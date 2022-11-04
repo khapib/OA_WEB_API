@@ -19,7 +19,7 @@ namespace OA_WEB_API.Repository
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMPro);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
 
         CommonRepository commonRepository = new CommonRepository();
         FormRepository formRepository = new FormRepository();

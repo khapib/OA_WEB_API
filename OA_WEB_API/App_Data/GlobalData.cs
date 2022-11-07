@@ -77,7 +77,8 @@ public class GlobalParameters
                     break;
 
                 case sqlConnBPMProDev:
-                    response = "http://oa-web-dev01.gtv.com.tw:82/";
+                    //response = "http://oa-web-dev01.gtv.com.tw:82/";
+                    response = "http://192.168.1.219:82/";
                     break;
 
                 case sqlConnBPMProTest:

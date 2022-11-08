@@ -46,7 +46,7 @@ namespace OA_WEB_API.Repository
                 var formQueryModel = new FormQueryModel()
                 {
                     REQUISITION_ID = query.REQUISITION_ID
-                };               
+                };
 
                 if (CommonRepository.PostDataHaveForm(formQueryModel))
                 {
@@ -59,7 +59,7 @@ namespace OA_WEB_API.Repository
                     {
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID},
                         new SqlParameter("@DIAGRAM_ID", SqlDbType.NVarChar) { Size = 50, Value = formData.DIAGRAM_ID }
-                    };                    
+                    };
 
                     strSQL = "";
                     strSQL += "UPDATE [BPMPro].[dbo].[FSe7en_Sys_Requisition] ";
@@ -72,7 +72,7 @@ namespace OA_WEB_API.Repository
                     dbFun.DoTran(strSQL, parameter);
 
                     #endregion
-                }                
+                }
 
                 #region - 刪除表單 -
 
@@ -81,7 +81,7 @@ namespace OA_WEB_API.Repository
 
                 #endregion
 
-                ResponseMsg= "已「結束及刪除」表單 REQUISITION_ID：" + query.REQUISITION_ID + "。";
+                ResponseMsg = "已「結束及刪除」表單 REQUISITION_ID：" + query.REQUISITION_ID + "。";
 
                 return ResponseMsg;
             }
@@ -145,16 +145,35 @@ namespace OA_WEB_API.Repository
 
                 foreach (var requisitionID in model.REQUISITION_ID)
                 {
-                    #region - 被知會特定角色 -
-
-
-
-                    #endregion
-
                     #region - 被知會特定人員 -
 
                     if (String.IsNullOrWhiteSpace(ReceiverID))
                     {
+                        #region - 被知會特定角色 -
+
+                        if (model.ROLE_ID != null)
+                        {
+                            foreach (var role in model.ROLE_ID)
+                            {
+                                var RolesUserID = commonRepository.GetRoles()
+                                                                .Where(R => R.ROLE_ID.Contains(role))
+                                                                .Select(R => R).ToList();
+                                RolesUserID.ForEach(roleuser =>
+                                {
+                                    model.NOTIFY_BY.Add(roleuser.USER_ID);
+                                });
+                            }
+                        }
+
+                        #endregion
+
+                        #region - 排除重複人員 -
+
+                        model.NOTIFY_BY = model.NOTIFY_BY.GroupBy(N => N)
+                                                        .Select(g => g.First()).ToList();
+
+                        #endregion
+
                         foreach (var notify in model.NOTIFY_BY)
                         {
                             var UserIDmodel = new LogonModel()
@@ -175,7 +194,7 @@ namespace OA_WEB_API.Repository
                     var formQueryModel = new FormQueryModel()
                     {
                         REQUISITION_ID = requisitionID
-                    };                    
+                    };
 
                     if (CommonRepository.PostDataHaveForm(formQueryModel))
                     {

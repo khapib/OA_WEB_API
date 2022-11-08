@@ -81,7 +81,21 @@ namespace OA_WEB_API.Controllers
         }
 
         #endregion
-        
+
+        #region - 角色列表 -
+
+        /// <summary>
+        /// 角色列表
+        /// </summary>
+        [Route("api/GetRoles")]
+        [HttpGet]
+        public IList<RolesModel> GetRoles()
+        {
+            return commonRepository.GetRoles();
+        }
+
+        #endregion
+
         #region - 表單列表 -
 
         /// <summary>

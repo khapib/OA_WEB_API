@@ -143,17 +143,23 @@ namespace OA_WEB_API.Repository
             {
                 ReceiverID = "";
 
+                #region - 被知會特定角色 -
+
+
+
+                #endregion
+
                 foreach (var requisitionID in model.REQUISITION_ID)
                 {
-                    #region - 特定人員 -
+                    #region - 被知會特定人員 -
 
                     if (String.IsNullOrWhiteSpace(ReceiverID))
                     {
-                        foreach (var n in model.NOTIFY_BY)
+                        foreach (var notify in model.NOTIFY_BY)
                         {
                             var UserIDmodel = new LogonModel()
                             {
-                                USER_ID = n
+                                USER_ID = notify
                             };
 
                             foreach (var userInfo in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)

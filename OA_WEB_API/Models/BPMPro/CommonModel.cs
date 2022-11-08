@@ -72,6 +72,25 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
+    #region - 角色列表 -
+
+    /// <summary>
+    /// 角色列表
+    /// </summary>
+    public class RolesModel
+    {
+        /// <summary>角色代碼</summary>
+        public string ROLE_ID { get; set; }
+
+        /// <summary>角色名稱</summary>
+        public string ROLE_NAME { get; set; }
+
+        /// <summary>員工編號</summary>
+        public string USER_ID { get; set; }
+    }
+
+    #endregion
+
     #region - 表單列表 -
 
     /// <summary>
@@ -386,7 +405,7 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-
+    
 
     #region - (擴充方法)_共同表單區分 -
 

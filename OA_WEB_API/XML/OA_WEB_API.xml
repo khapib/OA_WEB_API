@@ -706,6 +706,11 @@
             確認是否簽核中
             </summary>        
         </member>
+        <member name="M:OA_WEB_API.Controllers.CommonController.GetRoles">
+            <summary>
+            角色列表
+            </summary>
+        </member>
         <member name="M:OA_WEB_API.Controllers.CommonController.PostGTVBPMFormTree(OA_WEB_API.Models.BPMPro.FormFilter)">
             <summary>
             BPM表單列表
@@ -3261,6 +3266,20 @@
         <member name="P:OA_WEB_API.Models.BPMPro.GTVApproveProgressResponse.BPMStatus">
             <summary>BPM表單狀態</summary>
         </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.RolesModel">
+            <summary>
+            角色列表
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.RolesModel.ROLE_ID">
+            <summary>角色代碼</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.RolesModel.ROLE_NAME">
+            <summary>角色名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.RolesModel.USER_ID">
+            <summary>員工編號</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.FormFilter">
             <summary>
             表單列表(篩選條件)
@@ -4051,11 +4070,14 @@
             表單知會
             </summary>
         </member>
+        <member name="P:OA_WEB_API.Models.FormNotifyViewModel.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.FormNotifyViewModel.NOTIFY_BY">
             <summary>被知會人</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.FormNotifyViewModel.REQUISITION_ID">
-            <summary>系統編號</summary>
+        <member name="P:OA_WEB_API.Models.FormNotifyViewModel.ROLE_ID">
+            <summary>被知會角色</summary>
         </member>
         <member name="T:OA_WEB_API.Models.LogonModel">
             <summary>

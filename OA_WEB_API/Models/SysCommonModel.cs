@@ -58,11 +58,14 @@ namespace OA_WEB_API.Models
     /// </summary>
     public class FormNotifyViewModel
     {
+        /// <summary>系統編號</summary>
+        public IList<String> REQUISITION_ID { get; set; }
+
         /// <summary>被知會人</summary>
         public IList<String> NOTIFY_BY { get; set; }
 
-        /// <summary>系統編號</summary>
-        public IList<String> REQUISITION_ID { get; set; }
+        /// <summary>被知會角色</summary>
+        public IList<String> ROLE_ID { get; set; }
     }
 
     #endregion

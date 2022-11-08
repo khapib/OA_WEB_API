@@ -217,6 +217,32 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
+        #region - 角色列表 -
+
+        public IList<RolesModel> GetRoles()
+        {
+            try
+            {
+                strSQL += "";
+                strSQL += "SELECT ";
+                strSQL += "     S.[RoleID] AS [ROLE_ID], ";
+                strSQL += "     I.[DisplayName] AS [ROLE_NAME], ";
+                strSQL += "     S.[AtomID] AS [USER_ID] ";
+                strSQL += "FROM [BPMPro].[dbo].[FSe7en_Org_RoleStruct] AS S ";
+                strSQL += "INNER JOIN [BPMPro].[dbo].[FSe7en_Org_RoleInfo] AS I on S.RoleID=I.RoleID ";
+                var RolesData = dbFun.DoQuery(strSQL).ToList<RolesModel>();
+
+                return RolesData;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("角色列表呈現失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
         #region - 表單列表 -
 
         /// <summary>

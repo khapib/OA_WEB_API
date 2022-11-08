@@ -143,14 +143,14 @@ namespace OA_WEB_API.Repository
             {
                 ReceiverID = "";
 
-                #region - 被知會特定角色 -
-
-
-
-                #endregion
-
                 foreach (var requisitionID in model.REQUISITION_ID)
                 {
+                    #region - 被知會特定角色 -
+
+
+
+                    #endregion
+
                     #region - 被知會特定人員 -
 
                     if (String.IsNullOrWhiteSpace(ReceiverID))

@@ -24,7 +24,7 @@ namespace OA_WEB_API.Repository.BPMPro
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMPro);
 
         FormRepository formRepository = new FormRepository();
         FlowRepository flowRepository = new FlowRepository();
@@ -261,7 +261,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         }
 
                         emailCCList.Add("何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>");
-                        //emailCCTemp.Add("孫慶偉<top@gtv.com.tw>"); /*測試機在加經理*/
+                        emailCCTemp.Add("孫慶偉<top@gtv.com.tw>"); /*測試機在加經理*/
 
                         emailCCList = emailCCTemp.Distinct().ToList();
 

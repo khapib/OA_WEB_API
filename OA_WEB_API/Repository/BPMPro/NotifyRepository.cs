@@ -24,7 +24,7 @@ namespace OA_WEB_API.Repository.BPMPro
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMPro);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
 
         FormRepository formRepository = new FormRepository();
         FlowRepository flowRepository = new FlowRepository();
@@ -260,7 +260,9 @@ namespace OA_WEB_API.Repository.BPMPro
                             nameTemp.Add(manager.USER_NAME);
                         }
 
-                        emailCCTemp.Add("孫慶偉<top@gtv.com.tw>");
+                        emailCCList.Add("何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>");
+                        //emailCCTemp.Add("孫慶偉<top@gtv.com.tw>"); /*測試機在加經理*/
+
                         emailCCList = emailCCTemp.Distinct().ToList();
 
                         break;
@@ -580,6 +582,140 @@ namespace OA_WEB_API.Repository.BPMPro
                 }
             }
         }
+
+        #region - 2022/11/08 Leon: 接收流程引擎(特定知會通知)通知觸發事件 -
+
+        /// <summary>
+        /// (特定知會通知)事件
+        /// </summary>
+        public void ByInformNotify(InformNotifyModel inform)
+        {
+            var groupInformNotifyModel = new GroupInformNotifyModel
+            {
+                REQUISITION_ID = new List<string>
+                {
+                    inform.REQUISITION_ID
+                },
+                NOTIFY_BY = new List<string>
+                {
+                    inform.NOTIFY_BY
+                },
+                ROLE_ID = new List<string>
+                {
+                    inform.ROLE_ID
+                }
+            };
+            ByGroupInformNotify(groupInformNotifyModel);
+        }
+
+        #endregion
+
+        #region - 2022/11/08 Leon: (群體知會通知)通知觸發事件 -
+
+        /// <summary>
+        /// 群體知會通知
+        /// </summary>
+        public bool ByGroupInformNotify(GroupInformNotifyModel model)
+        {
+            bool vResult = false;
+            try
+            {
+                ReceiverID = "";
+
+                foreach (var requisitionID in model.REQUISITION_ID)
+                {
+                    #region - 被知會特定人員 -
+
+                    if (String.IsNullOrWhiteSpace(ReceiverID))
+                    {
+                        #region - 被知會特定角色 -
+
+                        if (model.ROLE_ID != null)
+                        {
+                            foreach (var role in model.ROLE_ID)
+                            {
+                                var RolesUserID = CommonRepository.GetRoles()
+                                                                .Where(R => R.ROLE_ID.Contains(role))
+                                                                .Select(R => R).ToList();
+                                RolesUserID.ForEach(roleuser =>
+                                {
+                                    model.NOTIFY_BY.Add(roleuser.USER_ID);
+                                });
+                            }
+                        }
+
+                        #endregion
+
+                        #region - 排除重複人員 -
+
+                        model.NOTIFY_BY = model.NOTIFY_BY.GroupBy(N => N)
+                                                        .Select(g => g.First()).ToList();
+
+                        #endregion
+
+                        #region - 排除 NOTIFY_BY List 是 null -
+
+                        model.NOTIFY_BY = model.NOTIFY_BY.Where(N => N != null)
+                                                            .Select(R => R)
+                                                            .ToList();
+
+                        #endregion
+
+                        foreach (var notify in model.NOTIFY_BY)
+                        {
+                            var UserIDmodel = new LogonModel()
+                            {
+                                USER_ID = notify
+                            };
+
+                            foreach (var userInfo in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                            {
+                                ReceiverID += userInfo.USER_ID + "@" + userInfo.DEPT_ID + ";";
+                            }
+                        }
+                        ReceiverID = ReceiverID.Substring(0, ReceiverID.Length - 1);
+                    }
+
+                    #endregion
+
+                    var formQueryModel = new FormQueryModel()
+                    {
+                        REQUISITION_ID = requisitionID
+                    };
+
+                    if (CommonRepository.PostDataHaveForm(formQueryModel))
+                    {
+                        //表單資訊
+                        var formData = formRepository.PostFormData(formQueryModel);
+
+                        formQueryModel = new FormQueryModel()
+                        {
+                            IS_ENABLE_SMS = false,
+                            RECEIVER_ID = ReceiverID,
+                            REQUISITION_ID = requisitionID,
+                            SERIAL_ID = formData.SERIAL_ID
+                        };
+                        //發特定人員通知及Email
+                        ByNotice(formQueryModel);
+
+                        vResult = true;
+                    }
+                    else
+                    {
+                        //無此表單資料
+                        vResult = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("群體知會通知 通知失敗，原因：" + ex.Message);
+                throw;
+            }
+            return vResult;
+        }
+
+        #endregion
 
         /// <summary>
         /// (結案打包)事件，包含 簽呈、會簽單、四方四隅簽呈
@@ -1119,6 +1255,9 @@ namespace OA_WEB_API.Repository.BPMPro
 
         /// <summary>密件收件人</summary>
         private string _BCC_LIST = "何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>";
+
+        /// <summary>特定人員</summary>
+        private string ReceiverID;
 
         /// <summary>列舉 表單狀態</summary>
         private enum enumProcess

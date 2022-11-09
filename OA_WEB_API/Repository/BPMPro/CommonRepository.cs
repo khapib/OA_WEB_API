@@ -27,7 +27,7 @@ namespace OA_WEB_API.Repository.BPMPro
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMPro);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
 
         #region Model
 
@@ -813,6 +813,35 @@ namespace OA_WEB_API.Repository.BPMPro
         #endregion
 
 
+
+        #region - 角色列表 -
+
+        public static IList<RolesModel> GetRoles()
+        {
+            //擴充方法使用dbFunction需要參考物件
+            CommonRepository commonRepository = new CommonRepository();
+
+            try
+            {
+                var strSQL = "";
+                strSQL += "SELECT ";
+                strSQL += "     S.[RoleID] AS [ROLE_ID], ";
+                strSQL += "     I.[DisplayName] AS [ROLE_NAME], ";
+                strSQL += "     S.[AtomID] AS [USER_ID] ";
+                strSQL += "FROM [BPMPro].[dbo].[FSe7en_Org_RoleStruct] AS S ";
+                strSQL += "INNER JOIN [BPMPro].[dbo].[FSe7en_Org_RoleInfo] AS I on S.RoleID=I.RoleID ";
+                var RolesData = commonRepository.dbFun.DoQuery(strSQL).ToList<RolesModel>();
+
+                return RolesData;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("角色列表呈現失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
 
         #region - (擴充方法)_確認BPM表單(FormData)是否存在 -
 

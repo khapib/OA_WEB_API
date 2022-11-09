@@ -19,14 +19,10 @@ namespace OA_WEB_API.Repository
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMPro);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
 
         CommonRepository commonRepository = new CommonRepository();
         FormRepository formRepository = new FormRepository();
-        UserRepository userRepository = new UserRepository();
-        NotifyRepository notifyRepository = new NotifyRepository();
-        NoticeMode noticeMode = new NoticeMode();
-
         #endregion
 
         #region - 方法 -
@@ -46,7 +42,7 @@ namespace OA_WEB_API.Repository
                 var formQueryModel = new FormQueryModel()
                 {
                     REQUISITION_ID = query.REQUISITION_ID
-                };               
+                };
 
                 if (CommonRepository.PostDataHaveForm(formQueryModel))
                 {
@@ -59,7 +55,7 @@ namespace OA_WEB_API.Repository
                     {
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID},
                         new SqlParameter("@DIAGRAM_ID", SqlDbType.NVarChar) { Size = 50, Value = formData.DIAGRAM_ID }
-                    };                    
+                    };
 
                     strSQL = "";
                     strSQL += "UPDATE [BPMPro].[dbo].[FSe7en_Sys_Requisition] ";
@@ -72,7 +68,7 @@ namespace OA_WEB_API.Repository
                     dbFun.DoTran(strSQL, parameter);
 
                     #endregion
-                }                
+                }
 
                 #region - 刪除表單 -
 
@@ -81,7 +77,7 @@ namespace OA_WEB_API.Repository
 
                 #endregion
 
-                ResponseMsg= "已「結束及刪除」表單 REQUISITION_ID：" + query.REQUISITION_ID + "。";
+                ResponseMsg = "已「結束及刪除」表單 REQUISITION_ID：" + query.REQUISITION_ID + "。";
 
                 return ResponseMsg;
             }
@@ -131,80 +127,6 @@ namespace OA_WEB_API.Repository
 
         #endregion
 
-        #region - 表單知會 -
-
-        /// <summary>
-        /// 表單知會
-        /// </summary>
-        public bool PutFormNotify(FormNotifyViewModel model)
-        {
-            bool vResult = false;
-            try
-            {
-                ReceiverID = "";
-
-                foreach (var requisitionID in model.REQUISITION_ID)
-                {
-                    #region - 特定人員 -
-
-                    if (String.IsNullOrWhiteSpace(ReceiverID))
-                    {
-                        foreach (var n in model.NOTIFY_BY)
-                        {
-                            var UserIDmodel = new LogonModel()
-                            {
-                                USER_ID = n
-                            };
-
-                            foreach (var userInfo in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
-                            {
-                                ReceiverID += userInfo.USER_ID + "@" + userInfo.DEPT_ID + ";";
-                            }
-                        }
-                        ReceiverID = ReceiverID.Substring(0, ReceiverID.Length - 1);
-                    }
-
-                    #endregion
-
-                    var formQueryModel = new FormQueryModel()
-                    {
-                        REQUISITION_ID = requisitionID
-                    };                    
-
-                    if (CommonRepository.PostDataHaveForm(formQueryModel))
-                    {
-                        //表單資訊
-                        var formData = formRepository.PostFormData(formQueryModel);
-
-                        formQueryModel = new FormQueryModel()
-                        {
-                            IS_ENABLE_SMS = false,
-                            RECEIVER_ID = ReceiverID,
-                            REQUISITION_ID = requisitionID,
-                            SERIAL_ID = formData.SERIAL_ID
-                        };
-                        //發特定人員通知及Email
-                        notifyRepository.ByNotice(formQueryModel);
-
-                        vResult = true;
-                    }
-                    else
-                    {
-                        //無此表單資料
-                        vResult = false;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                CommLib.Logger.Error("表單知會寫入失敗，原因：" + ex.Message);
-                throw;
-            }
-            return vResult;
-        }
-
-        #endregion
-
         #endregion
 
         #region - 欄位和屬性 -
@@ -218,11 +140,6 @@ namespace OA_WEB_API.Repository
         /// Json字串
         /// </summary>
         private string strJson;
-
-        /// <summary>
-        /// 特定人員
-        /// </summary>
-        private string ReceiverID;
 
         #endregion
     }

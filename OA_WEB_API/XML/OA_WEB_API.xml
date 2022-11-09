@@ -671,6 +671,16 @@
             接收流程引擎(特定人員)通知
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Controllers.NotifyController.ByInformNotify">
+            <summary>
+            接收流程引擎(特定知會通知)通知
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.NotifyController.ByGroupInformNotify(OA_WEB_API.Models.BPMPro.GroupInformNotifyModel)">
+            <summary>
+            群體知會通知
+            </summary>
+        </member>
         <member name="M:OA_WEB_API.Controllers.NotifyController.ByArchive">
             <summary>
             接收流程引擎(結案打包)通知，包含 簽呈、會簽單、四方四隅簽呈
@@ -705,6 +715,11 @@
             <summary>
             確認是否簽核中
             </summary>        
+        </member>
+        <member name="M:OA_WEB_API.Controllers.CommonController.GetRoles">
+            <summary>
+            角色列表
+            </summary>
         </member>
         <member name="M:OA_WEB_API.Controllers.CommonController.PostGTVBPMFormTree(OA_WEB_API.Models.BPMPro.FormFilter)">
             <summary>
@@ -959,11 +974,6 @@
         <member name="M:OA_WEB_API.Controllers.SysCommonController.GetGTVDeptTree">
             <summary>
             部門列表
-            </summary>
-        </member>
-        <member name="M:OA_WEB_API.Controllers.SysCommonController.PostFormNotify(OA_WEB_API.Models.FormNotifyViewModel)">
-            <summary>
-            表單知會
             </summary>
         </member>
         <member name="T:OA_WEB_API.Controllers.TokenController">
@@ -1427,6 +1437,34 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ReceiverModel.MOBILE">
             <summary>手機</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.InformNotifyModel">
+            <summary>
+            特定知會通知
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InformNotifyModel.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InformNotifyModel.NOTIFY_BY">
+            <summary>被通知人</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InformNotifyModel.ROLE_ID">
+            <summary>角色群組編號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.GroupInformNotifyModel">
+            <summary>
+            群體知會通知
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GroupInformNotifyModel.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GroupInformNotifyModel.NOTIFY_BY">
+            <summary>被知會人</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GroupInformNotifyModel.ROLE_ID">
+            <summary>被知會角色</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.FormSignOff">
             <summary>
@@ -3261,6 +3299,20 @@
         <member name="P:OA_WEB_API.Models.BPMPro.GTVApproveProgressResponse.BPMStatus">
             <summary>BPM表單狀態</summary>
         </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.RolesModel">
+            <summary>
+            角色列表
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.RolesModel.ROLE_ID">
+            <summary>角色代碼</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.RolesModel.ROLE_NAME">
+            <summary>角色名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.RolesModel.USER_ID">
+            <summary>員工編號</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.FormFilter">
             <summary>
             表單列表(篩選條件)
@@ -4046,17 +4098,6 @@
         <member name="P:OA_WEB_API.Models.DeptTree.DEPT_NAME">
             <summary>部門名稱</summary>
         </member>
-        <member name="T:OA_WEB_API.Models.FormNotifyViewModel">
-            <summary>
-            表單知會
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.FormNotifyViewModel.NOTIFY_BY">
-            <summary>被知會人</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.FormNotifyViewModel.REQUISITION_ID">
-            <summary>系統編號</summary>
-        </member>
         <member name="T:OA_WEB_API.Models.LogonModel">
             <summary>
             登入
@@ -4708,6 +4749,16 @@
             (特定人員)事件
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.NotifyRepository.ByInformNotify(OA_WEB_API.Models.BPMPro.InformNotifyModel)">
+            <summary>
+            (特定知會通知)事件
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.NotifyRepository.ByGroupInformNotify(OA_WEB_API.Models.BPMPro.GroupInformNotifyModel)">
+            <summary>
+            群體知會通知
+            </summary>
+        </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.NotifyRepository.ByArchive(OA_WEB_API.Models.BPMPro.FormQueryModel)">
             <summary>
             (結案打包)事件，包含 簽呈、會簽單、四方四隅簽呈
@@ -4783,6 +4834,9 @@
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.NotifyRepository._BCC_LIST">
             <summary>密件收件人</summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.NotifyRepository.ReceiverID">
+            <summary>特定人員</summary>
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.NotifyRepository.enumProcess">
             <summary>列舉 表單狀態</summary>
@@ -5247,11 +5301,6 @@
             部門列表
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Repository.SysCommonRepository.PutFormNotify(OA_WEB_API.Models.FormNotifyViewModel)">
-            <summary>
-            表單知會
-            </summary>
-        </member>
         <member name="F:OA_WEB_API.Repository.SysCommonRepository.strSQL">
             <summary>
             T-SQL
@@ -5260,11 +5309,6 @@
         <member name="F:OA_WEB_API.Repository.SysCommonRepository.strJson">
             <summary>
             Json字串
-            </summary>
-        </member>
-        <member name="F:OA_WEB_API.Repository.SysCommonRepository.ReceiverID">
-            <summary>
-            特定人員
             </summary>
         </member>
         <member name="T:OA_WEB_API.Repository.TokenCrypto">

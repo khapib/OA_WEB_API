@@ -203,6 +203,44 @@ namespace OA_WEB_API.Controllers
             notifyRepository.ByNotice(query);
         }
 
+        #region - 2022/11/08 Leon: 接收流程引擎(特定知會通知)通知觸發事件 -
+
+        /// <summary>
+        /// 接收流程引擎(特定知會通知)通知
+        /// </summary>
+        [Route("ByInformNotify")]
+        [HttpPost]
+        public void ByInformNotify()
+        {
+            HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
+            HttpRequestBase request = context.Request;
+
+            var inform = new InformNotifyModel()
+            {
+                REQUISITION_ID = request["RequisitionID"],
+                NOTIFY_BY = request["NotifyBy"],
+                ROLE_ID = request["RoleID"]
+            };
+
+            notifyRepository.ByInformNotify(inform);
+        }
+
+        #endregion
+
+        #region - 群體知會通知 -
+
+        /// <summary>
+        /// 群體知會通知
+        /// </summary>
+        [Route("api/ByGroupInformNotify")]
+        [HttpPost]
+        public bool ByGroupInformNotify([FromBody] GroupInformNotifyModel model)
+        {
+            return notifyRepository.ByGroupInformNotify(model);
+        }
+
+        #endregion
+
         /// <summary>
         /// 接收流程引擎(結案打包)通知，包含 簽呈、會簽單、四方四隅簽呈
         /// </summary>

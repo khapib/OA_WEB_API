@@ -346,6 +346,40 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
+    /// 特定知會通知
+    /// </summary>
+    public class InformNotifyModel
+    {
+        /// <summary>系統編號</summary>
+        public string REQUISITION_ID { get; set; }
+
+        /// <summary>被通知人</summary>
+        public string NOTIFY_BY { get; set; }
+
+        /// <summary>角色群組編號</summary>
+        public string ROLE_ID { get; set; }
+    }
+
+    #region - 群體知會通知 -
+
+    /// <summary>
+    /// 群體知會通知
+    /// </summary>
+    public class GroupInformNotifyModel
+    {
+        /// <summary>系統編號</summary>
+        public IList<String> REQUISITION_ID { get; set; }
+
+        /// <summary>被知會人</summary>
+        public IList<String> NOTIFY_BY { get; set; }
+
+        /// <summary>被知會角色</summary>
+        public IList<String> ROLE_ID { get; set; }
+    }
+
+    #endregion
+
+    /// <summary>
     /// 表單簽核歷程
     /// </summary>
     public class FormSignOff

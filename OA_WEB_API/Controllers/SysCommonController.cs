@@ -55,20 +55,6 @@ namespace OA_WEB_API.Controllers
 
         #endregion
 
-        #region - 表單知會 -
-
-        /// <summary>
-        /// 表單知會
-        /// </summary>
-        [Route("api/PostFormNotify")]
-        [HttpPost]
-        public bool PostFormNotify([FromBody]FormNotifyViewModel model)
-        {
-            return sysCommonRepository.PutFormNotify(model);
-        }
-
-        #endregion
-
         #region - 喚醒程式 -
 
         [HttpGet]

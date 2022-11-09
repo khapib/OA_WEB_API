@@ -91,7 +91,7 @@ namespace OA_WEB_API.Controllers
         [HttpGet]
         public IList<RolesModel> GetRoles()
         {
-            return commonRepository.GetRoles();
+            return CommonRepository.GetRoles();
         }
 
         #endregion

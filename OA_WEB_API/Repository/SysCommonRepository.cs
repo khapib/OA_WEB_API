@@ -23,10 +23,6 @@ namespace OA_WEB_API.Repository
 
         CommonRepository commonRepository = new CommonRepository();
         FormRepository formRepository = new FormRepository();
-        UserRepository userRepository = new UserRepository();
-        NotifyRepository notifyRepository = new NotifyRepository();
-        NoticeMode noticeMode = new NoticeMode();
-
         #endregion
 
         #region - 方法 -
@@ -131,105 +127,6 @@ namespace OA_WEB_API.Repository
 
         #endregion
 
-        #region - 表單知會 -
-
-        /// <summary>
-        /// 表單知會
-        /// </summary>
-        public bool PutFormNotify(FormNotifyViewModel model)
-        {
-            bool vResult = false;
-            try
-            {
-                ReceiverID = "";
-
-                foreach (var requisitionID in model.REQUISITION_ID)
-                {
-                    #region - 被知會特定人員 -
-
-                    if (String.IsNullOrWhiteSpace(ReceiverID))
-                    {
-                        #region - 被知會特定角色 -
-
-                        if (model.ROLE_ID != null)
-                        {
-                            foreach (var role in model.ROLE_ID)
-                            {
-                                var RolesUserID = commonRepository.GetRoles()
-                                                                .Where(R => R.ROLE_ID.Contains(role))
-                                                                .Select(R => R).ToList();
-                                RolesUserID.ForEach(roleuser =>
-                                {
-                                    model.NOTIFY_BY.Add(roleuser.USER_ID);
-                                });
-                            }
-                        }
-
-                        #endregion
-
-                        #region - 排除重複人員 -
-
-                        model.NOTIFY_BY = model.NOTIFY_BY.GroupBy(N => N)
-                                                        .Select(g => g.First()).ToList();
-
-                        #endregion
-
-                        foreach (var notify in model.NOTIFY_BY)
-                        {
-                            var UserIDmodel = new LogonModel()
-                            {
-                                USER_ID = notify
-                            };
-
-                            foreach (var userInfo in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
-                            {
-                                ReceiverID += userInfo.USER_ID + "@" + userInfo.DEPT_ID + ";";
-                            }
-                        }
-                        ReceiverID = ReceiverID.Substring(0, ReceiverID.Length - 1);
-                    }
-
-                    #endregion
-
-                    var formQueryModel = new FormQueryModel()
-                    {
-                        REQUISITION_ID = requisitionID
-                    };
-
-                    if (CommonRepository.PostDataHaveForm(formQueryModel))
-                    {
-                        //表單資訊
-                        var formData = formRepository.PostFormData(formQueryModel);
-
-                        formQueryModel = new FormQueryModel()
-                        {
-                            IS_ENABLE_SMS = false,
-                            RECEIVER_ID = ReceiverID,
-                            REQUISITION_ID = requisitionID,
-                            SERIAL_ID = formData.SERIAL_ID
-                        };
-                        //發特定人員通知及Email
-                        notifyRepository.ByNotice(formQueryModel);
-
-                        vResult = true;
-                    }
-                    else
-                    {
-                        //無此表單資料
-                        vResult = false;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                CommLib.Logger.Error("表單知會寫入失敗，原因：" + ex.Message);
-                throw;
-            }
-            return vResult;
-        }
-
-        #endregion
-
         #endregion
 
         #region - 欄位和屬性 -
@@ -243,11 +140,6 @@ namespace OA_WEB_API.Repository
         /// Json字串
         /// </summary>
         private string strJson;
-
-        /// <summary>
-        /// 特定人員
-        /// </summary>
-        private string ReceiverID;
 
         #endregion
     }

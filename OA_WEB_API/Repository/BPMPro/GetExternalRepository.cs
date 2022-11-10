@@ -676,6 +676,11 @@ namespace OA_WEB_API.Repository.BPMPro
                     var generalOrderChangeConfig = jsonFunction.JsonToObject<GeneralOrderChangeConfig>(strJson);
                     generalOrderChangeConfig.FORM_NO = strFormNo;
                     generalOrderChangeConfig.MODIFY_FORM_NO = model.ERP_MODIFY_FORM_NO;
+                    if (GroupSubject.Contains("【異動"))
+                    {
+                        var SubjectArray = GroupSubject.Split('-');
+                        GroupSubject = SubjectArray[3];
+                    }                    
                     generalOrderChangeConfig.FM7_SUBJECT = "【異動" + model.MODIFY_NO + "】" + GroupBPMFromNo + "-" + GroupSubject;
                     generalOrderChangeConfig.GROUP_BPM_FORM_NO = GroupBPMFromNo;
                     generalOrderChangeConfig.FORM_ACTION = "修改";

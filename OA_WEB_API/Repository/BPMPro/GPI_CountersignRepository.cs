@@ -239,7 +239,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_ID },
                     new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
                     //四方四隅_會簽單 表頭
-                    new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 64, Value = FM7Subject ?? String.Empty },
+                    new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
                     new SqlParameter("@LEVEL_TYPE", SqlDbType.NVarChar) { Size = 10, Value = (object)model.GPI_COUNTERSIGN_TITLE.LEVEL_TYPE ?? DBNull.Value },
                 };
 

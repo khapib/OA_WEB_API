@@ -16,7 +16,7 @@ namespace OA_WEB_API.Repository.BPMPro
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProTest);
 
         #region Repository
 
@@ -180,7 +180,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@CREATE_DATE", SqlDbType.NVarChar) { Size = 50, Value = (object)model.PROJECT_REVIEW_ERP_CONFIG.CREATE_DATE ?? DBNull.Value },
                     new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 500, Value = (object)model.PROJECT_REVIEW_ERP_CONFIG.NOTE ?? DBNull.Value },
                     //表單內容_BPM
-                    new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 50, Value = FM7Subject ?? String.Empty },
+                    new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
                     new SqlParameter("@GAD_REVIEW", SqlDbType.NVarChar) { Size = 10, Value = (object)model.PROJECT_REVIEW_BPM_CONFIG.GAD_REVIEW ?? DBNull.Value },
                     new SqlParameter("@ACC_CATEGORY", SqlDbType.NVarChar) { Size = 50, Value = (object)model.PROJECT_REVIEW_BPM_CONFIG.ACC_CATEGORY ?? DBNull.Value },
                 };

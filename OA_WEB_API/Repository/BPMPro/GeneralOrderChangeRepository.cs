@@ -195,7 +195,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@FLOW_NAME", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_ORDER_CHANGE_CONFIG.FLOW_NAME ?? DBNull.Value },
                     new SqlParameter("@MODIFY_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_ORDER_CHANGE_CONFIG.MODIFY_FORM_NO ?? DBNull.Value },
                     new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_ORDER_CHANGE_CONFIG.FORM_NO ?? DBNull.Value },
-                    new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 64, Value = FM7Subject ?? String.Empty },
+                    new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
                     new SqlParameter("@CHANGE_DESCRIPTION", SqlDbType.NVarChar) { Size = 64, Value = model.GENERAL_ORDER_CHANGE_CONFIG.CHANGE_DESCRIPTION ?? String.Empty },
                 };
 

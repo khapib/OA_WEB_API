@@ -176,7 +176,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         PROJECT_REVIEW_ERP_CONFIG = projectReviewERPConfig,
                         PROJECT_REVIEW_BPM_CONFIG = projectReviewBpmConfig
                     };
-                    
+
                     if (projectReviewRepository.PutProjectReviewSingle(projectReviewViewModel))
                     {
                         //起單成功
@@ -401,7 +401,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 #endregion
 
                 #region - 回傳狀態資訊 -
-                
+
                 var getExternalData = new GetExternalData()
                 {
                     BPM_REQ_ID = strREQ,
@@ -522,7 +522,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         APPLICANT_INFO = applicantInfo,
                         GENERAL_ORDER_TITLE = generalOrderTitle
                     };
-                    
+
                     if (generalOrderRepository.PutGeneralOrderSingle(generalOrderViewModel))
                     {
                         //起單成功
@@ -547,7 +547,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 #endregion
 
                 #region - 回傳狀態資訊 -
-                               
+
                 var getExternalData = new GetExternalData()
                 {
                     BPM_REQ_ID = strREQ,
@@ -676,6 +676,17 @@ namespace OA_WEB_API.Repository.BPMPro
                     var generalOrderChangeConfig = jsonFunction.JsonToObject<GeneralOrderChangeConfig>(strJson);
                     generalOrderChangeConfig.FORM_NO = strFormNo;
                     generalOrderChangeConfig.MODIFY_FORM_NO = model.ERP_MODIFY_FORM_NO;
+
+                    #region - 主旨(【異動X】-XXXX-XXXXXX-XXXX 問題排除) -
+
+                    if (GroupSubject.Contains("【異動"))
+                    {
+                        GroupSubject = GroupSubject.Substring(GroupSubject.IndexOf("-", GroupSubject.IndexOf("-", GroupSubject.IndexOf("-") + 1) + 1));
+                        GroupSubject = GroupSubject.Remove(0, 1);
+                    }
+
+                    #endregion
+
                     generalOrderChangeConfig.FM7_SUBJECT = "【異動" + model.MODIFY_NO + "】" + GroupBPMFromNo + "-" + GroupSubject;
                     generalOrderChangeConfig.GROUP_BPM_FORM_NO = GroupBPMFromNo;
                     generalOrderChangeConfig.FORM_ACTION = "修改";
@@ -848,8 +859,8 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     APPLICANT_INFO = applicantInfo,
                     GENERAL_ACCEPTANCE_TITLE = generalAcceptanceTitle,
-                    GENERAL_ACCEPTANCE_CONFIG= generalAcceptanceConfig,
-                    GENERAL_ACCEPTANCE_DETAILS_CONFIG=generalAcceptanceDetailsConfig
+                    GENERAL_ACCEPTANCE_CONFIG = generalAcceptanceConfig,
+                    GENERAL_ACCEPTANCE_DETAILS_CONFIG = generalAcceptanceDetailsConfig
                 };
 
                 if (generalAcceptanceRepository.PutGeneralAcceptanceSingle(generalAcceptanceViewModel))
@@ -996,7 +1007,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     APPLICANT_INFO = applicantInfo,
                     GENERAL_INVOICE_TITLE = generalInvoiceTitle,
                     GENERAL_INVOICE_CONFIG = generalInvoiceConfig,
-                    
+
                 };
 
                 if (generalInvoiceRepository.PutGeneralInvoiceSingle(generalInvoiceViewModel))

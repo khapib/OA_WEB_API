@@ -298,7 +298,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_ID },
                     new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
                     //合作夥伴審核單 表頭
-                    new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 64, Value = FM7Subject ?? String.Empty },
+                    new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
                     new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.SUPPLIER_REVIEW_TITLE.FORM_NO ?? DBNull.Value },
                     new SqlParameter("@APPROVE", SqlDbType.NVarChar) { Size = 4, Value = (object)model.SUPPLIER_REVIEW_TITLE.APPROVE ?? DBNull.Value },
                     new SqlParameter("@SUP_NO", SqlDbType.NVarChar) { Size = 16, Value = (object)model.SUPPLIER_REVIEW_TITLE.SUP_NO ?? DBNull.Value },

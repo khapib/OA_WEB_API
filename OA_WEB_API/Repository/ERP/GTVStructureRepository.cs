@@ -64,6 +64,7 @@ namespace OA_WEB_API.Repository.ERP
             strSQL += "          AND (";
             strSQL += "                  [COMPANY_ID]<>'GPI' AND [TITLE_ID]<>'AD'";
             strSQL += "              )";
+            strSQL += "order by [SEQ_ID],[SORT_ORDER] ASC ";
 
             var gTVStaffModel = dbFun.DoQuery(strSQL, parameterA).ToList<GTVStaffModel>();
 

@@ -563,7 +563,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (model.GENERAL_INVOICE_PAYMENTS_CONFIG != null && model.GENERAL_INVOICE_PAYMENTS_CONFIG.Count > 0)
                 {
-                    #region 再新增資料
+                    #region 修改資料
 
                     foreach (var item in model.GENERAL_INVOICE_PAYMENTS_CONFIG)
                     {

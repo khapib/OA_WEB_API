@@ -447,6 +447,8 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (model.GENERAL_ORDER_CONFIG != null)
                 {
+                    model.GENERAL_ORDER_CONFIG.PRE_RATE = Math.Round(model.GENERAL_ORDER_CONFIG.PRE_RATE, 2);
+                    model.GENERAL_ORDER_CONFIG.TAX = Math.Round(model.GENERAL_ORDER_CONFIG.TAX, 2);
                     var parameterInfo = new List<SqlParameter>()
                     {
                         //行政採購申請 表單內容
@@ -584,8 +586,6 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region - 行政採購申請 付款辦法：GeneralOrder_PYMT -
 
-
-
                 var parameterPayments = new List<SqlParameter>()
                 {
                     //行政採購申請 付款辦法
@@ -621,6 +621,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     
                     foreach (var item in model.GENERAL_ORDER_PAYMENTS_CONFIG)
                     {
+                        item.PYMT_TAX = Math.Round(item.PYMT_TAX, 2);
+                        item.PYMT_PRE_RATE = Math.Round(item.PYMT_PRE_RATE, 2);
                         //寫入：行政採購申請 付款辦法parameter
                         
                         strJson = jsonFunction.ObjectToJSON(item);

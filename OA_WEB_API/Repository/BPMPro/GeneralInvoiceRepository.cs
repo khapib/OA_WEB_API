@@ -156,7 +156,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     ACPT.[PA_Model] AS [PA_MODEL], ";
             strSQL += "     ACPT.[PA_Specifications] AS [PA_SPECIFICATIONS], ";
             strSQL += "     ACPT.[PA_Quantity] AS [PA_QUANTITY], ";
-            strSQL += "     ACPT.[PA_Unit] AS [PA_UNIT] ";
+            strSQL += "     ACPT.[PA_Unit] AS [PA_UNIT], ";
+            strSQL += "     ACPT.[PA_Note] AS [PA_NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralOrder_ACPT] AS ACPT ";
             strSQL += "	    INNER JOIN [BPMPro].[dbo].[FM7T_GeneralOrder_DTL] AS DTL ON ACPT.[RequisitionID]=DTL.[RequisitionID] AND ACPT.[PA_SupProdANo]=DTL.[DTL_SupProdANo] ";
             strSQL += "WHERE 1=1 ";

@@ -9,6 +9,7 @@ using OA_WEB_API.Models.BPMPro;
 using OA_WEB_API.Models.ERP;
 
 using Newtonsoft.Json;
+using System.Drawing;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -215,7 +216,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [PA_Model] AS [PA_MODEL], ";
             strSQL += "     [PA_Specifications] AS [PA_SPECIFICATIONS], ";
             strSQL += "     [PA_Quantity] AS [PA_QUANTITY], ";
-            strSQL += "     [PA_Unit] AS [PA_UNIT] ";
+            strSQL += "     [PA_Unit] AS [PA_UNIT], ";
+            strSQL += "     [PA_Note] AS [PA_NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralOrder_ACPT] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
@@ -447,8 +449,17 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (model.GENERAL_ORDER_CONFIG != null)
                 {
+                    #region - 確認小數點後第二位 -
+
                     model.GENERAL_ORDER_CONFIG.PRE_RATE = Math.Round(model.GENERAL_ORDER_CONFIG.PRE_RATE, 2);
                     model.GENERAL_ORDER_CONFIG.TAX = Math.Round(model.GENERAL_ORDER_CONFIG.TAX, 2);
+                    model.GENERAL_ORDER_CONFIG.DTL_NET_TOTAL=Math.Round(model.GENERAL_ORDER_CONFIG.DTL_NET_TOTAL,2);
+                    model.GENERAL_ORDER_CONFIG.DTL_GROSS_TOTAL = Math.Round(model.GENERAL_ORDER_CONFIG.DTL_GROSS_TOTAL, 2);
+                    model.GENERAL_ORDER_CONFIG.PYMT_TAX_TOTAL=Math.Round(model.GENERAL_ORDER_CONFIG.PYMT_TAX_TOTAL,2);
+                    model.GENERAL_ORDER_CONFIG.PYMT_GROSS_TOTAL=Math.Round(model.GENERAL_ORDER_CONFIG.PYMT_GROSS_TOTAL,2);
+
+                    #endregion
+
                     var parameterInfo = new List<SqlParameter>()
                     {
                         //行政採購申請 表單內容
@@ -467,16 +478,16 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@OWNER_NAME", SqlDbType.NVarChar) { Size = 64,  Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@OWNER_TEL", SqlDbType.NVarChar) { Size = 20,  Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PAYMENT_PERIOD_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@DTL_NET_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@DTL_NET_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_NET_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@DTL_GROSS_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@DTL_GROSS_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_GROSS_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },                        
                         new SqlParameter("@DISCOUNT_PRICE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@DTL_ORDER_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@DTL_ORDER_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_ORDER_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_LOCK_PERIOD", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PYMT_TAX_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PYMT_NET_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PYMT_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PYMT_NET_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_GROSS_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_GROSS_TOTAL_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_USE_BUDGET_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value }
@@ -595,8 +606,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@PYMT_TERMS", SqlDbType.NVarChar) { Size = 25, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PYMT_METHOD_ID", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PYMT_TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PYMT_NET", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PYMT_GROSS", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PYMT_NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PYMT_GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PYMT_PRE_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PYMT_GROSS_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PYMT_USE_BUDGET", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -621,10 +632,17 @@ namespace OA_WEB_API.Repository.BPMPro
                     
                     foreach (var item in model.GENERAL_ORDER_PAYMENTS_CONFIG)
                     {
+                        #region - 確認小數點後第二位 -
+
                         item.PYMT_TAX = Math.Round(item.PYMT_TAX, 2);
+                        item.PYMT_NET = Math.Round(item.PYMT_NET, 2);
+                        item.PYMT_GROSS=Math.Round(item.PYMT_GROSS, 2);
                         item.PYMT_PRE_RATE = Math.Round(item.PYMT_PRE_RATE, 2);
-                        //寫入：行政採購申請 付款辦法parameter
+
+                        #endregion
                         
+                        //寫入：行政採購申請 付款辦法parameter
+
                         strJson = jsonFunction.ObjectToJSON(item);
                         GlobalParameters.Infoparameter(strJson, parameterPayments);
 
@@ -703,6 +721,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@PA_SPECIFICATIONS", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PA_QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PA_UNIT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PA_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -728,8 +747,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterAcceptance);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralOrder_ACPT]([RequisitionID],[Period],[PA_SupProdANo],[PA_ItemName],[PA_Model],[PA_Specifications],[PA_Quantity],[PA_Unit]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@PA_SUP_PROD_A_NO,@PA_ITEM_NAME,@PA_MODEL,@PA_SPECIFICATIONS,@PA_QUANTITY,@PA_UNIT) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralOrder_ACPT]([RequisitionID],[Period],[PA_SupProdANo],[PA_ItemName],[PA_Model],[PA_Specifications],[PA_Quantity],[PA_Unit],[PA_Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@PA_SUP_PROD_A_NO,@PA_ITEM_NAME,@PA_MODEL,@PA_SPECIFICATIONS,@PA_QUANTITY,@PA_UNIT,@PA_NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterAcceptance);
                     }

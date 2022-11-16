@@ -125,13 +125,13 @@ namespace OA_WEB_API.Models.BPMPro
         public int PAYMENT_PERIOD_TOTAL { get; set; }
 
         /// <summary>合計未稅金額(採購明細)/NET總額(採購明細)</summary>
-        public int DTL_NET_TOTAL { get; set; }
+        public double DTL_NET_TOTAL { get; set; }
 
         /// <summary>合計未稅金額_台幣(採購明細)/NET總額_台幣(採購明細)</summary>
         public int DTL_NET_TOTAL_TWD { get; set; }
 
         /// <summary>合計含稅總額(採購明細)/GROSS總額(採購明細)</summary>
-        public int DTL_GROSS_TOTAL { get; set; }
+        public double DTL_GROSS_TOTAL { get; set; }
 
         /// <summary>合計含稅總額_台幣(採購明細)/GROSS總額_台幣(採購明細)</summary>
         public int DTL_GROSS_TOTAL_TWD { get; set; }
@@ -140,7 +140,7 @@ namespace OA_WEB_API.Models.BPMPro
         public int DISCOUNT_PRICE { get; set; }
 
         /// <summary>合計(採購明細)</summary>
-        public int DTL_ORDER_TOTAL { get; set; }
+        public double DTL_ORDER_TOTAL { get; set; }
 
         /// <summary>合計_台幣(採購明細)</summary>
         public int DTL_ORDER_TOTAL_TWD { get; set; }
@@ -149,13 +149,13 @@ namespace OA_WEB_API.Models.BPMPro
         public string PYMT_LOCK_PERIOD { get; set; }
 
         /// <summary>總稅額(付款辦法)</summary>
-        public int PYMT_TAX_TOTAL { get; set; }
+        public double PYMT_TAX_TOTAL { get; set; }
 
         /// <summary>合計未稅金額(付款辦法)/NET總額(付款辦法)</summary>
-        public int PYMT_NET_TOTAL { get; set; }
+        public double PYMT_NET_TOTAL { get; set; }
 
         /// <summary>合計含稅總額(付款辦法)/GROSS總額(付款辦法)</summary>
-        public int PYMT_GROSS_TOTAL { get; set; }
+        public double PYMT_GROSS_TOTAL { get; set; }
 
         /// <summary>合計含稅總額(換算)(付款辦法)/合計GROSS價(換算)(付款辦法)</summary>
         public int PYMT_GROSS_TOTAL_CONV { get; set; }
@@ -248,10 +248,10 @@ namespace OA_WEB_API.Models.BPMPro
         public double PYMT_TAX { get; set; }
 
         /// <summary>未稅金額/NET單價</summary>
-        public int PYMT_NET { get; set; }
+        public double PYMT_NET { get; set; }
 
         /// <summary>含稅總額/GROSS單價</summary>
-        public int PYMT_GROSS { get; set; }
+        public double PYMT_GROSS { get; set; }
 
         /// <summary>當期預計匯率</summary>
         public double PYMT_PRE_RATE { get; set; }
@@ -318,5 +318,8 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>單位</summary>
         public string PA_UNIT { get; set; }
+
+        /// <summary>商品備註</summary>
+        public string PA_NOTE { get; set;}
     }
 }

@@ -133,7 +133,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>驗收結果</summary>
         public string DTL_STATUS { get; set; }
 
-        /// <summary>備註</summary>
+        /// <summary>商品備註</summary>
         public string DTL_NOTE { get; set; }
     }
 

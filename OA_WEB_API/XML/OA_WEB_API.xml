@@ -1765,7 +1765,7 @@
             <summary>驗收結果</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceDetailsConfig.DTL_NOTE">
-            <summary>備註</summary>
+            <summary>商品備註</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GeneralInvoiceQueryModel">
             <summary>
@@ -2358,6 +2358,9 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderAcceptancesConfig.PA_UNIT">
             <summary>單位</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderAcceptancesConfig.PA_NOTE">
+            <summary>商品備註</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GetExternalData.BPM_REQ_ID">
             <summary>BPM 表單唯一碼</summary>

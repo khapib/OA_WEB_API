@@ -456,6 +456,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     model.GENERAL_ORDER_CONFIG.DTL_NET_TOTAL=Math.Round(model.GENERAL_ORDER_CONFIG.DTL_NET_TOTAL,2);
                     model.GENERAL_ORDER_CONFIG.DTL_GROSS_TOTAL = Math.Round(model.GENERAL_ORDER_CONFIG.DTL_GROSS_TOTAL, 2);
                     model.GENERAL_ORDER_CONFIG.PYMT_TAX_TOTAL=Math.Round(model.GENERAL_ORDER_CONFIG.PYMT_TAX_TOTAL,2);
+                    model.GENERAL_ORDER_CONFIG.PYMT_NET_TOTAL = Math.Round(model.GENERAL_ORDER_CONFIG.PYMT_NET_TOTAL, 2);
                     model.GENERAL_ORDER_CONFIG.PYMT_GROSS_TOTAL=Math.Round(model.GENERAL_ORDER_CONFIG.PYMT_GROSS_TOTAL,2);
 
                     #endregion

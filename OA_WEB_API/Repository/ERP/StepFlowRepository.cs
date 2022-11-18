@@ -340,7 +340,7 @@ namespace OA_WEB_API.Repository.ERP
 
                 #region - 回傳ERP - 
 
-                ApiUrl = GlobalParameters.ERPSystemAPI + "BPM/UpdateFormStatus";
+                ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/UpdateFormStatus";
                 Method = "POST";
                 strResponseJson = GlobalParameters.RequestInfoWebServers(ApiUrl, Method, strRequestJson);
 

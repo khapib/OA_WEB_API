@@ -77,7 +77,6 @@ public class GlobalParameters
                     break;
 
                 case sqlConnBPMProDev:
-                    //response = "http://oa-web-dev01.gtv.com.tw:82/";
                     response = "http://192.168.1.219:82/";
                     break;
 
@@ -107,8 +106,41 @@ public class GlobalParameters
     public static bool IsTelegram = true;
 
     /// <summary>ERP API路徑</summary>
-    public static string ERPSystemAPI = @"http://192.168.1.49:15500/ERP_API/";
+    public static string ERPSystemAPI(string connName)
+    {
+        var response = String.Empty;
+        try
+        {
+            switch (connName)
+            {
+                case sqlConnOADB:
+                    //OADB
+                    break;
 
+                case sqlConnBPMProDevHo:
+                    break;
+
+                case sqlConnBPMProDev:
+                    response = "http://192.168.1.49:15500/ERP_API/";
+                    break;
+
+                case sqlConnBPMProTest:
+                    response = "https://fintech-test-api.gtv.com.tw/";
+                    break;
+
+                case sqlConnBPMPro:
+                    response = "https://fintech-api.gtv.com.tw/";
+                    break;
+
+            }
+        }
+        catch (Exception ex)
+        {
+            CommLib.Logger.Error("ERP網址路徑比對失敗，原因：" + ex.Message);
+            throw;
+        }
+        return response;
+    }
     #endregion
 
     #region - 郵件伺服器 -

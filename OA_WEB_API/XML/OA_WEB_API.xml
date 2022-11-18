@@ -130,7 +130,7 @@
         <member name="F:GlobalParameters.IsTelegram">
             <summary>是否要發監控訊息</summary>
         </member>
-        <member name="F:GlobalParameters.ERPSystemAPI">
+        <member name="M:GlobalParameters.ERPSystemAPI(System.String)">
             <summary>ERP API路徑</summary>
         </member>
         <member name="F:GlobalParameters.MailServer">

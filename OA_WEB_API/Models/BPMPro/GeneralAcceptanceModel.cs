@@ -135,6 +135,12 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>商品備註</summary>
         public string DTL_NOTE { get; set; }
+
+        /// <summary>是否為原始列</summary>
+        public string IS_ORIGINAL { get; set; }
+
+        /// <summary>原始列編碼</summary>
+        public int? ORIGIN_NUM { get; set;}
     }
 
 }

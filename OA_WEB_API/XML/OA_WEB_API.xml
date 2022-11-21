@@ -1767,6 +1767,12 @@
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceDetailsConfig.DTL_NOTE">
             <summary>商品備註</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceDetailsConfig.IS_ORIGINAL">
+            <summary>是否為原始列</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceDetailsConfig.ORIGIN_NUM">
+            <summary>原始列編碼</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GeneralInvoiceQueryModel">
             <summary>
             行政採購請款單(查詢條件)

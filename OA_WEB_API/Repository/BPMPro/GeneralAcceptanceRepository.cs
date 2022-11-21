@@ -120,7 +120,9 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [DTL_OwnerName] AS [DTL_OWNER_NAME], ";
             strSQL += "     [DTL_AcceptanceNote] AS [DTL_ACPT_NOTE], ";
             strSQL += "     [DTL_Status] AS [DTL_STATUS], ";
-            strSQL += "     [DTL_Note] AS [DTL_NOTE] ";
+            strSQL += "     [DTL_Note] AS [DTL_NOTE], ";
+            strSQL += "     [IsOriginal] AS [IS_ORIGINAL], ";
+            strSQL += "     [OriginNum] AS [ORIGIN_NUM] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralAcceptance_DTL] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             var generalAcceptanceDetailsConfig = dbFun.DoQuery(strSQL, parameter).ToList<GeneralAcceptanceDetailsConfig>();
@@ -354,6 +356,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@DTL_ACPT_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_STATUS", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@IS_ORIGINAL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ORIGIN_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -379,8 +383,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralAcceptance_DTL]([RequisitionID],[GeneralOrderRequisitionID],[GeneralOrderBPMFormNo],[Period],[DTL_SupProdANo],[DTL_ItemName],[DTL_MODEL],[DTL_Specifications],[DTL_AcceptanceQuantity],[DTL_Quantity],[DTL_Unit],[DTL_OwnerDeptMainID],[DTL_OwnerDeptID],[DTL_OwnerID],[DTL_OwnerName],[DTL_AcceptanceNote],[DTL_Status],[DTL_Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@GENERAL_ORDER_REQUISITION_ID,@GENERAL_ORDER_BPM_FORM_NO,@PERIOD,@DTL_SUP_PROD_A_NO,@DTL_ITEM_NAME,@DTL_MODEL,@DTL_SPECIFICATIONS,@DTL_ACPT_QUANTITY,@DTL_QUANTITY,@DTL_UNIT,@DTL_OWNER_DEPT_MAIN_ID,@DTL_OWNER_DEPT_ID,@DTL_OWNER_ID,@DTL_OWNER_NAME,@DTL_ACPT_NOTE,@DTL_STATUS,@DTL_NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralAcceptance_DTL]([RequisitionID],[GeneralOrderRequisitionID],[GeneralOrderBPMFormNo],[Period],[DTL_SupProdANo],[DTL_ItemName],[DTL_MODEL],[DTL_Specifications],[DTL_AcceptanceQuantity],[DTL_Quantity],[DTL_Unit],[DTL_OwnerDeptMainID],[DTL_OwnerDeptID],[DTL_OwnerID],[DTL_OwnerName],[DTL_AcceptanceNote],[DTL_Status],[DTL_Note],[IsOriginal],[OriginNum]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@GENERAL_ORDER_REQUISITION_ID,@GENERAL_ORDER_BPM_FORM_NO,@PERIOD,@DTL_SUP_PROD_A_NO,@DTL_ITEM_NAME,@DTL_MODEL,@DTL_SPECIFICATIONS,@DTL_ACPT_QUANTITY,@DTL_QUANTITY,@DTL_UNIT,@DTL_OWNER_DEPT_MAIN_ID,@DTL_OWNER_DEPT_ID,@DTL_OWNER_ID,@DTL_OWNER_NAME,@DTL_ACPT_NOTE,@DTL_STATUS,@DTL_NOTE,@IS_ORIGINAL,@ORIGIN_NUM) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }

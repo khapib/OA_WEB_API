@@ -70,6 +70,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
+            strSQL += "     [BPMFormNo] AS [BPM_FORM_NO], ";
             strSQL += "     [Compendium] AS [COMPENDIUM], ";
             strSQL += "     [ContactPerson] AS [CONTACT_PERSON], ";
             strSQL += "     [Evaluate] AS [EVALUATE], ";
@@ -144,7 +145,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 合作夥伴審核設定 -
+                #region - 需求評估單設定 -
 
                 evaluateDemandConfig.FM7_SUBJECT = "(依此單內容重上)" + original.EVALUATE_DEMAND_CONFIG.FM7_SUBJECT;
 

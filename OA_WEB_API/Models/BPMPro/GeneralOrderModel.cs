@@ -50,7 +50,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 行政採購申請 表頭資訊
     /// </summary>
-    public class GeneralOrderTitle : HeaderTitle
+    public class GeneralOrderTitle : ImplementHeader
     {
         /// <summary>編輯註記</summary>
         public string EDIT_FLAG { get; set; }
@@ -188,25 +188,25 @@ namespace OA_WEB_API.Models.BPMPro
         public string DTL_UNIT { get; set; }
 
         /// <summary>未稅單價/NET單價</summary>
-        public int DTL_NET { get; set; }
+        public double DTL_NET { get; set; }
 
         /// <summary>未稅單價_台幣/NET單價_台幣</summary>
         public int DTL_NET_TWD { get; set; }
 
         /// <summary>含稅單價/GROSS單價</summary>
-        public int DTL_GROSS { get; set; }
+        public double DTL_GROSS { get; set; }
 
         /// <summary>含稅單價_台幣/GROSS單價_台幣</summary>
         public int DTL_GROSS_TWD { get; set; }
 
         /// <summary>未稅小計/NET小計</summary>
-        public int DTL_NET_SUM { get; set; }
+        public double DTL_NET_SUM { get; set; }
 
         /// <summary>未稅小計_台幣/NET小計_台幣</summary>
         public int DTL_NET_SUM_TWD { get; set; }
 
         /// <summary>含稅小計/GROSS小計</summary>
-        public int DTL_GROSS_SUM { get; set; }
+        public double DTL_GROSS_SUM { get; set; }
 
         /// <summary>含稅小計_台幣/GROSS小計_台幣</summary>
         public int DTL_GROSS_SUM_TWD { get; set; }

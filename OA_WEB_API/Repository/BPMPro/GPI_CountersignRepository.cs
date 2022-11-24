@@ -439,7 +439,7 @@ namespace OA_WEB_API.Repository.BPMPro
             catch (Exception ex)
             {
                 vResult = false;
-                CommLib.Logger.Error("行政採購申請單(新增/修改/草稿)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("四方四隅_會簽單(新增/修改/草稿)失敗，原因：" + ex.Message);
             }
 
             return vResult;

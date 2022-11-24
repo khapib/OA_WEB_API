@@ -42,14 +42,8 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 四方四隅_會簽單 表頭資訊
     /// </summary>
-    public class GPI_CountersignTitle
+    public class GPI_CountersignTitle : HeaderTitle
     {
-        /// <summary>主旨</summary>
-        public string FM7_SUBJECT { get; set; }
-
-        /// <summary>BPM 表單單號</summary>
-        public string BPM_FORM_NO { get; set; }
-
         /// <summary>
         /// 級別：
         /// 調整 ApplicantInfo(申請人資訊)的，表單PRIORITY(重要性)

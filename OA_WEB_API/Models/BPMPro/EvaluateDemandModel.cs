@@ -33,11 +33,8 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 需求評估設定
     /// </summary>
-    public class EvaluateDemandConfig
+    public class EvaluateDemandConfig : HeaderTitle
     {
-        /// <summary>主旨</summary>
-        public string FM7_SUBJECT { get; set; }
-
         /// <summary>概要</summary>
         public string COMPENDIUM { get; set; }
 

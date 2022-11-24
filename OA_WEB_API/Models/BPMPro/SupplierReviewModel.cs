@@ -38,7 +38,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 合作夥伴審核 表頭內容
     /// </summary>
-    public class SupplierReviewTitle : HeaderTitle
+    public class SupplierReviewTitle : ImplementHeader
     {
         /// <summary>審核單性質</summary>
         public string APPROVE { get; set; }

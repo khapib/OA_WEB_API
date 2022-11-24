@@ -50,7 +50,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 行政採購請款單 表頭資訊
     /// </summary>
-    public class GeneralInvoiceTitle : HeaderTitle
+    public class GeneralInvoiceTitle : ImplementHeader
     {
         /// <summary>ERP 工作流程標題名稱</summary>
         public string FLOW_NAME { get; set; }

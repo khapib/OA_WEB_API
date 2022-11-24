@@ -491,6 +491,11 @@
             需求評估單(新增/修改/草稿)
             </summary>
         </member>
+        <member name="T:OA_WEB_API.Controllers.BPMPro.ExpensesReimburseController">
+            <summary>
+            會簽管理系統 - 費用申請單
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.GeneralAcceptanceController">
             <summary>
             會簽管理系統 - 點驗收單
@@ -1622,9 +1627,6 @@
             需求評估設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateDemandConfig.FM7_SUBJECT">
-            <summary>主旨</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.EvaluateDemandConfig.COMPENDIUM">
             <summary>概要</summary>
         </member>
@@ -2604,12 +2606,6 @@
             四方四隅_會簽單 表頭資訊
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GPI_CountersignTitle.FM7_SUBJECT">
-            <summary>主旨</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GPI_CountersignTitle.BPM_FORM_NO">
-            <summary>BPM 表單單號</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GPI_CountersignTitle.LEVEL_TYPE">
             <summary>
             級別：
@@ -3269,13 +3265,18 @@
         <member name="P:OA_WEB_API.Models.BPMPro.Test05List.NARRATIVE">
             <summary>描述</summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.HeaderTitle">
+        <member name="T:OA_WEB_API.Models.BPMPro.ImplementHeader">
             <summary>
-            (BPM API共用)_ERP共用抬頭
+            (BPM API共用)_ERP起單共用抬頭
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.HeaderTitle.FORM_NO">
+        <member name="P:OA_WEB_API.Models.BPMPro.ImplementHeader.FORM_NO">
             <summary>ERP 表單唯一碼</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.HeaderTitle">
+            <summary>
+            (BPM API共用)_BPM表單抬頭
+            </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.HeaderTitle.FM7_SUBJECT">
             <summary>主旨</summary>

@@ -41,7 +41,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 行政採購點驗收單 表頭資訊
     /// </summary>
-    public class GeneralAcceptanceTitle : HeaderTitle
+    public class GeneralAcceptanceTitle : ImplementHeader
     {
         /// <summary>ERP 工作流程標題名稱</summary>
         public string FLOW_NAME { get; set; }

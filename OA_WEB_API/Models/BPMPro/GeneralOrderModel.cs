@@ -50,7 +50,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 行政採購申請 表頭資訊
     /// </summary>
-    public class GeneralOrderTitle : HeaderTitle
+    public class GeneralOrderTitle : ImplementHeader
     {
         /// <summary>編輯註記</summary>
         public string EDIT_FLAG { get; set; }

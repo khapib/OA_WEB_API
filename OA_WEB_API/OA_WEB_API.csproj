@@ -174,6 +174,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BPMPro\ActiveController.cs" />
     <Compile Include="Controllers\BPMPro\EvaluateDemandController.cs" />
+    <Compile Include="Controllers\BPMPro\ExpensesReimburseController.cs" />
     <Compile Include="Controllers\BPMPro\GeneralAcceptanceController.cs" />
     <Compile Include="Controllers\BPMPro\GeneralInvoiceController.cs" />
     <Compile Include="Controllers\BPMPro\GeneralOrderChangeController.cs" />
@@ -213,6 +214,7 @@
     </Compile>
     <Compile Include="Models\BPMPro\ActiveModel.cs" />
     <Compile Include="Models\BPMPro\EvaluateDemandModel.cs" />
+    <Compile Include="Models\BPMPro\ExpensesReimburseModel.cs" />
     <Compile Include="Models\BPMPro\GeneralAcceptanceModel.cs" />
     <Compile Include="Models\BPMPro\GeneralInvoiceModel.cs" />
     <Compile Include="Models\BPMPro\GeneralOrderChangeModel.cs" />
@@ -234,6 +236,7 @@
     <Compile Include="Models\BPMPro\UserModel.cs" />
     <Compile Include="Repository\BPMPro\ActiveRepository.cs" />
     <Compile Include="Repository\BPMPro\EvaluateDemandRepository.cs" />
+    <Compile Include="Repository\BPMPro\ExpensesReimburseRepository.cs" />
     <Compile Include="Repository\BPMPro\GeneralAcceptanceRepository.cs" />
     <Compile Include="Repository\BPMPro\GeneralInvoiceRepository.cs" />
     <Compile Include="Repository\BPMPro\GeneralOrderChangeRepository.cs" />

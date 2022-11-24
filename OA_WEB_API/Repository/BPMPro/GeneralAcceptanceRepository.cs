@@ -378,7 +378,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     foreach (var item in model.GENERAL_ACCEPTANCE_DETAILS_CONFIG)
                     {
-                        //寫入：行政採購申請 付款辦法parameter
+                        //寫入：行政採購點驗收單 驗收明細parameter
                         strJson = jsonFunction.ObjectToJSON(item);
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 

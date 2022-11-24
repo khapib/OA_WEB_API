@@ -20,22 +20,28 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    #region (BPM API共用)_ERP共用抬頭
+    #region (BPM API共用)_ERP起單共用抬頭
 
-        /// <summary>
-        /// (BPM API共用)_ERP共用抬頭
-        /// </summary>
-        public class HeaderTitle
-        {
-            /// <summary>ERP 表單唯一碼</summary>
-            public string FORM_NO { get; set; }
+    /// <summary>
+    /// (BPM API共用)_ERP起單共用抬頭
+    /// </summary>
+    public class ImplementHeader : HeaderTitle
+    {
+        /// <summary>ERP 表單唯一碼</summary>
+        public string FORM_NO { get; set; }
+    }
 
-            /// <summary>主旨</summary>
-            public string FM7_SUBJECT { get; set; }
+    /// <summary>
+    /// (BPM API共用)_BPM表單抬頭
+    /// </summary>
+    public class HeaderTitle
+    {
+        /// <summary>主旨</summary>
+        public string FM7_SUBJECT { get; set; }
 
-            /// <summary>BPM 表單單號</summary>
-            public string BPM_FORM_NO { get; set; }
-        }
+        /// <summary>BPM 表單單號</summary>
+        public string BPM_FORM_NO { get; set; }
+    }
 
     #endregion
 
@@ -105,7 +111,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 表單資料夾分類DataViewModel
     /// </summary>
-    public class FormMainData: FormTree
+    public class FormMainData : FormTree
     {
         /// <summary>表單資料夾名稱</summary>
         public string FOLDER_NAME { get; set; }
@@ -156,13 +162,13 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>是否開啟子母表單篩選功能</summary>
         public bool PARENT { get; set; }
-        
+
         /// <summary>審核狀態</summary>
         public int? STATUS { get; set; }
 
         /// <summary>表單代號</summary>
         public string IDENTIFY { get; set; }
-        
+
         /// <summary>
         /// 申請人-可查：
         ///     姓名、
@@ -295,14 +301,14 @@ namespace OA_WEB_API.Models.BPMPro
         public string START_DATE { get; set; }
 
         /// <summary>結束日期</summary>
-        public string END_DATE { get; set; }        
+        public string END_DATE { get; set; }
     }
 
     /// <summary>
     /// 表單關聯(搜詢)DataViewModel
     /// </summary>
     public class AssociatedFormDataViewModel
-   {
+    {
         /// <summary>關聯表單:系統編號</summary>
         public string ASSOCIATED_REQUISITION_ID { get; set; }
 
@@ -353,7 +359,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     #endregion
-    
+
     /// <summary>
     /// 表單關聯內容
     /// </summary>
@@ -383,7 +389,7 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>BPM 表單編號</summary>
         public string BPM_FORM_NO { get; set; }
-        
+
         /// <summary>主旨</summary>
         public string FM7_SUBJECT { get; set; }
 
@@ -405,7 +411,7 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    
+
 
     #region - (擴充方法)_共同表單區分 -
 
@@ -426,5 +432,5 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    
+
 }

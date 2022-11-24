@@ -35,7 +35,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 行政採購異動申請 表頭資訊
     /// </summary>
-    public class GeneralOrderChangeTitle : HeaderTitle
+    public class GeneralOrderChangeTitle : ImplementHeader
     {
         /// <summary>不可異動標住(付款辦法)</summary>
         public string PYMT_LOCK_PERIOD { get; set; }

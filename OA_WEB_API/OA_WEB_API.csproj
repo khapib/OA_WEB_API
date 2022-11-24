@@ -180,6 +180,7 @@
     <Compile Include="Controllers\BPMPro\GeneralOrderChangeController.cs" />
     <Compile Include="Controllers\BPMPro\GetExternalController.cs" />
     <Compile Include="Controllers\BPMPro\GPI_CountersignController.cs" />
+    <Compile Include="Controllers\BPMPro\MediaOrderController.cs" />
     <Compile Include="Controllers\BPMPro\NotifyController.cs" />
     <Compile Include="Controllers\BPMPro\CommonController.cs" />
     <Compile Include="Controllers\BPMPro\ProjectReviewController.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="Models\BPMPro\GeneralOrderModel.cs" />
     <Compile Include="Models\BPMPro\GetExternalModel.cs" />
     <Compile Include="Models\BPMPro\GPI_CountersignModel.cs" />
+    <Compile Include="Models\BPMPro\MediaOrderModel.cs" />
     <Compile Include="Models\BPMPro\NotifyModel.cs" />
     <Compile Include="Models\BPMPro\ProjectReviewModel.cs" />
     <Compile Include="Models\BPMPro\SupplierReviewModel.cs" />
@@ -243,6 +245,7 @@
     <Compile Include="Repository\BPMPro\GeneralOrderRepository.cs" />
     <Compile Include="Repository\BPMPro\GetExternalRepository.cs" />
     <Compile Include="Repository\BPMPro\GPI_CountersignRepository.cs" />
+    <Compile Include="Repository\BPMPro\MediaOrderRepository.cs" />
     <Compile Include="Repository\BPMPro\NotifyRepository.cs" />
     <Compile Include="Repository\BPMPro\ProjectReviewRepository.cs" />
     <Compile Include="Repository\BPMPro\SupplierReviewRepository.cs" />

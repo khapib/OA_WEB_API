@@ -254,18 +254,27 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 if (!String.IsNullOrEmpty(generalOrderTitle.GROUP_ID) || !String.IsNullOrWhiteSpace(generalOrderTitle.GROUP_ID))
                 {
-                    #region 判斷 編輯註記
-
-                    //是空null就給false預設值
-                    generalOrderTitle.EDIT_FLAG = generalOrderTitle.EDIT_FLAG ?? "false";
-
-                    if (!Boolean.Parse(generalOrderTitle.EDIT_FLAG))
+                    generalOrderTitle.GROUP_ID = generalOrderTitle.GROUP_ID + "1";
+                    try
                     {
-                        //匯入【子表單】
-                        generalOrderViewModel = PutGeneralOrderImportSingle(generalOrderViewModel);
+                        #region 判斷 編輯註記及匯入【子表單】
+
+                        //是空null就給false預設值
+                        generalOrderTitle.EDIT_FLAG = generalOrderTitle.EDIT_FLAG ?? "false";
+
+                        if (!Boolean.Parse(generalOrderTitle.EDIT_FLAG))
+                        {
+                            //匯入【子表單】
+                            generalOrderViewModel = PutGeneralOrderImportSingle(generalOrderViewModel);
+                        }
+
+                        #endregion
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("行政採購申請單(原表單匯入子表單)失敗；請確認原表單資訊是否正確。原因：" + ex.Message);
                     }
 
-                    #endregion
                 }
             }
 
@@ -291,7 +300,7 @@ namespace OA_WEB_API.Repository.BPMPro
         //    catch (Exception ex)
         //    {
         //        vResult = false;
-        //        CommLib.Logger.Error("專案建立審核單(依此單內容重送)失敗，原因" + ex.Message);
+        //        CommLib.Logger.Error("行政採購申請單(依此單內容重送)失敗，原因" + ex.Message);
         //    }
         //    return vResult;
         //}
@@ -489,7 +498,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@PYMT_LOCK_PERIOD", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_NET_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PYMT_GROSS_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PYMT_GROSS_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_GROSS_TOTAL_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_USE_BUDGET_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value }
                     };

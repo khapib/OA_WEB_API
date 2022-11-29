@@ -53,10 +53,10 @@ namespace OA_WEB_API.Repository.ERP
 
         #region  - 方法 -
 
-        #region - 專案建立審核單 財務審核資訊回傳ERP -
+        #region - 專案建立審核單 財務審核資訊_回傳ERP -
 
         /// <summary>
-        /// 專案建立審核單 財務審核資訊回傳ERP
+        /// 專案建立審核單 財務審核資訊_回傳ERP
         /// </summary>
         public ProjectReviewFinanceRequest PostProjectReviewFinanceSingle(RequestQueryModel query)
         {
@@ -64,7 +64,7 @@ namespace OA_WEB_API.Repository.ERP
             {
                 #region - 查詢及執行 -
 
-                #region - 專案建立審核單 財務審核資訊查詢 -
+                #region - 專案建立審核單 財務審核資訊 -
 
                 var parameter = new List<SqlParameter>()
                 {
@@ -136,10 +136,12 @@ namespace OA_WEB_API.Repository.ERP
 
         #endregion
 
-        #region - 行政採購申請單 申請審核資訊回傳ERP -
+        #region - 行政採購類_回傳ERP資訊 -
+
+        #region - 行政採購申請單 申請審核資訊_回傳ERP -
 
         /// <summary>
-        /// 行政採購申請單 申請審核資訊回傳ERP
+        /// 行政採購申請單 申請審核資訊_回傳ERP_回傳ERP
         /// </summary>
         public GeneralOrderInfoRequest PostGeneralOrderInfoSingle(RequestQueryModel query)
         {
@@ -217,91 +219,91 @@ namespace OA_WEB_API.Repository.ERP
 
         #endregion
 
-        #region - 行政採購異動申請單 異動申請資訊回傳ERP -
+        #region - 行政採購異動申請單 異動申請資訊_回傳ERP(暫時不需要) -
 
-        /// <summary>
-        /// 行政採購異動申請單 異動申請資訊回傳ERP
-        /// </summary>
-        public GeneralOrderChangeInfoRequest PostGeneralOrderChangeInfoSingle(RequestQueryModel query)
-        {
-            try
-            {
-                #region - 查詢及執行 -
+        ///// <summary>
+        ///// 行政採購異動申請單 異動申請資訊_回傳ERP
+        ///// </summary>
+        //public GeneralOrderChangeInfoRequest PostGeneralOrderChangeInfoSingle(RequestQueryModel query)
+        //{
+        //    try
+        //    {
+        //        #region - 查詢及執行 -
 
-                #region - 行政採購異動申請單 異動申請資訊查詢 -
+        //        #region - 行政採購異動申請單 異動申請資訊查詢 -
 
-                #region 回傳表單內容
+        //        #region 回傳表單內容
 
-                GeneralOrderChangeQueryModel generalOrderChangeQueryModel = new GeneralOrderChangeQueryModel
-                {
-                    REQUISITION_ID = query.REQUISITION_ID
-                };
+        //        GeneralOrderChangeQueryModel generalOrderChangeQueryModel = new GeneralOrderChangeQueryModel
+        //        {
+        //            REQUISITION_ID = query.REQUISITION_ID
+        //        };
 
-                GeneralOrderChangeInfoRequest generalOrderChangeInfoRequest = new GeneralOrderChangeInfoRequest();
-                var generalOrderChangeContent = generalOrderChangeRepository.PostGeneralOrderChangeSingle(generalOrderChangeQueryModel);
-                //Join 行政採購異動申請單(查詢)Function
-                strJson = jsonFunction.ObjectToJSON(generalOrderChangeContent);
-                //給予需要回傳ERP的資訊
-                generalOrderChangeInfoRequest.GENERAL_ORDER_INFO_CONFIG = jsonFunction.JsonToObject<GeneralOrderChangeInfoConfig>(strJson);
-                generalOrderChangeInfoRequest.REQUISITION_ID = generalOrderChangeContent.APPLICANT_INFO.REQUISITION_ID;
+        //        GeneralOrderChangeInfoRequest generalOrderChangeInfoRequest = new GeneralOrderChangeInfoRequest();
+        //        var generalOrderChangeContent = generalOrderChangeRepository.PostGeneralOrderChangeSingle(generalOrderChangeQueryModel);
+        //        //Join 行政採購異動申請單(查詢)Function
+        //        strJson = jsonFunction.ObjectToJSON(generalOrderChangeContent);
+        //        //給予需要回傳ERP的資訊
+        //        generalOrderChangeInfoRequest.GENERAL_ORDER_INFO_CONFIG = jsonFunction.JsonToObject<GeneralOrderChangeInfoConfig>(strJson);
+        //        generalOrderChangeInfoRequest.REQUISITION_ID = generalOrderChangeContent.APPLICANT_INFO.REQUISITION_ID;
 
-                #endregion
+        //        #endregion
 
-                #region 表單簽核狀態
+        //        #region 表單簽核狀態
 
-                var parameter = new List<SqlParameter>()
-                {
-                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID },
-                };
-                //表單資料
-                var formQueryModel = new FormQueryModel()
-                {
-                    REQUISITION_ID = query.REQUISITION_ID
-                };
-                var formData = formRepository.PostFormData(formQueryModel);
-                var stepFlowConfig = stepFlowRepository.StepFlowInfo(formData, parameter);
+        //        var parameter = new List<SqlParameter>()
+        //        {
+        //             new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID },
+        //        };
+        //        //表單資料
+        //        var formQueryModel = new FormQueryModel()
+        //        {
+        //            REQUISITION_ID = query.REQUISITION_ID
+        //        };
+        //        var formData = formRepository.PostFormData(formQueryModel);
+        //        var stepFlowConfig = stepFlowRepository.StepFlowInfo(formData, parameter);
 
-                #endregion
+        //        #endregion
 
-                #endregion
+        //        #endregion
 
-                #region - 回傳ERP - 
+        //        #region - 回傳ERP - 
 
-                generalOrderChangeInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
-                generalOrderChangeInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+        //        generalOrderChangeInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+        //        generalOrderChangeInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
 
-                if (query.REQUEST_FLG)
-                {
-                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/";
-                    Method = "POST";
-                    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, generalOrderChangeInfoRequest);
+        //        if (query.REQUEST_FLG)
+        //        {
+        //            ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/";
+        //            Method = "POST";
+        //            strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, generalOrderChangeInfoRequest);
 
-                    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
-                    CommLib.Logger.Debug("行政採購異動申請單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
-                    generalOrderChangeInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
-                }
+        //            erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+        //            CommLib.Logger.Debug("行政採購異動申請單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+        //            generalOrderChangeInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+        //        }
 
-                #endregion
+        //        #endregion
 
-                #endregion
+        //        #endregion
 
-                strJson = jsonFunction.ObjectToJSON(generalOrderChangeInfoRequest);
-                CommLib.Logger.Debug("行政採購異動申請單:" + query.REQUISITION_ID + " BPM回傳內容：" + strJson);
-                return generalOrderChangeInfoRequest;
-            }
-            catch (Exception ex)
-            {
-                CommLib.Logger.Error("行政採購異動申請單:" + query.REQUISITION_ID + " 異動申請資訊回傳ERP 失敗，原因：" + ex.Message);
-                throw;
-            }
-        }
+        //        strJson = jsonFunction.ObjectToJSON(generalOrderChangeInfoRequest);
+        //        CommLib.Logger.Debug("行政採購異動申請單:" + query.REQUISITION_ID + " BPM回傳內容：" + strJson);
+        //        return generalOrderChangeInfoRequest;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        CommLib.Logger.Error("行政採購異動申請單:" + query.REQUISITION_ID + " 異動申請資訊回傳ERP 失敗，原因：" + ex.Message);
+        //        throw;
+        //    }
+        //}
 
         #endregion
 
-        #region - 行政採購點驗收單 驗收明細回傳ERP -
+        #region - 行政採購點驗收單 驗收審核資訊_回傳ERP -
 
         /// <summary>
-        /// 行政採購點驗收單 驗收明細回傳ERP
+        /// 行政採購點驗收單 驗收審核資訊_回傳ERP
         /// </summary>
         public GeneralAcceptanceInfoRequest PostGeneralAcceptanceInfoSingle(RequestQueryModel query)
         {
@@ -309,7 +311,7 @@ namespace OA_WEB_API.Repository.ERP
             {
                 #region - 查詢及執行 -
 
-                #region - 行政採購點驗收單 內容資訊查詢 -
+                #region - 行政採購點驗收單 驗收審核資訊 -
 
                 #region 回傳表單內容
 
@@ -350,7 +352,7 @@ namespace OA_WEB_API.Repository.ERP
 
                 generalAcceptanceInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
                 generalAcceptanceInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
-                
+
                 if (query.REQUEST_FLG)
                 {
                     ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/UpdateAcpt_DetailContent";
@@ -382,7 +384,7 @@ namespace OA_WEB_API.Repository.ERP
         #region - 行政採購請款單 財務簽核資訊回傳ERP -
 
         /// <summary>
-        /// 行政採購請款單 財務簽核資訊回傳ERP
+        /// 行政採購請款單 財務審核資訊_回傳ERP
         /// </summary>
         public GeneralInvoiceInfoRequest PostGeneralInvoiceInfoSingle(RequestQueryModel query)
         {
@@ -390,7 +392,7 @@ namespace OA_WEB_API.Repository.ERP
             {
                 #region - 查詢及執行 -
 
-                #region - 行政採購點驗收單 內容資訊查詢 -
+                #region - 行政採購點驗收單 財務審核資訊 -
 
                 #region 回傳表單內容
 
@@ -455,8 +457,10 @@ namespace OA_WEB_API.Repository.ERP
             {
                 CommLib.Logger.Error("行政採購請款單:" + query.REQUISITION_ID + " 財務簽核資訊回傳ERP 失敗，原因：" + ex.Message);
                 throw;
-            }           
+            }
         }
+
+        #endregion
 
         #endregion
 

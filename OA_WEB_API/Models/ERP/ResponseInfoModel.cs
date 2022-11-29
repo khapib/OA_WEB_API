@@ -26,10 +26,10 @@ namespace OA_WEB_API.Models.ERP
 
     #endregion
 
-    #region - 專案建立審核單 財務審核資訊回傳ERP -
+    #region - 專案建立審核單 財務審核資訊_回傳ERP -
 
     /// <summary>
-    /// 專案建立審核單 財務審核資訊回傳ERP 設定
+    /// 專案建立審核單 財務審核資訊_回傳ERP 設定
     /// </summary>
     public class ProjectReviewFinanceConfig
     {
@@ -41,7 +41,7 @@ namespace OA_WEB_API.Models.ERP
     }
 
     /// <summary>
-    /// 專案建立審核單 財務審核資訊回傳ERP 
+    /// 專案建立審核單 財務審核資訊_回傳ERP 
     /// </summary>
     public class ProjectReviewFinanceRequest
     {
@@ -64,10 +64,10 @@ namespace OA_WEB_API.Models.ERP
 
     #endregion
 
-    #region - 行政採購申請單 申請審核資訊回傳ERP -
+    #region - 行政採購申請單 申請審核資訊_回傳ERP -
 
     /// <summary>
-    /// 行政採購申請單 申請審核資訊回傳ERP 
+    /// 行政採購申請單 申請審核資訊_回傳ERP 
     /// </summary>
     public class GeneralOrderInfoRequest: GeneralOrderQueryModel
     {
@@ -105,45 +105,45 @@ namespace OA_WEB_API.Models.ERP
 
     #endregion
 
-    #region - 行政採購異動申請單 異動申請資訊回傳ERP -
+    #region - 行政採購異動申請單 異動申請資訊回傳ERP(暫時不需要) -
 
-    /// <summary>
-    /// 行政採購異動申請單 異動申請資訊回傳ERP 
-    /// </summary>
-    public class GeneralOrderChangeInfoRequest: GeneralOrderChangeQueryModel
-    {
-        /// <summary>接收ERP回傳狀態</summary>
-        public ErpResponseState ERP_RESPONSE_STATE { get; set; }
+    ///// <summary>
+    ///// 行政採購異動申請單 異動申請資訊回傳ERP 
+    ///// </summary>
+    //public class GeneralOrderChangeInfoRequest: GeneralOrderChangeQueryModel
+    //{
+    //    /// <summary>接收ERP回傳狀態</summary>
+    //    public ErpResponseState ERP_RESPONSE_STATE { get; set; }
 
-        /// <summary>行政採購申請單 申請審核資訊回傳 內容</summary>
-        public GeneralOrderChangeInfoConfig GENERAL_ORDER_INFO_CONFIG { get; set; }
+    //    /// <summary>行政採購申請單 申請審核資訊回傳 內容</summary>
+    //    public GeneralOrderChangeInfoConfig GENERAL_ORDER_INFO_CONFIG { get; set; }
 
-        /// <summary>最後簽核人員工編號</summary>
-        public string LoginId { get; set; }
+    //    /// <summary>最後簽核人員工編號</summary>
+    //    public string LoginId { get; set; }
 
-        /// <summary>最後簽核人姓名</summary>
-        public string LoginName { get; set; }
+    //    /// <summary>最後簽核人姓名</summary>
+    //    public string LoginName { get; set; }
 
-    }
+    //}
 
-    /// <summary>
-    /// 行政採購異動申請單 異動申請資訊回傳ERP 設定
-    /// </summary>
-    public class GeneralOrderChangeInfoConfig
-    {        
-        /// <summary>行政採購異動申請單 表頭資訊</summary>
-        public GeneralOrderChangeTitle GENERAL_ORDER_CHANGE_TITLE { get; set; }
+    ///// <summary>
+    ///// 行政採購異動申請單 異動申請資訊回傳ERP 設定
+    ///// </summary>
+    //public class GeneralOrderChangeInfoConfig
+    //{        
+    //    /// <summary>行政採購異動申請單 表頭資訊</summary>
+    //    public GeneralOrderChangeTitle GENERAL_ORDER_CHANGE_TITLE { get; set; }
 
-        /// <summary>行政採購異動申請單 設定</summary>
-        public GeneralOrderChangeConfig GENERAL_ORDER_CHANGE_CONFIG { get; set; }
-    }
+    //    /// <summary>行政採購異動申請單 設定</summary>
+    //    public GeneralOrderChangeConfig GENERAL_ORDER_CHANGE_CONFIG { get; set; }
+    //}
 
     #endregion
 
-    #region - 行政採購點驗收單 驗收明細回傳ERP -
+    #region - 行政採購點驗收單 驗收審核資訊_回傳ERP -
 
     /// <summary>
-    /// 行政採購點驗收單 驗收明細回傳ERP 
+    /// 行政採購點驗收單 驗收審核資訊_回傳ERP 
     /// </summary>
     public class GeneralAcceptanceInfoRequest: GeneralAcceptanceQueryModel
     {
@@ -165,10 +165,10 @@ namespace OA_WEB_API.Models.ERP
 
     #endregion
 
-    #region - 行政採購請款單 財務簽核資訊回傳ERP -
+    #region - 行政採購請款單 財務審核資訊_回傳ERP -
 
     /// <summary>
-    /// 行政採購請款單 財務簽核資訊回傳ERP
+    /// 行政採購請款單 財務審核資訊_回傳ERP
     /// </summary>
     public class GeneralInvoiceInfoRequest : GeneralInvoiceQueryModel
     {

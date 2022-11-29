@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 
 /// <summary>
-/// 外部接收資訊
+/// 外部起單資訊
 /// </summary>
 namespace OA_WEB_API.Models.BPMPro
 {
@@ -24,10 +24,10 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    #region - 專案建立審核單(外部接收) -
+    #region - 專案建立審核單(外部起單) -
 
     /// <summary>
-    /// 專案建立審核單(外部接收)ERP資料
+    /// 專案建立審核單(外部起單)ERP資料
     /// </summary>
     public class ProjectReviewERPInfo
     {
@@ -62,10 +62,10 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    #region - 合作夥伴審核單(外部接收) -
+    #region - 合作夥伴審核單(外部起單) -
 
     /// <summary>
-    /// 合作夥伴審核單(外部接收)ERP資料
+    /// 合作夥伴審核單(外部起單)ERP資料
     /// </summary>
     public class SupplierReviewERPInfo
     {
@@ -108,10 +108,10 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    #region - 行政採購申請單(外部接收) -
+    #region - 行政採購申請單(外部起單) -
 
     /// <summary>
-    /// 行政採購申請單(外部接收)ERP資料
+    /// 行政採購申請單(外部起單)ERP資料
     /// </summary>
     public class GeneralOrderERPInfo
     {
@@ -130,10 +130,10 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    #region - 行政採購異動申請單(外部接收) -
+    #region - 行政採購異動申請單(外部起單) -
 
     /// <summary>
-    /// 行政採購異動申請單(外部接收)ERP資料
+    /// 行政採購異動申請單(外部起單)ERP資料
     /// </summary>
     public class GeneralOrderChangeERPInfo
     {
@@ -164,10 +164,10 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    #region - 行政採購點驗收單(外部接收) -
+    #region - 行政採購點驗收單(外部起單) -
 
     /// <summary>
-    /// 行政採購點驗收單(外部接收)
+    /// 行政採購點驗收單(外部起單)
     /// </summary>
     public class GeneralAcceptanceERPInfo
     {
@@ -201,10 +201,10 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    #region - 行政採購請購單(外部接收) -
+    #region - 行政採購請購單(外部起單) -
 
     /// <summary>
-    /// 行政採購請購單(外部接收)
+    /// 行政採購請購單(外部起單)
     /// </summary>
     public class GeneralInvoiceERPInfo
     {

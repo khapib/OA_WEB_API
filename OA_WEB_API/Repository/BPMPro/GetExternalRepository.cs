@@ -13,7 +13,7 @@ using OA_WEB_API.Repository.ERP;
 namespace OA_WEB_API.Repository.BPMPro
 {
     /// <summary>
-    /// 外部接收
+    /// 外部起單
     /// </summary>
     public class GetExternalRepository
     {
@@ -57,10 +57,10 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #region - 方法 -
 
-        #region - 專案建立審核單(外部接收) -
+        #region - 專案建立審核單(外部起單) -
 
         /// <summary>
-        /// 專案建立審核單(外部接收)
+        /// 專案建立審核單(外部起單)
         /// </summary>
         public GetExternalData PutProjectReviewGetExternal(ProjectReviewERPInfo model)
         {
@@ -215,17 +215,17 @@ namespace OA_WEB_API.Repository.BPMPro
             }
             catch (Exception ex)
             {
-                CommLib.Logger.Error("專案建立審核單(外部接收)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("專案建立審核單(外部起單)失敗，原因：" + ex.Message);
                 throw;
             }
         }
 
         #endregion
 
-        #region - 合作夥伴審核單(外部接收) -
+        #region - 合作夥伴審核單(外部起單) -
 
         /// <summary>
-        /// 合作夥伴審核單(外部接收)
+        /// 合作夥伴審核單(外部起單)
         /// </summary>
         public GetExternalData PutSupplierReviewGetExternal(SupplierReviewERPInfo model)
         {
@@ -415,17 +415,19 @@ namespace OA_WEB_API.Repository.BPMPro
             }
             catch (Exception ex)
             {
-                CommLib.Logger.Error("合作夥伴審核單(外部接收)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("合作夥伴審核單(外部起單)失敗，原因：" + ex.Message);
                 throw;
             }
         }
 
         #endregion
 
-        #region - 行政採購申請單(外部接收) -
+        #region - 外部起單行政採購類 -
+
+        #region - 行政採購申請單(外部起單) -
 
         /// <summary>
-        /// 行政採購申請單(外部接收)
+        /// 行政採購申請單(外部起單)
         /// </summary>
         public GetExternalData PutGeneralOrderGetExternal(GeneralOrderERPInfo model)
         {
@@ -568,10 +570,10 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
-        #region - 行政採購異動申請單(外部接收) -
+        #region - 行政採購異動申請單(外部起單) -
 
         /// <summary>
-        /// 行政採購異動申請單(外部接收)
+        /// 行政採購異動申請單(外部起單)
         /// </summary>
         public GetExternalData PutGeneralOrderChangeGetExternal(GeneralOrderChangeERPInfo model)
         {
@@ -748,10 +750,10 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
-        #region - 行政採購點驗收單(外部接收) -
+        #region - 行政採購點驗收單(外部起單) -
 
         /// <summary>
-        /// 行政採購點驗收單(外部接收)
+        /// 行政採購點驗收單(外部起單)
         /// </summary>
         public GetExternalData PutGeneralAcceptanceGetExternal(GeneralAcceptanceERPInfo model)
         {
@@ -902,10 +904,10 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
-        #region - 行政採購請款單(外部接收) -
+        #region - 行政採購請款單(外部起單) -
 
         /// <summary>
-        /// 行政採購請款單(外部接收)
+        /// 行政採購請款單(外部起單)
         /// </summary>
         public GetExternalData PutGeneralInvoiceGetExternal(GeneralInvoiceERPInfo model)
         {
@@ -1046,6 +1048,12 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
         }
+
+        #endregion
+
+        #endregion
+
+        #region - 版權採購類 -
 
         #endregion
 

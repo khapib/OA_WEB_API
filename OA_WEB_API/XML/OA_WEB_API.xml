@@ -543,37 +543,37 @@
         </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.GetExternalController">
             <summary>
-            外部接收
+            外部起單
             </summary>
         </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutProjectReviewGetExternal(OA_WEB_API.Models.BPMPro.ProjectReviewERPInfo)">
             <summary>
-            專案建立審核單(外部接收)
+            專案建立審核單(外部起單)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutSupplierReviewGetExternal(OA_WEB_API.Models.BPMPro.SupplierReviewERPInfo)">
             <summary>
-            合作夥伴審核單(外部接收)
+            合作夥伴審核單(外部起單)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutGeneralOrderGetExternal(OA_WEB_API.Models.BPMPro.GeneralOrderERPInfo)">
             <summary>
-            行政採購申請單(外部接收)
+            行政採購申請單(外部起單)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutGeneralOrderChangeGetExternal(OA_WEB_API.Models.BPMPro.GeneralOrderChangeERPInfo)">
             <summary>
-            行政採購異動申請單(外部接收)
+            行政採購異動申請單(外部起單)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutGeneralAcceptanceGetExternal(OA_WEB_API.Models.BPMPro.GeneralAcceptanceERPInfo)">
             <summary>
-            行政採購點驗收單(外部接收)
+            行政採購點驗收單(外部起單)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutGeneralInvoiceGetExternal(OA_WEB_API.Models.BPMPro.GeneralInvoiceERPInfo)">
             <summary>
-            行政採購請款單(外部接收)
+            行政採購請款單(外部起單)
             </summary>
         </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.GPI_CountersignController">
@@ -2401,7 +2401,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ProjectReviewERPInfo">
             <summary>
-            專案建立審核單(外部接收)ERP資料
+            專案建立審核單(外部起單)ERP資料
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ProjectReviewERPInfo.BPM_REQ_ID">
@@ -2433,7 +2433,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.SupplierReviewERPInfo">
             <summary>
-            合作夥伴審核單(外部接收)ERP資料
+            合作夥伴審核單(外部起單)ERP資料
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.SupplierReviewERPInfo.TITLE">
@@ -2473,7 +2473,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GeneralOrderERPInfo">
             <summary>
-            行政採購申請單(外部接收)ERP資料
+            行政採購申請單(外部起單)ERP資料
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderERPInfo.BPM_REQ_ID">
@@ -2490,7 +2490,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GeneralOrderChangeERPInfo">
             <summary>
-            行政採購異動申請單(外部接收)ERP資料
+            行政採購異動申請單(外部起單)ERP資料
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderChangeERPInfo.BPM_REQ_ID">
@@ -2519,7 +2519,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GeneralAcceptanceERPInfo">
             <summary>
-            行政採購點驗收單(外部接收)
+            行政採購點驗收單(外部起單)
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceERPInfo.TITLE">
@@ -2550,7 +2550,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GeneralInvoiceERPInfo">
             <summary>
-            行政採購請購單(外部接收)
+            行政採購請購單(外部起單)
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceERPInfo.TITLE">
@@ -5030,7 +5030,7 @@
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.GetExternalRepository">
             <summary>
-            外部接收
+            外部起單
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.projectReviewRepository">
@@ -5053,32 +5053,32 @@
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutProjectReviewGetExternal(OA_WEB_API.Models.BPMPro.ProjectReviewERPInfo)">
             <summary>
-            專案建立審核單(外部接收)
+            專案建立審核單(外部起單)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutSupplierReviewGetExternal(OA_WEB_API.Models.BPMPro.SupplierReviewERPInfo)">
             <summary>
-            合作夥伴審核單(外部接收)
+            合作夥伴審核單(外部起單)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutGeneralOrderGetExternal(OA_WEB_API.Models.BPMPro.GeneralOrderERPInfo)">
             <summary>
-            行政採購申請單(外部接收)
+            行政採購申請單(外部起單)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutGeneralOrderChangeGetExternal(OA_WEB_API.Models.BPMPro.GeneralOrderChangeERPInfo)">
             <summary>
-            行政採購異動申請單(外部接收)
+            行政採購異動申請單(外部起單)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutGeneralAcceptanceGetExternal(OA_WEB_API.Models.BPMPro.GeneralAcceptanceERPInfo)">
             <summary>
-            行政採購點驗收單(外部接收)
+            行政採購點驗收單(外部起單)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutGeneralInvoiceGetExternal(OA_WEB_API.Models.BPMPro.GeneralInvoiceERPInfo)">
             <summary>
-            行政採購請款單(外部接收)
+            行政採購請款單(外部起單)
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.IDENTIFY">

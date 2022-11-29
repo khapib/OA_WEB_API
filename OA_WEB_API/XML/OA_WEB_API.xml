@@ -596,6 +596,26 @@
             四方四隅_會簽單(新增/修改/草稿)
             </summary>
         </member>
+        <member name="T:OA_WEB_API.Controllers.BPMPro.MediaOrderController">
+            <summary>
+            會簽管理系統 - 版權採購申請單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.MediaOrderController.PostMediaOrderSingle(OA_WEB_API.Models.BPMPro.MediaOrderQueryModel)">
+            <summary>
+            版權採購申請單(查詢)
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.MediaOrderController.PutMediaOrderSingle(OA_WEB_API.Models.BPMPro.MediaOrderViewModel)">
+            <summary>
+            版權採購申請單(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.MediaOrderController.PutMediaOrderImportSingle(OA_WEB_API.Models.BPMPro.MediaOrderViewModel)">
+            <summary>
+            版權採購申請單(原表單匯入子表單)
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.ProjectReviewController">
             <summary>
             會簽管理系統 - 專案建立審核單
@@ -5131,9 +5151,19 @@
             會簽管理系統 - 版權採購申請單
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.MediaOrderRepository.PostMediaOrderSingle(OA_WEB_API.Models.BPMPro.MediaOrderQueryModel)">
+            <summary>
+            版權採購申請單(查詢)
+            </summary>
+        </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.MediaOrderRepository.PutMediaOrderSingle(OA_WEB_API.Models.BPMPro.MediaOrderViewModel)">
             <summary>
             版權採購申請單(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.MediaOrderRepository.PutMediaOrderImportSingle(OA_WEB_API.Models.BPMPro.MediaOrderViewModel)">
+            <summary>
+            版權採購申請單(原表單匯入子表單)
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaOrderRepository.strSQL">

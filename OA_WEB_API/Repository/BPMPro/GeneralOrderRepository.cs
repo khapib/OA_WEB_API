@@ -254,7 +254,6 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 if (!String.IsNullOrEmpty(generalOrderTitle.GROUP_ID) || !String.IsNullOrWhiteSpace(generalOrderTitle.GROUP_ID))
                 {
-                    generalOrderTitle.GROUP_ID = generalOrderTitle.GROUP_ID + "1";
                     try
                     {
                         #region 判斷 編輯註記及匯入【子表單】

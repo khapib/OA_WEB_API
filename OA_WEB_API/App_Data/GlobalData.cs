@@ -384,7 +384,7 @@ public class GlobalParameters
         catch (Exception ex)
         {
             CommLib.Logger.Error("請求信息失敗，原因：" + ex.Message);
-             throw;
+            throw;
         }
     }
 
@@ -395,12 +395,12 @@ public class GlobalParameters
     {
         try
         {
-            var request = (HttpWebRequest)WebRequest.Create(ApiUrl);            
+            var request = (HttpWebRequest)WebRequest.Create(ApiUrl);
             request.Method = Method;
             request.ContentType = "application/json";
             //request.ContentType = "application/x-www-form-urlencoded";
             //request.UserAgent = "Mozilla/5.0";
-            request.Timeout = 3000; 
+            request.Timeout = 3000;
 
             //將匿名物件序列化為json字串
             string postBody = jsonFunction.ObjectToJSON(RequestJson);
@@ -443,13 +443,13 @@ public class GlobalParameters
 
             foreach (var k in dictionary)
             {
-                var SqlParameter = parameters.Where(P => P.ParameterName.Contains(k.Key)).FirstOrDefault();
+                var SqlParameter = parameters.Where(P => P.ParameterName == "@" + k.Key).FirstOrDefault();
 
                 if (SqlParameter != null)
                 {
                     SqlParameter.Value = k.Value;
-                    
-                    if(k.Value == null)
+
+                    if (k.Value == null)
                     {
                         SqlParameter.Value = (object)DBNull.Value;
                     }

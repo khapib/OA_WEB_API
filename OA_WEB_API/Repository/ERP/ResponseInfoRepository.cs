@@ -10,7 +10,7 @@ using OA_WEB_API.Models.ERP;
 using OA_WEB_API.Repository.BPMPro;
 
 using Newtonsoft.Json;
-
+using System.Drawing;
 
 namespace OA_WEB_API.Repository.ERP
 {
@@ -38,6 +38,8 @@ namespace OA_WEB_API.Repository.ERP
 
         #region FormRepository
 
+        #region 行政採購類_FormRepository
+
         /// <summary>行政採購申請單</summary>
         GeneralOrderRepository generalOrderRepository = new GeneralOrderRepository();
         /// <summary>行政採購異動申請單</summary>
@@ -46,6 +48,15 @@ namespace OA_WEB_API.Repository.ERP
         GeneralAcceptanceRepository generalAcceptanceRepository = new GeneralAcceptanceRepository();
         /// <summary>行政採購請款單</summary>
         GeneralInvoiceRepository generalInvoiceRepository = new GeneralInvoiceRepository();
+
+        #endregion
+
+        #region 版權採購類_FormRepository
+
+        /// <summary>版權採購申請單</summary>
+        MediaOrderRepository mediaOrderRepository = new MediaOrderRepository();
+
+        #endregion
 
         #endregion
 
@@ -149,7 +160,7 @@ namespace OA_WEB_API.Repository.ERP
             {
                 #region - 查詢及執行 -
 
-                #region - 行政採購申請單 申請審核資訊查詢 -
+                #region - 行政採購申請單 申請審核資訊 -
 
                 #region 回傳表單內容
 
@@ -230,7 +241,7 @@ namespace OA_WEB_API.Repository.ERP
         //    {
         //        #region - 查詢及執行 -
 
-        //        #region - 行政採購異動申請單 異動申請資訊查詢 -
+        //        #region - 行政採購異動申請單 異動申請資訊 -
 
         //        #region 回傳表單內容
 
@@ -381,7 +392,7 @@ namespace OA_WEB_API.Repository.ERP
 
         #endregion
 
-        #region - 行政採購請款單 財務簽核資訊回傳ERP -
+        #region - 行政採購請款單 財務審核資訊_回傳ERP -
 
         /// <summary>
         /// 行政採購請款單 財務審核資訊_回傳ERP
@@ -456,6 +467,91 @@ namespace OA_WEB_API.Repository.ERP
             catch (Exception ex)
             {
                 CommLib.Logger.Error("行政採購請款單:" + query.REQUISITION_ID + " 財務簽核資訊回傳ERP 失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region - 版權採購類_回傳ERP資訊 -
+
+        #region - 版權採購申請單 申請審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 版權採購申請單 申請審核資訊_回傳ERP
+        /// </summary>
+        public MediaOrderInfoRequest PostMediaOrderInfoSingle(RequestQueryModel query)
+        {
+            try
+            {
+                #region - 查詢及執行 -
+
+                #region - 版權採購申請單 申請審核資訊 -
+
+                #region 回傳表單內容
+
+                var mediaOrderQueryModel = new MediaOrderQueryModel
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+
+                MediaOrderInfoRequest mediaOrderInfoRequest = new MediaOrderInfoRequest();
+                var generalOrderContent = mediaOrderRepository.PostMediaOrderSingle(mediaOrderQueryModel);
+                //Join 版權採購申請單(查詢)Function
+                strJson = jsonFunction.ObjectToJSON(generalOrderContent);
+                //給予需要回傳ERP的資訊
+                mediaOrderInfoRequest = jsonFunction.JsonToObject<MediaOrderInfoRequest>(strJson);
+                mediaOrderInfoRequest.REQUISITION_ID = generalOrderContent.APPLICANT_INFO.REQUISITION_ID;
+
+                #endregion
+
+                #region 表單簽核狀態
+
+                var parameter = new List<SqlParameter>()
+                {
+                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID },
+                };
+                //表單資料
+                var formQueryModel = new FormQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+                var formData = formRepository.PostFormData(formQueryModel);
+                var stepFlowConfig = stepFlowRepository.StepFlowInfo(formData, parameter);
+
+                #endregion
+
+                #endregion
+
+                #region - 回傳ERP - 
+
+                mediaOrderInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                mediaOrderInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+
+                if (query.REQUEST_FLG)
+                {
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/";
+                    Method = "POST";
+                    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, mediaOrderInfoRequest);
+
+                    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                    CommLib.Logger.Debug("版權採購申請單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                    mediaOrderInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                }
+
+                #endregion
+
+                #endregion
+
+                strJson = jsonFunction.ObjectToJSON(mediaOrderInfoRequest);
+                CommLib.Logger.Debug("版權採購申請單:" + query.REQUISITION_ID + " BPM回傳內容：" + strJson);
+                return mediaOrderInfoRequest;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("版權採購申請單:" + query.REQUISITION_ID + " 申請審核資訊回傳ERP 失敗，原因：" + ex.Message);
                 throw;
             }
         }

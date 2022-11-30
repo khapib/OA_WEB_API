@@ -53,6 +53,8 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #endregion
 
+        #region - 行政採購類_(外部起單) -
+
         #region - 行政採購申請單(外部起單) -
 
         /// <summary>
@@ -106,6 +108,40 @@ namespace OA_WEB_API.Controllers.BPMPro
         {
             return getExternalRepository.PutGeneralInvoiceGetExternal(model);
         }
+
+        #endregion
+
+        #endregion
+
+        #region - 版權採購類_(外部起單) -
+
+        #region - 版權採購申請單(外部起單) -
+
+        /// <summary>
+        /// 版權採購申請單(外部起單)
+        /// </summary>
+        [Route("api/PutMediaOrderGetExternal")]
+        [HttpPost]
+        public GetExternalData PutMediaOrderGetExternal(MediaOrderERPInfo model)
+        {
+            return getExternalRepository.PutMediaOrderGetExternal(model);
+        }
+
+        #endregion
+
+        #region - 版權購異動申請單(外部起單) -
+
+        /// <summary>
+        /// 版權購異動申請單(外部起單)
+        /// </summary>
+        [Route("api/PutMediaOrderChangeGetExternal")]
+        [HttpPost]
+        public GetExternalData PutMediaOrderChangeGetExternal(MediaOrderChangeERPInfo model)
+        {
+            return getExternalRepository.PutMediaOrderChangeGetExternal(model);
+        }
+
+        #endregion
 
         #endregion
 

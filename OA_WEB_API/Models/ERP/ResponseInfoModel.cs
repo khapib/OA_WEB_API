@@ -64,12 +64,14 @@ namespace OA_WEB_API.Models.ERP
 
     #endregion
 
+    #region - 行政採購類_回傳ERP資訊 -
+
     #region - 行政採購申請單 申請審核資訊_回傳ERP -
 
     /// <summary>
     /// 行政採購申請單 申請審核資訊_回傳ERP 
     /// </summary>
-    public class GeneralOrderInfoRequest: GeneralOrderQueryModel
+    public class GeneralOrderInfoRequest : GeneralOrderQueryModel
     {
         /// <summary>接收ERP回傳狀態</summary>
         public ErpResponseState ERP_RESPONSE_STATE { get; set; }
@@ -108,7 +110,7 @@ namespace OA_WEB_API.Models.ERP
     #region - 行政採購異動申請單 異動申請資訊回傳ERP(暫時不需要) -
 
     ///// <summary>
-    ///// 行政採購異動申請單 異動申請資訊回傳ERP 
+    ///// 行政採購異動申請單 異動申請資訊_回傳ERP 
     ///// </summary>
     //public class GeneralOrderChangeInfoRequest: GeneralOrderChangeQueryModel
     //{
@@ -127,7 +129,7 @@ namespace OA_WEB_API.Models.ERP
     //}
 
     ///// <summary>
-    ///// 行政採購異動申請單 異動申請資訊回傳ERP 設定
+    ///// 行政採購異動申請單 異動申請資訊_回傳ERP 設定
     ///// </summary>
     //public class GeneralOrderChangeInfoConfig
     //{        
@@ -145,7 +147,7 @@ namespace OA_WEB_API.Models.ERP
     /// <summary>
     /// 行政採購點驗收單 驗收審核資訊_回傳ERP 
     /// </summary>
-    public class GeneralAcceptanceInfoRequest: GeneralAcceptanceQueryModel
+    public class GeneralAcceptanceInfoRequest : GeneralAcceptanceQueryModel
     {
         /// <summary>接收ERP回傳狀態</summary>
         public ErpResponseState ERP_RESPONSE_STATE { get; set; }
@@ -191,8 +193,62 @@ namespace OA_WEB_API.Models.ERP
         public string LoginId { get; set; }
 
         /// <summary>最後簽核人姓名</summary>
-        public string LoginName { get; set; }        
+        public string LoginName { get; set; }
     }
 
     #endregion
+
+    #endregion
+
+    #region - 版權採購類_回傳ERP資訊 -
+
+    #region - 版權採購申請單 申請審核資訊_回傳ERP -
+
+    /// <summary>
+    /// 版權採購申請單 申請審核資訊_回傳ERP 
+    /// </summary>
+    public class MediaOrderInfoRequest : MediaOrderQueryModel
+    {
+        /// <summary>接收ERP回傳狀態</summary>
+        public ErpResponseState ERP_RESPONSE_STATE { get; set; }
+
+        /// <summary>版權採購申請 表頭資訊</summary>
+        public MediaOrderTitle MEDIA_ORDER_TITLE { get; set; }
+
+        /// <summary>版權採購申請 設定</summary>
+        public MediaOrderConfig MEDIA_ORDER_CONFIG { get; set; }
+
+        /// <summary>版權採購申請單 採購明細 設定</summary>
+        public IList<MediaOrderDetailsConfig> MEDIA_ORDER_DTLS_CONFIG { get; set; }
+
+        /// <summary>版權採購申請單 授權權利 設定</summary>
+        public IList<MediaOrderAuthorizesConfig> MEDIA_ORDER_AUTHS_CONFIG { get; set; }
+
+        /// <summary>版權採購申請單 額外項目 設定</summary>
+        public IList<MediaOrderExtrasConfig> MEDIA_ORDER_EXS_CONFIG { get; set; }
+
+        /// <summary>版權採購申請單 付款辦法 設定</summary>
+        public IList<MediaOrderPaymentsConfig> MEDIA_ORDER_PYMTS_CONFIG { get; set; }
+
+        /// <summary>版權採購申請單 使用預算 設定</summary>
+        public IList<MediaOrderBudgetsConfig> MEDIA_ORDER_BUDGS_CONFIG { get; set; }
+
+        /// <summary>版權採購申請單 驗收項目 設定</summary>
+        public IList<MediaOrderAcceptancesConfig> MEDIA_ORDER_ACPTS_CONFIG { get; set; }
+
+        /// <summary>表單關聯</summary>
+        public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
+
+        /// <summary>最後簽核人員工編號</summary>
+        public string LoginId { get; set; }
+
+        /// <summary>最後簽核人姓名</summary>
+        public string LoginName { get; set; }
+
+    }
+
+    #endregion
+
+    #endregion
+
 }

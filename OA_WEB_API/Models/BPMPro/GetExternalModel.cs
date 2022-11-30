@@ -108,6 +108,8 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
+    #region - 行政採購類_(外部起單) -
+
     #region - 行政採購申請單(外部起單) -
 
     /// <summary>
@@ -253,4 +255,65 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
+    #endregion
+
+    #region - 版權採購類_(外部起單) -
+
+    #region - 版權採購申請單(外部起單) -
+
+    /// <summary>
+    /// 版權採購申請單(外部起單)ERP資料
+    /// </summary>
+    public class MediaOrderERPInfo
+    {
+        /// <summary>BPM 表單唯一碼</summary>
+        public string BPM_REQ_ID { get; set; }
+
+        /// <summary>ERP 表單唯一碼</summary>
+        public string ERP_FORM_NO { get; set; }
+
+        /// <summary>ERP送審人</summary>
+        public string CREATE_BY { get; set; }
+
+        /// <summary>ERP 工作流程名稱</summary>
+        public string FLOW_NAME { get; set; }
+    }
+
+    #endregion
+
+    #region - 版權購異動申請單(外部起單) -
+
+    /// <summary>
+    /// 版權購異動申請單(外部起單)ERP資料
+    /// </summary>
+    public class MediaOrderChangeERPInfo
+    {
+        /// <summary>BPM 表單唯一碼</summary>
+        public string BPM_REQ_ID { get; set; }
+
+        /// <summary>ERP 表單唯一碼</summary>
+        public string ERP_FORM_NO { get; set; }
+
+        /// <summary>行政採購:新單ERP 表單唯一碼</summary>
+        public string ERP_MODIFY_FORM_NO { get; set; }
+
+        /// <summary>ERP送審人</summary>
+        public string CREATE_BY { get; set; }
+
+        /// <summary>ERP 工作流程名稱</summary>
+        public string FLOW_NAME { get; set; }
+
+        /// <summary>原異動單BPM 表單唯一碼</summary>
+        public string GROUP_ID { get; set; }
+
+        /// <summary>異動次數</summary>
+        public int MODIFY_NO { get; set; }
+
+        /// <summary>不可異動標住(付款辦法)</summary>
+        public string LOCK_PERIOD { get; set; }
+    }
+
+    #endregion
+
+    #endregion
 }

@@ -74,29 +74,6 @@ namespace OA_WEB_API.Controllers.ERP
 
         #endregion
 
-        #region - 行政採購異動申請單 異動申請資訊_回傳ERP(暫時不需要) -
-
-        ///// <summary>
-        ///// 行政採購異動申請單 異動申請資訊_回傳ERP
-        ///// </summary>    
-        //[Route("api/PostGeneralOrderChangeInfoSingle")]
-        //[HttpPost]
-        //public GeneralOrderChangeInfoRequest PostGeneralOrderChangeInfoSingle()
-        //{
-        //    HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
-        //    HttpRequestBase request = context.Request;
-
-        //    var query = new RequestQueryModel()
-        //    {
-        //        REQUISITION_ID = request["RequisitionID"],
-        //        REQUEST_FLG = bool.Parse(request["RequestFlg"])
-        //    };
-
-        //    return responseInfoRepository.PostGeneralOrderChangeInfoSingle(query);
-        //}
-
-        #endregion
-
         #region - 行政採購點驗收單 驗收審核資訊_回傳ERP -
 
         /// <summary>

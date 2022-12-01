@@ -5834,9 +5834,6 @@
         <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.generalOrderRepository">
             <summary>行政採購申請單</summary>
         </member>
-        <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.generalOrderChangeRepository">
-            <summary>行政採購異動申請單</summary>
-        </member>
         <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.generalAcceptanceRepository">
             <summary>行政採購點驗收單</summary>
         </member>

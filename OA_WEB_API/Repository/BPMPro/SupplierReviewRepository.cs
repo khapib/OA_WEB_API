@@ -358,20 +358,20 @@ namespace OA_WEB_API.Repository.BPMPro
                     //合作夥伴審核單(基本資料)
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
                     new SqlParameter("@SUP_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@REGISTER_KIND", SqlDbType.NVarChar) { Size = 15, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@REGISTER_NO", SqlDbType.NVarChar) { Size = 15, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@REG_KIND", SqlDbType.NVarChar) { Size = 15, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@REG_NO", SqlDbType.NVarChar) { Size = 15, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@IS_SUP_PARTNER", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@IS_CUST_PARTNER", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@IS_AD_PARTNER", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@COUNTRY_NAME", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@REGISTER_YEAR", SqlDbType.NVarChar) { Size = 10, Value =(object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@REGISTER_CAPITAL", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@REG_YEAR", SqlDbType.NVarChar) { Size = 10, Value =(object) DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@REG_CAPITAL", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@NO_OF_EMPLOYEE", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@OWNER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@OWNER_TEL", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@REGISTER_TEL", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@REGISTER_WEB", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@REGISTER_ADDRESS", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@REG_TEL", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@REG_WEB", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@REG_ADDRESS", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@CURRENT_ADDRESS", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
@@ -390,20 +390,20 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL = "";
                     strSQL += "UPDATE [BPMPro].[dbo].[FM7T_SupplierReview_M] ";
                     strSQL += "SET [SupName]=@SUP_NAME, ";
-                    strSQL += "    [RegisterKind]=@REGISTER_KIND, ";
-                    strSQL += "    [RegisterNo]=@REGISTER_NO, ";
+                    strSQL += "    [RegisterKind]=@REG_KIND, ";
+                    strSQL += "    [RegisterNo]=@REG_NO, ";
                     strSQL += "    [IS_SUP_Partner]=@IS_SUP_PARTNER, ";
                     strSQL += "    [IS_CUST_Partner]=@IS_CUST_PARTNER, ";
                     strSQL += "    [IS_AD_Partner]=@IS_AD_PARTNER, ";
                     strSQL += "    [CountryName]=@COUNTRY_NAME, ";
-                    strSQL += "    [RegisterYear]=@REGISTER_YEAR, ";
-                    strSQL += "    [RegisterCapital]=@REGISTER_CAPITAL, ";
+                    strSQL += "    [RegisterYear]=@REG_YEAR, ";
+                    strSQL += "    [RegisterCapital]=@REG_CAPITAL, ";
                     strSQL += "    [NoOfEmployee]=@NO_OF_EMPLOYEE, ";
                     strSQL += "    [OwnerName]=@OWNER_NAME, ";
                     strSQL += "    [OwnerTEL]=@OWNER_TEL, ";
-                    strSQL += "    [RegisterTEL]=@REGISTER_TEL, ";
-                    strSQL += "    [RegisterWeb]=@REGISTER_WEB, ";
-                    strSQL += "    [RegisterAddress]=@REGISTER_ADDRESS, ";
+                    strSQL += "    [RegisterTEL]=@REG_TEL, ";
+                    strSQL += "    [RegisterWeb]=@REG_WEB, ";
+                    strSQL += "    [RegisterAddress]=@REG_ADDRESS, ";
                     strSQL += "    [CurrentAddress]=@CURRENT_ADDRESS ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
@@ -437,7 +437,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 strSQL = "";
                 strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_SupplierReview_M2]([RequisitionID],[SupName],[RegisterKind],[RegisterNo],[IS_SUP_Partner],[IS_CUST_Partner],[IS_AD_Partner],[CountryName],[RegisterYear],[RegisterCapital],[NoOfEmployee],[OwnerName],[OwnerTEL],[RegisterTEL],[RegisterWeb],[RegisterAddress],[CurrentAddress]) ";
-                strSQL += "VALUES(@REQUISITION_ID,@SUP_NAME,@REGISTER_KIND,@REGISTER_NO,@IS_SUP_PARTNER,@IS_CUST_PARTNER,@IS_AD_PARTNER,@COUNTRY_NAME,@REGISTER_YEAR,@REGISTER_CAPITAL,@NO_OF_EMPLOYEE,@OWNER_NAME,@OWNER_TEL,@REGISTER_TEL,@REGISTER_WEB,@REGISTER_ADDRESS,@CURRENT_ADDRESS) ";
+                strSQL += "VALUES(@REQUISITION_ID,@SUP_NAME,@REG_KIND,@REG_NO,@IS_SUP_PARTNER,@IS_CUST_PARTNER,@IS_AD_PARTNER,@COUNTRY_NAME,@REG_YEAR,@REG_CAPITAL,@NO_OF_EMPLOYEE,@OWNER_NAME,@OWNER_TEL,@REG_TEL,@REG_WEB,@REG_ADDRESS,@CURRENT_ADDRESS) ";
 
                 dbFun.DoTran(strSQL, parameterInfo);
 

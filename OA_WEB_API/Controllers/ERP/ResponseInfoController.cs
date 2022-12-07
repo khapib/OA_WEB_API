@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -25,10 +26,10 @@ namespace OA_WEB_API.Controllers.ERP
 
         #region - 方法 -
 
-        #region - 專案建立審核單 財務審核資訊回傳ERP -
+        #region - 專案建立審核單 財務審核資訊_回傳ERP -
 
         /// <summary>
-        /// 專案建立審核單 簽核資訊回傳ERP
+        /// 專案建立審核單 財務審核資訊_回傳ERP
         /// </summary>    
         [Route("api/PostProjectReviewFinanceSingle")]
         [HttpPost]
@@ -48,10 +49,12 @@ namespace OA_WEB_API.Controllers.ERP
 
         #endregion
 
-        #region - 行政採購申請單 審核資訊回傳ERP -
+        #region - 行政採購類_回傳ERP資訊 -
+
+        #region - 行政採購申請單 申請審核資訊_回傳ERP -
 
         /// <summary>
-        /// 行政採購申請單 簽核資訊回傳ERP
+        /// 行政採購申請單 申請審核資訊_回傳ERP
         /// </summary>    
         [Route("api/PostGeneralOrderInfoSingle")]
         [HttpPost]
@@ -71,33 +74,10 @@ namespace OA_WEB_API.Controllers.ERP
 
         #endregion
 
-        #region - 行政採購異動申請單 異動申請資訊回傳ERP -
+        #region - 行政採購點驗收單 驗收審核資訊_回傳ERP -
 
         /// <summary>
-        /// 行政採購異動申請單 異動申請資訊回傳ERP
-        /// </summary>    
-        [Route("api/PostGeneralOrderChangeInfoSingle")]
-        [HttpPost]
-        public GeneralOrderChangeInfoRequest PostGeneralOrderChangeInfoSingle()
-        {
-            HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
-            HttpRequestBase request = context.Request;
-
-            var query = new RequestQueryModel()
-            {
-                REQUISITION_ID = request["RequisitionID"],
-                REQUEST_FLG = bool.Parse(request["RequestFlg"])
-            };
-
-            return responseInfoRepository.PostGeneralOrderChangeInfoSingle(query);
-        }
-
-        #endregion
-
-        #region - 行政採購點驗收單 驗收明細回傳ERP -
-
-        /// <summary>
-        /// 行政採購點驗收單 驗收明細回傳ERP
+        /// 行政採購點驗收單 驗收審核資訊_回傳ERP
         /// </summary>    
         [Route("api/PostGeneralAcceptanceInfoSingle")]
         [HttpPost]
@@ -117,10 +97,10 @@ namespace OA_WEB_API.Controllers.ERP
 
         #endregion
 
-        #region - 行政採購請款單 財務簽核資訊回傳ERP -
+        #region - 行政採購請款單 財務審核資訊_回傳ERP -
 
         /// <summary>
-        /// 行政採購請款單 財務簽核資訊回傳ERP
+        /// 行政採購請款單 財務審核資訊_回傳ERP
         /// </summary>    
         [Route("api/PostGeneralInvoiceInfoSingle")]
         [HttpPost]
@@ -137,6 +117,35 @@ namespace OA_WEB_API.Controllers.ERP
 
             return responseInfoRepository.PostGeneralInvoiceInfoSingle(query);
         }
+
+        #endregion
+
+        #endregion
+
+        #region - 版權採購類_回傳ERP資訊 -
+
+        #region - 行政採購申請單 申請審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 行政採購申請單 申請審核資訊_回傳ERP
+        /// </summary>    
+        [Route("api/PostMediaOrderInfoSingle")]
+        [HttpPost]
+        public MediaOrderInfoRequest PostMediaOrderInfoSingle()
+        {
+            HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
+            HttpRequestBase request = context.Request;
+
+            var query = new RequestQueryModel()
+            {
+                REQUISITION_ID = request["RequisitionID"],
+                REQUEST_FLG = bool.Parse(request["RequestFlg"])
+            };
+
+            return responseInfoRepository.PostMediaOrderInfoSingle(query);
+        }
+
+        #endregion
 
         #endregion
 

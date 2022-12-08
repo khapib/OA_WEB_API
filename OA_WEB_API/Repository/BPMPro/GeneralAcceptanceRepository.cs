@@ -108,6 +108,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "SELECT ";
             strSQL += "     [Period] AS [PERIOD], ";
             strSQL += "     [DTL_SupProdANo] AS [DTL_SUP_PROD_A_NO], ";
+            strSQL += "     [DTL_RowNo] AS [DTL_ROW_NO], ";
             strSQL += "     [DTL_ItemName] AS [DTL_ITEM_NAME], ";
             strSQL += "     [DTL_Model] AS [DTL_MODEL], ";
             strSQL += "     [DTL_Specifications] AS [DTL_SPECIFICATIONS], ";
@@ -343,6 +344,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@GENERAL_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_ACCEPTANCE_CONFIG.GENERAL_ORDER_BPM_FORM_NO ?? DBNull.Value },
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)model.GENERAL_ACCEPTANCE_CONFIG.PERIOD ?? DBNull.Value },
                     new SqlParameter("@DTL_SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DTL_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_MODEL", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_SPECIFICATIONS", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -383,8 +385,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralAcceptance_DTL]([RequisitionID],[GeneralOrderRequisitionID],[GeneralOrderBPMFormNo],[Period],[DTL_SupProdANo],[DTL_ItemName],[DTL_MODEL],[DTL_Specifications],[DTL_AcceptanceQuantity],[DTL_Quantity],[DTL_Unit],[DTL_OwnerDeptMainID],[DTL_OwnerDeptID],[DTL_OwnerID],[DTL_OwnerName],[DTL_AcceptanceNote],[DTL_Status],[DTL_Note],[IsOriginal],[OriginNum]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@GENERAL_ORDER_REQUISITION_ID,@GENERAL_ORDER_BPM_FORM_NO,@PERIOD,@DTL_SUP_PROD_A_NO,@DTL_ITEM_NAME,@DTL_MODEL,@DTL_SPECIFICATIONS,@DTL_ACPT_QUANTITY,@DTL_QUANTITY,@DTL_UNIT,@DTL_OWNER_DEPT_MAIN_ID,@DTL_OWNER_DEPT_ID,@DTL_OWNER_ID,@DTL_OWNER_NAME,@DTL_ACPT_NOTE,@DTL_STATUS,@DTL_NOTE,@IS_ORIGINAL,@ORIGIN_NUM) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralAcceptance_DTL]([RequisitionID],[GeneralOrderRequisitionID],[GeneralOrderBPMFormNo],[Period],[DTL_SupProdANo],[DTL_RowNo],[DTL_ItemName],[DTL_MODEL],[DTL_Specifications],[DTL_AcceptanceQuantity],[DTL_Quantity],[DTL_Unit],[DTL_OwnerDeptMainID],[DTL_OwnerDeptID],[DTL_OwnerID],[DTL_OwnerName],[DTL_AcceptanceNote],[DTL_Status],[DTL_Note],[IsOriginal],[OriginNum]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@GENERAL_ORDER_REQUISITION_ID,@GENERAL_ORDER_BPM_FORM_NO,@PERIOD,@DTL_SUP_PROD_A_NO,@DTL_ROW_NO,@DTL_ITEM_NAME,@DTL_MODEL,@DTL_SPECIFICATIONS,@DTL_ACPT_QUANTITY,@DTL_QUANTITY,@DTL_UNIT,@DTL_OWNER_DEPT_MAIN_ID,@DTL_OWNER_DEPT_ID,@DTL_OWNER_ID,@DTL_OWNER_NAME,@DTL_ACPT_NOTE,@DTL_STATUS,@DTL_NOTE,@IS_ORIGINAL,@ORIGIN_NUM) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }
@@ -480,6 +482,61 @@ namespace OA_WEB_API.Repository.BPMPro
                     autoStart.APPLICANT_DEPT = model.APPLICANT_INFO.APPLICANT_DEPT;
 
                     formRepository.PutFormAutoStart(autoStart);
+                }
+
+                #endregion
+
+                vResult = true;
+            }
+            catch (Exception ex)
+            {
+                vResult = false;
+                CommLib.Logger.Error("點驗收單(新增/修改/草稿)失敗，原因：" + ex.Message);
+            }
+            return vResult;
+        }
+
+        /// <summary>
+        /// 行政採購點驗收單(驗收簽核)
+        /// </summary>
+        public bool PutGeneralAcceptanceApproveSingle(GeneralAcceptanceApproveViewModel model)
+        {
+            bool vResult = false;
+            try
+            {
+                #region - 行政採購點驗收單 驗收簽核: GeneralAcceptanceApprove -
+
+                var parameterApprove = new List<SqlParameter>()
+                {
+                    //行政採購點驗收單 驗收簽核
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },
+                    new SqlParameter("@DTL_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DTL_ACPT_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DTL_STATUS", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                };
+                  
+                if (!String.IsNullOrEmpty(model.REQUISITION_ID) || !String.IsNullOrWhiteSpace(model.REQUISITION_ID))
+                {
+                    #region 調整資料
+
+                    foreach (var item in model.GENERAL_ACCEPTANCE_APPROVES_CONFIG)
+                    {
+                        //寫入：行政採購點驗收單 驗收明細parameter
+                        strJson = jsonFunction.ObjectToJSON(item);
+                        GlobalParameters.Infoparameter(strJson, parameterApprove);
+
+                        strSQL = "";
+                        strSQL += "UPDATE [BPMPro].[dbo].[FM7T_GeneralAcceptance_DTL] ";
+                        strSQL += "SET  [DTL_AcceptanceNote]=@DTL_ACPT_NOTE, ";
+                        strSQL += "     [DTL_Status]=@DTL_STATUS ";
+                        strSQL += "WHERE 1=1 ";
+                        strSQL += "     AND [RequisitionID]=@REQUISITION_ID ";
+                        strSQL += "     AND [DTL_RowNo]=@DTL_ROW_NO ";
+
+                        dbFun.DoTran(strSQL, parameterApprove);
+                    }
+
+                    #endregion
                 }
 
                 #endregion

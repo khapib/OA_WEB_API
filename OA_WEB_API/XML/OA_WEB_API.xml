@@ -511,6 +511,11 @@
             點驗收單(新增/修改/草稿)
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.GeneralAcceptanceController.PutGeneralAcceptanceApproveSingle(OA_WEB_API.Models.BPMPro.GeneralAcceptanceApproveViewModel)">
+            <summary>
+            點驗收單(驗收簽核)
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.GeneralInvoiceController">
             <summary>
             會簽管理系統 - 行政採購請款單
@@ -1775,6 +1780,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceDetailsConfig.DTL_SUP_PROD_A_NO">
             <summary>商品代碼</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceDetailsConfig.DTL_ROW_NO">
+            <summary>行數編號</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceDetailsConfig.DTL_ITEM_NAME">
             <summary>商品名稱</summary>
         </member>
@@ -1819,6 +1827,28 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceDetailsConfig.ORIGIN_NUM">
             <summary>原始列編碼</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.GeneralAcceptanceApproveViewModel">
+            <summary>
+            行政採購點驗收單 驗收簽核
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceApproveViewModel.GENERAL_ACCEPTANCE_APPROVES_CONFIG">
+            <summary>行政採購點驗收單 驗收簽核 設定</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.GeneralAcceptanceApprovesConfig">
+            <summary>
+            行政採購點驗收單 驗收簽核 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceApprovesConfig.DTL_ROW_NO">
+            <summary>行數編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceApprovesConfig.DTL_STATUS">
+            <summary>驗收結果</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceApprovesConfig.DTL_ACPT_NOTE">
+            <summary>驗收備註</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GeneralInvoiceQueryModel">
             <summary>
@@ -5047,6 +5077,11 @@
         <member name="M:OA_WEB_API.Repository.BPMPro.GeneralAcceptanceRepository.PutGeneralAcceptanceSingle(OA_WEB_API.Models.BPMPro.GeneralAcceptanceViewModel)">
             <summary>
             行政採購點驗收單(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.GeneralAcceptanceRepository.PutGeneralAcceptanceApproveSingle(OA_WEB_API.Models.BPMPro.GeneralAcceptanceApproveViewModel)">
+            <summary>
+            行政採購點驗收單(驗收簽核)
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GeneralAcceptanceRepository.strSQL">

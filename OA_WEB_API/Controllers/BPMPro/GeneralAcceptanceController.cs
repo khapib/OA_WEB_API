@@ -58,6 +58,16 @@ namespace OA_WEB_API.Controllers.BPMPro
             return GeneralAcceptanceRepository.PutGeneralAcceptanceSingle(model);
         }
 
+        /// <summary>
+        /// 點驗收單(驗收簽核)
+        /// </summary>
+        [Route("PutGeneralAcceptanceApproveSingle")]
+        [HttpPost]
+        public bool PutGeneralAcceptanceApproveSingle([FromBody] GeneralAcceptanceApproveViewModel model)
+        {
+            return GeneralAcceptanceRepository.PutGeneralAcceptanceApproveSingle(model);
+        }
+
         #endregion
 
     }

@@ -97,6 +97,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>商品代碼</summary>
         public string DTL_SUP_PROD_A_NO { get; set; }
 
+        /// <summary>行數編號</summary>
+        public int DTL_ROW_NO { get; set; }
+
         /// <summary>商品名稱</summary>
         public string DTL_ITEM_NAME { get; set; }
 
@@ -140,7 +143,31 @@ namespace OA_WEB_API.Models.BPMPro
         public string IS_ORIGINAL { get; set; }
 
         /// <summary>原始列編碼</summary>
-        public int? ORIGIN_NUM { get; set;}
+        public int? ORIGIN_NUM { get; set; }
+    }
+
+    /// <summary>
+    /// 行政採購點驗收單 驗收簽核
+    /// </summary>
+    public class GeneralAcceptanceApproveViewModel : GeneralAcceptanceQueryModel
+    {
+        /// <summary>行政採購點驗收單 驗收簽核 設定</summary>
+        public IList<GeneralAcceptanceApprovesConfig> GENERAL_ACCEPTANCE_APPROVES_CONFIG { get; set; }
+    }
+
+    /// <summary>
+    /// 行政採購點驗收單 驗收簽核 設定
+    /// </summary>
+    public class GeneralAcceptanceApprovesConfig
+    {
+        /// <summary>行數編號</summary>
+        public int DTL_ROW_NO { get; set; }
+
+        /// <summary>驗收結果</summary>
+        public string DTL_STATUS { get; set; }
+
+        /// <summary>驗收備註</summary>
+        public string DTL_ACPT_NOTE { get; set; }
     }
 
 }

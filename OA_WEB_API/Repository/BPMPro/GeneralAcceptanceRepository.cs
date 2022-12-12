@@ -491,7 +491,7 @@ namespace OA_WEB_API.Repository.BPMPro
             catch (Exception ex)
             {
                 vResult = false;
-                CommLib.Logger.Error("點驗收單(新增/修改/草稿)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("行政採購點驗收單(新增/修改/草稿)失敗，原因：" + ex.Message);
             }
             return vResult;
         }
@@ -546,7 +546,7 @@ namespace OA_WEB_API.Repository.BPMPro
             catch (Exception ex)
             {
                 vResult = false;
-                CommLib.Logger.Error("點驗收單(新增/修改/草稿)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("行政採購點驗收單(驗收簽核)失敗，原因：" + ex.Message);
             }
             return vResult;
         }

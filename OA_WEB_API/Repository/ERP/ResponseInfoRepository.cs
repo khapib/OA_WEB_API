@@ -38,6 +38,9 @@ namespace OA_WEB_API.Repository.ERP
 
         #region FormRepository
 
+        /// <summary>費用申請單</summary>
+        ExpensesReimburseRepository expensesReimburseRepository = new ExpensesReimburseRepository();
+
         #region 行政採購類_FormRepository
 
         /// <summary>行政採購申請單</summary>
@@ -142,6 +145,88 @@ namespace OA_WEB_API.Repository.ERP
                 throw;
             }
         }
+
+        #endregion
+
+        #region - 費用申請單 申請審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 費用申請單 申請審核資訊_回傳ERP
+        /// </summary>
+        public ExpensesReimburseInfoRequest PostExpensesReimburseInfoSingle(RequestQueryModel query)
+        {
+            try
+            {
+                #region - 查詢及執行 -
+
+                #region - 費用申請單 申請審核資訊 -
+
+                #region 回傳表單內容
+
+                ExpensesReimburseQueryModel expensesReimburseQueryModel = new ExpensesReimburseQueryModel
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+
+                ExpensesReimburseInfoRequest expensesReimburseInfoRequest = new ExpensesReimburseInfoRequest();
+                var expensesReimburseContent = expensesReimburseRepository.PostExpensesReimburseSingle(expensesReimburseQueryModel);
+                //Join 費用申請單(查詢)Function
+                strJson = jsonFunction.ObjectToJSON(expensesReimburseContent);
+                //給予需要回傳ERP的資訊
+                expensesReimburseInfoRequest = jsonFunction.JsonToObject<ExpensesReimburseInfoRequest>(strJson);
+                expensesReimburseInfoRequest.REQUISITION_ID = expensesReimburseContent.APPLICANT_INFO.REQUISITION_ID;
+
+                #endregion
+
+                #region 表單簽核狀態
+
+                var parameter = new List<SqlParameter>()
+                {
+                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID },
+                };
+                //表單資料
+                var formQueryModel = new FormQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+                var formData = formRepository.PostFormData(formQueryModel);
+                var stepFlowConfig = stepFlowRepository.StepFlowInfo(formData, parameter);
+
+                #endregion
+
+                #endregion
+
+                #region - 回傳ERP - 
+
+                expensesReimburseInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                expensesReimburseInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+
+                if (query.REQUEST_FLG)
+                {
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/";
+                    Method = "POST";
+                    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, expensesReimburseInfoRequest);
+
+                    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                    CommLib.Logger.Debug("費用申請單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                    expensesReimburseInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                }
+
+                #endregion
+
+                #endregion
+
+                strJson = jsonFunction.ObjectToJSON(expensesReimburseInfoRequest);
+                CommLib.Logger.Debug("費用申請單:" + query.REQUISITION_ID + " BPM回傳內容：" + strJson);
+                return expensesReimburseInfoRequest;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("費用申請單:" + query.REQUISITION_ID + " 申請審核資訊回傳ERP 失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
 
         #endregion
 

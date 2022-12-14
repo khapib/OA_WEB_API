@@ -53,6 +53,20 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #endregion
 
+        #region - 費用申請單(外部起單) -
+
+        /// <summary>
+        /// 費用申請單(外部起單)
+        /// </summary>
+        [Route("api/PutExpensesReimburseGetExternal")]
+        [HttpPost]
+        public GetExternalData PutExpensesReimburseGetExternal(ExpensesReimburseERPInfo model)
+        {
+            return getExternalRepository.PutExpensesReimburseGetExternal(model);
+        }
+
+        #endregion
+
         #region - 行政採購類_(外部起單) -
 
         #region - 行政採購申請單(外部起單) -

@@ -49,6 +49,29 @@ namespace OA_WEB_API.Controllers.ERP
 
         #endregion
 
+        #region - 費用申請單 申請審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 費用申請單 申請審核資訊_回傳ERP
+        /// </summary>    
+        [Route("api/PostExpensesReimburseInfoSingle")]
+        [HttpPost]
+        public ExpensesReimburseInfoRequest PostExpensesReimburseInfoSingle()
+        {
+            HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
+            HttpRequestBase request = context.Request;
+
+            var query = new RequestQueryModel()
+            {
+                REQUISITION_ID = request["RequisitionID"],
+                REQUEST_FLG = bool.Parse(request["RequestFlg"])
+            };
+
+            return responseInfoRepository.PostExpensesReimburseInfoSingle(query);
+        }
+
+        #endregion
+
         #region - 行政採購類_回傳ERP資訊 -
 
         #region - 行政採購申請單 申請審核資訊_回傳ERP -

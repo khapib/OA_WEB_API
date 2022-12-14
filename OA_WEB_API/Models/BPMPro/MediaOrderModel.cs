@@ -190,6 +190,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>商品名稱</summary>
         public string DTL_ITEM_NAME { get; set; }
 
+        /// <summary>影帶規格</summary>
+        public string DTL_MEDIA_SPEC { get; set; }
+
         /// <summary>影片類型</summary>
         public string DTL_MEDIA_TYPE { get; set; }
 
@@ -311,11 +314,17 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaOrderExtrasConfig
     {
+        /// <summary>行數編號</summary>
+        public int EX_ROW_NO { get; set; }
+
         /// <summary>名稱</summary>
         public string EX_NAME { get; set; }
 
         /// <summary>金額</summary>
         public int EX_AMOUNT { get; set; }
+
+        /// <summary>期別</summary>
+        public int PERIOD { get; set; }
 
         /// <summary>所屬專案 ERP 單號</summary>
         public string EX_PROJECT_FORM_NO { get; set; }
@@ -338,6 +347,9 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaOrderPaymentsConfig
     {
+        /// <summary>行數編號</summary>
+        public int PYMT_ROW_NO { get; set; }
+
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
 
@@ -374,6 +386,9 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaOrderBudgetsConfig
     {
+        /// <summary>行數編號</summary>
+        public int BUDG_ROW_NO { get; set; }
+
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
 
@@ -404,6 +419,10 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaOrderAcceptancesConfig
     {
+
+        /// <summary>行數編號</summary>
+        public int PA_ROW_NO { get; set; }
+
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
 

@@ -175,9 +175,14 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>聯絡Email</summary>
         public string BFCY_EMAIL { get; set; }
 
-        /// <summary>發票類型</summary>
+        /// <summary>
+        /// 憑證類型：
+        /// GUI.統一發票、
+        /// Invoice. Invoice、
+        /// RECPT.收據
+        /// </summary>
         public string INVOICE_TYPE { get; set; }
-
+        
         /// <summary>備註</summary>
         public string NOTE { get; set; }
 
@@ -230,17 +235,17 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 行政採購請款單 發票明細 設定
+    /// 行政採購請款單 憑證明細 設定
     /// </summary>
     public class GeneralInvoiceDetailsConfig
     {
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
 
-        /// <summary>發票號碼</summary>
+        /// <summary>憑證號碼</summary>
         public string INV_NUM { get; set; }
 
-        /// <summary>發票日期</summary>
+        /// <summary>憑證日期</summary>
         public string INV_DATE { get; set; }
 
         /// <summary>發票金額</summary>

@@ -24,15 +24,17 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #region  - 方法 - 
 
-        ///// <summary>
-        ///// 費用申請單(查詢)
-        ///// </summary>    
-        //[Route("PostExpensesReimburseSingle")]
-        //[HttpPost]
-        //public ExpensesReimburseViewModel PostExpensesReimburseSingle([FromBody] ExpensesReimburseQueryModel query)
-        //{
-        //    return expensesReimburseRepository.PostExpensesReimburseSingle(query);
-        //}
+        /// <summary>
+        /// 費用申請單(查詢)
+        /// </summary>    
+        [Route("PostExpensesReimburseSingle")]
+        [HttpPost]
+        public ExpensesReimburseViewModel PostExpensesReimburseSingle([FromBody] ExpensesReimburseQueryModel query)
+        {
+            return expensesReimburseRepository.PostExpensesReimburseSingle(query);
+        }
+
+        #region - 依此單內容重送 -
 
         ///// <summary>
         ///// 費用申請單(依此單內容重送)
@@ -44,15 +46,17 @@ namespace OA_WEB_API.Controllers.BPMPro
         //    return expensesReimburseRepository.PutExpensesReimburseRefill(query);
         //}
 
-        ///// <summary>
-        ///// 費用申請單(新增/修改/草稿)
-        ///// </summary>
-        //[Route("PutExpensesReimburseSingle")]
-        //[HttpPost]
-        //public bool PutExpensesReimburseSingle([FromBody] ExpensesReimburseViewModel model)
-        //{
-        //    return expensesReimburseRepository.PutExpensesReimburseSingle(model);
-        //}
+        #endregion
+
+        /// <summary>
+        /// 費用申請單(新增/修改/草稿)
+        /// </summary>
+        [Route("PutExpensesReimburseSingle")]
+        [HttpPost]
+        public bool PutExpensesReimburseSingle([FromBody] ExpensesReimburseViewModel model)
+        {
+            return expensesReimburseRepository.PutExpensesReimburseSingle(model);
+        }
 
         #endregion
     }

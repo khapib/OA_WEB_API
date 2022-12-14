@@ -64,6 +64,38 @@ namespace OA_WEB_API.Models.ERP
 
     #endregion
 
+    #region - 費用申請單 申請審核資訊_回傳ERP -
+
+    /// <summary>
+    /// 費用申請單 申請審核資訊_回傳ERP 
+    /// </summary>
+    public class ExpensesReimburseInfoRequest : ExpensesReimburseQueryModel
+    {
+        /// <summary>接收ERP回傳狀態</summary>
+        public ErpResponseState ERP_RESPONSE_STATE { get; set; }
+
+        /// <summary>費用申請單 表頭資訊</summary>
+        public ExpensesReimburseTitle EXPENSES_REIMBURSE_TITLE { get; set; }
+
+        /// <summary>費用申請單 表單內容 設定</summary>
+        public ExpensesReimburseConfig EXPENSES_REIMBURSE_CONFIG { get; set; }
+
+        /// <summary>費用申請單 費用明細 設定</summary>
+        public IList<ExpensesReimburseDetailsConfig> EXPENSES_REIMBURSE_DTLS_CONFIG { get; set; }
+
+        /// <summary>表單關聯</summary>
+        public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
+
+        /// <summary>最後簽核人員工編號</summary>
+        public string LoginId { get; set; }
+
+        /// <summary>最後簽核人姓名</summary>
+        public string LoginName { get; set; }
+
+    }
+
+    #endregion
+
     #region - 行政採購類_回傳ERP資訊 -
 
     #region - 行政採購申請單 申請審核資訊_回傳ERP -

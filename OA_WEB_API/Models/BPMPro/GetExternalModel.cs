@@ -108,6 +108,28 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
+    #region - 費用申請單(外部起單) -
+
+    /// <summary>
+    /// 費用申請單(外部起單)ERP資料
+    /// </summary>
+    public class ExpensesReimburseERPInfo
+    {
+        /// <summary>BPM 表單唯一碼</summary>
+        public string BPM_REQ_ID { get; set; }
+
+        /// <summary>ERP 表單唯一碼</summary>
+        public string ERP_FORM_NO { get; set; }
+
+        /// <summary>ERP送審人</summary>
+        public string CREATE_BY { get; set; }
+
+        /// <summary>ERP 工作流程名稱</summary>
+        public string FLOW_NAME { get; set; }
+    }
+
+    #endregion
+
     #region - 行政採購類_(外部起單) -
 
     #region - 行政採購申請單(外部起單) -

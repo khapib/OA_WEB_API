@@ -232,7 +232,7 @@ namespace OA_WEB_API.Controllers
         /// <summary>
         /// 群體知會通知
         /// </summary>
-        [Route("api/ByGroupInformNotify")]
+        [Route("ByGroupInformNotify")]
         [HttpPost]
         public bool ByGroupInformNotify([FromBody] GroupInformNotifyModel model)
         {

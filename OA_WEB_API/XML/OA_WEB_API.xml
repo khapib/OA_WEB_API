@@ -1803,8 +1803,8 @@
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_TYPE">
             <summary>
             憑證類型：
-            GUI.統一發票、
-            Invoice. Invoice、
+            INV_TW.統一發票、
+            INV_F. Invoice、
             RECPT.收據
             </summary>
         </member>

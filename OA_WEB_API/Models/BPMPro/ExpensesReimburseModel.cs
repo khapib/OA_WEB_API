@@ -97,8 +97,8 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>
         /// 憑證類型：
-        /// GUI.統一發票、
-        /// Invoice. Invoice、
+        /// INV_TW.統一發票、
+        /// INV_F. Invoice、
         /// RECPT.收據
         /// </summary>
         public string INV_TYPE { get; set; }

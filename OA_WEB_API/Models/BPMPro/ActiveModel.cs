@@ -379,6 +379,31 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
+    #region - 欄位確認後知會通知 -
+
+    /// <summary>
+    /// 欄位確認後知會通知
+    /// </summary>
+    public class CheckNotifyModel
+    {
+        /// <summary>系統編號</summary>
+        public string REQUISITION_ID { get; set; }
+
+        /// <summary>識別編號(運用在M表)</summary>
+        public string IDENTIFY { get; set; }
+
+        /// <summary>要確認的欄位名稱</summary>
+        public string IS_IMPLEMENT { get; set; }
+
+        /// <summary>被通知人</summary>
+        public string NOTIFY_BY { get; set; }
+
+        /// <summary>角色群組編號</summary>
+        public string ROLE_ID { get; set; }
+    }
+
+    #endregion
+
     /// <summary>
     /// 表單簽核歷程
     /// </summary>

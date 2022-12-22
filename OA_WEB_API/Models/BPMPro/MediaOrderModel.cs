@@ -169,8 +169,14 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>合計含稅總額(付款辦法)/GROSS總額(付款辦法)</summary>
         public double PYMT_GROSS_TOTAL { get; set; }
 
-        /// <summary>合計含稅總額(換算)(付款辦法)/合計GROSS價(換算)(付款辦法)</summary>
-        public int PYMT_GROSS_TOTAL_CONV { get; set; }
+        /// <summary>材料費總價(付款辦法)</summary>
+        public double PYMT_MATERIAL_TOTAL { get; set; }
+
+        /// <summary>合計(付款辦法)</summary>
+        public double PYMT_ORDER_TOTAL { get; set; }
+
+        /// <summary>合計(換算)(付款辦法)</summary>
+        public int PYMT_ORDER_TOTAL_CONV { get; set; }
 
         /// <summary>合計使用預算(所需預算)(付款辦法)</summary>
         public int PYMT_USE_BUDGET_TOTAL { get; set; }
@@ -374,8 +380,14 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>當期預計匯率</summary>
         public double PYMT_PRE_RATE { get; set; }
 
-        /// <summary>含稅總額(換算)/GROSS價(換算)</summary>
-        public int PYMT_GROSS_CONV { get; set; }
+        /// <summary>單集材料費(付款辦法)</summary>
+        public double PYMT_MATERIAL { get; set; }
+
+        /// <summary>小計(付款辦法)</summary>
+        public double PYMT_ORDER_SUM { get; set; }
+
+        /// <summary>小計(換算)(付款辦法)</summary>
+        public int PYMT_ORDER_SUM_CONV { get; set; }
 
         /// <summary>使用預算金額</summary>
         public int PYMT_USE_BUDGET { get; set; }

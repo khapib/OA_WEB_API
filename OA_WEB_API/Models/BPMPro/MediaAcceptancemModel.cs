@@ -121,8 +121,14 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>結束集數</summary>
         public int DTL_END_EPISODE { get; set; }
 
-        /// <summary>總集數</summary>
-        public int DTL_EPISODE_TOTAL { get; set; }
+        /// <summary>總採購集數</summary>
+        public int DTL_ORDER_EPISODE { get; set; }
+
+        /// <summary>驗收集數</summary>
+        public int DTL_ACPT_EPISODE { get; set; }
+
+        /// <summary>拆分集數</summary>
+        public int DTL_DISMANTLE_EPISODE { get; set; }
 
         /// <summary>每集長度</summary>
         public int DTL_EPISODE_TIME { get; set; }

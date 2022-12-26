@@ -2115,8 +2115,11 @@
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.GENERAL_ORDER_PATH">
             <summary>行政採購 路徑</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.GENERAL_ORDER_DTL_ORDER_TOTAL">
+            <summary>行政採購 採購單 總金額</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.GENERAL_ORDER_DTL_ORDER_TOTAL_TWD">
-            <summary>行政採購 付款辦法 總金額_台幣(換算)</summary>
+            <summary>行政採購 採購單 總金額_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.GENERAL_ACCEPTANCE_REQUISITION_ID">
             <summary>行政採購點驗收單 系統編號</summary>
@@ -2228,7 +2231,13 @@
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.PYMT_CURRENT_TOTAL">
             <summary>付款辦法 本期付款總額</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.PYMT_CURRENT_TOTAL_TWD">
+            <summary>付款辦法 本期付款總額_台幣</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.INV_AMOUNT_TOTAL">
+            <summary>發票明細 合計</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.INV_AMOUNT_TOTAL_TWD">
             <summary>發票明細 合計_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.ACTUAL_PAY_AMOUNT">
@@ -2282,6 +2291,9 @@
             <summary>憑證日期</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceDetailsConfig.INV_AMOUNT">
+            <summary>發票金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceDetailsConfig.INV_AMOUNT_TWD">
             <summary>發票金額</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceDetailsConfig.INV_NOTE">
@@ -3101,8 +3113,14 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.DTL_END_EPISODE">
             <summary>結束集數</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.DTL_EPISODE_TOTAL">
-            <summary>總集數</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.DTL_ORDER_EPISODE">
+            <summary>總採購集數</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.DTL_ACPT_EPISODE">
+            <summary>驗收集數</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.DTL_DISMANTLE_EPISODE">
+            <summary>拆分集數</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.DTL_EPISODE_TIME">
             <summary>每集長度</summary>
@@ -3300,6 +3318,13 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.IS_VICE_PRESIDENT">
             <summary>是否過副總</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.TXN_TYPE">
+            <summary>
+            交易類型：
+            ABD.國外、
+            DOM.國內
+            </summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.CURRENCY">
             <summary>幣別</summary>
         </member>
@@ -3381,6 +3406,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_MATERIAL_TOTAL">
             <summary>材料費總價(付款辦法)</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_EX_AMOUNT_TOTAL">
+            <summary>額外項目總額(付款辦法)</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_ORDER_TOTAL">
             <summary>合計(付款辦法)</summary>
         </member>
@@ -3416,8 +3444,11 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_END_EPISODE">
             <summary>結束集數</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_EPISODE_TOTAL">
-            <summary>總集數</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_ORDER_EPISODE">
+            <summary>總採購集數</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_ACPT_EPISODE">
+            <summary>驗收集數</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_EPISODE_TIME">
             <summary>每集長度</summary>
@@ -3585,13 +3616,16 @@
             <summary>當期預計匯率</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.PYMT_MATERIAL">
-            <summary>單集材料費(付款辦法)</summary>
+            <summary>單集材料費</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.PYMT_EX_AMOUNT">
+            <summary>額外項目金額</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.PYMT_ORDER_SUM">
-            <summary>小計(付款辦法)</summary>
+            <summary>小計</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.PYMT_ORDER_SUM_CONV">
-            <summary>小計(換算)(付款辦法)</summary>
+            <summary>小計(換算)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.PYMT_USE_BUDGET">
             <summary>使用預算金額</summary>
@@ -3654,8 +3688,11 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderAcceptancesConfig.PA_END_EPISODE">
             <summary>結束集數</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderAcceptancesConfig.PA_EPISODE_TOTAL">
-            <summary>總集數</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderAcceptancesConfig.PA_ORDER_EPISODE">
+            <summary>總採購集數</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderAcceptancesConfig.PA_ACPT_EPISODE">
+            <summary>驗收集數</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderAcceptancesConfig.PA_NOTE">
             <summary>商品備註</summary>

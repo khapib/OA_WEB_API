@@ -92,6 +92,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "SELECT ";
             strSQL += "     [Description] AS [DESCRIPTION], ";
             strSQL += "     [IsVicePresident] AS [IS_VICE_PRESIDENT], ";
+            strSQL += "     [TXN_Type] AS [TXN_TYPE], ";
             strSQL += "     [Currency] AS [CURRENCY], ";
             strSQL += "     [PredictRate] AS [PRE_RATE], ";
             strSQL += "     [PricingMethod] AS [PRICING_METHOD], ";
@@ -119,6 +120,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [PYMT_NetTotal] AS [PYMT_NET_TOTAL], ";
             strSQL += "     [PYMT_GrossTotal] AS [PYMT_GROSS_TOTAL], ";
             strSQL += "     [PYMT_MaterialTotal] AS [PYMT_MATERIAL_TOTAL], ";
+            strSQL += "     [PYMT_EX_AmountTotal] AS [PYMT_EX_AMOUNT_TOTAL], ";
             strSQL += "     [PYMT_OrderTotal] AS [PYMT_ORDER_TOTAL], ";
             strSQL += "     [PYMT_OrderTotal_CONV] AS [PYMT_ORDER_TOTAL_CONV], ";
             strSQL += "     [PYMT_UseBudgetTotal] AS [PYMT_USE_BUDGET_TOTAL] ";
@@ -141,7 +143,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [DTL_MediaType] AS [DTL_MEDIA_TYPE], ";
             strSQL += "     [DTL_StartEpisode] AS [DTL_START_EPISODE], ";
             strSQL += "     [DTL_EndEpisode] AS [DTL_END_EPISODE], ";
-            strSQL += "     [DTL_EpisodeTotal] AS [DTL_EPISODE_TOTAL], ";
+            strSQL += "     [DTL_OrderEpisode] AS [DTL_ORDER_EPISODE], ";
+            strSQL += "     [DTL_ACPT_Episode] AS [DTL_ACPT_EPISODE], ";
             strSQL += "     [DTL_EpisodeTime] AS [DTL_EPISODE_TIME], ";
             strSQL += "     [DTL_Net] AS [DTL_NET], ";
             strSQL += "     [DTL_Net_TWD] AS [DTL_NET_TWD], ";
@@ -232,6 +235,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [PYMT_Gross] AS [PYMT_GROSS], ";
             strSQL += "     [PYMT_PredictRate] AS [PYMT_PRE_RATE], ";
             strSQL += "     [PYMT_Material] AS [PYMT_MATERIAL], ";
+            strSQL += "     [PYMT_EX_Amount] AS [PYMT_EX_AMOUNT], ";
             strSQL += "     [PYMT_OrderSum] AS [PYMT_ORDER_SUM], ";
             strSQL += "     [PYMT_OrderSum_CONV] AS [PYMT_ORDER_SUM_CONV], ";
             strSQL += "     [PYMT_UseBudget] AS [PYMT_USE_BUDGET] ";
@@ -277,7 +281,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [PA_MediaType] AS [PA_MEDIA_TYPE], ";
             strSQL += "     [PA_StartEpisode] AS [PA_START_EPISODE], ";
             strSQL += "     [PA_EndEpisode] AS [PA_END_EPISODE], ";
-            strSQL += "     [PA_EpisodeTotal] AS [PA_EPISODE_TOTAL], ";
+            strSQL += "     [PA_OrderEpisode] AS [PA_ORDER_EPISODE], ";
+            strSQL += "     [PA_ACPT_Episode] AS [PA_ACPT_EPISODE], ";
             strSQL += "     [PA_Note] AS [PA_NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_ACPT] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
@@ -531,6 +536,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     model.MEDIA_ORDER_CONFIG.PYMT_TAX_TOTAL = Math.Round(model.MEDIA_ORDER_CONFIG.PYMT_TAX_TOTAL, 2);
                     model.MEDIA_ORDER_CONFIG.PYMT_NET_TOTAL = Math.Round(model.MEDIA_ORDER_CONFIG.PYMT_NET_TOTAL, 2);
                     model.MEDIA_ORDER_CONFIG.PYMT_MATERIAL_TOTAL = Math.Round(model.MEDIA_ORDER_CONFIG.PYMT_MATERIAL_TOTAL, 2);
+                    model.MEDIA_ORDER_CONFIG.PYMT_EX_AMOUNT_TOTAL = Math.Round(model.MEDIA_ORDER_CONFIG.PYMT_EX_AMOUNT_TOTAL, 2);
                     model.MEDIA_ORDER_CONFIG.PYMT_ORDER_TOTAL = Math.Round(model.MEDIA_ORDER_CONFIG.PYMT_ORDER_TOTAL, 2);
 
                     #endregion
@@ -540,6 +546,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         //版權採購申請單 表單內容
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
                         new SqlParameter("@DESCRIPTION", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@TXN_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@IS_VICE_PRESIDENT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@CURRENCY", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PRE_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -568,6 +575,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@PYMT_NET_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_GROSS_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_MATERIAL_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PYMT_EX_AMOUNT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_ORDER_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_ORDER_TOTAL_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_USE_BUDGET_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value }
@@ -581,6 +589,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "UPDATE [BPMPro].[dbo].[FM7T_MediaOrder_M] ";
                     strSQL += "SET [Description]=@DESCRIPTION, ";
                     strSQL += "     [IsVicePresident]=@IS_VICE_PRESIDENT, ";
+                    strSQL += "     [TXN_Type]=@TXN_TYPE, ";
                     strSQL += "     [Currency]=@CURRENCY, ";
                     strSQL += "     [PredictRate]=@PRE_RATE, ";
                     strSQL += "     [PricingMethod]=@PRICING_METHOD, ";
@@ -608,6 +617,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [PYMT_NetTotal]=@PYMT_NET_TOTAL, ";
                     strSQL += "     [PYMT_GrossTotal]=@PYMT_GROSS_TOTAL, ";
                     strSQL += "     [PYMT_MaterialTotal]=@PYMT_MATERIAL_TOTAL, ";
+                    strSQL += "     [PYMT_EX_AmountTotal]=@PYMT_EX_AMOUNT_TOTAL, ";
                     strSQL += "     [PYMT_OrderTotal]=@PYMT_ORDER_TOTAL, ";
                     strSQL += "     [PYMT_OrderTotal_CONV]=@PYMT_ORDER_TOTAL_CONV, ";
                     strSQL += "     [PYMT_UseBudgetTotal]=@PYMT_USE_BUDGET_TOTAL ";
@@ -632,7 +642,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@DTL_MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_START_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_END_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_EPISODE_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DTL_ORDER_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DTL_ACPT_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_EPISODE_TIME", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_NET_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -685,8 +696,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_DTL]([RequisitionID],[DTL_RowNo],[DTL_SupProdANo],[DTL_ItemName],[DTL_MediaSpec],[DTL_MediaType],[DTL_StartEpisode],[DTL_EndEpisode],[DTL_EpisodeTotal],[DTL_EpisodeTime],[DTL_Net],[DTL_Net_TWD],[DTL_Gross],[DTL_Gross_TWD],[DTL_NetSum],[DTL_NetSum_TWD],[DTL_GrossSum],[DTL_GrossSum_TWD],[DTL_Material],[DTL_ItemSum],[DTL_ProjectFormNo],[DTL_ProjectName],[DTL_ProjectNickname],[DTL_ProjectUseYear],[DTL_Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@DTL_ROW_NO,@DTL_SUP_PROD_A_NO,@DTL_ITEM_NAME,@DTL_MEDIA_SPEC,@DTL_MEDIA_TYPE,@DTL_START_EPISODE,@DTL_END_EPISODE,@DTL_EPISODE_TOTAL,@DTL_EPISODE_TIME,@DTL_NET,@DTL_NET_TWD,@DTL_GROSS,@DTL_GROSS_TWD,@DTL_NET_SUM,@DTL_NET_SUM_TWD,@DTL_GROSS_SUM,@DTL_GROSS_SUM_TWD,@DTL_MATERIAL,@DTL_ITEM_SUM,@DTL_PROJECT_FORM_NO,@DTL_PROJECT_NAME,@DTL_PROJECT_NICKNAME,@DTL_PROJECT_USE_YEAR,@DTL_NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_DTL]([RequisitionID],[DTL_RowNo],[DTL_SupProdANo],[DTL_ItemName],[DTL_MediaSpec],[DTL_MediaType],[DTL_StartEpisode],[DTL_EndEpisode],[DTL_OrderEpisode],[DTL_ACPT_Episode],[DTL_EpisodeTime],[DTL_Net],[DTL_Net_TWD],[DTL_Gross],[DTL_Gross_TWD],[DTL_NetSum],[DTL_NetSum_TWD],[DTL_GrossSum],[DTL_GrossSum_TWD],[DTL_Material],[DTL_ItemSum],[DTL_ProjectFormNo],[DTL_ProjectName],[DTL_ProjectNickname],[DTL_ProjectUseYear],[DTL_Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@DTL_ROW_NO,@DTL_SUP_PROD_A_NO,@DTL_ITEM_NAME,@DTL_MEDIA_SPEC,@DTL_MEDIA_TYPE,@DTL_START_EPISODE,@DTL_END_EPISODE,@DTL_ORDER_EPISODE,@DTL_ACPT_EPISODE,@DTL_EPISODE_TIME,@DTL_NET,@DTL_NET_TWD,@DTL_GROSS,@DTL_GROSS_TWD,@DTL_NET_SUM,@DTL_NET_SUM_TWD,@DTL_GROSS_SUM,@DTL_GROSS_SUM_TWD,@DTL_MATERIAL,@DTL_ITEM_SUM,@DTL_PROJECT_FORM_NO,@DTL_PROJECT_NAME,@DTL_PROJECT_NICKNAME,@DTL_PROJECT_USE_YEAR,@DTL_NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }
@@ -790,6 +801,12 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     foreach (var item in model.MEDIA_ORDER_EXS_CONFIG)
                     {
+                        #region - 確認小數點後第二位 -
+
+                        item.EX_AMOUNT = Math.Round(item.EX_AMOUNT, 2);
+
+                        #endregion
+
                         //寫入：版權採購申請單 授權權利parameter
                         strJson = jsonFunction.ObjectToJSON(item);
                         GlobalParameters.Infoparameter(strJson, parameterExtras);
@@ -823,6 +840,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@PYMT_GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PYMT_PRE_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PYMT_MATERIAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PYMT_EX_AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PYMT_ORDER_SUM", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PYMT_ORDER_SUM_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PYMT_USE_BUDGET", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -853,6 +871,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         item.PYMT_GROSS = Math.Round(item.PYMT_GROSS, 2);
                         item.PYMT_PRE_RATE = Math.Round(item.PYMT_PRE_RATE, 2);
                         item.PYMT_MATERIAL = Math.Round(item.PYMT_MATERIAL, 2);
+                        item.PYMT_EX_AMOUNT = Math.Round(item.PYMT_EX_AMOUNT, 2);
                         item.PYMT_ORDER_SUM = Math.Round(item.PYMT_ORDER_SUM, 2);
 
                         #endregion
@@ -863,8 +882,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterPayments);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_PYMT]([RequisitionID],[PYMT_RowNo],[Period],[PYMT_Project],[PYMT_Terms],[PYMT_MethodID],[PYMT_Tax],[PYMT_Net],[PYMT_Gross],[PYMT_PredictRate],[PYMT_Material],[PYMT_OrderSum],[PYMT_OrderSum_CONV],[PYMT_UseBudget]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@PYMT_ROW_NO,@PERIOD,@PYMT_PROJECT,@PYMT_TERMS,@PYMT_METHOD_ID,@PYMT_TAX,@PYMT_NET,@PYMT_GROSS,@PYMT_PRE_RATE,@PYMT_MATERIAL,@PYMT_ORDER_SUM,@PYMT_ORDER_SUM_CONV,@PYMT_USE_BUDGET) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_PYMT]([RequisitionID],[PYMT_RowNo],[Period],[PYMT_Project],[PYMT_Terms],[PYMT_MethodID],[PYMT_Tax],[PYMT_Net],[PYMT_Gross],[PYMT_PredictRate],[PYMT_Material],[PYMT_EX_Amount],[PYMT_OrderSum],[PYMT_OrderSum_CONV],[PYMT_UseBudget]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@PYMT_ROW_NO,@PERIOD,@PYMT_PROJECT,@PYMT_TERMS,@PYMT_METHOD_ID,@PYMT_TAX,@PYMT_NET,@PYMT_GROSS,@PYMT_PRE_RATE,@PYMT_MATERIAL,@PYMT_EX_AMOUNT,@PYMT_ORDER_SUM,@PYMT_ORDER_SUM_CONV,@PYMT_USE_BUDGET) ";
 
                         dbFun.DoTran(strSQL, parameterPayments);
                     }
@@ -938,7 +957,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@PA_MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PA_START_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PA_END_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PA_EPISODE_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PA_ORDER_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PA_ACPT_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PA_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
@@ -965,8 +985,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterAcceptance);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_ACPT]([RequisitionID],[PA_RowNo],[Period],[PA_SupProdANo],[PA_ItemName],[PA_MediaType],[PA_StartEpisode],[PA_EndEpisode],[PA_EpisodeTotal],[PA_Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@PA_ROW_NO,@PERIOD,@PA_SUP_PROD_A_NO,@PA_ITEM_NAME,@PA_MEDIA_TYPE,@PA_START_EPISODE,@PA_END_EPISODE,@PA_EPISODE_TOTAL,@PA_NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_ACPT]([RequisitionID],[PA_RowNo],[Period],[PA_SupProdANo],[PA_ItemName],[PA_MediaType],[PA_StartEpisode],[PA_EndEpisode],[PA_OrderEpisode],[PA_ACPT_Episode],[PA_Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@PA_ROW_NO,@PERIOD,@PA_SUP_PROD_A_NO,@PA_ITEM_NAME,@PA_MEDIA_TYPE,@PA_START_EPISODE,@PA_END_EPISODE,@PA_ORDER_EPISODE,@PA_ACPT_EPISODE,@PA_NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterAcceptance);
                     }

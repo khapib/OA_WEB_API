@@ -76,7 +76,10 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>行政採購 路徑</summary>
         public string GENERAL_ORDER_PATH { get; set; }
 
-        /// <summary>行政採購 付款辦法 總金額_台幣(換算)</summary>
+        /// <summary>行政採購 採購單 總金額</summary>
+        public double GENERAL_ORDER_DTL_ORDER_TOTAL { get; set; }
+
+        /// <summary>行政採購 採購單 總金額_台幣</summary>
         public int GENERAL_ORDER_DTL_ORDER_TOTAL_TWD { get; set; }
 
         /// <summary>行政採購點驗收單 系統編號</summary>
@@ -187,10 +190,16 @@ namespace OA_WEB_API.Models.BPMPro
         public string NOTE { get; set; }
 
         /// <summary>付款辦法 本期付款總額</summary>
-        public int PYMT_CURRENT_TOTAL { get; set; }
+        public double PYMT_CURRENT_TOTAL { get; set; }
+
+        /// <summary>付款辦法 本期付款總額_台幣</summary>
+        public int PYMT_CURRENT_TOTAL_TWD { get; set; }
+
+        /// <summary>發票明細 合計</summary>
+        public double INV_AMOUNT_TOTAL { get; set; }
 
         /// <summary>發票明細 合計_台幣</summary>
-        public int INV_AMOUNT_TOTAL { get; set; }
+        public int INV_AMOUNT_TOTAL_TWD { get; set; }
 
         /// <summary>實際支付金額</summary>
         public int ACTUAL_PAY_AMOUNT { get; set; }
@@ -249,7 +258,10 @@ namespace OA_WEB_API.Models.BPMPro
         public string INV_DATE { get; set; }
 
         /// <summary>發票金額</summary>
-        public int INV_AMOUNT { get; set; }
+        public double INV_AMOUNT { get; set; }
+
+        /// <summary>發票金額</summary>
+        public int INV_AMOUNT_TWD { get; set; }
 
         /// <summary>備註</summary>
         public string INV_NOTE { get; set; }

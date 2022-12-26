@@ -91,6 +91,13 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>是否過副總</summary>
         public string IS_VICE_PRESIDENT { get; set; }
 
+        /// <summary>
+        /// 交易類型：
+        /// ABD.國外、
+        /// DOM.國內
+        /// </summary>
+        public string TXN_TYPE { get; set; }
+
         /// <summary>幣別</summary>
         public string CURRENCY { get; set; }
 
@@ -172,6 +179,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>材料費總價(付款辦法)</summary>
         public double PYMT_MATERIAL_TOTAL { get; set; }
 
+        /// <summary>額外項目總額(付款辦法)</summary>
+        public double PYMT_EX_AMOUNT_TOTAL { get; set; }
+
         /// <summary>合計(付款辦法)</summary>
         public double PYMT_ORDER_TOTAL { get; set; }
 
@@ -208,8 +218,11 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>結束集數</summary>
         public int DTL_END_EPISODE { get; set; }
 
-        /// <summary>總集數</summary>
-        public int DTL_EPISODE_TOTAL { get; set; }
+        /// <summary>總採購集數</summary>
+        public int DTL_ORDER_EPISODE { get; set; }
+
+        /// <summary>驗收集數</summary>
+        public int DTL_ACPT_EPISODE { get; set; }
 
         /// <summary>每集長度</summary>
         public int DTL_EPISODE_TIME { get; set; }
@@ -327,7 +340,7 @@ namespace OA_WEB_API.Models.BPMPro
         public string EX_NAME { get; set; }
 
         /// <summary>金額</summary>
-        public int EX_AMOUNT { get; set; }
+        public double EX_AMOUNT { get; set; }
 
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
@@ -380,13 +393,16 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>當期預計匯率</summary>
         public double PYMT_PRE_RATE { get; set; }
 
-        /// <summary>單集材料費(付款辦法)</summary>
+        /// <summary>單集材料費</summary>
         public double PYMT_MATERIAL { get; set; }
 
-        /// <summary>小計(付款辦法)</summary>
+        /// <summary>額外項目金額</summary>
+        public double PYMT_EX_AMOUNT { get; set; }
+
+        /// <summary>小計</summary>
         public double PYMT_ORDER_SUM { get; set; }
 
-        /// <summary>小計(換算)(付款辦法)</summary>
+        /// <summary>小計(換算)</summary>
         public int PYMT_ORDER_SUM_CONV { get; set; }
 
         /// <summary>使用預算金額</summary>
@@ -453,9 +469,11 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>結束集數</summary>
         public int PA_END_EPISODE { get; set; }
 
-        /// <summary>總集數</summary>
-        public int PA_EPISODE_TOTAL { get; set; }
+        /// <summary>總採購集數</summary>
+        public int PA_ORDER_EPISODE { get; set; }
 
+        /// <summary>驗收集數</summary>
+        public int PA_ACPT_EPISODE { get; set; }
 
         /// <summary>商品備註</summary>
         public string PA_NOTE { get; set; }

@@ -26,7 +26,7 @@ namespace OA_WEB_API.Repository.BPMPro
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDevHo);
 
         #endregion
 
@@ -126,8 +126,8 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 //HttpWebRequest request = HttpWebRequest.Create("http://192.168.1.84:81/BPMPro/AutoStart.aspx") as HttpWebRequest;        //正試機
                 //HttpWebRequest request = HttpWebRequest.Create("http://192.168.1.217:81/BPMPro/AutoStart.aspx") as HttpWebRequest;   //測試機
-                HttpWebRequest request = HttpWebRequest.Create("http://192.168.1.219:82/BPMPro/AutoStart.aspx") as HttpWebRequest;   //共用測試機
-                //HttpWebRequest request = HttpWebRequest.Create("http://song-vm-pc:82/BPMPro/AutoStart.aspx") as HttpWebRequest;     //個人測試機
+                //HttpWebRequest request = HttpWebRequest.Create("http://192.168.1.219:82/BPMPro/AutoStart.aspx") as HttpWebRequest;   //共用測試機
+                HttpWebRequest request = HttpWebRequest.Create("http://song-vm-pc:82/BPMPro/AutoStart.aspx") as HttpWebRequest;     //個人測試機
 
                 request.Method = "POST";
                 request.ContentType = "application/x-www-form-urlencoded";
@@ -301,7 +301,7 @@ namespace OA_WEB_API.Repository.BPMPro
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDevHo);
 
         FormRepository formRepository = new FormRepository();
         UserRepository userRepository = new UserRepository();

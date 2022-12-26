@@ -20,7 +20,7 @@ namespace OA_WEB_API.Repository.BPMPro
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDevHo);
         
         #region Repository
 

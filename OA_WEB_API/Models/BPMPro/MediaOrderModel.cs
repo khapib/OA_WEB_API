@@ -209,7 +209,12 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>影帶規格</summary>
         public string DTL_MEDIA_SPEC { get; set; }
 
-        /// <summary>影片類型</summary>
+        /// <summary>
+        /// 影片類型：
+        /// SD.
+        /// HD.
+        /// 4K.
+        /// </summary>
         public string DTL_MEDIA_TYPE { get; set; }
 
         /// <summary>開始集數</summary>
@@ -378,7 +383,12 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>付款條件</summary>
         public string PYMT_TERMS { get; set; }
 
-        /// <summary>付款方式編號</summary>
+        /// <summary>
+        /// 付款方式編號：
+        /// DD.票據
+        /// FF.電匯
+        /// CS.現金
+        /// </summary>
         public string PYMT_METHOD_ID { get; set; }
 
         /// <summary>稅額</summary>

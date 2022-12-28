@@ -115,7 +115,13 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>代墊員工姓名</summary>
         public string REIMB_STAFF_NAME { get; set; }
 
-        /// <summary>支付方式</summary>
+        /// <summary>
+        /// 支付方式：
+        /// CS.現金
+        /// PT_AC.薪轉帳戶
+        /// D_AC.指定帳戶
+        /// SUP_AC.合作夥伴帳戶
+        /// </summary>
         public string PAY_METHOD { get; set; }
 
         /// <summary>廠商編號</summary>
@@ -133,7 +139,15 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>銀行往來編號</summary>
         public string SUP_TX_ID { get; set; }
 
-        /// <summary>匯款類型</summary>
+        /// <summary>
+        /// 匯款類型：
+        /// DT.國內電匯(台幣)、
+        /// DF.國內電匯(外幣)、
+        /// FF.國外電匯、
+        /// DD.票匯、
+        /// CS.現金、
+        /// OR.其他
+        /// </summary>
         public string TX_CATEGORY { get; set; }
 
         /// <summary>受款帳號</summary>

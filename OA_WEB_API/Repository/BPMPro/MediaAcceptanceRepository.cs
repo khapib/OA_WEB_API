@@ -173,7 +173,7 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 REQUISITION_ID = query.REQUISITION_ID
             };
-            //var associatedForm = commonRepository.PostAssociatedForm(formQueryModel);
+            var associatedForm = commonRepository.PostAssociatedForm(formQueryModel);
 
             #endregion
 
@@ -184,7 +184,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 MEDIA_ACCEPTANCE_CONFIG = mediaAcceptanceConfig,
                 MEDIA_ACCEPTANCE_DTLS_CONFIG = mediaAcceptanceDetailsConfig,
                 MEDIA_ACCEPTANCE_AUTHS_CONFIG = mediaAcceptanceAuthorizesConfig,
-                //ASSOCIATED_FORM_CONFIG = associatedForm
+                ASSOCIATED_FORM_CONFIG = associatedForm
             };
 
             return mediaAcceptanceViewModel;

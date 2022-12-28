@@ -1814,7 +1814,51 @@
             <summary>代墊員工姓名</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.PAY_METHOD">
-            <summary>支付方式</summary>
+            <summary>
+            支付方式：
+            CS.現金
+            PT_AC.薪轉帳戶
+            OR.其他
+            DT.其他帳戶(需自行負擔手續費)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.TX_CATEGORY">
+            <summary>
+            匯款類型：
+            DT.國內電匯(台幣)、
+            DF.國內電匯(外幣)、
+            FF.國外電匯、
+            DD.票匯、
+            CS.現金、
+            OR.其他
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.BFCY_ACCOUNT_NO">
+            <summary>受款帳號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.BFCY_ACCOUNT_NAME">
+            <summary>受款帳號名稱/票據抬頭</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.BFCY_BANK_NO">
+            <summary>受款銀行代碼</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.BFCY_BANK_NAME">
+            <summary>受款銀行名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.BFCY_BANK_COUNTRY_AND_CITY">
+            <summary>受款銀行國家</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.CURRENCY_NAME">
+            <summary>幣別</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.BFCY_NAME">
+            <summary>帳款聯絡人</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.BFCY_TEL">
+            <summary>聯絡電話</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.BFCY_EMAIL">
+            <summary>聯絡Email</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.NOTE">
             <summary>備註</summary>
@@ -2155,7 +2199,13 @@
             <summary>代墊員工姓名</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.PAY_METHOD">
-            <summary>支付方式</summary>
+            <summary>
+            支付方式：
+            CS.現金
+            PT_AC.薪轉帳戶
+            D_AC.指定帳戶
+            SUP_AC.合作夥伴帳戶
+            </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.SUP_NO">
             <summary>廠商編號</summary>
@@ -2173,7 +2223,15 @@
             <summary>銀行往來編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.TX_CATEGORY">
-            <summary>匯款類型</summary>
+            <summary>
+            匯款類型：
+            DT.國內電匯(台幣)、
+            DF.國內電匯(外幣)、
+            FF.國外電匯、
+            DD.票匯、
+            CS.現金、
+            OR.其他
+            </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.BFCY_ACCOUNT_NO">
             <summary>受款帳號</summary>
@@ -2584,7 +2642,12 @@
             <summary>付款條件</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderPaymentsConfig.PYMT_METHOD_ID">
-            <summary>付款方式編號</summary>
+            <summary>
+            付款方式編號：
+            DD.票據
+            FF.電匯
+            CS.現金
+            </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderPaymentsConfig.PYMT_TAX">
             <summary>稅額</summary>
@@ -3436,7 +3499,12 @@
             <summary>影帶規格</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_MEDIA_TYPE">
-            <summary>影片類型</summary>
+            <summary>
+            影片類型：
+            SD.
+            HD.
+            4K.
+            </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_START_EPISODE">
             <summary>開始集數</summary>
@@ -3601,7 +3669,12 @@
             <summary>付款條件</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.PYMT_METHOD_ID">
-            <summary>付款方式編號</summary>
+            <summary>
+            付款方式編號：
+            DD.票據
+            FF.電匯
+            CS.現金
+            </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.PYMT_TAX">
             <summary>稅額</summary>
@@ -4032,7 +4105,15 @@
             <summary>銀行往來編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.SupplierReviewRemitConfig.TX_CATEGORY">
-            <summary>匯款類型</summary>
+            <summary>
+            匯款類型：
+            DT.國內電匯(台幣)、
+            DF.國內電匯(外幣)、
+            FF.國外電匯、
+            DD.票匯、
+            CS.現金、
+            OR.其他
+            </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.SupplierReviewRemitConfig.BFCY_AC_NO">
             <summary>受款帳號</summary>

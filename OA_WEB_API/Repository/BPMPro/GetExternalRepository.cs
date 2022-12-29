@@ -19,7 +19,7 @@ namespace OA_WEB_API.Repository.BPMPro
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDevHo);
 
         #region Model
 
@@ -1560,6 +1560,19 @@ namespace OA_WEB_API.Repository.BPMPro
                 throw;
             }
         }
+
+        #endregion
+
+        #region - 版權採購交片單(外部起單) -
+
+        /// <summary>
+        /// 版權採購交片單(外部起單)
+        /// </summary>
+        //public GetExternalData PutMediaAcceptanceGetExternal(MediaAcceptanceERPInfo model)
+        //{
+
+        //}
+
 
         #endregion
 

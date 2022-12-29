@@ -20,7 +20,7 @@ namespace OA_WEB_API.Repository.BPMPro
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDevHo);
         
         #region Repository
 
@@ -98,6 +98,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [Description] AS [DESCRIPTION], ";
             strSQL += "     [IsVicePresident] AS [IS_VICE_PRESIDENT], ";
             strSQL += "     [IsAssest] AS [IS_ASSEST], ";
+            strSQL += "     [TXN_Type] AS [TXN_TYPE], ";
             strSQL += "     [Currency] AS [CURRENCY], ";
             strSQL += "     [PredictRate] AS [PRE_RATE], ";
             strSQL += "     [PricingMethod] AS [PRICING_METHOD], ";
@@ -476,6 +477,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@DESCRIPTION", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@IS_VICE_PRESIDENT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@IS_ASSEST", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@TXN_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@CURRENCY", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PRE_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PRICING_METHOD", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -511,6 +513,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "SET [Description]=@DESCRIPTION, ";
                     strSQL += "     [IsVicePresident]=@IS_VICE_PRESIDENT, ";
                     strSQL += "     [IsAssest]=@IS_ASSEST, ";
+                    strSQL += "     [TXN_Type]=@TXN_TYPE, ";
                     strSQL += "     [Currency]=@CURRENCY, ";
                     strSQL += "     [PredictRate]=@PRE_RATE, ";
                     strSQL += "     [PricingMethod]=@PRICING_METHOD, ";

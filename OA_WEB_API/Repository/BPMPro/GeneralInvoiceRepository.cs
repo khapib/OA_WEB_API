@@ -16,7 +16,7 @@ namespace OA_WEB_API.Repository.BPMPro
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDevHo);
 
         #region Repository
 
@@ -87,6 +87,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [GeneralOrderSubject] AS [GENERAL_ORDER_SUBJECT], ";
             strSQL += "     [GeneralOrderBPMFormNo] AS [GENERAL_ORDER_BPM_FORM_NO], ";
             strSQL += "     [GeneralOrderERPFormNo] AS [GENERAL_ORDER_ERP_FORM_NO], ";
+            strSQL += "     [GeneralOrderTXN_Type] AS [GENERAL_ORDER_TXN_TYPE], ";
             strSQL += "     [GeneralOrderPath] AS [GENERAL_ORDER_PATH], ";
             strSQL += "     [GeneralOrderDTL_OrderTotal] AS [GENERAL_ORDER_DTL_ORDER_TOTAL], ";
             strSQL += "     [GeneralOrderDTL_OrderTotal_TWD] AS [GENERAL_ORDER_DTL_ORDER_TOTAL_TWD], ";
@@ -463,6 +464,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "SET [GeneralOrderRequisitionID]=@GENERAL_ORDER_REQUISITION_ID, ";
                     strSQL += "     [GeneralOrderBPMFormNo]=@GENERAL_ORDER_BPM_FORM_NO, ";
                     strSQL += "     [GeneralOrderERPFormNo]=@GENERAL_ORDER_ERP_FORM_NO, ";
+                    strSQL += "     [GeneralOrderTXN_Type]=MAIN.[TXN_TYPE], ";
                     strSQL += "     [GeneralOrderSubject]=@GENERAL_ORDER_SUBJECT, ";
                     strSQL += "     [GeneralOrderPath]=@GENERAL_ORDER_PATH, ";
                     strSQL += "     [GeneralOrderDTL_OrderTotal]=MAIN.[DTL_ORDER_TOTAL], ";
@@ -508,6 +510,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [ActualPayAmount]=@ACTUAL_PAY_AMOUNT ";
                     strSQL += "     FROM ( ";
                     strSQL += "             SELECT ";
+                    strSQL += "                 [TXN_Type] AS [TXN_TYPE], ";
                     strSQL += "                 [Currency] AS [CURRENCY], ";
                     strSQL += "                 [PredictRate] AS [PRE_RATE], ";
                     strSQL += "                 [PricingMethod] AS [PRICING_METHOD], ";

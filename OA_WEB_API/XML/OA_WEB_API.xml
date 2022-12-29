@@ -2156,6 +2156,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.GENERAL_ORDER_ERP_FORM_NO">
             <summary>行政採購 ERP 表單唯一碼</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.GENERAL_ORDER_TXN_TYPE">
+            <summary>行政採購 交易類型</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.GENERAL_ORDER_PATH">
             <summary>行政採購 路徑</summary>
         </member>
@@ -2492,6 +2495,9 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderConfig.IS_ASSEST">
             <summary>是否入資產</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderConfig.TXN_TYPE">
+            <summary>交易類型</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderConfig.CURRENCY">
             <summary>幣別</summary>
@@ -2964,7 +2970,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaOrderChangeERPInfo">
             <summary>
-            版權購異動申請單(外部起單)ERP資料
+            版權採購異動申請單(外部起單)ERP資料
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderChangeERPInfo.BPM_REQ_ID">

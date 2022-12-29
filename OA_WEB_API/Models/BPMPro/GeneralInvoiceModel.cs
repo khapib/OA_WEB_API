@@ -73,6 +73,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>行政採購 ERP 表單唯一碼</summary>
         public string GENERAL_ORDER_ERP_FORM_NO { get; set; }
 
+        /// <summary>行政採購 交易類型</summary>
+        public string GENERAL_ORDER_TXN_TYPE { get; set; }
+
         /// <summary>行政採購 路徑</summary>
         public string GENERAL_ORDER_PATH { get; set; }
 

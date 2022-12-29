@@ -91,6 +91,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>是否入資產</summary>
         public string IS_ASSEST { get; set; }
 
+        /// <summary>交易類型</summary>
+        public string TXN_TYPE { get; set; }
+
         /// <summary>幣別</summary>
         public string CURRENCY { get; set; }
 

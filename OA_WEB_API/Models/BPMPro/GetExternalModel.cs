@@ -303,10 +303,10 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    #region - 版權購異動申請單(外部起單) -
+    #region - 版權採購異動申請單(外部起單) -
 
     /// <summary>
-    /// 版權購異動申請單(外部起單)ERP資料
+    /// 版權採購異動申請單(外部起單)ERP資料
     /// </summary>
     public class MediaOrderChangeERPInfo
     {
@@ -334,6 +334,15 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>不可異動標住(付款辦法)</summary>
         public string LOCK_PERIOD { get; set; }
     }
+
+    #endregion
+
+    #region - 版權採購交片單 -
+
+    //public class MediaAcceptanceERPInfo
+    //{
+
+    //}
 
     #endregion
 

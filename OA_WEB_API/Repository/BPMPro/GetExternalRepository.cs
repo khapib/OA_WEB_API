@@ -1563,6 +1563,19 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
+        #region - 版權採購交片單(外部起單) -
+
+        /// <summary>
+        /// 版權採購交片單(外部起單)
+        /// </summary>
+        //public GetExternalData PutMediaAcceptanceGetExternal(MediaAcceptanceERPInfo model)
+        //{
+
+        //}
+
+
+        #endregion
+
         #endregion
 
         #endregion

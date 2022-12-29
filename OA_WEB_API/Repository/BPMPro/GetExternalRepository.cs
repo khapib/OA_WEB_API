@@ -62,8 +62,10 @@ namespace OA_WEB_API.Repository.BPMPro
         #region 版權採購類
         /// <summary>版權採購申請單</summary>
         MediaOrderRepository mediaOrderRepository = new MediaOrderRepository();
-        /// <summary>版權購異動申請單</summary>
+        /// <summary>版權採購異動申請單</summary>
         MediaOrderChangeRepository mediaOrderChangeRepository = new MediaOrderChangeRepository();
+        /// <summary>版權採購交片單</summary>
+        MediaAcceptanceRepository mediaAcceptanceRepository = new MediaAcceptanceRepository();
 
         #endregion
 
@@ -1383,10 +1385,10 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
-        #region - 版權購異動申請單(外部起單) -
+        #region - 版權採購異動申請單(外部起單) -
 
         /// <summary>
-        /// 版權購異動申請單(外部起單)
+        /// 版權採購異動申請單(外部起單)
         /// </summary>
         public GetExternalData PutMediaOrderChangeGetExternal(MediaOrderChangeERPInfo model)
         {
@@ -1485,7 +1487,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     #endregion
 
-                    #region - 版權購異動申請單 表頭資訊:MediaOrderChangeTitle -
+                    #region - 版權採購異動申請單 表頭資訊:MediaOrderChangeTitle -
 
                     strJson = jsonFunction.ObjectToJSON(model);
                     var mediaOrderChangeConfig = jsonFunction.JsonToObject<MediaOrderChangeConfig>(strJson);
@@ -1556,7 +1558,7 @@ namespace OA_WEB_API.Repository.BPMPro
             }
             catch (Exception ex)
             {
-                CommLib.Logger.Error("版權購異動申請單(外部起單)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("版權採購異動申請單(外部起單)失敗，原因：" + ex.Message);
                 throw;
             }
         }
@@ -1568,11 +1570,161 @@ namespace OA_WEB_API.Repository.BPMPro
         /// <summary>
         /// 版權採購交片單(外部起單)
         /// </summary>
-        //public GetExternalData PutMediaAcceptanceGetExternal(MediaAcceptanceERPInfo model)
-        //{
+        public GetExternalData PutMediaAcceptanceGetExternal(MediaAcceptanceERPInfo model)
+        {
+            try
+            {
+                #region - 初始化宣告 -
 
-        //}
+                //表單ID
+                IDENTIFY = "MediaAcceptance";
 
+                strFormNo = model.TITLE.ERP_FORM_NO;
+                var request = new GTVInApproveProgress()
+                {
+                    FORM_NO = strFormNo,
+                    IDENTIFY = IDENTIFY
+                };
+
+                //BPM 系統編號
+                if (model.TITLE.BPM_REQ_ID == null)
+                {
+                    strREQ = Guid.NewGuid().ToString();
+
+                }
+                else
+                {
+                    strREQ = model.TITLE.BPM_REQ_ID;
+                }
+
+                #endregion
+
+                #region 確認是否已起單且簽核中
+
+                var ApproveProgress = commonRepository.PostGTVInApproveProgress(request);
+
+                //確認是否已起單且簽核中或草稿中
+                if (!ApproveProgress.vResult)
+                {
+                    #region - 起單 -
+
+                    #region - 申請人資訊:ApplicantInfo -
+
+                    //表單資訊
+                    var applicantInfo = new ApplicantInfo()
+                    {
+                        REQUISITION_ID = strREQ,
+                        DIAGRAM_ID = IDENTIFY + "_P1",
+                        PRIORITY = 2,
+                        DRAFT_FLAG = 0,
+                        FLOW_ACTIVATED = 1
+                    };
+
+                    //申請人資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.TITLE.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.APPLICANT_DEPT = item.DEPT_ID;
+                        applicantInfo.APPLICANT_DEPT_NAME = item.DEPT_NAME;
+                        applicantInfo.APPLICANT_ID = item.USER_ID;
+                        applicantInfo.APPLICANT_NAME = item.USER_NAME;
+                        applicantInfo.APPLICANT_PHONE = item.MOBILE;
+                    }
+
+                    //(填單人/代填單人)資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.TITLE.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.FILLER_ID = item.USER_ID;
+                        applicantInfo.FILLER_NAME = item.USER_NAME;
+                    }
+
+                    #endregion
+
+                    #region - 版權採購交片單(表頭內容):MediaAcceptanceTitle -
+
+                    strJson = jsonFunction.ObjectToJSON(model.TITLE);
+                    var mediaAcceptanceTitle = jsonFunction.JsonToObject<MediaAcceptanceTitle>(strJson);
+                    mediaAcceptanceTitle.FORM_NO = strFormNo;
+
+                    #endregion
+
+                    #region - 版權採購交片單(基本資料):MediaAcceptanceConfig -
+
+                    strJson = jsonFunction.ObjectToJSON(model.INFO);
+                    var mediaAcceptanceConfig = jsonFunction.JsonToObject<MediaAcceptanceConfig>(strJson);
+
+                    #endregion
+
+                    #region - 版權採購交片單(驗收明細):mediaAcceptanceDetailsConfig -
+
+                    strJson = jsonFunction.ObjectToJSON(model.DTL);
+                    var mediaAcceptanceDetailsConfig = jsonFunction.JsonToObject<IList<MediaAcceptanceDetailsConfig>>(strJson);
+
+                    #endregion
+
+                    #region - 送單 -
+
+                    //送單
+                    var mediaAcceptanceViewModel = new MediaAcceptanceViewModel()
+                    {
+                        APPLICANT_INFO = applicantInfo,
+                        MEDIA_ACCEPTANCE_TITLE = mediaAcceptanceTitle,
+                        MEDIA_ACCEPTANCE_CONFIG = mediaAcceptanceConfig,
+                        MEDIA_ACCEPTANCE_DTLS_CONFIG = mediaAcceptanceDetailsConfig
+                    };
+
+                    if (mediaAcceptanceRepository.PutMediaAcceptanceSingle(mediaAcceptanceViewModel))
+                    {
+                        //起單成功
+                        State = BPMStatusCode.PROGRESS;
+                    }
+                    else
+                    {
+                        //起單失敗
+                        State = BPMStatusCode.FAIL;
+                    }
+
+                    #endregion
+
+                    #endregion
+                }
+                else
+                {
+                    strREQ = ApproveProgress.REQUISITION_ID;
+                    State = ApproveProgress.BPMStatus;
+                }
+
+                #endregion
+
+                #region - 回傳狀態資訊 -
+
+                var getExternalData = new GetExternalData()
+                {
+                    BPM_REQ_ID = strREQ,
+                    ERP_FORM_NO = strFormNo,
+                    STATE = State
+                };
+
+                return getExternalData;
+
+                #endregion
+
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("版權採購交片單(外部起單)失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
 
         #endregion
 

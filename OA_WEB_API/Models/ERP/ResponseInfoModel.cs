@@ -138,7 +138,7 @@ namespace OA_WEB_API.Models.ERP
     }
 
     #endregion
-        
+
     #region - 行政採購點驗收單 驗收審核資訊_回傳ERP -
 
     /// <summary>
@@ -242,6 +242,37 @@ namespace OA_WEB_API.Models.ERP
         /// <summary>最後簽核人姓名</summary>
         public string LoginName { get; set; }
 
+    }
+
+    #endregion
+
+    #region -  -
+
+    public class MediaAcceptanceInfoRequest : MediaAcceptanceQueryModel
+    {
+        /// <summary>接收ERP回傳狀態</summary>
+        public ErpResponseState ERP_RESPONSE_STATE { get; set; }
+
+        /// <summary>版權採購交片單 表頭資訊</summary>
+        public MediaAcceptanceTitle MEDIA_ACCEPTANCE_TITLE { get; set; }
+
+        /// <summary>版權採購交片單 表單內容 設定</summary>
+        public MediaAcceptanceConfig MEDIA_ACCEPTANCE_CONFIG { get; set; }
+
+        /// <summary>版權採購交片單 驗收明細 設定</summary>
+        public IList<MediaAcceptanceDetailsConfig> MEDIA_ACCEPTANCE_DTLS_CONFIG { get; set; }
+
+        /// <summary>版權採購申請單 授權權利 設定</summary>
+        public IList<MediaAcceptanceAuthorizesConfig> MEDIA_ACCEPTANCE_AUTHS_CONFIG { get; set; }
+
+        /// <summary>表單關聯</summary>
+        public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
+
+        /// <summary>最後簽核人員工編號</summary>
+        public string LoginId { get; set; }
+
+        /// <summary>最後簽核人姓名</summary>
+        public string LoginName { get; set; }
     }
 
     #endregion

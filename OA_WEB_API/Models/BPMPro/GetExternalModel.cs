@@ -337,12 +337,37 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    #region - 版權採購交片單 -
+    #region - 版權採購交片單(外部起單) -
 
-    //public class MediaAcceptanceERPInfo
-    //{
+    /// <summary>
+    /// 版權採購交片單(外部起單)
+    /// </summary>
+    public class MediaAcceptanceERPInfo
+    {
+        /// <summary>行政採購點驗收單(表頭內容)</summary>
+        public MediaAcceptanceInfoTitle TITLE { get; set; }
 
-    //}
+        /// <summary>行政採購點驗收單(表單內容)</summary>
+        public MediaAcceptanceConfig INFO { get; set; }
+
+        /// <summary>行政採購點驗收單(驗收明細)</summary>
+        public IList<MediaAcceptanceDetailsConfig> DTL { get; set; }
+    }
+
+    public class MediaAcceptanceInfoTitle
+    {
+        /// <summary>BPM 表單唯一碼</summary>
+        public string BPM_REQ_ID { get; set; }
+
+        /// <summary>ERP 表單唯一碼</summary>
+        public string ERP_FORM_NO { get; set; }
+
+        /// <summary>ERP 工作流程名稱</summary>
+        public string FLOW_NAME { get; set; }
+
+        /// <summary>ERP送審人</summary>
+        public string CREATE_BY { get; set; }
+    }
 
     #endregion
 

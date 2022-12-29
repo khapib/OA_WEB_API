@@ -56,6 +56,8 @@ namespace OA_WEB_API.Repository.ERP
 
         /// <summary>版權採購申請單</summary>
         MediaOrderRepository mediaOrderRepository = new MediaOrderRepository();
+        /// <summary>版權採購交片單</summary>
+        MediaAcceptanceRepository mediaAcceptanceRepository = new MediaAcceptanceRepository();
 
         #endregion
 
@@ -557,6 +559,89 @@ namespace OA_WEB_API.Repository.ERP
                 throw;
             }
         }
+
+        #endregion
+
+        #region - 版權採購交片單 申請審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 版權採購交片單 申請審核資訊_回傳ERP
+        /// </summary>
+        public MediaAcceptanceInfoRequest PostMediaAcceptanceInfoSingle(RequestQueryModel query)
+        {
+            try
+            {
+                #region - 查詢及執行 -
+
+                #region - 版權採購交片單 驗收審核資訊 -
+
+                #region 回傳表單內容
+
+                MediaAcceptanceQueryModel mediaAcceptanceQueryModel = new MediaAcceptanceQueryModel
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+
+                MediaAcceptanceInfoRequest mediaAcceptanceInfoRequest = new MediaAcceptanceInfoRequest();
+                var mediaAcceptanceContent = mediaAcceptanceRepository.PostMediaAcceptanceSingle(mediaAcceptanceQueryModel);
+                //Join 版權採購交片單(查詢)Function
+                strJson = jsonFunction.ObjectToJSON(mediaAcceptanceContent);
+                //給予需要回傳ERP的資訊
+                mediaAcceptanceInfoRequest = jsonFunction.JsonToObject<MediaAcceptanceInfoRequest>(strJson);
+                mediaAcceptanceInfoRequest.REQUISITION_ID = mediaAcceptanceContent.APPLICANT_INFO.REQUISITION_ID;
+
+                #endregion
+
+                #region 表單簽核狀態
+
+                var parameter = new List<SqlParameter>()
+                {
+                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID },
+                };
+                //表單資料
+                var formQueryModel = new FormQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+                var formData = formRepository.PostFormData(formQueryModel);
+                var stepFlowConfig = stepFlowRepository.StepFlowInfo(formData, parameter);
+
+                #endregion
+
+                #endregion
+
+                #region - 回傳ERP - 
+
+                mediaAcceptanceInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                mediaAcceptanceInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+
+                if (query.REQUEST_FLG)
+                {
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
+                    Method = "POST";
+                    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, mediaAcceptanceInfoRequest);
+
+                    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                    CommLib.Logger.Debug("版權採購交片單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                    mediaAcceptanceInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                }
+
+                #endregion
+
+                #endregion
+
+                strJson = jsonFunction.ObjectToJSON(mediaAcceptanceInfoRequest);
+                CommLib.Logger.Debug("版權採購交片單:" + query.REQUISITION_ID + " BPM回傳內容：" + strJson);
+                return mediaAcceptanceInfoRequest;
+
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("版權採購交片單:" + query.REQUISITION_ID + " 申請審核資訊回傳ERP 失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
 
         #endregion
 

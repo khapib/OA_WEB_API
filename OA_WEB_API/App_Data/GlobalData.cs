@@ -487,7 +487,7 @@ public class GlobalParameters
     {
         var Base64Code = "RequisitionID=" + RequisitionID + "&Identify=" + Identify + "&DiagramName=" + HttpUtility.UrlEncode(DiagramName).ToUpper();
 
-        return WebPathBPMPro(sqlConnBPMProDevHo) + "BPMPro/FM7_FormContent_Redirect.aspx?EinB64=" + Convert.ToBase64String(Encoding.Default.GetBytes(Base64Code));
+        return WebPathBPMPro(sqlConnBPMProDev) + "BPMPro/FM7_FormContent_Redirect.aspx?EinB64=" + Convert.ToBase64String(Encoding.Default.GetBytes(Base64Code));
     }
 
     #endregion

@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
-
+using System.Web.ModelBinding;
 using OA_WEB_API.Models.BPMPro;
 using OA_WEB_API.Repository.BPMPro;
 
@@ -148,10 +148,10 @@ namespace OA_WEB_API.Controllers
 
         #endregion
 
-        #region - 表單關聯 -
+        #region - 關聯表單 -
 
         /// <summary>
-        /// 表單關聯(搜詢)
+        /// 關聯表單(搜詢)
         /// </summary>
         [Route("api/PostAssociatedFormSearch")]
         [HttpPost]
@@ -161,7 +161,7 @@ namespace OA_WEB_API.Controllers
         }
 
         /// <summary>
-        /// 表單關聯(查詢)
+        /// 關聯表單(查詢)
         /// </summary>        
         [Route("api/PostAssociatedForm")]
         [HttpPost]
@@ -171,13 +171,23 @@ namespace OA_WEB_API.Controllers
         }
 
         /// <summary>
-        /// 表單關聯(新增)
+        /// 關聯表單(新增)
         /// </summary>
         [Route("api/PutAssociatedForm")]
         [HttpPost]
         public bool PutAssociatedForm([FromBody] AssociatedFormModel model)
         {
             return commonRepository.PutAssociatedForm(model);
+        }
+
+        /// <summary>
+        /// 關聯表單(知會)
+        /// </summary>
+        [Route("api/PutAssociatedFormNotify")]
+        [HttpPost]
+        public bool PutAssociatedFormNotify([FromBody] AssociatedFormNotifyModel model)
+        {
+            return commonRepository.PutAssociatedFormNotify(model);
         }
 
         #endregion

@@ -4,89 +4,92 @@ using System.Linq;
 using System.Web;
 
 /// <summary>
-/// 會簽管理系統 - 行政採購請款單
+/// 會簽管理系統 - 版權採購請款單
 /// </summary>
 namespace OA_WEB_API.Models.BPMPro
 {
     /// <summary>
-    /// 行政採購請款單(查詢條件)
+    /// 版權採購請款單(查詢條件)
     /// </summary>
-    public class GeneralInvoiceQueryModel
+    public class MediaInvoiceQueryModel
     {
         /// <summary>系統編號</summary>
         public string REQUISITION_ID { get; set; }
     }
 
     /// <summary>
-    /// 行政採購請款單
+    /// 版權採購請款單
     /// </summary>
-    public class GeneralInvoiceViewModel
+    public class MediaInvoiceViewModel
     {
         /// <summary>申請人資訊</summary>
         public ApplicantInfo APPLICANT_INFO { get; set; }
 
-        /// <summary>行政採購請款單 表頭資訊</summary>
-        public GeneralInvoiceTitle GENERAL_INVOICE_TITLE { get; set; }
+        /// <summary>版權採購請款單 表頭資訊</summary>
+        public MediaInvoiceTitle MEDIA_INVOICE_TITLE { get; set; }
 
-        /// <summary>行政採購請款單 表單內容 設定</summary>
-        public GeneralInvoiceConfig GENERAL_INVOICE_CONFIG { get; set; }
+        /// <summary>版權採購請款單 表單內容 設定</summary>
+        public MediaInvoiceConfig MEDIA_INVOICE_CONFIG { get; set; }
 
-        /// <summary>行政採購請款單 驗收明細 設定</summary>
-        public IList<GeneralInvoiceAcceptancesConfig> GENERAL_INVOICE_ACCEPTANCES_CONFIG { get; set; }
+        /// <summary>版權採購請款單 驗收明細 設定</summary>
+        public IList<MediaInvoiceAcceptancesConfig> MEDIA_INVOICE_ACCEPTANCES_CONFIG { get; set; }
 
-        /// <summary>行政採購請款單 付款辦法 設定</summary>
-        public IList<GeneralInvoicePaymentsConfig> GENERAL_INVOICE_PAYMENTS_CONFIG { get; set; }
+        /// <summary>版權採購請款單 授權權利 設定</summary>
+        public IList<MediaInvoiceAuthorizesConfig> MEDIA_INVOICE_AUTHS_CONFIG { get; set; }
 
-        /// <summary>行政採購申請 使用預算 設定</summary>
-        public IList<GeneralInvoiceBudgetsConfig> GENERAL_INVOICE_BUDGETS_CONFIG { get; set; }
+        /// <summary>版權採購請款單 付款辦法 設定</summary>
+        public IList<MediaInvoicePaymentsConfig> MEDIA_INVOICE_PYMTS_CONFIG { get; set; }
 
-        /// <summary>行政採購申請 發票明細 設定</summary>
-        public IList<GeneralInvoiceDetailsConfig> GENERAL_INVOICE_DETAILS_CONFIG { get; set; }
+        /// <summary>版權採購請款單 使用預算 設定</summary>
+        public IList<MediaInvoiceBudgetsConfig> MEDIA_INVOICE_BUDGS_CONFIG { get; set; }
+
+        /// <summary>版權採購請款單 發票明細 設定</summary>
+        public IList<MediaInvoiceDetailsConfig> MEDIA_INVOICE_DETAILS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
     }
 
     /// <summary>
-    /// 行政採購請款單 表頭資訊
+    /// 版權採購請款單 表頭資訊
     /// </summary>
-    public class GeneralInvoiceTitle : ImplementHeader
+    public class MediaInvoiceTitle : ImplementHeader
     {
         /// <summary>ERP 工作流程標題名稱</summary>
         public string FLOW_NAME { get; set; }
     }
 
     /// <summary>
-    /// 行政採購請款單 表單內容 設定
+    /// 版權採購請款單 表單內容 設定
     /// </summary>
-    public class GeneralInvoiceConfig : COMM_Bank
+    public class MediaInvoiceConfig : COMM_Bank
     {
-        /// <summary>行政採購 系統編號</summary>
-        public string GENERAL_ORDER_REQUISITION_ID { get; set; }
+        /// <summary>版權採購 系統編號</summary>
+        public string MEDIA_ORDER_REQUISITION_ID { get; set; }
 
-        /// <summary>行政採購 主旨</summary>
-        public string GENERAL_ORDER_SUBJECT { get; set; }
+        /// <summary>版權採購 主旨</summary>
+        public string MEDIA_ORDER_SUBJECT { get; set; }
 
-        /// <summary>行政採購 BPM 表單單號</summary>
-        public string GENERAL_ORDER_BPM_FORM_NO { get; set; }
+        /// <summary>版權採購 BPM 表單單號</summary>
+        public string MEDIA_ORDER_BPM_FORM_NO { get; set; }
 
-        /// <summary>行政採購 ERP 表單唯一碼</summary>
-        public string GENERAL_ORDER_ERP_FORM_NO { get; set; }
+        /// <summary>版權採購 ERP 表單唯一碼</summary>
+        public string MEDIA_ORDER_ERP_FORM_NO { get; set; }
 
-        /// <summary>行政採購 交易類型</summary>
-        public string GENERAL_ORDER_TXN_TYPE { get; set; }
+        /// <summary>版權採購 交易類型</summary>
+        public string MEDIA_ORDER_TXN_TYPE { get; set; }
 
-        /// <summary>行政採購 路徑</summary>
-        public string GENERAL_ORDER_PATH { get; set; }
+        /// <summary>版權採購 路徑</summary>
+        public string MEDIA_ORDER_PATH { get; set; }
 
-        /// <summary>行政採購 採購單 總金額</summary>
-        public double GENERAL_ORDER_DTL_ORDER_TOTAL { get; set; }
+        /// <summary>版權採購 採購單 總金額</summary>
+        public double MEDIA_ORDER_DTL_ORDER_TOTAL { get; set; }
 
-        /// <summary>行政採購 採購單 總金額_台幣</summary>
-        public int GENERAL_ORDER_DTL_ORDER_TOTAL_TWD { get; set; }
+        /// <summary>版權採購 採購單 總金額_台幣</summary>
+        public int MEDIA_ORDER_DTL_ORDER_TOTAL_TWD { get; set; }
 
-        /// <summary>行政採購點驗收單 系統編號</summary>
-        public string GENERAL_ACCEPTANCE_REQUISITION_ID { get; set; }
+        /// <summary>版權採購點驗收單 系統編號</summary>
+        public string MEDIA_ACCEPTANCE_REQUISITION_ID { get; set; }
 
         /// <summary>幣別</summary>
         public string CURRENCY { get; set; }
@@ -170,9 +173,9 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 行政採購請款單 驗收明細 設定
+    /// 版權採購請款單 驗收明細 設定
     /// </summary>
-    public class GeneralInvoiceAcceptancesConfig : GeneralOrderAcceptancesConfig
+    public class MediaInvoiceAcceptancesConfig : MediaOrderAcceptancesConfig
     {
         /// <summary>所屬專案 ERP 單號</summary>
         public string DTL_PROJECT_FORM_NO { get; set; }
@@ -191,26 +194,34 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 行政採購請款單 付款辦法 設定
+    /// 版權採購申請單 授權權利 設定
     /// </summary>
-    public class GeneralInvoicePaymentsConfig : GeneralOrderPaymentsConfig
+    public class MediaInvoiceAuthorizesConfig : MediaOrderAuthorizesConfig
+    {
+
+    }
+
+    /// <summary>
+    /// 版權採購申請單 付款辦法 設定
+    /// </summary>
+    public class MediaInvoicePaymentsConfig : GeneralOrderPaymentsConfig
     {
         /// <summary>會計類別</summary>
         public string ACCT_CATEGORY { get; set; }
     }
 
     /// <summary>
-    /// 行政採購請款單 使用預算 設定
+    /// 版權採購申請單 使用預算 設定
     /// </summary>
-    public class GeneralInvoiceBudgetsConfig : GeneralOrderBudgetsConfig
+    public class MediaInvoiceBudgetsConfig : GeneralOrderBudgetsConfig
     {
 
     }
 
     /// <summary>
-    /// 行政採購請款單 憑證明細 設定
+    /// 版權採購申請單 憑證明細 設定
     /// </summary>
-    public class GeneralInvoiceDetailsConfig
+    public class MediaInvoiceDetailsConfig
     {
         /// <summary>期別</summary>
         public int PERIOD { get; set; }

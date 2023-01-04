@@ -20,6 +20,8 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
+    #region - 共用Model -
+
     #region (BPM API共用)_ERP起單共用抬頭
 
     /// <summary>
@@ -44,6 +46,79 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     #endregion
+
+    #region - 銀行 -
+
+    /// <summary>
+    /// 銀行(國內/國外)_台幣/外幣/開票
+    /// </summary>
+    public class COMM_Bank : DOM_TWD_Bank
+    {
+        /// <summary>受款分行代碼</summary>
+        public string BFCY_BANK_BRANCH_NO { get; set; }
+
+        /// <summary>受款分行名稱</summary>
+        public string BFCY_BANK_BRANCH_NAME { get; set; }
+
+        /// <summary>SWIFT</summary>
+        public string BFCY_BANK_SWIFT { get; set; }
+
+        /// <summary>受款銀行地址</summary>
+        public string BFCY_BANK_ADDRESS { get; set; }
+
+        /// <summary>中間銀行</summary>
+        public string BFCY_BANK_IBAN { get; set; }
+    }
+
+    /// <summary>
+    /// 銀行(國內)_台幣
+    /// </summary>
+    public class DOM_TWD_Bank
+    {
+        /// <summary>
+        /// 匯款類型：
+        /// DT.國內電匯(台幣)、
+        /// DF.國內電匯(外幣)、
+        /// FF.國外電匯、
+        /// DD.票匯、
+        /// CS.現金、
+        /// OR.其他
+        /// </summary>
+        public string TX_CATEGORY { get; set; }
+
+        /// <summary>受款帳號</summary>
+        public string BFCY_ACCOUNT_NO { get; set; }
+
+        /// <summary>受款帳號名稱/票據抬頭</summary>
+        public string BFCY_ACCOUNT_NAME { get; set; }
+
+        /// <summary>受款銀行代碼</summary>
+        public string BFCY_BANK_NO { get; set; }
+
+        /// <summary>受款銀行名稱</summary>
+        public string BFCY_BANK_NAME { get; set; }
+
+        /// <summary>受款銀行國家</summary>
+        public string BFCY_BANK_COUNTRY_AND_CITY { get; set; }
+
+        /// <summary>幣別</summary>
+        public string CURRENCY_NAME { get; set; }
+
+        /// <summary>帳款聯絡人</summary>
+        public string BFCY_NAME { get; set; }
+
+        /// <summary>聯絡電話</summary>
+        public string BFCY_TEL { get; set; }
+
+        /// <summary>聯絡Email</summary>
+        public string BFCY_EMAIL { get; set; }
+
+    }
+
+    #endregion
+
+    #endregion
+
 
 
 
@@ -260,12 +335,12 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    #region - 表單關聯 -
+    #region - 關聯表單 -
 
-    #region - 表單關聯(搜詢) -
+    #region - 關聯表單(搜詢) -
 
     /// <summary>
-    /// 表單關聯(搜詢條件)
+    /// 關聯表單(搜詢條件)
     /// </summary>
     public class AssociatedFormQuery
     {
@@ -305,7 +380,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 表單關聯(搜詢)DataViewModel
+    /// 關聯表單(搜詢)DataViewModel
     /// </summary>
     public class AssociatedFormDataViewModel
     {
@@ -344,7 +419,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 表單關聯(搜詢)(完整內容)
+    /// 關聯表單(搜詢)(完整內容)
     /// </summary>
     public class AssociatedFormViewModel
     {
@@ -354,27 +429,27 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>總頁數</summary>
         public int TOTAL_PAGES { get; set; }
 
-        /// <summary>表單關聯</summary>
+        /// <summary>關聯表單</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
     }
 
     #endregion
 
     /// <summary>
-    /// 表單關聯內容
+    /// 關聯表單內容
     /// </summary>
     public class AssociatedFormModel
     {
         /// <summary>主要表單:系統編號</summary>
         public string REQUISITION_ID { get; set; }
 
-        /// <summary>表單關聯</summary>
+        /// <summary>關聯表單</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
 
     }
 
     /// <summary>
-    /// 表單關聯
+    /// 關聯表單
     /// </summary>
     public class AssociatedFormConfig
     {
@@ -408,6 +483,25 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>狀態</summary>
         public string STATE { get; set; }
     }
+
+    #region - 關聯表單(知會) -
+
+    /// <summary>
+    /// 關聯表單(知會)
+    /// </summary>
+    public class AssociatedFormNotifyModel
+    {
+        /// <summary>主要表單:系統編號</summary>
+        public string REQUISITION_ID { get; set; }
+
+        /// <summary>被知會人</summary>
+        public IList<String> NOTIFY_BY { get; set; }
+
+        /// <summary>被知會角色</summary>
+        public IList<String> ROLE_ID { get; set; }
+    }
+
+    #endregion
 
     #endregion
 

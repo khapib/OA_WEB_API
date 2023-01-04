@@ -48,7 +48,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 費用申請單 表單內容 設定
     /// </summary>
-    public class ExpensesReimburseConfig
+    public class ExpensesReimburseConfig : DOM_TWD_Bank
     {
         /// <summary>代墊員工部門編號</summary>
         public string REIMB_STAFF_DEPT_ID { get; set; }
@@ -67,47 +67,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// CS.現金
         /// PT_AC.薪轉帳戶
         /// OR.其他
-        /// DT.其他帳戶(需自行負擔手續費)
+        /// DT.(國內)_台幣其他帳戶(需自行負擔手續費)
         /// </summary>
         public string PAY_METHOD { get; set; }
-
-        /// <summary>
-        /// 匯款類型：
-        /// DT.國內電匯(台幣)、
-        /// DF.國內電匯(外幣)、
-        /// FF.國外電匯、
-        /// DD.票匯、
-        /// CS.現金、
-        /// OR.其他
-        /// </summary>
-        public string TX_CATEGORY { get; set; }
-
-        /// <summary>受款帳號</summary>
-        public string BFCY_ACCOUNT_NO { get; set; }
-
-        /// <summary>受款帳號名稱/票據抬頭</summary>
-        public string BFCY_ACCOUNT_NAME { get; set; }
-
-        /// <summary>受款銀行代碼</summary>
-        public string BFCY_BANK_NO { get; set; }
-
-        /// <summary>受款銀行名稱</summary>
-        public string BFCY_BANK_NAME { get; set; }
-
-        /// <summary>受款銀行國家</summary>
-        public string BFCY_BANK_COUNTRY_AND_CITY { get; set; }
-
-        /// <summary>幣別</summary>
-        public string CURRENCY_NAME { get; set; }
-
-        /// <summary>帳款聯絡人</summary>
-        public string BFCY_NAME { get; set; }
-
-        /// <summary>聯絡電話</summary>
-        public string BFCY_TEL { get; set; }
-
-        /// <summary>聯絡Email</summary>
-        public string BFCY_EMAIL { get; set; }
 
         /// <summary>備註</summary>
         public string NOTE { get; set; }

@@ -308,7 +308,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>員工編號</summary>
         public string USER_ID { get; set; }
 
-        /// <summary>部門編號</summary>
+        /// <summary>代理人員工編號</summary>
         public string AGENT_ID { get; set; }
 
         /// <summary>部門編號</summary>

@@ -26,6 +26,8 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
+        #region - 方法 -
+
         /// <summary>
         /// 版權採購交片單(查詢)
         /// </summary>
@@ -135,7 +137,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             var mediaOrderparameter = new List<SqlParameter>()
             {
-                 new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = mediaAcceptanceConfig.MEDIA_ORDER_REQUISITION_ID },                
+                 new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = mediaAcceptanceConfig.MEDIA_ORDER_REQUISITION_ID },
             };
 
             #region - 版權採購交片單 授權權利 -
@@ -535,7 +537,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 }
 
                 #endregion
-            
+
                 vResult = true;
 
             }
@@ -603,6 +605,7 @@ namespace OA_WEB_API.Repository.BPMPro
             return vResult;
         }
 
+        #endregion
 
         #region - 欄位和屬性 -
 

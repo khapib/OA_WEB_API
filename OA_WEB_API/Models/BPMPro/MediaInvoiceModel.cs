@@ -37,6 +37,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>版權採購請款單 授權權利 設定</summary>
         public IList<MediaInvoiceAuthorizesConfig> MEDIA_INVOICE_AUTHS_CONFIG { get; set; }
 
+        /// <summary>版權採購申請單 額外項目 設定</summary>
+        public IList<MediaInvoiceExtrasConfig> MEDIA_INVOICE_EXS_CONFIG { get; set; }
+
         /// <summary>版權採購請款單 付款辦法 設定</summary>
         public IList<MediaInvoicePaymentsConfig> MEDIA_INVOICE_PYMTS_CONFIG { get; set; }
 
@@ -44,7 +47,7 @@ namespace OA_WEB_API.Models.BPMPro
         public IList<MediaInvoiceBudgetsConfig> MEDIA_INVOICE_BUDGS_CONFIG { get; set; }
 
         /// <summary>版權採購請款單 發票明細 設定</summary>
-        public IList<MediaInvoiceDetailsConfig> MEDIA_INVOICE_DETAILS_CONFIG { get; set; }
+        public IList<MediaInvoiceDetailsConfig> MEDIA_INVOICE_DTLS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
@@ -194,7 +197,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 版權採購申請單 授權權利 設定
+    /// 版權採購請款單 授權權利 設定
     /// </summary>
     public class MediaInvoiceAuthorizesConfig : MediaOrderAuthorizesConfig
     {
@@ -202,7 +205,15 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 版權採購申請單 付款辦法 設定
+    /// 版權採購請款單 額外項目 設定
+    /// </summary>
+    public class MediaInvoiceExtrasConfig: MediaOrderExtrasConfig
+    {
+
+    }
+
+    /// <summary>
+    /// 版權採購請款單 付款辦法 設定
     /// </summary>
     public class MediaInvoicePaymentsConfig : GeneralOrderPaymentsConfig
     {
@@ -211,7 +222,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 版權採購申請單 使用預算 設定
+    /// 版權採購請款單 使用預算 設定
     /// </summary>
     public class MediaInvoiceBudgetsConfig : GeneralOrderBudgetsConfig
     {
@@ -219,7 +230,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 版權採購申請單 憑證明細 設定
+    /// 版權採購請款單 憑證明細 設定
     /// </summary>
     public class MediaInvoiceDetailsConfig
     {

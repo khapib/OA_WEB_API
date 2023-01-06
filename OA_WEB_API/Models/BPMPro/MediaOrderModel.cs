@@ -137,6 +137,12 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>合計未稅金額_台幣(採購明細)/NET總額_台幣(採購明細)</summary>
         public int DTL_NET_TOTAL_TWD { get; set; }
 
+        /// <summary>預估保留稅總額(採購明細)</summary>
+        public double DTL_ER_TAX_TOTAL { get; set; }
+
+        /// <summary>預估保留稅_台幣(採購明細)</summary>
+        public int DTL_ER_TAX_TOTAL_TWD { get; set; }
+
         /// <summary>合計含稅總額(採購明細)/GROSS總額(採購明細)</summary>
         public double DTL_GROSS_TOTAL { get; set; }
 
@@ -163,6 +169,12 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>額外項目總額_台幣(額外項目)</summary>
         public int EX_AMOUNT_TOTAL_TWD { get; set; }
+
+        /// <summary>預估保留稅總額(額外項目)</summary>
+        public double EX_ER_TAX_TOTAL { get; set; }
+
+        /// <summary>預估保留稅_台幣(額外項目)</summary>
+        public int EX_ER_TAX_TOTAL_TWD { get; set; }
 
         /// <summary>不可異動標住(付款辦法)</summary>
         public string PYMT_LOCK_PERIOD { get; set; }
@@ -238,6 +250,12 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>未稅單價_台幣/NET單價_台幣</summary>
         public int DTL_NET_TWD { get; set; }
 
+        /// <summary>預估保留稅</summary>
+        public double DTL_ER_TAX { get; set; }
+
+        /// <summary>預估保留稅_台幣</summary>
+        public int DTL_ER_TAX_TWD { get; set; }
+
         /// <summary>含稅單價/GROSS單價</summary>
         public double DTL_GROSS { get; set; }
 
@@ -261,6 +279,9 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>明細單項小記</summary>
         public double DTL_ITEM_SUM { get; set; }
+
+        /// <summary>明細單項小記_台幣</summary>
+        public int DTL_ITEM_SUM_TWD { get; set; }
 
         /// <summary>所屬專案 ERP 單號</summary>
         public string DTL_PROJECT_FORM_NO { get; set; }
@@ -346,6 +367,15 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>金額</summary>
         public double EX_AMOUNT { get; set; }
+
+        /// <summary>金額_台幣</summary>
+        public int EX_AMOUNT_TWD { get; set; }
+
+        /// <summary>預估保留稅</summary>
+        public double EX_ER_TAX { get; set; }
+
+        /// <summary>預估保留稅_台幣</summary>
+        public int EX_ER_TAX_TWD { get; set; }
 
         /// <summary>期別</summary>
         public int PERIOD { get; set; }

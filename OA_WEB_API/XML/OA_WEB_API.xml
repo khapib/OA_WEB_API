@@ -3236,13 +3236,16 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel.MEDIA_INVOICE_AUTHS_CONFIG">
             <summary>版權採購請款單 授權權利 設定</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel.MEDIA_INVOICE_EXS_CONFIG">
+            <summary>版權採購申請單 額外項目 設定</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel.MEDIA_INVOICE_PYMTS_CONFIG">
             <summary>版權採購請款單 付款辦法 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel.MEDIA_INVOICE_BUDGS_CONFIG">
             <summary>版權採購請款單 使用預算 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel.MEDIA_INVOICE_DETAILS_CONFIG">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel.MEDIA_INVOICE_DTLS_CONFIG">
             <summary>版權採購請款單 發票明細 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel.ASSOCIATED_FORM_CONFIG">
@@ -3390,12 +3393,17 @@
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaInvoiceAuthorizesConfig">
             <summary>
-            版權採購申請單 授權權利 設定
+            版權採購請款單 授權權利 設定
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaInvoiceExtrasConfig">
+            <summary>
+            版權採購請款單 額外項目 設定
             </summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaInvoicePaymentsConfig">
             <summary>
-            版權採購申請單 付款辦法 設定
+            版權採購請款單 付款辦法 設定
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoicePaymentsConfig.ACCT_CATEGORY">
@@ -3403,12 +3411,12 @@
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaInvoiceBudgetsConfig">
             <summary>
-            版權採購申請單 使用預算 設定
+            版權採購請款單 使用預算 設定
             </summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig">
             <summary>
-            版權採購申請單 憑證明細 設定
+            版權採購請款單 憑證明細 設定
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.PERIOD">
@@ -3614,6 +3622,12 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.DTL_NET_TOTAL_TWD">
             <summary>合計未稅金額_台幣(採購明細)/NET總額_台幣(採購明細)</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.DTL_ER_TAX_TOTAL">
+            <summary>預估保留稅總額(採購明細)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.DTL_ER_TAX_TOTAL_TWD">
+            <summary>預估保留稅_台幣(採購明細)</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.DTL_GROSS_TOTAL">
             <summary>合計含稅總額(採購明細)/GROSS總額(採購明細)</summary>
         </member>
@@ -3640,6 +3654,12 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.EX_AMOUNT_TOTAL_TWD">
             <summary>額外項目總額_台幣(額外項目)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.EX_ER_TAX_TOTAL">
+            <summary>預估保留稅總額(額外項目)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.EX_ER_TAX_TOTAL_TWD">
+            <summary>預估保留稅_台幣(額外項目)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_LOCK_PERIOD">
             <summary>不可異動標住(付款辦法)</summary>
@@ -3714,6 +3734,12 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_NET_TWD">
             <summary>未稅單價_台幣/NET單價_台幣</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_ER_TAX">
+            <summary>預估保留稅</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_ER_TAX_TWD">
+            <summary>預估保留稅_台幣</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_GROSS">
             <summary>含稅單價/GROSS單價</summary>
         </member>
@@ -3737,6 +3763,9 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_ITEM_SUM">
             <summary>明細單項小記</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_ITEM_SUM_TWD">
+            <summary>明細單項小記_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_PROJECT_FORM_NO">
             <summary>所屬專案 ERP 單號</summary>
@@ -3819,6 +3848,15 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderExtrasConfig.EX_AMOUNT">
             <summary>金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderExtrasConfig.EX_AMOUNT_TWD">
+            <summary>金額_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderExtrasConfig.EX_ER_TAX">
+            <summary>預估保留稅</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderExtrasConfig.EX_ER_TAX_TWD">
+            <summary>預估保留稅_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderExtrasConfig.PERIOD">
             <summary>期別</summary>
@@ -6290,6 +6328,16 @@
         <member name="T:OA_WEB_API.Repository.BPMPro.MediaInvoiceRepository">
             <summary>
             會簽管理系統 - 版權採購請款單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.MediaInvoiceRepository.PostMediaInvoiceSingle(OA_WEB_API.Models.BPMPro.MediaInvoiceQueryModel)">
+            <summary>
+            版權採購請款單(查詢)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.MediaInvoiceRepository.PutMediaInvoiceSingle(OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel)">
+            <summary>
+            版權採購請款單(新增/修改/草稿)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.MediaInvoiceRepository.PutMediaInvoiceNotifySingle(OA_WEB_API.Models.BPMPro.MediaInvoiceQueryModel)">

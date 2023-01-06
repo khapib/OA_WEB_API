@@ -106,6 +106,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [PaymentPeriodTotal] AS [PAYMENT_PERIOD_TOTAL], ";
             strSQL += "     [DTL_NetTotal] AS [DTL_NET_TOTAL], ";
             strSQL += "     [DTL_NetTotal_TWD] AS [DTL_NET_TOTAL_TWD], ";
+            strSQL += "     [DTL_ER_TaxTotal] AS [DTL_ER_TAX_TOTAL], ";
+            strSQL += "     [DTL_ER_TaxTotal_TWD] AS [DTL_ER_TAX_TOTAL_TWD], ";
             strSQL += "     [DTL_GrossTotal] AS [DTL_GROSS_TOTAL], ";
             strSQL += "     [DTL_GrossTotal_TWD] AS [DTL_GROSS_TOTAL_TWD], ";
             strSQL += "     [DiscountPrice] AS [DISCOUNT_PRICE], ";
@@ -115,6 +117,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [DTL_OrderTotal_TWD] AS [DTL_ORDER_TOTAL_TWD], ";
             strSQL += "     [EX_AmountTotal] AS [EX_AMOUNT_TOTAL], ";
             strSQL += "     [EX_AmountTotal_TWD] AS [EX_AMOUNT_TOTAL_TWD], ";
+            strSQL += "     [EX_ER_TaxTotal] AS [EX_ER_TAX_TOTAL], ";
+            strSQL += "     [EX_ER_TaxTotal_TWD] AS [EX_ER_TAX_TOTAL_TWD], ";
             strSQL += "     [PYMT_LockPeriod] AS [PYMT_LOCK_PERIOD], ";
             strSQL += "     [PYMT_TaxTotal] AS [PYMT_TAX_TOTAL], ";
             strSQL += "     [PYMT_NetTotal] AS [PYMT_NET_TOTAL], ";
@@ -148,6 +152,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [DTL_EpisodeTime] AS [DTL_EPISODE_TIME], ";
             strSQL += "     [DTL_Net] AS [DTL_NET], ";
             strSQL += "     [DTL_Net_TWD] AS [DTL_NET_TWD], ";
+            strSQL += "     [DTL_ER_Tax] AS [DTL_ER_TAX], ";
+            strSQL += "     [DTL_ER_Tax_TWD] AS [DTL_ER_TAX_TWD], ";
             strSQL += "     [DTL_Gross] AS [DTL_GROSS], ";
             strSQL += "     [DTL_Gross_TWD] AS [DTL_GROSS_TWD], ";
             strSQL += "     [DTL_NetSum] AS [DTL_NET_SUM], ";
@@ -156,6 +162,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [DTL_GrossSum_TWD] AS [DTL_GROSS_SUM_TWD], ";
             strSQL += "     [DTL_Material] AS [DTL_MATERIAL], ";
             strSQL += "     [DTL_ItemSum] AS [DTL_ITEM_SUM], ";
+            strSQL += "     [DTL_ItemSum_TWD] AS [DTL_ITEM_SUM_TWD], ";
             strSQL += "     [DTL_ProjectFormNo] AS [DTL_PROJECT_FORM_NO], ";
             strSQL += "     [DTL_ProjectName] AS [DTL_PROJECT_NAME], ";
             strSQL += "     [DTL_ProjectNickname] AS [DTL_PROJECT_NICKNAME], ";
@@ -206,6 +213,9 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [EX_RowNo] AS [EX_ROW_NO], ";
             strSQL += "     [EX_Name] AS [EX_NAME], ";
             strSQL += "     [EX_Amount] AS [EX_AMOUNT], ";
+            strSQL += "     [EX_Amount_TWD] AS [EX_AMOUNT_TWD], ";
+            strSQL += "     [EX_ER_Tax] AS [EX_ER_TAX], ";
+            strSQL += "     [EX_ER_Tax_TWD] AS [EX_ER_TAX_TWD], ";
             strSQL += "     [Period] AS [PERIOD], ";
             strSQL += "     [EX_ProjectFormNo] AS [EX_PROJECT_FORM_NO], ";
             strSQL += "     [EX_ProjectName] AS [EX_PROJECT_NAME], ";
@@ -529,10 +539,12 @@ namespace OA_WEB_API.Repository.BPMPro
                     model.MEDIA_ORDER_CONFIG.PRE_RATE = Math.Round(model.MEDIA_ORDER_CONFIG.PRE_RATE, 2);
                     model.MEDIA_ORDER_CONFIG.TAX = Math.Round(model.MEDIA_ORDER_CONFIG.TAX, 2);
                     model.MEDIA_ORDER_CONFIG.DTL_NET_TOTAL = Math.Round(model.MEDIA_ORDER_CONFIG.DTL_NET_TOTAL, 2);
+                    model.MEDIA_ORDER_CONFIG.DTL_ER_TAX_TOTAL = Math.Round(model.MEDIA_ORDER_CONFIG.DTL_ER_TAX_TOTAL, 2);
                     model.MEDIA_ORDER_CONFIG.DTL_GROSS_TOTAL = Math.Round(model.MEDIA_ORDER_CONFIG.DTL_GROSS_TOTAL, 2);
                     model.MEDIA_ORDER_CONFIG.DTL_MATERIAL_TOTAL = Math.Round(model.MEDIA_ORDER_CONFIG.DTL_MATERIAL_TOTAL, 2);
                     model.MEDIA_ORDER_CONFIG.DTL_ORDER_TOTAL = Math.Round(model.MEDIA_ORDER_CONFIG.DTL_ORDER_TOTAL, 2);
                     model.MEDIA_ORDER_CONFIG.EX_AMOUNT_TOTAL = Math.Round(model.MEDIA_ORDER_CONFIG.EX_AMOUNT_TOTAL, 2);
+                    model.MEDIA_ORDER_CONFIG.EX_ER_TAX_TOTAL = Math.Round(model.MEDIA_ORDER_CONFIG.EX_ER_TAX_TOTAL, 2);
                     model.MEDIA_ORDER_CONFIG.PYMT_TAX_TOTAL = Math.Round(model.MEDIA_ORDER_CONFIG.PYMT_TAX_TOTAL, 2);
                     model.MEDIA_ORDER_CONFIG.PYMT_NET_TOTAL = Math.Round(model.MEDIA_ORDER_CONFIG.PYMT_NET_TOTAL, 2);
                     model.MEDIA_ORDER_CONFIG.PYMT_MATERIAL_TOTAL = Math.Round(model.MEDIA_ORDER_CONFIG.PYMT_MATERIAL_TOTAL, 2);
@@ -561,6 +573,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@PAYMENT_PERIOD_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_NET_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_NET_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@DTL_ER_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@DTL_ER_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_GROSS_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_GROSS_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DISCOUNT_PRICE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -570,6 +584,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@DTL_ORDER_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@EX_AMOUNT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@EX_AMOUNT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@EX_ER_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@EX_ER_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_LOCK_PERIOD", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_NET_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -603,6 +619,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [PaymentPeriodTotal]=@PAYMENT_PERIOD_TOTAL, ";
                     strSQL += "     [DTL_NetTotal]=@DTL_NET_TOTAL, ";
                     strSQL += "     [DTL_NetTotal_TWD]=@DTL_NET_TOTAL_TWD, ";
+                    strSQL += "     [DTL_ER_TaxTotal]=@DTL_ER_TAX_TOTAL, ";
+                    strSQL += "     [DTL_ER_TaxTotal_TWD]=@DTL_ER_TAX_TOTAL_TWD, ";
                     strSQL += "     [DTL_GrossTotal]=@DTL_GROSS_TOTAL, ";
                     strSQL += "     [DTL_GrossTotal_TWD]=@DTL_GROSS_TOTAL_TWD, ";
                     strSQL += "     [DiscountPrice]=@DISCOUNT_PRICE, ";
@@ -612,6 +630,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [DTL_OrderTotal_TWD]=@DTL_ORDER_TOTAL_TWD, ";
                     strSQL += "     [EX_AmountTotal]=@EX_AMOUNT_TOTAL, ";
                     strSQL += "     [EX_AmountTotal_TWD]=@EX_AMOUNT_TOTAL_TWD, ";
+                    strSQL += "     [EX_ER_TaxTotal]=@EX_ER_TAX_TOTAL, ";
+                    strSQL += "     [EX_ER_TaxTotal_TWD]=@EX_ER_TAX_TOTAL_TWD, ";
                     strSQL += "     [PYMT_LockPeriod]=@PYMT_LOCK_PERIOD, ";
                     strSQL += "     [PYMT_TaxTotal]=@PYMT_TAX_TOTAL, ";
                     strSQL += "     [PYMT_NetTotal]=@PYMT_NET_TOTAL, ";
@@ -647,6 +667,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@DTL_EPISODE_TIME", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_NET_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DTL_ER_TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DTL_ER_TAX_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_GROSS_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_NET_SUM", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -655,6 +677,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@DTL_GROSS_SUM_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_MATERIAL", SqlDbType.Float) { Value =(object) DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_ITEM_SUM", SqlDbType.Float) { Value =(object) DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DTL_ITEM_SUM_TWD", SqlDbType.Int) { Value =(object) DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_PROJECT_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value =(object) DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_PROJECT_NAME", SqlDbType.NVarChar) { Size = 500, Value =(object) DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_PROJECT_NICKNAME", SqlDbType.NVarChar) { Size = 4000, Value =(object) DBNull.Value ?? DBNull.Value },
@@ -685,6 +708,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         item.DTL_NET = Math.Round(item.DTL_NET, 2);
                         item.DTL_GROSS = Math.Round(item.DTL_GROSS, 2);
                         item.DTL_NET_SUM = Math.Round(item.DTL_NET_SUM, 2);
+                        item.DTL_ER_TAX = Math.Round(item.DTL_ER_TAX, 2);
                         item.DTL_GROSS_SUM = Math.Round(item.DTL_GROSS_SUM, 2);
                         item.DTL_MATERIAL = Math.Round(item.DTL_MATERIAL, 2);
                         item.DTL_ITEM_SUM = Math.Round(item.DTL_ITEM_SUM, 2);
@@ -696,8 +720,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_DTL]([RequisitionID],[DTL_RowNo],[DTL_SupProdANo],[DTL_ItemName],[DTL_MediaSpec],[DTL_MediaType],[DTL_StartEpisode],[DTL_EndEpisode],[DTL_OrderEpisode],[DTL_ACPT_Episode],[DTL_EpisodeTime],[DTL_Net],[DTL_Net_TWD],[DTL_Gross],[DTL_Gross_TWD],[DTL_NetSum],[DTL_NetSum_TWD],[DTL_GrossSum],[DTL_GrossSum_TWD],[DTL_Material],[DTL_ItemSum],[DTL_ProjectFormNo],[DTL_ProjectName],[DTL_ProjectNickname],[DTL_ProjectUseYear],[DTL_Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@DTL_ROW_NO,@DTL_SUP_PROD_A_NO,@DTL_ITEM_NAME,@DTL_MEDIA_SPEC,@DTL_MEDIA_TYPE,@DTL_START_EPISODE,@DTL_END_EPISODE,@DTL_ORDER_EPISODE,@DTL_ACPT_EPISODE,@DTL_EPISODE_TIME,@DTL_NET,@DTL_NET_TWD,@DTL_GROSS,@DTL_GROSS_TWD,@DTL_NET_SUM,@DTL_NET_SUM_TWD,@DTL_GROSS_SUM,@DTL_GROSS_SUM_TWD,@DTL_MATERIAL,@DTL_ITEM_SUM,@DTL_PROJECT_FORM_NO,@DTL_PROJECT_NAME,@DTL_PROJECT_NICKNAME,@DTL_PROJECT_USE_YEAR,@DTL_NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_DTL]([RequisitionID],[DTL_RowNo],[DTL_SupProdANo],[DTL_ItemName],[DTL_MediaSpec],[DTL_MediaType],[DTL_StartEpisode],[DTL_EndEpisode],[DTL_OrderEpisode],[DTL_ACPT_Episode],[DTL_EpisodeTime],[DTL_Net],[DTL_Net_TWD],[DTL_ER_Tax],[DTL_ER_Tax_TWD],[DTL_Gross],[DTL_Gross_TWD],[DTL_NetSum],[DTL_NetSum_TWD],[DTL_GrossSum],[DTL_GrossSum_TWD],[DTL_Material],[DTL_ItemSum],[DTL_ItemSum_TWD],[DTL_ProjectFormNo],[DTL_ProjectName],[DTL_ProjectNickname],[DTL_ProjectUseYear],[DTL_Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@DTL_ROW_NO,@DTL_SUP_PROD_A_NO,@DTL_ITEM_NAME,@DTL_MEDIA_SPEC,@DTL_MEDIA_TYPE,@DTL_START_EPISODE,@DTL_END_EPISODE,@DTL_ORDER_EPISODE,@DTL_ACPT_EPISODE,@DTL_EPISODE_TIME,@DTL_NET,@DTL_NET_TWD,@DTL_ER_TAX,@DTL_ER_TAX_TWD,@DTL_GROSS,@DTL_GROSS_TWD,@DTL_NET_SUM,@DTL_NET_SUM_TWD,@DTL_GROSS_SUM,@DTL_GROSS_SUM_TWD,@DTL_MATERIAL,@DTL_ITEM_SUM,@DTL_ITEM_SUM_TWD,@DTL_PROJECT_FORM_NO,@DTL_PROJECT_NAME,@DTL_PROJECT_NICKNAME,@DTL_PROJECT_USE_YEAR,@DTL_NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }
@@ -774,7 +798,10 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
                     new SqlParameter("@EX_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@EX_NAME", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@EX_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EX_AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EX_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EX_ER_TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EX_ER_TAX_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Size = 2, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@EX_PROJECT_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@EX_PROJECT_NAME", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -804,6 +831,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         #region - 確認小數點後第二位 -
 
                         item.EX_AMOUNT = Math.Round(item.EX_AMOUNT, 2);
+                        item.EX_ER_TAX = Math.Round(item.EX_ER_TAX, 2);
 
                         #endregion
 
@@ -812,8 +840,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterExtras);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_EX]([RequisitionID],[EX_RowNo],[EX_Name],[EX_Amount],[Period],[EX_ProjectFormNo],[EX_ProjectName],[EX_ProjectNickname],[EX_ProjectUseYear],[EX_Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@EX_ROW_NO,@EX_NAME,@EX_AMOUNT,@PERIOD,@EX_PROJECT_FORM_NO,@EX_PROJECT_NAME,@EX_PROJECT_NICKNAME,@EX_PROJECT_USE_YEAR,@EX_NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_EX]([RequisitionID],[EX_RowNo],[EX_Name],[EX_Amount],[EX_Amount_TWD],[EX_ER_Tax],[EX_ER_Tax_TWD],[Period],[EX_ProjectFormNo],[EX_ProjectName],[EX_ProjectNickname],[EX_ProjectUseYear],[EX_Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@EX_ROW_NO,@EX_NAME,@EX_AMOUNT,@EX_AMOUNT_TWD,@EX_ER_TAX,@EX_ER_TAX_TWD,@PERIOD,@EX_PROJECT_FORM_NO,@EX_PROJECT_NAME,@EX_PROJECT_NICKNAME,@EX_PROJECT_USE_YEAR,@EX_NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterExtras);
                     }

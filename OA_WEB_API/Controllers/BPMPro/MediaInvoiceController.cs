@@ -54,7 +54,7 @@ namespace OA_WEB_API.Controllers.BPMPro
         //[HttpPost]
         //public bool PutMediaInvoiceSingle([FromBody] MediaInvoiceViewModel model)
         //{
-        //    return mediaInvoiceRepository.PutMediaAcceptanceSingle(model);
+        //    return mediaInvoiceRepository.PutMediaInvoiceSingle(model);
         //}
 
         /// <summary>

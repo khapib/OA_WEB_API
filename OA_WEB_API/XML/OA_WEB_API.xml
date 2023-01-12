@@ -3164,6 +3164,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.DTL_EPISODE_TIME">
             <summary>每集長度</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.DTL_GET_MASTERING_DATE">
+            <summary>母帶受領日期</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.DTL_OWNER_DEPT_MAIN_ID">
             <summary>驗收負責人主要部門</summary>
         </member>

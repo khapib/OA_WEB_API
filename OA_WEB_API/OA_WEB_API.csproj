@@ -225,7 +225,7 @@
     <Compile Include="Models\BPMPro\GeneralOrderModel.cs" />
     <Compile Include="Models\BPMPro\GetExternalModel.cs" />
     <Compile Include="Models\BPMPro\GPI_CountersignModel.cs" />
-    <Compile Include="Models\BPMPro\MediaAcceptancemModel.cs" />
+    <Compile Include="Models\BPMPro\MediaAcceptanceModel.cs" />
     <Compile Include="Models\BPMPro\MediaInvoiceModel.cs" />
     <Compile Include="Models\BPMPro\MediaOrderChangeModel.cs" />
     <Compile Include="Models\BPMPro\MediaOrderModel.cs" />

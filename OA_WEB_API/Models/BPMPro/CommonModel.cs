@@ -66,6 +66,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>受款銀行地址</summary>
         public string BFCY_BANK_ADDRESS { get; set; }
 
+        /// <summary>受款銀行國家</summary>
+        public string BFCY_BANK_COUNTRY_AND_CITY { get; set; }
+
         /// <summary>中間銀行</summary>
         public string BFCY_BANK_IBAN { get; set; }
     }
@@ -97,9 +100,6 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>受款銀行名稱</summary>
         public string BFCY_BANK_NAME { get; set; }
-
-        /// <summary>受款銀行國家</summary>
-        public string BFCY_BANK_COUNTRY_AND_CITY { get; set; }
 
         /// <summary>幣別</summary>
         public string CURRENCY_NAME { get; set; }

@@ -656,6 +656,16 @@
             會簽管理系統 - 版權採購請款單
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.MediaInvoiceController.PostMediaInvoiceSingle(OA_WEB_API.Models.BPMPro.MediaInvoiceQueryModel)">
+            <summary>
+            版權採購請款單(查詢)
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.MediaInvoiceController.PutMediaInvoiceSingle(OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel)">
+            <summary>
+            版權採購請款單(新增/修改/草稿)
+            </summary>
+        </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.MediaInvoiceController.PutMediaInvoiceNotifySingle(OA_WEB_API.Models.BPMPro.MediaInvoiceQueryModel)">
             <summary>
             版權採購請款單(財務審核關卡-關聯表單(知會))
@@ -3230,7 +3240,7 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel.MEDIA_INVOICE_CONFIG">
             <summary>版權採購請款單 表單內容 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel.MEDIA_INVOICE_ACCEPTANCES_CONFIG">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel.MEDIA_INVOICE_ACPTS_CONFIG">
             <summary>版權採購請款單 驗收明細 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel.MEDIA_INVOICE_AUTHS_CONFIG">
@@ -3276,11 +3286,11 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.MEDIA_ORDER_ERP_FORM_NO">
             <summary>版權採購 ERP 表單唯一碼</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.MEDIA_ORDER_TXN_TYPE">
-            <summary>版權採購 交易類型</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.MEDIA_ORDER_PATH">
             <summary>版權採購 路徑</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.MEDIA_ORDER_TXN_TYPE">
+            <summary>版權採購 交易類型</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.MEDIA_ORDER_DTL_ORDER_TOTAL">
             <summary>版權採購 採購單 總金額</summary>
@@ -3321,6 +3331,12 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.REIMB_STAFF_NAME">
             <summary>代墊員工姓名</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.SUP_NO">
+            <summary>廠商編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.SUP_NAME">
+            <summary>廠商名稱</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PAY_METHOD">
             <summary>
             支付方式：
@@ -3329,12 +3345,6 @@
             D_AC.指定帳戶
             SUP_AC.合作夥伴帳戶
             </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.SUP_NO">
-            <summary>廠商編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.SUP_NAME">
-            <summary>廠商名稱</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.REG_KIND">
             <summary>登記證號類別</summary>
@@ -3356,25 +3366,133 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.NOTE">
             <summary>備註</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.DTL_NET_TOTAL">
+            <summary>合計未稅金額(採購明細)/NET總額(採購明細)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.DTL_NET_TOTAL_TWD">
+            <summary>合計未稅金額_台幣(採購明細)/NET總額_台幣(採購明細)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.DTL_ER_TAX_TOTAL">
+            <summary>預估保留稅總額(採購明細)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.DTL_ER_TAX_TOTAL_TWD">
+            <summary>預估保留稅_台幣(採購明細)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.DTL_GROSS_TOTAL">
+            <summary>合計含稅總額(採購明細)/GROSS總額(採購明細)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.DTL_GROSS_TOTAL_TWD">
+            <summary>合計含稅總額_台幣(採購明細)/GROSS總額_台幣(採購明細)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.DTL_MATERIAL_TOTAL">
+            <summary>材料費總價(採購明細)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.DTL_MATERIAL_TOTAL_TWD">
+            <summary>材料費總價_台幣(採購明細)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.DTL_ORDER_TOTAL">
+            <summary>合計(採購明細)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.DTL_ORDER_TOTAL_TWD">
+            <summary>合計_台幣(採購明細)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.EX_AMOUNT_TOTAL">
+            <summary>額外項目總額(額外項目)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.EX_AMOUNT_TOTAL_TWD">
+            <summary>額外項目總額_台幣(額外項目)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.EX_ER_TAX_TOTAL">
+            <summary>預估保留稅總額(額外項目)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.EX_ER_TAX_TOTAL_TWD">
+            <summary>預估保留稅_台幣(額外項目)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_EX_AMOUNT_TOTAL">
+            <summary>額外項目總額(付款辦法)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_EX_AMOUNT_TOTAL_TWD">
+            <summary>額外項目總額_台幣(付款辦法)</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_CURRENT_TOTAL">
-            <summary>付款辦法 本期付款總額</summary>
+            <summary>付款辦法 本期付款總額(付款辦法)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_CURRENT_TOTAL_TWD">
-            <summary>付款辦法 本期付款總額_台幣</summary>
+            <summary>付款辦法 本期付款總額_台幣(付款辦法)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.INV_AMOUNT_TOTAL">
-            <summary>發票明細 合計</summary>
+            <summary>發票明細 合計(憑證明細)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.INV_AMOUNT_TOTAL_TWD">
-            <summary>發票明細 合計_台幣</summary>
+            <summary>發票明細 合計_台幣(憑證明細)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.IVN_ER_TAX_TOTAL">
+            <summary>發票明細 合計(憑證明細)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.IVN_ER_TAX_TOTAL_TWD">
+            <summary>發票明細 合計_台幣(憑證明細)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.ACTUAL_PAY_AMOUNT">
             <summary>實際支付金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.FINANC_AUDIT_ID_1">
+            <summary>財務審核人員編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.FINANC_AUDIT_NAME_1">
+            <summary>財務審核人員姓名</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig">
             <summary>
             版權採購請款單 驗收明細 設定
             </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_ROW_NO">
+            <summary>行數編號(採購明細)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_EPISODE_TIME">
+            <summary>每集長度</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_MEDIA_SPEC">
+            <summary>影帶規格</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_NET">
+            <summary>未稅單價/NET單價</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_NET_TWD">
+            <summary>未稅單價_台幣/NET單價_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_ER_TAX">
+            <summary>預估保留稅</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_ER_TAX_TWD">
+            <summary>預估保留稅_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_GROSS">
+            <summary>含稅單價/GROSS單價</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_GROSS_TWD">
+            <summary>含稅單價_台幣/GROSS單價_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_NET_SUM">
+            <summary>未稅小計/NET小計</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_NET_SUM_TWD">
+            <summary>未稅小計_台幣/NET小計_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_GROSS_SUM">
+            <summary>含稅小計/GROSS小計</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_GROSS_SUM_TWD">
+            <summary>含稅小計_台幣/GROSS小計_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_MATERIAL">
+            <summary>單集材料費</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_ITEM_SUM">
+            <summary>明細單項小記</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_ITEM_SUM_TWD">
+            <summary>明細單項小記_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_PROJECT_FORM_NO">
             <summary>所屬專案 ERP 單號</summary>
@@ -4655,6 +4773,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.COMM_Bank.BFCY_BANK_ADDRESS">
             <summary>受款銀行地址</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.COMM_Bank.BFCY_BANK_COUNTRY_AND_CITY">
+            <summary>受款銀行國家</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.COMM_Bank.BFCY_BANK_IBAN">
             <summary>中間銀行</summary>
         </member>
@@ -4685,9 +4806,6 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.BFCY_BANK_NAME">
             <summary>受款銀行名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.BFCY_BANK_COUNTRY_AND_CITY">
-            <summary>受款銀行國家</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.CURRENCY_NAME">
             <summary>幣別</summary>

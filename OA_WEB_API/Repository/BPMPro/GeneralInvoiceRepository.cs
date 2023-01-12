@@ -409,9 +409,13 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (model.GENERAL_INVOICE_CONFIG != null)
                 {
+                    #region - 【行政採購申請單】資訊 -
+
                     model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_BPM_FORM_NO = GeneralOrderformData.SERIAL_ID;
                     model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_SUBJECT = GeneralOrderformData.FORM_SUBJECT;
                     model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_PATH = GlobalParameters.FormContentPath(model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_REQUISITION_ID, GeneralOrderformData.IDENTIFY, GeneralOrderformData.DIAGRAM_NAME);
+
+                    #endregion
 
                     var parameterInfo = new List<SqlParameter>()
                     {

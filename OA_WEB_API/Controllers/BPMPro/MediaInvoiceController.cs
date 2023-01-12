@@ -23,15 +23,15 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #region - 方法 -
 
-        ///// <summary>
-        ///// 版權採購請款單(查詢)
-        ///// </summary>    
-        //[Route("PostMediaInvoiceSingle")]
-        //[HttpPost]
-        //public MediaInvoiceViewModel PostMediaInvoiceSingle([FromBody] MediaInvoiceQueryModel query)
-        //{
-        //    return mediaInvoiceRepository.PostMediaInvoiceSingle(query);
-        //}
+        /// <summary>
+        /// 版權採購請款單(查詢)
+        /// </summary>    
+        [Route("PostMediaInvoiceSingle")]
+        [HttpPost]
+        public MediaInvoiceViewModel PostMediaInvoiceSingle([FromBody] MediaInvoiceQueryModel query)
+        {
+            return mediaInvoiceRepository.PostMediaInvoiceSingle(query);
+        }
 
         #region - 依此單內容重送 -
 
@@ -47,15 +47,15 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #endregion
 
-        ///// <summary>
-        ///// 版權採購請款單(新增/修改/草稿)
-        ///// </summary>
-        //[Route("PutMediaInvoiceSingle")]
-        //[HttpPost]
-        //public bool PutMediaInvoiceSingle([FromBody] MediaInvoiceViewModel model)
-        //{
-        //    return mediaInvoiceRepository.PutMediaInvoiceSingle(model);
-        //}
+        /// <summary>
+        /// 版權採購請款單(新增/修改/草稿)
+        /// </summary>
+        [Route("PutMediaInvoiceSingle")]
+        [HttpPost]
+        public bool PutMediaInvoiceSingle([FromBody] MediaInvoiceViewModel model)
+        {
+            return mediaInvoiceRepository.PutMediaInvoiceSingle(model);
+        }
 
         /// <summary>
         /// 版權採購請款單(財務審核關卡-關聯表單(知會))

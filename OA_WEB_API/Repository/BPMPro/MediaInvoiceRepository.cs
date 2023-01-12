@@ -359,7 +359,8 @@ namespace OA_WEB_API.Repository.BPMPro
                 MEDIA_INVOICE_EXS_CONFIG = mediaInvoiceExtrasConfig,
                 MEDIA_INVOICE_PYMTS_CONFIG = mediaInvoicePaymentsConfig,
                 MEDIA_INVOICE_BUDGS_CONFIG = mediaInvoiceBudgetsConfig,
-                MEDIA_INVOICE_DTLS_CONFIG = mediaInvoiceDetailsConfig
+                MEDIA_INVOICE_DTLS_CONFIG = mediaInvoiceDetailsConfig,
+                ASSOCIATED_FORM_CONFIG = associatedForm
             };
 
             return mediaInvoiceViewModel;

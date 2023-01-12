@@ -171,6 +171,20 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #endregion
 
+        #region - 版權採購請款單(外部起單) -
+
+        /// <summary>
+        /// 版權採購交片單(外部起單)
+        /// </summary>
+        [Route("api/PutMediaInvoiceGetExternal")]
+        [HttpPost]
+        public GetExternalData PutMediaInvoiceGetExternal(MediaInvoiceERPInfo model)
+        {
+            return getExternalRepository.PutMediaInvoiceGetExternal(model);
+        }
+
+        #endregion
+
         #endregion
 
         #endregion

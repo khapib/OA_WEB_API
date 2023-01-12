@@ -611,6 +611,11 @@
             版權採購交片單(外部起單)
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutMediaInvoiceGetExternal(OA_WEB_API.Models.BPMPro.MediaInvoiceERPInfo)">
+            <summary>
+            版權採購交片單(外部起單)
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.GPI_CountersignController">
             <summary>
             會簽管理系統 - 四方四隅_會簽單
@@ -2684,19 +2689,22 @@
         <member name="P:OA_WEB_API.Models.BPMPro.GetExternalData.STATE">
             <summary>狀態</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InfoTitle.BPM_REQ_ID">
+            <summary>BPM表 單唯一碼</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InfoTitle.ERP_FORM_NO">
+            <summary>ERP 表單唯一碼</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InfoTitle.CREATE_BY">
+            <summary>ERP送審人</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ProjectReviewERPInfo">
             <summary>
             專案建立審核單(外部起單)ERP資料
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ProjectReviewERPInfo.BPM_REQ_ID">
-            <summary>BPM表 單唯一碼</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ProjectReviewERPInfo.PROJECT_NAME">
             <summary>專案群組名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ProjectReviewERPInfo.ERP_FORM_NO">
-            <summary>ERP 表單唯一碼</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ProjectReviewERPInfo.PROJECT_NICKNAME">
             <summary>專案名稱</summary>
@@ -2706,9 +2714,6 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ProjectReviewERPInfo.START_ID">
             <summary>ERP起案人</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ProjectReviewERPInfo.CREATE_BY">
-            <summary>ERP送審人</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ProjectReviewERPInfo.CREATE_DATE">
             <summary>建檔日期</summary>
@@ -2744,15 +2749,6 @@
             合作夥伴審核單(表頭內容)
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.SupplierReviewInfoTitle.BPM_REQ_ID">
-            <summary>BPM 表單唯一碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.SupplierReviewInfoTitle.ERP_FORM_NO">
-            <summary>ERP 表單唯一碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.SupplierReviewInfoTitle.CREATE_BY">
-            <summary>ERP送審人</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.SupplierReviewInfoTitle.SUP_NO">
             <summary>廠商編號</summary>
         </member>
@@ -2760,15 +2756,6 @@
             <summary>
             費用申請單(外部起單)ERP資料
             </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseERPInfo.BPM_REQ_ID">
-            <summary>BPM 表單唯一碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseERPInfo.ERP_FORM_NO">
-            <summary>ERP 表單唯一碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseERPInfo.CREATE_BY">
-            <summary>ERP送審人</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseERPInfo.FLOW_NAME">
             <summary>ERP 工作流程名稱</summary>
@@ -2778,15 +2765,6 @@
             行政採購申請單(外部起單)ERP資料
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderERPInfo.BPM_REQ_ID">
-            <summary>BPM 表單唯一碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderERPInfo.ERP_FORM_NO">
-            <summary>ERP 表單唯一碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderERPInfo.CREATE_BY">
-            <summary>ERP送審人</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderERPInfo.FLOW_NAME">
             <summary>ERP 工作流程名稱</summary>
         </member>
@@ -2795,17 +2773,8 @@
             行政採購異動申請單(外部起單)ERP資料
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderChangeERPInfo.BPM_REQ_ID">
-            <summary>BPM 表單唯一碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderChangeERPInfo.ERP_FORM_NO">
-            <summary>ERP 表單唯一碼</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderChangeERPInfo.ERP_MODIFY_FORM_NO">
             <summary>行政採購:新單ERP 表單唯一碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderChangeERPInfo.CREATE_BY">
-            <summary>ERP送審人</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderChangeERPInfo.FLOW_NAME">
             <summary>ERP 工作流程名稱</summary>
@@ -2838,17 +2807,8 @@
             行政採購點驗收單(表頭內容)
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceInfoTitle.BPM_REQ_ID">
-            <summary>BPM 表單唯一碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceInfoTitle.ERP_FORM_NO">
-            <summary>ERP 表單唯一碼</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceInfoTitle.FLOW_NAME">
             <summary>ERP 工作流程名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceInfoTitle.CREATE_BY">
-            <summary>ERP送審人</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GeneralInvoiceERPInfo">
             <summary>
@@ -2865,15 +2825,6 @@
             <summary>
             行政採購請購單(表頭內容)
             </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceInfoTitle.BPM_REQ_ID">
-            <summary>BPM 表單唯一碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceInfoTitle.ERP_FORM_NO">
-            <summary>ERP 表單唯一碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceInfoTitle.CREATE_BY">
-            <summary>ERP送審人</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceInfoTitle.FLOW_NAME">
             <summary>ERP 工作流程名稱</summary>
@@ -2900,15 +2851,6 @@
             版權採購申請單(外部起單)ERP資料
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderERPInfo.BPM_REQ_ID">
-            <summary>BPM 表單唯一碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderERPInfo.ERP_FORM_NO">
-            <summary>ERP 表單唯一碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderERPInfo.CREATE_BY">
-            <summary>ERP送審人</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderERPInfo.FLOW_NAME">
             <summary>ERP 工作流程名稱</summary>
         </member>
@@ -2917,17 +2859,8 @@
             版權採購異動申請單(外部起單)ERP資料
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderChangeERPInfo.BPM_REQ_ID">
-            <summary>BPM 表單唯一碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderChangeERPInfo.ERP_FORM_NO">
-            <summary>ERP 表單唯一碼</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderChangeERPInfo.ERP_MODIFY_FORM_NO">
             <summary>行政採購:新單ERP 表單唯一碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderChangeERPInfo.CREATE_BY">
-            <summary>ERP送審人</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderChangeERPInfo.FLOW_NAME">
             <summary>ERP 工作流程名稱</summary>
@@ -2955,17 +2888,44 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceERPInfo.DTL">
             <summary>行政採購點驗收單(驗收明細)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceInfoTitle.BPM_REQ_ID">
-            <summary>BPM 表單唯一碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceInfoTitle.ERP_FORM_NO">
-            <summary>ERP 表單唯一碼</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceInfoTitle.FLOW_NAME">
             <summary>ERP 工作流程名稱</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceInfoTitle.CREATE_BY">
-            <summary>ERP送審人</summary>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaInvoiceERPInfo">
+            <summary>
+            版權採購請購單(外部起單)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceERPInfo.TITLE">
+            <summary>行政採購點驗收單(表頭內容)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceERPInfo.INFO">
+            <summary>行政採購請購單(表單內容)</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaInvoiceInfoTitle">
+            <summary>
+            版權採購請購單(表頭內容)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInfoTitle.FLOW_NAME">
+            <summary>ERP 工作流程名稱</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaInvoiceInfoConfig">
+            <summary>
+            版權採購請購單(表單內容)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInfoConfig.MEDIA_ORDER_REQUISITION_ID">
+            <summary>版權採購 系統編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInfoConfig.MEDIA_ORDER_ERP_FORM_NO">
+            <summary>版權採購 ERP 表單唯一碼</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInfoConfig.MEDIA_ACCEPTANCE_REQUISITION_ID">
+            <summary>版權採購點驗收單 系統編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInfoConfig.PERIOD">
+            <summary>期別</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GPI_CountersignQueryModel">
             <summary>
@@ -6291,6 +6251,9 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.mediaAcceptanceRepository">
             <summary>版權採購交片單</summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.mediaInvoiceRepository">
+            <summary>版權採購請款單</summary>
+        </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutProjectReviewGetExternal(OA_WEB_API.Models.BPMPro.ProjectReviewERPInfo)">
             <summary>
             專案建立審核單(外部起單)
@@ -6339,6 +6302,11 @@
         <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutMediaAcceptanceGetExternal(OA_WEB_API.Models.BPMPro.MediaAcceptanceERPInfo)">
             <summary>
             版權採購交片單(外部起單)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutMediaInvoiceGetExternal(OA_WEB_API.Models.BPMPro.MediaInvoiceERPInfo)">
+            <summary>
+            版權採購請款單(外部起單)
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.IDENTIFY">

@@ -280,8 +280,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [PYMT_Terms] AS [PYMT_TERMS], ";
             strSQL += "     [PYMT_MethodID] AS [PYMT_METHOD_ID], ";
             strSQL += "     [PYMT_Tax] AS [PYMT_TAX], ";
-            strSQL += "     [PYMT_ER_Tax] AS [PYMT_ER_TAX], ";
             strSQL += "     [PYMT_Net] AS [PYMT_NET], ";
+            strSQL += "     [PYMT_ER_Tax] AS [PYMT_ER_TAX], ";
             strSQL += "     [PYMT_Gross] AS [PYMT_GROSS], ";
             strSQL += "     [PYMT_PredictRate] AS [PYMT_PRE_RATE], ";
             strSQL += "     [PYMT_Material] AS [PYMT_MATERIAL], ";

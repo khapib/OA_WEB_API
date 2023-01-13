@@ -185,6 +185,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>合計未稅金額(付款辦法)/NET總額(付款辦法)</summary>
         public double PYMT_NET_TOTAL { get; set; }
 
+        /// <summary>預估保留稅總額(付款辦法)</summary>
+        public double PYMT_ER_TAX_TOTAL { get; set; }
+  
         /// <summary>合計含稅總額(付款辦法)/GROSS總額(付款辦法)</summary>
         public double PYMT_GROSS_TOTAL { get; set; }
 
@@ -429,6 +432,9 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>含稅總額/GROSS單價</summary>
         public double PYMT_GROSS { get; set; }
+
+        /// <summary>預估保留稅總額</summary>
+        public double PYMT_ER_TAX { get; set; }
 
         /// <summary>當期預計匯率</summary>
         public double PYMT_PRE_RATE { get; set; }

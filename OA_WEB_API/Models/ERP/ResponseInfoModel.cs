@@ -64,10 +64,10 @@ namespace OA_WEB_API.Models.ERP
 
     #endregion
 
-    #region - 費用申請單 申請審核資訊_回傳ERP -
+    #region - 費用申請單 審核資訊_回傳ERP -
 
     /// <summary>
-    /// 費用申請單 申請審核資訊_回傳ERP 
+    /// 費用申請單 審核資訊_回傳ERP 
     /// </summary>
     public class ExpensesReimburseInfoRequest : ExpensesReimburseQueryModel
     {
@@ -98,10 +98,10 @@ namespace OA_WEB_API.Models.ERP
 
     #region - 行政採購類_回傳ERP資訊 -
 
-    #region - 行政採購申請單 申請審核資訊_回傳ERP -
+    #region - 行政採購申請單 審核資訊_回傳ERP -
 
     /// <summary>
-    /// 行政採購申請單 申請審核資訊_回傳ERP 
+    /// 行政採購申請單 審核資訊_回傳ERP 
     /// </summary>
     public class GeneralOrderInfoRequest : GeneralOrderQueryModel
     {
@@ -139,10 +139,10 @@ namespace OA_WEB_API.Models.ERP
 
     #endregion
 
-    #region - 行政採購點驗收單 驗收審核資訊_回傳ERP -
+    #region - 行政採購點驗收單 審核資訊_回傳ERP -
 
     /// <summary>
-    /// 行政採購點驗收單 驗收審核資訊_回傳ERP 
+    /// 行政採購點驗收單 審核資訊_回傳ERP 
     /// </summary>
     public class GeneralAcceptanceInfoRequest : GeneralAcceptanceQueryModel
     {
@@ -164,7 +164,7 @@ namespace OA_WEB_API.Models.ERP
 
     #endregion
 
-    #region - 行政採購請款單 財務審核資訊_回傳ERP -
+    #region - 行政採購請款單 審核資訊_回傳ERP -
 
     /// <summary>
     /// 行政採購請款單 財務審核資訊_回傳ERP
@@ -199,10 +199,10 @@ namespace OA_WEB_API.Models.ERP
 
     #region - 版權採購類_回傳ERP資訊 -
 
-    #region - 版權採購申請單 申請審核資訊_回傳ERP -
+    #region - 版權採購申請單 審核資訊_回傳ERP -
 
     /// <summary>
-    /// 版權採購申請單 申請審核資訊_回傳ERP 
+    /// 版權採購申請單 審核資訊_回傳ERP 
     /// </summary>
     public class MediaOrderInfoRequest : MediaOrderQueryModel
     {
@@ -246,8 +246,11 @@ namespace OA_WEB_API.Models.ERP
 
     #endregion
 
-    #region -  -
+    #region - 版權採購交片單 審核資訊_回傳ERP -
 
+    /// <summary>
+    /// 版權採購交片單 審核資訊_回傳ERP
+    /// </summary>
     public class MediaAcceptanceInfoRequest : MediaAcceptanceQueryModel
     {
         /// <summary>接收ERP回傳狀態</summary>
@@ -265,8 +268,48 @@ namespace OA_WEB_API.Models.ERP
         /// <summary>版權採購申請單 授權權利 設定</summary>
         public IList<MediaAcceptanceAuthorizesConfig> MEDIA_ACCEPTANCE_AUTHS_CONFIG { get; set; }
 
-        /// <summary>表單關聯</summary>
-        public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
+        /// <summary>最後簽核人員工編號</summary>
+        public string LoginId { get; set; }
+
+        /// <summary>最後簽核人姓名</summary>
+        public string LoginName { get; set; }
+    }
+
+    #endregion
+
+    #region - 版權採購請款單 審核資訊_回傳ERP -
+
+    /// <summary>
+    /// 版權採購請款單 審核資訊_回傳ERP
+    /// </summary>
+    public class MediaInvoiceInfoRequest : MediaInvoiceQueryModel
+    {
+        /// <summary>接收ERP回傳狀態</summary>
+        public ErpResponseState ERP_RESPONSE_STATE { get; set; }
+
+        /// <summary>版權採購請款單 表頭資訊</summary>
+        public MediaInvoiceTitle MEDIA_INVOICE_TITLE { get; set; }
+
+        /// <summary>版權採購請款單 表單內容 設定</summary>
+        public MediaInvoiceConfig MEDIA_INVOICE_CONFIG { get; set; }
+
+        /// <summary>版權採購請款單 驗收明細 設定</summary>
+        public IList<MediaInvoiceAcceptancesConfig> MEDIA_INVOICE_ACPTS_CONFIG { get; set; }
+
+        /// <summary>版權採購請款單 授權權利 設定</summary>
+        public IList<MediaInvoiceAuthorizesConfig> MEDIA_INVOICE_AUTHS_CONFIG { get; set; }
+
+        /// <summary>版權採購申請單 額外項目 設定</summary>
+        public IList<MediaInvoiceExtrasConfig> MEDIA_INVOICE_EXS_CONFIG { get; set; }
+
+        /// <summary>版權採購請款單 付款辦法 設定</summary>
+        public IList<MediaInvoicePaymentsConfig> MEDIA_INVOICE_PYMTS_CONFIG { get; set; }
+
+        /// <summary>版權採購請款單 使用預算 設定</summary>
+        public IList<MediaInvoiceBudgetsConfig> MEDIA_INVOICE_BUDGS_CONFIG { get; set; }
+
+        /// <summary>版權採購請款單 發票明細 設定</summary>
+        public IList<MediaInvoiceDetailsConfig> MEDIA_INVOICE_DTLS_CONFIG { get; set; }
 
         /// <summary>最後簽核人員工編號</summary>
         public string LoginId { get; set; }

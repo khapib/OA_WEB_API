@@ -127,10 +127,10 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [EX_AmountTotal_TWD] AS [EX_AMOUNT_TOTAL_TWD], ";
             strSQL += "     [EX_ER_TaxTotal] AS [EX_ER_TAX_TOTAL], ";
             strSQL += "     [EX_ER_TaxTotal_TWD] AS [EX_ER_TAX_TOTAL_TWD], ";
-            strSQL += "     [PYMT_ER_TaxTotal] AS [PYMT_EX_AMOUNT_TOTAL], ";
-            strSQL += "     [PYMT_ER_TaxTotal_TWD] AS [PYMT_EX_AMOUNT_TOTAL_TWD], ";
             strSQL += "     [PYMT_CurrentTotal] AS [PYMT_CURRENT_TOTAL], ";
             strSQL += "     [PYMT_CurrentTotal_TWD] AS [PYMT_CURRENT_TOTAL_TWD], ";
+            strSQL += "     [PYMT_ER_TaxTotal] AS [PYMT_ER_TAX_TOTAL], ";
+            strSQL += "     [PYMT_ER_TaxTotal_TWD] AS [PYMT_ER_TAX_TOTAL_TWD], ";
             strSQL += "     [INV_AmountTotal] AS [INV_AMOUNT_TOTAL], ";
             strSQL += "     [INV_AmountTotal_TWD] AS [INV_AMOUNT_TOTAL_TWD], ";
             strSQL += "     [IVN_ER_TaxTotal] AS [IVN_ER_TAX_TOTAL], ";
@@ -280,6 +280,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [PYMT_Terms] AS [PYMT_TERMS], ";
             strSQL += "     [PYMT_MethodID] AS [PYMT_METHOD_ID], ";
             strSQL += "     [PYMT_Tax] AS [PYMT_TAX], ";
+            strSQL += "     [PYMT_ER_Tax] AS [PYMT_ER_TAX], ";
             strSQL += "     [PYMT_Net] AS [PYMT_NET], ";
             strSQL += "     [PYMT_Gross] AS [PYMT_GROSS], ";
             strSQL += "     [PYMT_PredictRate] AS [PYMT_PRE_RATE], ";
@@ -564,10 +565,10 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@EX_AMOUNT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@EX_ER_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@EX_ER_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PYMT_EX_AMOUNT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PYMT_EX_AMOUNT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_CURRENT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_CURRENT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PYMT_ER_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PYMT_ER_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@INV_AMOUNT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@INV_AMOUNT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@IVN_ER_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -601,7 +602,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     model.MEDIA_INVOICE_CONFIG.DTL_ORDER_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.DTL_ORDER_TOTAL, 2);
                     model.MEDIA_INVOICE_CONFIG.EX_AMOUNT_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.EX_AMOUNT_TOTAL, 2);
                     model.MEDIA_INVOICE_CONFIG.EX_ER_TAX_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.EX_ER_TAX_TOTAL, 2);
-                    model.MEDIA_INVOICE_CONFIG.PYMT_EX_AMOUNT_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.PYMT_EX_AMOUNT_TOTAL, 2);
+                    model.MEDIA_INVOICE_CONFIG.PYMT_ER_TAX_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.PYMT_ER_TAX_TOTAL, 2);
                     model.MEDIA_INVOICE_CONFIG.PYMT_CURRENT_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.PYMT_CURRENT_TOTAL, 2);
                     model.MEDIA_INVOICE_CONFIG.INV_AMOUNT_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.INV_AMOUNT_TOTAL, 2);
                     model.MEDIA_INVOICE_CONFIG.IVN_ER_TAX_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.IVN_ER_TAX_TOTAL, 2);
@@ -653,10 +654,10 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [EX_AmountTotal_TWD]=@EX_AMOUNT_TOTAL_TWD, ";
                     strSQL += "     [EX_ER_TaxTotal]=@EX_ER_TAX_TOTAL, ";
                     strSQL += "     [EX_ER_TaxTotal_TWD]=@EX_ER_TAX_TOTAL_TWD, ";
-                    strSQL += "     [PYMT_ER_TaxTotal]=@PYMT_EX_AMOUNT_TOTAL, ";
-                    strSQL += "     [PYMT_ER_TaxTotal_TWD]=@PYMT_EX_AMOUNT_TOTAL_TWD, ";
                     strSQL += "     [PYMT_CurrentTotal]=@PYMT_CURRENT_TOTAL, ";
                     strSQL += "     [PYMT_CurrentTotal_TWD]=@PYMT_CURRENT_TOTAL_TWD, ";
+                    strSQL += "     [PYMT_ER_TaxTotal]=@PYMT_ER_TAX_TOTAL, ";
+                    strSQL += "     [PYMT_ER_TaxTotal_TWD]=@PYMT_ER_TAX_TOTAL_TWD, ";
                     strSQL += "     [INV_AmountTotal]=@INV_AMOUNT_TOTAL, ";
                     strSQL += "     [INV_AmountTotal_TWD]=@INV_AMOUNT_TOTAL_TWD, ";
                     strSQL += "     [IVN_ER_TaxTotal]=@IVN_ER_TAX_TOTAL, ";

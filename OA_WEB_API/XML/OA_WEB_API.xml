@@ -1028,32 +1028,37 @@
         </member>
         <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostExpensesReimburseInfoSingle">
             <summary>
-            費用申請單 申請審核資訊_回傳ERP
+            費用申請單 審核資訊_回傳ERP
             </summary>    
         </member>
         <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostGeneralOrderInfoSingle">
             <summary>
-            行政採購申請單 申請審核資訊_回傳ERP
+            行政採購申請單 審核資訊_回傳ERP
             </summary>    
         </member>
         <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostGeneralAcceptanceInfoSingle">
             <summary>
-            行政採購點驗收單 驗收審核資訊_回傳ERP
+            行政採購點驗收單 審核資訊_回傳ERP
             </summary>    
         </member>
         <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostGeneralInvoiceInfoSingle">
             <summary>
-            行政採購請款單 財務審核資訊_回傳ERP
+            行政採購請款單 審核資訊_回傳ERP
             </summary>    
         </member>
         <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostMediaOrderInfoSingle">
             <summary>
-            版權採購申請單 申請審核資訊_回傳ERP
+            版權採購申請單 審核資訊_回傳ERP
             </summary>    
         </member>
         <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostMediaAcceptanceInfoSingle">
             <summary>
-            版權採購交片單 申請審核資訊_回傳ERP
+            版權採購交片單 審核資訊_回傳ERP
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostMediaInvoiceInfoSingle">
+            <summary>
+            版權採購請款單 審核資訊_回傳ERP
             </summary>    
         </member>
         <member name="T:OA_WEB_API.Controllers.ERP.StepFlowController">
@@ -3371,17 +3376,17 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.EX_ER_TAX_TOTAL_TWD">
             <summary>預估保留稅_台幣(額外項目)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_EX_AMOUNT_TOTAL">
-            <summary>額外項目總額(付款辦法)</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_EX_AMOUNT_TOTAL_TWD">
-            <summary>額外項目總額_台幣(付款辦法)</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_CURRENT_TOTAL">
             <summary>付款辦法 本期付款總額(付款辦法)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_CURRENT_TOTAL_TWD">
             <summary>付款辦法 本期付款總額_台幣(付款辦法)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_ER_TAX_TOTAL">
+            <summary>預估保留稅總額(付款辦法)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_ER_TAX_TOTAL_TWD">
+            <summary>預估保留稅總額_台幣(付款辦法)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.INV_AMOUNT_TOTAL">
             <summary>發票明細 合計(憑證明細)</summary>
@@ -3751,6 +3756,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_NET_TOTAL">
             <summary>合計未稅金額(付款辦法)/NET總額(付款辦法)</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_ER_TAX_TOTAL">
+            <summary>預估保留稅總額(付款辦法)</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_GROSS_TOTAL">
             <summary>合計含稅總額(付款辦法)/GROSS總額(付款辦法)</summary>
         </member>
@@ -3990,6 +3998,9 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.PYMT_GROSS">
             <summary>含稅總額/GROSS單價</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.PYMT_ER_TAX">
+            <summary>預估保留稅總額</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.PYMT_PRE_RATE">
             <summary>當期預計匯率</summary>
@@ -5380,7 +5391,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.ERP.ExpensesReimburseInfoRequest">
             <summary>
-            費用申請單 申請審核資訊_回傳ERP 
+            費用申請單 審核資訊_回傳ERP 
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.ExpensesReimburseInfoRequest.ERP_RESPONSE_STATE">
@@ -5406,7 +5417,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.ERP.GeneralOrderInfoRequest">
             <summary>
-            行政採購申請單 申請審核資訊_回傳ERP 
+            行政採購申請單 審核資訊_回傳ERP 
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.GeneralOrderInfoRequest.ERP_RESPONSE_STATE">
@@ -5441,7 +5452,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.ERP.GeneralAcceptanceInfoRequest">
             <summary>
-            行政採購點驗收單 驗收審核資訊_回傳ERP 
+            行政採購點驗收單 審核資訊_回傳ERP 
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.GeneralAcceptanceInfoRequest.ERP_RESPONSE_STATE">
@@ -5487,7 +5498,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.ERP.MediaOrderInfoRequest">
             <summary>
-            版權採購申請單 申請審核資訊_回傳ERP 
+            版權採購申請單 審核資訊_回傳ERP 
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.MediaOrderInfoRequest.ERP_RESPONSE_STATE">
@@ -5526,6 +5537,11 @@
         <member name="P:OA_WEB_API.Models.ERP.MediaOrderInfoRequest.LoginName">
             <summary>最後簽核人姓名</summary>
         </member>
+        <member name="T:OA_WEB_API.Models.ERP.MediaAcceptanceInfoRequest">
+            <summary>
+            版權採購交片單 審核資訊_回傳ERP
+            </summary>
+        </member>
         <member name="P:OA_WEB_API.Models.ERP.MediaAcceptanceInfoRequest.ERP_RESPONSE_STATE">
             <summary>接收ERP回傳狀態</summary>
         </member>
@@ -5541,13 +5557,48 @@
         <member name="P:OA_WEB_API.Models.ERP.MediaAcceptanceInfoRequest.MEDIA_ACCEPTANCE_AUTHS_CONFIG">
             <summary>版權採購申請單 授權權利 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.ERP.MediaAcceptanceInfoRequest.ASSOCIATED_FORM_CONFIG">
-            <summary>表單關聯</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.ERP.MediaAcceptanceInfoRequest.LoginId">
             <summary>最後簽核人員工編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.MediaAcceptanceInfoRequest.LoginName">
+            <summary>最後簽核人姓名</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest">
+            <summary>
+            版權採購請款單 審核資訊_回傳ERP
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.ERP_RESPONSE_STATE">
+            <summary>接收ERP回傳狀態</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.MEDIA_INVOICE_TITLE">
+            <summary>版權採購請款單 表頭資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.MEDIA_INVOICE_CONFIG">
+            <summary>版權採購請款單 表單內容 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.MEDIA_INVOICE_ACPTS_CONFIG">
+            <summary>版權採購請款單 驗收明細 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.MEDIA_INVOICE_AUTHS_CONFIG">
+            <summary>版權採購請款單 授權權利 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.MEDIA_INVOICE_EXS_CONFIG">
+            <summary>版權採購申請單 額外項目 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.MEDIA_INVOICE_PYMTS_CONFIG">
+            <summary>版權採購請款單 付款辦法 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.MEDIA_INVOICE_BUDGS_CONFIG">
+            <summary>版權採購請款單 使用預算 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.MEDIA_INVOICE_DTLS_CONFIG">
+            <summary>版權採購請款單 發票明細 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.LoginId">
+            <summary>最後簽核人員工編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.LoginName">
             <summary>最後簽核人姓名</summary>
         </member>
         <member name="T:OA_WEB_API.Models.ERP.StepFlowQueryModel">
@@ -7006,6 +7057,9 @@
         <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.mediaAcceptanceRepository">
             <summary>版權採購交片單</summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.mediaInvoiceRepository">
+            <summary>版權採購請款單</summary>
+        </member>
         <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostProjectReviewFinanceSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
             <summary>
             專案建立審核單 財務審核資訊_回傳ERP
@@ -7013,12 +7067,12 @@
         </member>
         <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostExpensesReimburseInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
             <summary>
-            費用申請單 申請審核資訊_回傳ERP
+            費用申請單 審核資訊_回傳ERP
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostGeneralOrderInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
             <summary>
-            行政採購申請單 申請審核資訊_回傳ERP_回傳ERP
+            行政採購申請單 審核資訊_回傳ERP_回傳ERP
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostGeneralAcceptanceInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
@@ -7028,17 +7082,22 @@
         </member>
         <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostGeneralInvoiceInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
             <summary>
-            行政採購請款單 財務審核資訊_回傳ERP
+            行政採購請款單 審核資訊_回傳ERP
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostMediaOrderInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
             <summary>
-            版權採購申請單 申請審核資訊_回傳ERP
+            版權採購申請單 審核資訊_回傳ERP
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostMediaAcceptanceInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
             <summary>
-            版權採購交片單 申請審核資訊_回傳ERP
+            版權採購交片單 審核資訊_回傳ERP
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostMediaInvoiceInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
+            <summary>
+            版權採購請款單 審核資訊_回傳ERP
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.strSQL">

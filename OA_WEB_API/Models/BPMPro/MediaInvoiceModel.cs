@@ -201,17 +201,17 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>預估保留稅_台幣(額外項目)</summary>
         public int EX_ER_TAX_TOTAL_TWD { get; set; }
 
-        /// <summary>額外項目總額(付款辦法)</summary>
-        public double PYMT_EX_AMOUNT_TOTAL { get; set; }
-
-        /// <summary>額外項目總額_台幣(付款辦法)</summary>
-        public int PYMT_EX_AMOUNT_TOTAL_TWD { get; set; }
-
         /// <summary>付款辦法 本期付款總額(付款辦法)</summary>
         public double PYMT_CURRENT_TOTAL { get; set; }
 
         /// <summary>付款辦法 本期付款總額_台幣(付款辦法)</summary>
         public int PYMT_CURRENT_TOTAL_TWD { get; set; }
+
+        /// <summary>預估保留稅總額(付款辦法)</summary>
+        public double PYMT_ER_TAX_TOTAL { get; set; }
+
+        /// <summary>預估保留稅總額_台幣(付款辦法)</summary>
+        public int PYMT_ER_TAX_TOTAL_TWD { get; set; }
 
         /// <summary>發票明細 合計(憑證明細)</summary>
         public double INV_AMOUNT_TOTAL { get; set; }

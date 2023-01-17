@@ -217,7 +217,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             strSQL = "";
             strSQL += "SELECT ";
-            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
+            strSQL += "     AUTH.[RequisitionID] AS [REQUISITION_ID], ";
             strSQL += "     [AUTH_RowNo] AS [AUTH_ROW_NO], ";
             strSQL += "     [AUTH_SupProdANo] AS [AUTH_SUP_PROD_A_NO], ";
             strSQL += "     [AUTH_ItemName] AS [AUTH_ITEM_NAME], ";
@@ -235,8 +235,11 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [AUTH_PlayFrequency] AS [AUTH_PLAY_FREQUENCY], ";
             strSQL += "     [AUTH_Note] AS [AUTH_NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_AUTH] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "ORDER BY [AutoCounter] ";
+            strSQL += "     INNER JOIN [BPMPro].[dbo].[FM7T_MediaOrder_ACPT] AS ACPT ON AUTH.[RequisitionID]=ACPT.[RequisitionID] AND AUTH.[AUTH_RowNo]=ACPT.[PA_RowNo] ";
+            strSQL += "WHERE 1=1 ";
+            strSQL += "         AND AUTH.[RequisitionID]=@REQUISITION_ID ";
+            strSQL += "         AND ACPT.[Period]=@PERIOD ";
+            strSQL += "ORDER BY AUTH.[AutoCounter] ";
 
             var mediaInvoiceAuthorizesConfig = dbFun.DoQuery(strSQL, mediaOrderparameter).ToList<MediaInvoiceAuthorizesConfig>();
 

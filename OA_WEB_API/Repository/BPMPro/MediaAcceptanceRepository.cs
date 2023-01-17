@@ -163,7 +163,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [AUTH_PlayFrequency] AS [AUTH_PLAY_FREQUENCY], ";
             strSQL += "     [AUTH_Note] AS [AUTH_NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_AUTH] AS AUTH ";
-            strSQL += "INNER JOIN [BPMPro].[dbo].[FM7T_MediaAcceptance_DTL] AS ACPT ON AUTH.[RequisitionID]=ACPT.[MediaOrderRequisitionID] AND AUTH.[AUTH_RowNo]=ACPT.[OriginNum] ";
+            strSQL += "     INNER JOIN [BPMPro].[dbo].[FM7T_MediaAcceptance_DTL] AS ACPT ON AUTH.[RequisitionID]=ACPT.[MediaOrderRequisitionID] AND AUTH.[AUTH_RowNo]=ACPT.[OriginNum] ";
             strSQL += "WHERE AUTH.[RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY AUTH.[AutoCounter] ";
 

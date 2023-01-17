@@ -609,7 +609,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [MediaOrderERPFormNo]=@MEDIA_ORDER_ERP_FORM_NO, ";
                     strSQL += "     [MediaOrderPath]=@MEDIA_ORDER_PATH, ";
                     strSQL += "     [MediaOrderTXN_Type]=MAIN.[TXN_TYPE], ";
-                    strSQL += "     [MediaOrderDTL_OrderTotal]=MAIN.[DTL_ORDER_TOTAL_TWD], ";
+                    strSQL += "     [MediaOrderDTL_OrderTotal]=MAIN.[DTL_ORDER_TOTAL], ";
                     strSQL += "     [MediaOrderDTL_OrderTotal_TWD]=MAIN.[DTL_ORDER_TOTAL_TWD], ";
                     strSQL += "     [MediaAcceptanceRequisitionID]=@MEDIA_ACCEPTANCE_REQUISITION_ID, ";
                     strSQL += "     [Currency]=MAIN.[CURRENCY], ";

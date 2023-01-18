@@ -1668,7 +1668,16 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region - 版權採購交片單(驗收明細):mediaAcceptanceDetailsConfig -
 
                     strJson = jsonFunction.ObjectToJSON(model.DTL);
-                    var mediaAcceptanceDetailsConfig = jsonFunction.JsonToObject<IList<MediaAcceptanceDetailsConfig>>(strJson);
+                    var mediaAcceptanceDetailsConfig = jsonFunction.JsonToObject<List<MediaAcceptanceDetailsConfig>>(strJson);
+
+                    #region - 預設 母帶受領日為 -
+
+                    mediaAcceptanceDetailsConfig.ForEach(ACPT =>
+                    {
+                        ACPT.DTL_GET_MASTERING_DATE = DateTime.Today;
+                    });
+
+                    #endregion
 
                     #endregion
 

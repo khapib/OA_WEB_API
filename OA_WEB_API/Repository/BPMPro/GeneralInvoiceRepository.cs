@@ -95,7 +95,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [Currency] AS [CURRENCY], ";
             strSQL += "     [PredictRate] AS [PRE_RATE], ";
             strSQL += "     [PricingMethod] AS [PRICING_METHOD], ";
-            strSQL += "     [Tax] AS [TAX], ";
+            strSQL += "     [TaxRate] AS [TAX_RATE], ";
             strSQL += "     [Period] AS [PERIOD], ";
             strSQL += "     [Reimbursement] AS [REIMBURSEMENT], ";
             strSQL += "     [REIMB_StaffDeptID] AS [REIMB_STAFF_DEPT_ID], ";
@@ -477,7 +477,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [Currency]=MAIN.[CURRENCY], ";
                     strSQL += "     [PredictRate]=MAIN.[PRE_RATE], ";
                     strSQL += "     [PricingMethod]=MAIN.[PRICING_METHOD], ";
-                    strSQL += "     [Tax]=MAIN.[TAX], ";
+                    strSQL += "     [TaxRate]=MAIN.[TAX_RATE], ";
                     strSQL += "     [Period]=@PERIOD, ";
                     strSQL += "     [Reimbursement]=@REIMBURSEMENT, ";
                     strSQL += "     [REIMB_StaffDeptID]=@REIMB_STAFF_DEPT_ID, ";
@@ -518,7 +518,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "                 [Currency] AS [CURRENCY], ";
                     strSQL += "                 [PredictRate] AS [PRE_RATE], ";
                     strSQL += "                 [PricingMethod] AS [PRICING_METHOD], ";
-                    strSQL += "                 [Tax] AS [TAX], ";
+                    strSQL += "                 [TaxRate] AS [TAX_RATE], ";
                     strSQL += "                 [DTL_OrderTotal] AS [DTL_ORDER_TOTAL], ";
                     strSQL += "                 [DTL_OrderTotal_TWD] AS [DTL_ORDER_TOTAL_TWD], ";
                     strSQL += "                 [SupNo] AS [SUP_NO], ";

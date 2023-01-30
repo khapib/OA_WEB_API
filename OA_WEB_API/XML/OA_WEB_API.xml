@@ -2187,7 +2187,7 @@
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.PRICING_METHOD">
             <summary>計價方式</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.TAX">
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.TAX_RATE">
             <summary>營業稅/[稅率]租稅協定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.PERIOD">
@@ -2462,7 +2462,7 @@
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderConfig.PRICING_METHOD">
             <summary>計價方式</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderConfig.TAX">
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderConfig.TAX_RATE">
             <summary>營業稅/[稅率]租稅協定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderConfig.SUP_NO">
@@ -3278,7 +3278,7 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PRICING_METHOD">
             <summary>計價方式</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.TAX">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.TAX_RATE">
             <summary>營業稅/[稅率]租稅協定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PERIOD">
@@ -3678,7 +3678,7 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PRICING_METHOD">
             <summary>計價方式</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.TAX">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.TAX_RATE">
             <summary>營業稅/[稅率]租稅協定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.SUP_NO">

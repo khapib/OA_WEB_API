@@ -104,7 +104,7 @@ namespace OA_WEB_API.Models.BPMPro
         public string PRICING_METHOD { get; set; }
 
         /// <summary>營業稅/[稅率]租稅協定</summary>
-        public double TAX { get; set; }
+        public double TAX_RATE { get; set; }
 
         /// <summary>廠商編號</summary>
         public string SUP_NO { get; set; }

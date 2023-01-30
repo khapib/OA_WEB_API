@@ -136,6 +136,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>母帶受領日期</summary>
         public DateTime DTL_GET_MASTERING_DATE { get; set; }
 
+        /// <summary>[母帶]群組ID</summary>
+        public string DTL_MASTERING_GROUP_ID { get; set; }
+
         /// <summary>驗收負責人主要部門</summary>
         public string DTL_OWNER_DEPT_MAIN_ID { get; set; }
 

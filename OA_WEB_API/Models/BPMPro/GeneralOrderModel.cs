@@ -91,6 +91,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>是否入資產</summary>
         public string IS_ASSEST { get; set; }
 
+        /// <summary>交易類型</summary>
+        public string TXN_TYPE { get; set; }
+
         /// <summary>幣別</summary>
         public string CURRENCY { get; set; }
 
@@ -101,7 +104,7 @@ namespace OA_WEB_API.Models.BPMPro
         public string PRICING_METHOD { get; set; }
 
         /// <summary>營業稅/[稅率]租稅協定</summary>
-        public double TAX { get; set; }
+        public double TAX_RATE { get; set; }
 
         /// <summary>廠商編號</summary>
         public string SUP_NO { get; set; }
@@ -241,7 +244,12 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>付款條件</summary>
         public string PYMT_TERMS { get; set; }
 
-        /// <summary>付款方式編號</summary>
+        /// <summary>
+        /// 付款方式編號：
+        /// DD.票據
+        /// FF.電匯
+        /// CS.現金
+        /// </summary>
         public string PYMT_METHOD_ID { get; set; }
 
         /// <summary>稅額</summary>

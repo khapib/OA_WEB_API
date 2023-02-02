@@ -98,10 +98,11 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [Description] AS [DESCRIPTION], ";
             strSQL += "     [IsVicePresident] AS [IS_VICE_PRESIDENT], ";
             strSQL += "     [IsAssest] AS [IS_ASSEST], ";
+            strSQL += "     [TXN_Type] AS [TXN_TYPE], ";
             strSQL += "     [Currency] AS [CURRENCY], ";
             strSQL += "     [PredictRate] AS [PRE_RATE], ";
             strSQL += "     [PricingMethod] AS [PRICING_METHOD], ";
-            strSQL += "     [Tax] AS [TAX], ";
+            strSQL += "     [TaxRate] AS [TAX_RATE], ";
             strSQL += "     [SupNo] AS [SUP_NO], ";
             strSQL += "     [SupName] AS [SUP_NAME], ";
             strSQL += "     [RegisterKind] AS [REG_KIND], ";
@@ -347,7 +348,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     if (model.GENERAL_ORDER_CONFIG != null)
                     {
-                        if (model.GENERAL_ORDER_CONFIG.CURRENCY == "台幣" && model.GENERAL_ORDER_CONFIG.TAX == 0.0)
+                        if (model.GENERAL_ORDER_CONFIG.CURRENCY == "台幣" && model.GENERAL_ORDER_CONFIG.TAX_RATE == 0.0)
                         {
                             FM7Subject += "  (零稅率)";
                         }
@@ -460,7 +461,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region - 確認小數點後第二位 -
 
                     model.GENERAL_ORDER_CONFIG.PRE_RATE = Math.Round(model.GENERAL_ORDER_CONFIG.PRE_RATE, 2);
-                    model.GENERAL_ORDER_CONFIG.TAX = Math.Round(model.GENERAL_ORDER_CONFIG.TAX, 2);
+                    model.GENERAL_ORDER_CONFIG.TAX_RATE = Math.Round(model.GENERAL_ORDER_CONFIG.TAX_RATE, 2);
                     model.GENERAL_ORDER_CONFIG.DTL_NET_TOTAL=Math.Round(model.GENERAL_ORDER_CONFIG.DTL_NET_TOTAL,2);
                     model.GENERAL_ORDER_CONFIG.DTL_GROSS_TOTAL = Math.Round(model.GENERAL_ORDER_CONFIG.DTL_GROSS_TOTAL, 2);
                     model.GENERAL_ORDER_CONFIG.PYMT_TAX_TOTAL=Math.Round(model.GENERAL_ORDER_CONFIG.PYMT_TAX_TOTAL,2);
@@ -476,10 +477,11 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@DESCRIPTION", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@IS_VICE_PRESIDENT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@IS_ASSEST", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@TXN_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@CURRENCY", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PRE_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PRICING_METHOD", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@TAX_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@SUP_NO", SqlDbType.NVarChar) { Size = 16, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@SUP_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REG_KIND", SqlDbType.NVarChar) { Size = 15, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -511,10 +513,11 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "SET [Description]=@DESCRIPTION, ";
                     strSQL += "     [IsVicePresident]=@IS_VICE_PRESIDENT, ";
                     strSQL += "     [IsAssest]=@IS_ASSEST, ";
+                    strSQL += "     [TXN_Type]=@TXN_TYPE, ";
                     strSQL += "     [Currency]=@CURRENCY, ";
                     strSQL += "     [PredictRate]=@PRE_RATE, ";
                     strSQL += "     [PricingMethod]=@PRICING_METHOD, ";
-                    strSQL += "     [Tax]=@TAX, ";
+                    strSQL += "     [TaxRate]=@TAX_RATE, ";
                     strSQL += "     [SupNo]=@SUP_NO, ";
                     strSQL += "     [SupName]=@SUP_NAME, ";
                     strSQL += "     [RegisterKind]=@REG_KIND, ";

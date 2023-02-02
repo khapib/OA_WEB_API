@@ -9,7 +9,7 @@ using System.Web;
 namespace OA_WEB_API.Repository.BPMPro
 {
     /// <summary>
-    /// 會簽管理系統 - 版權購異動申請單
+    /// 會簽管理系統 - 版權採購異動申請單
     /// </summary>
     public class MediaOrderChangeRepository
     {
@@ -29,7 +29,7 @@ namespace OA_WEB_API.Repository.BPMPro
         #region - 方法 -
 
         /// <summary>
-        /// 版權購異動申請單(查詢)
+        /// 版權採購異動申請單(查詢)
         /// </summary> 
         public MediaOrderChangeViewModel PostMediaOrderChangeSingle(MediaOrderChangeQueryModel query)
         {
@@ -130,7 +130,7 @@ namespace OA_WEB_API.Repository.BPMPro
         #endregion
 
         /// <summary>
-        /// 版權購異動申請單(新增/修改/草稿)
+        /// 版權採購異動申請單(新增/修改/草稿)
         /// </summary>
         public bool PutMediaOrderChangeSingle(MediaOrderChangeViewModel model)
         {
@@ -169,7 +169,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 版權購異動申請單 表頭資訊及設定內容：MediaOrderChange_M -
+                #region - 版權採購異動申請單 表頭資訊及設定內容：MediaOrderChange_M -
 
                 var parameterTitle = new List<SqlParameter>()
                 {
@@ -259,7 +259,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 版權購異動申請單 表單關聯：AssociatedForm -
+                #region - 版權採購異動申請單 表單關聯：AssociatedForm -
 
                 var associatedFormModel = new AssociatedFormModel()
                 {
@@ -327,7 +327,7 @@ namespace OA_WEB_API.Repository.BPMPro
             catch (Exception ex)
             {
                 vResult = false;
-                CommLib.Logger.Error("版權購異動申請單(新增/修改/草稿)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("版權採購異動申請單(新增/修改/草稿)失敗，原因：" + ex.Message);
             }
 
             return vResult;

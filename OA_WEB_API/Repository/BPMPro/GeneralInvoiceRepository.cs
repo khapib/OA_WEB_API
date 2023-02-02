@@ -87,13 +87,15 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [GeneralOrderSubject] AS [GENERAL_ORDER_SUBJECT], ";
             strSQL += "     [GeneralOrderBPMFormNo] AS [GENERAL_ORDER_BPM_FORM_NO], ";
             strSQL += "     [GeneralOrderERPFormNo] AS [GENERAL_ORDER_ERP_FORM_NO], ";
+            strSQL += "     [GeneralOrderTXN_Type] AS [GENERAL_ORDER_TXN_TYPE], ";
             strSQL += "     [GeneralOrderPath] AS [GENERAL_ORDER_PATH], ";
+            strSQL += "     [GeneralOrderDTL_OrderTotal] AS [GENERAL_ORDER_DTL_ORDER_TOTAL], ";
             strSQL += "     [GeneralOrderDTL_OrderTotal_TWD] AS [GENERAL_ORDER_DTL_ORDER_TOTAL_TWD], ";
             strSQL += "     [GeneralAcceptanceRequisitionID] AS [GENERAL_ACCEPTANCE_REQUISITION_ID], ";
             strSQL += "     [Currency] AS [CURRENCY], ";
             strSQL += "     [PredictRate] AS [PRE_RATE], ";
             strSQL += "     [PricingMethod] AS [PRICING_METHOD], ";
-            strSQL += "     [Tax] AS [TAX], ";
+            strSQL += "     [TaxRate] AS [TAX_RATE], ";
             strSQL += "     [Period] AS [PERIOD], ";
             strSQL += "     [Reimbursement] AS [REIMBURSEMENT], ";
             strSQL += "     [REIMB_StaffDeptID] AS [REIMB_STAFF_DEPT_ID], ";
@@ -124,7 +126,9 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [InvoiceType] AS [INVOICE_TYPE], ";
             strSQL += "     [Note] AS [NOTE], ";
             strSQL += "     [PYMT_CurrentTotal] AS [PYMT_CURRENT_TOTAL], ";
+            strSQL += "     [PYMT_CurrentTotal_TWD] AS [PYMT_CURRENT_TOTAL_TWD], ";
             strSQL += "     [INV_AmountTotal] AS [INV_AMOUNT_TOTAL], ";
+            strSQL += "     [INV_AmountTotal_TWD] AS [INV_AMOUNT_TOTAL_TWD], ";
             strSQL += "     [ActualPayAmount] AS [ACTUAL_PAY_AMOUNT] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralInvoice_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
@@ -225,6 +229,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [INV_Num] AS [INV_NUM], ";
             strSQL += "     [INV_Date] AS [INV_DATE], ";
             strSQL += "     [INV_Amount] AS [INV_AMOUNT], ";
+            strSQL += "     [INV_Amount_TWD] AS [INV_AMOUNT_TWD], ";
             strSQL += "     [INV_Note] AS [INV_NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralInvoice_INV] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
@@ -344,7 +349,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     //(填單人/代填單人)資訊
                     new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_ID },
                     new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
-                    //行政採購申請 表頭
+                    //行政採購請款單 表頭
                     new SqlParameter("@FLOW_NAME", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_INVOICE_TITLE.FLOW_NAME ?? DBNull.Value },
                     new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_INVOICE_TITLE.FORM_NO ?? DBNull.Value },
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
@@ -404,9 +409,13 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (model.GENERAL_INVOICE_CONFIG != null)
                 {
+                    #region - 【行政採購申請單】資訊 -
+
                     model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_BPM_FORM_NO = GeneralOrderformData.SERIAL_ID;
                     model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_SUBJECT = GeneralOrderformData.FORM_SUBJECT;
                     model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_PATH = GlobalParameters.FormContentPath(model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_REQUISITION_ID, GeneralOrderformData.IDENTIFY, GeneralOrderformData.DIAGRAM_NAME);
+
+                    #endregion
 
                     var parameterInfo = new List<SqlParameter>()
                     {
@@ -418,10 +427,6 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@GENERAL_ORDER_SUBJECT", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@GENERAL_ORDER_PATH", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@GENERAL_ACCEPTANCE_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                        //new SqlParameter("@CURRENCY", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                        //new SqlParameter("@PRE_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        //new SqlParameter("@PRICING_METHOD", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                        //new SqlParameter("@TAX", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REIMBURSEMENT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REIMB_STAFF_DEPT_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -429,10 +434,6 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@REIMB_STAFF_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REIMB_STAFF_NAME", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PAY_METHOD", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                        //new SqlParameter("@SUP_NO", SqlDbType.NVarChar) { Size = 16, Value = (object)DBNull.Value ?? DBNull.Value },
-                        //new SqlParameter("@SUP_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                        //new SqlParameter("@REG_KIND", SqlDbType.NVarChar) { Size = 15, Value = (object)DBNull.Value ?? DBNull.Value },
-                        //new SqlParameter("@REG_NO", SqlDbType.NVarChar) { Size = 15, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@SUP_TX_ID", SqlDbType.NVarChar) { Size = 1000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@TX_CATEGORY", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@BFCY_ACCOUNT_NO", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -451,8 +452,10 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@BFCY_EMAIL", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@INVOICE_TYPE", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                        //new SqlParameter("@PYMT_CURRENT_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        //new SqlParameter("@INV_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PYMT_CURRENT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PYMT_CURRENT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@INV_AMOUNT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@INV_AMOUNT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@ACTUAL_PAY_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value }
                     };
 
@@ -465,14 +468,16 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "SET [GeneralOrderRequisitionID]=@GENERAL_ORDER_REQUISITION_ID, ";
                     strSQL += "     [GeneralOrderBPMFormNo]=@GENERAL_ORDER_BPM_FORM_NO, ";
                     strSQL += "     [GeneralOrderERPFormNo]=@GENERAL_ORDER_ERP_FORM_NO, ";
+                    strSQL += "     [GeneralOrderTXN_Type]=MAIN.[TXN_TYPE], ";
                     strSQL += "     [GeneralOrderSubject]=@GENERAL_ORDER_SUBJECT, ";
                     strSQL += "     [GeneralOrderPath]=@GENERAL_ORDER_PATH, ";
+                    strSQL += "     [GeneralOrderDTL_OrderTotal]=MAIN.[DTL_ORDER_TOTAL], ";
                     strSQL += "     [GeneralOrderDTL_OrderTotal_TWD]=MAIN.[DTL_ORDER_TOTAL_TWD], ";
                     strSQL += "     [GeneralAcceptanceRequisitionID]=@GENERAL_ACCEPTANCE_REQUISITION_ID, ";
                     strSQL += "     [Currency]=MAIN.[CURRENCY], ";
                     strSQL += "     [PredictRate]=MAIN.[PRE_RATE], ";
                     strSQL += "     [PricingMethod]=MAIN.[PRICING_METHOD], ";
-                    strSQL += "     [Tax]=MAIN.[TAX], ";
+                    strSQL += "     [TaxRate]=MAIN.[TAX_RATE], ";
                     strSQL += "     [Period]=@PERIOD, ";
                     strSQL += "     [Reimbursement]=@REIMBURSEMENT, ";
                     strSQL += "     [REIMB_StaffDeptID]=@REIMB_STAFF_DEPT_ID, ";
@@ -502,13 +507,19 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [BFCY_Email]=@BFCY_EMAIL, ";
                     strSQL += "     [InvoiceType]=@INVOICE_TYPE, ";
                     strSQL += "     [Note]=@NOTE, ";                    
+                    strSQL += "     [PYMT_CurrentTotal]=@PYMT_CURRENT_TOTAL, ";
+                    strSQL += "     [PYMT_CurrentTotal_TWD]=@PYMT_CURRENT_TOTAL_TWD, ";
+                    strSQL += "     [INV_AmountTotal]=@INV_AMOUNT_TOTAL, ";
+                    strSQL += "     [INV_AmountTotal_TWD]=@INV_AMOUNT_TOTAL_TWD, ";
                     strSQL += "     [ActualPayAmount]=@ACTUAL_PAY_AMOUNT ";
                     strSQL += "     FROM ( ";
                     strSQL += "             SELECT ";
+                    strSQL += "                 [TXN_Type] AS [TXN_TYPE], ";
                     strSQL += "                 [Currency] AS [CURRENCY], ";
                     strSQL += "                 [PredictRate] AS [PRE_RATE], ";
                     strSQL += "                 [PricingMethod] AS [PRICING_METHOD], ";
-                    strSQL += "                 [Tax] AS [TAX], ";
+                    strSQL += "                 [TaxRate] AS [TAX_RATE], ";
+                    strSQL += "                 [DTL_OrderTotal] AS [DTL_ORDER_TOTAL], ";
                     strSQL += "                 [DTL_OrderTotal_TWD] AS [DTL_ORDER_TOTAL_TWD], ";
                     strSQL += "                 [SupNo] AS [SUP_NO], ";
                     strSQL += "                 [SupName] AS [SUP_NAME], ";
@@ -520,21 +531,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                     dbFun.DoTran(strSQL, parameterInfo);
-
-                    strSQL = "";
-                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_GeneralInvoice_M] ";
-                    strSQL += "SET [PYMT_CurrentTotal]=MAIN.[PYMT_CURRENT_TOTAL] ";
-                    strSQL += "     FROM ( ";
-                    strSQL += "             SELECT ";
-                    strSQL += "                 SUM([PYMT_Gross_CONV]) AS [PYMT_CURRENT_TOTAL] ";
-                    strSQL += "             FROM [BPMPro].[dbo].[FM7T_GeneralOrder_PYMT] ";
-                    strSQL += "             WHERE [RequisitionID] = @GENERAL_ORDER_REQUISITION_ID ";
-                    strSQL += "               AND [Period]=@PERIOD ";
-                    strSQL += "     ) AS MAIN ";
-                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-
-                    dbFun.DoTran(strSQL, parameterInfo);
-
                 }
 
                 #endregion
@@ -596,7 +592,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 #endregion
 
                 #region - 行政採購請款單 發票明細：GeneralInvoice_INV -
-
+                                
                 var parameterDetails = new List<SqlParameter>()
                 {
                     //行政採購請款單 發票明細
@@ -607,7 +603,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@INV_NUM", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@INV_DATE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@INV_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
@@ -629,34 +626,22 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     foreach (var item in model.GENERAL_INVOICE_DETAILS_CONFIG)
                     {
+                        #region - 確認小數點後第二位 -
+
+                        item.INV_AMOUNT = Math.Round(item.INV_AMOUNT, 2);
+
+                        #endregion
+
                         //寫入：行政採購申請 發票明細parameter
                         strJson = jsonFunction.ObjectToJSON(item);
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralInvoice_INV]([RequisitionID],[Period],[GeneralOrderRequisitionID],[GeneralOrderBPMFormNo],[GeneralOrderERPFormNo],[INV_Num],[INV_Date],[INV_Amount],[INV_Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@GENERAL_ORDER_REQUISITION_ID,@GENERAL_ORDER_BPM_FORM_NO,@GENERAL_ORDER_ERP_FORM_NO,@INV_NUM,@INV_DATE,@INV_AMOUNT,@INV_NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralInvoice_INV]([RequisitionID],[Period],[GeneralOrderRequisitionID],[GeneralOrderBPMFormNo],[GeneralOrderERPFormNo],[INV_Num],[INV_Date],[INV_Amount],[INV_Amount_TWD],[INV_Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@GENERAL_ORDER_REQUISITION_ID,@GENERAL_ORDER_BPM_FORM_NO,@GENERAL_ORDER_ERP_FORM_NO,@INV_NUM,@INV_DATE,@INV_AMOUNT,@INV_AMOUNT_TWD,@INV_NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }
-
-                    #endregion
-
-                    #region -  -
-
-                    strSQL = "";
-                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_GeneralInvoice_M] ";
-                    strSQL += "SET [INV_AmountTotal]=MAIN.[INV_AMOUNT_TOTAL] ";
-                    strSQL += "     FROM ( ";
-                    strSQL += "             SELECT ";
-                    strSQL += "                 SUM([INV_AMOUNT]) AS [INV_AMOUNT_TOTAL] ";
-                    strSQL += "             FROM [BPMPro].[dbo].[FM7T_GeneralInvoice_INV] ";
-                    strSQL += "             WHERE [RequisitionID] = @REQUISITION_ID ";
-                    strSQL += "               AND [Period]=@PERIOD ";
-                    strSQL += "     ) AS MAIN ";
-                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-
-                    dbFun.DoTran(strSQL, parameterDetails);
 
                     #endregion
                 }
@@ -784,7 +769,7 @@ namespace OA_WEB_API.Repository.BPMPro
             catch (Exception ex)
             {
                 vResult = false;
-                CommLib.Logger.Error("點驗收單(新增/修改/草稿)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("行政採購請款單(新增/修改/草稿)失敗，原因：" + ex.Message);
             }
             return vResult;
         }

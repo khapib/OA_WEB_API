@@ -227,12 +227,12 @@ namespace OA_WEB_API.Controllers
 
         #endregion
 
-        #region - 群體知會通知 -
+        #region - (群體知會通知)通知觸發事件 -
 
         /// <summary>
-        /// 群體知會通知
+        /// (群體知會通知)通知觸發事件
         /// </summary>
-        [Route("api/ByGroupInformNotify")]
+        [Route("ByGroupInformNotify")]
         [HttpPost]
         public bool ByGroupInformNotify([FromBody] GroupInformNotifyModel model)
         {
@@ -240,6 +240,33 @@ namespace OA_WEB_API.Controllers
         }
 
         #endregion
+
+        #region - (欄位確認後知會通知)通知觸發事件 -
+
+        /// <summary>
+        /// (欄位確認後知會通知)通知觸發事件
+        /// </summary>
+        [Route("ByCheckNotify")]
+        [HttpPost]
+        public void ByCheckNotify()
+        {
+            HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
+            HttpRequestBase request = context.Request;
+
+            var query = new CheckNotifyModel()
+            {
+                REQUISITION_ID = request["RequisitionID"],
+                IDENTIFY = request["Identify"],
+                IS_IMPLEMENT = request["IsImplement"],
+                NOTIFY_BY = request["NotifyBy"],
+                ROLE_ID = request["RoleID"]
+            };
+
+            notifyRepository.ByCheckNotify(query);
+        }
+
+        #endregion
+
 
         /// <summary>
         /// 接收流程引擎(結案打包)通知，包含 簽呈、會簽單、四方四隅簽呈

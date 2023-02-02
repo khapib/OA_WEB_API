@@ -91,6 +91,13 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>是否過副總</summary>
         public string IS_VICE_PRESIDENT { get; set; }
 
+        /// <summary>
+        /// 交易類型：
+        /// ABD.國外、
+        /// DOM.國內
+        /// </summary>
+        public string TXN_TYPE { get; set; }
+
         /// <summary>幣別</summary>
         public string CURRENCY { get; set; }
 
@@ -101,7 +108,7 @@ namespace OA_WEB_API.Models.BPMPro
         public string PRICING_METHOD { get; set; }
 
         /// <summary>營業稅/[稅率]租稅協定</summary>
-        public double TAX { get; set; }
+        public double TAX_RATE { get; set; }
 
         /// <summary>廠商編號</summary>
         public string SUP_NO { get; set; }
@@ -130,6 +137,12 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>合計未稅金額_台幣(採購明細)/NET總額_台幣(採購明細)</summary>
         public int DTL_NET_TOTAL_TWD { get; set; }
 
+        /// <summary>總稅額/總預估保留稅額(採購明細)</summary>
+        public double DTL_TAX_TOTAL { get; set; }
+
+        /// <summary>總稅額/總預估保留稅額_台幣(採購明細)</summary>
+        public int DTL_TAX_TOTAL_TWD { get; set; }
+
         /// <summary>合計含稅總額(採購明細)/GROSS總額(採購明細)</summary>
         public double DTL_GROSS_TOTAL { get; set; }
 
@@ -157,6 +170,12 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>額外項目總額_台幣(額外項目)</summary>
         public int EX_AMOUNT_TOTAL_TWD { get; set; }
 
+        /// <summary>額外項目總稅額/總預估保留稅額(額外項目)</summary>
+        public double EX_TAX_TOTAL { get; set; }
+
+        /// <summary>額外項目總稅額/總預估保留稅額_台幣(額外項目)</summary>
+        public int EX_TAX_TOTAL_TWD { get; set; }
+
         /// <summary>不可異動標住(付款辦法)</summary>
         public string PYMT_LOCK_PERIOD { get; set; }
 
@@ -165,12 +184,24 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>合計未稅金額(付款辦法)/NET總額(付款辦法)</summary>
         public double PYMT_NET_TOTAL { get; set; }
-
+  
         /// <summary>合計含稅總額(付款辦法)/GROSS總額(付款辦法)</summary>
         public double PYMT_GROSS_TOTAL { get; set; }
 
-        /// <summary>合計含稅總額(換算)(付款辦法)/合計GROSS價(換算)(付款辦法)</summary>
-        public int PYMT_GROSS_TOTAL_CONV { get; set; }
+        /// <summary>材料費總價(付款辦法)</summary>
+        public double PYMT_MATERIAL_TOTAL { get; set; }
+
+        /// <summary>額外項目總額(付款辦法)</summary>
+        public double PYMT_EX_AMOUNT_TOTAL { get; set; }
+
+        /// <summary>額外項目_總稅額/總預估保留稅額(付款辦法)</summary>
+        public double PYMT_EX_TAX_TOTAL { get; set; }
+
+        /// <summary>合計(付款辦法)</summary>
+        public double PYMT_ORDER_TOTAL { get; set; }
+
+        /// <summary>合計(換算)(付款辦法)</summary>
+        public int PYMT_ORDER_TOTAL_CONV { get; set; }
 
         /// <summary>合計使用預算(所需預算)(付款辦法)</summary>
         public int PYMT_USE_BUDGET_TOTAL { get; set; }
@@ -190,7 +221,15 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>商品名稱</summary>
         public string DTL_ITEM_NAME { get; set; }
 
-        /// <summary>影片類型</summary>
+        /// <summary>影帶規格</summary>
+        public string DTL_MEDIA_SPEC { get; set; }
+
+        /// <summary>
+        /// 影片類型：
+        /// SD.
+        /// HD.
+        /// 4K.
+        /// </summary>
         public string DTL_MEDIA_TYPE { get; set; }
 
         /// <summary>開始集數</summary>
@@ -199,8 +238,11 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>結束集數</summary>
         public int DTL_END_EPISODE { get; set; }
 
-        /// <summary>總集數</summary>
-        public int DTL_EPISODE_TOTAL { get; set; }
+        /// <summary>總採購集數</summary>
+        public int DTL_ORDER_EPISODE { get; set; }
+
+        /// <summary>驗收集數</summary>
+        public int DTL_ACPT_EPISODE { get; set; }
 
         /// <summary>每集長度</summary>
         public int DTL_EPISODE_TIME { get; set; }
@@ -210,6 +252,12 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>未稅單價_台幣/NET單價_台幣</summary>
         public int DTL_NET_TWD { get; set; }
+
+        /// <summary>稅額/預估保留稅額</summary>
+        public double DTL_TAX { get; set; }
+
+        /// <summary>稅額/預估保留稅額_台幣</summary>
+        public int DTL_TAX_TWD { get; set; }
 
         /// <summary>含稅單價/GROSS單價</summary>
         public double DTL_GROSS { get; set; }
@@ -234,6 +282,9 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>明細單項小記</summary>
         public double DTL_ITEM_SUM { get; set; }
+
+        /// <summary>明細單項小記_台幣</summary>
+        public int DTL_ITEM_SUM_TWD { get; set; }
 
         /// <summary>所屬專案 ERP 單號</summary>
         public string DTL_PROJECT_FORM_NO { get; set; }
@@ -290,10 +341,10 @@ namespace OA_WEB_API.Models.BPMPro
         public string AUTH_ALLOTED_TIME_TYPE { get; set; }
 
         /// <summary>授權開始時間(授權時間)</summary>
-        public DateTime AUTH_START_DATE { get; set; }
+        public Nullable<DateTime> AUTH_START_DATE { get; set; }
 
         /// <summary>授權結束時間(授權時間)</summary>
-        public DateTime AUTH_END_DATE { get; set; }
+        public Nullable<DateTime> AUTH_END_DATE { get; set; }
 
         /// <summary>授權方式類型</summary>
         public string AUTH_FREQUENCY_TYPE { get; set; }
@@ -311,11 +362,26 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaOrderExtrasConfig
     {
+        /// <summary>行數編號</summary>
+        public int EX_ROW_NO { get; set; }
+
         /// <summary>名稱</summary>
         public string EX_NAME { get; set; }
 
         /// <summary>金額</summary>
-        public int EX_AMOUNT { get; set; }
+        public double EX_AMOUNT { get; set; }
+
+        /// <summary>金額_台幣</summary>
+        public int EX_AMOUNT_TWD { get; set; }
+
+        /// <summary>稅額/預估保留稅額</summary>
+        public double EX_TAX { get; set; }
+
+        /// <summary>稅額/預估保留稅額_台幣</summary>
+        public int EX_TAX_TWD { get; set; }
+
+        /// <summary>期別</summary>
+        public int PERIOD { get; set; }
 
         /// <summary>所屬專案 ERP 單號</summary>
         public string EX_PROJECT_FORM_NO { get; set; }
@@ -338,6 +404,9 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaOrderPaymentsConfig
     {
+        /// <summary>行數編號</summary>
+        public int PYMT_ROW_NO { get; set; }
+
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
 
@@ -347,7 +416,12 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>付款條件</summary>
         public string PYMT_TERMS { get; set; }
 
-        /// <summary>付款方式編號</summary>
+        /// <summary>
+        /// 付款方式編號：
+        /// DD.票據
+        /// FF.電匯
+        /// CS.現金
+        /// </summary>
         public string PYMT_METHOD_ID { get; set; }
 
         /// <summary>稅額</summary>
@@ -362,8 +436,20 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>當期預計匯率</summary>
         public double PYMT_PRE_RATE { get; set; }
 
-        /// <summary>含稅總額(換算)/GROSS價(換算)</summary>
-        public int PYMT_GROSS_CONV { get; set; }
+        /// <summary>單集材料費</summary>
+        public double PYMT_MATERIAL { get; set; }
+
+        /// <summary>額外採購項目金額</summary>
+        public double PYMT_EX_AMOUNT { get; set; }
+
+        /// <summary>額外採購項目稅額</summary>
+        public double PYMT_EX_TAX { get; set; }
+
+        /// <summary>小計</summary>
+        public double PYMT_ORDER_SUM { get; set; }
+
+        /// <summary>小計(換算)</summary>
+        public int PYMT_ORDER_SUM_CONV { get; set; }
 
         /// <summary>使用預算金額</summary>
         public int PYMT_USE_BUDGET { get; set; }
@@ -374,6 +460,9 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaOrderBudgetsConfig
     {
+        /// <summary>行數編號</summary>
+        public int BUDG_ROW_NO { get; set; }
+
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
 
@@ -404,6 +493,10 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaOrderAcceptancesConfig
     {
+
+        /// <summary>行數編號</summary>
+        public int PA_ROW_NO { get; set; }
+
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
 
@@ -422,9 +515,11 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>結束集數</summary>
         public int PA_END_EPISODE { get; set; }
 
-        /// <summary>總集數</summary>
-        public int PA_EPISODE_TOTAL { get; set; }
+        /// <summary>總採購集數</summary>
+        public int PA_ORDER_EPISODE { get; set; }
 
+        /// <summary>驗收集數</summary>
+        public int PA_ACPT_EPISODE { get; set; }
 
         /// <summary>商品備註</summary>
         public string PA_NOTE { get; set; }

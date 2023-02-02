@@ -115,8 +115,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [Note] AS [NOTE], ";
             strSQL += "     [DTL_NetTotal] AS [DTL_NET_TOTAL], ";
             strSQL += "     [DTL_NetTotal_TWD] AS [DTL_NET_TOTAL_TWD], ";
-            strSQL += "     [DTL_ER_TaxTotal] AS [DTL_ER_TAX_TOTAL], ";
-            strSQL += "     [DTL_ER_TaxTotal_TWD] AS [DTL_ER_TAX_TOTAL_TWD], ";
+            strSQL += "     [DTL_TaxTotal] AS [DTL_TAX_TOTAL], ";
+            strSQL += "     [DTL_TaxTotal_TWD] AS [DTL_TAX_TOTAL_TWD], ";
             strSQL += "     [DTL_GrossTotal] AS [DTL_GROSS_TOTAL], ";
             strSQL += "     [DTL_GrossTotal_TWD] AS [DTL_GROSS_TOTAL_TWD], ";
             strSQL += "     [DTL_MaterialTotal] AS [DTL_MATERIAL_TOTAL], ";
@@ -125,16 +125,16 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [DTL_OrderTotal_TWD] AS [DTL_ORDER_TOTAL_TWD], ";
             strSQL += "     [EX_AmountTotal] AS [EX_AMOUNT_TOTAL], ";
             strSQL += "     [EX_AmountTotal_TWD] AS [EX_AMOUNT_TOTAL_TWD], ";
-            strSQL += "     [EX_ER_TaxTotal] AS [EX_ER_TAX_TOTAL], ";
-            strSQL += "     [EX_ER_TaxTotal_TWD] AS [EX_ER_TAX_TOTAL_TWD], ";
+            strSQL += "     [EX_TaxTotal] AS [EX_TAX_TOTAL], ";
+            strSQL += "     [EX_TaxTotal_TWD] AS [EX_TAX_TOTAL_TWD], ";
             strSQL += "     [PYMT_CurrentTotal] AS [PYMT_CURRENT_TOTAL], ";
             strSQL += "     [PYMT_CurrentTotal_TWD] AS [PYMT_CURRENT_TOTAL_TWD], ";
-            strSQL += "     [PYMT_ER_TaxTotal] AS [PYMT_ER_TAX_TOTAL], ";
-            strSQL += "     [PYMT_ER_TaxTotal_TWD] AS [PYMT_ER_TAX_TOTAL_TWD], ";
+            strSQL += "     [PYMT_EX_TaxTotal] AS [PYMT_EX_TAX_TOTAL], ";
+            strSQL += "     [PYMT_EX_TaxTotal_TWD] AS [PYMT_EX_TAX_TOTAL_TWD], ";
             strSQL += "     [INV_AmountTotal] AS [INV_AMOUNT_TOTAL], ";
             strSQL += "     [INV_AmountTotal_TWD] AS [INV_AMOUNT_TOTAL_TWD], ";
-            strSQL += "     [IVN_ER_TaxTotal] AS [IVN_ER_TAX_TOTAL], ";
-            strSQL += "     [IVN_ER_TaxTotal_TWD] AS [IVN_ER_TAX_TOTAL_TWD], ";
+            strSQL += "     [INV_TaxTotal] AS [INV_TAX_TOTAL], ";
+            strSQL += "     [INV_TaxTotal_TWD] AS [INV_TAX_TOTAL_TWD], ";
             strSQL += "     [ActualPayAmount] AS [ACTUAL_PAY_AMOUNT], ";
             strSQL += "     [FinancAuditID_1] AS [FINANC_AUDIT_ID_1], ";
             strSQL += "     [FinancAuditName_1] AS [FINANC_AUDIT_NAME_1], ";
@@ -177,8 +177,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     DTL.[DTL_MediaSpec] AS [DTL_MEDIA_SPEC], ";
             strSQL += "     DTL.[DTL_Net] AS [DTL_NET], ";
             strSQL += "     DTL.[DTL_Net_TWD] AS [DTL_NET_TWD], ";
-            strSQL += "     DTL.[DTL_ER_Tax] AS [DTL_ER_TAX], ";
-            strSQL += "     DTL.[DTL_ER_Tax_TWD] AS [DTL_ER_TAX_TWD], ";
+            strSQL += "     DTL.[DTL_Tax] AS [DTL_TAX], ";
+            strSQL += "     DTL.[DTL_Tax_TWD] AS [DTL_TAX_TWD], ";
             strSQL += "     DTL.[DTL_Gross] AS [DTL_GROSS], ";
             strSQL += "     DTL.[DTL_Gross_TWD] AS [DTL_GROSS_TWD], ";
             strSQL += "     DTL.[DTL_NetSum] AS [DTL_NET_SUM], ";
@@ -254,8 +254,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [EX_Name] AS [EX_NAME], ";
             strSQL += "     [EX_Amount] AS [EX_AMOUNT], ";
             strSQL += "     [EX_Amount_TWD] AS [EX_AMOUNT_TWD], ";
-            strSQL += "     [EX_ER_Tax] AS [EX_ER_TAX], ";
-            strSQL += "     [EX_ER_Tax_TWD] AS [EX_ER_TAX_TWD], ";
+            strSQL += "     [EX_Tax] AS [EX_TAX], ";
+            strSQL += "     [EX_Tax_TWD] AS [EX_TAX_TWD], ";
             strSQL += "     [Period] AS [PERIOD], ";
             strSQL += "     [EX_ProjectFormNo] AS [EX_PROJECT_FORM_NO], ";
             strSQL += "     [EX_ProjectName] AS [EX_PROJECT_NAME], ";
@@ -283,12 +283,12 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [PYMT_Terms] AS [PYMT_TERMS], ";
             strSQL += "     [PYMT_MethodID] AS [PYMT_METHOD_ID], ";
             strSQL += "     [PYMT_Tax] AS [PYMT_TAX], ";
-            strSQL += "     [PYMT_ER_Tax] AS [PYMT_ER_TAX], ";
             strSQL += "     [PYMT_Net] AS [PYMT_NET], ";
             strSQL += "     [PYMT_Gross] AS [PYMT_GROSS], ";
             strSQL += "     [PYMT_PredictRate] AS [PYMT_PRE_RATE], ";
             strSQL += "     [PYMT_Material] AS [PYMT_MATERIAL], ";
             strSQL += "     [PYMT_EX_Amount] AS [PYMT_EX_AMOUNT], ";
+            strSQL += "     [PYMT_EX_Tax] AS [PYMT_EX_TAX], ";
             strSQL += "     [PYMT_OrderSum] AS [PYMT_ORDER_SUM], ";
             strSQL += "     [PYMT_OrderSum_CONV] AS [PYMT_ORDER_SUM_CONV], ";
             strSQL += "     [PYMT_UseBudget] AS [PYMT_USE_BUDGET], ";
@@ -545,8 +545,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_NET_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_NET_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@DTL_ER_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@DTL_ER_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@DTL_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@DTL_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_GROSS_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_GROSS_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_MATERIAL_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -555,16 +555,16 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@DTL_ORDER_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@EX_AMOUNT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@EX_AMOUNT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@EX_ER_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@EX_ER_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@EX_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@EX_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_CURRENT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_CURRENT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PYMT_ER_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PYMT_ER_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PYMT_EX_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PYMT_EX_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@INV_AMOUNT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@INV_AMOUNT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@IVN_ER_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@IVN_ER_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@INV_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@INV_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@ACTUAL_PAY_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@FINANC_AUDIT_ID_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@FINANC_AUDIT_NAME_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -588,16 +588,16 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region - 確認小數點後第二位 -
                                       
                     model.MEDIA_INVOICE_CONFIG.DTL_NET_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.DTL_NET_TOTAL, 2);
-                    model.MEDIA_INVOICE_CONFIG.DTL_ER_TAX_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.DTL_ER_TAX_TOTAL, 2);
+                    model.MEDIA_INVOICE_CONFIG.DTL_TAX_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.DTL_TAX_TOTAL, 2);
                     model.MEDIA_INVOICE_CONFIG.DTL_GROSS_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.DTL_GROSS_TOTAL, 2);
                     model.MEDIA_INVOICE_CONFIG.DTL_MATERIAL_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.DTL_MATERIAL_TOTAL, 2);
                     model.MEDIA_INVOICE_CONFIG.DTL_ORDER_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.DTL_ORDER_TOTAL, 2);
                     model.MEDIA_INVOICE_CONFIG.EX_AMOUNT_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.EX_AMOUNT_TOTAL, 2);
-                    model.MEDIA_INVOICE_CONFIG.EX_ER_TAX_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.EX_ER_TAX_TOTAL, 2);
-                    model.MEDIA_INVOICE_CONFIG.PYMT_ER_TAX_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.PYMT_ER_TAX_TOTAL, 2);
+                    model.MEDIA_INVOICE_CONFIG.EX_TAX_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.EX_TAX_TOTAL, 2);
+                    model.MEDIA_INVOICE_CONFIG.PYMT_EX_TAX_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.PYMT_EX_TAX_TOTAL, 2);
                     model.MEDIA_INVOICE_CONFIG.PYMT_CURRENT_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.PYMT_CURRENT_TOTAL, 2);
                     model.MEDIA_INVOICE_CONFIG.INV_AMOUNT_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.INV_AMOUNT_TOTAL, 2);
-                    model.MEDIA_INVOICE_CONFIG.IVN_ER_TAX_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.IVN_ER_TAX_TOTAL, 2);
+                    model.MEDIA_INVOICE_CONFIG.INV_TAX_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.INV_TAX_TOTAL, 2);
 
                     #endregion
 
@@ -635,8 +635,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [Note]=@NOTE, ";
                     strSQL += "     [DTL_NetTotal]=@DTL_NET_TOTAL, ";
                     strSQL += "     [DTL_NetTotal_TWD]=@DTL_NET_TOTAL_TWD, ";
-                    strSQL += "     [DTL_ER_TaxTotal]=@DTL_ER_TAX_TOTAL, ";
-                    strSQL += "     [DTL_ER_TaxTotal_TWD]=@DTL_ER_TAX_TOTAL_TWD, ";
+                    strSQL += "     [DTL_TaxTotal]=@DTL_TAX_TOTAL, ";
+                    strSQL += "     [DTL_TaxTotal_TWD]=@DTL_TAX_TOTAL_TWD, ";
                     strSQL += "     [DTL_GrossTotal]=@DTL_GROSS_TOTAL, ";
                     strSQL += "     [DTL_GrossTotal_TWD]=@DTL_GROSS_TOTAL_TWD, ";
                     strSQL += "     [DTL_MaterialTotal]=@DTL_MATERIAL_TOTAL, ";
@@ -645,16 +645,16 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [DTL_OrderTotal_TWD]=@DTL_ORDER_TOTAL_TWD, ";
                     strSQL += "     [EX_AmountTotal]=@EX_AMOUNT_TOTAL, ";
                     strSQL += "     [EX_AmountTotal_TWD]=@EX_AMOUNT_TOTAL_TWD, ";
-                    strSQL += "     [EX_ER_TaxTotal]=@EX_ER_TAX_TOTAL, ";
-                    strSQL += "     [EX_ER_TaxTotal_TWD]=@EX_ER_TAX_TOTAL_TWD, ";
+                    strSQL += "     [EX_TaxTotal]=@EX_TAX_TOTAL, ";
+                    strSQL += "     [EX_TaxTotal_TWD]=@EX_TAX_TOTAL_TWD, ";
                     strSQL += "     [PYMT_CurrentTotal]=@PYMT_CURRENT_TOTAL, ";
                     strSQL += "     [PYMT_CurrentTotal_TWD]=@PYMT_CURRENT_TOTAL_TWD, ";
-                    strSQL += "     [PYMT_ER_TaxTotal]=@PYMT_ER_TAX_TOTAL, ";
-                    strSQL += "     [PYMT_ER_TaxTotal_TWD]=@PYMT_ER_TAX_TOTAL_TWD, ";
+                    strSQL += "     [PYMT_EX_TaxTotal]=@PYMT_EX_TAX_TOTAL, ";
+                    strSQL += "     [PYMT_EX_TaxTotal_TWD]=@PYMT_EX_TAX_TOTAL_TWD, ";
                     strSQL += "     [INV_AmountTotal]=@INV_AMOUNT_TOTAL, ";
                     strSQL += "     [INV_AmountTotal_TWD]=@INV_AMOUNT_TOTAL_TWD, ";
-                    strSQL += "     [IVN_ER_TaxTotal]=@IVN_ER_TAX_TOTAL, ";
-                    strSQL += "     [IVN_ER_TaxTotal_TWD]=@IVN_ER_TAX_TOTAL_TWD, ";
+                    strSQL += "     [INV_TaxTotal]=@INV_TAX_TOTAL, ";
+                    strSQL += "     [INV_TaxTotal_TWD]=@INV_TAX_TOTAL_TWD, ";
                     strSQL += "     [ActualPayAmount]=@ACTUAL_PAY_AMOUNT, ";
                     strSQL += "     [FinancAuditID_1]=@FINANC_AUDIT_ID_1, ";
                     strSQL += "     [FinancAuditName_1]=@FINANC_AUDIT_NAME_1, ";

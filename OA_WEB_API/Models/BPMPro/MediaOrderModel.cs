@@ -137,11 +137,11 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>合計未稅金額_台幣(採購明細)/NET總額_台幣(採購明細)</summary>
         public int DTL_NET_TOTAL_TWD { get; set; }
 
-        /// <summary>預估保留稅總額(採購明細)</summary>
-        public double DTL_ER_TAX_TOTAL { get; set; }
+        /// <summary>總稅額/總預估保留稅額(採購明細)</summary>
+        public double DTL_TAX_TOTAL { get; set; }
 
-        /// <summary>預估保留稅_台幣(採購明細)</summary>
-        public int DTL_ER_TAX_TOTAL_TWD { get; set; }
+        /// <summary>總稅額/總預估保留稅額_台幣(採購明細)</summary>
+        public int DTL_TAX_TOTAL_TWD { get; set; }
 
         /// <summary>合計含稅總額(採購明細)/GROSS總額(採購明細)</summary>
         public double DTL_GROSS_TOTAL { get; set; }
@@ -170,11 +170,11 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>額外項目總額_台幣(額外項目)</summary>
         public int EX_AMOUNT_TOTAL_TWD { get; set; }
 
-        /// <summary>預估保留稅總額(額外項目)</summary>
-        public double EX_ER_TAX_TOTAL { get; set; }
+        /// <summary>額外項目總稅額/總預估保留稅額(額外項目)</summary>
+        public double EX_TAX_TOTAL { get; set; }
 
-        /// <summary>預估保留稅_台幣(額外項目)</summary>
-        public int EX_ER_TAX_TOTAL_TWD { get; set; }
+        /// <summary>額外項目總稅額/總預估保留稅額_台幣(額外項目)</summary>
+        public int EX_TAX_TOTAL_TWD { get; set; }
 
         /// <summary>不可異動標住(付款辦法)</summary>
         public string PYMT_LOCK_PERIOD { get; set; }
@@ -184,9 +184,6 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>合計未稅金額(付款辦法)/NET總額(付款辦法)</summary>
         public double PYMT_NET_TOTAL { get; set; }
-
-        /// <summary>預估保留稅總額(付款辦法)</summary>
-        public double PYMT_ER_TAX_TOTAL { get; set; }
   
         /// <summary>合計含稅總額(付款辦法)/GROSS總額(付款辦法)</summary>
         public double PYMT_GROSS_TOTAL { get; set; }
@@ -196,6 +193,9 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>額外項目總額(付款辦法)</summary>
         public double PYMT_EX_AMOUNT_TOTAL { get; set; }
+
+        /// <summary>額外項目_總稅額/總預估保留稅額(付款辦法)</summary>
+        public double PYMT_EX_TAX_TOTAL { get; set; }
 
         /// <summary>合計(付款辦法)</summary>
         public double PYMT_ORDER_TOTAL { get; set; }
@@ -253,11 +253,11 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>未稅單價_台幣/NET單價_台幣</summary>
         public int DTL_NET_TWD { get; set; }
 
-        /// <summary>預估保留稅</summary>
-        public double DTL_ER_TAX { get; set; }
+        /// <summary>稅額/預估保留稅額</summary>
+        public double DTL_TAX { get; set; }
 
-        /// <summary>預估保留稅_台幣</summary>
-        public int DTL_ER_TAX_TWD { get; set; }
+        /// <summary>稅額/預估保留稅額_台幣</summary>
+        public int DTL_TAX_TWD { get; set; }
 
         /// <summary>含稅單價/GROSS單價</summary>
         public double DTL_GROSS { get; set; }
@@ -341,10 +341,10 @@ namespace OA_WEB_API.Models.BPMPro
         public string AUTH_ALLOTED_TIME_TYPE { get; set; }
 
         /// <summary>授權開始時間(授權時間)</summary>
-        public DateTime AUTH_START_DATE { get; set; }
+        public Nullable<DateTime> AUTH_START_DATE { get; set; }
 
         /// <summary>授權結束時間(授權時間)</summary>
-        public DateTime AUTH_END_DATE { get; set; }
+        public Nullable<DateTime> AUTH_END_DATE { get; set; }
 
         /// <summary>授權方式類型</summary>
         public string AUTH_FREQUENCY_TYPE { get; set; }
@@ -374,11 +374,11 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>金額_台幣</summary>
         public int EX_AMOUNT_TWD { get; set; }
 
-        /// <summary>預估保留稅</summary>
-        public double EX_ER_TAX { get; set; }
+        /// <summary>稅額/預估保留稅額</summary>
+        public double EX_TAX { get; set; }
 
-        /// <summary>預估保留稅_台幣</summary>
-        public int EX_ER_TAX_TWD { get; set; }
+        /// <summary>稅額/預估保留稅額_台幣</summary>
+        public int EX_TAX_TWD { get; set; }
 
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
@@ -433,17 +433,17 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>含稅總額/GROSS單價</summary>
         public double PYMT_GROSS { get; set; }
 
-        /// <summary>預估保留稅總額</summary>
-        public double PYMT_ER_TAX { get; set; }
-
         /// <summary>當期預計匯率</summary>
         public double PYMT_PRE_RATE { get; set; }
 
         /// <summary>單集材料費</summary>
         public double PYMT_MATERIAL { get; set; }
 
-        /// <summary>額外項目金額</summary>
+        /// <summary>額外採購項目金額</summary>
         public double PYMT_EX_AMOUNT { get; set; }
+
+        /// <summary>額外採購項目稅額</summary>
+        public double PYMT_EX_TAX { get; set; }
 
         /// <summary>小計</summary>
         public double PYMT_ORDER_SUM { get; set; }

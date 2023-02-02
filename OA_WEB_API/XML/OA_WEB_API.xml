@@ -3343,11 +3343,11 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.DTL_NET_TOTAL_TWD">
             <summary>合計未稅金額_台幣(採購明細)/NET總額_台幣(採購明細)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.DTL_ER_TAX_TOTAL">
-            <summary>預估保留稅總額(採購明細)</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.DTL_TAX_TOTAL">
+            <summary>總稅額/總預估保留稅額(採購明細)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.DTL_ER_TAX_TOTAL_TWD">
-            <summary>預估保留稅_台幣(採購明細)</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.DTL_TAX_TOTAL_TWD">
+            <summary>總稅額/總預估保留稅額_台幣(採購明細)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.DTL_GROSS_TOTAL">
             <summary>合計含稅總額(採購明細)/GROSS總額(採購明細)</summary>
@@ -3368,16 +3368,16 @@
             <summary>合計_台幣(採購明細)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.EX_AMOUNT_TOTAL">
-            <summary>額外項目總額(額外項目)</summary>
+            <summary>額外採購項目 總額(額外採購項目)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.EX_AMOUNT_TOTAL_TWD">
-            <summary>額外項目總額_台幣(額外項目)</summary>
+            <summary>額外採購項目 總額_台幣(額外採購項目)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.EX_ER_TAX_TOTAL">
-            <summary>預估保留稅總額(額外項目)</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.EX_TAX_TOTAL">
+            <summary>額外採購項目 總稅額/總預估保留稅額(額外採購項目)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.EX_ER_TAX_TOTAL_TWD">
-            <summary>預估保留稅_台幣(額外項目)</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.EX_TAX_TOTAL_TWD">
+            <summary>額外採購項目 總稅額/總預估保留稅額_台幣(額外採購項目)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_CURRENT_TOTAL">
             <summary>付款辦法 本期付款總額(付款辦法)</summary>
@@ -3385,11 +3385,11 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_CURRENT_TOTAL_TWD">
             <summary>付款辦法 本期付款總額_台幣(付款辦法)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_ER_TAX_TOTAL">
-            <summary>預估保留稅總額(付款辦法)</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_EX_TAX_TOTAL">
+            <summary>額外採購項目 總稅額/總預估保留稅額(付款辦法)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_ER_TAX_TOTAL_TWD">
-            <summary>預估保留稅總額_台幣(付款辦法)</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_EX_TAX_TOTAL_TWD">
+            <summary>額外採購項目 總稅額/總預估保留稅額_台幣(付款辦法)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.INV_AMOUNT_TOTAL">
             <summary>發票明細 合計(憑證明細)</summary>
@@ -3397,11 +3397,11 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.INV_AMOUNT_TOTAL_TWD">
             <summary>發票明細 合計_台幣(憑證明細)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.IVN_ER_TAX_TOTAL">
-            <summary>發票明細 合計(憑證明細)</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.INV_TAX_TOTAL">
+            <summary>發票明細 總稅額/總預估保留稅額(憑證明細)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.IVN_ER_TAX_TOTAL_TWD">
-            <summary>發票明細 合計_台幣(憑證明細)</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.INV_TAX_TOTAL_TWD">
+            <summary>發票明細 總稅額/總預估保留稅額_台幣(憑證明細)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.ACTUAL_PAY_AMOUNT">
             <summary>實際支付金額</summary>
@@ -3432,11 +3432,11 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_NET_TWD">
             <summary>未稅單價_台幣/NET單價_台幣</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_ER_TAX">
-            <summary>預估保留稅</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_TAX">
+            <summary>稅額/總預估保留稅額</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_ER_TAX_TWD">
-            <summary>預估保留稅_台幣</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_TAX_TWD">
+            <summary>稅額/總預估保留稅額_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.DTL_GROSS">
             <summary>含稅單價/GROSS單價</summary>
@@ -3711,11 +3711,11 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.DTL_NET_TOTAL_TWD">
             <summary>合計未稅金額_台幣(採購明細)/NET總額_台幣(採購明細)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.DTL_ER_TAX_TOTAL">
-            <summary>預估保留稅總額(採購明細)</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.DTL_TAX_TOTAL">
+            <summary>總稅額/總預估保留稅額(採購明細)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.DTL_ER_TAX_TOTAL_TWD">
-            <summary>預估保留稅_台幣(採購明細)</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.DTL_TAX_TOTAL_TWD">
+            <summary>總稅額/總預估保留稅額_台幣(採購明細)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.DTL_GROSS_TOTAL">
             <summary>合計含稅總額(採購明細)/GROSS總額(採購明細)</summary>
@@ -3744,11 +3744,11 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.EX_AMOUNT_TOTAL_TWD">
             <summary>額外項目總額_台幣(額外項目)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.EX_ER_TAX_TOTAL">
-            <summary>預估保留稅總額(額外項目)</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.EX_TAX_TOTAL">
+            <summary>額外項目總稅額/總預估保留稅額(額外項目)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.EX_ER_TAX_TOTAL_TWD">
-            <summary>預估保留稅_台幣(額外項目)</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.EX_TAX_TOTAL_TWD">
+            <summary>額外項目總稅額/總預估保留稅額_台幣(額外項目)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_LOCK_PERIOD">
             <summary>不可異動標住(付款辦法)</summary>
@@ -3759,9 +3759,6 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_NET_TOTAL">
             <summary>合計未稅金額(付款辦法)/NET總額(付款辦法)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_ER_TAX_TOTAL">
-            <summary>預估保留稅總額(付款辦法)</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_GROSS_TOTAL">
             <summary>合計含稅總額(付款辦法)/GROSS總額(付款辦法)</summary>
         </member>
@@ -3770,6 +3767,9 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_EX_AMOUNT_TOTAL">
             <summary>額外項目總額(付款辦法)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_EX_TAX_TOTAL">
+            <summary>額外項目_總稅額/總預估保留稅額(付款辦法)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_ORDER_TOTAL">
             <summary>合計(付款辦法)</summary>
@@ -3826,11 +3826,11 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_NET_TWD">
             <summary>未稅單價_台幣/NET單價_台幣</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_ER_TAX">
-            <summary>預估保留稅</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_TAX">
+            <summary>稅額/預估保留稅額</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_ER_TAX_TWD">
-            <summary>預估保留稅_台幣</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_TAX_TWD">
+            <summary>稅額/預估保留稅額_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_GROSS">
             <summary>含稅單價/GROSS單價</summary>
@@ -3944,11 +3944,11 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderExtrasConfig.EX_AMOUNT_TWD">
             <summary>金額_台幣</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderExtrasConfig.EX_ER_TAX">
-            <summary>預估保留稅</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderExtrasConfig.EX_TAX">
+            <summary>稅額/預估保留稅額</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderExtrasConfig.EX_ER_TAX_TWD">
-            <summary>預估保留稅_台幣</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderExtrasConfig.EX_TAX_TWD">
+            <summary>稅額/預估保留稅額_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderExtrasConfig.PERIOD">
             <summary>期別</summary>
@@ -4002,9 +4002,6 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.PYMT_GROSS">
             <summary>含稅總額/GROSS單價</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.PYMT_ER_TAX">
-            <summary>預估保留稅總額</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.PYMT_PRE_RATE">
             <summary>當期預計匯率</summary>
         </member>
@@ -4012,7 +4009,10 @@
             <summary>單集材料費</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.PYMT_EX_AMOUNT">
-            <summary>額外項目金額</summary>
+            <summary>額外採購項目金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.PYMT_EX_TAX">
+            <summary>額外採購項目稅額</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.PYMT_ORDER_SUM">
             <summary>小計</summary>

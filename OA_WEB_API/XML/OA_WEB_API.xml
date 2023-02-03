@@ -6090,6 +6090,11 @@
             表單主旨
             </summary>
         </member>
+        <member name="T:OA_WEB_API.Repository.BPMPro.ExpensesReimburseRepository">
+            <summary>
+            會簽管理系統 - 費用申請單
+            </summary>
+        </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.ExpensesReimburseRepository.PostExpensesReimburseSingle(OA_WEB_API.Models.BPMPro.ExpensesReimburseQueryModel)">
             <summary>
             費用申請單(查詢)

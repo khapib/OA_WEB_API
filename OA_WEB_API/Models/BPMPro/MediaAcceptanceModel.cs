@@ -134,10 +134,7 @@ namespace OA_WEB_API.Models.BPMPro
         public int DTL_EPISODE_TIME { get; set; }
 
         /// <summary>母帶受領日期</summary>
-        public DateTime DTL_GET_MASTERING_DATE { get; set; }
-
-        /// <summary>[母帶]群組ID</summary>
-        public string DTL_MASTERING_GROUP_ID { get; set; }
+        public Nullable<DateTime> DTL_GET_MASTERING_DATE { get; set; }
 
         /// <summary>驗收負責人主要部門</summary>
         public string DTL_OWNER_DEPT_MAIN_ID { get; set; }
@@ -164,7 +161,7 @@ namespace OA_WEB_API.Models.BPMPro
         public string IS_ORIGINAL { get; set; }
 
         /// <summary>原始列編碼</summary>
-        public int? ORIGIN_NUM { get; set; }
+        public int ORIGIN_NUM { get; set; }
     }
 
     /// <summary>

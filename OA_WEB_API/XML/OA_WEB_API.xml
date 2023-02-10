@@ -3132,9 +3132,6 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.DTL_GET_MASTERING_DATE">
             <summary>母帶受領日期</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.DTL_MASTERING_GROUP_ID">
-            <summary>[母帶]群組ID</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.DTL_OWNER_DEPT_MAIN_ID">
             <summary>驗收負責人主要部門</summary>
         </member>

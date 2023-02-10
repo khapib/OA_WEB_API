@@ -630,13 +630,13 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         #region - 被知會特定角色 -
 
-                        if (model.ROLE_ID != null)
+                        foreach (var role in model.ROLE_ID)
                         {
-                            foreach (var role in model.ROLE_ID)
+                            if (role != null)
                             {
                                 var RolesUserID = CommonRepository.GetRoles()
-                                                                .Where(R => R.ROLE_ID.Contains(role))
-                                                                .Select(R => R).ToList();
+                                                            .Where(R => R.ROLE_ID.Contains(role))
+                                                            .Select(R => R).ToList();
                                 RolesUserID.ForEach(roleuser =>
                                 {
                                     model.NOTIFY_BY.Add(roleuser.USER_ID);

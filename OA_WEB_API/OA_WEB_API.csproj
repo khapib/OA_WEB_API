@@ -217,6 +217,7 @@
       <DependentUpon>Index.aspx</DependentUpon>
     </Compile>
     <Compile Include="Models\BPMPro\ActiveModel.cs" />
+    <Compile Include="Models\BPMPro\EvaluateContent_Purchase.cs" />
     <Compile Include="Models\BPMPro\EvaluateDemandModel.cs" />
     <Compile Include="Models\BPMPro\ExpensesReimburseModel.cs" />
     <Compile Include="Models\BPMPro\GeneralAcceptanceModel.cs" />

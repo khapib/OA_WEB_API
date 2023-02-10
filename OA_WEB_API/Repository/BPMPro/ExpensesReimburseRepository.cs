@@ -9,6 +9,9 @@ using System.Drawing;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
+    /// <summary>
+    /// 會簽管理系統 - 費用申請單
+    /// </summary>
     public class ExpensesReimburseRepository
     {
         #region - 宣告 -

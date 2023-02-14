@@ -147,7 +147,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [UserName] AS [USER_NAME], ";
             strSQL += "     [AdviseType] AS [ADVISE_TYPE], ";
             strSQL += "     [Reason] AS [REASON], ";
-            strSQL += "     [OpinionDateTime] AS [OPINION_DATE_TIME], ";
+            strSQL += "     [OpinionDateTime] AS [OPINION_DATE_TIME] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_EVA] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
@@ -164,8 +164,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [UserName] AS [USER_NAME], ";
             strSQL += "     [AdviseType] AS [ADVISE_TYPE], ";
             strSQL += "     [Reason] AS [REASON], ";
-            strSQL += "     [OpinionDateTime] AS [OPINION_DATE_TIME], ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_EVA] ";
+            strSQL += "     [OpinionDateTime] AS [OPINION_DATE_TIME] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_DEC] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
             var evaluateContent_PurchaseDecisionsConfig = dbFun.DoQuery(strSQL, parameter).ToList<EvaluateContent_PurchaseDecisionsConfig>();

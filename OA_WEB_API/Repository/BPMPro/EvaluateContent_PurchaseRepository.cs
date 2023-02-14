@@ -292,7 +292,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     //內容評估表_外購 表頭
                     new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.EVALUATECONTENT_PURCHASE_TITLE.FORM_NO ?? DBNull.Value },
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
-                    new SqlParameter("@EVALUATE_NO", SqlDbType.NVarChar) { Size = 50, Value = (object)model.EVALUATECONTENT_PURCHASE_TITLE.EVALUATE_NO ?? DBNull.Value },
+                    new SqlParameter("@EVALUATE_NO", SqlDbType.NVarChar) { Size = 50, Value = (object)strEvaluateNo ?? DBNull.Value },
                 };
 
                 strSQL = "";

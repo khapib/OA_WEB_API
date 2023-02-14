@@ -258,8 +258,9 @@ namespace OA_WEB_API.Repository.BPMPro
                             {
                                 strEvaluateNo = "初";
                             }
+                            strEvaluateNo += "評";
 
-                            FM7Subject = "【" + model.EVALUATECONTENT_PURCHASE_CONFIG.ORIGINAL_TITLE + "】" + strEvaluateNo + "評";
+                            FM7Subject = "【" + model.EVALUATECONTENT_PURCHASE_CONFIG.ORIGINAL_TITLE + "】：" + strEvaluateNo;
                         }
                     }
                 }
@@ -386,7 +387,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     GlobalParameters.Infoparameter(strJson, parameterInfo);
 
                     strSQL = "";
-                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_MediaAcceptance_M] ";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_M] ";
                     strSQL += "SET [OriginalTitle]=@ORIGINAL_TITLE, ";
                     strSQL += "     [UsuallyTitle]=@USUALLY_TITLE, ";
                     strSQL += "     [TranslateTitle]=@TRANSLATE_TITLE, ";

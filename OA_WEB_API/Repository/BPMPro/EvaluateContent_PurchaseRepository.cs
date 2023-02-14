@@ -17,7 +17,7 @@ namespace OA_WEB_API.Repository.BPMPro
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDevHo);
 
         #region Repository
 
@@ -254,7 +254,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         {
                             strEvaluateNo = EastAsiaNumericFormatter.FormatWithCulture("Ln", EvaluateNo, null, new CultureInfo("zh-TW"));
 
-                            if(EvaluateNo == 1)
+                            if (EvaluateNo == 1)
                             {
                                 strEvaluateNo = "初";
                             }
@@ -323,7 +323,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [FlowActivated]=@FLOW_ACTIVATED, ";
                     strSQL += "     [FormNo]=@FORM_NO, ";
                     strSQL += "     [FM7Subject]=@FM7_SUBJECT, ";
-                    strSQL += "     [EvaluateNo]=@EVALUATE_NO, ";
+                    strSQL += "     [EvaluateNo]=@EVALUATE_NO ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                     dbFun.DoTran(strSQL, parameterTitle);
@@ -353,14 +353,14 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         //內容評估表_外購 表單內容
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                        new SqlParameter("@ORIGINAL_TITLE", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },                        
-                        new SqlParameter("@USUALLY_TITLE", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },                        
-                        new SqlParameter("@TRANSLATE_TITLE", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },                        
-                        new SqlParameter("@COUNTRY_NAME", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },                        
-                        new SqlParameter("@MEDIA_TYPE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },                        
-                        new SqlParameter("@MEDIA_ATTRIBUTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },                        
-                        new SqlParameter("@CATEGORY", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },                        
-                        new SqlParameter("@MEDIA_LENGTH", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },                        
+                        new SqlParameter("@ORIGINAL_TITLE", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@USUALLY_TITLE", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@TRANSLATE_TITLE", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@COUNTRY_NAME", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@MEDIA_TYPE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@MEDIA_ATTRIBUTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@CATEGORY", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@MEDIA_LENGTH", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@EVALUATE_EPISODE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@EPISODE_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PROVIDE_UNIT", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -380,6 +380,9 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@ARTISTS", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@CONTENT", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@EVALUATE_DATE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PRINCIPAL_ID", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PRINCIPAL_NAME", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                     };
 
                     //寫入：內容評估表_外購 表單內容parameter                        
@@ -414,7 +417,10 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [Emcee]=@EMCEE, ";
                     strSQL += "     [Artists]=@ARTISTS, ";
                     strSQL += "     [Content]=@CONTENT, ";
-                    strSQL += "     [Note]=@NOTE ";
+                    strSQL += "     [Note]=@NOTE, ";
+                    strSQL += "     [EvaluateDate]=@EVALUATE_DATE, ";
+                    strSQL += "     [PrincipalID]=@PRINCIPAL_ID, ";
+                    strSQL += "     [PrincipalName]=@PRINCIPAL_NAME ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                     dbFun.DoTran(strSQL, parameterInfo);

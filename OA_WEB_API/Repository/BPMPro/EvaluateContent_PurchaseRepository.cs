@@ -469,99 +469,99 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region - 內容評估表_外購 評估意見彙整: EvaluateContent_Purchase_EVA -
 
-                var parameterEvaluates = new List<SqlParameter>()
-                {
-                    //內容評估表_外購 評估意見彙整
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@ADVANTAGE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DEFECT", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@OPINION_ID", SqlDbType.UniqueIdentifier) { Value = (object)Guid.NewGuid() ?? DBNull.Value },
-                    new SqlParameter("@USER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@USER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@ADVISE_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@REASON", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@OPINION_DATE_TIME", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value }
-                };
+                //var parameterEvaluates = new List<SqlParameter>()
+                //{
+                //    //內容評估表_外購 評估意見彙整
+                //    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                //    new SqlParameter("@ADVANTAGE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                //    new SqlParameter("@DEFECT", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                //    new SqlParameter("@OPINION_ID", SqlDbType.UniqueIdentifier) { Value = (object)Guid.NewGuid() ?? DBNull.Value },
+                //    new SqlParameter("@USER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                //    new SqlParameter("@USER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                //    new SqlParameter("@ADVISE_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                //    new SqlParameter("@REASON", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                //    new SqlParameter("@OPINION_DATE_TIME", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value }
+                //};
 
-                #region 先刪除舊資料
+                //#region 先刪除舊資料
 
-                strSQL = "";
-                strSQL += "DELETE ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_EVA] ";
-                strSQL += "WHERE 1=1 ";
-                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+                //strSQL = "";
+                //strSQL += "DELETE ";
+                //strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_EVA] ";
+                //strSQL += "WHERE 1=1 ";
+                //strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
 
-                dbFun.DoTran(strSQL, parameterEvaluates);
+                //dbFun.DoTran(strSQL, parameterEvaluates);
 
-                #endregion
+                //#endregion
 
-                if (model.EVALUATECONTENT_PURCHASE_EVAS_CONFIG != null && model.EVALUATECONTENT_PURCHASE_EVAS_CONFIG.Count > 0)
-                {
-                    #region 再新增資料
+                //if (model.EVALUATECONTENT_PURCHASE_EVAS_CONFIG != null && model.EVALUATECONTENT_PURCHASE_EVAS_CONFIG.Count > 0)
+                //{
+                //    #region 再新增資料
 
-                    foreach (var item in model.EVALUATECONTENT_PURCHASE_EVAS_CONFIG)
-                    {
-                        //寫入：版權採購交片單 評估意見彙整parameter
-                        strJson = jsonFunction.ObjectToJSON(item);
-                        GlobalParameters.Infoparameter(strJson, parameterEvaluates);
+                //    foreach (var item in model.EVALUATECONTENT_PURCHASE_EVAS_CONFIG)
+                //    {
+                //        //寫入：版權採購交片單 評估意見彙整parameter
+                //        strJson = jsonFunction.ObjectToJSON(item);
+                //        GlobalParameters.Infoparameter(strJson, parameterEvaluates);
 
-                        strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_EVA]([RequisitionID],[Advantage],[Defect],[OpinionID],[UserID],[UserName],[AdviseType],[Reason],[OpinionDateTime]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@ADVANTAGE,@DEFECT,@OPINION_ID,@USER_ID,@USER_NAME,@ADVISE_TYPE,@REASON,@OPINION_DATE_TIME) ";
+                //        strSQL = "";
+                //        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_EVA]([RequisitionID],[Advantage],[Defect],[OpinionID],[UserID],[UserName],[AdviseType],[Reason],[OpinionDateTime]) ";
+                //        strSQL += "VALUES(@REQUISITION_ID,@ADVANTAGE,@DEFECT,@OPINION_ID,@USER_ID,@USER_NAME,@ADVISE_TYPE,@REASON,@OPINION_DATE_TIME) ";
 
-                        dbFun.DoTran(strSQL, parameterEvaluates);
-                    }
+                //        dbFun.DoTran(strSQL, parameterEvaluates);
+                //    }
 
-                    #endregion
-                }
+                //    #endregion
+                //}
 
                 #endregion
 
                 #region - 內容評估表_外購 決策意見彙整: EvaluateContent_Purchase_DEC -
 
-                var parameterDecisions = new List<SqlParameter>()
-                {
-                    //內容評估表_外購 決策意見彙整
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@OPINION_ID", SqlDbType.UniqueIdentifier) { Value = (object)Guid.NewGuid() ?? DBNull.Value },
-                    new SqlParameter("@USER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@USER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@ADVISE_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@REASON", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@OPINION_DATE_TIME", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value }
-                };
+                //var parameterDecisions = new List<SqlParameter>()
+                //{
+                //    //內容評估表_外購 決策意見彙整
+                //    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                //    new SqlParameter("@OPINION_ID", SqlDbType.UniqueIdentifier) { Value = (object)Guid.NewGuid() ?? DBNull.Value },
+                //    new SqlParameter("@USER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                //    new SqlParameter("@USER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                //    new SqlParameter("@ADVISE_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                //    new SqlParameter("@REASON", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                //    new SqlParameter("@OPINION_DATE_TIME", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value }
+                //};
 
-                #region 先刪除舊資料
+                //#region 先刪除舊資料
 
-                strSQL = "";
-                strSQL += "DELETE ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_DEC] ";
-                strSQL += "WHERE 1=1 ";
-                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+                //strSQL = "";
+                //strSQL += "DELETE ";
+                //strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_DEC] ";
+                //strSQL += "WHERE 1=1 ";
+                //strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
 
-                dbFun.DoTran(strSQL, parameterDecisions);
+                //dbFun.DoTran(strSQL, parameterDecisions);
 
-                #endregion
+                //#endregion
 
-                if (model.EVALUATECONTENT_PURCHASE_DECS_CONFIG != null && model.EVALUATECONTENT_PURCHASE_DECS_CONFIG.Count > 0)
-                {
-                    #region 再新增資料
+                //if (model.EVALUATECONTENT_PURCHASE_DECS_CONFIG != null && model.EVALUATECONTENT_PURCHASE_DECS_CONFIG.Count > 0)
+                //{
+                //    #region 再新增資料
 
-                    foreach (var item in model.EVALUATECONTENT_PURCHASE_DECS_CONFIG)
-                    {
-                        //寫入：版權採購交片單 決策意見彙整parameter
-                        strJson = jsonFunction.ObjectToJSON(item);
-                        GlobalParameters.Infoparameter(strJson, parameterDecisions);
+                //    foreach (var item in model.EVALUATECONTENT_PURCHASE_DECS_CONFIG)
+                //    {
+                //        //寫入：版權採購交片單 決策意見彙整parameter
+                //        strJson = jsonFunction.ObjectToJSON(item);
+                //        GlobalParameters.Infoparameter(strJson, parameterDecisions);
 
-                        strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_EVA]([RequisitionID],[OpinionID],[UserID],[UserName],[AdviseType],[Reason],[OpinionDateTime]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@OPINION_ID,@USER_ID,@USER_NAME,@ADVISE_TYPE,@REASON,@OPINION_DATE_TIME) ";
+                //        strSQL = "";
+                //        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_EVA]([RequisitionID],[OpinionID],[UserID],[UserName],[AdviseType],[Reason],[OpinionDateTime]) ";
+                //        strSQL += "VALUES(@REQUISITION_ID,@OPINION_ID,@USER_ID,@USER_NAME,@ADVISE_TYPE,@REASON,@OPINION_DATE_TIME) ";
 
-                        dbFun.DoTran(strSQL, parameterDecisions);
-                    }
+                //        dbFun.DoTran(strSQL, parameterDecisions);
+                //    }
 
-                    #endregion
-                }
+                //    #endregion
+                //}
 
                 #endregion
 

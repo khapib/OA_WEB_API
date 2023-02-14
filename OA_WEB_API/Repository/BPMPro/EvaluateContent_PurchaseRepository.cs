@@ -239,6 +239,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 #region - 宣告 -
 
                 string strEvaluateNo = null;
+                int EvaluateNo;
 
                 #region - 主旨 -
 
@@ -248,20 +249,22 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     if (!String.IsNullOrEmpty(model.EVALUATECONTENT_PURCHASE_TITLE.EVALUATE_NO) || !String.IsNullOrWhiteSpace(model.EVALUATECONTENT_PURCHASE_TITLE.EVALUATE_NO))
                     {
-                        int EvaluateNo = int.Parse(model.EVALUATECONTENT_PURCHASE_TITLE.EVALUATE_NO);
 
-                        if (EvaluateNo != 0)
+                        if(int.TryParse(model.EVALUATECONTENT_PURCHASE_TITLE.EVALUATE_NO, out EvaluateNo))
                         {
-                            strEvaluateNo = EastAsiaNumericFormatter.FormatWithCulture("Ln", EvaluateNo, null, new CultureInfo("zh-TW"));
-
-                            if (EvaluateNo == 1)
+                            if (EvaluateNo != 0)
                             {
-                                strEvaluateNo = "初";
-                            }
-                            strEvaluateNo += "評";
+                                strEvaluateNo = EastAsiaNumericFormatter.FormatWithCulture("Ln", EvaluateNo, null, new CultureInfo("zh-TW"));
 
-                            FM7Subject = "【" + model.EVALUATECONTENT_PURCHASE_CONFIG.ORIGINAL_TITLE + "】：" + strEvaluateNo;
-                        }
+                                if (EvaluateNo == 1)
+                                {
+                                    strEvaluateNo = "初";
+                                }
+                                strEvaluateNo += "評";
+
+                                FM7Subject = "【" + model.EVALUATECONTENT_PURCHASE_CONFIG.ORIGINAL_TITLE + "】：" + strEvaluateNo;
+                            }
+                        }                        
                     }
                 }
 

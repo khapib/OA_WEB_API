@@ -471,6 +471,21 @@
             (測試)表單(結束)執行
             </summary>
         </member>
+        <member name="T:OA_WEB_API.Controllers.BPMPro.EvaluateContent_PurchaseController">
+            <summary>
+            會簽管理系統 - 內容評估表_外購
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.EvaluateContent_PurchaseController.PostEvaluateContent_PurchaseSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseQueryModel)">
+            <summary>
+            內容評估表_外購(查詢)
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.EvaluateContent_PurchaseController.PutEvaluateContent_PurchaseSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseViewModel)">
+            <summary>
+            內容評估表_外購(新增/修改/草稿)
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.EvaluateDemandController">
             <summary>
             會簽管理系統 - 需求評估單
@@ -1802,6 +1817,9 @@
             內容評估表_外購 表頭資訊
             </summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseTitle.EVALUATE_NO">
+            <summary>評估編號</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseConfig">
             <summary>
             內容評估表_外購 表單內容 設定
@@ -1908,10 +1926,10 @@
         <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseUsersConfig.USER_DEPT_ID">
             <summary>評估人員部門</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseUsersConfig.User_ID">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseUsersConfig.USER_ID">
             <summary>評估人員編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseUsersConfig.User_Name">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseUsersConfig.USER_NAME">
             <summary>評估人員姓名</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseEvaluatesConfig">
@@ -6256,6 +6274,36 @@
         <member name="T:OA_WEB_API.Repository.BPMPro.EvaluateContent_PurchaseRepository">
             <summary>
             會簽管理系統 - 內容評估表_外購
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.EvaluateContent_PurchaseRepository.PostEvaluateContent_PurchaseSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseQueryModel)">
+            <summary>
+            內容評估表_外購(查詢)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.EvaluateContent_PurchaseRepository.PutEvaluateContent_PurchaseSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseViewModel)">
+            <summary>
+            內容評估表_外購(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContent_PurchaseRepository.strSQL">
+            <summary>
+            T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContent_PurchaseRepository.IDENTIFY">
+            <summary>
+            表單代號
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContent_PurchaseRepository.FM7Subject">
+            <summary>
+            表單主旨
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContent_PurchaseRepository.strJson">
+            <summary>
+            Json字串
             </summary>
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.EvaluateDemandRepository">

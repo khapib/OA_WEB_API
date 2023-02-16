@@ -1979,6 +1979,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseOpinionConfig.REQUISITION_ID">
             <summary>系統編號</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseOpinionConfig.OPINION_TYPE">
+            <summary>意見類型</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.EvaluateDemandQueryModel">
             <summary>
             需求評估單(查詢條件)
@@ -6284,6 +6287,11 @@
         <member name="M:OA_WEB_API.Repository.BPMPro.EvaluateContent_PurchaseRepository.PutEvaluateContent_PurchaseSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseViewModel)">
             <summary>
             內容評估表_外購(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.EvaluateContent_PurchaseRepository.PutEvaluateContent_PurchaseOpinionSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseOpinionConfig)">
+            <summary>
+            內容評估表_外購(評估意見)
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContent_PurchaseRepository.strSQL">

@@ -221,6 +221,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>系統編號</summary>
         public string REQUISITION_ID { get; set; }
 
+        /// <summary>意見類型</summary>
+        public string OPINION_TYPE { get; set; }
+
     }
 
     #endregion

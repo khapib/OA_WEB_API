@@ -646,6 +646,9 @@ namespace OA_WEB_API.Repository.BPMPro
                 }
 
                 #endregion
+
+                vResult = true;
+
             }
             catch (Exception ex)
             {

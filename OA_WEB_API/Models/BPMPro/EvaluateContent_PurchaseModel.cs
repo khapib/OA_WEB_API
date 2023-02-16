@@ -196,15 +196,15 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>評估人員姓名</summary>
         public string USER_NAME { get; set; }
 
-        /// <summary>建議類型</summary>
-        public string ADVISE_TYPE { get; set; }
-
-        /// <summary>建議原因：
+        /// <summary>建議類型：
         /// ADV.建議採購
         /// N_ADV.不建議採購
         /// AG.需再次評估
         /// N_I.沒意見(決策意見無這一項)
         /// </summary>
+        public string ADVISE_TYPE { get; set; }
+
+        /// <summary>建議原因</summary>
         public string REASON { get; set; }
 
         /// <summary>建議時間</summary>

@@ -608,14 +608,17 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     #region 先刪除舊資料
 
-                    strSQL = "";
-                    strSQL += "DELETE ";
-                    strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_"+model.OPINION_TYPE+"] ";
-                    strSQL += "WHERE 1=1 ";
-                    strSQL += "          AND [OpinionID]=@OPINION_ID ";
-                    strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+                    if (model.OPINION_ID != null)
+                    {
+                        strSQL = "";
+                        strSQL += "DELETE ";
+                        strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_" + model.OPINION_TYPE + "] ";
+                        strSQL += "WHERE 1=1 ";
+                        strSQL += "          AND [OpinionID]=@OPINION_ID ";
+                        strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
 
-                    dbFun.DoTran(strSQL, parameterOpinion);
+                        dbFun.DoTran(strSQL, parameterOpinion);
+                    }
 
                     #endregion
 

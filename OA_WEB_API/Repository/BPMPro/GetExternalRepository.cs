@@ -1237,7 +1237,23 @@ namespace OA_WEB_API.Repository.BPMPro
         #endregion
 
         #endregion
-        
+
+        #region - 內容評估表_(外部起單) -
+
+        #region - 內容評估表_外購(外部起單) -
+
+        ///// <summary>
+        ///// 行政採購申請單(外部起單)
+        ///// </summary>
+        //public GetExternalData PutEvaluateContent_PurchaseGetExternal(EvaluateContent_PurchaseERPInfo model)
+        //{
+
+        //}
+
+        #endregion
+
+        #endregion
+
         #region - 版權採購類_(外部起單) -
 
         #region - 版權採購申請單(外部起單) -

@@ -1976,6 +1976,23 @@
         <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseDecisionsConfig.OPINION_DATE_TIME">
             <summary>建議時間</summary>
         </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseFillinConfig">
+            <summary>
+            內容評估表_外購 填寫 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseFillinConfig.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseFillinConfig.EVALUATECONTENT_PURCHASE_CONFIG">
+            <summary>內容評估表_外購 表單內容 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseFillinConfig.EVALUATECONTENT_PURCHASE_USERS_CONFIG">
+            <summary>內容評估表_外購 評估人員 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseFillinConfig.ASSOCIATED_FORM_CONFIG">
+            <summary>表單關聯</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseOpinionConfig">
             <summary>
             內容評估表_外購 評估意見 設定
@@ -6292,6 +6309,11 @@
         <member name="M:OA_WEB_API.Repository.BPMPro.EvaluateContent_PurchaseRepository.PutEvaluateContent_PurchaseSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseViewModel)">
             <summary>
             內容評估表_外購(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.EvaluateContent_PurchaseRepository.PutEvaluateContent_PurchaseFillinSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseFillinConfig)">
+            <summary>
+            內容評估表_外購(填寫)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.EvaluateContent_PurchaseRepository.PutEvaluateContent_PurchaseOpinionSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseOpinionConfig)">

@@ -384,9 +384,6 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@ARTISTS", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@CONTENT", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@EVALUATE_DATE", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PRINCIPAL_ID", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PRINCIPAL_NAME", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                     };
 
                     //寫入：內容評估表_外購 表單內容parameter                        
@@ -421,59 +418,11 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [Emcee]=@EMCEE, ";
                     strSQL += "     [Artists]=@ARTISTS, ";
                     strSQL += "     [Content]=@CONTENT, ";
-                    strSQL += "     [Note]=@NOTE, ";
-                    strSQL += "     [EvaluateDate]=@EVALUATE_DATE, ";
-                    strSQL += "     [PrincipalID]=@PRINCIPAL_ID, ";
-                    strSQL += "     [PrincipalName]=@PRINCIPAL_NAME ";
+                    strSQL += "     [Note]=@NOTE ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                     dbFun.DoTran(strSQL, parameterInfo);
 
-                }
-
-                #endregion
-
-                #region - 內容評估表_外購 評估人員: EvaluateContent_Purchase_D -
-
-                var parameterUsers = new List<SqlParameter>()
-                {
-                    //內容評估表_外購 評估人員
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@USER_DEPT_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@USER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@USER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value }
-                };
-
-                #region 先刪除舊資料
-
-                strSQL = "";
-                strSQL += "DELETE ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_D] ";
-                strSQL += "WHERE 1=1 ";
-                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
-
-                dbFun.DoTran(strSQL, parameterUsers);
-
-                #endregion
-
-                if (model.EVALUATECONTENT_PURCHASE_USERS_CONFIG != null && model.EVALUATECONTENT_PURCHASE_USERS_CONFIG.Count > 0)
-                {
-                    #region 再新增資料
-
-                    foreach (var item in model.EVALUATECONTENT_PURCHASE_USERS_CONFIG)
-                    {
-                        //寫入：版權採購交片單 評估人員parameter
-                        strJson = jsonFunction.ObjectToJSON(item);
-                        GlobalParameters.Infoparameter(strJson, parameterUsers);
-
-                        strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_D]([RequisitionID],[UserDeptID],[UserID],[UserName]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@USER_DEPT_ID,@User_ID,@USER_NAME) ";
-
-                        dbFun.DoTran(strSQL, parameterUsers);
-                    }
-
-                    #endregion
                 }
 
                 #endregion
@@ -491,18 +440,6 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     commonRepository.PutAttachment(attachmentMain);
                 }
-
-                #endregion
-
-                #region - 內容評估表_外購 表單關聯：AssociatedForm -
-
-                var associatedFormModel = new AssociatedFormModel()
-                {
-                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
-                    ASSOCIATED_FORM_CONFIG = model.ASSOCIATED_FORM_CONFIG
-                };
-
-                commonRepository.PutAssociatedForm(associatedFormModel);
 
                 #endregion
 
@@ -564,6 +501,115 @@ namespace OA_WEB_API.Repository.BPMPro
                 vResult = false;
                 CommLib.Logger.Error("內容評估表_外購(新增/修改/草稿)失敗，原因：" + ex.Message);
 
+            }
+
+            return vResult;
+        }
+
+        /// <summary>
+        /// 內容評估表_外購(填寫)
+        /// </summary>
+        public bool PutEvaluateContent_PurchaseFillinSingle(EvaluateContent_PurchaseFillinConfig model)
+        {
+            bool vResult = false;
+            try
+            {
+                
+
+                #region - 內容評估表_外購 表單內容：EvaluateContent_Purchase_M -
+
+                if (model.EVALUATECONTENT_PURCHASE_CONFIG != null)
+                {
+                    var parameterInfo = new List<SqlParameter>()
+                    {
+                        //內容評估表_外購 填寫
+                        new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },
+                        new SqlParameter("@EVALUATE_DATE", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PRINCIPAL_ID", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PRINCIPAL_NAME", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    };
+
+                    //寫入：內容評估表_外購 表單內容parameter                        
+                    strJson = jsonFunction.ObjectToJSON(model.EVALUATECONTENT_PURCHASE_CONFIG);
+                    GlobalParameters.Infoparameter(strJson, parameterInfo);
+
+                    strSQL = "";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_M] ";
+                    strSQL += "SET [EvaluateDate]=@EVALUATE_DATE, ";
+                    strSQL += "     [PrincipalID]=@PRINCIPAL_ID, ";
+                    strSQL += "     [PrincipalName]=@PRINCIPAL_NAME ";
+                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+                    dbFun.DoTran(strSQL, parameterInfo);
+
+                }
+
+                #endregion
+
+                #region - 內容評估表_外購 評估人員: EvaluateContent_Purchase_D -
+
+                var parameterUsers = new List<SqlParameter>()
+                {
+                    //內容評估表_外購 評估人員
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },
+                    new SqlParameter("@USER_DEPT_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@USER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@USER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value }
+                };
+
+                #region 先刪除舊資料
+
+                strSQL = "";
+                strSQL += "DELETE ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_D] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoTran(strSQL, parameterUsers);
+
+                #endregion
+
+                if (model.EVALUATECONTENT_PURCHASE_USERS_CONFIG != null && model.EVALUATECONTENT_PURCHASE_USERS_CONFIG.Count > 0)
+                {
+                    #region 再新增資料
+
+                    foreach (var item in model.EVALUATECONTENT_PURCHASE_USERS_CONFIG)
+                    {
+                        //寫入：版權採購交片單 評估人員parameter
+                        strJson = jsonFunction.ObjectToJSON(item);
+                        GlobalParameters.Infoparameter(strJson, parameterUsers);
+
+                        strSQL = "";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_D]([RequisitionID],[UserDeptID],[UserID],[UserName]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@USER_DEPT_ID,@User_ID,@USER_NAME) ";
+
+                        dbFun.DoTran(strSQL, parameterUsers);
+                    }
+
+                    #endregion
+                }
+
+                #endregion
+
+                #region - 內容評估表_外購 表單關聯：AssociatedForm -
+
+                var associatedFormModel = new AssociatedFormModel()
+                {
+                    REQUISITION_ID = model.REQUISITION_ID,
+                    ASSOCIATED_FORM_CONFIG = model.ASSOCIATED_FORM_CONFIG
+                };
+
+                commonRepository.PutAssociatedForm(associatedFormModel);
+
+                #endregion
+
+                vResult = true;
+
+            }
+            catch (Exception ex)
+            {
+                vResult = false;
+                CommLib.Logger.Error("內容評估表_外購(評估意見)失敗，原因：" + ex.Message);
             }
 
             return vResult;

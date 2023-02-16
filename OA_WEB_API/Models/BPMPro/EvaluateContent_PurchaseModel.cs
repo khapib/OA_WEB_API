@@ -211,6 +211,29 @@ namespace OA_WEB_API.Models.BPMPro
         public Nullable<DateTime> OPINION_DATE_TIME { get; set; }
     }
 
+    #region - 內容評估表_外購 填寫 -
+
+    /// <summary>
+    /// 內容評估表_外購 填寫 設定
+    /// </summary>
+    public class EvaluateContent_PurchaseFillinConfig 
+    {
+        /// <summary>系統編號</summary>
+        public string REQUISITION_ID { get; set; }
+
+        /// <summary>內容評估表_外購 表單內容 設定</summary>
+        public EvaluateContent_PurchaseConfig EVALUATECONTENT_PURCHASE_CONFIG { get; set; }
+
+        /// <summary>內容評估表_外購 評估人員 設定</summary>
+        public IList<EvaluateContent_PurchaseUsersConfig> EVALUATECONTENT_PURCHASE_USERS_CONFIG { get; set; }
+
+        /// <summary>表單關聯</summary>
+        public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
+
+    }
+
+    #endregion
+
     #region - 內容評估表_外購 評估意見 -
 
     /// <summary>

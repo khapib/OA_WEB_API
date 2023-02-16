@@ -60,7 +60,7 @@ namespace OA_WEB_API.Controllers.BPMPro
         /// <summary>
         /// 內容評估表_外購(評估意見)
         /// </summary>
-        [Route("PutEvaluateContent_PurchaseSingle")]
+        [Route("PutEvaluateContent_PurchaseOpinionSingle")]
         [HttpPost]
         public bool PutEvaluateContent_PurchaseOpinionSingle([FromBody] EvaluateContent_PurchaseOpinionConfig model)
         {

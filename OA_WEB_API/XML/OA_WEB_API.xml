@@ -1963,15 +1963,15 @@
             <summary>評估人員姓名</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseDecisionsConfig.ADVISE_TYPE">
-            <summary>建議類型</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseDecisionsConfig.REASON">
-            <summary>建議原因：
+            <summary>建議類型：
             ADV.建議採購
             N_ADV.不建議採購
             AG.需再次評估
             N_I.沒意見(決策意見無這一項)
             </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseDecisionsConfig.REASON">
+            <summary>建議原因</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseDecisionsConfig.OPINION_DATE_TIME">
             <summary>建議時間</summary>

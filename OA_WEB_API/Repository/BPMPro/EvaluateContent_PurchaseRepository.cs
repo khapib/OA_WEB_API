@@ -143,7 +143,6 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "SELECT ";
             strSQL += "     [Advantage] AS [ADVANTAGE], ";
             strSQL += "     [Defect] AS [DEFECT], ";
-            strSQL += "     [OpinionID] AS [OPINION_ID], ";
             strSQL += "     [UserID] AS [USER_ID], ";
             strSQL += "     [UserName] AS [USER_NAME], ";
             strSQL += "     [AdviseType] AS [ADVISE_TYPE], ";
@@ -160,7 +159,6 @@ namespace OA_WEB_API.Repository.BPMPro
 
             strSQL = "";
             strSQL += "SELECT ";
-            strSQL += "     [OpinionID] AS [OPINION_ID], ";
             strSQL += "     [UserID] AS [USER_ID], ";
             strSQL += "     [UserName] AS [USER_NAME], ";
             strSQL += "     [AdviseType] AS [ADVISE_TYPE], ";
@@ -636,7 +634,6 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     //內容評估表_外購 評估意見
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },
-                    new SqlParameter("@OPINION_ID", SqlDbType.UniqueIdentifier) {  Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@USER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@USER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ADVANTAGE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -654,26 +651,17 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     #region 先刪除舊資料
 
-                    if (model.OPINION_ID != null)
-                    {
-                        strSQL = "";
-                        strSQL += "DELETE ";
-                        strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_" + model.OPINION_TYPE + "] ";
-                        strSQL += "WHERE 1=1 ";
-                        strSQL += "          AND [OpinionID]=@OPINION_ID ";
-                        strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+                    strSQL = "";
+                    strSQL += "DELETE ";
+                    strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_" + model.OPINION_TYPE + "] ";
+                    strSQL += "WHERE 1=1 ";
+                    strSQL += "          AND [UserID]=@USER_ID ";
+                    strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
 
-                        dbFun.DoTran(strSQL, parameterOpinion);
-                    }
+                    dbFun.DoTran(strSQL, parameterOpinion);
 
                     #endregion
-
-                    #region - 給予新的意見編號 -
-
-                    parameterOpinion.Where(P => P.ParameterName == "@OPINION_ID").FirstOrDefault().Value = Guid.NewGuid();
-
-                    #endregion
-
+                      
                     #region - 添加意見資料 -
 
                     if (model.OPINION_TYPE == "EVA")
@@ -683,8 +671,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     }
 
                     strSQL = "";
-                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_" + model.OPINION_TYPE + "]([RequisitionID],[OpinionID],[UserID],[UserName]," + insertOpinionKey + "[AdviseType],[Reason],[OpinionDateTime]) ";
-                    strSQL += "VALUES(@REQUISITION_ID,@OPINION_ID,@USER_ID,@USER_NAME," + insertOpinionValue + "@ADVISE_TYPE,@REASON,GETDATE()) ";
+                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_" + model.OPINION_TYPE + "]([RequisitionID],[UserID],[UserName]," + insertOpinionKey + "[AdviseType],[Reason],[OpinionDateTime]) ";
+                    strSQL += "VALUES(@REQUISITION_ID,@USER_ID,@USER_NAME," + insertOpinionValue + "@ADVISE_TYPE,@REASON,GETDATE()) ";
 
                     dbFun.DoTran(strSQL, parameterOpinion);
 

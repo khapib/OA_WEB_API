@@ -58,6 +58,16 @@ namespace OA_WEB_API.Controllers.BPMPro
         }
 
         /// <summary>
+        /// 內容評估表_外購(填寫)
+        /// </summary>
+        [Route("PutEvaluateContent_PurchaseFillinSingle")]
+        [HttpPost]
+        public bool PutEvaluateContent_PurchaseFillinSingle([FromBody] EvaluateContent_PurchaseFillinConfig model)
+        {
+            return evaluateContent_PurchaseRepository.PutEvaluateContent_PurchaseFillinSingle(model);
+        }
+
+        /// <summary>
         /// 內容評估表_外購(評估意見)
         /// </summary>
         [Route("PutEvaluateContent_PurchaseOpinionSingle")]

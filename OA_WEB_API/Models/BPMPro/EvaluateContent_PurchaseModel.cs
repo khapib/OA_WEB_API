@@ -187,9 +187,6 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class EvaluateContent_PurchaseDecisionsConfig
     {
-        /// <summary>意見編號[Guid]</summary>
-        public Nullable<Guid> OPINION_ID { get; set; }
-
         /// <summary>評估人員編號</summary>
         public string USER_ID { get; set; }
 

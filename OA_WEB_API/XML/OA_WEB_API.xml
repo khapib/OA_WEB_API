@@ -486,6 +486,11 @@
             內容評估表_外購(新增/修改/草稿)
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.EvaluateContent_PurchaseController.PutEvaluateContent_PurchaseFillinSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseFillinConfig)">
+            <summary>
+            內容評估表_外購(填寫)
+            </summary>
+        </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.EvaluateContent_PurchaseController.PutEvaluateContent_PurchaseOpinionSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseOpinionConfig)">
             <summary>
             內容評估表_外購(評估意見)
@@ -1952,9 +1957,6 @@
             <summary>
             內容評估表_外購 決策意見彙整 設定
             </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseDecisionsConfig.OPINION_ID">
-            <summary>意見編號[Guid]</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseDecisionsConfig.USER_ID">
             <summary>評估人員編號</summary>

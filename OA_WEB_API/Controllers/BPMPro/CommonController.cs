@@ -192,6 +192,21 @@ namespace OA_WEB_API.Controllers
 
         #endregion
 
+        #region - BPM表單機能 -
+
+        /// <summary>
+        /// BPM表單機能
+        /// </summary>
+        [Route("api/PostBPMFormFunction")]
+        [HttpPost]
+        public bool PostBPMFormFunction([FromBody] BPMFormFunction model)
+        {
+            return commonRepository.PostBPMFormFunction(model);
+        }
+
+
+        #endregion
+
         #endregion
     }
 }

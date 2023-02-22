@@ -138,6 +138,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [ActualPayAmount] AS [ACTUAL_PAY_AMOUNT], ";
             strSQL += "     [FinancAuditID_1] AS [FINANC_AUDIT_ID_1], ";
             strSQL += "     [FinancAuditName_1] AS [FINANC_AUDIT_NAME_1], ";
+            strSQL += "     [FinancAuditID_2] AS [FINANC_AUDIT_ID_2], ";
+            strSQL += "     [FinancAuditName_2] AS [FINANC_AUDIT_NAME_2], ";
             strSQL += "     [TX_Category] AS [TX_CATEGORY], ";
             strSQL += "     [BFCY_AccountNo] AS [BFCY_ACCOUNT_NO], ";
             strSQL += "     [BFCY_AccountName] AS [BFCY_ACCOUNT_NAME], ";
@@ -568,6 +570,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@ACTUAL_PAY_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@FINANC_AUDIT_ID_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@FINANC_AUDIT_NAME_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@FINANC_AUDIT_ID_2", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@FINANC_AUDIT_NAME_2", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@BFCY_BANK_BRANCH_NO", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@BFCY_BANK_BRANCH_NAME", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@BFCY_BANK_SWIFT", SqlDbType.NVarChar) { Size = 300, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -658,6 +662,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [ActualPayAmount]=@ACTUAL_PAY_AMOUNT, ";
                     strSQL += "     [FinancAuditID_1]=@FINANC_AUDIT_ID_1, ";
                     strSQL += "     [FinancAuditName_1]=@FINANC_AUDIT_NAME_1, ";
+                    strSQL += "     [FinancAuditID_2]=@FINANC_AUDIT_ID_2, ";
+                    strSQL += "     [FinancAuditName_2]=@FINANC_AUDIT_NAME_2, ";
                     strSQL += "     [BFCY_BanKBranchNo]=@BFCY_BANK_BRANCH_NO, ";
                     strSQL += "     [BFCY_BanKBranchName]=@BFCY_BANK_BRANCH_NAME, ";
                     strSQL += "     [BFCY_BankSWIFT]=@BFCY_BANK_SWIFT, ";
@@ -937,6 +943,18 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     formRepository.PutFormAutoStart(autoStart);
                 }
+
+                #endregion
+
+                #region - 表單機能啟用：BPMFormFunction -
+
+                var BPM_FormFunction = new BPMFormFunction()
+                {
+                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    IDENTIFY = IDENTIFY,
+                    DRAFT_FLAG = 0
+                };
+                commonRepository.PostBPMFormFunction(BPM_FormFunction);
 
                 #endregion
 

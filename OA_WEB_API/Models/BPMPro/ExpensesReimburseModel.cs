@@ -31,6 +31,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>費用申請單 費用明細 設定</summary>
         public IList<ExpensesReimburseDetailsConfig> EXPENSES_REIMBURSE_DTLS_CONFIG { get; set; }
 
+        /// <summary>費用申請單 使用預算 設定</summary>
+        public IList<ExpensesReimburseBudgetsConfig> EXPENSES_REIMBURSE_BUDGS_CONFIG { get; set; }
+
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
 
@@ -151,4 +154,35 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>所屬專案年分</summary>
         public string PROJECT_USE_YEAR { get; set; }
     }
+
+    /// <summary>
+    /// 費用申請單 使用預算 設定
+    /// </summary>
+    public class ExpensesReimburseBudgetsConfig
+    {
+        /// <summary>行數編號</summary>
+        public int BUDG_ROW_NO { get; set; }
+
+        /// <summary>預算 ERP唯一碼</summary>        
+        public string BUDG_FORM_NO { get; set; }
+
+        /// <summary>預算編列年度</summary>
+        public string BUDG_CREATE_YEAR { get; set; }
+
+        /// <summary>預算名稱</summary>
+        public string BUDG_NAME { get; set; }
+
+        /// <summary>所屬部門</summary>
+        public string BUDG_OWNER_DEPT { get; set; }
+
+        /// <summary>預算總額</summary>
+        public int BUDG_TOTAL { get; set; }
+
+        /// <summary>可用預算金額</summary>
+        public int BUDG_AVAILABLE_BUDGET_AMOUNT { get; set; }
+
+        /// <summary>使用預算金額</summary>
+        public int BUDG_USE_BUDGET_AMOUNT { get; set; }
+    }
+
 }

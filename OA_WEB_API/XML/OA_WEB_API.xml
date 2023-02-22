@@ -911,6 +911,11 @@
             關聯表單(知會)
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Controllers.CommonController.PostBPMFormFunction(OA_WEB_API.Models.BPMPro.BPMFormFunction)">
+            <summary>
+            BPM表單機能
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Controllers.TestController">
             <summary>
             會簽管理系統 - 測試申請單
@@ -2076,6 +2081,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_DTLS_CONFIG">
             <summary>費用申請單 費用明細 設定</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_BUDGS_CONFIG">
+            <summary>費用申請單 使用預算 設定</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.ASSOCIATED_FORM_CONFIG">
             <summary>表單關聯</summary>
         </member>
@@ -2191,6 +2199,35 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.PROJECT_USE_YEAR">
             <summary>所屬專案年分</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig">
+            <summary>
+            費用申請單 使用預算 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.BUDG_ROW_NO">
+            <summary>行數編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.BUDG_FORM_NO">
+            <summary>預算 ERP唯一碼</summary>        
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.BUDG_CREATE_YEAR">
+            <summary>預算編列年度</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.BUDG_NAME">
+            <summary>預算名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.BUDG_OWNER_DEPT">
+            <summary>所屬部門</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.BUDG_TOTAL">
+            <summary>預算總額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.BUDG_AVAILABLE_BUDGET_AMOUNT">
+            <summary>可用預算金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.BUDG_USE_BUDGET_AMOUNT">
+            <summary>使用預算金額</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GeneralAcceptanceQueryModel">
             <summary>
@@ -2503,6 +2540,18 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.ACTUAL_PAY_AMOUNT">
             <summary>實際支付金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.FINANC_AUDIT_ID_1">
+            <summary>財務審核人員編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.FINANC_AUDIT_NAME_1">
+            <summary>財務審核人員姓名</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.FINANC_AUDIT_ID_2">
+            <summary>財務覆核人員編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.FINANC_AUDIT_NAME_2">
+            <summary>財務覆核人員姓名</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GeneralInvoiceAcceptancesConfig">
             <summary>
@@ -3654,6 +3703,12 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.FINANC_AUDIT_NAME_1">
             <summary>財務審核人員姓名</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.FINANC_AUDIT_ID_2">
+            <summary>財務覆核人員編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.FINANC_AUDIT_NAME_2">
+            <summary>財務覆核人員姓名</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig">
             <summary>
@@ -5368,6 +5423,23 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AssociatedFormNotifyModel.ROLE_ID">
             <summary>被知會角色</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.BPMFormFunction">
+            <summary>
+            BPM表單機能
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BPMFormFunction.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BPMFormFunction.IDENTIFY">
+            <summary>表單代號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BPMFormFunction.DRAFT_FLAG">
+            <summary>是否為草稿：
+            0.啟用
+            1.草稿
+            </summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.FormDistinguishResponse">
             <summary>
@@ -7160,6 +7232,11 @@
             關聯表單(知會)
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostBPMFormFunction(OA_WEB_API.Models.BPMPro.BPMFormFunction)">
+            <summary>
+            BPM表單機能
+            </summary>
+        </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostDataHaveForm(OA_WEB_API.Models.BPMPro.FormQueryModel)">
             <summary>
             (擴充方法)_確認BPM表單是否存在
@@ -7288,6 +7365,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.RollCardRepository.strSQL">
             <summary>
             T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.RollCardRepository.IDENTIFY">
+            <summary>
+            表單代號
             </summary>
         </member>
         <member name="T:OA_WEB_API.Repository.UserRepository">

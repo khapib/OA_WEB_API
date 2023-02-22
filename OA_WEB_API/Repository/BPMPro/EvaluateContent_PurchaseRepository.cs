@@ -492,6 +492,18 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
+                #region - 表單機能啟用：BPMFormFunction -
+
+                var BPM_FormFunction = new BPMFormFunction()
+                {
+                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    IDENTIFY = IDENTIFY,
+                    DRAFT_FLAG = 0
+                };
+                commonRepository.PostBPMFormFunction(BPM_FormFunction);
+
+                #endregion
+
                 vResult = true;
             }
             catch (Exception ex)
@@ -512,8 +524,6 @@ namespace OA_WEB_API.Repository.BPMPro
             bool vResult = false;
             try
             {
-                
-
                 #region - 內容評估表_外購 表單內容：EvaluateContent_Purchase_M -
 
                 if (model.EVALUATECONTENT_PURCHASE_CONFIG != null)
@@ -640,7 +650,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@DEFECT", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ADVISE_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@REASON", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    //new SqlParameter("@OPINION_DATE_TIME", SqlDbType.DateTime) { Value = (object)DateTime.Now ?? DBNull.Value },
                 };
 
                 if(!String.IsNullOrEmpty(model.REQUISITION_ID) || !String.IsNullOrWhiteSpace(model.REQUISITION_ID))

@@ -505,6 +505,28 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
+    #region - BPM表單機能 -
+
+    /// <summary>
+    /// BPM表單機能
+    /// </summary>
+    public class BPMFormFunction
+    {
+        /// <summary>系統編號</summary>
+        public string REQUISITION_ID { get; set; }
+
+        /// <summary>表單代號</summary>
+        public string IDENTIFY { get; set; }
+
+        /// <summary>是否為草稿：
+        /// 0.啟用
+        /// 1.草稿
+        /// </summary>
+        public int DRAFT_FLAG { get; set; }
+    }
+
+    #endregion
+
 
 
     #region - (擴充方法)_共同表單區分 -

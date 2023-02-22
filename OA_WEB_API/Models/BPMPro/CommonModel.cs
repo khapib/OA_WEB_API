@@ -20,24 +20,105 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    #region (BPM API共用)_ERP共用抬頭
+    #region - 共用Model -
 
-        /// <summary>
-        /// (BPM API共用)_ERP共用抬頭
-        /// </summary>
-        public class HeaderTitle
-        {
-            /// <summary>ERP 表單唯一碼</summary>
-            public string FORM_NO { get; set; }
+    #region (BPM API共用)_ERP起單共用抬頭
 
-            /// <summary>主旨</summary>
-            public string FM7_SUBJECT { get; set; }
+    /// <summary>
+    /// (BPM API共用)_ERP起單共用抬頭
+    /// </summary>
+    public class ImplementHeader : HeaderTitle
+    {
+        /// <summary>ERP 表單唯一碼</summary>
+        public string FORM_NO { get; set; }
+    }
 
-            /// <summary>BPM 表單單號</summary>
-            public string BPM_FORM_NO { get; set; }
-        }
+    /// <summary>
+    /// (BPM API共用)_BPM表單抬頭
+    /// </summary>
+    public class HeaderTitle
+    {
+        /// <summary>主旨</summary>
+        public string FM7_SUBJECT { get; set; }
+
+        /// <summary>BPM 表單單號</summary>
+        public string BPM_FORM_NO { get; set; }
+    }
 
     #endregion
+
+    #region - 銀行 -
+
+    /// <summary>
+    /// 銀行(國內/國外)_台幣/外幣/開票
+    /// </summary>
+    public class COMM_Bank : DOM_TWD_Bank
+    {
+        /// <summary>受款分行代碼</summary>
+        public string BFCY_BANK_BRANCH_NO { get; set; }
+
+        /// <summary>受款分行名稱</summary>
+        public string BFCY_BANK_BRANCH_NAME { get; set; }
+
+        /// <summary>SWIFT</summary>
+        public string BFCY_BANK_SWIFT { get; set; }
+
+        /// <summary>受款銀行地址</summary>
+        public string BFCY_BANK_ADDRESS { get; set; }
+
+        /// <summary>受款銀行國家</summary>
+        public string BFCY_BANK_COUNTRY_AND_CITY { get; set; }
+
+        /// <summary>中間銀行</summary>
+        public string BFCY_BANK_IBAN { get; set; }
+    }
+
+    /// <summary>
+    /// 銀行(國內)_台幣
+    /// </summary>
+    public class DOM_TWD_Bank
+    {
+        /// <summary>
+        /// 匯款類型：
+        /// DT.國內電匯(台幣)、
+        /// DF.國內電匯(外幣)、
+        /// FF.國外電匯、
+        /// DD.票匯、
+        /// CS.現金、
+        /// OR.其他
+        /// </summary>
+        public string TX_CATEGORY { get; set; }
+
+        /// <summary>受款帳號</summary>
+        public string BFCY_ACCOUNT_NO { get; set; }
+
+        /// <summary>受款帳號名稱/票據抬頭</summary>
+        public string BFCY_ACCOUNT_NAME { get; set; }
+
+        /// <summary>受款銀行代碼</summary>
+        public string BFCY_BANK_NO { get; set; }
+
+        /// <summary>受款銀行名稱</summary>
+        public string BFCY_BANK_NAME { get; set; }
+
+        /// <summary>幣別</summary>
+        public string CURRENCY_NAME { get; set; }
+
+        /// <summary>帳款聯絡人</summary>
+        public string BFCY_NAME { get; set; }
+
+        /// <summary>聯絡電話</summary>
+        public string BFCY_TEL { get; set; }
+
+        /// <summary>聯絡Email</summary>
+        public string BFCY_EMAIL { get; set; }
+
+    }
+
+    #endregion
+
+    #endregion
+
 
 
 
@@ -105,7 +186,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 表單資料夾分類DataViewModel
     /// </summary>
-    public class FormMainData: FormTree
+    public class FormMainData : FormTree
     {
         /// <summary>表單資料夾名稱</summary>
         public string FOLDER_NAME { get; set; }
@@ -156,13 +237,13 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>是否開啟子母表單篩選功能</summary>
         public bool PARENT { get; set; }
-        
+
         /// <summary>審核狀態</summary>
         public int? STATUS { get; set; }
 
         /// <summary>表單代號</summary>
         public string IDENTIFY { get; set; }
-        
+
         /// <summary>
         /// 申請人-可查：
         ///     姓名、
@@ -254,12 +335,12 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    #region - 表單關聯 -
+    #region - 關聯表單 -
 
-    #region - 表單關聯(搜詢) -
+    #region - 關聯表單(搜詢) -
 
     /// <summary>
-    /// 表單關聯(搜詢條件)
+    /// 關聯表單(搜詢條件)
     /// </summary>
     public class AssociatedFormQuery
     {
@@ -295,14 +376,14 @@ namespace OA_WEB_API.Models.BPMPro
         public string START_DATE { get; set; }
 
         /// <summary>結束日期</summary>
-        public string END_DATE { get; set; }        
+        public string END_DATE { get; set; }
     }
 
     /// <summary>
-    /// 表單關聯(搜詢)DataViewModel
+    /// 關聯表單(搜詢)DataViewModel
     /// </summary>
     public class AssociatedFormDataViewModel
-   {
+    {
         /// <summary>關聯表單:系統編號</summary>
         public string ASSOCIATED_REQUISITION_ID { get; set; }
 
@@ -338,7 +419,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 表單關聯(搜詢)(完整內容)
+    /// 關聯表單(搜詢)(完整內容)
     /// </summary>
     public class AssociatedFormViewModel
     {
@@ -348,27 +429,27 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>總頁數</summary>
         public int TOTAL_PAGES { get; set; }
 
-        /// <summary>表單關聯</summary>
+        /// <summary>關聯表單</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
     }
 
     #endregion
-    
+
     /// <summary>
-    /// 表單關聯內容
+    /// 關聯表單內容
     /// </summary>
     public class AssociatedFormModel
     {
         /// <summary>主要表單:系統編號</summary>
         public string REQUISITION_ID { get; set; }
 
-        /// <summary>表單關聯</summary>
+        /// <summary>關聯表單</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
 
     }
 
     /// <summary>
-    /// 表單關聯
+    /// 關聯表單
     /// </summary>
     public class AssociatedFormConfig
     {
@@ -383,7 +464,7 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>BPM 表單編號</summary>
         public string BPM_FORM_NO { get; set; }
-        
+
         /// <summary>主旨</summary>
         public string FM7_SUBJECT { get; set; }
 
@@ -403,9 +484,50 @@ namespace OA_WEB_API.Models.BPMPro
         public string STATE { get; set; }
     }
 
+    #region - 關聯表單(知會) -
+
+    /// <summary>
+    /// 關聯表單(知會)
+    /// </summary>
+    public class AssociatedFormNotifyModel
+    {
+        /// <summary>主要表單:系統編號</summary>
+        public string REQUISITION_ID { get; set; }
+
+        /// <summary>被知會人</summary>
+        public IList<String> NOTIFY_BY { get; set; }
+
+        /// <summary>被知會角色</summary>
+        public IList<String> ROLE_ID { get; set; }
+    }
+
     #endregion
 
-    
+    #endregion
+
+    #region - BPM表單機能 -
+
+    /// <summary>
+    /// BPM表單機能
+    /// </summary>
+    public class BPMFormFunction
+    {
+        /// <summary>系統編號</summary>
+        public string REQUISITION_ID { get; set; }
+
+        /// <summary>表單代號</summary>
+        public string IDENTIFY { get; set; }
+
+        /// <summary>是否為草稿：
+        /// 0.啟用
+        /// 1.草稿
+        /// </summary>
+        public int DRAFT_FLAG { get; set; }
+    }
+
+    #endregion
+
+
 
     #region - (擴充方法)_共同表單區分 -
 
@@ -426,5 +548,5 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    
+
 }

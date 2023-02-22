@@ -54,6 +54,9 @@
     <Reference Include="Docker.DotNet, Version=3.125.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Docker.DotNet.3.125.5\lib\netstandard2.0\Docker.DotNet.dll</HintPath>
     </Reference>
+    <Reference Include="EastAsiaNumericFormatter, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e1e67937c016e5b2, processorArchitecture=MSIL">
+      <HintPath>..\packages\EastAsiaNumericFormatter.1.0.0\lib\net40\EastAsiaNumericFormatter.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.12.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.12\lib\net45\log4net.dll</HintPath>
     </Reference>
@@ -173,12 +176,18 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BPMPro\ActiveController.cs" />
+    <Compile Include="Controllers\BPMPro\EvaluateContent_PurchaseController.cs" />
     <Compile Include="Controllers\BPMPro\EvaluateDemandController.cs" />
+    <Compile Include="Controllers\BPMPro\ExpensesReimburseController.cs" />
     <Compile Include="Controllers\BPMPro\GeneralAcceptanceController.cs" />
     <Compile Include="Controllers\BPMPro\GeneralInvoiceController.cs" />
     <Compile Include="Controllers\BPMPro\GeneralOrderChangeController.cs" />
     <Compile Include="Controllers\BPMPro\GetExternalController.cs" />
     <Compile Include="Controllers\BPMPro\GPI_CountersignController.cs" />
+    <Compile Include="Controllers\BPMPro\MediaAcceptanceController.cs" />
+    <Compile Include="Controllers\BPMPro\MediaInvoiceController.cs" />
+    <Compile Include="Controllers\BPMPro\MediaOrderChangeController.cs" />
+    <Compile Include="Controllers\BPMPro\MediaOrderController.cs" />
     <Compile Include="Controllers\BPMPro\NotifyController.cs" />
     <Compile Include="Controllers\BPMPro\CommonController.cs" />
     <Compile Include="Controllers\BPMPro\ProjectReviewController.cs" />
@@ -212,13 +221,19 @@
       <DependentUpon>Index.aspx</DependentUpon>
     </Compile>
     <Compile Include="Models\BPMPro\ActiveModel.cs" />
+    <Compile Include="Models\BPMPro\EvaluateContent_PurchaseModel.cs" />
     <Compile Include="Models\BPMPro\EvaluateDemandModel.cs" />
+    <Compile Include="Models\BPMPro\ExpensesReimburseModel.cs" />
     <Compile Include="Models\BPMPro\GeneralAcceptanceModel.cs" />
     <Compile Include="Models\BPMPro\GeneralInvoiceModel.cs" />
     <Compile Include="Models\BPMPro\GeneralOrderChangeModel.cs" />
     <Compile Include="Models\BPMPro\GeneralOrderModel.cs" />
     <Compile Include="Models\BPMPro\GetExternalModel.cs" />
     <Compile Include="Models\BPMPro\GPI_CountersignModel.cs" />
+    <Compile Include="Models\BPMPro\MediaAcceptanceModel.cs" />
+    <Compile Include="Models\BPMPro\MediaInvoiceModel.cs" />
+    <Compile Include="Models\BPMPro\MediaOrderChangeModel.cs" />
+    <Compile Include="Models\BPMPro\MediaOrderModel.cs" />
     <Compile Include="Models\BPMPro\NotifyModel.cs" />
     <Compile Include="Models\BPMPro\ProjectReviewModel.cs" />
     <Compile Include="Models\BPMPro\SupplierReviewModel.cs" />
@@ -233,13 +248,19 @@
     <Compile Include="Models\TokenModel.cs" />
     <Compile Include="Models\BPMPro\UserModel.cs" />
     <Compile Include="Repository\BPMPro\ActiveRepository.cs" />
+    <Compile Include="Repository\BPMPro\EvaluateContent_PurchaseRepository.cs" />
     <Compile Include="Repository\BPMPro\EvaluateDemandRepository.cs" />
+    <Compile Include="Repository\BPMPro\ExpensesReimburseRepository.cs" />
     <Compile Include="Repository\BPMPro\GeneralAcceptanceRepository.cs" />
     <Compile Include="Repository\BPMPro\GeneralInvoiceRepository.cs" />
     <Compile Include="Repository\BPMPro\GeneralOrderChangeRepository.cs" />
     <Compile Include="Repository\BPMPro\GeneralOrderRepository.cs" />
     <Compile Include="Repository\BPMPro\GetExternalRepository.cs" />
     <Compile Include="Repository\BPMPro\GPI_CountersignRepository.cs" />
+    <Compile Include="Repository\BPMPro\MediaAcceptanceRepository.cs" />
+    <Compile Include="Repository\BPMPro\MediaInvoiceRepository.cs" />
+    <Compile Include="Repository\BPMPro\MediaOrderChangeRepository.cs" />
+    <Compile Include="Repository\BPMPro\MediaOrderRepository.cs" />
     <Compile Include="Repository\BPMPro\NotifyRepository.cs" />
     <Compile Include="Repository\BPMPro\ProjectReviewRepository.cs" />
     <Compile Include="Repository\BPMPro\SupplierReviewRepository.cs" />

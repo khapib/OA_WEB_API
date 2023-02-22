@@ -4,68 +4,71 @@ using System.Linq;
 using System.Web;
 
 /// <summary>
-/// 會簽管理系統 - 行政採購點驗收單
+/// 會簽管理系統 - 版權採購交片單
 /// </summary>
 namespace OA_WEB_API.Models.BPMPro
 {
     /// <summary>
-    /// 行政採購點驗收單(查詢條件)
+    /// 版權採購交片單(查詢條件)
     /// </summary>
-    public class GeneralAcceptanceQueryModel
+    public class MediaAcceptanceQueryModel
     {
         /// <summary>系統編號</summary>
         public string REQUISITION_ID { get; set; }
     }
 
     /// <summary>
-    /// 行政採購點驗收單
+    /// 版權採購交片單
     /// </summary>
-    public class GeneralAcceptanceViewModel
+    public class MediaAcceptanceViewModel
     {
         /// <summary>申請人資訊</summary>
         public ApplicantInfo APPLICANT_INFO { get; set; }
 
-        /// <summary>行政採購點驗收單 表頭資訊</summary>
-        public GeneralAcceptanceTitle GENERAL_ACCEPTANCE_TITLE { get; set; }
+        /// <summary>版權採購交片單 表頭資訊</summary>
+        public MediaAcceptanceTitle MEDIA_ACCEPTANCE_TITLE { get; set; }
 
-        /// <summary>行政採購點驗收單 表單內容 設定</summary>
-        public GeneralAcceptanceConfig GENERAL_ACCEPTANCE_CONFIG { get; set; }
+        /// <summary>版權採購交片單 表單內容 設定</summary>
+        public MediaAcceptanceConfig MEDIA_ACCEPTANCE_CONFIG { get; set; }
 
-        /// <summary>行政採購點驗收單 驗收明細 設定</summary>
-        public IList<GeneralAcceptanceDetailsConfig> GENERAL_ACCEPTANCE_DETAILS_CONFIG { get; set; }
+        /// <summary>版權採購交片單 驗收明細 設定</summary>
+        public IList<MediaAcceptanceDetailsConfig> MEDIA_ACCEPTANCE_DTLS_CONFIG { get; set; }
+
+        /// <summary>版權採購申請單 授權權利 設定</summary>
+        public IList<MediaAcceptanceAuthorizesConfig> MEDIA_ACCEPTANCE_AUTHS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
     }
 
     /// <summary>
-    /// 行政採購點驗收單 表頭資訊
+    /// 版權採購交片單 表頭資訊
     /// </summary>
-    public class GeneralAcceptanceTitle : ImplementHeader
+    public class MediaAcceptanceTitle : ImplementHeader
     {
         /// <summary>ERP 工作流程標題名稱</summary>
         public string FLOW_NAME { get; set; }
     }
 
     /// <summary>
-    /// 行政採購點驗收單 表單內容 設定
+    /// 版權採購交片單 表單內容 設定
     /// </summary>
-    public class GeneralAcceptanceConfig
+    public class MediaAcceptanceConfig
     {
         /// <summary>行政採購 系統編號</summary>
-        public string GENERAL_ORDER_REQUISITION_ID { get; set; }
+        public string MEDIA_ORDER_REQUISITION_ID { get; set; }
 
         /// <summary>行政採購 主旨</summary>
-        public string GENERAL_ORDER_SUBJECT { get; set; }
+        public string MEDIA_ORDER_SUBJECT { get; set; }
 
         /// <summary>行政採購 BPM 表單單號</summary>
-        public string GENERAL_ORDER_BPM_FORM_NO { get; set; }
+        public string MEDIA_ORDER_BPM_FORM_NO { get; set; }
 
         /// <summary>行政採購 ERP 表單唯一碼</summary>
-        public string GENERAL_ORDER_ERP_FORM_NO { get; set; }
+        public string MEDIA_ORDER_ERP_FORM_NO { get; set; }
 
         /// <summary>行政採購 路徑</summary>
-        public string GENERAL_ORDER_PATH { get; set; }
+        public string MEDIA_ORDER_PATH { get; set; }
 
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
@@ -87,12 +90,15 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>負責人電話</summary>
         public string OWNER_TEL { get; set; }
+
+        /// <summary>是否通知片庫[標記]</summary>
+        public string IS_FILM_STORAGE { get; set; }
     }
 
     /// <summary>
-    /// 行政採購點驗收單 驗收明細 設定
+    /// 版權採購交片單 驗收明細 設定
     /// </summary>
-    public class GeneralAcceptanceDetailsConfig
+    public class MediaAcceptanceDetailsConfig
     {
         /// <summary>商品代碼</summary>
         public string DTL_SUP_PROD_A_NO { get; set; }
@@ -103,20 +109,32 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>商品名稱</summary>
         public string DTL_ITEM_NAME { get; set; }
 
-        /// <summary>型號</summary>
-        public string DTL_MODEL { get; set; }
+        /// <summary>影帶規格</summary>
+        public string DTL_MEDIA_SPEC { get; set; }
 
-        /// <summary>規格</summary>
-        public string DTL_SPECIFICATIONS { get; set; }
+        /// <summary>影片類型</summary>
+        public string DTL_MEDIA_TYPE { get; set; }
 
-        /// <summary>驗收量</summary>
-        public int DTL_ACPT_QUANTITY { get; set; }
+        /// <summary>開始集數</summary>
+        public int DTL_START_EPISODE { get; set; }
 
-        /// <summary>總採購量</summary>
-        public int DTL_QUANTITY { get; set; }
+        /// <summary>結束集數</summary>
+        public int DTL_END_EPISODE { get; set; }
 
-        /// <summary>單位</summary>
-        public string DTL_UNIT { get; set; }
+        /// <summary>總採購集數</summary>
+        public int DTL_ORDER_EPISODE { get; set; }
+
+        /// <summary>驗收集數</summary>
+        public int DTL_ACPT_EPISODE { get; set; }
+
+        /// <summary>拆分集數</summary>
+        public int DTL_DISMANTLE_EPISODE { get; set; }
+
+        /// <summary>每集長度</summary>
+        public int DTL_EPISODE_TIME { get; set; }
+
+        /// <summary>母帶受領日期</summary>
+        public Nullable<DateTime> DTL_GET_MASTERING_DATE { get; set; }
 
         /// <summary>驗收負責人主要部門</summary>
         public string DTL_OWNER_DEPT_MAIN_ID { get; set; }
@@ -143,24 +161,32 @@ namespace OA_WEB_API.Models.BPMPro
         public string IS_ORIGINAL { get; set; }
 
         /// <summary>原始列編碼</summary>
-        public int? ORIGIN_NUM { get; set; }
+        public int ORIGIN_NUM { get; set; }
     }
 
-    #region - 行政採購點驗收單 驗收簽核 -
-
     /// <summary>
-    /// 行政採購點驗收單 驗收簽核
+    /// 版權採購申請單 授權權利 設定
     /// </summary>
-    public class GeneralAcceptanceApproveViewModel : GeneralAcceptanceQueryModel
+    public class MediaAcceptanceAuthorizesConfig : MediaOrderAuthorizesConfig
     {
-        /// <summary>行政採購點驗收單 驗收簽核 設定</summary>
-        public IList<GeneralAcceptanceApprovesConfig> GENERAL_ACCEPTANCE_APPROVES_CONFIG { get; set; }
+
+    }
+
+    #region - 版權採購交片單 驗收簽核 -
+
+    /// <summary>
+    /// 版權採購交片單 驗收簽核
+    /// </summary>
+    public class MediaAcceptanceApproveViewModel : MediaAcceptanceQueryModel
+    {
+        /// <summary>版權採購交片單 驗收簽核 設定</summary>
+        public IList<MediaAcceptanceApprovesConfig> MEDIA_ACCEPTANCE_APPROVES_CONFIG { get; set; }
     }
 
     /// <summary>
-    /// 行政採購點驗收單 驗收簽核 設定
+    /// 版權採購交片單 驗收簽核 設定
     /// </summary>
-    public class GeneralAcceptanceApprovesConfig
+    public class MediaAcceptanceApprovesConfig
     {
         /// <summary>行數編號</summary>
         public int DTL_ROW_NO { get; set; }
@@ -173,5 +199,4 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     #endregion
-
 }

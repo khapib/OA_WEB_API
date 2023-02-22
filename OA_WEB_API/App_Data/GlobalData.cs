@@ -77,12 +77,11 @@ public class GlobalParameters
                     break;
 
                 case sqlConnBPMProDev:
-                    //response = "http://oa-web-dev01.gtv.com.tw:82/";
                     response = "http://192.168.1.219:82/";
                     break;
 
                 case sqlConnBPMProTest:
-                    response = "http://http://oa-web-test02.gtv.com.tw:81/";
+                    response = "http://oa-web-test02.gtv.com.tw:81/";
                     break;
 
                 case sqlConnBPMPro:
@@ -107,8 +106,41 @@ public class GlobalParameters
     public static bool IsTelegram = true;
 
     /// <summary>ERP API路徑</summary>
-    public static string ERPSystemAPI = @"http://192.168.1.49:15500/ERP_API/";
+    public static string ERPSystemAPI(string connName)
+    {
+        var response = String.Empty;
+        try
+        {
+            switch (connName)
+            {
+                case sqlConnOADB:
+                    //OADB
+                    break;
 
+                case sqlConnBPMProDevHo:
+                    break;
+
+                case sqlConnBPMProDev:
+                    response = "http://192.168.1.49:15500/ERP_API/";
+                    break;
+
+                case sqlConnBPMProTest:
+                    response = "https://fintech-test-api.gtv.com.tw/";
+                    break;
+
+                case sqlConnBPMPro:
+                    response = "https://fintech-api.gtv.com.tw/";
+                    break;
+
+            }
+        }
+        catch (Exception ex)
+        {
+            CommLib.Logger.Error("ERP網址路徑比對失敗，原因：" + ex.Message);
+            throw;
+        }
+        return response;
+    }
     #endregion
 
     #region - 郵件伺服器 -
@@ -352,7 +384,7 @@ public class GlobalParameters
         catch (Exception ex)
         {
             CommLib.Logger.Error("請求信息失敗，原因：" + ex.Message);
-             throw;
+            throw;
         }
     }
 
@@ -363,12 +395,12 @@ public class GlobalParameters
     {
         try
         {
-            var request = (HttpWebRequest)WebRequest.Create(ApiUrl);            
+            var request = (HttpWebRequest)WebRequest.Create(ApiUrl);
             request.Method = Method;
             request.ContentType = "application/json";
             //request.ContentType = "application/x-www-form-urlencoded";
             //request.UserAgent = "Mozilla/5.0";
-            request.Timeout = 3000; 
+            request.Timeout = 3000;
 
             //將匿名物件序列化為json字串
             string postBody = jsonFunction.ObjectToJSON(RequestJson);
@@ -411,13 +443,13 @@ public class GlobalParameters
 
             foreach (var k in dictionary)
             {
-                var SqlParameter = parameters.Where(P => P.ParameterName.Contains(k.Key)).FirstOrDefault();
+                var SqlParameter = parameters.Where(P => P.ParameterName == "@" + k.Key).FirstOrDefault();
 
                 if (SqlParameter != null)
                 {
                     SqlParameter.Value = k.Value;
-                    
-                    if(k.Value == null)
+
+                    if (k.Value == null)
                     {
                         SqlParameter.Value = (object)DBNull.Value;
                     }
@@ -455,7 +487,7 @@ public class GlobalParameters
     {
         var Base64Code = "RequisitionID=" + RequisitionID + "&Identify=" + Identify + "&DiagramName=" + HttpUtility.UrlEncode(DiagramName).ToUpper();
 
-        return WebPathBPMPro(sqlConnBPMProDev) + "BPMPro/FM7_FormContent_Redirect.aspx?EinB64=" + Convert.ToBase64String(Encoding.Default.GetBytes(Base64Code));
+        return WebPathBPMPro(sqlConnBPMProTest) + "BPMPro/FM7_FormContent_Redirect.aspx?EinB64=" + Convert.ToBase64String(Encoding.Default.GetBytes(Base64Code));
     }
 
     #endregion

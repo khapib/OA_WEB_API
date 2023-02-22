@@ -3,39 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-/// <summary>
-/// 會簽管理系統 - 行政採購異動申請單
-/// </summary>
 namespace OA_WEB_API.Models.BPMPro
 {
     /// <summary>
-    /// 行政採購異動申請單(查詢條件)
+    /// 版權採購異動申請單(查詢條件)
     /// </summary>
-    public class GeneralOrderChangeQueryModel
+    public class MediaOrderChangeQueryModel
     {
         /// <summary>系統編號</summary>
         public string REQUISITION_ID { get; set; }
     }
 
     /// <summary>
-    /// 行政採購異動申請單
+    /// 版權採購異動申請單
     /// </summary>
-    public class GeneralOrderChangeViewModel
+    public class MediaOrderChangeViewModel
     {
         /// <summary>申請人資訊</summary>
         public ApplicantInfo APPLICANT_INFO { get; set; }
 
-        /// <summary>行政採購異動申請單 表頭資訊及表單內容 設定</summary>
-        public GeneralOrderChangeConfig GENERAL_ORDER_CHANGE_CONFIG { get; set; }
+        /// <summary>版權採購異動申請單 表頭資訊及表單內容 設定</summary>
+        public MediaOrderChangeConfig MEDIA_ORDER_CHANGE_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
     }
 
     /// <summary>
-    /// 行政採購異動申請 表頭資訊
+    /// 版權採購異動申請 表頭資訊
     /// </summary>
-    public class GeneralOrderChangeTitle : ImplementHeader
+    public class MediaOrderChangeTitle : ImplementHeader
     {
         /// <summary>不可異動標住(付款辦法)</summary>
         public string PYMT_LOCK_PERIOD { get; set; }
@@ -50,7 +47,7 @@ namespace OA_WEB_API.Models.BPMPro
         public string GROUP_PATH { get; set; }
 
         /// <summary>表單操作</summary>
-        public string FORM_ACTION { get; set; }    
+        public string FORM_ACTION { get; set; }
 
         /// <summary>ERP 工作流程標題名稱</summary>
         public string FLOW_NAME { get; set; }
@@ -63,9 +60,9 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 行政採購異動申請單 表單內容 設定
+    /// 版權採購異動申請單 表單內容 設定
     /// </summary>
-    public class GeneralOrderChangeConfig : GeneralOrderChangeTitle
+    public class MediaOrderChangeConfig : MediaOrderChangeTitle
     {
         /// <summary>異動說明</summary>
         public string CHANGE_DESCRIPTION { get; set; }

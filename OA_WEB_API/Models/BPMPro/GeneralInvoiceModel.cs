@@ -50,7 +50,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 行政採購請款單 表頭資訊
     /// </summary>
-    public class GeneralInvoiceTitle : HeaderTitle
+    public class GeneralInvoiceTitle : ImplementHeader
     {
         /// <summary>ERP 工作流程標題名稱</summary>
         public string FLOW_NAME { get; set; }
@@ -59,7 +59,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 行政採購請款單 表單內容 設定
     /// </summary>
-    public class GeneralInvoiceConfig
+    public class GeneralInvoiceConfig : COMM_Bank
     {
         /// <summary>行政採購 系統編號</summary>
         public string GENERAL_ORDER_REQUISITION_ID { get; set; }
@@ -73,10 +73,16 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>行政採購 ERP 表單唯一碼</summary>
         public string GENERAL_ORDER_ERP_FORM_NO { get; set; }
 
+        /// <summary>行政採購 交易類型</summary>
+        public string GENERAL_ORDER_TXN_TYPE { get; set; }
+
         /// <summary>行政採購 路徑</summary>
         public string GENERAL_ORDER_PATH { get; set; }
 
-        /// <summary>行政採購 付款辦法 總金額_台幣(換算)</summary>
+        /// <summary>行政採購 採購單 總金額</summary>
+        public double GENERAL_ORDER_DTL_ORDER_TOTAL { get; set; }
+
+        /// <summary>行政採購 採購單 總金額_台幣</summary>
         public int GENERAL_ORDER_DTL_ORDER_TOTAL_TWD { get; set; }
 
         /// <summary>行政採購點驗收單 系統編號</summary>
@@ -92,7 +98,7 @@ namespace OA_WEB_API.Models.BPMPro
         public string PRICING_METHOD { get; set; }
 
         /// <summary>營業稅/[稅率]租稅協定</summary>
-        public double TAX { get; set; }
+        public double TAX_RATE { get; set; }
 
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
@@ -112,12 +118,18 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>代墊員工姓名</summary>
         public string REIMB_STAFF_NAME { get; set; }
 
-        /// <summary>支付方式</summary>
+        /// <summary>
+        /// 支付方式：
+        /// CS.現金
+        /// PT_AC.薪轉帳戶
+        /// D_AC.指定帳戶
+        /// SUP_AC.合作夥伴帳戶
+        /// </summary>
         public string PAY_METHOD { get; set; }
 
         /// <summary>廠商編號</summary>
         public string SUP_NO { get; set; }
-        
+
         /// <summary>廠商名稱</summary>
         public string SUP_NAME { get; set; }
 
@@ -130,71 +142,50 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>銀行往來編號</summary>
         public string SUP_TX_ID { get; set; }
 
-        /// <summary>匯款類型</summary>
-        public string TX_CATEGORY { get; set; }
-
-        /// <summary>受款帳號</summary>
-        public string BFCY_ACCOUNT_NO { get; set; }
-
-        /// <summary>受款帳號名稱/票據抬頭</summary>
-        public string BFCY_ACCOUNT_NAME { get; set; }
-
-        /// <summary>受款銀行代碼</summary>
-        public string BFCY_BANK_NO { get; set; }
-
-        /// <summary>受款銀行名稱</summary>
-        public string BFCY_BANK_NAME { get; set; }
-
-        /// <summary>受款分行代碼</summary>
-        public string BFCY_BANK_BRANCH_NO { get; set; }
-
-        /// <summary>受款分行名稱</summary>
-        public string BFCY_BANK_BRANCH_NAME { get; set; }
-
-        /// <summary>SWIFT</summary>
-        public string BFCY_BANK_SWIFT { get; set; }
-
-        /// <summary>受款銀行地址</summary>
-        public string BFCY_BANK_ADDRESS { get; set; }
-
-        /// <summary>受款銀行國家</summary>
-        public string BFCY_BANK_COUNTRY_AND_CITY { get; set; }
-
-        /// <summary>中間銀行</summary>
-        public string BFCY_BANK_IBAN { get; set; }
-
-        /// <summary>幣別</summary>
-        public string CURRENCY_NAME { get; set; }
-
-        /// <summary>帳款聯絡人</summary>
-        public string BFCY_NAME { get; set; }
-
-        /// <summary>聯絡電話</summary>
-        public string BFCY_TEL { get; set; }
-
-        /// <summary>聯絡Email</summary>
-        public string BFCY_EMAIL { get; set; }
-
-        /// <summary>發票類型</summary>
+        /// <summary>
+        /// 憑證類型：
+        /// GUI.統一發票、
+        /// Invoice. Invoice、
+        /// RECPT.收據
+        /// </summary>
         public string INVOICE_TYPE { get; set; }
 
         /// <summary>備註</summary>
         public string NOTE { get; set; }
 
         /// <summary>付款辦法 本期付款總額</summary>
-        public int PYMT_CURRENT_TOTAL { get; set; }
+        public double PYMT_CURRENT_TOTAL { get; set; }
+
+        /// <summary>付款辦法 本期付款總額_台幣</summary>
+        public int PYMT_CURRENT_TOTAL_TWD { get; set; }
+
+        /// <summary>發票明細 合計</summary>
+        public double INV_AMOUNT_TOTAL { get; set; }
 
         /// <summary>發票明細 合計_台幣</summary>
-        public int INV_AMOUNT_TOTAL { get; set; }
+        public int INV_AMOUNT_TOTAL_TWD { get; set; }
 
         /// <summary>實際支付金額</summary>
         public int ACTUAL_PAY_AMOUNT { get; set; }
+
+        /// <summary>財務審核人員編號</summary>
+        public string FINANC_AUDIT_ID_1 { get; set; }
+
+        /// <summary>財務審核人員姓名</summary>
+        public string FINANC_AUDIT_NAME_1 { get; set; }
+
+        /// <summary>財務覆核人員編號</summary>
+        public string FINANC_AUDIT_ID_2 { get; set; }
+
+        /// <summary>財務覆核人員姓名</summary>
+        public string FINANC_AUDIT_NAME_2 { get; set; }
+
     }
 
     /// <summary>
     /// 行政採購請款單 驗收明細 設定
     /// </summary>
-    public class GeneralInvoiceAcceptancesConfig: GeneralOrderAcceptancesConfig
+    public class GeneralInvoiceAcceptancesConfig : GeneralOrderAcceptancesConfig
     {
         /// <summary>所屬專案 ERP 單號</summary>
         public string DTL_PROJECT_FORM_NO { get; set; }
@@ -215,7 +206,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 行政採購請款單 付款辦法 設定
     /// </summary>
-    public class GeneralInvoicePaymentsConfig: GeneralOrderPaymentsConfig
+    public class GeneralInvoicePaymentsConfig : GeneralOrderPaymentsConfig
     {
         /// <summary>會計類別</summary>
         public string ACCT_CATEGORY { get; set; }
@@ -224,27 +215,30 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 行政採購請款單 使用預算 設定
     /// </summary>
-    public class GeneralInvoiceBudgetsConfig: GeneralOrderBudgetsConfig
+    public class GeneralInvoiceBudgetsConfig : GeneralOrderBudgetsConfig
     {
 
     }
 
     /// <summary>
-    /// 行政採購請款單 發票明細 設定
+    /// 行政採購請款單 憑證明細 設定
     /// </summary>
     public class GeneralInvoiceDetailsConfig
     {
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
 
-        /// <summary>發票號碼</summary>
+        /// <summary>憑證號碼</summary>
         public string INV_NUM { get; set; }
 
-        /// <summary>發票日期</summary>
+        /// <summary>憑證日期</summary>
         public string INV_DATE { get; set; }
 
         /// <summary>發票金額</summary>
-        public int INV_AMOUNT { get; set; }
+        public double INV_AMOUNT { get; set; }
+
+        /// <summary>發票金額</summary>
+        public int INV_AMOUNT_TWD { get; set; }
 
         /// <summary>備註</summary>
         public string INV_NOTE { get; set; }

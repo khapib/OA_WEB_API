@@ -17,6 +17,10 @@ using OA_WEB_API.Repository.ERP;
 using OA_WEB_API.Models;
 
 using Dapper;
+using Microsoft.Ajax.Utilities;
+using System.Reflection;
+using System.Web.Http.Results;
+using System.Runtime.InteropServices;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -108,7 +112,7 @@ namespace OA_WEB_API.Repository.BPMPro
         }
 
         #endregion
-        
+
         #region - 確認是否已起單且簽核中 -
 
         /// <summary>
@@ -120,7 +124,7 @@ namespace OA_WEB_API.Repository.BPMPro
             var BPMStatus = "";
 
             try
-            {                
+            {
                 if (!String.IsNullOrEmpty(query.FORM_NO) || !String.IsNullOrWhiteSpace(query.FORM_NO))
                 {
                     var formDistinguish = FormDistinguish(query.IDENTIFY);
@@ -154,7 +158,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         {
                             REQUISITION_ID = strREQ
                         };
-                        
+
                         if (CommonRepository.PostDataHaveForm(formQueryModel))
                         {
                             #region 判斷是否簽核中或在草稿中【是】就不能起單
@@ -532,10 +536,10 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
-        #region - 表單關聯 -
+        #region - 關聯表單 -
 
         /// <summary>
-        /// 表單關聯(搜詢)(只關聯 "同意結束" 的表單)；
+        /// 關聯表單(搜詢)(只關聯 "同意結束" 的表單)；
         /// 可查到以【使用者編號】申請的、簽核過的、代他人申請的、被知會的 表單。
         /// </summary>        
         public AssociatedFormViewModel PostAssociatedFormSearch(AssociatedFormQuery query)
@@ -705,7 +709,7 @@ namespace OA_WEB_API.Repository.BPMPro
         }
 
         /// <summary>
-        /// 表單關聯(查詢)
+        /// 關聯表單(查詢)
         /// </summary>  
         public IList<AssociatedFormConfig> PostAssociatedForm(FormQueryModel query)
         {
@@ -732,7 +736,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
                 strSQL += "ORDER BY [AutoCounter] ";
 
-                var associatedForm= dbFun.DoQuery(strSQL, parameter).ToList<AssociatedFormConfig>();
+                var associatedForm = dbFun.DoQuery(strSQL, parameter).ToList<AssociatedFormConfig>();
                 foreach (var Form in associatedForm)
                 {
                     Form.FORM_NAME = FormDistinguish(Form.IDENTIFY).FORM_NAME;
@@ -741,13 +745,13 @@ namespace OA_WEB_API.Repository.BPMPro
             }
             catch (Exception ex)
             {
-                CommLib.Logger.Error("表單關聯(查詢)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("關聯表單(查詢)失敗，原因：" + ex.Message);
                 throw;
             }
         }
 
         /// <summary>
-        /// 表單關聯(新增)
+        /// 關聯表單(新增)
         /// </summary>
         public bool PutAssociatedForm(AssociatedFormModel model)
         {
@@ -756,7 +760,7 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 var parameter = new List<SqlParameter>()
                 {
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },                    
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },
                     new SqlParameter("@IDENTIFY", SqlDbType.VarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ASSOCIATED_REQUISITION_ID", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@BPM_FORM_NO", SqlDbType.VarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -779,7 +783,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                if(model.ASSOCIATED_FORM_CONFIG!= null && model.ASSOCIATED_FORM_CONFIG.Count > 0)
+                if (model.ASSOCIATED_FORM_CONFIG != null && model.ASSOCIATED_FORM_CONFIG.Count > 0)
                 {
                     #region 新增資料
 
@@ -804,10 +808,118 @@ namespace OA_WEB_API.Repository.BPMPro
             }
             catch (Exception ex)
             {
-                CommLib.Logger.Error("表單關聯(新增)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("關聯表單(新增)失敗，原因：" + ex.Message);
                 throw;
             }
             return vResult;
+        }
+
+        /// <summary>
+        /// 關聯表單(知會)
+        /// </summary>
+        public bool PutAssociatedFormNotify(AssociatedFormNotifyModel model)
+        {
+            bool vResult = false;
+            try
+            {
+                var query = new FormQueryModel
+                {
+                    REQUISITION_ID = model.REQUISITION_ID
+                };
+                var AssociatedForms = PostAssociatedForm(query);
+                if (AssociatedForms != null)
+                {
+                    if (AssociatedForms.Count > 0)
+                    {
+                        var AssociatedFormsRequisitionID = new List<String>();
+
+                        AssociatedForms.ForEach(AF =>
+                        {
+                            AssociatedFormsRequisitionID.Add(AF.ASSOCIATED_REQUISITION_ID);
+                        });
+
+                        var groupInformNotifyModel = new GroupInformNotifyModel()
+                        {
+                            REQUISITION_ID = AssociatedFormsRequisitionID,
+                            NOTIFY_BY = model.NOTIFY_BY,
+                            ROLE_ID= model.ROLE_ID,
+                        };
+                        
+                        vResult = notifyRepository.ByGroupInformNotify(groupInformNotifyModel);                        
+                    }
+                    else
+                    {
+                        CommLib.Logger.Debug(model.REQUISITION_ID + "：此表單無 關聯表單，可(知會)通知(2)。");
+                    }
+                }
+                else
+                {
+                    CommLib.Logger.Debug(model.REQUISITION_ID + "：此表單無 關聯表單，可(知會)通知(1)。");
+                }
+
+                return vResult;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("關聯表單(知會)通知失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region - BPM表單機能 -
+
+        /// <summary>
+        /// BPM表單機能
+        /// </summary>
+        public bool PostBPMFormFunction(BPMFormFunction model)
+        {
+            bool vResult = false;
+
+            try
+            {
+                var parameter = new List<SqlParameter>()
+                {
+                    //BPM表單機能
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },
+                    new SqlParameter("@DRAFT_FLAG", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                };
+                //寫入：版權採購交片單 表單內容parameter                        
+                strJson = jsonFunction.ObjectToJSON(model);
+                GlobalParameters.Infoparameter(strJson, parameter);
+
+                #region - 表單送出後將【附件】轉為啟用 -
+
+                strSQL = "";
+                strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + model.IDENTIFY + "_F] ";
+                strSQL += "SET [DraftFlag]=@DRAFT_FLAG ";
+                strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoTran(strSQL, parameter);
+
+                #endregion
+
+                #region - 表單送出後將【關聯表單】、【外部連結】轉為啟用 -
+
+                strSQL = "";
+                strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + model.IDENTIFY + "_U] ";
+                strSQL += "SET [DraftFlag]=@DRAFT_FLAG ";
+                strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoTran(strSQL, parameter);
+
+                #endregion
+
+                vResult = true;
+
+                return vResult;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("【表單機能】啟用失敗，原因：" + ex.Message);
+                throw;
+            }
         }
 
         #endregion

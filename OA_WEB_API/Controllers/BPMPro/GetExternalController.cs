@@ -13,7 +13,7 @@ using OA_WEB_API.Repository.BPMPro;
 namespace OA_WEB_API.Controllers.BPMPro
 {
     /// <summary>
-    /// 外部接收
+    /// 外部起單
     /// </summary>
     public class GetExternalController : ApiController
     {
@@ -25,10 +25,10 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #region - 方法 -
 
-        #region - 專案建立審核單(外部接收) -
+        #region - 專案建立審核單(外部起單) -
 
         /// <summary>
-        /// 專案建立審核單(外部接收)
+        /// 專案建立審核單(外部起單)
         /// </summary>
         [Route("api/PutProjectReviewGetExternal")]
         [HttpPost]
@@ -39,10 +39,10 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #endregion
 
-        #region - 合作夥伴審核單(外部接收) -
+        #region - 合作夥伴審核單(外部起單) -
 
         /// <summary>
-        /// 合作夥伴審核單(外部接收)
+        /// 合作夥伴審核單(外部起單)
         /// </summary>
         [Route("api/PutSupplierReviewGetExternal")]
         [HttpPost]
@@ -53,10 +53,26 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #endregion
 
-        #region - 行政採購申請單(外部接收) -
+        #region - 費用申請單(外部起單) -
 
         /// <summary>
-        /// 行政採購申請單(外部接收)
+        /// 費用申請單(外部起單)
+        /// </summary>
+        [Route("api/PutExpensesReimburseGetExternal")]
+        [HttpPost]
+        public GetExternalData PutExpensesReimburseGetExternal(ExpensesReimburseERPInfo model)
+        {
+            return getExternalRepository.PutExpensesReimburseGetExternal(model);
+        }
+
+        #endregion
+
+        #region - 行政採購類_(外部起單) -
+
+        #region - 行政採購申請單(外部起單) -
+
+        /// <summary>
+        /// 行政採購申請單(外部起單)
         /// </summary>
         [Route("api/PutGeneralOrderGetExternal")]
         [HttpPost]
@@ -67,10 +83,10 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #endregion
 
-        #region - 行政採購異動申請單(外部接收) -
+        #region - 行政採購異動申請單(外部起單) -
 
         /// <summary>
-        /// 行政採購異動申請單(外部接收)
+        /// 行政採購異動申請單(外部起單)
         /// </summary>
         [Route("api/PutGeneralOrderChangeGetExternal")]
         [HttpPost]
@@ -81,10 +97,10 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #endregion
 
-        #region - 行政採購點驗收單(外部接收) -
+        #region - 行政採購點驗收單(外部起單) -
 
         /// <summary>
-        /// 行政採購點驗收單(外部接收)
+        /// 行政採購點驗收單(外部起單)
         /// </summary>
         [Route("api/PutGeneralAcceptanceGetExternal")]
         [HttpPost]
@@ -95,10 +111,10 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #endregion
 
-        #region - 行政採購請款單(外部接收) -
+        #region - 行政採購請款單(外部起單) -
 
         /// <summary>
-        /// 行政採購請款單(外部接收)
+        /// 行政採購請款單(外部起單)
         /// </summary>
         [Route("api/PutGeneralInvoiceGetExternal")]
         [HttpPost]
@@ -106,6 +122,68 @@ namespace OA_WEB_API.Controllers.BPMPro
         {
             return getExternalRepository.PutGeneralInvoiceGetExternal(model);
         }
+
+        #endregion
+
+        #endregion
+
+        #region - 版權採購類_(外部起單) -
+
+        #region - 版權採購申請單(外部起單) -
+
+        /// <summary>
+        /// 版權採購申請單(外部起單)
+        /// </summary>
+        [Route("api/PutMediaOrderGetExternal")]
+        [HttpPost]
+        public GetExternalData PutMediaOrderGetExternal(MediaOrderERPInfo model)
+        {
+            return getExternalRepository.PutMediaOrderGetExternal(model);
+        }
+
+        #endregion
+
+        #region - 版權採購異動申請單(外部起單) -
+
+        /// <summary>
+        /// 版權採購異動申請單(外部起單)
+        /// </summary>
+        [Route("api/PutMediaOrderChangeGetExternal")]
+        [HttpPost]
+        public GetExternalData PutMediaOrderChangeGetExternal(MediaOrderChangeERPInfo model)
+        {
+            return getExternalRepository.PutMediaOrderChangeGetExternal(model);
+        }
+
+        #endregion
+
+        #region - 版權採購交片單(外部起單) -
+
+        /// <summary>
+        /// 版權採購交片單(外部起單)
+        /// </summary>
+        [Route("api/PutMediaAcceptanceGetExternal")]
+        [HttpPost]
+        public GetExternalData PutMediaAcceptanceGetExternal(MediaAcceptanceERPInfo model)
+        {
+            return getExternalRepository.PutMediaAcceptanceGetExternal(model);
+        }
+
+        #endregion
+
+        #region - 版權採購請款單(外部起單) -
+
+        /// <summary>
+        /// 版權採購交片單(外部起單)
+        /// </summary>
+        [Route("api/PutMediaInvoiceGetExternal")]
+        [HttpPost]
+        public GetExternalData PutMediaInvoiceGetExternal(MediaInvoiceERPInfo model)
+        {
+            return getExternalRepository.PutMediaInvoiceGetExternal(model);
+        }
+
+        #endregion
 
         #endregion
 

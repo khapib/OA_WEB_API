@@ -9,6 +9,7 @@ using OA_WEB_API.Models.BPMPro;
 using OA_WEB_API.Models.ERP;
 
 using Newtonsoft.Json;
+using System.Drawing;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -97,10 +98,11 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [Description] AS [DESCRIPTION], ";
             strSQL += "     [IsVicePresident] AS [IS_VICE_PRESIDENT], ";
             strSQL += "     [IsAssest] AS [IS_ASSEST], ";
+            strSQL += "     [TXN_Type] AS [TXN_TYPE], ";
             strSQL += "     [Currency] AS [CURRENCY], ";
             strSQL += "     [PredictRate] AS [PRE_RATE], ";
             strSQL += "     [PricingMethod] AS [PRICING_METHOD], ";
-            strSQL += "     [Tax] AS [TAX], ";
+            strSQL += "     [TaxRate] AS [TAX_RATE], ";
             strSQL += "     [SupNo] AS [SUP_NO], ";
             strSQL += "     [SupName] AS [SUP_NAME], ";
             strSQL += "     [RegisterKind] AS [REG_KIND], ";
@@ -215,7 +217,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [PA_Model] AS [PA_MODEL], ";
             strSQL += "     [PA_Specifications] AS [PA_SPECIFICATIONS], ";
             strSQL += "     [PA_Quantity] AS [PA_QUANTITY], ";
-            strSQL += "     [PA_Unit] AS [PA_UNIT] ";
+            strSQL += "     [PA_Unit] AS [PA_UNIT], ";
+            strSQL += "     [PA_Note] AS [PA_NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralOrder_ACPT] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
@@ -252,18 +255,26 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 if (!String.IsNullOrEmpty(generalOrderTitle.GROUP_ID) || !String.IsNullOrWhiteSpace(generalOrderTitle.GROUP_ID))
                 {
-                    #region 判斷 編輯註記
-
-                    //是空null就給false預設值
-                    generalOrderTitle.EDIT_FLAG = generalOrderTitle.EDIT_FLAG ?? "false";
-
-                    if (!Boolean.Parse(generalOrderTitle.EDIT_FLAG))
+                    try
                     {
-                        //匯入【子表單】
-                        generalOrderViewModel = PutGeneralOrderImportSingle(generalOrderViewModel);
+                        #region 判斷 編輯註記及匯入【子表單】
+
+                        //是空null就給false預設值
+                        generalOrderTitle.EDIT_FLAG = generalOrderTitle.EDIT_FLAG ?? "false";
+
+                        if (!Boolean.Parse(generalOrderTitle.EDIT_FLAG))
+                        {
+                            //匯入【子表單】
+                            generalOrderViewModel = PutGeneralOrderImportSingle(generalOrderViewModel);
+                        }
+
+                        #endregion
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("行政採購申請單(原表單匯入子表單)失敗；請確認原表單資訊是否正確。原因：" + ex.Message);
                     }
 
-                    #endregion
                 }
             }
 
@@ -289,7 +300,7 @@ namespace OA_WEB_API.Repository.BPMPro
         //    catch (Exception ex)
         //    {
         //        vResult = false;
-        //        CommLib.Logger.Error("專案建立審核單(依此單內容重送)失敗，原因" + ex.Message);
+        //        CommLib.Logger.Error("行政採購申請單(依此單內容重送)失敗，原因" + ex.Message);
         //    }
         //    return vResult;
         //}
@@ -337,7 +348,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     if (model.GENERAL_ORDER_CONFIG != null)
                     {
-                        if (model.GENERAL_ORDER_CONFIG.CURRENCY == "台幣" && model.GENERAL_ORDER_CONFIG.TAX == 0.0)
+                        if (model.GENERAL_ORDER_CONFIG.CURRENCY == "台幣" && model.GENERAL_ORDER_CONFIG.TAX_RATE == 0.0)
                         {
                             FM7Subject += "  (零稅率)";
                         }
@@ -447,6 +458,18 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (model.GENERAL_ORDER_CONFIG != null)
                 {
+                    #region - 確認小數點後第二位 -
+
+                    model.GENERAL_ORDER_CONFIG.PRE_RATE = Math.Round(model.GENERAL_ORDER_CONFIG.PRE_RATE, 2);
+                    model.GENERAL_ORDER_CONFIG.TAX_RATE = Math.Round(model.GENERAL_ORDER_CONFIG.TAX_RATE, 2);
+                    model.GENERAL_ORDER_CONFIG.DTL_NET_TOTAL=Math.Round(model.GENERAL_ORDER_CONFIG.DTL_NET_TOTAL,2);
+                    model.GENERAL_ORDER_CONFIG.DTL_GROSS_TOTAL = Math.Round(model.GENERAL_ORDER_CONFIG.DTL_GROSS_TOTAL, 2);
+                    model.GENERAL_ORDER_CONFIG.PYMT_TAX_TOTAL=Math.Round(model.GENERAL_ORDER_CONFIG.PYMT_TAX_TOTAL,2);
+                    model.GENERAL_ORDER_CONFIG.PYMT_NET_TOTAL = Math.Round(model.GENERAL_ORDER_CONFIG.PYMT_NET_TOTAL, 2);
+                    model.GENERAL_ORDER_CONFIG.PYMT_GROSS_TOTAL=Math.Round(model.GENERAL_ORDER_CONFIG.PYMT_GROSS_TOTAL,2);
+
+                    #endregion
+
                     var parameterInfo = new List<SqlParameter>()
                     {
                         //行政採購申請 表單內容
@@ -454,10 +477,11 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@DESCRIPTION", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@IS_VICE_PRESIDENT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@IS_ASSEST", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@TXN_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@CURRENCY", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PRE_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PRICING_METHOD", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@TAX_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@SUP_NO", SqlDbType.NVarChar) { Size = 16, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@SUP_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REG_KIND", SqlDbType.NVarChar) { Size = 15, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -465,17 +489,17 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@OWNER_NAME", SqlDbType.NVarChar) { Size = 64,  Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@OWNER_TEL", SqlDbType.NVarChar) { Size = 20,  Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PAYMENT_PERIOD_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@DTL_NET_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@DTL_NET_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_NET_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@DTL_GROSS_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@DTL_GROSS_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_GROSS_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },                        
                         new SqlParameter("@DISCOUNT_PRICE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@DTL_ORDER_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@DTL_ORDER_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_ORDER_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_LOCK_PERIOD", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PYMT_TAX_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PYMT_NET_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PYMT_GROSS_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PYMT_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PYMT_NET_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PYMT_GROSS_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_GROSS_TOTAL_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_USE_BUDGET_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value }
                     };
@@ -489,10 +513,11 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "SET [Description]=@DESCRIPTION, ";
                     strSQL += "     [IsVicePresident]=@IS_VICE_PRESIDENT, ";
                     strSQL += "     [IsAssest]=@IS_ASSEST, ";
+                    strSQL += "     [TXN_Type]=@TXN_TYPE, ";
                     strSQL += "     [Currency]=@CURRENCY, ";
                     strSQL += "     [PredictRate]=@PRE_RATE, ";
                     strSQL += "     [PricingMethod]=@PRICING_METHOD, ";
-                    strSQL += "     [Tax]=@TAX, ";
+                    strSQL += "     [TaxRate]=@TAX_RATE, ";
                     strSQL += "     [SupNo]=@SUP_NO, ";
                     strSQL += "     [SupName]=@SUP_NAME, ";
                     strSQL += "     [RegisterKind]=@REG_KIND, ";
@@ -533,13 +558,13 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@DTL_SPECIFICATIONS", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_UNIT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_NET", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DTL_NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_NET_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_GROSS", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DTL_GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_GROSS_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_NET_SUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DTL_NET_SUM", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_NET_SUM_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_GROSS_SUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DTL_GROSS_SUM", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_GROSS_SUM_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_PROJECT_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value =(object) DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_PROJECT_NAME", SqlDbType.NVarChar) { Size = 500, Value =(object) DBNull.Value ?? DBNull.Value },
@@ -566,6 +591,15 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     foreach (var item in model.GENERAL_ORDER_DETAILS_CONFIG)
                     {
+                        #region - 確認小數點後第二位 -
+
+                        item.DTL_NET = Math.Round(item.DTL_NET, 2);
+                        item.DTL_GROSS = Math.Round(item.DTL_GROSS, 2);
+                        item.DTL_NET_SUM = Math.Round(item.DTL_NET_SUM, 2);
+                        item.DTL_GROSS_SUM = Math.Round(item.DTL_GROSS_SUM, 2);
+
+                        #endregion
+
                         //寫入：行政採購申請 採購明細parameter
                         strJson = jsonFunction.ObjectToJSON(item);
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
@@ -584,8 +618,6 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region - 行政採購申請 付款辦法：GeneralOrder_PYMT -
 
-
-
                 var parameterPayments = new List<SqlParameter>()
                 {
                     //行政採購申請 付款辦法
@@ -595,8 +627,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@PYMT_TERMS", SqlDbType.NVarChar) { Size = 25, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PYMT_METHOD_ID", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PYMT_TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PYMT_NET", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PYMT_GROSS", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PYMT_NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PYMT_GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PYMT_PRE_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PYMT_GROSS_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PYMT_USE_BUDGET", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -621,8 +653,17 @@ namespace OA_WEB_API.Repository.BPMPro
                     
                     foreach (var item in model.GENERAL_ORDER_PAYMENTS_CONFIG)
                     {
-                        //寫入：行政採購申請 付款辦法parameter
+                        #region - 確認小數點後第二位 -
+
+                        item.PYMT_TAX = Math.Round(item.PYMT_TAX, 2);
+                        item.PYMT_NET = Math.Round(item.PYMT_NET, 2);
+                        item.PYMT_GROSS=Math.Round(item.PYMT_GROSS, 2);
+                        item.PYMT_PRE_RATE = Math.Round(item.PYMT_PRE_RATE, 2);
+
+                        #endregion
                         
+                        //寫入：行政採購申請 付款辦法parameter
+
                         strJson = jsonFunction.ObjectToJSON(item);
                         GlobalParameters.Infoparameter(strJson, parameterPayments);
 
@@ -701,6 +742,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@PA_SPECIFICATIONS", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PA_QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PA_UNIT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PA_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -726,8 +768,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterAcceptance);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralOrder_ACPT]([RequisitionID],[Period],[PA_SupProdANo],[PA_ItemName],[PA_Model],[PA_Specifications],[PA_Quantity],[PA_Unit]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@PA_SUP_PROD_A_NO,@PA_ITEM_NAME,@PA_MODEL,@PA_SPECIFICATIONS,@PA_QUANTITY,@PA_UNIT) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralOrder_ACPT]([RequisitionID],[Period],[PA_SupProdANo],[PA_ItemName],[PA_Model],[PA_Specifications],[PA_Quantity],[PA_Unit],[PA_Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@PA_SUP_PROD_A_NO,@PA_ITEM_NAME,@PA_MODEL,@PA_SPECIFICATIONS,@PA_QUANTITY,@PA_UNIT,@PA_NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterAcceptance);
                     }
@@ -797,6 +839,18 @@ namespace OA_WEB_API.Repository.BPMPro
                     
                     formRepository.PutFormAutoStart(autoStart);
                 }
+
+                #endregion
+
+                #region - 表單機能啟用：BPMFormFunction -
+
+                var BPM_FormFunction = new BPMFormFunction()
+                {
+                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    IDENTIFY = IDENTIFY,
+                    DRAFT_FLAG = 0
+                };
+                commonRepository.PostBPMFormFunction(BPM_FormFunction);
 
                 #endregion
 

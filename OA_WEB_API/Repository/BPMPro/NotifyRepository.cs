@@ -630,13 +630,13 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         #region - 被知會特定角色 -
 
-                        if (model.ROLE_ID != null)
+                        foreach (var role in model.ROLE_ID)
                         {
-                            foreach (var role in model.ROLE_ID)
+                            if (role != null)
                             {
                                 var RolesUserID = CommonRepository.GetRoles()
-                                                                .Where(R => R.ROLE_ID.Contains(role))
-                                                                .Select(R => R).ToList();
+                                                            .Where(R => R.ROLE_ID.Contains(role))
+                                                            .Select(R => R).ToList();
                                 RolesUserID.ForEach(roleuser =>
                                 {
                                     model.NOTIFY_BY.Add(roleuser.USER_ID);
@@ -713,6 +713,73 @@ namespace OA_WEB_API.Repository.BPMPro
                 throw;
             }
             return vResult;
+        }
+
+        #endregion
+
+        #region - 2022/12/19 Leon: (欄位確認後知會通知)通知觸發事件 -
+
+        /// <summary>
+        /// 欄位確認後知會通知
+        /// </summary>
+        /// <param name="Identify">識別編號(運用在M表)</param>
+        /// <param name="IsImplement">要確認的欄位名稱</param>
+        /// <returns></returns>
+        public bool ByCheckNotify(CheckNotifyModel model)
+        {
+            bool vResult = false;
+
+            try
+            {
+                var parameter = new List<SqlParameter>()
+                {
+                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID }
+                };
+
+                strSQL = "";
+                strSQL += "SELECT ";
+                strSQL += "     [" + model.IS_IMPLEMENT + "] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + model.IDENTIFY + "_M] ";
+                strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+                var dtSubject = dbFun.DoQuery(strSQL, parameter);
+                var IsImplement = dtSubject.Rows[0][0].ToString();
+
+                if (!String.IsNullOrEmpty(IsImplement) || !String.IsNullOrWhiteSpace(IsImplement))
+                {
+                    if (Boolean.Parse(IsImplement))
+                    {
+                        var groupInformNotifyModel = new GroupInformNotifyModel
+                        {
+                            REQUISITION_ID = new List<string>
+                            {
+                                model.REQUISITION_ID
+                            },
+                            NOTIFY_BY = new List<string>
+                            {
+                                model.NOTIFY_BY
+                            },
+                            ROLE_ID = new List<string>
+                            {
+                                model.ROLE_ID
+                            }
+                        };
+                        ByGroupInformNotify(groupInformNotifyModel);
+
+                    }
+                    else CommLib.Logger.Debug("確認知會通知，" + model.IDENTIFY + " 無須知會通知。");
+                }
+                else CommLib.Logger.Debug("確認知會通知，" + model.IDENTIFY + " 通知為 '空值'。");
+
+                vResult = true;
+
+                return vResult;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("確認知會通知 通知失敗，原因：" + ex.Message);
+                throw;
+            }
         }
 
         #endregion
@@ -867,7 +934,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 var FM7Subject = dtSubject.Rows[0][1].ToString();
                 var GroupID = dtSubject.Rows[0][2].ToString();
 
-                if(!String.IsNullOrEmpty(GroupID) || !String.IsNullOrWhiteSpace(GroupID))
+                if (!String.IsNullOrEmpty(GroupID) || !String.IsNullOrWhiteSpace(GroupID))
                 {
                     if (FM7Subject.Substring(1, 3) == "待填寫")
                     {

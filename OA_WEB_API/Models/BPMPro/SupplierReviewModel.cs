@@ -38,7 +38,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 合作夥伴審核 表頭內容
     /// </summary>
-    public class SupplierReviewTitle : HeaderTitle
+    public class SupplierReviewTitle : ImplementHeader
     {
         /// <summary>審核單性質</summary>
         public string APPROVE { get; set; }
@@ -120,7 +120,15 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>銀行往來編號</summary>
         public string SUP_TX_ID { get; set; }
 
-        /// <summary>匯款類型</summary>
+        /// <summary>
+        /// 匯款類型：
+        /// DT.國內電匯(台幣)、
+        /// DF.國內電匯(外幣)、
+        /// FF.國外電匯、
+        /// DD.票匯、
+        /// CS.現金、
+        /// OR.其他
+        /// </summary>
         public string TX_CATEGORY { get; set; }
 
         /// <summary>受款帳號</summary>

@@ -308,7 +308,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>員工編號</summary>
         public string USER_ID { get; set; }
 
-        /// <summary>部門編號</summary>
+        /// <summary>代理人員工編號</summary>
         public string AGENT_ID { get; set; }
 
         /// <summary>部門編號</summary>
@@ -375,6 +375,31 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>被知會角色</summary>
         public IList<String> ROLE_ID { get; set; }
+    }
+
+    #endregion
+
+    #region - 欄位確認後知會通知 -
+
+    /// <summary>
+    /// 欄位確認後知會通知
+    /// </summary>
+    public class CheckNotifyModel
+    {
+        /// <summary>系統編號</summary>
+        public string REQUISITION_ID { get; set; }
+
+        /// <summary>識別編號(運用在M表)</summary>
+        public string IDENTIFY { get; set; }
+
+        /// <summary>要確認的欄位名稱</summary>
+        public string IS_IMPLEMENT { get; set; }
+
+        /// <summary>被通知人</summary>
+        public string NOTIFY_BY { get; set; }
+
+        /// <summary>角色群組編號</summary>
+        public string ROLE_ID { get; set; }
     }
 
     #endregion

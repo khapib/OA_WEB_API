@@ -434,12 +434,24 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
+                #region - 表單機能啟用：BPMFormFunction -
+
+                var BPM_FormFunction = new BPMFormFunction()
+                {
+                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    IDENTIFY = IDENTIFY,
+                    DRAFT_FLAG = 0
+                };
+                commonRepository.PostBPMFormFunction(BPM_FormFunction);
+
+                #endregion
+
                 vResult = true;
             }
             catch (Exception ex)
             {
                 vResult = false;
-                CommLib.Logger.Error("行政採購申請單(新增/修改/草稿)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("四方四隅_會簽單(新增/修改/草稿)失敗，原因：" + ex.Message);
             }
 
             return vResult;

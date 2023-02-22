@@ -129,7 +129,11 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [PYMT_CurrentTotal_TWD] AS [PYMT_CURRENT_TOTAL_TWD], ";
             strSQL += "     [INV_AmountTotal] AS [INV_AMOUNT_TOTAL], ";
             strSQL += "     [INV_AmountTotal_TWD] AS [INV_AMOUNT_TOTAL_TWD], ";
-            strSQL += "     [ActualPayAmount] AS [ACTUAL_PAY_AMOUNT] ";
+            strSQL += "     [ActualPayAmount] AS [ACTUAL_PAY_AMOUNT], ";
+            strSQL += "     [FinancAuditID_1] AS [FINANC_AUDIT_ID_1], ";
+            strSQL += "     [FinancAuditName_1] AS [FINANC_AUDIT_NAME_1], ";
+            strSQL += "     [FinancAuditID_2] AS [FINANC_AUDIT_ID_2], ";
+            strSQL += "     [FinancAuditName_2] AS [FINANC_AUDIT_NAME_2] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralInvoice_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
@@ -456,7 +460,11 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@PYMT_CURRENT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@INV_AMOUNT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@INV_AMOUNT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@ACTUAL_PAY_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value }
+                        new SqlParameter("@ACTUAL_PAY_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@FINANC_AUDIT_ID_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@FINANC_AUDIT_NAME_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@FINANC_AUDIT_ID_2", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@FINANC_AUDIT_NAME_2", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value }
                     };
 
                     //寫入：行政採購請款單 表單內容parameter                        
@@ -511,7 +519,11 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [PYMT_CurrentTotal_TWD]=@PYMT_CURRENT_TOTAL_TWD, ";
                     strSQL += "     [INV_AmountTotal]=@INV_AMOUNT_TOTAL, ";
                     strSQL += "     [INV_AmountTotal_TWD]=@INV_AMOUNT_TOTAL_TWD, ";
-                    strSQL += "     [ActualPayAmount]=@ACTUAL_PAY_AMOUNT ";
+                    strSQL += "     [ActualPayAmount]=@ACTUAL_PAY_AMOUNT, ";
+                    strSQL += "     [FinancAuditID_1]=@FINANC_AUDIT_ID_1, ";
+                    strSQL += "     [FinancAuditName_1]=@FINANC_AUDIT_NAME_1, ";
+                    strSQL += "     [FinancAuditID_2]=@FINANC_AUDIT_ID_2, ";
+                    strSQL += "     [FinancAuditName_2]=@FINANC_AUDIT_NAME_2 ";
                     strSQL += "     FROM ( ";
                     strSQL += "             SELECT ";
                     strSQL += "                 [TXN_Type] AS [TXN_TYPE], ";
@@ -761,6 +773,18 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     formRepository.PutFormAutoStart(autoStart);
                 }
+
+                #endregion
+
+                #region - 表單機能啟用：BPMFormFunction -
+
+                var BPM_FormFunction = new BPMFormFunction()
+                {
+                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    IDENTIFY = IDENTIFY,
+                    DRAFT_FLAG = 0
+                };
+                commonRepository.PostBPMFormFunction(BPM_FormFunction);
 
                 #endregion
 

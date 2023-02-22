@@ -138,6 +138,27 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
+            #region - 費用申請單 使用預算 -
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
+            strSQL += "     [BUDG_RowNo] AS [BUDG_ROW_NO], ";
+            strSQL += "     [BUDG_FormNo] AS [BUDG_FORM_NO], ";
+            strSQL += "     [BUDG_CreateYear] AS [BUDG_CREATE_YEAR], ";
+            strSQL += "     [BUDG_Name] AS [BUDG_NAME], ";
+            strSQL += "     [BUDG_OwnerDept] AS [BUDG_OWNER_DEPT], ";
+            strSQL += "     [BUDG_Total] AS [BUDG_TOTAL], ";
+            strSQL += "     [BUDG_AvailableBudgetAmount] AS [BUDG_AVAILABLE_BUDGET_AMOUNT], ";
+            strSQL += "     [BUDG_UseBudgetAmount] AS [BUDG_USE_BUDGET_AMOUNT] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_ExpensesReimburse_BUDG] ";
+            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+            strSQL += "ORDER BY [AutoCounter] ";
+
+            var expensesReimburseBudgetsConfig = dbFun.DoQuery(strSQL, parameter).ToList<ExpensesReimburseBudgetsConfig>();
+
+            #endregion
+
             #region - 費用申請單 表單關聯 -
 
             var formQueryModel = new FormQueryModel()
@@ -154,7 +175,8 @@ namespace OA_WEB_API.Repository.BPMPro
                 EXPENSES_REIMBURSE_TITLE = expensesReimburseTitle,
                 EXPENSES_REIMBURSE_CONFIG = expensesReimburseConfig,
                 EXPENSES_REIMBURSE_DTLS_CONFIG = expensesReimburseDetailsConfig,
-                ASSOCIATED_FORM_CONFIG= associatedForm
+                EXPENSES_REIMBURSE_BUDGS_CONFIG = expensesReimburseBudgetsConfig,
+                ASSOCIATED_FORM_CONFIG = associatedForm
             };
 
             return expensesReimburseViewModel;
@@ -446,6 +468,57 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
+                #region - 費用申請單 使用預算：MediaOrder_BUDG -
+
+                var parameterBudgets = new List<SqlParameter>()
+                {
+                    //費用申請單 使用預算
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@BUDG_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PERIOD", SqlDbType.Int) { Size = 2, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@BUDG_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@BUDG_CREATE_YEAR", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@BUDG_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@BUDG_OWNER_DEPT", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@BUDG_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@BUDG_AVAILABLE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@BUDG_USE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                };
+
+                #region 先刪除舊資料
+
+                strSQL = "";
+                strSQL += "DELETE ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_ExpensesReimburse_BUDG] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoQuery(strSQL, parameterBudgets);
+
+                #endregion
+
+                if (model.EXPENSES_REIMBURSE_BUDGS_CONFIG != null && model.EXPENSES_REIMBURSE_BUDGS_CONFIG.Count > 0)
+                {
+                    #region 再新增資料
+
+                    foreach (var item in model.EXPENSES_REIMBURSE_BUDGS_CONFIG)
+                    {
+                        //寫入：版權採購申請單 使用預算parameter
+                        strJson = jsonFunction.ObjectToJSON(item);
+                        GlobalParameters.Infoparameter(strJson, parameterBudgets);
+
+                        strSQL = "";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_ExpensesReimburse_BUDG]([RequisitionID],[BUDG_RowNo],[BUDG_FormNo],[BUDG_CreateYear],[BUDG_Name],[BUDG_OwnerDept],[BUDG_Total],[BUDG_AvailableBudgetAmount],[BUDG_UseBudgetAmount]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@BUDG_ROW_NO,@BUDG_FORM_NO,@BUDG_CREATE_YEAR,@BUDG_NAME,@BUDG_OWNER_DEPT,@BUDG_TOTAL,@BUDG_AVAILABLE_BUDGET_AMOUNT,@BUDG_USE_BUDGET_AMOUNT) ";
+
+                        dbFun.DoTran(strSQL, parameterBudgets);
+                    }
+
+                    #endregion
+                }
+
+                #endregion
+
                 #region - 費用申請單 表單關聯：AssociatedForm -
 
                 var associatedFormModel = new AssociatedFormModel()
@@ -506,6 +579,18 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     formRepository.PutFormAutoStart(autoStart);
                 }
+
+                #endregion
+
+                #region - 表單機能啟用：BPMFormFunction -
+
+                var BPM_FormFunction = new BPMFormFunction()
+                {
+                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    IDENTIFY = IDENTIFY,
+                    DRAFT_FLAG = 0
+                };
+                commonRepository.PostBPMFormFunction(BPM_FormFunction);
 
                 #endregion
 

@@ -26,6 +26,7 @@ namespace OA_WEB_API.Repository.BPMPro
         dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProTest);
 
         FormRepository formRepository = new FormRepository();
+        CommonRepository commonRepository = new CommonRepository();
 
         #endregion
 
@@ -454,6 +455,18 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
+                #region - 表單機能啟用：BPMFormFunction -
+
+                var BPM_FormFunction = new BPMFormFunction()
+                {
+                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    IDENTIFY = IDENTIFY,
+                    DRAFT_FLAG = 0
+                };
+                commonRepository.PostBPMFormFunction(BPM_FormFunction);
+
+                #endregion
+
                 vResult = true;
             }
             catch (Exception ex)
@@ -538,6 +551,10 @@ namespace OA_WEB_API.Repository.BPMPro
         /// </summary>
         private string strSQL;
 
+        /// <summary>
+        /// 表單代號
+        /// </summary>
+        private string IDENTIFY = "ProjectReview";
         #endregion
     }
 }

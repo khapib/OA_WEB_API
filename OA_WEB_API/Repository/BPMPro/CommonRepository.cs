@@ -18,6 +18,9 @@ using OA_WEB_API.Models;
 
 using Dapper;
 using Microsoft.Ajax.Utilities;
+using System.Reflection;
+using System.Web.Http.Results;
+using System.Runtime.InteropServices;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -859,6 +862,62 @@ namespace OA_WEB_API.Repository.BPMPro
             catch (Exception ex)
             {
                 CommLib.Logger.Error("關聯表單(知會)通知失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region - BPM表單機能 -
+
+        /// <summary>
+        /// BPM表單機能
+        /// </summary>
+        public bool PostBPMFormFunction(BPMFormFunction model)
+        {
+            bool vResult = false;
+
+            try
+            {
+                var parameter = new List<SqlParameter>()
+                {
+                    //BPM表單機能
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },
+                    new SqlParameter("@DRAFT_FLAG", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                };
+                //寫入：版權採購交片單 表單內容parameter                        
+                strJson = jsonFunction.ObjectToJSON(model);
+                GlobalParameters.Infoparameter(strJson, parameter);
+
+                #region - 表單送出後將【附件】轉為啟用 -
+
+                strSQL = "";
+                strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + model.IDENTIFY + "_F] ";
+                strSQL += "SET [DraftFlag]=@DRAFT_FLAG ";
+                strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoTran(strSQL, parameter);
+
+                #endregion
+
+                #region - 表單送出後將【關聯表單】、【外部連結】轉為啟用 -
+
+                strSQL = "";
+                strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + model.IDENTIFY + "_U] ";
+                strSQL += "SET [DraftFlag]=@DRAFT_FLAG ";
+                strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoTran(strSQL, parameter);
+
+                #endregion
+
+                vResult = true;
+
+                return vResult;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("【表單機能】啟用失敗，原因：" + ex.Message);
                 throw;
             }
         }

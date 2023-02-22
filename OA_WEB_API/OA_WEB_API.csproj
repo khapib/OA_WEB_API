@@ -54,6 +54,9 @@
     <Reference Include="Docker.DotNet, Version=3.125.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Docker.DotNet.3.125.5\lib\netstandard2.0\Docker.DotNet.dll</HintPath>
     </Reference>
+    <Reference Include="EastAsiaNumericFormatter, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e1e67937c016e5b2, processorArchitecture=MSIL">
+      <HintPath>..\packages\EastAsiaNumericFormatter.1.0.0\lib\net40\EastAsiaNumericFormatter.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.12.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.12\lib\net45\log4net.dll</HintPath>
     </Reference>
@@ -173,6 +176,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BPMPro\ActiveController.cs" />
+    <Compile Include="Controllers\BPMPro\EvaluateContent_PurchaseController.cs" />
     <Compile Include="Controllers\BPMPro\EvaluateDemandController.cs" />
     <Compile Include="Controllers\BPMPro\ExpensesReimburseController.cs" />
     <Compile Include="Controllers\BPMPro\GeneralAcceptanceController.cs" />
@@ -217,7 +221,7 @@
       <DependentUpon>Index.aspx</DependentUpon>
     </Compile>
     <Compile Include="Models\BPMPro\ActiveModel.cs" />
-    <Compile Include="Models\BPMPro\EvaluateContent_Purchase.cs" />
+    <Compile Include="Models\BPMPro\EvaluateContent_PurchaseModel.cs" />
     <Compile Include="Models\BPMPro\EvaluateDemandModel.cs" />
     <Compile Include="Models\BPMPro\ExpensesReimburseModel.cs" />
     <Compile Include="Models\BPMPro\GeneralAcceptanceModel.cs" />
@@ -244,6 +248,7 @@
     <Compile Include="Models\TokenModel.cs" />
     <Compile Include="Models\BPMPro\UserModel.cs" />
     <Compile Include="Repository\BPMPro\ActiveRepository.cs" />
+    <Compile Include="Repository\BPMPro\EvaluateContent_PurchaseRepository.cs" />
     <Compile Include="Repository\BPMPro\EvaluateDemandRepository.cs" />
     <Compile Include="Repository\BPMPro\ExpensesReimburseRepository.cs" />
     <Compile Include="Repository\BPMPro\GeneralAcceptanceRepository.cs" />

@@ -167,6 +167,19 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>實際支付金額</summary>
         public int ACTUAL_PAY_AMOUNT { get; set; }
+
+        /// <summary>財務審核人員編號</summary>
+        public string FINANC_AUDIT_ID_1 { get; set; }
+
+        /// <summary>財務審核人員姓名</summary>
+        public string FINANC_AUDIT_NAME_1 { get; set; }
+
+        /// <summary>財務覆核人員編號</summary>
+        public string FINANC_AUDIT_ID_2 { get; set; }
+
+        /// <summary>財務覆核人員姓名</summary>
+        public string FINANC_AUDIT_NAME_2 { get; set; }
+
     }
 
     /// <summary>

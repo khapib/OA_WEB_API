@@ -702,6 +702,41 @@ namespace OA_WEB_API.Repository.BPMPro
             return vResult;
         }
 
+        /// <summary>
+        /// 內容評估表_外購(清除評估人員)
+        /// </summary>
+        public bool PutEvaluateContent_PurchaseRemoveCountersignSingle(EvaluateContent_PurchaseQueryModel query)
+        {
+            bool vResult = false;
+            try
+            {
+                #region - 內容評估表_外購 評估意見:EvaluateContent_PurchaseRemoveCountersign -
+
+                var parameter = new List<SqlParameter>()
+                {
+                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID }
+                };
+
+                //清空  評估人員列。
+                strSQL = "";
+                strSQL += "DELETE [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_D] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "			AND [RequisitionID]=@REQUISITION_ID ";
+                dbFun.DoTran(strSQL, parameter);
+
+                #endregion
+
+                vResult = true;
+            }
+            catch (Exception ex)
+            {
+                vResult = false;
+                CommLib.Logger.Error("內容評估表_外購(清除評估人員)失敗，原因：" + ex.Message);
+            }
+
+            return vResult;
+        }
+
         #endregion
 
         #region - 欄位和屬性 -

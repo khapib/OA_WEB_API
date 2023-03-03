@@ -58,6 +58,17 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
+        #region 內容評估表
+
+        #region 內容評估表_外購
+
+        /// <summary>內容評估表_外購</summary>
+        EvaluateContent_PurchaseRepository evaluateContent_PurchaseRepository = new EvaluateContent_PurchaseRepository();
+
+        #endregion
+
+        #endregion
+
         #region 版權採購類
         /// <summary>版權採購申請單</summary>
         MediaOrderRepository mediaOrderRepository = new MediaOrderRepository();
@@ -1238,17 +1249,173 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
-        #region - 內容評估表_(外部起單) -
+        #region - 內容評估表(外部起單) -
 
         #region - 內容評估表_外購(外部起單) -
 
-        ///// <summary>
-        ///// 行政採購申請單(外部起單)
-        ///// </summary>
-        //public GetExternalData PutEvaluateContent_PurchaseGetExternal(EvaluateContent_PurchaseERPInfo model)
-        //{
+        /// <summary>
+        /// 內容評估表_外購(外部起單)
+        /// </summary>
+        public GetExternalData PutEvaluateContent_PurchaseGetExternal(EvaluateContent_PurchaseERPInfo model)
+        {
+            try
+            {
+                #region - 初始化宣告 -
 
-        //}
+                //表單ID
+                IDENTIFY = "EvaluateContent_Purchase";
+
+                strFormNo = model.TITLE.ERP_FORM_NO;
+                var request = new GTVInApproveProgress()
+                {
+                    FORM_NO = strFormNo,
+                    IDENTIFY = IDENTIFY
+                };
+
+                //BPM 系統編號
+                if (model.TITLE.BPM_REQ_ID == null)
+                {
+                    strREQ = Guid.NewGuid().ToString();
+
+                }
+                else
+                {
+                    strREQ = model.TITLE.BPM_REQ_ID;
+                }
+
+                #endregion
+
+                #region 確認是否已起單且簽核中
+
+                var ApproveProgress = commonRepository.PostGTVInApproveProgress(request);
+
+                //確認是否已起單且簽核中或草稿中
+                if (!ApproveProgress.vResult)
+                {
+                    #region - 起單 -
+
+                    #region - 申請人資訊:ApplicantInfo -
+
+                    //表單資訊
+                    var applicantInfo = new ApplicantInfo()
+                    {
+                        REQUISITION_ID = strREQ,
+                        DIAGRAM_ID = IDENTIFY + "_P1",
+                        PRIORITY = 2,
+                        DRAFT_FLAG = 0,
+                        FLOW_ACTIVATED = 1
+                    };
+
+                    //申請人資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.TITLE.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.APPLICANT_DEPT = item.DEPT_ID;
+                        applicantInfo.APPLICANT_DEPT_NAME = item.DEPT_NAME;
+                        applicantInfo.APPLICANT_ID = item.USER_ID;
+                        applicantInfo.APPLICANT_NAME = item.USER_NAME;
+                        applicantInfo.APPLICANT_PHONE = item.MOBILE;
+                    }
+
+                    //(填單人/代填單人)資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.TITLE.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.FILLER_ID = item.USER_ID;
+                        applicantInfo.FILLER_NAME = item.USER_NAME;
+                    }
+
+                    #endregion
+
+                    #region - 內容評估表_外購(表頭內容):EvaluateContent_PurchaseTitle -
+
+                    strJson = jsonFunction.ObjectToJSON(model.TITLE);
+                    var evaluateContent_PurchaseTitle = jsonFunction.JsonToObject<EvaluateContent_PurchaseTitle>(strJson);
+                    evaluateContent_PurchaseTitle.FORM_NO = strFormNo;
+
+                    #endregion
+
+                    #region - 內容評估表_外購(表單內容):EvaluateContent_PurchaseConfig -
+
+                    strJson = jsonFunction.ObjectToJSON(model.INFO);
+                    var evaluateContent_PurchaseConfig = jsonFunction.JsonToObject<EvaluateContent_PurchaseConfig>(strJson);
+
+                    #endregion
+
+                    #region - 內容評估表_外購(附件)上傳:AttachmentConfig -
+
+                    //附件的設定
+                    strJson = jsonFunction.ObjectToJSON(model.ATTACHMENT);
+                    var attachmentConfig = jsonFunction.JsonToObject<List<AttachmentConfig>>(strJson);
+                    attachmentConfig.ForEach(Attachment =>
+                    {
+                        Attachment.CREATE_DATE = DateTime.Parse(Attachment.CREATE_DATE).ToString("yyyy/MM/dd HH:mm:ss");
+                    });
+
+
+                    #endregion
+
+                    #region - 送單 -
+
+                    //送單
+                    var evaluateContent_PurchaseViewModel = new EvaluateContent_PurchaseViewModel()
+                    {
+                        APPLICANT_INFO = applicantInfo,
+                        EVALUATECONTENT_PURCHASE_TITLE = evaluateContent_PurchaseTitle,
+                        EVALUATECONTENT_PURCHASE_CONFIG = evaluateContent_PurchaseConfig,
+                        ATTACHMENT_CONFIG = attachmentConfig
+                    };
+
+                    if (evaluateContent_PurchaseRepository.PutEvaluateContent_PurchaseSingle(evaluateContent_PurchaseViewModel))
+                    {
+                        //起單成功
+                        State = BPMStatusCode.PROGRESS;
+                    }
+                    else
+                    {
+                        //起單失敗
+                        State = BPMStatusCode.FAIL;
+                    }
+
+                    #endregion
+
+                    #endregion
+                }
+                else
+                {
+                    strREQ = ApproveProgress.REQUISITION_ID;
+                    State = ApproveProgress.BPMStatus;
+                }
+
+                #endregion
+
+                #region - 回傳狀態資訊 -
+
+                var getExternalData = new GetExternalData()
+                {
+                    BPM_REQ_ID = strREQ,
+                    ERP_FORM_NO = strFormNo,
+                    STATE = State
+                };
+
+                return getExternalData;
+
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("內容評估表_外購(外部起單)失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
 
         #endregion
 

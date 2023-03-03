@@ -197,6 +197,47 @@ namespace OA_WEB_API.Models.ERP
 
     #endregion
 
+    #region - 內容評估表_外購_回傳ERP資訊 -
+
+    #region - 內容評估表_外購 審核資訊_回傳ERP -
+
+    public class EvaluateContent_PurchaseInfoRequest: EvaluateContent_PurchaseQueryModel
+    {
+        /// <summary>接收ERP回傳狀態</summary>
+        public ErpResponseState ERP_RESPONSE_STATE { get; set; }
+
+        /// <summary>內容評估表_外購 表頭資訊</summary>
+        public EvaluateContent_PurchaseTitle EVALUATECONTENT_PURCHASE_TITLE { get; set; }
+
+        /// <summary>內容評估表_外購 表單內容 設定</summary>
+        public EvaluateContent_PurchaseConfig EVALUATECONTENT_PURCHASE_CONFIG { get; set; }
+
+        /// <summary>內容評估表_外購 評估人員 設定</summary>
+        public IList<EvaluateContent_PurchaseUsersConfig> EVALUATECONTENT_PURCHASE_USERS_CONFIG { get; set; }
+
+        /// <summary>內容評估表_外購 評估意見彙整 設定</summary>
+        public IList<EvaluateContent_PurchaseEvaluatesConfig> EVALUATECONTENT_PURCHASE_EVAS_CONFIG { get; set; }
+
+        /// <summary>內容評估表_外購 決策意見彙整 設定</summary>
+        public IList<EvaluateContent_PurchaseDecisionsConfig> EVALUATECONTENT_PURCHASE_DECS_CONFIG { get; set; }
+
+        /// <summary>附件</summary>
+        public IList<AttachmentConfig> ATTACHMENT_CONFIG { get; set; }
+
+        /// <summary>表單關聯</summary>
+        public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
+
+        /// <summary>最後簽核人員工編號</summary>
+        public string LoginId { get; set; }
+
+        /// <summary>最後簽核人姓名</summary>
+        public string LoginName { get; set; }
+    }
+
+    #endregion
+
+    #endregion
+
     #region - 版權採購類_回傳ERP資訊 -
 
     #region - 版權採購申請單 審核資訊_回傳ERP -

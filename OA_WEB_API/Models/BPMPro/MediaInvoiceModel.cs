@@ -213,16 +213,16 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>額外採購項目 總稅額/總預估保留稅額_台幣(付款辦法)</summary>
         public int PYMT_EX_TAX_TOTAL_TWD { get; set; }
 
-        /// <summary>發票明細 合計(憑證明細)</summary>
+        /// <summary>憑證明細 合計</summary>
         public double INV_AMOUNT_TOTAL { get; set; }
 
-        /// <summary>發票明細 合計_台幣(憑證明細)</summary>
+        /// <summary>憑證明細 合計_台幣</summary>
         public int INV_AMOUNT_TOTAL_TWD { get; set; }
 
-        /// <summary>發票明細 總稅額/總預估保留稅額(憑證明細)</summary>
+        /// <summary>憑證明細 總稅額/總預估保留稅額(憑證明細)</summary>
         public double INV_TAX_TOTAL { get; set; }
 
-        /// <summary>發票明細 總稅額/總預估保留稅額_台幣(憑證明細)</summary>
+        /// <summary>憑證明細 總稅額/總預估保留稅額_台幣(憑證明細)</summary>
         public int INV_TAX_TOTAL_TWD { get; set; }
 
         /// <summary>實際支付金額</summary>
@@ -358,10 +358,34 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>憑證日期</summary>
         public string INV_DATE { get; set; }
 
-        /// <summary>發票金額</summary>
+        /// <summary>憑證免稅額</summary>
+        public double INV_EXCL { get; set; }
+
+        /// <summary>憑證免稅額_台幣</summary>
+        public int INV_EXCL_TWD { get; set; }
+
+        /// <summary>憑證稅額</summary>
+        public double INV_TAX { get; set; }
+
+        /// <summary>憑證稅額_台幣</summary>
+        public int INV_TAX_TWD { get; set; }
+
+        /// <summary>憑證未稅金額</summary>
+        public double INV_NET { get; set; }
+
+        /// <summary>憑證未稅金額_台幣</summary>
+        public int INV_NET_TWD { get; set; }
+
+        /// <summary>憑證含稅金額</summary>
+        public double INV_GROSS { get; set; }
+
+        /// <summary>憑證含稅金額_台幣</summary>
+        public int INV_GROSS_TWD { get; set; }
+
+        /// <summary>憑證金額</summary>
         public double INV_AMOUNT { get; set; }
 
-        /// <summary>發票金額</summary>
+        /// <summary>憑證金額</summary>
         public int INV_AMOUNT_TWD { get; set; }
 
         /// <summary>備註</summary>

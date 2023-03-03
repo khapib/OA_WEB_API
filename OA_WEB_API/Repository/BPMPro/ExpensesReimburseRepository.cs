@@ -122,8 +122,16 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [INV_Date] AS [INV_DATE], ";
             strSQL += "     [ItemName] AS [ITEM_NAME], ";
             strSQL += "     [ItemType] AS [ITEM_TYPE], ";
-            strSQL += "     [Reason] AS [REASON], ";
+            strSQL += "     [INV_Excl] AS [INV_EXCL], ";
+            strSQL += "     [INV_Excl_TWD] AS [INV_EXCL_TWD], ";
+            strSQL += "     [INV_Tax] AS [INV_TAX], ";
+            strSQL += "     [INV_Tax_TWD] AS [INV_TAX_TWD], ";
+            strSQL += "     [INV_Net] AS [INV_NET], ";
+            strSQL += "     [INV_Net_TWD] AS [INV_NET_TWD], ";
+            strSQL += "     [INV_Gross] AS [INV_GROSS], ";
+            strSQL += "     [INV_Gross_TWD] AS [INV_GROSS_TWD], ";
             strSQL += "     [INV_Amount] AS [INV_AMOUNT], ";
+            strSQL += "     [INV_Amount_TWD] AS [INV_AMOUNT_TWD], ";
             strSQL += "     [ExchangeRate] AS [EXCH_RATE], ";
             strSQL += "     [Amount_CONV] AS [AMOUNT_CONV], ";
             strSQL += "     [Currency] AS [CURRENCY], ";
@@ -131,7 +139,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [ProjectFormNo] AS [PROJECT_FORM_NO], ";
             strSQL += "     [ProjectName] AS [PROJECT_NAME], ";
             strSQL += "     [ProjectNickname] AS [PROJECT_NICKNAME], ";
-            strSQL += "     [ProjectUseYear] AS [PROJECT_USE_YEAR] ";
+            strSQL += "     [ProjectUseYear] AS [PROJECT_USE_YEAR], ";
+            strSQL += "     [Reason] AS [REASON] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_ExpensesReimburse_DTL] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             var expensesReimburseDetailsConfig = dbFun.DoQuery(strSQL, parameter).ToList<ExpensesReimburseDetailsConfig>();
@@ -415,8 +424,16 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@INV_DATE", SqlDbType.NVarChar) { Size = 64 , Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100 , Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ITEM_TYPE", SqlDbType.NVarChar) { Size = 100 , Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@REASON", SqlDbType.NVarChar) { Size = 4000 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_EXCL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_EXCL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_TAX_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_NET_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_GROSS_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@INV_AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@EXCH_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AMOUNT_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@CURRENCY", SqlDbType.NVarChar) { Size = 10 , Value = (object)DBNull.Value ?? DBNull.Value },
@@ -425,6 +442,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@PROJECT_NAME", SqlDbType.NVarChar) { Size = 500 , Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PROJECT_NICKNAME", SqlDbType.NVarChar) { Size = 4000 , Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PROJECT_USE_YEAR", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@REASON", SqlDbType.NVarChar) { Size = 4000 , Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -447,6 +465,10 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         #region - 確認小數點後第二位 -
 
+                        item.INV_EXCL = Math.Round(item.INV_EXCL, 2);
+                        item.INV_TAX = Math.Round(item.INV_TAX, 2);
+                        item.INV_NET = Math.Round(item.INV_NET, 2);
+                        item.INV_GROSS = Math.Round(item.INV_GROSS, 2);
                         item.INV_AMOUNT = Math.Round(item.INV_AMOUNT, 2);
                         item.EXCH_RATE = Math.Round(item.EXCH_RATE, 2);                        
 
@@ -457,8 +479,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_ExpensesReimburse_DTL]([RequisitionID],[DTL_RowNo],[INV_Type],[INV_Num],[INV_Date],[ItemName],[ItemType],[Reason],[INV_Amount],[ExchangeRate],[Amount_CONV],[Currency],[ACCT_Category],[ProjectFormNo],[ProjectName],[ProjectNickname],[ProjectUseYear]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@DTL_ROW_NO,@INV_TYPE,@INV_NUM,@INV_DATE,@ITEM_NAME,@ITEM_TYPE,@REASON,@INV_AMOUNT,@EXCH_RATE,@AMOUNT_CONV,@CURRENCY,@ACCT_CATEGORY,@PROJECT_FORM_NO,@PROJECT_NAME,@PROJECT_NICKNAME,@PROJECT_USE_YEAR) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_ExpensesReimburse_DTL]([RequisitionID],[DTL_RowNo],[INV_Type],[INV_Num],[INV_Date],[ItemName],[ItemType],[INV_Excl],[INV_Excl_TWD],[INV_Tax],[INV_Tax_TWD],[INV_Net],[INV_Net_TWD],[INV_Gross],[INV_Gross_TWD],[INV_Amount],[INV_Amount_TWD],[ExchangeRate],[Amount_CONV],[Currency],[ACCT_Category],[ProjectFormNo],[ProjectName],[ProjectNickname],[ProjectUseYear],[Reason]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@DTL_ROW_NO,@INV_TYPE,@INV_NUM,@INV_DATE,@ITEM_NAME,@ITEM_TYPE,@INV_EXCL,@INV_EXCL_TWD,@INV_TAX,@INV_TAX_TWD,@INV_NET,@INV_NET_TWD,@INV_GROSS,@INV_GROSS_TWD,@INV_AMOUNT,@INV_AMOUNT_TWD,@EXCH_RATE,@AMOUNT_CONV,@CURRENCY,@ACCT_CATEGORY,@PROJECT_FORM_NO,@PROJECT_NAME,@PROJECT_NICKNAME,@PROJECT_USE_YEAR,@REASON) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }

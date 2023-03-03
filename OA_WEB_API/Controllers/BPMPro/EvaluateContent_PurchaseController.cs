@@ -77,6 +77,16 @@ namespace OA_WEB_API.Controllers.BPMPro
             return evaluateContent_PurchaseRepository.PutEvaluateContent_PurchaseOpinionSingle(model);
         }
 
+        /// <summary>
+        /// 內容評估表_外購(清除評估人員)
+        /// </summary>
+        [Route("PutEvaluateContent_PurchaseRemoveCountersignSingle")]
+        [HttpPost]
+        public bool PutEvaluateContent_PurchaseRemoveCountersignSingle([FromBody] EvaluateContent_PurchaseQueryModel query)
+        {
+            return evaluateContent_PurchaseRepository.PutEvaluateContent_PurchaseRemoveCountersignSingle(query);
+        }
+
         #endregion
     }
 }

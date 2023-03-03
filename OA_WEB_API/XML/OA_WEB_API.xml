@@ -496,6 +496,11 @@
             內容評估表_外購(評估意見)
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.EvaluateContent_PurchaseController.PutEvaluateContent_PurchaseRemoveCountersignSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseQueryModel)">
+            <summary>
+            內容評估表_外購(清除評估人員)
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.EvaluateDemandController">
             <summary>
             會簽管理系統 - 需求評估單
@@ -619,6 +624,11 @@
         <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutGeneralInvoiceGetExternal(OA_WEB_API.Models.BPMPro.GeneralInvoiceERPInfo)">
             <summary>
             行政採購請款單(外部起單)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutEvaluateContent_PurchaseGetExternal(OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseERPInfo)">
+            <summary>
+            內容評估表_外購(外部起單)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutMediaOrderGetExternal(OA_WEB_API.Models.BPMPro.MediaOrderERPInfo)">
@@ -2170,11 +2180,35 @@
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.ITEM_TYPE">
             <summary>項目類別</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.REASON">
-            <summary>申請源由</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_EXCL">
+            <summary>憑證免稅額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_EXCL_TWD">
+            <summary>憑證免稅額_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_TAX">
+            <summary>憑證稅額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_TAX_TWD">
+            <summary>憑證稅額_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_NET">
+            <summary>憑證未稅金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_NET_TWD">
+            <summary>憑證未稅金額_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_GROSS">
+            <summary>憑證含稅金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_GROSS_TWD">
+            <summary>憑證含稅金額_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_AMOUNT">
-            <summary>發票金額</summary>
+            <summary>憑證金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_AMOUNT_TWD">
+            <summary>憑證金額_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.EXCH_RATE">
             <summary>匯率</summary>
@@ -2199,6 +2233,9 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.PROJECT_USE_YEAR">
             <summary>所屬專案年分</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.REASON">
+            <summary>申請源由</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig">
             <summary>
@@ -2533,10 +2570,10 @@
             <summary>付款辦法 本期付款總額_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.INV_AMOUNT_TOTAL">
-            <summary>發票明細 合計</summary>
+            <summary>憑證明細 合計</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.INV_AMOUNT_TOTAL_TWD">
-            <summary>發票明細 合計_台幣</summary>
+            <summary>憑證明細 合計_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.ACTUAL_PAY_AMOUNT">
             <summary>實際支付金額</summary>
@@ -2600,11 +2637,35 @@
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceDetailsConfig.INV_DATE">
             <summary>憑證日期</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceDetailsConfig.INV_EXCL">
+            <summary>憑證免稅額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceDetailsConfig.INV_EXCL_TWD">
+            <summary>憑證免稅額_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceDetailsConfig.INV_TAX">
+            <summary>憑證稅額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceDetailsConfig.INV_TAX_TWD">
+            <summary>憑證稅額_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceDetailsConfig.INV_NET">
+            <summary>憑證未稅金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceDetailsConfig.INV_NET_TWD">
+            <summary>憑證未稅金額_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceDetailsConfig.INV_GROSS">
+            <summary>憑證含稅金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceDetailsConfig.INV_GROSS_TWD">
+            <summary>憑證含稅金額_台幣</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceDetailsConfig.INV_AMOUNT">
-            <summary>發票金額</summary>
+            <summary>憑證金額</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceDetailsConfig.INV_AMOUNT_TWD">
-            <summary>發票金額</summary>
+            <summary>憑證金額_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceDetailsConfig.INV_NOTE">
             <summary>備註</summary>
@@ -3146,6 +3207,28 @@
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceInfoConfig.PERIOD">
             <summary>期別</summary>
         </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseERPInfo">
+            <summary>
+            內容評估表_外購(外部起單)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseERPInfo.TITLE">
+            <summary>內容評估表_外購(表頭內容)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseERPInfo.INFO">
+            <summary>內容評估表_外購(表單內容)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseERPInfo.ATTACHMENT">
+            <summary>內容評估表_外購(附件)</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseERPInfoTitle">
+            <summary>
+            內容評估表_外購(表頭內容)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseERPInfoTitle.EVALUATE_NO">
+            <summary>評估編號</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaOrderERPInfo">
             <summary>
             版權採購申請單(外部起單)ERP資料
@@ -3684,16 +3767,16 @@
             <summary>額外採購項目 總稅額/總預估保留稅額_台幣(付款辦法)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.INV_AMOUNT_TOTAL">
-            <summary>發票明細 合計(憑證明細)</summary>
+            <summary>憑證明細 合計</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.INV_AMOUNT_TOTAL_TWD">
-            <summary>發票明細 合計_台幣(憑證明細)</summary>
+            <summary>憑證明細 合計_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.INV_TAX_TOTAL">
-            <summary>發票明細 總稅額/總預估保留稅額(憑證明細)</summary>
+            <summary>憑證明細 總稅額/總預估保留稅額(憑證明細)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.INV_TAX_TOTAL_TWD">
-            <summary>發票明細 總稅額/總預估保留稅額_台幣(憑證明細)</summary>
+            <summary>憑證明細 總稅額/總預估保留稅額_台幣(憑證明細)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.ACTUAL_PAY_AMOUNT">
             <summary>實際支付金額</summary>
@@ -3815,11 +3898,35 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.INV_DATE">
             <summary>憑證日期</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.INV_EXCL">
+            <summary>憑證免稅額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.INV_EXCL_TWD">
+            <summary>憑證免稅額_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.INV_TAX">
+            <summary>憑證稅額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.INV_TAX_TWD">
+            <summary>憑證稅額_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.INV_NET">
+            <summary>憑證未稅金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.INV_NET_TWD">
+            <summary>憑證未稅金額_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.INV_GROSS">
+            <summary>憑證含稅金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.INV_GROSS_TWD">
+            <summary>憑證含稅金額_台幣</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.INV_AMOUNT">
-            <summary>發票金額</summary>
+            <summary>憑證金額</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.INV_AMOUNT_TWD">
-            <summary>發票金額</summary>
+            <summary>憑證金額</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.INV_NOTE">
             <summary>備註</summary>
@@ -5814,6 +5921,36 @@
         <member name="P:OA_WEB_API.Models.ERP.GeneralInvoiceInfoRequest.LoginName">
             <summary>最後簽核人姓名</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.ERP.EvaluateContent_PurchaseInfoRequest.ERP_RESPONSE_STATE">
+            <summary>接收ERP回傳狀態</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.EvaluateContent_PurchaseInfoRequest.EVALUATECONTENT_PURCHASE_TITLE">
+            <summary>內容評估表_外購 表頭資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.EvaluateContent_PurchaseInfoRequest.EVALUATECONTENT_PURCHASE_CONFIG">
+            <summary>內容評估表_外購 表單內容 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.EvaluateContent_PurchaseInfoRequest.EVALUATECONTENT_PURCHASE_USERS_CONFIG">
+            <summary>內容評估表_外購 評估人員 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.EvaluateContent_PurchaseInfoRequest.EVALUATECONTENT_PURCHASE_EVAS_CONFIG">
+            <summary>內容評估表_外購 評估意見彙整 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.EvaluateContent_PurchaseInfoRequest.EVALUATECONTENT_PURCHASE_DECS_CONFIG">
+            <summary>內容評估表_外購 決策意見彙整 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.EvaluateContent_PurchaseInfoRequest.ATTACHMENT_CONFIG">
+            <summary>附件</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.EvaluateContent_PurchaseInfoRequest.ASSOCIATED_FORM_CONFIG">
+            <summary>表單關聯</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.EvaluateContent_PurchaseInfoRequest.LoginId">
+            <summary>最後簽核人員工編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.EvaluateContent_PurchaseInfoRequest.LoginName">
+            <summary>最後簽核人姓名</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.ERP.MediaOrderInfoRequest">
             <summary>
             版權採購申請單 審核資訊_回傳ERP 
@@ -6395,6 +6532,11 @@
             內容評估表_外購(評估意見)
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.EvaluateContent_PurchaseRepository.PutEvaluateContent_PurchaseRemoveCountersignSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseQueryModel)">
+            <summary>
+            內容評估表_外購(清除評估人員)
+            </summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContent_PurchaseRepository.strSQL">
             <summary>
             T-SQL
@@ -6661,6 +6803,9 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.generalInvoiceRepository">
             <summary>行政採購請款單</summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.evaluateContent_PurchaseRepository">
+            <summary>內容評估表_外購</summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.mediaOrderRepository">
             <summary>版權採購申請單</summary>
         </member>
@@ -6706,6 +6851,11 @@
         <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutGeneralInvoiceGetExternal(OA_WEB_API.Models.BPMPro.GeneralInvoiceERPInfo)">
             <summary>
             行政採購請款單(外部起單)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutEvaluateContent_PurchaseGetExternal(OA_WEB_API.Models.BPMPro.EvaluateContent_PurchaseERPInfo)">
+            <summary>
+            內容評估表_外購(外部起單)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutMediaOrderGetExternal(OA_WEB_API.Models.BPMPro.MediaOrderERPInfo)">
@@ -7429,6 +7579,9 @@
         <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.generalInvoiceRepository">
             <summary>行政採購請款單</summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.evaluateContent_PurchaseRepository">
+            <summary>內容評估表_外購</summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.mediaOrderRepository">
             <summary>版權採購申請單</summary>
         </member>
@@ -7450,7 +7603,7 @@
         </member>
         <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostGeneralOrderInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
             <summary>
-            行政採購申請單 審核資訊_回傳ERP_回傳ERP
+            行政採購申請單 審核資訊_回傳ERP
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostGeneralAcceptanceInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
@@ -7461,6 +7614,11 @@
         <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostGeneralInvoiceInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
             <summary>
             行政採購請款單 審核資訊_回傳ERP
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostEvaluateContent_PurchaseInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
+            <summary>
+            內容評估表_外購 審核資訊_回傳ERP
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostMediaOrderInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">

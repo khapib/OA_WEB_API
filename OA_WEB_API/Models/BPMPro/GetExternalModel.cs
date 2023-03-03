@@ -233,6 +233,39 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
+    #region - 內容評估表(外部起單) -
+
+    #region - 內容評估表_外購(外部起單) -
+
+    /// <summary>
+    /// 內容評估表_外購(外部起單)
+    /// </summary>
+    public class EvaluateContent_PurchaseERPInfo
+    {
+        /// <summary>內容評估表_外購(表頭內容)</summary>
+        public EvaluateContent_PurchaseERPInfoTitle TITLE { get; set; }
+
+        /// <summary>內容評估表_外購(表單內容)</summary>
+        public EvaluateContent_PurchaseConfig INFO { get; set; }
+
+        /// <summary>內容評估表_外購(附件)</summary>
+        public IList<AttachmentConfig> ATTACHMENT { get; set; }
+
+    }
+
+    /// <summary>
+    /// 內容評估表_外購(表頭內容)
+    /// </summary>
+    public class EvaluateContent_PurchaseERPInfoTitle : InfoTitle
+    {
+        /// <summary>評估編號</summary>
+        public string EVALUATE_NO { get; set; }
+    }
+
+    #endregion
+
+    #endregion
+
     #region - 版權採購類_(外部起單) -
 
     #region - 版權採購申請單(外部起單) -

@@ -127,6 +127,25 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #endregion
 
+        #region - 內容評估表(外部起單) -
+
+        #region - 內容評估表_外購(外部起單) -
+
+        /// <summary>
+        /// 內容評估表_外購(外部起單)
+        /// </summary>
+        [Route("api/PutEvaluateContent_PurchaseGetExternal")]
+        [HttpPost]
+        public GetExternalData PutEvaluateContent_PurchaseGetExternal(EvaluateContent_PurchaseERPInfo model)
+        {
+            return getExternalRepository.PutEvaluateContent_PurchaseGetExternal(model);
+        }
+
+
+        #endregion
+
+        #endregion
+
         #region - 版權採購類_(外部起單) -
 
         #region - 版權採購申請單(外部起單) -

@@ -1369,8 +1369,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     var evaluateContent_PurchaseViewModel = new EvaluateContent_PurchaseViewModel()
                     {
                         APPLICANT_INFO = applicantInfo,
-                        EVALUATECONTENT_PURCHASE_TITLE = evaluateContent_PurchaseTitle,
-                        EVALUATECONTENT_PURCHASE_CONFIG = evaluateContent_PurchaseConfig,
+                        EVALUATE_CONTENT_PURCHASE_TITLE = evaluateContent_PurchaseTitle,
+                        EVALUATE_CONTENT_PURCHASE_CONFIG = evaluateContent_PurchaseConfig,
                         ATTACHMENT_CONFIG = attachmentConfig
                     };
 

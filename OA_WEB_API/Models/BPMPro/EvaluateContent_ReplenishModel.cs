@@ -6,36 +6,33 @@ using System.Web;
 namespace OA_WEB_API.Models.BPMPro
 {
     /// <summary>
-    /// 內容評估表_外購(查詢條件)
+    /// 內容評估表_補充意見(查詢條件)
     /// </summary>
-    public class EvaluateContent_PurchaseQueryModel
+    public class EvaluateContent_ReplenishQueryModel
     {
         /// <summary>系統編號</summary>
         public string REQUISITION_ID { get; set; }
     }
 
     /// <summary>
-    /// 內容評估表_外購
+    /// 內容評估表_補充意見
     /// </summary>
-    public class EvaluateContent_PurchaseViewModel
+    public class EvaluateContent_ReplenishViewModel
     {
         /// <summary>申請人資訊</summary>
         public ApplicantInfo APPLICANT_INFO { get; set; }
 
-        /// <summary>內容評估表_外購 表頭資訊</summary>
-        public EvaluateContent_PurchaseTitle EVALUATE_CONTENT_PURCHASE_TITLE { get; set; }
+        /// <summary>內容評估表_補充意見 表頭資訊</summary>
+        public EvaluateContent_ReplenishTitle EVALUATE_CONTENT_REPLENISH_TITLE { get; set; }
 
-        /// <summary>內容評估表_外購 表單內容 設定</summary>
-        public EvaluateContent_PurchaseConfig EVALUATE_CONTENT_PURCHASE_CONFIG { get; set; }
+        /// <summary>內容評估表_補充意見 表單內容 設定</summary>
+        public EvaluateContent_ReplenishConfig EVALUATE_CONTENT_REPLENISH_CONFIG { get; set; }
 
-        /// <summary>內容評估表_外購 評估人員 設定</summary>
-        public IList<EvaluateContent_PurchaseUsersConfig> EVALUATE_CONTENT_PURCHASE_USERS_CONFIG { get; set; }
+        /// <summary>內容評估表_補充意見 補充意見彙整 設定</summary>
+        public IList<EvaluateContent_ReplenishEvaluatesConfig> EVALUATE_CONTENT_REPLENISH_EVAS_CONFIG { get; set; }
 
-        /// <summary>內容評估表_外購 評估意見彙整 設定</summary>
-        public IList<EvaluateContent_PurchaseEvaluatesConfig> EVALUATE_CONTENT_PURCHASE_EVAS_CONFIG { get; set; }
-
-        /// <summary>內容評估表_外購 決策意見彙整 設定</summary>
-        public IList<EvaluateContent_PurchaseDecisionsConfig> EVALUATE_CONTENT_PURCHASE_DECS_CONFIG { get; set; }
+        /// <summary>內容評估表_補充意見 決策意見彙整 設定</summary>
+        public IList<EvaluateContent_ReplenishDecisionsConfig> EVALUATE_CONTENT_REPLENISH_DECS_CONFIG { get; set; }
 
         /// <summary>附件</summary>
         public IList<AttachmentConfig> ATTACHMENT_CONFIG { get; set; }
@@ -46,18 +43,18 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 內容評估表_外購 表頭資訊
+    /// 內容評估表_補充意見 表頭資訊
     /// </summary>
-    public class EvaluateContent_PurchaseTitle : ImplementHeader
+    public class EvaluateContent_ReplenishTitle : ImplementHeader
     {
-        /// <summary>評估編號</summary>
+        /// <summary>補充意見編號</summary>
         public string SORT_NO { get; set; }
     }
 
     /// <summary>
-    /// 內容評估表_外購 表單內容 設定
+    /// 內容評估表_補充意見 表單內容 設定
     /// </summary>
-    public class EvaluateContent_PurchaseConfig
+    public class EvaluateContent_ReplenishConfig
     {
         /// <summary>原始片名</summary>
         public string ORIGINAL_TITLE { get; set; }
@@ -140,67 +137,24 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>備註</summary>
         public string NOTE { get; set; }
 
-        /// <summary>建議評估期限</summary>
-        public Nullable<DateTime> EVALUATE_DATE { get; set; }
-
         /// <summary>指定劇種負責人編號</summary>
         public string PRINCIPAL_ID { get; set; }
 
         /// <summary>指定劇種負責人姓名</summary>
         public string PRINCIPAL_NAME { get; set; }
-
     }
 
     /// <summary>
-    /// 內容評估表_外購 評估人員 設定
+    /// 內容評估表_補充意見 補充意見彙整 設定
     /// </summary>
-    public class EvaluateContent_PurchaseUsersConfig
-    {
-        /// <summary>評估人員主要部門</summary>
-        public string USER_DEPT_MAIN_ID { get; set; }
-
-        /// <summary>評估人員部門</summary>
-        public string USER_DEPT_ID { get; set; }
-
-        /// <summary>評估人員編號</summary>
-        public string USER_ID { get; set; }
-
-        /// <summary>評估人員姓名</summary>
-        public string USER_NAME { get; set; }
-    }
-
-    /// <summary>
-    /// 內容評估表_外購 評估意見彙整 設定
-    /// </summary>
-    public class EvaluateContent_PurchaseEvaluatesConfig : EvaluateContent_PurchaseDecisionsConfig
-    {
-        /// <summary>優點</summary>
-        public string ADVANTAGE { get; set; }
-
-        /// <summary>缺點</summary>
-        public string DEFECT { get; set; }
-
-    }
-
-    /// <summary>
-    /// 內容評估表_外購 決策意見彙整 設定
-    /// </summary>
-    public class EvaluateContent_PurchaseDecisionsConfig
+    public class EvaluateContent_ReplenishEvaluatesConfig
     {
         /// <summary>評估人員編號</summary>
         public string USER_ID { get; set; }
 
         /// <summary>評估人員姓名</summary>
         public string USER_NAME { get; set; }
-
-        /// <summary>建議類型：
-        /// ADV.建議採購
-        /// N_ADV.不建議採購
-        /// AG.需再次評估
-        /// N_I.沒意見(決策意見無這一項)
-        /// </summary>
-        public string ADVISE_TYPE { get; set; }
-
+        
         /// <summary>建議原因</summary>
         public string REASON { get; set; }
 
@@ -208,35 +162,45 @@ namespace OA_WEB_API.Models.BPMPro
         public Nullable<DateTime> OPINION_DATE_TIME { get; set; }
     }
 
-    #region - 內容評估表_外購 填寫 -
+    /// <summary>
+    /// 內容評估表_補充意見 決策意見彙整 設定
+    /// </summary>
+    public class EvaluateContent_ReplenishDecisionsConfig: EvaluateContent_ReplenishEvaluatesConfig
+    {
+        /// <summary>建議類型：
+        /// ADV.建議採購
+        /// N_ADV.不建議採購
+        /// AG.需再次評估
+        /// N_I.沒意見(決策意見無這一項)
+        /// </summary>
+        public string ADVISE_TYPE { get; set; }
+    }
+
+    #region - 內容評估表_補充意見 填寫 -
 
     /// <summary>
-    /// 內容評估表_外購 填寫 設定
+    /// 內容評估表_補充意見 填寫 設定
     /// </summary>
-    public class EvaluateContent_PurchaseFillinConfig 
+    public class EvaluateContent_ReplenishFillinConfig
     {
         /// <summary>系統編號</summary>
         public string REQUISITION_ID { get; set; }
 
-        /// <summary>內容評估表_外購 表單內容 設定</summary>
-        public EvaluateContent_PurchaseConfig EVALUATE_CONTENT_PURCHASE_CONFIG { get; set; }
+        /// <summary>指定劇種負責人編號</summary>
+        public string PRINCIPAL_ID { get; set; }
 
-        /// <summary>內容評估表_外購 評估人員 設定</summary>
-        public IList<EvaluateContent_PurchaseUsersConfig> EVALUATE_CONTENT_PURCHASE_USERS_CONFIG { get; set; }
-
-        /// <summary>表單關聯</summary>
-        public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
-
+        /// <summary>指定劇種負責人姓名</summary>
+        public string PRINCIPAL_NAME { get; set; }
     }
 
     #endregion
 
-    #region - 內容評估表_外購 評估意見 -
+    #region - 內容評估表_補充意見 評估意見 -
 
     /// <summary>
-    /// 內容評估表_外購 評估意見 設定
+    /// 內容評估表_補充意見 評估意見 設定
     /// </summary>
-    public class EvaluateContent_PurchaseOpinionConfig : EvaluateContent_PurchaseEvaluatesConfig
+    public class EvaluateContent_ReplenishOpinionConfig : EvaluateContent_ReplenishDecisionsConfig
     {
         /// <summary>系統編號</summary>
         public string REQUISITION_ID { get; set; }

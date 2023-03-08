@@ -259,7 +259,7 @@ namespace OA_WEB_API.Models.BPMPro
     public class EvaluateContent_PurchaseERPInfoTitle : InfoTitle
     {
         /// <summary>評估編號</summary>
-        public string EVALUATE_NO { get; set; }
+        public string SORT_NO { get; set; }
     }
 
     #endregion

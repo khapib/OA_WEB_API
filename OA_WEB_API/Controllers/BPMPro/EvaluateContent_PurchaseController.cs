@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 
 namespace OA_WEB_API.Controllers.BPMPro
@@ -82,9 +83,17 @@ namespace OA_WEB_API.Controllers.BPMPro
         /// </summary>
         [Route("PutEvaluateContent_PurchaseRemoveCountersignSingle")]
         [HttpPost]
-        public bool PutEvaluateContent_PurchaseRemoveCountersignSingle([FromBody] EvaluateContent_PurchaseQueryModel query)
+        public void PutEvaluateContent_PurchaseRemoveCountersignSingle()
         {
-            return evaluateContent_PurchaseRepository.PutEvaluateContent_PurchaseRemoveCountersignSingle(query);
+            HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
+            HttpRequestBase request = context.Request;
+
+            var query = new EvaluateContent_PurchaseQueryModel()
+            {
+                REQUISITION_ID = request["RequisitionID"],
+            };
+
+             evaluateContent_PurchaseRepository.PutEvaluateContent_PurchaseRemoveCountersignSingle(query);
         }
 
         #endregion

@@ -177,6 +177,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BPMPro\ActiveController.cs" />
     <Compile Include="Controllers\BPMPro\EvaluateContent_PurchaseController.cs" />
+    <Compile Include="Controllers\BPMPro\EvaluateContent_ReplenishController.cs" />
     <Compile Include="Controllers\BPMPro\EvaluateDemandController.cs" />
     <Compile Include="Controllers\BPMPro\ExpensesReimburseController.cs" />
     <Compile Include="Controllers\BPMPro\GeneralAcceptanceController.cs" />
@@ -222,6 +223,7 @@
     </Compile>
     <Compile Include="Models\BPMPro\ActiveModel.cs" />
     <Compile Include="Models\BPMPro\EvaluateContent_PurchaseModel.cs" />
+    <Compile Include="Models\BPMPro\EvaluateContent_ReplenishModel.cs" />
     <Compile Include="Models\BPMPro\EvaluateDemandModel.cs" />
     <Compile Include="Models\BPMPro\ExpensesReimburseModel.cs" />
     <Compile Include="Models\BPMPro\GeneralAcceptanceModel.cs" />
@@ -249,6 +251,7 @@
     <Compile Include="Models\BPMPro\UserModel.cs" />
     <Compile Include="Repository\BPMPro\ActiveRepository.cs" />
     <Compile Include="Repository\BPMPro\EvaluateContent_PurchaseRepository.cs" />
+    <Compile Include="Repository\BPMPro\EvaluateContent_ReplenishRepository.cs" />
     <Compile Include="Repository\BPMPro\EvaluateDemandRepository.cs" />
     <Compile Include="Repository\BPMPro\ExpensesReimburseRepository.cs" />
     <Compile Include="Repository\BPMPro\GeneralAcceptanceRepository.cs" />

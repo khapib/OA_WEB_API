@@ -197,29 +197,29 @@ namespace OA_WEB_API.Models.ERP
 
     #endregion
 
-    #region - 內容評估表_外購_回傳ERP資訊 -
+    #region - 內容評估表_回傳ERP資訊 -
 
-    #region - 內容評估表_外購 審核資訊_回傳ERP -
+    #region - 內容評估表 審核資訊_回傳ERP -
 
-    public class EvaluateContent_PurchaseInfoRequest: EvaluateContent_PurchaseQueryModel
+    public class EvaluateContentInfoRequest: EvaluateContentQueryModel
     {
         /// <summary>接收ERP回傳狀態</summary>
         public ErpResponseState ERP_RESPONSE_STATE { get; set; }
 
         /// <summary>內容評估表_外購 表頭資訊</summary>
-        public EvaluateContent_PurchaseTitle EVALUATECONTENT_PURCHASE_TITLE { get; set; }
+        public EvaluateContentTitle EVALUATE_CONTENT_TITLE { get; set; }
 
         /// <summary>內容評估表_外購 表單內容 設定</summary>
-        public EvaluateContent_PurchaseConfig EVALUATECONTENT_PURCHASE_CONFIG { get; set; }
+        public EvaluateContentConfig EVALUATE_CONTENT_CONFIG { get; set; }
 
         /// <summary>內容評估表_外購 評估人員 設定</summary>
-        public IList<EvaluateContent_PurchaseUsersConfig> EVALUATECONTENT_PURCHASE_USERS_CONFIG { get; set; }
+        public IList<EvaluateContentUsersConfig> EVALUATE_CONTENT_USERS_CONFIG { get; set; }
 
         /// <summary>內容評估表_外購 評估意見彙整 設定</summary>
-        public IList<EvaluateContent_PurchaseEvaluatesConfig> EVALUATECONTENT_PURCHASE_EVAS_CONFIG { get; set; }
+        public IList<EvaluateContentEvaluatesConfig> EVALUATE_CONTENT_EVAS_CONFIG { get; set; }
 
         /// <summary>內容評估表_外購 決策意見彙整 設定</summary>
-        public IList<EvaluateContent_PurchaseDecisionsConfig> EVALUATECONTENT_PURCHASE_DECS_CONFIG { get; set; }
+        public IList<EvaluateContentDecisionsConfig> EVALUATE_CONTENT_DECS_CONFIG { get; set; }
 
         /// <summary>附件</summary>
         public IList<AttachmentConfig> ATTACHMENT_CONFIG { get; set; }
@@ -232,6 +232,44 @@ namespace OA_WEB_API.Models.ERP
 
         /// <summary>最後簽核人姓名</summary>
         public string LoginName { get; set; }
+    }
+
+    #endregion
+
+    #region - 內容評估表_補充意見 審核資訊_回傳ERP -
+
+    /// <summary>
+    /// 內容評估表_補充意見 審核資訊_回傳ERP
+    /// </summary>
+    public class EvaluateContent_ReplenishInfoRequest: EvaluateContent_ReplenishQueryModel
+    {
+        /// <summary>接收ERP回傳狀態</summary>
+        public ErpResponseState ERP_RESPONSE_STATE { get; set; }
+
+        /// <summary>內容評估表_外購 表頭資訊</summary>
+        public EvaluateContent_ReplenishTitle EVALUATE_CONTENT_REPLENISH_TITLE { get; set; }
+
+        /// <summary>內容評估表_外購 表單內容 設定</summary>
+        public EvaluateContent_ReplenishConfig EVALUATE_CONTENT_REPLENISH_CONFIG { get; set; }
+
+        /// <summary>內容評估表_外購 評估意見彙整 設定</summary>
+        public IList<EvaluateContent_ReplenishEvaluatesConfig> EVALUATE_CONTENT_REPLENISH_EVAS_CONFIG { get; set; }
+
+        /// <summary>內容評估表_外購 決策意見彙整 設定</summary>
+        public IList<EvaluateContent_ReplenishDecisionsConfig> EVALUATE_CONTENT_REPLENISH_DECS_CONFIG { get; set; }
+
+        /// <summary>附件</summary>
+        public IList<AttachmentConfig> ATTACHMENT_CONFIG { get; set; }
+
+        /// <summary>表單關聯</summary>
+        public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
+
+        /// <summary>最後簽核人員工編號</summary>
+        public string LoginId { get; set; }
+
+        /// <summary>最後簽核人姓名</summary>
+        public string LoginName { get; set; }
+
     }
 
     #endregion

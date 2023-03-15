@@ -235,18 +235,18 @@ namespace OA_WEB_API.Models.BPMPro
 
     #region - 內容評估表(外部起單) -
 
-    #region - 內容評估表_外購(外部起單) -
+    #region - 內容評估表(外部起單) -
 
     /// <summary>
-    /// 內容評估表_外購(外部起單)
+    /// 內容評估表(外部起單)
     /// </summary>
-    public class EvaluateContent_PurchaseERPInfo
+    public class EvaluateContentERPInfo
     {
         /// <summary>內容評估表_外購(表頭內容)</summary>
-        public EvaluateContent_PurchaseERPInfoTitle TITLE { get; set; }
+        public EvaluateContentERPInfoTitle TITLE { get; set; }
 
         /// <summary>內容評估表_外購(表單內容)</summary>
-        public EvaluateContent_PurchaseConfig INFO { get; set; }
+        public EvaluateContentConfig INFO { get; set; }
 
         /// <summary>內容評估表_外購(附件)</summary>
         public IList<AttachmentConfig> ATTACHMENT { get; set; }
@@ -254,11 +254,53 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 內容評估表_外購(表頭內容)
+    /// 內容評估表(表頭內容)
     /// </summary>
-    public class EvaluateContent_PurchaseERPInfoTitle : InfoTitle
+    public class EvaluateContentERPInfoTitle : InfoTitle
     {
+        /// <summary>
+        /// 評估類別：
+        /// MADE.自製
+        /// PUR.外購
+        /// </summary>
+        public string EVALUATE_CATEGORY { get; set; }
+
         /// <summary>評估編號</summary>
+        public string SORT_NO { get; set; }
+    }
+
+    #endregion
+
+    #region - 內容評估表_補充意見(外部起單) -
+
+    /// <summary>
+    /// 內容評估表_補充意見(外部起單)
+    /// </summary>
+    public class EvaluateContent_ReplenishERPInfo
+    {
+        /// <summary>內容評估表_外購(表頭內容)</summary>
+        public EvaluateContent_ReplenishERPInfoTitle TITLE { get; set; }
+
+        /// <summary>內容評估表_外購(表單內容)</summary>
+        public EvaluateContent_ReplenishConfig INFO { get; set; }
+
+        /// <summary>內容評估表_外購(附件)</summary>
+        public IList<AttachmentConfig> ATTACHMENT { get; set; }
+
+        /// <summary>表單關聯</summary>
+        public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
+    }
+
+    public class EvaluateContent_ReplenishERPInfoTitle : InfoTitle
+    {
+        /// <summary>
+        /// 評估類別：
+        /// MADE.自製
+        /// PUR.外購
+        /// </summary>
+        public string EVALUATE_CATEGORY { get; set; }
+
+        /// <summary>補充意見編號</summary>
         public string SORT_NO { get; set; }
     }
 

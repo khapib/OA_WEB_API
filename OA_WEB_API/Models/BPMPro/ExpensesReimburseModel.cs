@@ -74,6 +74,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// </summary>
         public string PAY_METHOD { get; set; }
 
+        /// <summary>申請源由</summary>
+        public string REASON { get; set; }
+
         /// <summary>備註</summary>
         public string NOTE { get; set; }
 
@@ -177,10 +180,6 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>所屬專案年分</summary>
         public string PROJECT_USE_YEAR { get; set; }
-
-        /// <summary>申請源由</summary>
-        public string REASON { get; set; }
-
     }
 
     /// <summary>

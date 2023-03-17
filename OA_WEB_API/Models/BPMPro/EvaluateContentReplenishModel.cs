@@ -8,7 +8,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 內容評估表_補充意見(查詢條件)
     /// </summary>
-    public class EvaluateContent_ReplenishQueryModel
+    public class EvaluateContentReplenishQueryModel
     {
         /// <summary>系統編號</summary>
         public string REQUISITION_ID { get; set; }
@@ -17,22 +17,22 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 內容評估表_補充意見
     /// </summary>
-    public class EvaluateContent_ReplenishViewModel
+    public class EvaluateContentReplenishViewModel
     {
         /// <summary>申請人資訊</summary>
         public ApplicantInfo APPLICANT_INFO { get; set; }
 
         /// <summary>內容評估表_補充意見 表頭資訊</summary>
-        public EvaluateContent_ReplenishTitle EVALUATE_CONTENT_REPLENISH_TITLE { get; set; }
+        public EvaluateContentReplenishTitle EVALUATE_CONTENT_REPLENISH_TITLE { get; set; }
 
         /// <summary>內容評估表_補充意見 表單內容 設定</summary>
-        public EvaluateContent_ReplenishConfig EVALUATE_CONTENT_REPLENISH_CONFIG { get; set; }
+        public EvaluateContentReplenishConfig EVALUATE_CONTENT_REPLENISH_CONFIG { get; set; }
 
         /// <summary>內容評估表_補充意見 補充意見彙整 設定</summary>
-        public IList<EvaluateContent_ReplenishEvaluatesConfig> EVALUATE_CONTENT_REPLENISH_EVAS_CONFIG { get; set; }
+        public IList<EvaluateContentReplenishEvaluatesConfig> EVALUATE_CONTENT_REPLENISH_EVAS_CONFIG { get; set; }
 
         /// <summary>內容評估表_補充意見 決策意見彙整 設定</summary>
-        public IList<EvaluateContent_ReplenishDecisionsConfig> EVALUATE_CONTENT_REPLENISH_DECS_CONFIG { get; set; }
+        public IList<EvaluateContentReplenishDecisionsConfig> EVALUATE_CONTENT_REPLENISH_DECS_CONFIG { get; set; }
 
         /// <summary>附件</summary>
         public IList<AttachmentConfig> ATTACHMENT_CONFIG { get; set; }
@@ -45,7 +45,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 內容評估表_補充意見 表頭資訊
     /// </summary>
-    public class EvaluateContent_ReplenishTitle : ImplementHeader
+    public class EvaluateContentReplenishTitle : ImplementHeader
     {
         /// <summary>
         /// 評估類別：
@@ -61,7 +61,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 內容評估表_補充意見 表單內容 設定
     /// </summary>
-    public class EvaluateContent_ReplenishConfig : EvaluateContentBasicInformation
+    public class EvaluateContentReplenishConfig : EvaluateContentBasicInformation
     {
         /// <summary>指定劇種負責人編號</summary>
         public string PRINCIPAL_ID { get; set; }
@@ -73,7 +73,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 內容評估表_補充意見 補充意見彙整 設定
     /// </summary>
-    public class EvaluateContent_ReplenishEvaluatesConfig
+    public class EvaluateContentReplenishEvaluatesConfig
     {
         /// <summary>評估人員編號</summary>
         public string USER_ID { get; set; }
@@ -91,7 +91,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 內容評估表_補充意見 決策意見彙整 設定
     /// </summary>
-    public class EvaluateContent_ReplenishDecisionsConfig : EvaluateContent_ReplenishEvaluatesConfig
+    public class EvaluateContentReplenishDecisionsConfig : EvaluateContentReplenishEvaluatesConfig
     {
         /// <summary>建議類型：
         /// PUR.外購：
@@ -108,7 +108,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 內容評估表_補充意見 填寫 設定
     /// </summary>
-    public class EvaluateContent_ReplenishFillinConfig
+    public class EvaluateContentReplenishFillinConfig
     {
         /// <summary>系統編號</summary>
         public string REQUISITION_ID { get; set; }
@@ -127,7 +127,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 內容評估表_補充意見 評估意見 設定
     /// </summary>
-    public class EvaluateContent_ReplenishOpinionConfig : EvaluateContent_ReplenishDecisionsConfig
+    public class EvaluateContentReplenishOpinionConfig : EvaluateContentReplenishDecisionsConfig
     {
         /// <summary>系統編號</summary>
         public string REQUISITION_ID { get; set; }
@@ -138,4 +138,5 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     #endregion
+
 }

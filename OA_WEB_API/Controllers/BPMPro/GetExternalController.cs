@@ -149,11 +149,11 @@ namespace OA_WEB_API.Controllers.BPMPro
         /// <summary>
         /// 內容評估表_補充意見(外部起單)
         /// </summary>
-        [Route("api/PutEvaluateContent_ReplenishGetExternal")]
+        [Route("api/PutEvaluateContentReplenishGetExternal")]
         [HttpPost]
-        public GetExternalData PutEvaluateContent_ReplenishGetExternal(EvaluateContent_ReplenishERPInfo model)
+        public GetExternalData PutEvaluateContentReplenishGetExternal(EvaluateContentReplenishERPInfo model)
         {
-            return getExternalRepository.PutEvaluateContent_ReplenishGetExternal(model);
+            return getExternalRepository.PutEvaluateContentReplenishGetExternal(model);
         }
 
         #endregion
@@ -214,6 +214,39 @@ namespace OA_WEB_API.Controllers.BPMPro
         public GetExternalData PutMediaInvoiceGetExternal(MediaInvoiceERPInfo model)
         {
             return getExternalRepository.PutMediaInvoiceGetExternal(model);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region - 四方四隅_內容評估表(外部起單) -
+
+        #region - 四方四隅_內容評估表(外部起單) -
+
+        /// <summary>
+        /// 四方四隅_內容評估表(外部起單)
+        /// </summary>
+        [Route("api/PutGPI_EvaluateContentGetExternal")]
+        [HttpPost]
+        public GetExternalData PutGPI_EvaluateContentGetExternal(GPI_EvaluateContentERPInfo model)
+        {
+            return getExternalRepository.PutGPI_EvaluateContentGetExternal(model);
+        }
+
+
+        #endregion
+
+        #region - 四方四隅_內容評估表_補充意見(外部起單) -
+
+        /// <summary>
+        /// 四方四隅_內容評估表_補充意見(外部起單)
+        /// </summary>
+        [Route("api/PutGPI_EvaluateContentReplenishGetExternal")]
+        [HttpPost]
+        public GetExternalData PutGPI_EvaluateContentReplenishGetExternal(GPI_EvaluateContentReplenishERPInfo model)
+        {
+            return getExternalRepository.PutGPI_EvaluateContentReplenishGetExternal(model);
         }
 
         #endregion

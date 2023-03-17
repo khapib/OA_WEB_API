@@ -101,7 +101,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 四方四隅_內容評估表 評估意見彙整 設定
     /// </summary>
-    public class GPI_EvaluateContentEvaluatesConfig : EvaluateContentDecisionsConfig
+    public class GPI_EvaluateContentEvaluatesConfig : GPI_EvaluateContentDecisionsConfig
     {
         /// <summary>優點</summary>
         public string ADVANTAGE { get; set; }

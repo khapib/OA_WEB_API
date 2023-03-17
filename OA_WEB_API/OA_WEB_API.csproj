@@ -177,7 +177,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BPMPro\ActiveController.cs" />
     <Compile Include="Controllers\BPMPro\EvaluateContentController.cs" />
-    <Compile Include="Controllers\BPMPro\EvaluateContent_ReplenishController.cs" />
+    <Compile Include="Controllers\BPMPro\EvaluateContentReplenishController.cs" />
     <Compile Include="Controllers\BPMPro\EvaluateDemandController.cs" />
     <Compile Include="Controllers\BPMPro\ExpensesReimburseController.cs" />
     <Compile Include="Controllers\BPMPro\GeneralAcceptanceController.cs" />
@@ -186,6 +186,7 @@
     <Compile Include="Controllers\BPMPro\GetExternalController.cs" />
     <Compile Include="Controllers\BPMPro\GPI_CountersignController.cs" />
     <Compile Include="Controllers\BPMPro\GPI_EvaluateContentController.cs" />
+    <Compile Include="Controllers\BPMPro\GPI_EvaluateContentReplenishController.cs" />
     <Compile Include="Controllers\BPMPro\MediaAcceptanceController.cs" />
     <Compile Include="Controllers\BPMPro\MediaInvoiceController.cs" />
     <Compile Include="Controllers\BPMPro\MediaOrderChangeController.cs" />
@@ -224,7 +225,7 @@
     </Compile>
     <Compile Include="Models\BPMPro\ActiveModel.cs" />
     <Compile Include="Models\BPMPro\EvaluateContentModel.cs" />
-    <Compile Include="Models\BPMPro\EvaluateContent_ReplenishModel.cs" />
+    <Compile Include="Models\BPMPro\EvaluateContentReplenishModel.cs" />
     <Compile Include="Models\BPMPro\EvaluateDemandModel.cs" />
     <Compile Include="Models\BPMPro\ExpensesReimburseModel.cs" />
     <Compile Include="Models\BPMPro\GeneralAcceptanceModel.cs" />
@@ -234,6 +235,7 @@
     <Compile Include="Models\BPMPro\GetExternalModel.cs" />
     <Compile Include="Models\BPMPro\GPI_CountersignModel.cs" />
     <Compile Include="Models\BPMPro\GPI_EvaluateContentModel.cs" />
+    <Compile Include="Models\BPMPro\GPI_EvaluateContentReplenishModel.cs" />
     <Compile Include="Models\BPMPro\MediaAcceptanceModel.cs" />
     <Compile Include="Models\BPMPro\MediaInvoiceModel.cs" />
     <Compile Include="Models\BPMPro\MediaOrderChangeModel.cs" />
@@ -252,8 +254,8 @@
     <Compile Include="Models\TokenModel.cs" />
     <Compile Include="Models\BPMPro\UserModel.cs" />
     <Compile Include="Repository\BPMPro\ActiveRepository.cs" />
+    <Compile Include="Repository\BPMPro\EvaluateContentReplenishRepository.cs" />
     <Compile Include="Repository\BPMPro\EvaluateContentRepository.cs" />
-    <Compile Include="Repository\BPMPro\EvaluateContent_ReplenishRepository.cs" />
     <Compile Include="Repository\BPMPro\EvaluateDemandRepository.cs" />
     <Compile Include="Repository\BPMPro\ExpensesReimburseRepository.cs" />
     <Compile Include="Repository\BPMPro\GeneralAcceptanceRepository.cs" />
@@ -262,6 +264,7 @@
     <Compile Include="Repository\BPMPro\GeneralOrderRepository.cs" />
     <Compile Include="Repository\BPMPro\GetExternalRepository.cs" />
     <Compile Include="Repository\BPMPro\GPI_CountersignRepository.cs" />
+    <Compile Include="Repository\BPMPro\GPI_EvaluateContentReplenishRepository.cs" />
     <Compile Include="Repository\BPMPro\GPI_EvaluateContentRepository.cs" />
     <Compile Include="Repository\BPMPro\MediaAcceptanceRepository.cs" />
     <Compile Include="Repository\BPMPro\MediaInvoiceRepository.cs" />

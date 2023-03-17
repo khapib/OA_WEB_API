@@ -206,19 +206,19 @@ namespace OA_WEB_API.Models.ERP
         /// <summary>接收ERP回傳狀態</summary>
         public ErpResponseState ERP_RESPONSE_STATE { get; set; }
 
-        /// <summary>內容評估表_外購 表頭資訊</summary>
+        /// <summary>內容評估表 表頭資訊</summary>
         public EvaluateContentTitle EVALUATE_CONTENT_TITLE { get; set; }
 
-        /// <summary>內容評估表_外購 表單內容 設定</summary>
+        /// <summary>內容評估表 表單內容 設定</summary>
         public EvaluateContentConfig EVALUATE_CONTENT_CONFIG { get; set; }
 
-        /// <summary>內容評估表_外購 評估人員 設定</summary>
+        /// <summary>內容評估表 評估人員 設定</summary>
         public IList<EvaluateContentUsersConfig> EVALUATE_CONTENT_USERS_CONFIG { get; set; }
 
-        /// <summary>內容評估表_外購 評估意見彙整 設定</summary>
+        /// <summary>內容評估表 評估意見彙整 設定</summary>
         public IList<EvaluateContentEvaluatesConfig> EVALUATE_CONTENT_EVAS_CONFIG { get; set; }
 
-        /// <summary>內容評估表_外購 決策意見彙整 設定</summary>
+        /// <summary>內容評估表 決策意見彙整 設定</summary>
         public IList<EvaluateContentDecisionsConfig> EVALUATE_CONTENT_DECS_CONFIG { get; set; }
 
         /// <summary>附件</summary>
@@ -241,22 +241,22 @@ namespace OA_WEB_API.Models.ERP
     /// <summary>
     /// 內容評估表_補充意見 審核資訊_回傳ERP
     /// </summary>
-    public class EvaluateContent_ReplenishInfoRequest: EvaluateContent_ReplenishQueryModel
+    public class EvaluateContentReplenishInfoRequest: EvaluateContentReplenishQueryModel
     {
         /// <summary>接收ERP回傳狀態</summary>
         public ErpResponseState ERP_RESPONSE_STATE { get; set; }
 
-        /// <summary>內容評估表_外購 表頭資訊</summary>
-        public EvaluateContent_ReplenishTitle EVALUATE_CONTENT_REPLENISH_TITLE { get; set; }
+        /// <summary>內容評估表_補充意見 表頭資訊</summary>
+        public EvaluateContentReplenishTitle EVALUATE_CONTENT_REPLENISH_TITLE { get; set; }
 
-        /// <summary>內容評估表_外購 表單內容 設定</summary>
-        public EvaluateContent_ReplenishConfig EVALUATE_CONTENT_REPLENISH_CONFIG { get; set; }
+        /// <summary>內容評估表_補充意見 表單內容 設定</summary>
+        public EvaluateContentReplenishConfig EVALUATE_CONTENT_REPLENISH_CONFIG { get; set; }
 
-        /// <summary>內容評估表_外購 評估意見彙整 設定</summary>
-        public IList<EvaluateContent_ReplenishEvaluatesConfig> EVALUATE_CONTENT_REPLENISH_EVAS_CONFIG { get; set; }
+        /// <summary>內容評估表_補充意見 評估意見彙整 設定</summary>
+        public IList<EvaluateContentReplenishEvaluatesConfig> EVALUATE_CONTENT_REPLENISH_EVAS_CONFIG { get; set; }
 
-        /// <summary>內容評估表_外購 決策意見彙整 設定</summary>
-        public IList<EvaluateContent_ReplenishDecisionsConfig> EVALUATE_CONTENT_REPLENISH_DECS_CONFIG { get; set; }
+        /// <summary>內容評估表_補充意見 決策意見彙整 設定</summary>
+        public IList<EvaluateContentReplenishDecisionsConfig> EVALUATE_CONTENT_REPLENISH_DECS_CONFIG { get; set; }
 
         /// <summary>附件</summary>
         public IList<AttachmentConfig> ATTACHMENT_CONFIG { get; set; }
@@ -401,4 +401,82 @@ namespace OA_WEB_API.Models.ERP
 
     #endregion
 
+    #region - 四方四隅_內容評估表_回傳ERP資訊 -
+
+    #region - 四方四隅_內容評估表 審核資訊_回傳ERP -
+
+    public class GPI_EvaluateContentInfoRequest : GPI_EvaluateContentQueryModel
+    {
+        /// <summary>接收ERP回傳狀態</summary>
+        public ErpResponseState ERP_RESPONSE_STATE { get; set; }
+
+        /// <summary>四方四隅_內容評估表 表頭資訊</summary>
+        public GPI_EvaluateContentTitle GPI_EVALUATE_CONTENT_TITLE { get; set; }
+
+        /// <summary>四方四隅_內容評估表 表單內容 設定</summary>
+        public GPI_EvaluateContentConfig GPI_EVALUATE_CONTENT_CONFIG { get; set; }
+
+        /// <summary>四方四隅_內容評估表 評估人員 設定</summary>
+        public IList<GPI_EvaluateContentUsersConfig> GPI_EVALUATE_CONTENT_USERS_CONFIG { get; set; }
+
+        /// <summary>四方四隅_內容評估表 評估意見彙整 設定</summary>
+        public IList<GPI_EvaluateContentEvaluatesConfig> GPI_EVALUATE_CONTENT_EVAS_CONFIG { get; set; }
+
+        /// <summary>四方四隅_內容評估表 決策意見彙整 設定</summary>
+        public IList<GPI_EvaluateContentDecisionsConfig> GPI_EVALUATE_CONTENT_DECS_CONFIG { get; set; }
+
+        /// <summary>附件</summary>
+        public IList<AttachmentConfig> ATTACHMENT_CONFIG { get; set; }
+
+        /// <summary>表單關聯</summary>
+        public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
+
+        /// <summary>最後簽核人員工編號</summary>
+        public string LoginId { get; set; }
+
+        /// <summary>最後簽核人姓名</summary>
+        public string LoginName { get; set; }
+    }
+
+    #endregion
+
+    #region - 四方四隅_內容評估表_補充意見 審核資訊_回傳ERP -
+
+    /// <summary>
+    /// 四方四隅_內容評估表_補充意見 審核資訊_回傳ERP
+    /// </summary>
+    public class GPI_EvaluateContentReplenishInfoRequest : GPI_EvaluateContentReplenishQueryModel
+    {
+        /// <summary>接收ERP回傳狀態</summary>
+        public ErpResponseState ERP_RESPONSE_STATE { get; set; }
+
+        /// <summary>四方四隅_內容評估表_補充意見 表頭資訊</summary>
+        public GPI_EvaluateContentReplenishTitle GPI_EVALUATE_CONTENT_REPLENISH_TITLE { get; set; }
+
+        /// <summary>四方四隅_內容評估表_補充意見 表單內容 設定</summary>
+        public GPI_EvaluateContentReplenishConfig GPI_EVALUATE_CONTENT_REPLENISH_CONFIG { get; set; }
+
+        /// <summary>四方四隅_內容評估表_補充意見 評估意見彙整 設定</summary>
+        public IList<GPI_EvaluateContentReplenishEvaluatesConfig> GPI_EVALUATE_CONTENT_REPLENISH_EVAS_CONFIG { get; set; }
+
+        /// <summary>四方四隅_內容評估表_補充意見 決策意見彙整 設定</summary>
+        public IList<GPI_EvaluateContentReplenishDecisionsConfig> GPI_EVALUATE_CONTENT_REPLENISH_DECS_CONFIG { get; set; }
+
+        /// <summary>附件</summary>
+        public IList<AttachmentConfig> ATTACHMENT_CONFIG { get; set; }
+
+        /// <summary>表單關聯</summary>
+        public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
+
+        /// <summary>最後簽核人員工編號</summary>
+        public string LoginId { get; set; }
+
+        /// <summary>最後簽核人姓名</summary>
+        public string LoginName { get; set; }
+
+    }
+
+    #endregion
+
+    #endregion
 }

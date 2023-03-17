@@ -501,29 +501,29 @@
             內容評估表(清除評估人員)
             </summary>
         </member>
-        <member name="T:OA_WEB_API.Controllers.BPMPro.EvaluateContent_ReplenishController">
+        <member name="T:OA_WEB_API.Controllers.BPMPro.EvaluateContentReplenishController">
             <summary>
             會簽管理系統 - 內容評估表_補充意見
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Controllers.BPMPro.EvaluateContent_ReplenishController.PostEvaluateContent_ReplenishSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishQueryModel)">
+        <member name="M:OA_WEB_API.Controllers.BPMPro.EvaluateContentReplenishController.PostEvaluateContentReplenishSingle(OA_WEB_API.Models.BPMPro.EvaluateContentReplenishQueryModel)">
             <summary>
             內容評估表_補充意見(查詢)
             </summary>    
         </member>
-        <member name="M:OA_WEB_API.Controllers.BPMPro.EvaluateContent_ReplenishController.PutEvaluateContent_ReplenishSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishViewModel)">
+        <member name="M:OA_WEB_API.Controllers.BPMPro.EvaluateContentReplenishController.PutEvaluateContentReplenishSingle(OA_WEB_API.Models.BPMPro.EvaluateContentReplenishViewModel)">
             <summary>
             內容評估表_補充意見(新增/修改/草稿)
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Controllers.BPMPro.EvaluateContent_ReplenishController.PutEvaluateContent_ReplenishFillinSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishFillinConfig)">
+        <member name="M:OA_WEB_API.Controllers.BPMPro.EvaluateContentReplenishController.PutEvaluateContentReplenishFillinSingle(OA_WEB_API.Models.BPMPro.EvaluateContentReplenishFillinConfig)">
             <summary>
-            內容評估表_外購(填寫)
+            內容評估表_補充意見(填寫)
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Controllers.BPMPro.EvaluateContent_ReplenishController.PutEvaluateContent_ReplenishOpinionSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishOpinionConfig)">
+        <member name="M:OA_WEB_API.Controllers.BPMPro.EvaluateContentReplenishController.PutEvaluateContentReplenishOpinionSingle(OA_WEB_API.Models.BPMPro.EvaluateContentReplenishOpinionConfig)">
             <summary>
-            內容評估表_外購(意見)
+            內容評估表_補充意見(意見)
             </summary>
         </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.EvaluateDemandController">
@@ -656,7 +656,7 @@
             內容評估表(外部起單)
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutEvaluateContent_ReplenishGetExternal(OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishERPInfo)">
+        <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutEvaluateContentReplenishGetExternal(OA_WEB_API.Models.BPMPro.EvaluateContentReplenishERPInfo)">
             <summary>
             內容評估表_補充意見(外部起單)
             </summary>
@@ -679,6 +679,16 @@
         <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutMediaInvoiceGetExternal(OA_WEB_API.Models.BPMPro.MediaInvoiceERPInfo)">
             <summary>
             版權採購交片單(外部起單)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutGPI_EvaluateContentGetExternal(OA_WEB_API.Models.BPMPro.GPI_EvaluateContentERPInfo)">
+            <summary>
+            四方四隅_內容評估表(外部起單)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutGPI_EvaluateContentReplenishGetExternal(OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishERPInfo)">
+            <summary>
+            四方四隅_內容評估表_補充意見(外部起單)
             </summary>
         </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.GPI_CountersignController">
@@ -729,6 +739,31 @@
         <member name="M:OA_WEB_API.Controllers.BPMPro.GPI_EvaluateContentController.PutGPI_EvaluateContentRemoveCountersignSingle">
             <summary>
             四方四隅_內容評估表(清除評估人員)
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Controllers.BPMPro.GPI_EvaluateContentReplenishController">
+            <summary>
+            會簽管理系統 - 四方四隅_內容評估表_補充意見
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.GPI_EvaluateContentReplenishController.PostGPI_EvaluateContentReplenishSingle(OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishQueryModel)">
+            <summary>
+            四方四隅_內容評估表_補充意見(查詢)
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.GPI_EvaluateContentReplenishController.PutGPI_EvaluateContentReplenishSingle(OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishViewModel)">
+            <summary>
+            四方四隅_內容評估表_補充意見(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.GPI_EvaluateContentReplenishController.PutGPI_EvaluateContentReplenishFillinSingle(OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishFillinConfig)">
+            <summary>
+            四方四隅_內容評估表_補充意見(填寫)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.GPI_EvaluateContentReplenishController.PutGPI_EvaluateContentReplenishOpinionSingle(OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishOpinionConfig)">
+            <summary>
+            四方四隅_內容評估表_補充意見(意見)
             </summary>
         </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.MediaAcceptanceController">
@@ -1151,7 +1186,7 @@
             內容評估表 審核資訊_回傳ERP
             </summary>    
         </member>
-        <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostEvaluateContent_ReplenishInfoSingle">
+        <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostEvaluateContentReplenishInfoSingle">
             <summary>
             內容評估表_補充意見 審核資訊_回傳ERP
             </summary>    
@@ -1169,6 +1204,16 @@
         <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostMediaInvoiceInfoSingle">
             <summary>
             版權採購請款單 審核資訊_回傳ERP
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostGPI_EvaluateContentInfoSingle">
+            <summary>
+            四方四隅_內容評估表 審核資訊_回傳ERP
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostGPI_EvaluateContentReplenishInfoSingle">
+            <summary>
+            四方四隅_內容評估表_補充意見 審核資訊_回傳ERP
             </summary>    
         </member>
         <member name="T:OA_WEB_API.Controllers.ERP.StepFlowController">
@@ -2108,89 +2153,89 @@
         <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentBasicInformation.NOTE">
             <summary>備註</summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishQueryModel">
+        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishQueryModel">
             <summary>
             內容評估表_補充意見(查詢條件)
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishQueryModel.REQUISITION_ID">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishQueryModel.REQUISITION_ID">
             <summary>系統編號</summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishViewModel">
+        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishViewModel">
             <summary>
             內容評估表_補充意見
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishViewModel.APPLICANT_INFO">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishViewModel.APPLICANT_INFO">
             <summary>申請人資訊</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishViewModel.EVALUATE_CONTENT_REPLENISH_TITLE">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishViewModel.EVALUATE_CONTENT_REPLENISH_TITLE">
             <summary>內容評估表_補充意見 表頭資訊</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishViewModel.EVALUATE_CONTENT_REPLENISH_CONFIG">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishViewModel.EVALUATE_CONTENT_REPLENISH_CONFIG">
             <summary>內容評估表_補充意見 表單內容 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishViewModel.EVALUATE_CONTENT_REPLENISH_EVAS_CONFIG">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishViewModel.EVALUATE_CONTENT_REPLENISH_EVAS_CONFIG">
             <summary>內容評估表_補充意見 補充意見彙整 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishViewModel.EVALUATE_CONTENT_REPLENISH_DECS_CONFIG">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishViewModel.EVALUATE_CONTENT_REPLENISH_DECS_CONFIG">
             <summary>內容評估表_補充意見 決策意見彙整 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishViewModel.ATTACHMENT_CONFIG">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishViewModel.ATTACHMENT_CONFIG">
             <summary>附件</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishViewModel.ASSOCIATED_FORM_CONFIG">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishViewModel.ASSOCIATED_FORM_CONFIG">
             <summary>表單關聯</summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishTitle">
+        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishTitle">
             <summary>
             內容評估表_補充意見 表頭資訊
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishTitle.EVALUATE_CATEGORY">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishTitle.EVALUATE_CATEGORY">
             <summary>
             評估類別：
             MADE.自製
             PUR.外購
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishTitle.SORT_NO">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishTitle.SORT_NO">
             <summary>補充意見編號</summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishConfig">
+        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishConfig">
             <summary>
             內容評估表_補充意見 表單內容 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishConfig.PRINCIPAL_ID">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishConfig.PRINCIPAL_ID">
             <summary>指定劇種負責人編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishConfig.PRINCIPAL_NAME">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishConfig.PRINCIPAL_NAME">
             <summary>指定劇種負責人姓名</summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishEvaluatesConfig">
+        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishEvaluatesConfig">
             <summary>
             內容評估表_補充意見 補充意見彙整 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishEvaluatesConfig.USER_ID">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishEvaluatesConfig.USER_ID">
             <summary>評估人員編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishEvaluatesConfig.USER_NAME">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishEvaluatesConfig.USER_NAME">
             <summary>評估人員姓名</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishEvaluatesConfig.REASON">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishEvaluatesConfig.REASON">
             <summary>建議原因</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishEvaluatesConfig.OPINION_DATE_TIME">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishEvaluatesConfig.OPINION_DATE_TIME">
             <summary>建議時間</summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishDecisionsConfig">
+        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishDecisionsConfig">
             <summary>
             內容評估表_補充意見 決策意見彙整 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishDecisionsConfig.ADVISE_TYPE">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishDecisionsConfig.ADVISE_TYPE">
             <summary>建議類型：
             PUR.外購：
             ADV.建議採購
@@ -2199,29 +2244,29 @@
             N_I.沒意見(決策意見無這一項)
             </summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishFillinConfig">
+        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishFillinConfig">
             <summary>
             內容評估表_補充意見 填寫 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishFillinConfig.REQUISITION_ID">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishFillinConfig.REQUISITION_ID">
             <summary>系統編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishFillinConfig.PRINCIPAL_ID">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishFillinConfig.PRINCIPAL_ID">
             <summary>指定劇種負責人編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishFillinConfig.PRINCIPAL_NAME">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishFillinConfig.PRINCIPAL_NAME">
             <summary>指定劇種負責人姓名</summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishOpinionConfig">
+        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishOpinionConfig">
             <summary>
             內容評估表_補充意見 評估意見 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishOpinionConfig.REQUISITION_ID">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishOpinionConfig.REQUISITION_ID">
             <summary>系統編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishOpinionConfig.OPINION_TYPE">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishOpinionConfig.OPINION_TYPE">
             <summary>意見類型</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.EvaluateDemandQueryModel">
@@ -2334,6 +2379,9 @@
             DT.(國內)_台幣其他帳戶(需自行負擔手續費)
             </summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.REASON">
+            <summary>申請源由</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.NOTE">
             <summary>備註</summary>
         </member>
@@ -2436,9 +2484,6 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.PROJECT_USE_YEAR">
             <summary>所屬專案年分</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.REASON">
-            <summary>申請源由</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig">
             <summary>
@@ -3416,13 +3461,13 @@
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentERPInfo.TITLE">
-            <summary>內容評估表_外購(表頭內容)</summary>
+            <summary>內容評估表(表頭內容)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentERPInfo.INFO">
-            <summary>內容評估表_外購(表單內容)</summary>
+            <summary>內容評估表(表單內容)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentERPInfo.ATTACHMENT">
-            <summary>內容評估表_外購(附件)</summary>
+            <summary>內容評估表(附件)</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContentERPInfoTitle">
             <summary>
@@ -3439,31 +3484,36 @@
         <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentERPInfoTitle.SORT_NO">
             <summary>評估編號</summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishERPInfo">
+        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishERPInfo">
             <summary>
             內容評估表_補充意見(外部起單)
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishERPInfo.TITLE">
-            <summary>內容評估表_外購(表頭內容)</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishERPInfo.TITLE">
+            <summary>內容評估表_補充意見(表頭內容)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishERPInfo.INFO">
-            <summary>內容評估表_外購(表單內容)</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishERPInfo.INFO">
+            <summary>內容評估表_補充意見(表單內容)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishERPInfo.ATTACHMENT">
-            <summary>內容評估表_外購(附件)</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishERPInfo.ATTACHMENT">
+            <summary>內容評估表_補充意見(附件)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishERPInfo.ASSOCIATED_FORM_CONFIG">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishERPInfo.ASSOCIATED_FORM_CONFIG">
             <summary>表單關聯</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishERPInfoTitle.EVALUATE_CATEGORY">
+        <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishERPInfoTitle">
+            <summary>
+            內容評估表_補充意見(表頭內容)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishERPInfoTitle.EVALUATE_CATEGORY">
             <summary>
             評估類別：
             MADE.自製
             PUR.外購
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishERPInfoTitle.SORT_NO">
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateContentReplenishERPInfoTitle.SORT_NO">
             <summary>補充意見編號</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaOrderERPInfo">
@@ -3546,6 +3596,67 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInfoConfig.PERIOD">
             <summary>期別</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentERPInfo">
+            <summary>
+            四方四隅_內容評估表(外部起單)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentERPInfo.TITLE">
+            <summary>四方四隅_內容評估表(表頭內容)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentERPInfo.INFO">
+            <summary>四方四隅_內容評估表(表單內容)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentERPInfo.ATTACHMENT">
+            <summary>四方四隅_內容評估表(附件)</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentERPInfoTitle">
+            <summary>
+            內容評估表(表頭內容)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentERPInfoTitle.EVALUATE_CATEGORY">
+            <summary>
+            評估類別：
+            MADE.自製
+            PUR.外購
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentERPInfoTitle.SORT_NO">
+            <summary>評估編號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishERPInfo">
+            <summary>
+            四方四隅_內容評估表_補充意見(外部起單)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishERPInfo.TITLE">
+            <summary>四方四隅_內容評估表_補充意見(表頭內容)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishERPInfo.INFO">
+            <summary>四方四隅_內容評估表_補充意見(表單內容)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishERPInfo.ATTACHMENT">
+            <summary>四方四隅_內容評估表_補充意見(附件)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishERPInfo.ASSOCIATED_FORM_CONFIG">
+            <summary>表單關聯</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishERPInfoTitle">
+            <summary>
+            四方四隅_內容評估表_補充意見(表頭內容)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishERPInfoTitle.EVALUATE_CATEGORY">
+            <summary>
+            評估類別：
+            MADE.自製
+            PUR.外購
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishERPInfoTitle.SORT_NO">
+            <summary>補充意見編號</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GPI_CountersignQueryModel">
             <summary>
@@ -3776,6 +3887,128 @@
             <summary>系統編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentOpinionConfig.OPINION_TYPE">
+            <summary>意見類型</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishQueryModel">
+            <summary>
+            四方四隅_內容評估表_補充意見(查詢條件)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishQueryModel.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishViewModel">
+            <summary>
+            四方四隅_內容評估表_補充意見
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishViewModel.APPLICANT_INFO">
+            <summary>申請人資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishViewModel.GPI_EVALUATE_CONTENT_REPLENISH_TITLE">
+            <summary>四方四隅_內容評估表_補充意見 表頭資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishViewModel.GPI_EVALUATE_CONTENT_REPLENISH_CONFIG">
+            <summary>四方四隅_內容評估表_補充意見 表單內容 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishViewModel.GPI_EVALUATE_CONTENT_REPLENISH_EVAS_CONFIG">
+            <summary>四方四隅_內容評估表_補充意見 補充意見彙整 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishViewModel.GPI_EVALUATE_CONTENT_REPLENISH_DECS_CONFIG">
+            <summary>四方四隅_內容評估表_補充意見 決策意見彙整 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishViewModel.ATTACHMENT_CONFIG">
+            <summary>附件</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishViewModel.ASSOCIATED_FORM_CONFIG">
+            <summary>表單關聯</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishTitle">
+            <summary>
+            四方四隅_內容評估表_補充意見 表頭資訊
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishTitle.EVALUATE_CATEGORY">
+            <summary>
+            評估類別：
+            MADE.自製
+            PUR.外購
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishTitle.SORT_NO">
+            <summary>補充意見編號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishConfig">
+            <summary>
+            四方四隅_內容評估表_補充意見 表單內容 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishConfig.IS_PRESIDENT">
+            <summary>繼續上呈董事長</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishConfig.PRINCIPAL_ID">
+            <summary>指定劇種負責人編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishConfig.PRINCIPAL_NAME">
+            <summary>指定劇種負責人姓名</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishEvaluatesConfig">
+            <summary>
+            四方四隅_內容評估表_補充意見 補充意見彙整 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishEvaluatesConfig.USER_ID">
+            <summary>評估人員編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishEvaluatesConfig.USER_NAME">
+            <summary>評估人員姓名</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishEvaluatesConfig.REASON">
+            <summary>建議原因</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishEvaluatesConfig.OPINION_DATE_TIME">
+            <summary>建議時間</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishDecisionsConfig">
+            <summary>
+            四方四隅_內容評估表_補充意見 決策意見彙整 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishDecisionsConfig.ADVISE_TYPE">
+            <summary>建議類型：
+            PUR.外購：
+            ADV.建議採購
+            N_ADV.不建議採購
+            AG.需再次評估
+            N_I.沒意見(決策意見無這一項)
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishFillinConfig">
+            <summary>
+            四方四隅_內容評估表_補充意見 填寫 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishFillinConfig.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishFillinConfig.IS_PRESIDENT">
+            <summary>繼續上呈董事長</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishFillinConfig.PRINCIPAL_ID">
+            <summary>指定劇種負責人編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishFillinConfig.PRINCIPAL_NAME">
+            <summary>指定劇種負責人姓名</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishOpinionConfig">
+            <summary>
+            四方四隅_內容評估表_補充意見 評估意見 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishOpinionConfig.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishOpinionConfig.OPINION_TYPE">
             <summary>意見類型</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaAcceptanceQueryModel">
@@ -6317,19 +6550,19 @@
             <summary>接收ERP回傳狀態</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.EvaluateContentInfoRequest.EVALUATE_CONTENT_TITLE">
-            <summary>內容評估表_外購 表頭資訊</summary>
+            <summary>內容評估表 表頭資訊</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.EvaluateContentInfoRequest.EVALUATE_CONTENT_CONFIG">
-            <summary>內容評估表_外購 表單內容 設定</summary>
+            <summary>內容評估表 表單內容 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.EvaluateContentInfoRequest.EVALUATE_CONTENT_USERS_CONFIG">
-            <summary>內容評估表_外購 評估人員 設定</summary>
+            <summary>內容評估表 評估人員 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.EvaluateContentInfoRequest.EVALUATE_CONTENT_EVAS_CONFIG">
-            <summary>內容評估表_外購 評估意見彙整 設定</summary>
+            <summary>內容評估表 評估意見彙整 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.EvaluateContentInfoRequest.EVALUATE_CONTENT_DECS_CONFIG">
-            <summary>內容評估表_外購 決策意見彙整 設定</summary>
+            <summary>內容評估表 決策意見彙整 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.EvaluateContentInfoRequest.ATTACHMENT_CONFIG">
             <summary>附件</summary>
@@ -6343,36 +6576,36 @@
         <member name="P:OA_WEB_API.Models.ERP.EvaluateContentInfoRequest.LoginName">
             <summary>最後簽核人姓名</summary>
         </member>
-        <member name="T:OA_WEB_API.Models.ERP.EvaluateContent_ReplenishInfoRequest">
+        <member name="T:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest">
             <summary>
             內容評估表_補充意見 審核資訊_回傳ERP
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.ERP.EvaluateContent_ReplenishInfoRequest.ERP_RESPONSE_STATE">
+        <member name="P:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest.ERP_RESPONSE_STATE">
             <summary>接收ERP回傳狀態</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.ERP.EvaluateContent_ReplenishInfoRequest.EVALUATE_CONTENT_REPLENISH_TITLE">
-            <summary>內容評估表_外購 表頭資訊</summary>
+        <member name="P:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest.EVALUATE_CONTENT_REPLENISH_TITLE">
+            <summary>內容評估表_補充意見 表頭資訊</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.ERP.EvaluateContent_ReplenishInfoRequest.EVALUATE_CONTENT_REPLENISH_CONFIG">
-            <summary>內容評估表_外購 表單內容 設定</summary>
+        <member name="P:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest.EVALUATE_CONTENT_REPLENISH_CONFIG">
+            <summary>內容評估表_補充意見 表單內容 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.ERP.EvaluateContent_ReplenishInfoRequest.EVALUATE_CONTENT_REPLENISH_EVAS_CONFIG">
-            <summary>內容評估表_外購 評估意見彙整 設定</summary>
+        <member name="P:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest.EVALUATE_CONTENT_REPLENISH_EVAS_CONFIG">
+            <summary>內容評估表_補充意見 評估意見彙整 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.ERP.EvaluateContent_ReplenishInfoRequest.EVALUATE_CONTENT_REPLENISH_DECS_CONFIG">
-            <summary>內容評估表_外購 決策意見彙整 設定</summary>
+        <member name="P:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest.EVALUATE_CONTENT_REPLENISH_DECS_CONFIG">
+            <summary>內容評估表_補充意見 決策意見彙整 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.ERP.EvaluateContent_ReplenishInfoRequest.ATTACHMENT_CONFIG">
+        <member name="P:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest.ATTACHMENT_CONFIG">
             <summary>附件</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.ERP.EvaluateContent_ReplenishInfoRequest.ASSOCIATED_FORM_CONFIG">
+        <member name="P:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest.ASSOCIATED_FORM_CONFIG">
             <summary>表單關聯</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.ERP.EvaluateContent_ReplenishInfoRequest.LoginId">
+        <member name="P:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest.LoginId">
             <summary>最後簽核人員工編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.ERP.EvaluateContent_ReplenishInfoRequest.LoginName">
+        <member name="P:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest.LoginName">
             <summary>最後簽核人姓名</summary>
         </member>
         <member name="T:OA_WEB_API.Models.ERP.MediaOrderInfoRequest">
@@ -6478,6 +6711,68 @@
             <summary>最後簽核人員工編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.LoginName">
+            <summary>最後簽核人姓名</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.ERP_RESPONSE_STATE">
+            <summary>接收ERP回傳狀態</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.GPI_EVALUATE_CONTENT_TITLE">
+            <summary>四方四隅_內容評估表 表頭資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.GPI_EVALUATE_CONTENT_CONFIG">
+            <summary>四方四隅_內容評估表 表單內容 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.GPI_EVALUATE_CONTENT_USERS_CONFIG">
+            <summary>四方四隅_內容評估表 評估人員 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.GPI_EVALUATE_CONTENT_EVAS_CONFIG">
+            <summary>四方四隅_內容評估表 評估意見彙整 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.GPI_EVALUATE_CONTENT_DECS_CONFIG">
+            <summary>四方四隅_內容評估表 決策意見彙整 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.ATTACHMENT_CONFIG">
+            <summary>附件</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.ASSOCIATED_FORM_CONFIG">
+            <summary>表單關聯</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.LoginId">
+            <summary>最後簽核人員工編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.LoginName">
+            <summary>最後簽核人姓名</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest">
+            <summary>
+            四方四隅_內容評估表_補充意見 審核資訊_回傳ERP
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest.ERP_RESPONSE_STATE">
+            <summary>接收ERP回傳狀態</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest.GPI_EVALUATE_CONTENT_REPLENISH_TITLE">
+            <summary>四方四隅_內容評估表_補充意見 表頭資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest.GPI_EVALUATE_CONTENT_REPLENISH_CONFIG">
+            <summary>四方四隅_內容評估表_補充意見 表單內容 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest.GPI_EVALUATE_CONTENT_REPLENISH_EVAS_CONFIG">
+            <summary>四方四隅_內容評估表_補充意見 評估意見彙整 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest.GPI_EVALUATE_CONTENT_REPLENISH_DECS_CONFIG">
+            <summary>四方四隅_內容評估表_補充意見 決策意見彙整 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest.ATTACHMENT_CONFIG">
+            <summary>附件</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest.ASSOCIATED_FORM_CONFIG">
+            <summary>表單關聯</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest.LoginId">
+            <summary>最後簽核人員工編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest.LoginName">
             <summary>最後簽核人姓名</summary>
         </member>
         <member name="T:OA_WEB_API.Models.ERP.StepFlowQueryModel">
@@ -6931,6 +7226,51 @@
             T-SQL
             </summary>
         </member>
+        <member name="T:OA_WEB_API.Repository.BPMPro.EvaluateContentReplenishRepository">
+            <summary>
+            會簽管理系統 - 內容評估表_補充意見
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.EvaluateContentReplenishRepository.PostEvaluateContentReplenishSingle(OA_WEB_API.Models.BPMPro.EvaluateContentReplenishQueryModel)">
+            <summary>
+            內容評估表_補充意見(查詢)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.EvaluateContentReplenishRepository.PutEvaluateContentReplenishSingle(OA_WEB_API.Models.BPMPro.EvaluateContentReplenishViewModel)">
+            <summary>
+            內容評估表_補充意見(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.EvaluateContentReplenishRepository.PutEvaluateContentReplenishFillinSingle(OA_WEB_API.Models.BPMPro.EvaluateContentReplenishFillinConfig)">
+            <summary>
+            內容評估表_補充意見(填寫)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.EvaluateContentReplenishRepository.PutEvaluateContentReplenishOpinionSingle(OA_WEB_API.Models.BPMPro.EvaluateContentReplenishOpinionConfig)">
+            <summary>
+            內容評估表_補充意見(意見)
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContentReplenishRepository.strSQL">
+            <summary>
+            T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContentReplenishRepository.IDENTIFY">
+            <summary>
+            表單代號
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContentReplenishRepository.FM7Subject">
+            <summary>
+            表單主旨
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContentReplenishRepository.strJson">
+            <summary>
+            Json字串
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.EvaluateContentRepository">
             <summary>
             會簽管理系統 - 內容評估表
@@ -6977,51 +7317,6 @@
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContentRepository.strJson">
-            <summary>
-            Json字串
-            </summary>
-        </member>
-        <member name="T:OA_WEB_API.Repository.BPMPro.EvaluateContent_ReplenishRepository">
-            <summary>
-            會簽管理系統 - 內容評估表_補充意見
-            </summary>
-        </member>
-        <member name="M:OA_WEB_API.Repository.BPMPro.EvaluateContent_ReplenishRepository.PostEvaluateContent_ReplenishSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishQueryModel)">
-            <summary>
-            內容評估表_補充意見(查詢)
-            </summary>
-        </member>
-        <member name="M:OA_WEB_API.Repository.BPMPro.EvaluateContent_ReplenishRepository.PutEvaluateContent_ReplenishSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishViewModel)">
-            <summary>
-            內容評估表_補充意見(新增/修改/草稿)
-            </summary>
-        </member>
-        <member name="M:OA_WEB_API.Repository.BPMPro.EvaluateContent_ReplenishRepository.PutEvaluateContent_ReplenishFillinSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishFillinConfig)">
-            <summary>
-            內容評估表_補充意見(填寫)
-            </summary>
-        </member>
-        <member name="M:OA_WEB_API.Repository.BPMPro.EvaluateContent_ReplenishRepository.PutEvaluateContent_ReplenishOpinionSingle(OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishOpinionConfig)">
-            <summary>
-            內容評估表_補充意見(意見)
-            </summary>
-        </member>
-        <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContent_ReplenishRepository.strSQL">
-            <summary>
-            T-SQL
-            </summary>
-        </member>
-        <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContent_ReplenishRepository.IDENTIFY">
-            <summary>
-            表單代號
-            </summary>
-        </member>
-        <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContent_ReplenishRepository.FM7Subject">
-            <summary>
-            表單主旨
-            </summary>
-        </member>
-        <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContent_ReplenishRepository.strJson">
             <summary>
             Json字串
             </summary>
@@ -7275,7 +7570,7 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.evaluateContentRepository">
             <summary>內容評估表</summary>
         </member>
-        <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.evaluateContent_ReplenishRepository">
+        <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.evaluateContentReplenishRepository">
             <summary>內容評估表_補充意見</summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.mediaOrderRepository">
@@ -7289,6 +7584,12 @@
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.mediaInvoiceRepository">
             <summary>版權採購請款單</summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.GPI_evaluateContentRepository">
+            <summary>四方四隅_內容評估表</summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.GPI_evaluateContentReplenishRepository">
+            <summary>四方四隅_內容評估表_補充意見</summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutProjectReviewGetExternal(OA_WEB_API.Models.BPMPro.ProjectReviewERPInfo)">
             <summary>
@@ -7330,7 +7631,7 @@
             內容評估表(外部起單)
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutEvaluateContent_ReplenishGetExternal(OA_WEB_API.Models.BPMPro.EvaluateContent_ReplenishERPInfo)">
+        <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutEvaluateContentReplenishGetExternal(OA_WEB_API.Models.BPMPro.EvaluateContentReplenishERPInfo)">
             <summary>
             內容評估表_補充意見(外部起單)
             </summary>
@@ -7353,6 +7654,16 @@
         <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutMediaInvoiceGetExternal(OA_WEB_API.Models.BPMPro.MediaInvoiceERPInfo)">
             <summary>
             版權採購請款單(外部起單)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutGPI_EvaluateContentGetExternal(OA_WEB_API.Models.BPMPro.GPI_EvaluateContentERPInfo)">
+            <summary>
+            四方四隅_內容評估表(外部起單)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutGPI_EvaluateContentReplenishGetExternal(OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishERPInfo)">
+            <summary>
+            四方四隅_內容評估表_補充意見(外部起單)
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.IDENTIFY">
@@ -7416,6 +7727,51 @@
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GPI_CountersignRepository.strJson">
+            <summary>
+            Json字串
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Repository.BPMPro.GPI_EvaluateContentReplenishRepository">
+            <summary>
+            會簽管理系統 - 四方四隅_內容評估表_補充意見
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.GPI_EvaluateContentReplenishRepository.PostGPI_EvaluateContentReplenishSingle(OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishQueryModel)">
+            <summary>
+            四方四隅_內容評估表_補充意見(查詢)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.GPI_EvaluateContentReplenishRepository.PutGPI_EvaluateContentReplenishSingle(OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishViewModel)">
+            <summary>
+            四方四隅_內容評估表_補充意見(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.GPI_EvaluateContentReplenishRepository.PutGPI_EvaluateContentReplenishFillinSingle(OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishFillinConfig)">
+            <summary>
+            四方四隅_內容評估表_補充意見(填寫)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.GPI_EvaluateContentReplenishRepository.PutGPI_EvaluateContentReplenishOpinionSingle(OA_WEB_API.Models.BPMPro.GPI_EvaluateContentReplenishOpinionConfig)">
+            <summary>
+            四方四隅_內容評估表_補充意見(意見)
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GPI_EvaluateContentReplenishRepository.strSQL">
+            <summary>
+            T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GPI_EvaluateContentReplenishRepository.IDENTIFY">
+            <summary>
+            表單代號
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GPI_EvaluateContentReplenishRepository.FM7Subject">
+            <summary>
+            表單主旨
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GPI_EvaluateContentReplenishRepository.strJson">
             <summary>
             Json字串
             </summary>
@@ -8109,7 +8465,7 @@
         <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.evaluateContentRepository">
             <summary>內容評估表</summary>
         </member>
-        <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.evaluateContent_ReplenishRepository">
+        <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.evaluateContentReplenishRepository">
             <summary>內容評估表_補充意見</summary>
         </member>
         <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.mediaOrderRepository">
@@ -8120,6 +8476,12 @@
         </member>
         <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.mediaInvoiceRepository">
             <summary>版權採購請款單</summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.GPI_evaluateContentRepository">
+            <summary>四方四隅_內容評估表</summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.GPI_evaluateContentReplenishRepository">
+            <summary>四方四隅_內容評估表_補充意見</summary>
         </member>
         <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostProjectReviewFinanceSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
             <summary>
@@ -8151,7 +8513,7 @@
             內容評估表 審核資訊_回傳ERP
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostEvaluateContent_ReplenishInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
+        <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostEvaluateContentReplenishInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
             <summary>
             內容評估表_補充意見 審核資訊_回傳ERP
             </summary>
@@ -8169,6 +8531,16 @@
         <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostMediaInvoiceInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
             <summary>
             版權採購請款單 審核資訊_回傳ERP
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostGPI_EvaluateContentInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
+            <summary>
+            四方四隅_內容評估表 審核資訊_回傳ERP
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostGPI_EvaluateContentReplenishInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
+            <summary>
+            四方四隅_內容評估表_補充意見 審核資訊_回傳ERP
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.strSQL">

@@ -175,9 +175,9 @@ namespace OA_WEB_API.Controllers.ERP
         /// <summary>
         /// 內容評估表_補充意見 審核資訊_回傳ERP
         /// </summary>    
-        [Route("api/PostEvaluateContent_ReplenishInfoSingle")]
+        [Route("api/PostEvaluateContentReplenishInfoSingle")]
         [HttpPost]
-        public EvaluateContent_ReplenishInfoRequest PostEvaluateContent_ReplenishInfoSingle()
+        public EvaluateContentReplenishInfoRequest PostEvaluateContentReplenishInfoSingle()
         {
             HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
             HttpRequestBase request = context.Request;
@@ -188,7 +188,7 @@ namespace OA_WEB_API.Controllers.ERP
                 REQUEST_FLG = bool.Parse(request["RequestFlg"])
             };
 
-            return responseInfoRepository.PostEvaluateContent_ReplenishInfoSingle(query);
+            return responseInfoRepository.PostEvaluateContentReplenishInfoSingle(query);
         }
 
 
@@ -264,6 +264,57 @@ namespace OA_WEB_API.Controllers.ERP
 
             return responseInfoRepository.PostMediaInvoiceInfoSingle(query);
         }
+
+        #endregion
+
+        #endregion
+
+        #region -四方四隅_內容評估表_回傳ERP資訊-
+
+        #region - 四方四隅_內容評估表 審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 四方四隅_內容評估表 審核資訊_回傳ERP
+        /// </summary>    
+        [Route("api/PostGPI_EvaluateContentInfoSingle")]
+        [HttpPost]
+        public GPI_EvaluateContentInfoRequest PostGPI_EvaluateContentInfoSingle()
+        {
+            HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
+            HttpRequestBase request = context.Request;
+
+            var query = new RequestQueryModel()
+            {
+                REQUISITION_ID = request["RequisitionID"],
+                REQUEST_FLG = bool.Parse(request["RequestFlg"])
+            };
+
+            return responseInfoRepository.PostGPI_EvaluateContentInfoSingle(query);
+        }
+
+        #endregion
+
+        #region - 四方四隅_內容評估表_補充意見 審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 四方四隅_內容評估表_補充意見 審核資訊_回傳ERP
+        /// </summary>    
+        [Route("api/PostGPI_EvaluateContentReplenishInfoSingle")]
+        [HttpPost]
+        public GPI_EvaluateContentReplenishInfoRequest PostGPI_EvaluateContentReplenishInfoSingle()
+        {
+            HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
+            HttpRequestBase request = context.Request;
+
+            var query = new RequestQueryModel()
+            {
+                REQUISITION_ID = request["RequisitionID"],
+                REQUEST_FLG = bool.Parse(request["RequestFlg"])
+            };
+
+            return responseInfoRepository.PostGPI_EvaluateContentReplenishInfoSingle(query);
+        }
+
 
         #endregion
 

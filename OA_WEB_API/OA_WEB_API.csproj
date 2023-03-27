@@ -176,6 +176,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BPMPro\ActiveController.cs" />
+    <Compile Include="Controllers\BPMPro\AdvanceExpenseController.cs" />
     <Compile Include="Controllers\BPMPro\EvaluateContentController.cs" />
     <Compile Include="Controllers\BPMPro\EvaluateContentReplenishController.cs" />
     <Compile Include="Controllers\BPMPro\EvaluateDemandController.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="Controllers\BPMPro\MediaInvoiceController.cs" />
     <Compile Include="Controllers\BPMPro\MediaOrderChangeController.cs" />
     <Compile Include="Controllers\BPMPro\MediaOrderController.cs" />
+    <Compile Include="Controllers\BPMPro\MediaWarehouseNotAiredCopyController.cs" />
     <Compile Include="Controllers\BPMPro\NotifyController.cs" />
     <Compile Include="Controllers\BPMPro\CommonController.cs" />
     <Compile Include="Controllers\BPMPro\ProjectReviewController.cs" />
@@ -224,6 +226,7 @@
       <DependentUpon>Index.aspx</DependentUpon>
     </Compile>
     <Compile Include="Models\BPMPro\ActiveModel.cs" />
+    <Compile Include="Models\BPMPro\AdvanceExpenseModel.cs" />
     <Compile Include="Models\BPMPro\EvaluateContentModel.cs" />
     <Compile Include="Models\BPMPro\EvaluateContentReplenishModel.cs" />
     <Compile Include="Models\BPMPro\EvaluateDemandModel.cs" />
@@ -240,6 +243,8 @@
     <Compile Include="Models\BPMPro\MediaInvoiceModel.cs" />
     <Compile Include="Models\BPMPro\MediaOrderChangeModel.cs" />
     <Compile Include="Models\BPMPro\MediaOrderModel.cs" />
+    <Compile Include="Models\BPMPro\MediaSaleModel.cs" />
+    <Compile Include="Models\BPMPro\MediaWarehouseNotAiredCopyModel.cs" />
     <Compile Include="Models\BPMPro\NotifyModel.cs" />
     <Compile Include="Models\BPMPro\ProjectReviewModel.cs" />
     <Compile Include="Models\BPMPro\SupplierReviewModel.cs" />
@@ -254,6 +259,7 @@
     <Compile Include="Models\TokenModel.cs" />
     <Compile Include="Models\BPMPro\UserModel.cs" />
     <Compile Include="Repository\BPMPro\ActiveRepository.cs" />
+    <Compile Include="Repository\BPMPro\AdvanceExpenseRepository.cs" />
     <Compile Include="Repository\BPMPro\EvaluateContentReplenishRepository.cs" />
     <Compile Include="Repository\BPMPro\EvaluateContentRepository.cs" />
     <Compile Include="Repository\BPMPro\EvaluateDemandRepository.cs" />
@@ -270,6 +276,8 @@
     <Compile Include="Repository\BPMPro\MediaInvoiceRepository.cs" />
     <Compile Include="Repository\BPMPro\MediaOrderChangeRepository.cs" />
     <Compile Include="Repository\BPMPro\MediaOrderRepository.cs" />
+    <Compile Include="Repository\BPMPro\MediaSaleRepository.cs" />
+    <Compile Include="Repository\BPMPro\MediaWarehouseNotAiredCopyRepository.cs" />
     <Compile Include="Repository\BPMPro\NotifyRepository.cs" />
     <Compile Include="Repository\BPMPro\ProjectReviewRepository.cs" />
     <Compile Include="Repository\BPMPro\SupplierReviewRepository.cs" />
@@ -300,6 +308,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\Helpers\" />
+    <Folder Include="Views\AdvanceExpense\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="log4net.config">

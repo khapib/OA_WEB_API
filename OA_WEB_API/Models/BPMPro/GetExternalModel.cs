@@ -26,6 +26,9 @@ namespace OA_WEB_API.Models.BPMPro
 
     #region - 共用抬頭(外部起單) -
 
+    /// <summary>
+    /// 外部起單 抬頭
+    /// </summary>
     public class InfoTitle
     {
         /// <summary>BPM表 單唯一碼</summary>
@@ -39,6 +42,16 @@ namespace OA_WEB_API.Models.BPMPro
 
     }
 
+    /// <summary>
+    /// 外部起單的通用表單 抬頭
+    /// </summary>
+    public class COMM_FormInfoTitle: InfoTitle
+    {
+        /// <summary>ERP起案人</summary>
+        public string START_ID { get; set; }
+
+    }
+
     #endregion
 
     #region - 專案建立審核單(外部起單) -
@@ -46,7 +59,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 專案建立審核單(外部起單)ERP資料
     /// </summary>
-    public class ProjectReviewERPInfo : InfoTitle
+    public class ProjectReviewERPInfo : COMM_FormInfoTitle
     {
         /// <summary>專案群組名稱</summary>
         public string PROJECT_NAME { get; set; }
@@ -56,9 +69,6 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>執行年分</summary>
         public string USE_YEAR { get; set; }
-
-        /// <summary>ERP起案人</summary>
-        public string START_ID { get; set; }
 
         /// <summary>建檔日期</summary>
         public string CREATE_DATE { get; set; }

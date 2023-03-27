@@ -175,7 +175,11 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>系統編號</summary>
         public string REQUISITION_ID { get; set; }
 
-        /// <summary>意見類型</summary>
+        /// <summary>
+        /// 意見類型：
+        /// EVA. 補充意見
+        /// DEC.決策意見
+        /// </summary>
         public string OPINION_TYPE { get; set; }
     }
 

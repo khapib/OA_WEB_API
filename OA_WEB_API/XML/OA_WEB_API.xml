@@ -217,6 +217,16 @@
             寫入parameter值
             </summary>
         </member>
+        <member name="M:GlobalParameters.IsDouble(System.String)">
+            <summary>
+            確認小數點後第二位
+            </summary>
+        </member>
+        <member name="M:GlobalParameters.JsonChangeValue(System.String,System.String,System.String)">
+            <summary>
+            替換Json值
+            </summary>
+        </member>
         <member name="M:GlobalParameters.Pagination``1(System.Int32,System.Int32,System.Collections.Generic.IList{``0})">
             <summary>
             分頁
@@ -856,6 +866,36 @@
             版權採購申請單(原表單匯入子表單)
             </summary>
         </member>
+        <member name="T:OA_WEB_API.Controllers.BPMPro.MediaSaleController">
+            <summary>
+            會簽管理系統 - 版權銷售申請單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.MediaSaleController.PostMediaSaleSingle(OA_WEB_API.Models.BPMPro.MediaSaleQueryModel)">
+            <summary>
+            版權銷售申請單(查詢)
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.MediaSaleController.PutMediaSaleSingle(OA_WEB_API.Models.BPMPro.MediaSaleViewModel)">
+            <summary>
+            版權銷售申請單(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Controllers.BPMPro.MediaWarehouseCopyController">
+            <summary>
+            會簽管理系統 - 拷貝申請單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.MediaWarehouseCopyController.PostMediaWarehouseCopySingle(OA_WEB_API.Models.BPMPro.MediaWarehouseCopyQueryModel)">
+            <summary>
+            拷貝申請單(查詢)
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.MediaWarehouseCopyController.PutMediaWarehouseCopySingle(OA_WEB_API.Models.BPMPro.MediaWarehouseCopyViewModel)">
+            <summary>
+            拷貝申請單(新增/修改/草稿)
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.MediaWarehouseNotAiredCopyController">
             <summary>
             會簽管理系統 - 尚未播出檔拷貝申請單
@@ -1290,6 +1330,16 @@
             <summary>
             行政採購申請單(原表單匯入子表單)
             </summary>
+        </member>
+        <member name="T:OA_WEB_API.Controllers.OA.ResponseOAInfoController">
+            <summary>
+            回傳OA資訊
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.OA.ResponseOAInfoController.PostMediaWarehouseCopyResponseOASingle">
+            <summary>
+            拷貝申請單 回傳OA
+            </summary>    
         </member>
         <member name="T:OA_WEB_API.Controllers.SysCommonController">
             <summary>
@@ -5291,6 +5341,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleViewModel.MEDIA_SALE_CONFIG">
             <summary>版權銷售申請單 表單內容 設定</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleViewModel.MEDIA_SALE_TRSS_CONFIG">
+            <summary>版權銷售申請單 稅率結構 設定</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleViewModel.MEDIA_SALE_DTLS_CONFIG">
             <summary>版權銷售申請單 採購明細 設定</summary>
         </member>
@@ -5349,14 +5402,14 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.DESCRIPTION">
             <summary>說明</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.IS_VICE_PRESIDENT">
+            <summary>是否過副總</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.TXN_TYPE">
             <summary>交易類型</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.EXEC_DATE">
             <summary>作業日期</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.TAX_NOTE">
-            <summary>稅單備註</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.CURRENCY">
             <summary>幣別</summary>
@@ -5364,11 +5417,26 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.EXCH_RATE">
             <summary>匯率</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.IS_TAX_BILL">
+            <summary>提供稅單[標記]</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.TAX_NOTE">
+            <summary>稅單備註</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.PRICING_METHOD">
             <summary>計價方式</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.KNOW_GROSS">
+            <summary>已知GROSS價[標記]</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.TAX_RATE">
             <summary>營業稅/[稅率]租稅協定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.TRS_RATE_TOTAL">
+            <summary>合計稅率(稅率結構)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.TRS_TAX_TOTAL">
+            <summary>合計稅額(稅率結構)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.SUP_NO">
             <summary>廠商編號</summary>
@@ -5388,8 +5456,8 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.OWNER_TEL">
             <summary>負責人電話</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.PAYMENT_PERIOD_TOTAL">
-            <summary>總付款期數</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.COLLECTION_PERIOD_TOTAL">
+            <summary>總收款期數</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.DTL_NET_TOTAL">
             <summary>合計未稅金額(採購明細)/NET總額(採購明細)</summary>
@@ -5409,23 +5477,26 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.DTL_GROSS_TOTAL_TWD">
             <summary>合計含稅總額_台幣(採購明細)/GROSS總額_台幣(採購明細)</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.DTL_MATERIAL_TOTAL">
+            <summary>材料費總價(採購明細)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.DTL_MATERIAL_TOTAL_TWD">
+            <summary>材料費總價_台幣(採購明細)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.DTL_ORDER_TOTAL">
+            <summary>合計(採購明細)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.DTL_ORDER_TOTAL_TWD">
+            <summary>合計_台幣(採購明細)</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.EX_AMOUNT_TOTAL">
             <summary>額外項目總額(額外項目)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.EX_AMOUNT_TOTAL_TWD">
             <summary>額外項目總額_台幣(額外項目)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.EX_TAX_TOTAL">
-            <summary>額外項目總稅額/總預估保留稅額(額外項目)</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.EX_TAX_TOTAL_TWD">
-            <summary>額外項目總稅額/總預估保留稅額_台幣(額外項目)</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.COLL_LOCK_PERIOD">
             <summary>不可異動標住(收款辦法)</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.COLL_TAX_TOTAL">
-            <summary>總稅額(收款辦法)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.COLL_NET_TOTAL">
             <summary>合計未稅金額(收款辦法)/NET總額(收款辦法)</summary>
@@ -5433,11 +5504,11 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.COLL_GROSS_TOTAL">
             <summary>合計含稅總額(收款辦法)/GROSS總額(收款辦法)</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.COLL_MATERIAL_TOTAL">
+            <summary>材料費總價(收款辦法)</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.COLL_EX_AMOUNT_TOTAL">
             <summary>額外項目總額(收款辦法)</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.COLL_EX_TAX_TOTAL">
-            <summary>額外項目_總稅額/總預估保留稅額(收款辦法)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.COLL_ORDER_TOTAL">
             <summary>合計(收款辦法)</summary>
@@ -5446,94 +5517,97 @@
             <summary>合計(換算)(收款辦法)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleConfig.COLL_USE_BUDGET_TOTAL">
-            <summary>合計使用預算(所需預算)(付款辦法)</summary>
+            <summary>合計使用預算(所需預算)(收款辦法)</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaSaleTaxRateStructuresConfig">
+            <summary>
+            版權銷售申請單 稅率結構 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleTaxRateStructuresConfig.NAME">
+            <summary>名目</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleTaxRateStructuresConfig.RATE">
+            <summary>稅率[占比]</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleTaxRateStructuresConfig.TAX_TWD">
+            <summary>稅額_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleTaxRateStructuresConfig.NOTE">
+            <summary>備註</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig">
             <summary>
             版權銷售申請單 採購明細 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_ROW_NO">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.ROW_NO">
             <summary>行數編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_SUP_PROD_A_NO">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.SUP_PROD_A_NO">
             <summary>商品代碼</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_ITEM_NAME">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.ITEM_NAME">
             <summary>商品名稱</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_ITEM_TYPE">
-            <summary>類型</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.MEDIA_TYPE">
+            <summary>影帶類別</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_MEDIA_TYPE">
-            <summary>
-            影片類型：
-            SD.
-            HD.
-            4K.
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_START_EPISODE">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.START_EPISODE">
             <summary>開始集數</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_END_EPISODE">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.END_EPISODE">
             <summary>結束集數</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_ACPT_EPISODE">
-            <summary>驗收集數</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DELY_EPISODE">
+            <summary>交付集數</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_EPISODE_TIME">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.EPISODE_TIME">
             <summary>每集長度</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_NET">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.MEDIA_SPEC">
+            <summary>影帶規格</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.NET">
             <summary>未稅單價/NET單價</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_NET_TWD">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.NET_TWD">
             <summary>未稅單價_台幣/NET單價_台幣</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_TAX">
-            <summary>稅額/預估保留稅額</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.TAX">
+            <summary>稅額/預估保留稅額(銷售明細)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_TAX_TWD">
-            <summary>稅額/預估保留稅額_台幣</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.TAX_TWD">
+            <summary>稅額/預估保留稅額_台幣(銷售明細)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_GROSS">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.GROSS">
             <summary>含稅單價/GROSS單價</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_GROSS_TWD">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.GROSS_TWD">
             <summary>含稅單價_台幣/GROSS單價_台幣</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_NET_SUM">
-            <summary>未稅小計/NET小計</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.MATERIAL">
+            <summary>單集材料費</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_NET_SUM_TWD">
-            <summary>未稅小計_台幣/NET小計_台幣</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_GROSS_SUM">
-            <summary>含稅小計/GROSS小計</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_GROSS_SUM_TWD">
-            <summary>含稅小計_台幣/GROSS小計_台幣</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_ITEM_SUM">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.ITEM_SUM">
             <summary>明細單項小記</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_ITEM_SUM_TWD">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.ITEM_SUM_TWD">
             <summary>明細單項小記_台幣</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_PROJECT_FORM_NO">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.PROJECT_FORM_NO">
             <summary>所屬專案 ERP 單號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_PROJECT_NAME">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.PROJECT_NAME">
             <summary>所屬專案名稱</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_PROJECT_NICKNAME">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.PROJECT_NICKNAME">
             <summary>所屬專案描述</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_PROJECT_USE_YEAR">
-            <summary>所屬專案起案年度</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.PROJECT_USE_YEAR">
+            <summary>所屬專案年分</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.DTL_NOTE">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDetailsConfig.NOTE">
             <summary>備註</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig">
@@ -5541,52 +5615,52 @@
             版權銷售申請單 授權權利 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.AUTH_ROW_NO">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.ROW_NO">
             <summary>行數編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.AUTH_SUP_PROD_A_NO">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.SUP_PROD_A_NO">
             <summary>商品代碼</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.AUTH_ITEM_NAME">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.ITEM_NAME">
             <summary>商品名稱</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.AUTH_CONTINENT">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.CONTINENT">
             <summary>洲別</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.AUTH_COUNTRY">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.COUNTRY">
             <summary>國家</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.AUTH_PLAY_PLATFORM">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.PLAY_PLATFORM">
             <summary>播放平台</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.AUTH_PLAY">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.PLAY">
             <summary>播放[標記]</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.AUTH_SELL">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.SELL">
             <summary>販售[標記]</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.AUTH_EDIT_TO_PLAY">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.EDIT_TO_PLAY">
             <summary>剪後播[標記]</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.AUTH_EDIT_TO_SELL">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.EDIT_TO_SELL">
             <summary>剪後售[標記]</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.AUTH_ALLOTED_TIME_TYPE">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.ALLOTED_TIME_TYPE">
             <summary>授權時間類型</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.AUTH_START_DATE">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.START_DATE">
             <summary>授權開始時間(授權時間)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.AUTH_END_DATE">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.END_DATE">
             <summary>授權結束時間(授權時間)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.AUTH_FREQUENCY_TYPE">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.FREQUENCY_TYPE">
             <summary>授權方式類型</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.AUTH_PLAY_FREQUENCY">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.PLAY_FREQUENCY">
             <summary>授權播放次數(授權方式)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.AUTH_NOTE">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleAuthorizesConfig.NOTE">
             <summary>備註</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig">
@@ -5594,49 +5668,40 @@
             版權銷售申請單 額外項目 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.EX_ROW_NO">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.ROW_NO">
             <summary>行數編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.EX_NAME">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.NAME">
             <summary>名稱</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.EX_AMOUNT">
-            <summary>金額</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.TAX_INCL">
+            <summary>含稅價</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.EX_AMOUNT_TWD">
-            <summary>金額_台幣</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.EX_TAX">
-            <summary>稅額/預估保留稅額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.EX_TAX_TWD">
-            <summary>稅額/預估保留稅額_台幣</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.TAX_INCL_TWD">
+            <summary>含稅價_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.PERIOD">
             <summary>期別</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.EX_PROJECT_FORM_NO">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.PROJECT_FORM_NO">
             <summary>所屬專案 ERP 單號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.EX_PROJECT_NAME">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.PROJECT_NAME">
             <summary>所屬專案名稱 </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.EX_PROJECT_NICKNAME">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.PROJECT_NICKNAME">
             <summary>所屬專案描述</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.EX_PROJECT_USE_YEAR">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.PROJECT_USE_YEAR">
             <summary>所屬專案年分</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.EX_NOTE">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleExtrasConfig.NOTE">
             <summary>備註</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaSaleCollectionsConfig">
             <summary>
             版權銷售申請單 收款辦法 設定
             </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleCollectionsConfig.COLL_ROW_NO">
-            <summary>行數編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleCollectionsConfig.PERIOD">
             <summary>期別</summary>
@@ -5655,40 +5720,31 @@
             CS.現金
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleCollectionsConfig.COLL_TAX">
-            <summary>稅額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleCollectionsConfig.COLL_NET">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleCollectionsConfig.NET">
             <summary>未稅金額/NET單價</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleCollectionsConfig.COLL_GROSS">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleCollectionsConfig.GROSS">
             <summary>含稅總額/GROSS單價</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleCollectionsConfig.COLL_EXCH_RATE">
-            <summary>匯率</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleCollectionsConfig.MATERIAL">
+            <summary>材料費</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleCollectionsConfig.COLL_EX_AMOUNT">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleCollectionsConfig.EX_AMOUNT">
             <summary>額外採購項目金額</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleCollectionsConfig.COLL_EX_TAX">
-            <summary>額外採購項目稅額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleCollectionsConfig.COLL_ORDER_SUM">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleCollectionsConfig.ORDER_SUM">
             <summary>小計</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleCollectionsConfig.COLL_ORDER_SUM_CONV">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleCollectionsConfig.ORDER_SUM_CONV">
             <summary>小計(換算)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleCollectionsConfig.COLL_USE_BUDGET">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleCollectionsConfig.USE_BUDGET">
             <summary>使用預算金額</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig">
             <summary>
             版權銷售申請單 使用預算 設定
             </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.BUDG_ROW_NO">
-            <summary>行數編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.PERIOD">
             <summary>期別</summary>
@@ -5702,7 +5758,7 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.BUDG_NAME">
             <summary>預算名稱</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.BUDG_OWNER_DEPT">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.OWNER_DEPT">
             <summary>所屬部門</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.BUDG_TOTAL">
@@ -5719,32 +5775,206 @@
             版權銷售申請單 交付項目 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDeliverysConfig.DELY_ROW_NO">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDeliverysConfig.ROW_NO">
             <summary>行數編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDeliverysConfig.PERIOD">
             <summary>期別</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDeliverysConfig.DELY_SUP_PROD_A_NO">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDeliverysConfig.SUP_PROD_A_NO">
             <summary>商品代碼</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDeliverysConfig.DELY_ITEM_NAME">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDeliverysConfig.ITEM_NAME">
             <summary>商品名稱</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDeliverysConfig.DELY_MEDIA_TYPE">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDeliverysConfig.MEDIA_TYPE">
             <summary>影片類型</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDeliverysConfig.DELY_START_EPISODE">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDeliverysConfig.START_EPISODE">
             <summary>開始集數</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDeliverysConfig.DELY_END_EPISODE">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDeliverysConfig.END_EPISODE">
             <summary>結束集數</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDeliverysConfig.DELY_ACPT_EPISODE">
-            <summary>驗收集數</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDeliverysConfig.DELY_EPISODE">
+            <summary>交付集數</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleDeliverysConfig.DELY_NOTE">
-            <summary>商品備註</summary>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyQueryModel">
+            <summary>
+            拷貝申請單(查詢條件)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyQueryModel.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyViewModel">
+            <summary>
+            拷貝申請單
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyViewModel.APPLICANT_INFO">
+            <summary>申請人資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyViewModel.MEDIA_WAREHOUSE_COPY_TITLE">
+            <summary>拷貝申請單 表頭資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyViewModel.MEDIA_WAREHOUSE_COPY_CONFIG">
+            <summary>拷貝申請單 表單內容 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyViewModel.MEDIA_WAREHOUSE_COPY_DTLS_CONFIG">
+            <summary>拷貝申請單 拷貝明細 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyViewModel.MEDIA_WAREHOUSE_COPY_CHS_CONFIG">
+            <summary>拷貝申請單 音軌規格 設定</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyTitle">
+            <summary>
+            拷貝申請單 表頭資訊
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig">
+            <summary>
+            拷貝申請單 表單內容 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.DESCRIPTION">
+            <summary>拷貝說明</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.NOTE">
+            <summary>備註</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.CONTACT">
+            <summary>往來對象</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.APPROVAL_NO">
+            <summary>公文字號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.EXPECTED_DATE">
+            <summary>期望交付日期</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.CONTACT_PERSON">
+            <summary>處理人員</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.METERIAL_TYPE">
+            <summary>素材類別[複選]</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.METERIAL_TYPE_OTHERS">
+            <summary>素材類別_其他</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.APPLY_TYPE">
+            <summary>用途說明</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.APPLY_TYPE_OTHERS">
+            <summary>用途說明_其他</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.LENGTH">
+            <summary>長度版本</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.LENGTH_OTHERS">
+            <summary>長度版本_其他</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.COPY_TYPE">
+            <summary>拷貝格式</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.COPY_TYPE_OTHERS">
+            <summary>拷貝格式_其他</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.SAVE_TYPE">
+            <summary>儲存型態[複選]</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.SAVE_TYPE_OTHERS">
+            <summary>儲存型態_其他</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.SAVE_PATH">
+            <summary>指定路徑</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.UPPER_LEFT_LOGO">
+            <summary>畫面左上LOGO[標記]</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.SUBTITLES">
+            <summary>字幕[標記]</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.BREACH">
+            <summary>破口[標記]</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.EFFECT">
+            <summary>畫面動畫效果字[標記]</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.TIME_CODE">
+            <summary>Time Code[標記]</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.MEDIA_POSSESSION">
+            <summary>版權所有嚴禁公開場所播放字樣[標記]</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.CAST_CREW">
+            <summary>片頭/尾(演職員表) [標記]</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.LYRICS">
+            <summary>片頭/尾(歌詞) [標記]</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.OPENING_LOGO">
+            <summary>片頭曲LOGO[標記]</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.NOTICE">
+            <summary>預告字樣(畫面左上) [標記]</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.END_CARD">
+            <summary>END卡[標記]</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.COPY_DEMAND_OTHER">
+            <summary>拷貝需求 其他</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.STEREO">
+            <summary>立體聲[標記]</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.LOUDNESS">
+            <summary>響度</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.CHAPTER_NOTE">
+            <summary>音軌規格 註記</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.VIDEO_CODEC">
+            <summary>視訊轉檔封包</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.FRANE_RATE">
+            <summary>NTSC/PAL</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.BIRATE">
+            <summary>解析大小</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.RESOLUTION">
+            <summary>畫面尺寸</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.AUDIO_CODEO">
+            <summary>聲音封包</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.CONVERSION_NOTE">
+            <summary>轉檔規格 其他</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyDetailsConfig">
+            <summary>
+            拷貝申請單 拷貝明細 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyDetailsConfig.PROGRAM_NAME">
+            <summary>節目名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyDetailsConfig.VOLUME">
+            <summary>集數</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyDetailsConfig.NOTE">
+            <summary>備註</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyChaptersConfig">
+            <summary>
+            拷貝申請單 音軌規格 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyChaptersConfig.CHAPTER_NO">
+            <summary>音軌編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyChaptersConfig.CHAPTER">
+            <summary>音軌</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaWarehouseNotAiredCopyQueryModel">
             <summary>
@@ -7564,6 +7794,98 @@
         <member name="P:OA_WEB_API.Models.ERP.StepSignResponse.ViewPath">
             <summary>表單內容檢視頁路徑</summary>
         </member>
+        <member name="T:OA_WEB_API.Models.OA.OAResponseState">
+            <summary>
+            接收OA回傳狀態
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.OAResponseState.code">
+            <summary>狀態</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.OAResponseState.msg">
+            <summary>信息</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOA">
+            <summary>
+            拷貝申請單 回傳OA資訊
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOA.OA_RESPONSE_STATE">
+            <summary>接收OA回傳狀態</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOA.MEDIA_WAREHOUSE_COPY_RESPONSE_OA_INFO_CONFIG">
+            <summary>拷貝申請單 回傳OA 內容</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOA.MEDIA_WAREHOUSE_COPY_RESPONSE_OA_PROGRAM_INFO_CONFIG">
+            <summary>拷貝申請單 回傳OA 節目資訊</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAInfoConfig">
+            <summary>
+            拷貝申請單 回傳OA 內容
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAInfoConfig.CASE_LEVEL">
+            <summary>案件等級</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAInfoConfig.BPM_FORM_NO">
+            <summary>BPM 表單單號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAInfoConfig.SUBJECT">
+            <summary>主旨</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAInfoConfig.APPLY_DATE">
+            <summary>申請日期</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAInfoConfig.APPLY_PERSON">
+            <summary>申請人</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAInfoConfig.EXPECTED_DATE">
+            <summary>期望取件日期</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAInfoConfig.APPLY_TYPE">
+            <summary>申請用途</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAInfoConfig.APPLY_TYPE_OTHERS">
+            <summary>申請用途_其他</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAInfoConfig.CONTACT">
+            <summary>往來對象</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAInfoConfig.SELL_DOC_NO">
+            <summary>賣片文號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAInfoConfig.MODIFY_PERSON">
+            <summary>協力單位</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAInfoConfig.NOTE">
+            <summary>備註</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAInfoConfig.DELIVER_DATE">
+            <summary>最後交付日期</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAInfoConfig.CREATE_PERSON">
+            <summary>處理人員</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAProgramInfoConfig">
+            <summary>
+            拷貝申請單 回傳OA 節目資訊
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAProgramInfoConfig.PROGRAM_NAME">
+            <summary>節目名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAProgramInfoConfig.VOLUME">
+            <summary>集數</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAProgramInfoConfig.METERIAL_TYPE">
+            <summary>素材類別</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAProgramInfoConfig.COPY_TYPE">
+            <summary>拷貝格式</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.OA.MediaWarehouseCopyResponseOAProgramInfoConfig.LENGTH">
+            <summary>長度版本</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.FormRemoveQueryModel">
             <summary>
             會簽管理系統 - BPM刪除及結束表單
@@ -8715,7 +9037,12 @@
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.MediaSaleRepository.PutMediaSaleSingle(OA_WEB_API.Models.BPMPro.MediaSaleViewModel)">
             <summary>
-            版權銷售申請單(新增/修改/草稿)
+            版權銷售申請單(新增/修改/草稿)ㄘ
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.MediaSaleRepository.PutMediaSaleImportSingle(OA_WEB_API.Models.BPMPro.MediaSaleViewModel)">
+            <summary>
+            版權銷售申請單(原表單匯入子表單)
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaSaleRepository.strSQL">
@@ -8734,6 +9061,41 @@
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaSaleRepository.strJson">
+            <summary>
+            Json字串
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Repository.BPMPro.MediaWarehouseCopyRepository">
+            <summary>
+            會簽管理系統 - 拷貝申請單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.MediaWarehouseCopyRepository.PostMediaWarehouseCopySingle(OA_WEB_API.Models.BPMPro.MediaWarehouseCopyQueryModel)">
+            <summary>
+            拷貝申請單(查詢)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.MediaWarehouseCopyRepository.PutMediaWarehouseCopySingle(OA_WEB_API.Models.BPMPro.MediaWarehouseCopyViewModel)">
+            <summary>
+            拷貝申請單(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaWarehouseCopyRepository.strSQL">
+            <summary>
+            T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaWarehouseCopyRepository.IDENTIFY">
+            <summary>
+            表單代號
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaWarehouseCopyRepository.FM7Subject">
+            <summary>
+            表單主旨
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaWarehouseCopyRepository.strJson">
             <summary>
             Json字串
             </summary>
@@ -9425,6 +9787,64 @@
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.ERP.StepFlowRepository.strResponseJson">
+            <summary>
+            請求信息-接收回傳值
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Repository.OA.CommonRepository">
+            <summary>
+            OA系統 - 系統共通功能資訊
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.OA.CommonRepository.OA_CaseLevel(System.String)">
+            <summary>
+            OA(系統)案件等級
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Repository.OA.ResponseOAInfoRepository">
+            <summary>
+            回傳OA資訊
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.OA.ResponseOAInfoRepository.mediaWarehouseCopyRepository">
+            <summary>拷貝申請單</summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.OA.ResponseOAInfoRepository.PostMediaWarehouseCopyResponseOASingle(OA_WEB_API.Models.BPMPro.MediaWarehouseCopyQueryModel)">
+            <summary>
+            拷貝申請單 回傳OA
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.OA.ResponseOAInfoRepository.strSQL">
+            <summary>
+            T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.OA.ResponseOAInfoRepository.strJson">
+            <summary>
+            Json字串
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.OA.ResponseOAInfoRepository.dt">
+            <summary>
+            Data Table
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.OA.ResponseOAInfoRepository.ApiUrl">
+            <summary>
+            請求信息-Api路徑
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.OA.ResponseOAInfoRepository.Method">
+            <summary>
+            請求信息-取得或要求的方法
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.OA.ResponseOAInfoRepository.strRequestJson">
+            <summary>
+            請求信息-輸入值
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.OA.ResponseOAInfoRepository.strResponseJson">
             <summary>
             請求信息-接收回傳值
             </summary>

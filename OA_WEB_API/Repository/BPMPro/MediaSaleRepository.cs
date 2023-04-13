@@ -91,36 +91,42 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [Description] AS [DESCRIPTION], ";
+            strSQL += "     [IsVicePresident] AS [IS_VICE_PRESIDENT], ";
             strSQL += "     [TXN_Type] AS [TXN_TYPE], ";
             strSQL += "     [ExecuteDate] AS [EXEC_DATE], ";
-            strSQL += "     [TaxNote] AS [TAX_NOTE], ";
             strSQL += "     [Currency] AS [CURRENCY], ";
             strSQL += "     [ExchangeRate] AS [EXCH_RATE], ";
+            strSQL += "     [IsTaxBill] AS [IS_TAX_BILL], ";
+            strSQL += "     [TaxNote] AS [TAX_NOTE], ";
             strSQL += "     [PricingMethod] AS [PRICING_METHOD], ";
+            strSQL += "     [Know_GROSS] AS [KNOW_GROSS], ";
             strSQL += "     [TaxRate] AS [TAX_RATE], ";
+            strSQL += "     [TRS_RateTotal] AS [TRS_RATE_TOTAL], ";
+            strSQL += "     [TRS_TaxTotal] AS [TRS_TAX_TOTAL], ";
             strSQL += "     [SupNo] AS [SUP_NO], ";
             strSQL += "     [SupName] AS [SUP_NAME], ";
             strSQL += "     [RegisterKind] AS [REG_KIND], ";
             strSQL += "     [RegisterNo] AS [REG_NO], ";
             strSQL += "     [OwnerName] AS [OWNER_NAME], ";
             strSQL += "     [OwnerTEL] AS [OWNER_TEL], ";
-            strSQL += "     [PaymentPeriodTotal] AS [PAYMENT_PERIOD_TOTAL], ";
+            strSQL += "     [CollectionPeriodTotal] AS [COLLECTION_PERIOD_TOTAL], ";
             strSQL += "     [DTL_NetTotal] AS [DTL_NET_TOTAL], ";
             strSQL += "     [DTL_NetTotal_TWD] AS [DTL_NET_TOTAL_TWD], ";
             strSQL += "     [DTL_TaxTotal] AS [DTL_TAX_TOTAL], ";
             strSQL += "     [DTL_TaxTotal_TWD] AS [DTL_TAX_TOTAL_TWD], ";
             strSQL += "     [DTL_GrossTotal] AS [DTL_GROSS_TOTAL], ";
             strSQL += "     [DTL_GrossTotal_TWD] AS [DTL_GROSS_TOTAL_TWD], ";
+            strSQL += "     [DTL_MaterialTotal] AS [DTL_MATERIAL_TOTAL], ";
+            strSQL += "     [DTL_MaterialTotal_TWD] AS [DTL_MATERIAL_TOTAL_TWD], ";
+            strSQL += "     [DTL_OrderTotal] AS [DTL_ORDER_TOTAL], ";
+            strSQL += "     [DTL_OrderTotal_TWD] AS [DTL_ORDER_TOTAL_TWD], ";
             strSQL += "     [EX_AmountTotal] AS [EX_AMOUNT_TOTAL], ";
             strSQL += "     [EX_AmountTotal_TWD] AS [EX_AMOUNT_TOTAL_TWD], ";
-            strSQL += "     [EX_TaxTotal] AS [EX_TAX_TOTAL], ";
-            strSQL += "     [EX_TaxTotal_TWD] AS [EX_TAX_TOTAL_TWD], ";
             strSQL += "     [COLL_LockPeriod] AS [COLL_LOCK_PERIOD], ";
-            strSQL += "     [COLL_TaxTotal] AS [COLL_TAX_TOTAL], ";
             strSQL += "     [COLL_NetTotal] AS [COLL_NET_TOTAL], ";
             strSQL += "     [COLL_GrossTotal] AS [COLL_GROSS_TOTAL], ";
+            strSQL += "     [COLL_MaterialTotal] AS [COLL_MATERIAL_TOTAL], ";
             strSQL += "     [COLL_EX_AmountTotal] AS [COLL_EX_AMOUNT_TOTAL], ";
-            strSQL += "     [COLL_EX_TaxTotal] AS [COLL_EX_TAX_TOTAL], ";
             strSQL += "     [COLL_OrderTotal] AS [COLL_ORDER_TOTAL], ";
             strSQL += "     [COLL_OrderTotal_CONV] AS [COLL_ORDER_TOTAL_CONV], ";
             strSQL += "     [COLL_UseBudgetTotal] AS [COLL_USE_BUDGET_TOTAL] ";
@@ -131,37 +137,51 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
+            #region - 版權銷售申請單 稅率結構 -
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
+            strSQL += "     [Name] AS [NAME], ";
+            strSQL += "     [Rate] AS [RATE], ";
+            strSQL += "     [Tax_TWD] AS [TAX_TWD], ";
+            strSQL += "     [Note] AS [NOTE] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaSale_TRS] ";
+            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+            strSQL += "ORDER BY [AutoCounter] ";
+
+            var mediaSaleTaxRateStructuresConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaSaleTaxRateStructuresConfig>();
+
+            #endregion
+
             #region - 版權銷售申請單 銷售明細 -
 
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [DTL_RowNo] AS [DTL_ROW_NO], ";
-            strSQL += "     [DTL_SupProdANo] AS [DTL_SUP_PROD_A_NO], ";
-            strSQL += "     [DTL_ItemName] AS [DTL_ITEM_NAME], ";
-            strSQL += "     [DTL_ItemType] AS [DTL_ITEM_TYPE], ";
-            strSQL += "     [DTL_MediaType] AS [DTL_MEDIA_TYPE], ";
-            strSQL += "     [DTL_StartEpisode] AS [DTL_START_EPISODE], ";
-            strSQL += "     [DTL_EndEpisode] AS [DTL_END_EPISODE], ";
-            strSQL += "     [DTL_ACPT_Episode] AS [DTL_ACPT_EPISODE], ";
-            strSQL += "     [DTL_EpisodeTime] AS [DTL_EPISODE_TIME], ";
-            strSQL += "     [DTL_Net] AS [DTL_NET], ";
-            strSQL += "     [DTL_Net_TWD] AS [DTL_NET_TWD], ";
-            strSQL += "     [DTL_Tax] AS [DTL_TAX], ";
-            strSQL += "     [DTL_Tax_TWD] AS [DTL_TAX_TWD], ";
-            strSQL += "     [DTL_Gross] AS [DTL_GROSS], ";
-            strSQL += "     [DTL_Gross_TWD] AS [DTL_GROSS_TWD], ";
-            strSQL += "     [DTL_NetSum] AS [DTL_NET_SUM], ";
-            strSQL += "     [DTL_NetSum_TWD] AS [DTL_NET_SUM_TWD], ";
-            strSQL += "     [DTL_GrossSum] AS [DTL_GROSS_SUM], ";
-            strSQL += "     [DTL_GrossSum_TWD] AS [DTL_GROSS_SUM_TWD], ";
-            strSQL += "     [DTL_ItemSum] AS [DTL_ITEM_SUM], ";
-            strSQL += "     [DTL_ItemSum_TWD] AS [DTL_ITEM_SUM_TWD], ";
-            strSQL += "     [DTL_ProjectFormNo] AS [DTL_PROJECT_FORM_NO], ";
-            strSQL += "     [DTL_ProjectName] AS [DTL_PROJECT_NAME], ";
-            strSQL += "     [DTL_ProjectNickname] AS [DTL_PROJECT_NICKNAME], ";
-            strSQL += "     [DTL_ProjectUseYear] AS [DTL_PROJECT_USE_YEAR], ";
-            strSQL += "     [DTL_Note] AS [DTL_NOTE] ";
+            strSQL += "     [RowNo] AS [ROW_NO], ";
+            strSQL += "     [SupProdANo] AS [SUP_PROD_A_NO], ";
+            strSQL += "     [ItemName] AS [ITEM_NAME], ";
+            strSQL += "     [MediaType] AS [MEDIA_TYPE], ";
+            strSQL += "     [StartEpisode] AS [START_EPISODE], ";
+            strSQL += "     [EndEpisode] AS [END_EPISODE], ";
+            strSQL += "     [DELY_Episode] AS [DELY_EPISODE], ";
+            strSQL += "     [EpisodeTime] AS [EPISODE_TIME], ";
+            strSQL += "     [Media_Spec] AS [MEDIA_SPEC], ";
+            strSQL += "     [Net] AS [NET], ";
+            strSQL += "     [Net_TWD] AS [NET_TWD], ";
+            strSQL += "     [Tax] AS [TAX], ";
+            strSQL += "     [Tax_TWD] AS [TAX_TWD], ";
+            strSQL += "     [Gross] AS [GROSS], ";
+            strSQL += "     [Gross_TWD] AS [GROSS_TWD], ";
+            strSQL += "     [Material] AS [MATERIAL], ";
+            strSQL += "     [ItemSum] AS [ITEM_SUM], ";
+            strSQL += "     [ItemSum_TWD] AS [ITEM_SUM_TWD], ";
+            strSQL += "     [ProjectFormNo] AS [PROJECT_FORM_NO], ";
+            strSQL += "     [ProjectName] AS [PROJECT_NAME], ";
+            strSQL += "     [ProjectNickname] AS [PROJECT_NICKNAME], ";
+            strSQL += "     [ProjectUseYear] AS [PROJECT_USE_YEAR], ";
+            strSQL += "     [Note] AS [NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaSale_DTL] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
@@ -175,22 +195,22 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [AUTH_RowNo] AS [AUTH_ROW_NO], ";
-            strSQL += "     [AUTH_SupProdANo] AS [AUTH_SUP_PROD_A_NO], ";
-            strSQL += "     [AUTH_ItemName] AS [AUTH_ITEM_NAME], ";
-            strSQL += "     [AUTH_Continent] AS [AUTH_CONTINENT], ";
-            strSQL += "     [AUTH_Country] AS [AUTH_COUNTRY], ";
-            strSQL += "     [AUTH_PlayPlatform] AS [AUTH_PLAY_PLATFORM],";
-            strSQL += "     [AUTH_Play] AS [AUTH_PLAY], ";
-            strSQL += "     [AUTH_Sell] AS [AUTH_SELL], ";
-            strSQL += "     [AUTH_EditToPlay] AS [AUTH_EDIT_TO_PLAY], ";
-            strSQL += "     [AUTH_EditToSell] AS [AUTH_EDIT_TO_SELL], ";
-            strSQL += "     [AUTH_AllotedTimeType] AS [AUTH_ALLOTED_TIME_TYPE], ";
-            strSQL += "     [AUTH_StartDate] AS [AUTH_START_DATE], ";
-            strSQL += "     [AUTH_EndDate] AS [AUTH_END_DATE], ";
-            strSQL += "     [AUTH_FrequencyType] AS [AUTH_FREQUENCY_TYPE], ";
-            strSQL += "     [AUTH_PlayFrequency] AS [AUTH_PLAY_FREQUENCY], ";
-            strSQL += "     [AUTH_Note] AS [AUTH_NOTE] ";
+            strSQL += "     [RowNo] AS [ROW_NO], ";
+            strSQL += "     [SupProdANo] AS [SUP_PROD_A_NO], ";
+            strSQL += "     [ItemName] AS [ITEM_NAME], ";
+            strSQL += "     [Continent] AS [CONTINENT], ";
+            strSQL += "     [Country] AS [COUNTRY], ";
+            strSQL += "     [PlayPlatform] AS [PLAY_PLATFORM],";
+            strSQL += "     [Play] AS [PLAY], ";
+            strSQL += "     [Sell] AS [SELL], ";
+            strSQL += "     [EditToPlay] AS [EDIT_TO_PLAY], ";
+            strSQL += "     [EditToSell] AS [EDIT_TO_SELL], ";
+            strSQL += "     [AllotedTimeType] AS [ALLOTED_TIME_TYPE], ";
+            strSQL += "     [StartDate] AS [START_DATE], ";
+            strSQL += "     [EndDate] AS [END_DATE], ";
+            strSQL += "     [FrequencyType] AS [FREQUENCY_TYPE], ";
+            strSQL += "     [PlayFrequency] AS [PLAY_FREQUENCY], ";
+            strSQL += "     [Note] AS [NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaSale_AUTH] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
@@ -204,18 +224,16 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [EX_RowNo] AS [EX_ROW_NO], ";
-            strSQL += "     [EX_Name] AS [EX_NAME], ";
-            strSQL += "     [EX_Amount] AS [EX_AMOUNT], ";
-            strSQL += "     [EX_Amount_TWD] AS [EX_AMOUNT_TWD], ";
-            strSQL += "     [EX_Tax] AS [EX_TAX], ";
-            strSQL += "     [EX_Tax_TWD] AS [EX_TAX_TWD], ";
+            strSQL += "     [RowNo] AS [ROW_NO], ";
+            strSQL += "     [Name] AS [NAME], ";
+            strSQL += "     [TaxIncl] AS [TAX_INCL], ";
+            strSQL += "     [TaxIncl_TWD] AS [TAX_INCL_TWD], ";
             strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [EX_ProjectFormNo] AS [EX_PROJECT_FORM_NO], ";
-            strSQL += "     [EX_ProjectName] AS [EX_PROJECT_NAME], ";
-            strSQL += "     [EX_ProjectNickname] AS [EX_PROJECT_NICKNAME], ";
-            strSQL += "     [EX_ProjectUseYear] AS [EX_PROJECT_USE_YEAR], ";
-            strSQL += "     [EX_Note] AS [EX_NOTE] ";
+            strSQL += "     [ProjectFormNo] AS [PROJECT_FORM_NO], ";
+            strSQL += "     [ProjectName] AS [PROJECT_NAME], ";
+            strSQL += "     [ProjectNickname] AS [PROJECT_NICKNAME], ";
+            strSQL += "     [ProjectUseYear] AS [PROJECT_USE_YEAR], ";
+            strSQL += "     [Note] AS [NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaSale_EX] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
@@ -229,20 +247,17 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [COLL_RowNo] AS [COLL_ROW_NO], ";
             strSQL += "     [Period] AS [PERIOD], ";
             strSQL += "     [COLL_Project] AS [COLL_PROJECT], ";
             strSQL += "     [COLL_Terms] AS [COLL_TERMS], ";
             strSQL += "     [COLL_MethodID] AS [COLL_METHOD_ID], ";
-            strSQL += "     [COLL_Tax] AS [COLL_TAX], ";
-            strSQL += "     [COLL_Net] AS [COLL_NET], ";
-            strSQL += "     [COLL_Gross] AS [COLL_GROSS], ";
-            strSQL += "     [COLL_ExchangeRate] AS [COLL_EXCH_RATE], ";
-            strSQL += "     [COLL_EX_Amount] AS [COLL_EX_AMOUNT], ";
-            strSQL += "     [COLL_EX_Tax] AS [COLL_EX_TAX], ";
-            strSQL += "     [COLL_OrderSum] AS [COLL_ORDER_SUM], ";
-            strSQL += "     [COLL_OrderSum_CONV] AS [COLL_ORDER_SUM_CONV], ";
-            strSQL += "     [COLL_UseBudget] AS [COLL_USE_BUDGET] ";
+            strSQL += "     [Net] AS [NET], ";
+            strSQL += "     [Gross] AS [GROSS], ";
+            strSQL += "     [Material] AS [MATERIAL], ";
+            strSQL += "     [EX_Amount] AS [EX_AMOUNT], ";
+            strSQL += "     [OrderSum] AS [ORDER_SUM], ";
+            strSQL += "     [OrderSum_CONV] AS [ORDER_SUM_CONV], ";
+            strSQL += "     [UseBudget] AS [USE_BUDGET] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaSale_COLL] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
@@ -256,12 +271,11 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [BUDG_RowNo] AS [BUDG_ROW_NO], ";
             strSQL += "     [Period] AS [PERIOD], ";
             strSQL += "     [BUDG_FormNo] AS [BUDG_FORM_NO], ";
             strSQL += "     [BUDG_CreateYear] AS [BUDG_CREATE_YEAR], ";
             strSQL += "     [BUDG_Name] AS [BUDG_NAME], ";
-            strSQL += "     [BUDG_OwnerDept] AS [BUDG_OWNER_DEPT], ";
+            strSQL += "     [OwnerDept] AS [OWNER_DEPT], ";
             strSQL += "     [BUDG_Total] AS [BUDG_TOTAL], ";
             strSQL += "     [BUDG_AvailableBudgetAmount] AS [BUDG_AVAILABLE_BUDGET_AMOUNT], ";
             strSQL += "     [BUDG_UseBudgetAmount] AS [BUDG_USE_BUDGET_AMOUNT] ";
@@ -278,15 +292,14 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [DELY_RowNo] AS [DELY_ROW_NO], ";
+            strSQL += "     [RowNo] AS [ROW_NO], ";
             strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [DELY_SupProdANo] AS [DELY_SUP_PROD_A_NO], ";
-            strSQL += "     [DELY_ItemName] AS [DELY_ITEM_NAME], ";
-            strSQL += "     [DELY_MediaType] AS [DELY_MEDIA_TYPE], ";
-            strSQL += "     [DELY_StartEpisode] AS [DELY_START_EPISODE], ";
-            strSQL += "     [DELY_EndEpisode] AS [DELY_END_EPISODE], ";
-            strSQL += "     [DELY_ACPT_Episode] AS [DELY_ACPT_EPISODE], ";
-            strSQL += "     [DELY_Note] AS [DELY_NOTE] ";
+            strSQL += "     [SupProdANo] AS [SUP_PROD_A_NO], ";
+            strSQL += "     [ItemName] AS [ITEM_NAME], ";
+            strSQL += "     [MediaType] AS [MEDIA_TYPE], ";
+            strSQL += "     [StartEpisode] AS [START_EPISODE], ";
+            strSQL += "     [EndEpisode] AS [END_EPISODE], ";
+            strSQL += "     [DELY_Episode] AS [DELY_EPISODE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaSale_DELY] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
@@ -310,6 +323,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 APPLICANT_INFO = applicantInfo,
                 MEDIA_SALE_TITLE = mediaSaleTitle,
                 MEDIA_SALE_CONFIG = mediaSaleConfig,
+                MEDIA_SALE_TRSS_CONFIG=mediaSaleTaxRateStructuresConfig,
                 MEDIA_SALE_DTLS_CONFIG = mediaSaleDetailsConfig,
                 MEDIA_SALE_AUTHS_CONFIG = mediaSaleAuthorizesConfig,
                 MEDIA_SALE_EXS_CONFIG = mediaSaleExtrasConfig,
@@ -335,7 +349,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         if (!Boolean.Parse(mediaSaleTitle.EDIT_FLAG))
                         {
                             //匯入【子表單】
-                            //mediaSaleViewModel = PutMediaSaleImportSingle(mediaSaleViewModel);
+                            mediaSaleViewModel = PutMediaSaleImportSingle(mediaSaleViewModel);
                         }
 
                         #endregion
@@ -378,7 +392,7 @@ namespace OA_WEB_API.Repository.BPMPro
         #endregion
 
         /// <summary>
-        /// 版權銷售申請單(新增/修改/草稿)
+        /// 版權銷售申請單(新增/修改/草稿)ㄘ
         /// </summary>
         public bool PutMediaSaleSingle(MediaSaleViewModel model)
         {
@@ -525,21 +539,11 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (model.MEDIA_SALE_CONFIG != null)
                 {
+                    strJson = jsonFunction.ObjectToJSON(model.MEDIA_SALE_CONFIG);
+
                     #region - 確認小數點後第二位 -
 
-                    model.MEDIA_SALE_CONFIG.EXCH_RATE = Math.Round(model.MEDIA_SALE_CONFIG.EXCH_RATE, 2);
-                    model.MEDIA_SALE_CONFIG.TAX_RATE = Math.Round(model.MEDIA_SALE_CONFIG.TAX_RATE, 2);
-                    model.MEDIA_SALE_CONFIG.DTL_NET_TOTAL = Math.Round(model.MEDIA_SALE_CONFIG.DTL_NET_TOTAL, 2);
-                    model.MEDIA_SALE_CONFIG.DTL_TAX_TOTAL = Math.Round(model.MEDIA_SALE_CONFIG.DTL_TAX_TOTAL, 2);
-                    model.MEDIA_SALE_CONFIG.DTL_GROSS_TOTAL = Math.Round(model.MEDIA_SALE_CONFIG.DTL_GROSS_TOTAL, 2);
-                    model.MEDIA_SALE_CONFIG.EX_AMOUNT_TOTAL = Math.Round(model.MEDIA_SALE_CONFIG.EX_AMOUNT_TOTAL, 2);
-                    model.MEDIA_SALE_CONFIG.EX_TAX_TOTAL = Math.Round(model.MEDIA_SALE_CONFIG.EX_TAX_TOTAL, 2);
-                    model.MEDIA_SALE_CONFIG.COLL_TAX_TOTAL = Math.Round(model.MEDIA_SALE_CONFIG.COLL_TAX_TOTAL, 2);
-                    model.MEDIA_SALE_CONFIG.COLL_NET_TOTAL = Math.Round(model.MEDIA_SALE_CONFIG.COLL_NET_TOTAL, 2);
-                    model.MEDIA_SALE_CONFIG.COLL_GROSS_TOTAL = Math.Round(model.MEDIA_SALE_CONFIG.COLL_GROSS_TOTAL, 2);
-                    model.MEDIA_SALE_CONFIG.COLL_EX_AMOUNT_TOTAL = Math.Round(model.MEDIA_SALE_CONFIG.COLL_EX_AMOUNT_TOTAL, 2);
-                    model.MEDIA_SALE_CONFIG.COLL_EX_TAX_TOTAL = Math.Round(model.MEDIA_SALE_CONFIG.COLL_EX_TAX_TOTAL, 2);
-                    model.MEDIA_SALE_CONFIG.COLL_ORDER_TOTAL = Math.Round(model.MEDIA_SALE_CONFIG.COLL_ORDER_TOTAL, 2);
+                    GlobalParameters.IsDouble(strJson);
 
                     #endregion
 
@@ -548,79 +552,88 @@ namespace OA_WEB_API.Repository.BPMPro
                         //版權銷售申請單 表單內容
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
                         new SqlParameter("@DESCRIPTION", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@IS_VICE_PRESIDENT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@TXN_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@EXEC_DATE", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@TAX_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@CURRENCY", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@EXCH_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@IS_TAX_BILL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@TAX_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PRICING_METHOD", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@KNOW_GROSS", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@TAX_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@TRS_RATE_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@TRS_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@SUP_NO", SqlDbType.NVarChar) { Size = 16, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@SUP_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REG_KIND", SqlDbType.NVarChar) { Size = 15, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REG_NO", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@OWNER_NAME", SqlDbType.NVarChar) { Size = 64,  Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@OWNER_TEL", SqlDbType.NVarChar) { Size = 20,  Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PAYMENT_PERIOD_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@COLLECTION_PERIOD_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_NET_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_NET_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_GROSS_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_GROSS_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@DISCOUNT_PRICE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@DTL_MATERIAL_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@DTL_MATERIAL_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@DTL_ORDER_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@DTL_ORDER_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@EX_AMOUNT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@EX_AMOUNT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@EX_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@EX_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@COLL_LOCK_PERIOD", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@COLL_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@COLL_NET_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@COLL_GROSS_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@COLL_MATERIAL_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@COLL_EX_AMOUNT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@COLL_EX_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@COLL_ORDER_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@COLL_ORDER_TOTAL_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@COLL_USE_BUDGET_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value }
                     };
 
-                    //寫入：版權銷售申請單 表單內容parameter                        
-                    strJson = jsonFunction.ObjectToJSON(model.MEDIA_SALE_CONFIG);
+                    //寫入：版權銷售申請單 表單內容parameter                    
                     GlobalParameters.Infoparameter(strJson, parameterInfo);
 
                     strSQL = "";
                     strSQL += "UPDATE [BPMPro].[dbo].[FM7T_MediaSale_M] ";
                     strSQL += "SET [Description]=@DESCRIPTION, ";
+                    strSQL += "     [IsVicePresident]=@IS_VICE_PRESIDENT, ";
                     strSQL += "     [TXN_Type]=@TXN_TYPE, ";
                     strSQL += "     [ExecuteDate]=@EXEC_DATE, ";
                     strSQL += "     [TaxNote]=@TAX_NOTE, ";
                     strSQL += "     [Currency]=@CURRENCY, ";
                     strSQL += "     [ExchangeRate]=@EXCH_RATE, ";
                     strSQL += "     [PricingMethod]=@PRICING_METHOD, ";
+                    strSQL += "     [Know_GROSS]=@KNOW_GROSS, ";
                     strSQL += "     [TaxRate]=@TAX_RATE, ";
+                    strSQL += "     [TRS_RateTotal]=@TRS_RATE_TOTAL, ";
+                    strSQL += "     [TRS_TaxTotal]=@TRS_TAX_TOTAL, ";
                     strSQL += "     [SupNo]=@SUP_NO, ";
                     strSQL += "     [SupName]=@SUP_NAME, ";
                     strSQL += "     [RegisterKind]=@REG_KIND, ";
                     strSQL += "     [RegisterNo]=@REG_NO, ";
                     strSQL += "     [OwnerName]=@OWNER_NAME, ";
                     strSQL += "     [OwnerTEL]=@OWNER_TEL, ";
-                    strSQL += "     [PaymentPeriodTotal]=@PAYMENT_PERIOD_TOTAL, ";
+                    strSQL += "     [CollectionPeriodTotal]=@COLLECTION_PERIOD_TOTAL, ";
                     strSQL += "     [DTL_NetTotal]=@DTL_NET_TOTAL, ";
                     strSQL += "     [DTL_NetTotal_TWD]=@DTL_NET_TOTAL_TWD, ";
                     strSQL += "     [DTL_TaxTotal]=@DTL_TAX_TOTAL, ";
                     strSQL += "     [DTL_TaxTotal_TWD]=@DTL_TAX_TOTAL_TWD, ";
                     strSQL += "     [DTL_GrossTotal]=@DTL_GROSS_TOTAL, ";
                     strSQL += "     [DTL_GrossTotal_TWD]=@DTL_GROSS_TOTAL_TWD, ";
+                    strSQL += "     [DTL_MaterialTotal]=@DTL_MATERIAL_TOTAL, ";
+                    strSQL += "     [DTL_MaterialTotal_TWD]=@DTL_MATERIAL_TOTAL_TWD, ";
+                    strSQL += "     [DTL_OrderTotal]=@DTL_ORDER_TOTAL, ";
+                    strSQL += "     [DTL_OrderTotal_TWD]=@DTL_ORDER_TOTAL_TWD, ";
                     strSQL += "     [EX_AmountTotal]=@EX_AMOUNT_TOTAL, ";
                     strSQL += "     [EX_AmountTotal_TWD]=@EX_AMOUNT_TOTAL_TWD, ";
-                    strSQL += "     [EX_TaxTotal]=@EX_TAX_TOTAL, ";
-                    strSQL += "     [EX_TaxTotal_TWD]=@EX_TAX_TOTAL_TWD, ";
                     strSQL += "     [COLL_LockPeriod]=@COLL_LOCK_PERIOD, ";
-                    strSQL += "     [COLL_TaxTotal]=@COLL_TAX_TOTAL, ";
                     strSQL += "     [COLL_NetTotal]=@COLL_NET_TOTAL, ";
                     strSQL += "     [COLL_GrossTotal]=@COLL_GROSS_TOTAL, ";
+                    strSQL += "     [COLL_MaterialTotal]=@COLL_MATERIAL_TOTAL, ";
                     strSQL += "     [COLL_EX_AmountTotal]=@COLL_EX_AMOUNT_TOTAL, ";
-                    strSQL += "     [COLL_EX_TaxTotal]=@COLL_EX_TAX_TOTAL, ";
                     strSQL += "     [COLL_OrderTotal]=@COLL_ORDER_TOTAL, ";
                     strSQL += "     [COLL_OrderTotal_CONV]=@COLL_ORDER_TOTAL_CONV, ";
                     strSQL += "     [COLL_UseBudgetTotal]=@COLL_USE_BUDGET_TOTAL ";
@@ -632,39 +645,90 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
+                #region - 版權銷售申請單 稅率結構：MediaSale_TRS -
+
+                var parameterTaxRateStructures = new List<SqlParameter>()
+                {
+                    //版權銷售申請單 稅率結構
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@NAME", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@RATE", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX_TWD", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                };
+
+                #region 先刪除舊資料
+
+                strSQL = "";
+                strSQL += "DELETE ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaSale_TRS] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoTran(strSQL, parameterTaxRateStructures);
+
+                #endregion
+
+                if (model.MEDIA_SALE_TRSS_CONFIG != null && model.MEDIA_SALE_TRSS_CONFIG.Count > 0)
+                {
+                    #region 再新增資料
+
+                    foreach (var item in model.MEDIA_SALE_TRSS_CONFIG)
+                    {
+                        strJson = jsonFunction.ObjectToJSON(item);
+
+                        #region - 確認小數點後第二位 -
+
+                        GlobalParameters.IsDouble(strJson);
+
+                        #endregion
+
+                        //寫入：版權銷售申請單 稅率結構parameter
+                        GlobalParameters.Infoparameter(strJson, parameterTaxRateStructures);
+
+                        strSQL = "";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaSale_TRS]([RequisitionID],[Name],[Rate],[Tax_TWD],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@NAME,@RATE,@TAX_TWD,@NOTE) ";
+
+                        dbFun.DoTran(strSQL, parameterTaxRateStructures);
+                    }
+
+                    #endregion
+                }
+
+                #endregion
+
                 #region - 版權銷售申請單 銷售明細：MediaSale_DTL -
 
                 var parameterDetails = new List<SqlParameter>()
                 {
                     //版權銷售申請單 銷售明細
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@DTL_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ITEM_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_START_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_END_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ORDER_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ACPT_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_EPISODE_TIME", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_NET_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_TAX_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_GROSS_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_NET_SUM", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_NET_SUM_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_GROSS_SUM", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_GROSS_SUM_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ITEM_SUM", SqlDbType.Float) { Value =(object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ITEM_SUM_TWD", SqlDbType.Int) { Value =(object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_PROJECT_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value =(object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_PROJECT_NAME", SqlDbType.NVarChar) { Size = 500, Value =(object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_PROJECT_NICKNAME", SqlDbType.NVarChar) { Size = 4000, Value =(object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_PROJECT_USE_YEAR", SqlDbType.NVarChar) { Size = 50, Value =(object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ITEM_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@START_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@END_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ORDER_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DELY_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EPISODE_TIME", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_SPEC", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NET_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GROSS_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MATERIAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ITEM_SUM", SqlDbType.Float) { Value =(object) DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ITEM_SUM_TWD", SqlDbType.Int) { Value =(object) DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value =(object) DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_NAME", SqlDbType.NVarChar) { Size = 500, Value =(object) DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_NICKNAME", SqlDbType.NVarChar) { Size = 4000, Value =(object) DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_USE_YEAR", SqlDbType.NVarChar) { Size = 50, Value =(object) DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -685,24 +749,20 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     foreach (var item in model.MEDIA_SALE_DTLS_CONFIG)
                     {
+                        strJson = jsonFunction.ObjectToJSON(item);
+
                         #region - 確認小數點後第二位 -
 
-                        item.DTL_NET = Math.Round(item.DTL_NET, 2);
-                        item.DTL_GROSS = Math.Round(item.DTL_GROSS, 2);
-                        item.DTL_NET_SUM = Math.Round(item.DTL_NET_SUM, 2);
-                        item.DTL_TAX = Math.Round(item.DTL_TAX, 2);
-                        item.DTL_GROSS_SUM = Math.Round(item.DTL_GROSS_SUM, 2);
-                        item.DTL_ITEM_SUM = Math.Round(item.DTL_ITEM_SUM, 2);
+                        GlobalParameters.IsDouble(strJson);
 
                         #endregion
 
                         //寫入：版權銷售申請單 銷售明細parameter
-                        strJson = jsonFunction.ObjectToJSON(item);
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_DTL]([RequisitionID],[DTL_RowNo],[DTL_SupProdANo],[DTL_ItemName],[DTL_ItemType],[DTL_MediaType],[DTL_StartEpisode],[DTL_EndEpisode],[DTL_OrderEpisode],[DTL_ACPT_Episode],[DTL_EpisodeTime],[DTL_Net],[DTL_Net_TWD],[DTL_Tax],[DTL_Tax_TWD],[DTL_Gross],[DTL_Gross_TWD],[DTL_NetSum],[DTL_NetSum_TWD],[DTL_GrossSum],[DTL_GrossSum_TWD],[DTL_ItemSum],[DTL_ItemSum_TWD],[DTL_ProjectFormNo],[DTL_ProjectName],[DTL_ProjectNickname],[DTL_ProjectUseYear],[DTL_Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@DTL_ROW_NO,@DTL_SUP_PROD_A_NO,@DTL_ITEM_NAME,@DTL_ITEM_TYPE,@DTL_MEDIA_TYPE,@DTL_START_EPISODE,@DTL_END_EPISODE,@DTL_ORDER_EPISODE,@DTL_ACPT_EPISODE,@DTL_EPISODE_TIME,@DTL_NET,@DTL_NET_TWD,@DTL_TAX,@DTL_TAX_TWD,@DTL_GROSS,@DTL_GROSS_TWD,@DTL_NET_SUM,@DTL_NET_SUM_TWD,@DTL_GROSS_SUM,@DTL_GROSS_SUM_TWD,@DTL_ITEM_SUM,@DTL_ITEM_SUM_TWD,@DTL_PROJECT_FORM_NO,@DTL_PROJECT_NAME,@DTL_PROJECT_NICKNAME,@DTL_PROJECT_USE_YEAR,@DTL_NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaSale_DTL]([RequisitionID],[RowNo],[SupProdANo],[ItemName],[MediaType],[StartEpisode],[EndEpisode],[DELY_Episode],[EpisodeTime],[Media_Spec],[Net],[Net_TWD],[Tax],[Tax_TWD],[Gross],[Gross_TWD],[Material],[ItemSum],[ItemSum_TWD],[ProjectFormNo],[ProjectName],[ProjectNickname],[ProjectUseYear],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@ROW_NO,@SUP_PROD_A_NO,@ITEM_NAME,@MEDIA_TYPE,@START_EPISODE,@END_EPISODE,@DELY_EPISODE,@EPISODE_TIME,@MEDIA_SPEC,@NET,@NET_TWD,@TAX,@TAX_TWD,@GROSS,@GROSS_TWD,@MATERIAL,@ITEM_SUM,@ITEM_SUM_TWD,@PROJECT_FORM_NO,@PROJECT_NAME,@PROJECT_NICKNAME,@PROJECT_USE_YEAR,@NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }
@@ -718,22 +778,22 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     //版權銷售申請單 授權權利
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@AUTH_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_CONTINENT", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_COUNTRY", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_PLAY_PLATFORM", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_PLAY", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_SELL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_EDIT_TO_PLAY", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_EDIT_TO_SELL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_ALLOTED_TIME_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_START_DATE", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_END_DATE", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_FREQUENCY_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_PLAY_FREQUENCY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@CONTINENT", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@COUNTRY", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PLAY_PLATFORM", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PLAY", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@SELL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EDIT_TO_PLAY", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EDIT_TO_SELL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ALLOTED_TIME_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@START_DATE", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@END_DATE", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@FREQUENCY_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PLAY_FREQUENCY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -760,8 +820,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterAuthorizes);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaSale_AUTH]([RequisitionID],[AUTH_RowNo],[AUTH_SupProdANo],[AUTH_ItemName],[AUTH_Continent],[AUTH_Country],[AUTH_PlayPlatform],[AUTH_Play],[AUTH_Sell],[AUTH_EditToPlay],[AUTH_EditToSell],[AUTH_AllotedTimeType],[AUTH_StartDate],[AUTH_EndDate],[AUTH_FrequencyType],[AUTH_PlayFrequency],[AUTH_Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@AUTH_ROW_NO,@AUTH_SUP_PROD_A_NO,@AUTH_ITEM_NAME,@AUTH_CONTINENT,@AUTH_COUNTRY,@AUTH_PLAY_PLATFORM,@AUTH_PLAY,@AUTH_SELL,@AUTH_EDIT_TO_PLAY,@AUTH_EDIT_TO_SELL,@AUTH_ALLOTED_TIME_TYPE,@AUTH_START_DATE,@AUTH_END_DATE,@AUTH_FREQUENCY_TYPE,@AUTH_PLAY_FREQUENCY,@AUTH_NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaSale_AUTH]([RequisitionID],[RowNo],[SupProdANo],[ItemName],[Continent],[Country],[PlayPlatform],[Play],[Sell],[EditToPlay],[EditToSell],[AllotedTimeType],[StartDate],[EndDate],[FrequencyType],[PlayFrequency],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@ROW_NO,@SUP_PROD_A_NO,@ITEM_NAME,@CONTINENT,@COUNTRY,@PLAY_PLATFORM,@PLAY,@SELL,@EDIT_TO_PLAY,@EDIT_TO_SELL,@ALLOTED_TIME_TYPE,@START_DATE,@END_DATE,@FREQUENCY_TYPE,@PLAY_FREQUENCY,@NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterAuthorizes);
                     }
@@ -771,7 +831,299 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                
+                #region - 版權銷售申請單 額外項目：MediaSale_EX -
+
+                var parameterExtras = new List<SqlParameter>()
+                {
+                    //版權銷售申請單 額外項目
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX_INCL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX_INCL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PERIOD", SqlDbType.Int) { Size = 2, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_NAME", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_NICKNAME", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_USE_YEAR", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                };
+
+                #region 先刪除舊資料
+
+                strSQL = "";
+                strSQL += "DELETE ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaSale_EX] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoTran(strSQL, parameterAuthorizes);
+
+                #endregion
+
+                if (model.MEDIA_SALE_EXS_CONFIG != null && model.MEDIA_SALE_EXS_CONFIG.Count > 0)
+                {
+                    #region 再新增資料
+
+                    foreach (var item in model.MEDIA_SALE_EXS_CONFIG)
+                    {
+                        strJson = jsonFunction.ObjectToJSON(item);
+
+                        #region - 確認小數點後第二位 -
+
+                        GlobalParameters.IsDouble(strJson);
+
+                        #endregion
+
+                        //寫入：版權銷售申請單 授權權利parameter                        
+                        GlobalParameters.Infoparameter(strJson, parameterExtras);
+
+                        strSQL = "";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaSale_EX]([RequisitionID],[RowNo],[Name],[TaxIncl],[TaxIncl_TWD],[Period],[ProjectFormNo],[ProjectName],[ProjectNickname],[ProjectUseYear],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@ROW_NO,@NAME,@TAX_INCL,@TAX_INCL_TWD,@PERIOD,@PROJECT_FORM_NO,@PROJECT_NAME,@PROJECT_NICKNAME,@PROJECT_USE_YEAR,@NOTE) ";
+
+                        dbFun.DoTran(strSQL, parameterExtras);
+                    }
+
+                    #endregion
+                }
+
+                #endregion
+
+                #region - 版權銷售申請單 收款辦法：MediaSale_COLL -
+
+                var parameterCollections = new List<SqlParameter>()
+                {
+                    //版權銷售申請單 收款辦法
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@PERIOD", SqlDbType.Int) { Size = 2, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@COLL_PROJECT", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@COLL_TERMS", SqlDbType.NVarChar) { Size = 25, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@COLL_METHOD_ID", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MATERIAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EX_AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ORDER_SUM", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ORDER_SUM_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@USE_BUDGET", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                };
+
+                #region 先刪除舊資料
+
+                strSQL = "";
+                strSQL += "DELETE ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaSale_COLL] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoTran(strSQL, parameterCollections);
+
+                #endregion
+
+                if (model.MEDIA_SALE_COLLS_CONFIG != null && model.MEDIA_SALE_COLLS_CONFIG.Count > 0)
+                {
+                    #region 再新增資料
+
+                    foreach (var item in model.MEDIA_SALE_COLLS_CONFIG)
+                    {
+                        strJson = jsonFunction.ObjectToJSON(item);
+
+                        #region - 確認小數點後第二位 -
+
+                        GlobalParameters.IsDouble(strJson);
+
+                        #endregion
+
+                        //寫入：版權銷售申請單 收款辦法parameter                                               
+                        GlobalParameters.Infoparameter(strJson, parameterCollections);
+
+                        strSQL = "";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaSale_COLL]([RequisitionID],[Period],[COLL_Project],[COLL_Terms],[COLL_MethodID],[Net],[Gross],[Material],[EX_Amount],[OrderSum],[OrderSum_CONV],[UseBudget]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@COLL_PROJECT,@COLL_TERMS,@COLL_METHOD_ID,@NET,@GROSS,@MATERIAL,@EX_AMOUNT,@ORDER_SUM,@ORDER_SUM_CONV,@USE_BUDGET) ";
+
+                        dbFun.DoTran(strSQL, parameterCollections);
+                    }
+
+                    #endregion
+                }
+
+                #endregion
+
+                #region - 版權銷售申請單 使用預算：MediaSale_BUDG -
+
+                var parameterBudgets = new List<SqlParameter>()
+                {
+                    //版權銷售申請單 使用預算
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@PERIOD", SqlDbType.Int) { Size = 2, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@BUDG_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@BUDG_CREATE_YEAR", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@BUDG_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@OWNER_DEPT", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@BUDG_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@BUDG_AVAILABLE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@BUDG_USE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                };
+
+                #region 先刪除舊資料
+
+                strSQL = "";
+                strSQL += "DELETE ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaSale_BUDG] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoQuery(strSQL, parameterBudgets);
+
+                #endregion
+
+                if (model.MEDIA_SALE_BUDGS_CONFIG != null && model.MEDIA_SALE_BUDGS_CONFIG.Count > 0)
+                {
+                    #region 再新增資料
+
+                    foreach (var item in model.MEDIA_SALE_BUDGS_CONFIG)
+                    {
+                        //寫入：版權銷售申請單 使用預算parameter
+                        strJson = jsonFunction.ObjectToJSON(item);
+                        GlobalParameters.Infoparameter(strJson, parameterBudgets);
+
+                        strSQL = "";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaSale_BUDG]([RequisitionID],[Period],[BUDG_FormNo],[BUDG_CreateYear],[BUDG_Name],[OwnerDept],[BUDG_Total],[BUDG_AvailableBudgetAmount],[BUDG_UseBudgetAmount]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@BUDG_FORM_NO,@BUDG_CREATE_YEAR,@BUDG_NAME,@OWNER_DEPT,@BUDG_TOTAL,@BUDG_AVAILABLE_BUDGET_AMOUNT,@BUDG_USE_BUDGET_AMOUNT) ";
+
+                        dbFun.DoTran(strSQL, parameterBudgets);
+                    }
+
+                    #endregion
+                }
+
+                #endregion
+
+                #region - 版權銷售申請單 交付項目：MediaSale_DELY -
+
+                var parameterDeliverys = new List<SqlParameter>()
+                {
+                    //版權銷售申請單 交付項目
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@START_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@END_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DELY_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                };
+
+                #region 先刪除舊資料
+
+                strSQL = "";
+                strSQL += "DELETE ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaSale_DELY] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoTran(strSQL, parameterDeliverys);
+
+                #endregion
+
+                if (model.MEDIA_SALE_DELYS_CONFIG != null && model.MEDIA_SALE_DELYS_CONFIG.Count > 0)
+                {
+                    #region 再新增資料
+
+                    foreach (var item in model.MEDIA_SALE_DELYS_CONFIG)
+                    {
+                        //寫入：版權銷售申請單 交付項目parameter
+                        strJson = jsonFunction.ObjectToJSON(item);
+                        GlobalParameters.Infoparameter(strJson, parameterDeliverys);
+
+                        strSQL = "";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaSale_DELY]([RequisitionID],[RowNo],[Period],[SupProdANo],[ItemName],[MediaType],[StartEpisode],[EndEpisode],[DELY_Episode]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@ROW_NO,@PERIOD,@SUP_PROD_A_NO,@ITEM_NAME,@MEDIA_TYPE,@START_EPISODE,@END_EPISODE,@DELY_EPISODE) ";
+
+                        dbFun.DoTran(strSQL, parameterDeliverys);
+                    }
+
+                    #endregion
+                }
+
+                #endregion
+
+                #region - 版權銷售申請單 表單關聯：AssociatedForm -
+
+                var associatedFormModel = new AssociatedFormModel()
+                {
+                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    ASSOCIATED_FORM_CONFIG = model.ASSOCIATED_FORM_CONFIG
+                };
+
+                commonRepository.PutAssociatedForm(associatedFormModel);
+
+                #endregion
+
+                #region - 表單主旨：FormHeader -
+
+                FormHeader header = new FormHeader();
+                header.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                header.ITEM_NAME = "Subject";
+                header.ITEM_VALUE = FM7Subject;
+
+                formRepository.PutFormHeader(header);
+
+                #endregion
+
+                #region - 儲存草稿：FormDraftList -
+
+                if (model.APPLICANT_INFO.DRAFT_FLAG.Equals(1))
+                {
+                    FormDraftList draftList = new FormDraftList();
+                    draftList.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                    draftList.IDENTIFY = IDENTIFY;
+                    draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
+
+                    formRepository.PutFormDraftList(draftList, true);
+                }
+
+                #endregion
+
+                #region - 送出表單：FormAutoStart -
+
+                if (model.APPLICANT_INFO.DRAFT_FLAG.Equals(0))
+                {
+                    #region 送出表單前，先刪除草稿清單
+
+                    FormDraftList draftList = new FormDraftList();
+                    draftList.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                    draftList.IDENTIFY = IDENTIFY;
+                    draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
+
+                    formRepository.PutFormDraftList(draftList, false);
+
+                    #endregion
+
+                    FormAutoStart autoStart = new FormAutoStart();
+                    autoStart.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                    autoStart.DIAGRAM_ID = model.APPLICANT_INFO.DIAGRAM_ID;
+                    autoStart.APPLICANT_ID = model.APPLICANT_INFO.APPLICANT_ID;
+                    autoStart.APPLICANT_DEPT = model.APPLICANT_INFO.APPLICANT_DEPT;
+
+                    formRepository.PutFormAutoStart(autoStart);
+                }
+
+                #endregion
+
+                #region - 表單機能啟用：BPMFormFunction -
+
+                var BPM_FormFunction = new BPMFormFunction()
+                {
+                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    IDENTIFY = IDENTIFY,
+                    DRAFT_FLAG = 0
+                };
+                commonRepository.PostBPMFormFunction(BPM_FormFunction);
+
+                #endregion
 
                 vResult = true;
             }
@@ -782,6 +1134,88 @@ namespace OA_WEB_API.Repository.BPMPro
             }
 
             return vResult;
+        }
+
+        /// <summary>
+        /// 版權銷售申請單(原表單匯入子表單)
+        /// </summary>
+        public MediaSaleViewModel PutMediaSaleImportSingle(MediaSaleViewModel model)
+        {
+            try
+            {
+                #region 原表單_版權銷售申請單(查詢)
+
+                var groupQuery = new MediaSaleQueryModel()
+                {
+                    REQUISITION_ID = model.MEDIA_SALE_TITLE.GROUP_ID
+                };
+                //原表單_版權銷售申請單(查詢)
+                var postMediaSaleGroupSingle = PostMediaSaleSingle(groupQuery);
+
+                #endregion
+
+                #region 組裝要匯入寫回【子表單】的內容
+
+                #region 保留【子表單】所需欄位
+
+                var ChildFormAction = model.MEDIA_SALE_TITLE.FORM_ACTION;
+                var ChildPYMT_LockPeriod = model.MEDIA_SALE_CONFIG.COLL_LOCK_PERIOD;
+
+                #endregion
+
+                //版權銷售申請單 表頭資訊:ERP 工作流程標題名稱
+                model.MEDIA_SALE_TITLE.FLOW_NAME = postMediaSaleGroupSingle.MEDIA_SALE_TITLE.FLOW_NAME;
+                //版權銷售申請單 設定
+                model.MEDIA_SALE_CONFIG = postMediaSaleGroupSingle.MEDIA_SALE_CONFIG;
+                //版權銷售申請單 稅率結構 設定
+                model.MEDIA_SALE_TRSS_CONFIG = postMediaSaleGroupSingle.MEDIA_SALE_TRSS_CONFIG;
+                //版權銷售申請單 採購明細 設定
+                model.MEDIA_SALE_DTLS_CONFIG = postMediaSaleGroupSingle.MEDIA_SALE_DTLS_CONFIG;
+                //版權銷售申請單 授權權利 設定
+                model.MEDIA_SALE_AUTHS_CONFIG = postMediaSaleGroupSingle.MEDIA_SALE_AUTHS_CONFIG;
+                //版權銷售申請單 額外項目 設定
+                model.MEDIA_SALE_EXS_CONFIG = postMediaSaleGroupSingle.MEDIA_SALE_EXS_CONFIG;
+                //版權銷售申請單 付款辦法 設定
+                model.MEDIA_SALE_COLLS_CONFIG = postMediaSaleGroupSingle.MEDIA_SALE_COLLS_CONFIG;
+                //版權銷售申請單 使用預算 設定
+                model.MEDIA_SALE_BUDGS_CONFIG = postMediaSaleGroupSingle.MEDIA_SALE_BUDGS_CONFIG;
+                //版權銷售申請單 驗收項目 設定
+                model.MEDIA_SALE_DELYS_CONFIG = postMediaSaleGroupSingle.MEDIA_SALE_DELYS_CONFIG;
+                //表單關聯
+                model.ASSOCIATED_FORM_CONFIG = postMediaSaleGroupSingle.ASSOCIATED_FORM_CONFIG;
+
+                #region 寫回【子表單】不可被覆蓋內容
+
+                //版權銷售申請 表頭資訊: 避免 子表單的 表單操作 被原單覆蓋
+                model.MEDIA_SALE_TITLE.FORM_ACTION = ChildFormAction;
+                //版權銷售申請 設定:避免 子表單的 不可異動標住 被原單覆蓋
+                model.MEDIA_SALE_CONFIG.COLL_LOCK_PERIOD = ChildPYMT_LockPeriod;
+
+                #endregion
+
+                #endregion
+
+                strJson = jsonFunction.ObjectToJSON(model);
+                CommLib.Logger.Debug("版權銷售申請單(原表單匯入子表單)Json：" + strJson);
+
+                #region 執行 版權銷售申請單 原表單匯入子表單(新增/修改/草稿)
+
+                //執行 版權銷售申請單 原表單匯入子表單(新增/修改/草稿)
+                if (!PutMediaSaleSingle(model))
+                {
+                    CommLib.Logger.Error("版權銷售申請單 原表單匯入子表單(新增/修改/草稿)失敗。");
+                    throw new Exception("版權銷售申請單 原表單匯入子表單(新增/修改/草稿)失敗。");
+                }
+
+                #endregion
+
+                return model;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("版權銷售申請單(原表單匯入子表單)失敗，原因：" + ex.Message);
+                throw;
+            }
         }
 
         #endregion

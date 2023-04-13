@@ -1165,9 +1165,9 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region 寫回【子表單】不可被覆蓋內容
 
-                //行政採購申請 表頭資訊: 避免 子表單的 表單操作 被原單覆蓋
+                //版權採購申請 表頭資訊: 避免 子表單的 表單操作 被原單覆蓋
                 model.MEDIA_ORDER_TITLE.FORM_ACTION = ChildFormAction;
-                //行政採購申請 設定:避免 子表單的 不可異動標住 被原單覆蓋
+                //版權採購申請 設定:避免 子表單的 不可異動標住 被原單覆蓋
                 model.MEDIA_ORDER_CONFIG.PYMT_LOCK_PERIOD = ChildPYMT_LockPeriod;
 
                 #endregion

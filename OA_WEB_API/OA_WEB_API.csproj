@@ -192,6 +192,8 @@
     <Compile Include="Controllers\BPMPro\MediaInvoiceController.cs" />
     <Compile Include="Controllers\BPMPro\MediaOrderChangeController.cs" />
     <Compile Include="Controllers\BPMPro\MediaOrderController.cs" />
+    <Compile Include="Controllers\BPMPro\MediaSaleController.cs" />
+    <Compile Include="Controllers\BPMPro\MediaWarehouseCopyController.cs" />
     <Compile Include="Controllers\BPMPro\MediaWarehouseNotAiredCopyController.cs" />
     <Compile Include="Controllers\BPMPro\NotifyController.cs" />
     <Compile Include="Controllers\BPMPro\CommonController.cs" />
@@ -205,6 +207,7 @@
     <Compile Include="Controllers\ERP\StepFlowController.cs" />
     <Compile Include="Controllers\Error404Controller.cs" />
     <Compile Include="Controllers\BPMPro\GeneralOrderController.cs" />
+    <Compile Include="Controllers\OA\ResponseOAInfoController.cs" />
     <Compile Include="Controllers\SysCommonController.cs" />
     <Compile Include="Controllers\TokenController.cs" />
     <Compile Include="Core\ApiResponse.cs" />
@@ -244,6 +247,7 @@
     <Compile Include="Models\BPMPro\MediaOrderChangeModel.cs" />
     <Compile Include="Models\BPMPro\MediaOrderModel.cs" />
     <Compile Include="Models\BPMPro\MediaSaleModel.cs" />
+    <Compile Include="Models\BPMPro\MediaWarehouseCopyModel.cs" />
     <Compile Include="Models\BPMPro\MediaWarehouseNotAiredCopyModel.cs" />
     <Compile Include="Models\BPMPro\NotifyModel.cs" />
     <Compile Include="Models\BPMPro\ProjectReviewModel.cs" />
@@ -255,6 +259,8 @@
     <Compile Include="Models\ERP\GTVStructureModel.cs" />
     <Compile Include="Models\ERP\ResponseInfoModel.cs" />
     <Compile Include="Models\ERP\StepFlowModel.cs" />
+    <Compile Include="Models\OA\CommonModel.cs" />
+    <Compile Include="Models\OA\ResponseOAInfoModel.cs" />
     <Compile Include="Models\SysCommonModel.cs" />
     <Compile Include="Models\TokenModel.cs" />
     <Compile Include="Models\BPMPro\UserModel.cs" />
@@ -277,6 +283,7 @@
     <Compile Include="Repository\BPMPro\MediaOrderChangeRepository.cs" />
     <Compile Include="Repository\BPMPro\MediaOrderRepository.cs" />
     <Compile Include="Repository\BPMPro\MediaSaleRepository.cs" />
+    <Compile Include="Repository\BPMPro\MediaWarehouseCopyRepository.cs" />
     <Compile Include="Repository\BPMPro\MediaWarehouseNotAiredCopyRepository.cs" />
     <Compile Include="Repository\BPMPro\NotifyRepository.cs" />
     <Compile Include="Repository\BPMPro\ProjectReviewRepository.cs" />
@@ -289,6 +296,8 @@
     <Compile Include="Repository\ERP\GTVStructureRepository.cs" />
     <Compile Include="Repository\ERP\ResponseInfoRepository.cs" />
     <Compile Include="Repository\ERP\StepFlowRepository.cs" />
+    <Compile Include="Repository\OA\CommonRepository.cs" />
+    <Compile Include="Repository\OA\ResponseOAInfoRepository.cs" />
     <Compile Include="Repository\SysCommonRepository.cs" />
     <Compile Include="Repository\TokenRepository.cs" />
     <Compile Include="Utils\ExceptionUtils.cs" />

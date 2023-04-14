@@ -42,7 +42,7 @@ namespace OA_WEB_API.Controllers
         ///// </summary>
         //[Route("PutGeneralOrderRefill")]
         //[HttpPost]
-        //public bool PuttGeneralOrderRefill([FromBody] GeneralOrderQueryModel query)
+        //public bool PutGeneralOrderRefill([FromBody] GeneralOrderQueryModel query)
         //{
         //    return generalOrderRepository.PutGeneralOrderRefill(query);
         //}

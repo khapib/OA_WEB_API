@@ -74,6 +74,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// </summary>
         public string PAY_METHOD { get; set; }
 
+        /// <summary>申請源由</summary>
+        public string REASON { get; set; }
+
         /// <summary>備註</summary>
         public string NOTE { get; set; }
 
@@ -124,11 +127,35 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>項目類別</summary>
         public string ITEM_TYPE { get; set; }
 
-        /// <summary>申請源由</summary>
-        public string REASON { get; set; }
+        /// <summary>憑證免稅額</summary>
+        public double INV_EXCL { get; set; }
 
-        /// <summary>發票金額</summary>
+        /// <summary>憑證免稅額_台幣</summary>
+        public int INV_EXCL_TWD { get; set; }
+
+        /// <summary>憑證稅額</summary>
+        public double INV_TAX { get; set; }
+
+        /// <summary>憑證稅額_台幣</summary>
+        public int INV_TAX_TWD { get; set; }
+
+        /// <summary>憑證未稅金額</summary>
+        public double INV_NET { get; set; }
+
+        /// <summary>憑證未稅金額_台幣</summary>
+        public int INV_NET_TWD { get; set; }
+
+        /// <summary>憑證含稅金額</summary>
+        public double INV_GROSS { get; set; }
+
+        /// <summary>憑證含稅金額_台幣</summary>
+        public int INV_GROSS_TWD { get; set; }
+
+        /// <summary>憑證金額</summary>
         public double INV_AMOUNT { get; set; }
+
+        /// <summary>憑證金額_台幣</summary>
+        public int INV_AMOUNT_TWD { get; set; }
 
         /// <summary>匯率</summary>
         public double EXCH_RATE { get; set; }

@@ -1,22 +1,21 @@
-﻿using System;
+﻿using OA_WEB_API.Models.BPMPro;
+using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
+using System.Data;
 using System.Linq;
 using System.Web;
-
-using OA_WEB_API.Models.BPMPro;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
     /// <summary>
-    /// 會簽管理系統 - 四方四隅_會簽單
+    /// 會簽管理系統 - 尚未播出檔拷貝申請單
     /// </summary>
-    public class GPI_CountersignRepository
+    public class MediaWarehouseNotAiredCopyRepository
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProTest);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
 
         #region Repository
 
@@ -30,9 +29,9 @@ namespace OA_WEB_API.Repository.BPMPro
         #region - 方法 -
 
         /// <summary>
-        /// 四方四隅_會簽單(查詢)
+        /// 尚未播出檔拷貝申請單(查詢)
         /// </summary>
-        public GPI_CountersignViewModel PostGPI_CountersignSingle(GPI_CountersignQueryModel query)
+        public MediaWarehouseNotAiredCopyViewModel PostMediaWarehouseNotAiredCopySingle(MediaWarehouseNotAiredCopyQueryModel query)
         {
             var parameter = new List<SqlParameter>()
             {
@@ -57,175 +56,148 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [Priority] AS [PRIORITY], ";
             strSQL += "     [DraftFlag] AS [DRAFT_FLAG], ";
             strSQL += "     [FlowActivated] AS [FLOW_ACTIVATED] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_Countersign_M] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaWarehouseNotAiredCopy_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
             var applicantInfo = dbFun.DoQuery(strSQL, parameter).ToList<ApplicantInfo>().FirstOrDefault();
 
             #endregion
 
-            #region - 四方四隅_會簽單 表頭資訊 -
+            #region - 尚未播出檔拷貝申請單 表頭資訊 -
 
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
-            strSQL += "     [BPMFormNo] AS [BPM_FORM_NO], ";
-            strSQL += "     [LevelType] AS [LEVEL_TYPE] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_Countersign_M] ";
+            strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaWarehouseNotAiredCopy_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-            var GPI_countersignTitle = dbFun.DoQuery(strSQL, parameter).ToList<GPI_CountersignTitle>().FirstOrDefault();
+            var mediaWarehouseNotAiredCopyTitle = dbFun.DoQuery(strSQL, parameter).ToList<MediaWarehouseNotAiredCopyTitle>().FirstOrDefault();
 
             #endregion
 
-            #region - 四方四隅_會簽單 表單內容 -
+            #region - 尚未播出檔拷貝申請單 表單內容 -
 
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [Description] AS [DESCRIPTION], ";
-            strSQL += "     [Note] AS [NOTE], ";
-            strSQL += "     [IsVicePresident] AS [IS_VICE_PRESIDENT] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_Countersign_M] ";
+            strSQL += "     [Note] AS [NOTE] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaWarehouseNotAiredCopy_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-            var GPI_countersignConfig = dbFun.DoQuery(strSQL, parameter).ToList<GPI_CountersignConfig>().FirstOrDefault();
+            var mediaWarehouseNotAiredCopyConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaWarehouseNotAiredCopyConfig>().FirstOrDefault();
 
             #endregion
 
-            #region - 四方四隅_會簽單 會簽簽核人員 -
+            #region - 尚未播出檔拷貝申請單 拷貝明細 -
 
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [ApproverCompanyID] AS [APPROVER_COMPANY_ID], ";
-            strSQL += "     [ApproverDeptMainID] AS [APPROVER_DEPT_MAIN_ID], ";
-            strSQL += "     [ApproverDeptID] AS [APPROVER_DEPT_ID], ";
-            strSQL += "     [ApproverID] AS [APPROVER_ID], ";
-            strSQL += "     [ApproverName] AS [APPROVER_NAME] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_Countersign_D] ";
+            strSQL += "     [ItemName] AS [ITEM_NAME], ";
+            strSQL += "     [Episode] AS [EPISODE], ";
+            strSQL += "     [Application] AS [APPLICATION], ";
+            strSQL += "     [Note] AS [NOTE] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaWarehouseNotAiredCopy_D] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
 
-            var GPI_countersignApproversConfig = dbFun.DoQuery(strSQL, parameter).ToList<GPI_CountersignApproversConfig>();
+            var mediaWarehouseNotAiredCopyDetailsConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaWarehouseNotAiredCopyDetailsConfig>();
 
             #endregion
 
-            #region - 四方四隅_會簽單 表單關聯 -
-
-            var formQueryModel = new FormQueryModel()
-            {
-                REQUISITION_ID = query.REQUISITION_ID
-            };
-            var associatedForm = commonRepository.PostAssociatedForm(formQueryModel);
-
-            #endregion
-
-            var GPI_countersignViewModel = new GPI_CountersignViewModel()
+            MediaWarehouseNotAiredCopyViewModel mediaWarehouseNotAiredCopyViewModel = new MediaWarehouseNotAiredCopyViewModel()
             {
                 APPLICANT_INFO = applicantInfo,
-                GPI_COUNTERSIGN_TITLE = GPI_countersignTitle,
-                GPI_COUNTERSIGN_CONFIG = GPI_countersignConfig,
-                GPI_COUNTERSIGN_APPROVERS_CONFIG = GPI_countersignApproversConfig,
-                ASSOCIATED_FORM_CONFIG = associatedForm
+                MEDIA_WAREHOUSE_NOT_AIRED_COPY_TITLE = mediaWarehouseNotAiredCopyTitle,
+                MEDIA_WAREHOUSE_NOT_AIRED_COPY_CONFIG = mediaWarehouseNotAiredCopyConfig,
+                MEDIA_WAREHOUSE_NOT_AIRED_COPY_DTLS_CONFIG = mediaWarehouseNotAiredCopyDetailsConfig,
             };
 
-            return GPI_countersignViewModel;
+            return mediaWarehouseNotAiredCopyViewModel;
         }
 
+        #region - 依此單內容重送 -
+
+        ///// <summary>
+        ///// 尚未播出檔拷貝申請單(依此單內容重送)(僅外部起單使用)
+        ///// </summary>
+        //public bool PutMediaWarehouseNotAiredCopyRefill(MediaWarehouseNotAiredCopyQueryModel query)
+        //{
+        //    bool vResult = false;
+
+        //    try
+        //    {
+        //        #region - 宣告 -
+
+        //        var original = PostMediaWarehouseNotAiredCopySingle(query);
+        //        strJson = jsonFunction.ObjectToJSON(original);
+
+        //        var MediaWarehouseNotAiredCopyViewModel = new MediaWarehouseNotAiredCopyViewModel();
+
+        //        var requisitionID = Guid.NewGuid().ToString();
+
+        //        #endregion
+
+        //        #region - 重送內容 -
+
+        //        MediaWarehouseNotAiredCopyViewModel = jsonFunction.JsonToObject<MediaWarehouseNotAiredCopyViewModel>(strJson);
+
+        //        #region - 申請人資訊 調整 -
+
+        //        MediaWarehouseNotAiredCopyViewModel.APPLICANT_INFO.REQUISITION_ID = requisitionID;
+        //        MediaWarehouseNotAiredCopyViewModel.APPLICANT_INFO.DRAFT_FLAG = 1;
+        //        MediaWarehouseNotAiredCopyViewModel.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Now;
+
+        //        #endregion
+
+        //        #endregion
+
+        //        #region - 送出 執行(新增/修改/草稿) -
+
+        //        PutMediaWarehouseNotAiredCopySingle(MediaWarehouseNotAiredCopyViewModel);
+
+        //        #endregion
+
+        //        vResult = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        vResult = false;
+        //        CommLib.Logger.Error("尚未播出檔拷貝申請單(依此單內容重送)失敗，原因：" + ex.Message);
+        //    }
+
+        //    return vResult;
+        //}
+
+        #endregion
+
         /// <summary>
-        /// 四方四隅_會簽單(依此單內容重送)(僅外部起單使用)
-        /// </summary>        
-        public bool PutGPI_CountersignRefill(GPI_CountersignQueryModel query)
-        {
-            bool vResult = false;
-
-            try
-            {
-                #region - 宣告 -
-
-                var original = PostGPI_CountersignSingle(query);
-                strJson = jsonFunction.ObjectToJSON(original);
-
-                var GPI_countersignViewModel = new GPI_CountersignViewModel();
-
-                var requisitionID = Guid.NewGuid().ToString();
-
-                #endregion
-
-                #region - 重送內容 -
-
-                GPI_countersignViewModel = jsonFunction.JsonToObject<GPI_CountersignViewModel>(strJson);
-
-                #region - 申請人資訊 調整 -
-
-                GPI_countersignViewModel.APPLICANT_INFO.REQUISITION_ID = requisitionID;
-                GPI_countersignViewModel.APPLICANT_INFO.DRAFT_FLAG = 1;
-                GPI_countersignViewModel.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Now;
-
-                #endregion
-
-                #endregion
-
-                #region - 送出 執行(新增/修改/草稿) -
-
-                PutGPI_CountersignSingle(GPI_countersignViewModel);
-
-                #endregion
-            
-                vResult = true;
-            }
-            catch (Exception ex)
-            {
-                vResult = false;
-                CommLib.Logger.Error("四方四隅_會簽單(依此單內容重送)失敗，原因：" + ex.Message);
-            }
-
-            return vResult;
-        }
-
-        /// <summary>
-        /// 四方四隅_會簽單(新增/修改/草稿)
+        /// 尚未播出檔拷貝申請單(新增/修改/草稿)
         /// </summary>
-        public bool PutGPI_CountersignSingle(GPI_CountersignViewModel model)
+        public bool PutMediaWarehouseNotAiredCopySingle(MediaWarehouseNotAiredCopyViewModel model)
         {
             bool vResult = false;
             try
             {
                 #region - 宣告 -
-
-                //表單重要性
-                var PRIORITY = model.APPLICANT_INFO.PRIORITY;                
-
-                switch (model.GPI_COUNTERSIGN_TITLE.LEVEL_TYPE)
-                {
-                    case "特急件":
-                        PRIORITY = 3;
-                        break;
-                    case "急件":
-                        PRIORITY = 2;
-                        break;
-                    default:
-                        //普通件
-                        PRIORITY = 1;
-                        break;
-                }
 
                 #region - 主旨 -
 
-                FM7Subject = model.GPI_COUNTERSIGN_TITLE.FM7_SUBJECT;
+                FM7Subject = model.MEDIA_WAREHOUSE_NOT_AIRED_COPY_TITLE.FM7_SUBJECT;
 
                 #endregion
 
                 #endregion
 
-                #region - 四方四隅_會簽單 表頭資訊：GPI_Countersign_M -
+                #region - 尚未播出檔拷貝申請單 表頭資訊：MediaWarehouseNotAiredCopy_M -
 
                 var parameterTitle = new List<SqlParameter>()
                 {
                     //表單資訊
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  model.APPLICANT_INFO.REQUISITION_ID},
                     new SqlParameter("@DIAGRAM_ID", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.DIAGRAM_ID },
-                    new SqlParameter("@PRIORITY", SqlDbType.Int) { Value =  PRIORITY},
+                    new SqlParameter("@PRIORITY", SqlDbType.Int) { Value =  model.APPLICANT_INFO.PRIORITY},
                     new SqlParameter("@DRAFT_FLAG", SqlDbType.Int) { Value =  model.APPLICANT_INFO.DRAFT_FLAG},
                     new SqlParameter("@FLOW_ACTIVATED", SqlDbType.Int) { Value =  model.APPLICANT_INFO.FLOW_ACTIVATED},
                     //(申請人/起案人)資訊
@@ -238,15 +210,14 @@ namespace OA_WEB_API.Repository.BPMPro
                     //(填單人/代填單人)資訊
                     new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_ID },
                     new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
-                    //四方四隅_會簽單 表頭
+                    //尚未播出檔拷貝申請單 表頭
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
-                    new SqlParameter("@LEVEL_TYPE", SqlDbType.NVarChar) { Size = 10, Value = (object)model.GPI_COUNTERSIGN_TITLE.LEVEL_TYPE ?? DBNull.Value },
                 };
 
                 strSQL = "";
                 strSQL += "SELECT ";
                 strSQL += "      [RequisitionID] ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_Countersign_M] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaWarehouseNotAiredCopy_M] ";
                 strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                 var dtA = dbFun.DoQuery(strSQL, parameterTitle);
@@ -256,7 +227,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region - 修改 -
 
                     strSQL = "";
-                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_GPI_Countersign_M] ";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_MediaWarehouseNotAiredCopy_M] ";
                     strSQL += "SET [DiagramID] =@DIAGRAM_ID, ";
                     strSQL += "     [ApplicantDept]=@APPLICANT_DEPT, ";
                     strSQL += "     [ApplicantDeptName]=@APPLICANT_DEPT_NAME, ";
@@ -269,8 +240,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [Priority]=@PRIORITY, ";
                     strSQL += "     [DraftFlag]=@DRAFT_FLAG, ";
                     strSQL += "     [FlowActivated]=@FLOW_ACTIVATED, ";
-                    strSQL += "     [FM7Subject]=@FM7_SUBJECT, ";
-                    strSQL += "     [LevelType]=@LEVEL_TYPE ";
+                    strSQL += "     [FM7Subject]=@FM7_SUBJECT ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                     dbFun.DoTran(strSQL, parameterTitle);
@@ -282,8 +252,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region - 新增 -
 
                     strSQL = "";
-                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GPI_Countersign_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FM7Subject],[LevelType]) ";
-                    strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FM7_SUBJECT,@LEVEL_TYPE) ";
+                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaWarehouseNotAiredCopy_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FM7Subject]) ";
+                    strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FM7_SUBJECT) ";
 
                     dbFun.DoTran(strSQL, parameterTitle);
 
@@ -292,28 +262,26 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 四方四隅_會簽單 表單內容：GPI_Countersign_M -
+                #region - 尚未播出檔拷貝申請單 表單內容：MediaWarehouseNotAiredCopy_M -
 
-                if (model.GPI_COUNTERSIGN_CONFIG != null)
-                {
+                if (model.MEDIA_WAREHOUSE_NOT_AIRED_COPY_CONFIG != null)
+                {                    
                     var parameterInfo = new List<SqlParameter>()
                     {
-                        //行政採購申請 表單內容
+                        //尚未播出檔拷貝申請單 表單內容
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
                         new SqlParameter("@DESCRIPTION", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@IS_VICE_PRESIDENT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value }
+                        new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value }
                     };
 
-                    //寫入：四方四隅_會簽單 表單內容parameter                        
-                    strJson = jsonFunction.ObjectToJSON(model.GPI_COUNTERSIGN_CONFIG);
+                    //寫入：尚未播出檔拷貝申請單 表單內容parameter                        
+                    strJson = jsonFunction.ObjectToJSON(model.MEDIA_WAREHOUSE_NOT_AIRED_COPY_CONFIG);
                     GlobalParameters.Infoparameter(strJson, parameterInfo);
 
                     strSQL = "";
-                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_GPI_Countersign_M] ";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_MediaWarehouseNotAiredCopy_M] ";
                     strSQL += "SET [Description]=@DESCRIPTION, ";
-                    strSQL += "     [Note]=@NOTE, ";
-                    strSQL += "     [IsVicePresident]=@IS_VICE_PRESIDENT ";                    
+                    strSQL += "     [Note]=@NOTE ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                     dbFun.DoTran(strSQL, parameterInfo);
@@ -322,64 +290,50 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 四方四隅_會簽單 會簽簽核人員：GPI_Countersign_D -
+                #region - 尚未播出檔拷貝申請單 拷貝明細：MediaWarehouseNotAiredCopy_D -
 
-                var parameterApprovers = new List<SqlParameter>()
+                var parameterDetails = new List<SqlParameter>()
                 {
-                    //四方四隅_會簽單 會簽簽核人員
+                    //尚未播出檔拷貝申請單 拷貝明細
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@APPROVER_COMPANY_ID", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@APPROVER_DEPT_MAIN_ID", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@APPROVER_DEPT_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@APPROVER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@APPROVER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value }
+                    new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EPISODE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@APPLICATION", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value }
                 };
 
                 #region 先刪除舊資料
 
                 strSQL = "";
                 strSQL += "DELETE ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_Countersign_D] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaWarehouseNotAiredCopy_D] ";
                 strSQL += "WHERE 1=1 ";
                 strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
 
-                dbFun.DoTran(strSQL, parameterApprovers);
+                dbFun.DoTran(strSQL, parameterDetails);
 
                 #endregion
 
-
-                if (model.GPI_COUNTERSIGN_APPROVERS_CONFIG != null && model.GPI_COUNTERSIGN_APPROVERS_CONFIG.Count > 0)
+                if (model.MEDIA_WAREHOUSE_NOT_AIRED_COPY_DTLS_CONFIG != null && model.MEDIA_WAREHOUSE_NOT_AIRED_COPY_DTLS_CONFIG.Count > 0)
                 {
                     #region 再新增資料
 
-                    foreach (var item in model.GPI_COUNTERSIGN_APPROVERS_CONFIG)
+                    foreach (var item in model.MEDIA_WAREHOUSE_NOT_AIRED_COPY_DTLS_CONFIG)
                     {
-                        //寫入：四方四隅_會簽單 會簽簽核人員parameter
+                        //寫入：尚未播出檔拷貝申請單 拷貝明細parameter
 
                         strJson = jsonFunction.ObjectToJSON(item);
-                        GlobalParameters.Infoparameter(strJson, parameterApprovers);
+                        GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GPI_Countersign_D]([RequisitionID],[ApproverCompanyID],[ApproverDeptMainID],[ApproverDeptID],[ApproverID],[ApproverName]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@APPROVER_COMPANY_ID,@APPROVER_DEPT_MAIN_ID,@APPROVER_DEPT_ID,@APPROVER_ID,@APPROVER_NAME) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaWarehouseNotAiredCopy_D]([RequisitionID],[ItemName],[Episode],[Application],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@ITEM_NAME,@EPISODE,@APPLICATION,@NOTE) ";
 
-                        dbFun.DoTran(strSQL, parameterApprovers);
+                        dbFun.DoTran(strSQL, parameterDetails);
                     }
 
                     #endregion
                 }
-
-                #endregion
-
-                #region - 四方四隅_會簽單 表單關聯：AssociatedForm -
-
-                var associatedFormModel = new AssociatedFormModel()
-                {
-                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
-                    ASSOCIATED_FORM_CONFIG = model.ASSOCIATED_FORM_CONFIG
-                };
-
-                commonRepository.PutAssociatedForm(associatedFormModel);
 
                 #endregion
 
@@ -451,7 +405,7 @@ namespace OA_WEB_API.Repository.BPMPro
             catch (Exception ex)
             {
                 vResult = false;
-                CommLib.Logger.Error("四方四隅_會簽單(新增/修改/草稿)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("尚未播出檔拷貝申請單(新增/修改/草稿)失敗，原因：" + ex.Message);
             }
 
             return vResult;
@@ -469,7 +423,7 @@ namespace OA_WEB_API.Repository.BPMPro
         /// <summary>
         /// 表單代號
         /// </summary>
-        private string IDENTIFY = "GPI_Countersign";
+        private string IDENTIFY = "MediaWarehouseNotAiredCopy";
 
         /// <summary>
         /// 表單主旨

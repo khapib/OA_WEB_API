@@ -42,7 +42,7 @@ namespace OA_WEB_API.Controllers.BPMPro
         ///// </summary>
         //[Route("PutGeneralInvoiceRefill")]
         //[HttpPost]
-        //public bool PuttGeneralInvoiceRefill([FromBody] GeneralInvoiceQueryModel query)
+        //public bool PutGeneralInvoiceRefill([FromBody] GeneralInvoiceQueryModel query)
         //{
         //    return GeneralInvoiceRepository.PutGeneralInvoiceRefill(query);
         //}

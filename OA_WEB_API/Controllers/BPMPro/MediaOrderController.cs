@@ -40,7 +40,7 @@ namespace OA_WEB_API.Controllers.BPMPro
         ///// </summary>
         //[Route("PutMediaOrderRefill")]
         //[HttpPost]
-        //public bool PuttMediaOrderRefill([FromBody] MediaOrderQueryModel query)
+        //public bool PutMediaOrderRefill([FromBody] MediaOrderQueryModel query)
         //{
         //    return mediaOrderRepository.PutMediaOrderRefill(query);
         //}

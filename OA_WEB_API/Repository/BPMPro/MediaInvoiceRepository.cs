@@ -327,13 +327,21 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 版權採購請款單 發票明細 -
+            #region - 版權採購請款單 憑證明細 -
 
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [Period] AS [PERIOD], ";
             strSQL += "     [INV_Num] AS [INV_NUM], ";
             strSQL += "     [INV_Date] AS [INV_DATE], ";
+            strSQL += "     [INV_Excl] AS [INV_EXCL], ";
+            strSQL += "     [INV_Excl_TWD] AS [INV_EXCL_TWD], ";
+            strSQL += "     [INV_Tax] AS [INV_TAX], ";
+            strSQL += "     [INV_Tax_TWD] AS [INV_TAX_TWD], ";
+            strSQL += "     [INV_Net] AS [INV_NET], ";
+            strSQL += "     [INV_Net_TWD] AS [INV_NET_TWD], ";
+            strSQL += "     [INV_Gross] AS [INV_GROSS], ";
+            strSQL += "     [INV_Gross_TWD] AS [INV_GROSS_TWD], ";
             strSQL += "     [INV_Amount] AS [INV_AMOUNT], ";
             strSQL += "     [INV_Amount_TWD] AS [INV_AMOUNT_TWD], ";
             strSQL += "     [INV_Note] AS [INV_NOTE] ";
@@ -773,11 +781,11 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 版權採購請款單 發票明細：MediaInvoice_INV -
+                #region - 版權採購請款單 憑證明細：MediaInvoice_INV -
 
                 var parameterDetails = new List<SqlParameter>()
                 {
-                    //版權採購請款單 發票明細
+                    //版權採購請款單 憑證明細
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
                     new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)model.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_REQUISITION_ID ?? DBNull.Value },
                     new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_BPM_FORM_NO ?? DBNull.Value },
@@ -785,6 +793,14 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@INV_NUM", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@INV_DATE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_EXCL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_EXCL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_TAX_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_NET_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_GROSS_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@INV_AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@INV_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@INV_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -810,6 +826,10 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         #region - 確認小數點後第二位 -
 
+                        item.INV_EXCL = Math.Round(item.INV_EXCL, 2);
+                        item.INV_TAX = Math.Round(item.INV_TAX, 2);
+                        item.INV_NET = Math.Round(item.INV_NET, 2);
+                        item.INV_GROSS = Math.Round(item.INV_GROSS, 2);
                         item.INV_AMOUNT = Math.Round(item.INV_AMOUNT, 2);
 
                         #endregion
@@ -819,8 +839,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaInvoice_INV]([RequisitionID],[Period],[MediaOrderRequisitionID],[MediaOrderBPMFormNo],[MediaOrderERPFormNo],[INV_Num],[INV_Date],[INV_Amount],[INV_Amount_TWD],[INV_Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@MEDIA_ORDER_REQUISITION_ID,@MEDIA_ORDER_BPM_FORM_NO,@MEDIA_ORDER_ERP_FORM_NO,@INV_NUM,@INV_DATE,@INV_AMOUNT,@INV_AMOUNT_TWD,@INV_NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaInvoice_INV]([RequisitionID],[Period],[MediaOrderRequisitionID],[MediaOrderBPMFormNo],[MediaOrderERPFormNo],[INV_Num],[INV_Date],[INV_Excl],[INV_Excl_TWD],[INV_Tax],[INV_Tax_TWD],[INV_Net],[INV_Net_TWD],[INV_Gross],[INV_Gross_TWD],[INV_Amount],[INV_Amount_TWD],[INV_Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@MEDIA_ORDER_REQUISITION_ID,@MEDIA_ORDER_BPM_FORM_NO,@MEDIA_ORDER_ERP_FORM_NO,@INV_NUM,@INV_DATE,@INV_EXCL,@INV_EXCL_TWD,@INV_TAX,@INV_TAX_TWD,@INV_NET,@INV_NET_TWD,@INV_GROSS,@INV_GROSS_TWD,@INV_AMOUNT,@INV_AMOUNT_TWD,@INV_NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }

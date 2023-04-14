@@ -127,6 +127,39 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #endregion
 
+        #region - 內容評估表(外部起單) -
+
+        #region - 內容評估表(外部起單) -
+
+        /// <summary>
+        /// 內容評估表(外部起單)
+        /// </summary>
+        [Route("api/PutEvaluateContentGetExternal")]
+        [HttpPost]
+        public GetExternalData PutEvaluateContentGetExternal(EvaluateContentERPInfo model)
+        {
+            return getExternalRepository.PutEvaluateContentGetExternal(model);
+        }
+
+
+        #endregion
+
+        #region - 內容評估表_補充意見(外部起單) -
+
+        /// <summary>
+        /// 內容評估表_補充意見(外部起單)
+        /// </summary>
+        [Route("api/PutEvaluateContentReplenishGetExternal")]
+        [HttpPost]
+        public GetExternalData PutEvaluateContentReplenishGetExternal(EvaluateContentReplenishERPInfo model)
+        {
+            return getExternalRepository.PutEvaluateContentReplenishGetExternal(model);
+        }
+
+        #endregion
+
+        #endregion
+
         #region - 版權採購類_(外部起單) -
 
         #region - 版權採購申請單(外部起單) -
@@ -181,6 +214,39 @@ namespace OA_WEB_API.Controllers.BPMPro
         public GetExternalData PutMediaInvoiceGetExternal(MediaInvoiceERPInfo model)
         {
             return getExternalRepository.PutMediaInvoiceGetExternal(model);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region - 四方四隅_內容評估表(外部起單) -
+
+        #region - 四方四隅_內容評估表(外部起單) -
+
+        /// <summary>
+        /// 四方四隅_內容評估表(外部起單)
+        /// </summary>
+        [Route("api/PutGPI_EvaluateContentGetExternal")]
+        [HttpPost]
+        public GetExternalData PutGPI_EvaluateContentGetExternal(GPI_EvaluateContentERPInfo model)
+        {
+            return getExternalRepository.PutGPI_EvaluateContentGetExternal(model);
+        }
+
+
+        #endregion
+
+        #region - 四方四隅_內容評估表_補充意見(外部起單) -
+
+        /// <summary>
+        /// 四方四隅_內容評估表_補充意見(外部起單)
+        /// </summary>
+        [Route("api/PutGPI_EvaluateContentReplenishGetExternal")]
+        [HttpPost]
+        public GetExternalData PutGPI_EvaluateContentReplenishGetExternal(GPI_EvaluateContentReplenishERPInfo model)
+        {
+            return getExternalRepository.PutGPI_EvaluateContentReplenishGetExternal(model);
         }
 
         #endregion

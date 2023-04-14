@@ -556,7 +556,7 @@ namespace OA_WEB_API.Repository.ERP
 
                 if (query.REQUEST_FLG)
                 {
-                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/";
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProTest) + "BPM/";
                     Method = "POST";
                     strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, evaluateContentInfoRequest);
 
@@ -637,7 +637,7 @@ namespace OA_WEB_API.Repository.ERP
 
                 if (query.REQUEST_FLG)
                 {
-                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/";
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProTest) + "BPM/";
                     Method = "POST";
                     strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, evaluateContentReplenishInfoRequest);
 
@@ -803,7 +803,7 @@ namespace OA_WEB_API.Repository.ERP
 
                 if (query.REQUEST_FLG)
                 {
-                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/UpdateMR_DetailContent";
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProTest) + "BPM/UpdateMR_DetailContent";
                     Method = "POST";
                     strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, mediaAcceptanceInfoRequest);
 
@@ -886,7 +886,7 @@ namespace OA_WEB_API.Repository.ERP
 
                 if (query.REQUEST_FLG)
                 {
-                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/UpdateSI_M_DetailContent";
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProTest) + "BPM/UpdateSI_M_DetailContent";
                     Method = "POST";
                     strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, mediaInvoiceInfoRequest);
 
@@ -971,7 +971,7 @@ namespace OA_WEB_API.Repository.ERP
 
                 if (query.REQUEST_FLG)
                 {
-                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/";
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProTest) + "BPM/";
                     Method = "POST";
                     strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, GPI_evaluateContentInfoRequest);
 
@@ -1052,7 +1052,7 @@ namespace OA_WEB_API.Repository.ERP
 
                 if (query.REQUEST_FLG)
                 {
-                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/";
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProTest) + "BPM/";
                     Method = "POST";
                     strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, GPI_evaluateContentReplenishInfoRequest);
 

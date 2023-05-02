@@ -224,6 +224,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>稅率[占比]</summary>
         public double RATE { get; set; }
 
+        /// <summary>稅額</summary>
+        public double TAX { get; set; }
+
         /// <summary>稅額_台幣</summary>
         public int TAX_TWD { get; set; }
 

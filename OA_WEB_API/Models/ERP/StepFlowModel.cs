@@ -5,18 +5,7 @@ using System.Web;
 
 namespace OA_WEB_API.Models.ERP
 {
-    /// <summary>
-    /// BPM表單狀態(查詢條件)
-    /// </summary>
-    public class StepFlowQueryModel
-    {
-        /// <summary>系統編號</summary>
-        public string REQUISITION_ID { get; set; }
-
-        /// <summary>是否表單已完結</summary>
-        public string STATE_END { get; set; }
-
-    }
+    #region - BPM表單狀態細項 -
 
     /// <summary>
     /// BPM表單狀態細項 設定
@@ -75,6 +64,10 @@ namespace OA_WEB_API.Models.ERP
         public string COMMENT { get; set; }
     }
 
+    #endregion
+
+    #region - BPM更新ERP表單狀態 -
+
     /// <summary>
     /// BPM更新ERP表單狀態
     /// </summary>
@@ -85,13 +78,13 @@ namespace OA_WEB_API.Models.ERP
 
         /// <summary>BPM表單唯一碼</summary>
         public string RequisitionID { get; set; }
-        
+
         /// <summary>BPM表單單號</summary>
         public string BPM_FormNo { get; set; }
 
         /// <summary>主旨</summary>
         public string FM7Subject { get; set; }
-        
+
         /// <summary>
         /// 狀態回傳
         /// （
@@ -113,4 +106,7 @@ namespace OA_WEB_API.Models.ERP
         /// <summary>表單內容檢視頁路徑</summary>
         public string ViewPath { get; set; }
     }
+
+    #endregion
+
 }

@@ -221,15 +221,17 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>商品名稱</summary>
         public string DTL_ITEM_NAME { get; set; }
 
-        /// <summary>影帶規格</summary>
-        public string DTL_MEDIA_SPEC { get; set; }
-
-        /// <summary>
-        /// 影片類型：
+        /// <summary>影帶規格：
         /// SD.
         /// HD.
         /// 4K.
         /// </summary>
+        public string DTL_MEDIA_SPEC { get; set; }
+
+        /// <summary>全部權利</summary>
+        public string DTL_AUTH_ALL { get; set; }
+
+        /// <summary>影片類型</summary>
         public string DTL_MEDIA_TYPE { get; set; }
 
         /// <summary>開始集數</summary>

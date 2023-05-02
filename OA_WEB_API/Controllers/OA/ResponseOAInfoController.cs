@@ -1,4 +1,5 @@
-﻿using OA_WEB_API.Models.BPMPro;
+﻿using OA_WEB_API.Models;
+using OA_WEB_API.Models.BPMPro;
 using OA_WEB_API.Models.ERP;
 using OA_WEB_API.Models.OA;
 using OA_WEB_API.Repository.ERP;
@@ -38,9 +39,11 @@ namespace OA_WEB_API.Controllers.OA
             HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
             HttpRequestBase request = context.Request;
 
-            var query = new MediaWarehouseCopyQueryModel()
+            var query = new StepFlowQueryRequestModel()
             {
                 REQUISITION_ID = request["RequisitionID"],
+                REQUEST_FLG = request["RequestFlg"],
+                STATE_END = request["StateEND"],
             };
 
             return responseOAInfoRepository.PostMediaWarehouseCopyResponseOASingle(query);

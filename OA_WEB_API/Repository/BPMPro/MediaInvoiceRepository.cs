@@ -742,7 +742,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 var parameterPayments = new List<SqlParameter>()
                 {
-                    //行政採購申請 付款辦法 更新:會計類別
+                    //版權採購請款 付款辦法 更新:會計類別
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_REQUISITION_ID },
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ACCT_CATEGORY", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value }

@@ -145,6 +145,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [DTL_SupProdANo] AS [DTL_SUP_PROD_A_NO], ";
             strSQL += "     [DTL_ItemName] AS [DTL_ITEM_NAME], ";
             strSQL += "     [DTL_MediaSpec] AS [DTL_MEDIA_SPEC], ";
+            strSQL += "     [DTL_AUTH_All] AS [DTL_AUTH_ALL], ";
             strSQL += "     [DTL_MediaType] AS [DTL_MEDIA_TYPE], ";
             strSQL += "     [DTL_StartEpisode] AS [DTL_START_EPISODE], ";
             strSQL += "     [DTL_EndEpisode] AS [DTL_END_EPISODE], ";
@@ -664,6 +665,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@DTL_SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_MEDIA_SPEC", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DTL_AUTH_ALL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_START_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DTL_END_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -725,8 +727,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_DTL]([RequisitionID],[DTL_RowNo],[DTL_SupProdANo],[DTL_ItemName],[DTL_MediaSpec],[DTL_MediaType],[DTL_StartEpisode],[DTL_EndEpisode],[DTL_OrderEpisode],[DTL_ACPT_Episode],[DTL_EpisodeTime],[DTL_Net],[DTL_Net_TWD],[DTL_Tax],[DTL_Tax_TWD],[DTL_Gross],[DTL_Gross_TWD],[DTL_NetSum],[DTL_NetSum_TWD],[DTL_GrossSum],[DTL_GrossSum_TWD],[DTL_Material],[DTL_ItemSum],[DTL_ItemSum_TWD],[DTL_ProjectFormNo],[DTL_ProjectName],[DTL_ProjectNickname],[DTL_ProjectUseYear],[DTL_Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@DTL_ROW_NO,@DTL_SUP_PROD_A_NO,@DTL_ITEM_NAME,@DTL_MEDIA_SPEC,@DTL_MEDIA_TYPE,@DTL_START_EPISODE,@DTL_END_EPISODE,@DTL_ORDER_EPISODE,@DTL_ACPT_EPISODE,@DTL_EPISODE_TIME,@DTL_NET,@DTL_NET_TWD,@DTL_TAX,@DTL_TAX_TWD,@DTL_GROSS,@DTL_GROSS_TWD,@DTL_NET_SUM,@DTL_NET_SUM_TWD,@DTL_GROSS_SUM,@DTL_GROSS_SUM_TWD,@DTL_MATERIAL,@DTL_ITEM_SUM,@DTL_ITEM_SUM_TWD,@DTL_PROJECT_FORM_NO,@DTL_PROJECT_NAME,@DTL_PROJECT_NICKNAME,@DTL_PROJECT_USE_YEAR,@DTL_NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_DTL]([RequisitionID],[DTL_RowNo],[DTL_SupProdANo],[DTL_ItemName],[DTL_MediaSpec],[DTL_AUTH_All],[DTL_MediaType],[DTL_StartEpisode],[DTL_EndEpisode],[DTL_OrderEpisode],[DTL_ACPT_Episode],[DTL_EpisodeTime],[DTL_Net],[DTL_Net_TWD],[DTL_Tax],[DTL_Tax_TWD],[DTL_Gross],[DTL_Gross_TWD],[DTL_NetSum],[DTL_NetSum_TWD],[DTL_GrossSum],[DTL_GrossSum_TWD],[DTL_Material],[DTL_ItemSum],[DTL_ItemSum_TWD],[DTL_ProjectFormNo],[DTL_ProjectName],[DTL_ProjectNickname],[DTL_ProjectUseYear],[DTL_Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@DTL_ROW_NO,@DTL_SUP_PROD_A_NO,@DTL_ITEM_NAME,@DTL_MEDIA_SPEC,@DTL_AUTH_ALL,@DTL_MEDIA_TYPE,@DTL_START_EPISODE,@DTL_END_EPISODE,@DTL_ORDER_EPISODE,@DTL_ACPT_EPISODE,@DTL_EPISODE_TIME,@DTL_NET,@DTL_NET_TWD,@DTL_TAX,@DTL_TAX_TWD,@DTL_GROSS,@DTL_GROSS_TWD,@DTL_NET_SUM,@DTL_NET_SUM_TWD,@DTL_GROSS_SUM,@DTL_GROSS_SUM_TWD,@DTL_MATERIAL,@DTL_ITEM_SUM,@DTL_ITEM_SUM_TWD,@DTL_PROJECT_FORM_NO,@DTL_PROJECT_NAME,@DTL_PROJECT_NICKNAME,@DTL_PROJECT_USE_YEAR,@DTL_NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }

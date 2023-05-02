@@ -188,19 +188,16 @@ namespace OA_WEB_API.Models.BPMPro
     public class GeneralInvoiceAcceptancesConfig : GeneralOrderAcceptancesConfig
     {
         /// <summary>所屬專案 ERP 單號</summary>
-        public string DTL_PROJECT_FORM_NO { get; set; }
+        public string PROJECT_FORM_NO { get; set; }
 
         /// <summary>所屬專案名稱</summary>
-        public string DTL_PROJECT_NAME { get; set; }
+        public string PROJECT_NAME { get; set; }
 
         /// <summary>所屬專案描述</summary>
-        public string DTL_PROJECT_NICKNAME { get; set; }
+        public string PROJECT_NICKNAME { get; set; }
 
         /// <summary>所屬專案起案年度</summary>
-        public string DTL_PROJECT_USE_YEAR { get; set; }
-
-        /// <summary>備註</summary>
-        public string DTL_NOTE { get; set; }
+        public string PROJECT_USE_YEAR { get; set; }
     }
 
     /// <summary>
@@ -229,42 +226,42 @@ namespace OA_WEB_API.Models.BPMPro
         public int PERIOD { get; set; }
 
         /// <summary>憑證號碼</summary>
-        public string INV_NUM { get; set; }
+        public string NUM { get; set; }
 
         /// <summary>憑證日期</summary>
-        public string INV_DATE { get; set; }
+        public string DATE { get; set; }
 
         /// <summary>憑證免稅額</summary>
-        public double INV_EXCL { get; set; }
+        public double EXCL { get; set; }
 
         /// <summary>憑證免稅額_台幣</summary>
-        public int INV_EXCL_TWD { get; set; }
+        public int EXCL_TWD { get; set; }
 
         /// <summary>憑證稅額</summary>
-        public double INV_TAX { get; set; }
+        public double TAX { get; set; }
 
         /// <summary>憑證稅額_台幣</summary>
-        public int INV_TAX_TWD { get; set; }
+        public int TAX_TWD { get; set; }
 
         /// <summary>憑證未稅金額</summary>
-        public double INV_NET { get; set; }
+        public double NET { get; set; }
 
         /// <summary>憑證未稅金額_台幣</summary>
-        public int INV_NET_TWD { get; set; }
+        public int NET_TWD { get; set; }
 
         /// <summary>憑證含稅金額</summary>
-        public double INV_GROSS { get; set; }
+        public double GROSS { get; set; }
 
         /// <summary>憑證含稅金額_台幣</summary>
-        public int INV_GROSS_TWD { get; set; }
+        public int GROSS_TWD { get; set; }
 
         /// <summary>憑證金額</summary>
-        public double INV_AMOUNT { get; set; }
+        public double AMOUNT { get; set; }
 
         /// <summary>憑證金額_台幣</summary>
-        public int INV_AMOUNT_TWD { get; set; }
+        public int AMOUNT_TWD { get; set; }
 
         /// <summary>備註</summary>
-        public string INV_NOTE { get; set; }
+        public string NOTE { get; set; }
     }
 }

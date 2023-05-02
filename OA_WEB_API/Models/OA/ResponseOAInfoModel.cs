@@ -32,6 +32,18 @@ namespace OA_WEB_API.Models.OA
     /// </summary>
     public class MediaWarehouseCopyResponseOAInfoConfig
     {
+        /// <summary>表單路徑</summary>
+        public string BPM_FORM_PATH { get; set; }
+
+        /// <summary>BPM表單狀態</summary>
+        public string BPM_FORM_ACTION { get; set; }
+
+        /// <summary>OA系統編號</summary>
+        public string OA_MASTER_NO { get; set; }
+
+        /// <summary>OA表單編號</summary>
+        public string OA_FORM_NO { get; set; }
+
         /// <summary>案件等級</summary>
         public string CASE_LEVEL { get; set; }
 
@@ -86,14 +98,23 @@ namespace OA_WEB_API.Models.OA
         /// <summary>集數</summary>
         public string VOLUME { get; set; }
 
-        /// <summary>素材類別</summary>
+        /// <summary>素材類別[複選]</summary>
         public string METERIAL_TYPE { get; set; }
+
+        /// <summary>素材類別_其他</summary>
+        public string METERIAL_TYPE_OTHERS { get; set; }
+
+        /// <summary>長度版本</summary>
+        public string LENGTH { get; set; }
+
+        /// <summary>長度版本_其他</summary>
+        public string LENGTH_OTHERS { get; set; }
 
         /// <summary>拷貝格式</summary>
         public string COPY_TYPE { get; set; }
 
-        /// <summary>長度版本</summary>
-        public string LENGTH { get; set; }
+        /// <summary>拷貝格式_其他</summary>
+        public string COPY_TYPE_OTHERS { get; set; }
     }
 
     #endregion

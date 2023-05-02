@@ -144,6 +144,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
             strSQL += "     [Name] AS [NAME], ";
             strSQL += "     [Rate] AS [RATE], ";
+            strSQL += "     [Tax] AS [TAX], ";
             strSQL += "     [Tax_TWD] AS [TAX_TWD], ";
             strSQL += "     [Note] AS [NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaSale_TRS] ";
@@ -392,7 +393,7 @@ namespace OA_WEB_API.Repository.BPMPro
         #endregion
 
         /// <summary>
-        /// 版權銷售申請單(新增/修改/草稿)ㄘ
+        /// 版權銷售申請單(新增/修改/草稿)
         /// </summary>
         public bool PutMediaSaleSingle(MediaSaleViewModel model)
         {
@@ -652,8 +653,9 @@ namespace OA_WEB_API.Repository.BPMPro
                     //版權銷售申請單 稅率結構
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
                     new SqlParameter("@NAME", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@RATE", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@TAX_TWD", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
@@ -687,8 +689,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterTaxRateStructures);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaSale_TRS]([RequisitionID],[Name],[Rate],[Tax_TWD],[Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@NAME,@RATE,@TAX_TWD,@NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaSale_TRS]([RequisitionID],[Name],[Rate],[Tax],[Tax_TWD],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@NAME,@RATE,@TAX,@TAX_TWD,@NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterTaxRateStructures);
                     }

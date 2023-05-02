@@ -68,6 +68,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
+            strSQL += "     [OA_MasterNo] AS [OA_MASTER_NO], ";
+            strSQL += "     [OA_FormNo] AS [OA_FORM_NO], ";
             strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaWarehouseCopy_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
@@ -86,14 +88,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [ApprovalNo] AS [APPROVAL_NO], ";
             strSQL += "     [ExpectedDate] AS [EXPECTED_DATE], ";
             strSQL += "     [ContactPerson] AS [CONTACT_PERSON], ";
-            strSQL += "     [MeterialType] AS [METERIAL_TYPE], ";
-            strSQL += "     [MeterialTypeOthers] AS [METERIAL_TYPE_OTHERS], ";
             strSQL += "     [ApplyType] AS [APPLY_TYPE], ";
             strSQL += "     [ApplyTypeOthers] AS [APPLY_TYPE_OTHERS], ";
-            strSQL += "     [Length] AS [LENGTH], ";
-            strSQL += "     [LengthOthers] AS [LENGTH_OTHERS], ";
-            strSQL += "     [CopyType] AS [COPY_TYPE], ";
-            strSQL += "     [CopyTypeOthers] AS [COPY_TYPE_OTHERS], ";
             strSQL += "     [SaveType] AS [SAVE_TYPE], ";
             strSQL += "     [SaveTypeOthers] AS [SAVE_TYPE_OTHERS], ";
             strSQL += "     [SavePath] AS [SAVE_PATH], ";
@@ -132,6 +128,12 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
             strSQL += "     [ProgramName] AS [PROGRAM_NAME], ";
             strSQL += "     [Volume] AS [VOLUME], ";
+            strSQL += "     [MeterialType] AS [METERIAL_TYPE], ";
+            strSQL += "     [MeterialTypeOthers] AS [METERIAL_TYPE_OTHERS], ";
+            strSQL += "     [Length] AS [LENGTH], ";
+            strSQL += "     [LengthOthers] AS [LENGTH_OTHERS], ";
+            strSQL += "     [CopyType] AS [COPY_TYPE], ";
+            strSQL += "     [CopyTypeOthers] AS [COPY_TYPE_OTHERS], ";
             strSQL += "     [Note] AS [NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaWarehouseCopy_D] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
@@ -328,14 +330,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@EXPECTED_DATE", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@CONTACT_PERSON", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         //拷貝申請單 拷貝類型
-                        new SqlParameter("@METERIAL_TYPE", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@METERIAL_TYPE_OTHERS", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@APPLY_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@APPLY_TYPE_OTHERS", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@LENGTH", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@LENGTH_OTHERS", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@COPY_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@COPY_TYPE_OTHERS", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@SAVE_TYPE", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@SAVE_TYPE_OTHERS", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@SAVE_PATH", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -377,14 +373,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [ApprovalNo]=@APPROVAL_NO, ";
                     strSQL += "     [ExpectedDate]=@EXPECTED_DATE, ";
                     strSQL += "     [ContactPerson]=@CONTACT_PERSON, ";
-                    strSQL += "     [MeterialType]=@METERIAL_TYPE, ";
-                    strSQL += "     [MeterialTypeOthers]=@METERIAL_TYPE_OTHERS, ";
                     strSQL += "     [ApplyType]=@APPLY_TYPE, ";
                     strSQL += "     [ApplyTypeOthers]=@APPLY_TYPE_OTHERS, ";
-                    strSQL += "     [Length]=@LENGTH, ";
-                    strSQL += "     [LengthOthers]=@LENGTH_OTHERS, ";
-                    strSQL += "     [CopyType]=@COPY_TYPE, ";
-                    strSQL += "     [CopyTypeOthers]=@COPY_TYPE_OTHERS, ";
                     strSQL += "     [SaveType]=@SAVE_TYPE, ";
                     strSQL += "     [SaveTypeOthers]=@SAVE_TYPE_OTHERS, ";
                     strSQL += "     [SavePath]=@SAVE_PATH, ";
@@ -425,6 +415,14 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
                     new SqlParameter("@PROGRAM_NAME", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@VOLUME", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@METERIAL_TYPE", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@METERIAL_TYPE_OTHERS", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@APPLY_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@APPLY_TYPE_OTHERS", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@LENGTH", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@LENGTH_OTHERS", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@COPY_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@COPY_TYPE_OTHERS", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
@@ -451,8 +449,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaWarehouseCopy_D]([RequisitionID],[ProgramName],[Volume],[Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@PROGRAM_NAME,@VOLUME,@NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaWarehouseCopy_D]([RequisitionID],[ProgramName],[Volume],[MeterialType],[MeterialTypeOthers],[Length],[LengthOthers],[CopyType],[CopyTypeOthers],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@PROGRAM_NAME,@VOLUME,@METERIAL_TYPE,@METERIAL_TYPE_OTHERS,@LENGTH,@LENGTH_OTHERS,@COPY_TYPE,@COPY_TYPE_OTHERS,@NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }

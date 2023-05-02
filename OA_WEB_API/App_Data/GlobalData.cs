@@ -553,6 +553,28 @@ public class BPMStatusCode
 }
 
 /// <summary>
+/// OA狀態
+/// </summary>
+public class OAStatusCode
+{
+    /// <summary>新建</summary>
+    public const string NEW_CREATE = "Add";
+
+    /// <summary>已簽完</summary>
+    public const string CLOSE = "Close";
+
+    /// <summary>不同意結束</summary>
+    public const string DISAGREE_CLOSE = "Del";
+
+    /// <summary>簽核中</summary>
+    public const string MODIFY = "Modify";
+
+    /// <summary>失敗</summary>
+    public const string FAIL = "Fail";
+
+}
+
+/// <summary>
 /// BPM(系統)表單狀態代碼
 /// </summary>
 public class BPMSysStatus

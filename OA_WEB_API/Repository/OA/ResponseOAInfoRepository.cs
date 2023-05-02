@@ -11,6 +11,9 @@ using System.Linq;
 using System.Web;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
+using OA_WEB_API.Models;
+using System.Reflection;
+using Microsoft.SqlServer.Server;
 
 namespace OA_WEB_API.Repository.OA
 {
@@ -33,6 +36,7 @@ namespace OA_WEB_API.Repository.OA
 
         FormRepository formRepository = new FormRepository();
         StepFlowRepository stepFlowRepository = new StepFlowRepository();
+        FormStateContentRepository formStateContentRepository = new FormStateContentRepository();
 
         #endregion
 
@@ -50,7 +54,7 @@ namespace OA_WEB_API.Repository.OA
         /// <summary>
         /// 拷貝申請單 回傳OA
         /// </summary>
-        public MediaWarehouseCopyResponseOA PostMediaWarehouseCopyResponseOASingle(MediaWarehouseCopyQueryModel query)
+        public MediaWarehouseCopyResponseOA PostMediaWarehouseCopyResponseOASingle(StepFlowQueryRequestModel query)
         {
             try
             {
@@ -74,6 +78,10 @@ namespace OA_WEB_API.Repository.OA
 
                 strSQL = "";
                 strSQL += "SELECT ";
+                strSQL += "     null AS [BPM_FORM_PATH], ";
+                strSQL += "     null AS [BPM_FORM_ACTION], ";
+                strSQL += "     [OA_MasterNo] AS [OA_MASTER_NO], ";
+                strSQL += "     [OA_FormNo] AS [OA_FORM_NO], ";
                 strSQL += "     null AS [CASE_LEVEL], ";
                 strSQL += "     [BPMFormNo] AS [BPM_FORM_NO], ";
                 strSQL += "     [FM7Subject] AS [SUBJECT], ";
@@ -97,6 +105,14 @@ namespace OA_WEB_API.Repository.OA
 
                 if(mediaWarehouseCopyResponseOAInfoConfig != null)
                 {
+                    #region - BPM表單狀態 -
+
+                    strJson = jsonFunction.ObjectToJSON(query);
+                    var stepFlowQuery = jsonFunction.JsonToObject<StepFlowQueryModel>(strJson);
+                    mediaWarehouseCopyResponseOAInfoConfig.BPM_FORM_ACTION = formStateContentRepository.PostFormStateSingle(stepFlowQuery);
+
+                    #endregion
+
                     #region - 案件等級 -
 
                     strSQL = "";
@@ -185,15 +201,33 @@ namespace OA_WEB_API.Repository.OA
                     strSQL += "     D.[RequisitionID] AS [REQUISITION_ID], ";
                     strSQL += "     D.[ProgramName] AS [PROGRAM_NAME], ";
                     strSQL += "     D.[Volume] AS [VOLUME], ";
-                    strSQL += "     M.[MeterialType] AS [METERIAL_TYPE], ";
-                    strSQL += "     M.[CopyType] AS [COPY_TYPE], ";
-                    strSQL += "     M.[Length] AS [LENGTH] ";
+                    strSQL += "     D.[MeterialType] AS [METERIAL_TYPE], ";
+                    strSQL += "     D.[MeterialTypeOthers] AS [METERIAL_TYPE_OTHERS], ";
+                    strSQL += "     D.[CopyType] AS [COPY_TYPE], ";
+                    strSQL += "     D.[CopyTypeOthers] AS [COPY_TYPE_OTHERS], ";
+                    strSQL += "     D.[Length] AS [LENGTH], ";
+                    strSQL += "     D.[LengthOthers] AS [LENGTH_OTHERS] ";
                     strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaWarehouseCopy_D] AS D ";
                     strSQL += "     LEFT JOIN [BPMPro].[dbo].[FM7T_MediaWarehouseCopy_M] AS M ON D.RequisitionID=M.RequisitionID ";
                     strSQL += "WHERE D.[RequisitionID]=@REQUISITION_ID ";
                     strSQL += "ORDER BY [AutoCounter] ";
 
                     var mediaWarehouseCopyResponseOAProgramInfoConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaWarehouseCopyResponseOAProgramInfoConfig>();
+
+                    #endregion
+
+                    #region - BPM表單連結 -
+
+                    if (mediaWarehouseCopyResponseOAInfoConfig.BPM_FORM_ACTION != OAStatusCode.FAIL)
+                    {
+                        var formQueryModel = new FormQueryModel
+                        {
+                            REQUISITION_ID = query.REQUISITION_ID
+                        };
+
+                        var formData = formRepository.PostFormData(formQueryModel);
+                        mediaWarehouseCopyResponseOAInfoConfig.BPM_FORM_PATH = GlobalParameters.FormContentPath(query.REQUISITION_ID, formData.IDENTIFY, formData.DIAGRAM_NAME);
+                    }
 
                     #endregion
 
@@ -207,16 +241,36 @@ namespace OA_WEB_API.Repository.OA
                 #endregion
 
                 #region - 回傳OA - 
-                /*
-                //ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/UpdatePrjListInfoFromBPM";
-                Method = "POST";
-                strRequestJson = JsonConvert.SerializeObject(mediaWarehouseCopyResponseOA);
-                strResponseJson = GlobalParameters.RequestInfoWebServers(ApiUrl, Method, strRequestJson);
 
-                OA_ResponseState = JsonConvert.DeserializeObject<OAResponseState>(strResponseJson);
-                CommLib.Logger.Debug("拷貝申請單:" + query.REQUISITION_ID + " OA訊息回傳：" + OA_ResponseState.msg);
-                mediaWarehouseCopyResponseOA.OA_RESPONSE_STATE = OA_ResponseState;
-                */
+                if (bool.Parse(query.REQUEST_FLG))
+                {
+                    ApiUrl = "http://oa.gtv.com.tw/OA2/FilmWareHouseCopyWork/FilmWareHouseCopyWork_BpmOaSync.ashx";
+                    Method = "POST";
+                    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, mediaWarehouseCopyResponseOA);
+                    OA_ResponseState = JsonConvert.DeserializeObject<OAResponseState>(strResponseJson);
+                    CommLib.Logger.Debug("拷貝申請單:" + query.REQUISITION_ID + " OA狀態：" + OA_ResponseState.OA_FORM_ACTION);
+                    mediaWarehouseCopyResponseOA.OA_RESPONSE_STATE = OA_ResponseState;
+
+                    if (!String.IsNullOrEmpty(OA_ResponseState.OA_MASTER_NO) || !String.IsNullOrWhiteSpace(OA_ResponseState.OA_MASTER_NO))
+                    {
+                        var parameterState = new List<SqlParameter>()
+                        {
+                            //OA狀態資訊
+                            new SqlParameter("@OA_MASTER_NO", SqlDbType.NVarChar) { Size = 64, Value = OA_ResponseState.OA_MASTER_NO  },
+                            new SqlParameter("@OA_FORM_NO", SqlDbType.NVarChar) { Size = 64, Value = OA_ResponseState.OA_FORM_NO },
+                            new SqlParameter("@BPM_FORM_NO", SqlDbType.NVarChar) { Size = 64, Value = mediaWarehouseCopyResponseOA.MEDIA_WAREHOUSE_COPY_RESPONSE_OA_INFO_CONFIG.BPM_FORM_NO },
+                        };
+
+                        strSQL = "";
+                        strSQL += "UPDATE [BPMPro].[dbo].[FM7T_MediaWarehouseCopy_M] ";
+                        strSQL += "SET  [OA_MasterNo] =@OA_MASTER_NO, ";
+                        strSQL += "     [OA_FormNo]=@OA_FORM_NO ";
+                        strSQL += "WHERE [BPMFormNo]=@BPM_FORM_NO ";
+
+                        dbFun.DoTran(strSQL, parameterState);
+                    }
+                }
+
                 #endregion
 
                 return mediaWarehouseCopyResponseOA;

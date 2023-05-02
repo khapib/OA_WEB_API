@@ -44,7 +44,11 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaWarehouseCopyTitle : HeaderTitle
     {
+        /// <summary>OA系統編號</summary>
+        public string OA_MASTER_NO { get; set; }
 
+        /// <summary>OA表單編號</summary>
+        public string OA_FORM_NO { get; set; }
     }
 
     /// <summary>
@@ -72,29 +76,11 @@ namespace OA_WEB_API.Models.BPMPro
 
         #region 拷貝類型
 
-        /// <summary>素材類別[複選]</summary>
-        public string METERIAL_TYPE { get; set; }
-
-        /// <summary>素材類別_其他</summary>
-        public string METERIAL_TYPE_OTHERS { get; set; }
-
         /// <summary>用途說明</summary>
         public string APPLY_TYPE { get; set; }
 
         /// <summary>用途說明_其他</summary>
         public string APPLY_TYPE_OTHERS { get; set; }
-
-        /// <summary>長度版本</summary>
-        public string LENGTH { get; set; }
-
-        /// <summary>長度版本_其他</summary>
-        public string LENGTH_OTHERS { get; set; }
-
-        /// <summary>拷貝格式</summary>
-        public string COPY_TYPE { get; set; }
-
-        /// <summary>拷貝格式_其他</summary>
-        public string COPY_TYPE_OTHERS { get; set; }
 
         /// <summary>儲存型態[複選]</summary>
         public string SAVE_TYPE { get; set; }
@@ -194,6 +180,24 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>集數</summary>
         public string VOLUME { get; set; }
+
+        /// <summary>素材類別[複選]</summary>
+        public string METERIAL_TYPE { get; set; }
+
+        /// <summary>素材類別_其他</summary>
+        public string METERIAL_TYPE_OTHERS { get; set; }
+
+        /// <summary>長度版本</summary>
+        public string LENGTH { get; set; }
+
+        /// <summary>長度版本_其他</summary>
+        public string LENGTH_OTHERS { get; set; }
+
+        /// <summary>拷貝格式</summary>
+        public string COPY_TYPE { get; set; }
+
+        /// <summary>拷貝格式_其他</summary>
+        public string COPY_TYPE_OTHERS { get; set; }
 
         /// <summary>備註</summary>
         public string NOTE { get; set; }

@@ -15,14 +15,17 @@ namespace OA_WEB_API.Models.OA
     /// </summary>
     public class OAResponseState
     {
+        /// <summary>OA系統編號</summary>
+        public string OA_MASTER_NO { get; set; }
 
-        public string data { get; set; }
+        /// <summary>OA表單編號</summary>
+        public string OA_FORM_NO { get; set; }
 
-        /// <summary>狀態</summary>
-        public string code { get; set; }
+        /// <summary>OA狀態</summary>
+        public string OA_FORM_ACTION { get; set; }
 
-        /// <summary>信息</summary>
-        public string msg { get; set; }
+        /// <summary>BPM表單單號</summary>
+        public string BPM_FORM_NO { get; set; }
 
     }
 

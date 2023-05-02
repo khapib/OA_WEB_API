@@ -46,7 +46,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>版權採購請款單 使用預算 設定</summary>
         public IList<MediaInvoiceBudgetsConfig> MEDIA_INVOICE_BUDGS_CONFIG { get; set; }
 
-        /// <summary>版權採購請款單 發票明細 設定</summary>
+        /// <summary>版權採購請款單 憑證明細 設定</summary>
         public IList<MediaInvoiceDetailsConfig> MEDIA_INVOICE_DTLS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
@@ -339,7 +339,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 版權採購請款單 使用預算 設定
     /// </summary>
-    public class MediaInvoiceBudgetsConfig : GeneralOrderBudgetsConfig
+    public class MediaInvoiceBudgetsConfig : MediaOrderBudgetsConfig
     {
 
     }

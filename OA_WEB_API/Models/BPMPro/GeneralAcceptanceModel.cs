@@ -100,7 +100,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>行數編號</summary>
         public int ROW_NO { get; set; }
 
-        /// <summary>行數編號</summary>
+        /// <summary>原始行數編號</summary>
         public int ORIGIN_ROW_NO { get; set; }
 
         /// <summary>商品名稱</summary>

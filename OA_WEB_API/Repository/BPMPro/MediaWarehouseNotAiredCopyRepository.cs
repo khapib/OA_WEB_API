@@ -21,6 +21,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
         FormRepository formRepository = new FormRepository();
         CommonRepository commonRepository = new CommonRepository();
+        NotifyRepository notifyRepository = new NotifyRepository();
 
         #endregion
 
@@ -63,6 +64,18 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
+            #region - M表寫入BPM表單單號 -
+
+            //避免儲存後送出表單BPM表單單號沒寫入的情形
+            var formQuery = new FormQueryModel()
+            {
+                REQUISITION_ID = query.REQUISITION_ID
+            };
+
+            if (applicantInfo.DRAFT_FLAG == 0) notifyRepository.ByInsertBPMFormNo(formQuery);
+
+            #endregion
+
             #region - 尚未播出檔拷貝申請單 表頭資訊 -
 
             strSQL = "";
@@ -74,7 +87,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             var mediaWarehouseNotAiredCopyTitle = dbFun.DoQuery(strSQL, parameter).ToList<MediaWarehouseNotAiredCopyTitle>().FirstOrDefault();
 
-            #endregion
+            #endregion           
 
             #region - 尚未播出檔拷貝申請單 表單內容 -
 

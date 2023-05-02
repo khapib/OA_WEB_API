@@ -212,8 +212,8 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaOrderDetailsConfig
     {
-        /// <summary>行數編號</summary>
-        public int DTL_ROW_NO { get; set; }
+        /// <summary>原始行數編號</summary>
+        public int ORIGIN_ROW_NO { get; set; }
 
         /// <summary>商品代碼</summary>
         public string DTL_SUP_PROD_A_NO { get; set; }

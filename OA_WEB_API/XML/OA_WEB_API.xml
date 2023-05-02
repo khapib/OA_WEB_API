@@ -2819,7 +2819,7 @@
             <summary>行數編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceDetailsConfig.ORIGIN_ROW_NO">
-            <summary>行數編號</summary>
+            <summary>原始行數編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceDetailsConfig.ITEM_NAME">
             <summary>商品名稱</summary>
@@ -5046,8 +5046,8 @@
             版權採購申請單 採購明細 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_ROW_NO">
-            <summary>行數編號</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.ORIGIN_ROW_NO">
+            <summary>原始行數編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.DTL_SUP_PROD_A_NO">
             <summary>商品代碼</summary>

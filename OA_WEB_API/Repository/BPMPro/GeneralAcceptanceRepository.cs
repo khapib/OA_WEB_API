@@ -122,7 +122,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [Period] AS [PERIOD], ";
             strSQL += "     [SupProdANo] AS [SUP_PROD_A_NO], ";
             strSQL += "     [RowNo] AS [ROW_NO], ";
-            strSQL += "     [OriginRowNo] AS [ORIGIN_ROW_NO], ";
+            strSQL += "     [OrderRowNo] AS [ORDER_ROW_NO], ";
             strSQL += "     [ItemName] AS [ITEM_NAME], ";
             strSQL += "     [Model] AS [MODEL], ";
             strSQL += "     [Specifications] AS [SPECIFICATIONS], ";
@@ -358,7 +358,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)model.GENERAL_ACCEPTANCE_CONFIG.PERIOD ?? DBNull.Value },
                     new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@ORIGIN_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ORDER_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@MODEL", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@SPECIFICATIONS", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -398,8 +398,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralAcceptance_DTL]([RequisitionID],[GeneralOrderRequisitionID],[GeneralOrderBPMFormNo],[Period],[SupProdANo],[RowNo],[OriginRowNo],[ItemName],[MODEL],[Specifications],[AcceptanceQuantity],[Quantity],[Unit],[OwnerDeptMainID],[OwnerDeptID],[OwnerID],[OwnerName],[AcceptanceNote],[Status],[Note],[IsOriginal]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@GENERAL_ORDER_REQUISITION_ID,@GENERAL_ORDER_BPM_FORM_NO,@PERIOD,@SUP_PROD_A_NO,@ROW_NO,@ORIGIN_ROW_NO,@ITEM_NAME,@MODEL,@SPECIFICATIONS,@ACPT_QUANTITY,@QUANTITY,@UNIT,@OWNER_DEPT_MAIN_ID,@OWNER_DEPT_ID,@OWNER_ID,@OWNER_NAME,@ACPT_NOTE,@STATUS,@NOTE,@IS_ORIGINAL) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralAcceptance_DTL]([RequisitionID],[GeneralOrderRequisitionID],[GeneralOrderBPMFormNo],[Period],[SupProdANo],[RowNo],[OrderRowNo],[ItemName],[MODEL],[Specifications],[AcceptanceQuantity],[Quantity],[Unit],[OwnerDeptMainID],[OwnerDeptID],[OwnerID],[OwnerName],[AcceptanceNote],[Status],[Note],[IsOriginal]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@GENERAL_ORDER_REQUISITION_ID,@GENERAL_ORDER_BPM_FORM_NO,@PERIOD,@SUP_PROD_A_NO,@ROW_NO,@ORDER_ROW_NO,@ITEM_NAME,@MODEL,@SPECIFICATIONS,@ACPT_QUANTITY,@QUANTITY,@UNIT,@OWNER_DEPT_MAIN_ID,@OWNER_DEPT_ID,@OWNER_ID,@OWNER_NAME,@ACPT_NOTE,@STATUS,@NOTE,@IS_ORIGINAL) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }

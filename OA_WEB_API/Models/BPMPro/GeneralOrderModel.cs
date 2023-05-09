@@ -175,6 +175,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>商品代碼</summary>
         public string SUP_PROD_A_NO { get; set; }
 
+        /// <summary>訂單行數編號</summary>
+        public int ORDER_ROW_NO { get; set; }
+
         /// <summary>商品名稱</summary>
         public string ITEM_NAME { get; set; }
 
@@ -311,6 +314,9 @@ namespace OA_WEB_API.Models.BPMPro
                 
         /// <summary>商品代碼</summary>
         public string SUP_PROD_A_NO { get; set; }
+
+        /// <summary>訂單行數編號</summary>
+        public int ORDER_ROW_NO { get; set; }
 
         /// <summary>商品名稱</summary>
         public string ITEM_NAME { get; set; }

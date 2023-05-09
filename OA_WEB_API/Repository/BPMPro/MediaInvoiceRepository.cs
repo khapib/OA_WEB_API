@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Web;
 using Microsoft.SqlServer.Server;
 using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -26,6 +27,13 @@ namespace OA_WEB_API.Repository.BPMPro
         CommonRepository commonRepository = new CommonRepository();
         FlowRepository flowRepository = new FlowRepository();
         NotifyRepository notifyRepository = new NotifyRepository();
+
+        #endregion
+
+        #region FormRepository
+
+        /// <summary>版權採購申請單</summary>
+        MediaOrderRepository mediaOrderRepository = new MediaOrderRepository();
 
         #endregion
 
@@ -105,8 +113,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [MediaOrderERPFormNo] AS [MEDIA_ORDER_ERP_FORM_NO], ";
             strSQL += "     [MediaOrderPath] AS [MEDIA_ORDER_PATH], ";
             strSQL += "     [MediaOrderTXN_Type] AS [MEDIA_ORDER_TXN_TYPE], ";
-            strSQL += "     [MediaOrderDTL_OrderTotal] AS [MEDIA_ORDER_DTL_ORDER_TOTAL], ";
-            strSQL += "     [MediaOrderDTL_OrderTotal_TWD] AS [MEDIA_ORDER_DTL_ORDER_TOTAL_TWD], ";
+            strSQL += "     [MediaOrderPYMT_OrderTotal] AS [MEDIA_ORDER_PYMT_ORDER_TOTAL], ";
+            strSQL += "     [MediaOrderPYMT_OrderTotal_CONV] AS [MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV], ";
             strSQL += "     [MediaAcceptanceRequisitionID] AS [MEDIA_ACCEPTANCE_REQUISITION_ID], ";
             strSQL += "     [Currency] AS [CURRENCY], ";
             strSQL += "     [PredictRate] AS [PRE_RATE], ";
@@ -187,39 +195,37 @@ namespace OA_WEB_API.Repository.BPMPro
 
             strSQL = "";
             strSQL += "SELECT ";
-            strSQL += "     DTL.[DTL_RowNo] AS [DTL_ROW_NO], ";
-            strSQL += "     DTL.[DTL_EpisodeTime] AS [DTL_EPISODE_TIME], ";
-            strSQL += "     DTL.[DTL_MediaSpec] AS [DTL_MEDIA_SPEC], ";
-            strSQL += "     DTL.[DTL_Net] AS [DTL_NET], ";
-            strSQL += "     DTL.[DTL_Net_TWD] AS [DTL_NET_TWD], ";
-            strSQL += "     DTL.[DTL_Tax] AS [DTL_TAX], ";
-            strSQL += "     DTL.[DTL_Tax_TWD] AS [DTL_TAX_TWD], ";
-            strSQL += "     DTL.[DTL_Gross] AS [DTL_GROSS], ";
-            strSQL += "     DTL.[DTL_Gross_TWD] AS [DTL_GROSS_TWD], ";
-            strSQL += "     DTL.[DTL_NetSum] AS [DTL_NET_SUM], ";
-            strSQL += "     DTL.[DTL_NetSum_TWD] AS [DTL_NET_SUM_TWD], ";
-            strSQL += "     DTL.[DTL_GrossSum] AS [DTL_GROSS_SUM], ";
-            strSQL += "     DTL.[DTL_GrossSum_TWD] AS [DTL_GROSS_SUM_TWD], ";
-            strSQL += "     DTL.[DTL_Material] AS [DTL_MATERIAL], ";
-            strSQL += "     DTL.[DTL_ItemSum] AS [DTL_ITEM_SUM], ";
-            strSQL += "     DTL.[DTL_ItemSum_TWD] AS [DTL_ITEM_SUM_TWD], ";
-            strSQL += "     DTL.[DTL_ProjectFormNo] AS [DTL_PROJECT_FORM_NO], ";
-            strSQL += "     DTL.[DTL_ProjectName] AS [DTL_PROJECT_NAME], ";
-            strSQL += "     DTL.[DTL_ProjectNickname] AS [DTL_PROJECT_NICKNAME], ";
-            strSQL += "     DTL.[DTL_ProjectUseYear] AS [DTL_PROJECT_USE_YEAR], ";
-            strSQL += "     DTL.[DTL_Note] AS [DTL_NOTE], ";
-            strSQL += "     ACPT.[PA_RowNo] AS [PA_ROW_NO], ";
+            strSQL += "     DTL.[EpisodeTime] AS [EPISODE_TIME], ";
+            strSQL += "     DTL.[MediaSpec] AS [MEDIA_SPEC], ";
+            strSQL += "     DTL.[Net] AS [NET], ";
+            strSQL += "     DTL.[Net_TWD] AS [NET_TWD], ";
+            strSQL += "     DTL.[Tax] AS [TAX], ";
+            strSQL += "     DTL.[Tax_TWD] AS [TAX_TWD], ";
+            strSQL += "     DTL.[Gross] AS [GROSS], ";
+            strSQL += "     DTL.[Gross_TWD] AS [GROSS_TWD], ";
+            strSQL += "     DTL.[NetSum] AS [NET_SUM], ";
+            strSQL += "     DTL.[NetSum_TWD] AS [NET_SUM_TWD], ";
+            strSQL += "     DTL.[GrossSum] AS [GROSS_SUM], ";
+            strSQL += "     DTL.[GrossSum_TWD] AS [GROSS_SUM_TWD], ";
+            strSQL += "     DTL.[Material] AS [MATERIAL], ";
+            strSQL += "     DTL.[ItemSum] AS [ITEM_SUM], ";
+            strSQL += "     DTL.[ItemSum_TWD] AS [ITEM_SUM_TWD], ";
+            strSQL += "     DTL.[ProjectFormNo] AS [PROJECT_FORM_NO], ";
+            strSQL += "     DTL.[ProjectName] AS [PROJECT_NAME], ";
+            strSQL += "     DTL.[ProjectNickname] AS [PROJECT_NICKNAME], ";
+            strSQL += "     DTL.[ProjectUseYear] AS [PROJECT_USE_YEAR], ";
+            strSQL += "     DTL.[Note] AS [NOTE], ";
+            strSQL += "     DTL.[OrderRowNo] AS [ORDER_ROW_NO], ";
             strSQL += "     ACPT.[Period] AS [PERIOD], ";
-            strSQL += "     ACPT.[PA_SupProdANo] AS [PA_SUP_PROD_A_NO], ";
-            strSQL += "     ACPT.[PA_ItemName] AS [PA_ITEM_NAME], ";
-            strSQL += "     ACPT.[PA_MediaType] AS [PA_MEDIA_TYPE], ";
-            strSQL += "     ACPT.[PA_StartEpisode] AS [PA_START_EPISODE], ";
-            strSQL += "     ACPT.[PA_EndEpisode] AS [PA_END_EPISODE], ";
-            strSQL += "     ACPT.[PA_ACPT_Episode] AS [PA_ACPT_EPISODE], ";
-            strSQL += "     ACPT.[PA_OrderEpisode] AS [PA_ORDER_EPISODE], ";
-            strSQL += "     ACPT.[PA_Note] AS [PA_NOTE] ";
+            strSQL += "     ACPT.[SupProdANo] AS [SUP_PROD_A_NO], ";
+            strSQL += "     ACPT.[ItemName] AS [ITEM_NAME], ";
+            strSQL += "     ACPT.[MediaType] AS [MEDIA_TYPE], ";
+            strSQL += "     ACPT.[StartEpisode] AS [START_EPISODE], ";
+            strSQL += "     ACPT.[EndEpisode] AS [END_EPISODE], ";
+            strSQL += "     ACPT.[ACPT_Episode] AS [ACPT_EPISODE], ";
+            strSQL += "     ACPT.[OrderEpisode] AS [ORDER_EPISODE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_ACPT] AS ACPT ";
-            strSQL += "	    INNER JOIN [BPMPro].[dbo].[FM7T_MediaOrder_DTL] AS DTL ON ACPT.[RequisitionID]=DTL.[RequisitionID] AND ACPT.[PA_SupProdANo]=DTL.[DTL_SupProdANo] AND ACPT.[PA_RowNo]=DTL.[DTL_RowNo] ";
+            strSQL += "	    INNER JOIN [BPMPro].[dbo].[FM7T_MediaOrder_DTL] AS DTL ON ACPT.[RequisitionID]=DTL.[RequisitionID] AND ACPT.[SupProdANo]=DTL.[SupProdANo] AND ACPT.[OrderRowNo]=DTL.[OrderRowNo] ";
             strSQL += "WHERE 1=1 ";
             strSQL += "         AND ACPT.[RequisitionID]=@REQUISITION_ID ";
             strSQL += "         AND ACPT.[Period]=@PERIOD ";
@@ -228,115 +234,82 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 版權採購請款單 授權權利 -
+            #region - 版權採購單 資訊 -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     AUTH.[RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [AUTH_RowNo] AS [AUTH_ROW_NO], ";
-            strSQL += "     [AUTH_SupProdANo] AS [AUTH_SUP_PROD_A_NO], ";
-            strSQL += "     [AUTH_ItemName] AS [AUTH_ITEM_NAME], ";
-            strSQL += "     [AUTH_Continent] AS [AUTH_CONTINENT], ";
-            strSQL += "     [AUTH_Country] AS [AUTH_COUNTRY], ";
-            strSQL += "     [AUTH_PlayPlatform] AS [AUTH_PLAY_PLATFORM],";
-            strSQL += "     [AUTH_Play] AS [AUTH_PLAY], ";
-            strSQL += "     [AUTH_Sell] AS [AUTH_SELL], ";
-            strSQL += "     [AUTH_EditToPlay] AS [AUTH_EDIT_TO_PLAY], ";
-            strSQL += "     [AUTH_EditToSell] AS [AUTH_EDIT_TO_SELL], ";
-            strSQL += "     [AUTH_AllotedTimeType] AS [AUTH_ALLOTED_TIME_TYPE], ";
-            strSQL += "     [AUTH_StartDate] AS [AUTH_START_DATE], ";
-            strSQL += "     [AUTH_EndDate] AS [AUTH_END_DATE], ";
-            strSQL += "     [AUTH_FrequencyType] AS [AUTH_FREQUENCY_TYPE], ";
-            strSQL += "     [AUTH_PlayFrequency] AS [AUTH_PLAY_FREQUENCY], ";
-            strSQL += "     [AUTH_Note] AS [AUTH_NOTE] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_AUTH] AS AUTH ";
-            strSQL += "     INNER JOIN [BPMPro].[dbo].[FM7T_MediaOrder_ACPT] AS ACPT ON AUTH.[RequisitionID]=ACPT.[RequisitionID] AND AUTH.[AUTH_RowNo]=ACPT.[PA_RowNo] ";
-            strSQL += "WHERE 1=1 ";
-            strSQL += "         AND AUTH.[RequisitionID]=@REQUISITION_ID ";
-            strSQL += "         AND ACPT.[Period]=@PERIOD ";
-            strSQL += "ORDER BY AUTH.[AutoCounter] ";
+            var mediaOrderQueryModel = new MediaOrderQueryModel
+            {
+                REQUISITION_ID = mediaInvoiceConfig.MEDIA_ORDER_REQUISITION_ID
+            };
 
-            var mediaInvoiceAuthorizesConfig = dbFun.DoQuery(strSQL, mediaOrderparameter).ToList<MediaInvoiceAuthorizesConfig>();
+            var mediaOrderContent = mediaOrderRepository.PostMediaOrderSingle(mediaOrderQueryModel);
 
             #endregion
 
-            #region - 版權採購申請單 額外項目 -
+            #region - 版權採購請款單 授權權利 -
+            //View的「授權權利」是 版權採購申請單 的「授權權利」
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [EX_RowNo] AS [EX_ROW_NO], ";
-            strSQL += "     [EX_Name] AS [EX_NAME], ";
-            strSQL += "     [EX_Amount] AS [EX_AMOUNT], ";
-            strSQL += "     [EX_Amount_TWD] AS [EX_AMOUNT_TWD], ";
-            strSQL += "     [EX_Tax] AS [EX_TAX], ";
-            strSQL += "     [EX_Tax_TWD] AS [EX_TAX_TWD], ";
-            strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [EX_ProjectFormNo] AS [EX_PROJECT_FORM_NO], ";
-            strSQL += "     [EX_ProjectName] AS [EX_PROJECT_NAME], ";
-            strSQL += "     [EX_ProjectNickname] AS [EX_PROJECT_NICKNAME], ";
-            strSQL += "     [EX_ProjectUseYear] AS [EX_PROJECT_USE_YEAR], ";
-            strSQL += "     [EX_Note] AS [EX_NOTE] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_EX] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "ORDER BY [AutoCounter] ";
+            #region 授權權利 舊寫法
+            //strSQL = "";
+            //strSQL += "SELECT ";
+            //strSQL += "     AUTH.[RequisitionID] AS [REQUISITION_ID], ";
+            //strSQL += "     AUTH.[OrderRowNo] AS [ORDER_ROW_NO], ";
+            //strSQL += "     AUTH.[SupProdANo] AS [SUP_PROD_A_NO], ";
+            //strSQL += "     AUTH.[ItemName] AS [ITEM_NAME], ";
+            //strSQL += "     AUTH.[Continent] AS [CONTINENT], ";
+            //strSQL += "     AUTH.[Country] AS [COUNTRY], ";
+            //strSQL += "     AUTH.[PlayPlatform] AS [PLAY_PLATFORM],";
+            //strSQL += "     AUTH.[Play] AS [PLAY], ";
+            //strSQL += "     AUTH.[Sell] AS [SELL], ";
+            //strSQL += "     AUTH.[EditToPlay] AS [EDIT_TO_PLAY], ";
+            //strSQL += "     AUTH.[EditToSell] AS [EDIT_TO_SELL], ";
+            //strSQL += "     AUTH.[AllotedTimeType] AS [ALLOTED_TIME_TYPE], ";
+            //strSQL += "     AUTH.[StartDate] AS [START_DATE], ";
+            //strSQL += "     AUTH.[EndDate] AS [END_DATE], ";
+            //strSQL += "     AUTH.[FrequencyType] AS [FREQUENCY_TYPE], ";
+            //strSQL += "     AUTH.[PlayFrequency] AS [PLAY_FREQUENCY], ";
+            //strSQL += "     AUTH.[Note] AS [NOTE] ";
+            //strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_AUTH] AS AUTH ";
+            //strSQL += "     INNER JOIN [BPMPro].[dbo].[FM7T_MediaOrder_ACPT] AS ACPT ON AUTH.[RequisitionID]=ACPT.[RequisitionID] AND AUTH.[OrderRowNo]=ACPT.[OrderRowNo] ";
+            //strSQL += "WHERE 1=1 ";
+            //strSQL += "         AND AUTH.[RequisitionID]=@REQUISITION_ID ";
+            //strSQL += "         AND ACPT.[Period]=@PERIOD ";
+            //strSQL += "ORDER BY AUTH.[AutoCounter] ";
 
-            var mediaInvoiceExtrasConfig = dbFun.DoQuery(strSQL, mediaOrderparameter).ToList<MediaInvoiceExtrasConfig>();
+            //var mediaInvoiceAuthorizesConfig = dbFun.DoQuery(strSQL, mediaOrderparameter).ToList<MediaInvoiceAuthorizesConfig>();
+            #endregion
+
+            List<MediaInvoiceAuthorizesConfig> mediaInvoiceAuthorizesConfig = new List<MediaInvoiceAuthorizesConfig>();
+            foreach (var item in mediaInvoiceAcceptancesConfig)
+            {
+                strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_AUTHS_CONFIG.Where(AUTH => AUTH.ORDER_ROW_NO == item.ORDER_ROW_NO && item.PERIOD == mediaInvoiceConfig.PERIOD).Select(AUTH=> AUTH));
+                mediaInvoiceAuthorizesConfig.AddRange(JsonConvert.DeserializeObject<List<MediaInvoiceAuthorizesConfig>>(strJson));
+            }
+
+            #endregion
+
+            #region - 版權採購請款單 額外項目 -
+            //View的「額外項目」是 版權採購申請單 的「額外項目」
+
+            strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_EXS_CONFIG.Where(EX => EX.PERIOD == mediaInvoiceConfig.PERIOD).Select(EX=>EX));
+            var mediaInvoiceExtrasConfig = JsonConvert.DeserializeObject<List<MediaInvoiceExtrasConfig>>(strJson);
 
             #endregion
 
             #region - 版權採購請款單 付款辦法 -
-
             //View的「付款辦法」是 版權採購申請單 的「付款辦法」
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [PYMT_RowNo] AS [PYMT_ROW_NO], ";
-            strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [PYMT_Project] AS [PYMT_PROJECT], ";
-            strSQL += "     [PYMT_Terms] AS [PYMT_TERMS], ";
-            strSQL += "     [PYMT_MethodID] AS [PYMT_METHOD_ID], ";
-            strSQL += "     [PYMT_Tax] AS [PYMT_TAX], ";
-            strSQL += "     [PYMT_Net] AS [PYMT_NET], ";
-            strSQL += "     [PYMT_Gross] AS [PYMT_GROSS], ";
-            strSQL += "     [PYMT_PredictRate] AS [PYMT_PRE_RATE], ";
-            strSQL += "     [PYMT_Material] AS [PYMT_MATERIAL], ";
-            strSQL += "     [PYMT_EX_Amount] AS [PYMT_EX_AMOUNT], ";
-            strSQL += "     [PYMT_EX_Tax] AS [PYMT_EX_TAX], ";
-            strSQL += "     [PYMT_OrderSum] AS [PYMT_ORDER_SUM], ";
-            strSQL += "     [PYMT_OrderSum_CONV] AS [PYMT_ORDER_SUM_CONV], ";
-            strSQL += "     [PYMT_UseBudget] AS [PYMT_USE_BUDGET], ";
-            strSQL += "     [ACCT_Category] AS [ACCT_CATEGORY] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_PYMT] ";
-            strSQL += "WHERE 1=1 ";
-            strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "         AND [Period]=@PERIOD ";
-            strSQL += "ORDER BY [AutoCounter] ";
+            strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_PYMTS_CONFIG.Where(PYMT => PYMT.PERIOD == mediaInvoiceConfig.PERIOD).Select(PYMT => PYMT));
+            var mediaInvoicePaymentsConfig = JsonConvert.DeserializeObject<List<MediaInvoicePaymentsConfig>>(strJson);
 
-            var mediaInvoicePaymentsConfig = dbFun.DoQuery(strSQL, mediaOrderparameter).ToList<MediaInvoicePaymentsConfig>();
 
             #endregion
 
             #region - 版權採購請款單 使用預算 -
+            //View的「使用預算」是 版權採購申請單 的「使用預算」
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [BUDG_RowNo] AS [BUDG_ROW_NO], ";
-            strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [BUDG_FormNo] AS [BUDG_FORM_NO], ";
-            strSQL += "     [BUDG_CreateYear] AS [BUDG_CREATE_YEAR], ";
-            strSQL += "     [BUDG_Name] AS [BUDG_NAME], ";
-            strSQL += "     [BUDG_OwnerDept] AS [BUDG_OWNER_DEPT], ";
-            strSQL += "     [BUDG_Total] AS [BUDG_TOTAL], ";
-            strSQL += "     [BUDG_AvailableBudgetAmount] AS [BUDG_AVAILABLE_BUDGET_AMOUNT], ";
-            strSQL += "     [BUDG_UseBudgetAmount] AS [BUDG_USE_BUDGET_AMOUNT] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_BUDG] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "ORDER BY [AutoCounter] ";
+            strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_BUDGS_CONFIG.Where(BUDG => BUDG.PERIOD == mediaInvoiceConfig.PERIOD).Select(BUDG => BUDG));
+            var mediaInvoiceBudgetsConfig = JsonConvert.DeserializeObject<List<MediaInvoiceBudgetsConfig>>(strJson);
 
-            var mediaInvoiceBudgetsConfig = dbFun.DoQuery(strSQL, mediaOrderparameter).ToList<MediaInvoiceBudgetsConfig>();
 
             #endregion
 
@@ -345,19 +318,19 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [INV_Num] AS [INV_NUM], ";
-            strSQL += "     [INV_Date] AS [INV_DATE], ";
-            strSQL += "     [INV_Excl] AS [INV_EXCL], ";
-            strSQL += "     [INV_Excl_TWD] AS [INV_EXCL_TWD], ";
-            strSQL += "     [INV_Tax] AS [INV_TAX], ";
-            strSQL += "     [INV_Tax_TWD] AS [INV_TAX_TWD], ";
-            strSQL += "     [INV_Net] AS [INV_NET], ";
-            strSQL += "     [INV_Net_TWD] AS [INV_NET_TWD], ";
-            strSQL += "     [INV_Gross] AS [INV_GROSS], ";
-            strSQL += "     [INV_Gross_TWD] AS [INV_GROSS_TWD], ";
-            strSQL += "     [INV_Amount] AS [INV_AMOUNT], ";
-            strSQL += "     [INV_Amount_TWD] AS [INV_AMOUNT_TWD], ";
-            strSQL += "     [INV_Note] AS [INV_NOTE] ";
+            strSQL += "     [Num] AS [NUM], ";
+            strSQL += "     [Date] AS [DATE], ";
+            strSQL += "     [Excl] AS [EXCL], ";
+            strSQL += "     [Excl_TWD] AS [EXCL_TWD], ";
+            strSQL += "     [Tax] AS [TAX], ";
+            strSQL += "     [Tax_TWD] AS [TAX_TWD], ";
+            strSQL += "     [Net] AS [NET], ";
+            strSQL += "     [Net_TWD] AS [NET_TWD], ";
+            strSQL += "     [Gross] AS [GROSS], ";
+            strSQL += "     [Gross_TWD] AS [GROSS_TWD], ";
+            strSQL += "     [Amount] AS [AMOUNT], ";
+            strSQL += "     [Amount_TWD] AS [AMOUNT_TWD], ";
+            strSQL += "     [Note] AS [NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaInvoice_INV] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
@@ -637,8 +610,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [MediaOrderERPFormNo]=@MEDIA_ORDER_ERP_FORM_NO, ";
                     strSQL += "     [MediaOrderPath]=@MEDIA_ORDER_PATH, ";
                     strSQL += "     [MediaOrderTXN_Type]=MAIN.[TXN_TYPE], ";
-                    strSQL += "     [MediaOrderDTL_OrderTotal]=MAIN.[DTL_ORDER_TOTAL], ";
-                    strSQL += "     [MediaOrderDTL_OrderTotal_TWD]=MAIN.[DTL_ORDER_TOTAL_TWD], ";
+                    strSQL += "     [MediaOrderPYMT_OrderTotal]=MAIN.[PYMT_ORDER_TOTAL], ";
+                    strSQL += "     [MediaOrderPYMT_OrderTotal_CONV]=MAIN.[PYMT_ORDER_TOTAL_COMV], ";
                     strSQL += "     [MediaAcceptanceRequisitionID]=@MEDIA_ACCEPTANCE_REQUISITION_ID, ";
                     strSQL += "     [Currency]=MAIN.[CURRENCY], ";
                     strSQL += "     [PredictRate]=MAIN.[PRE_RATE], ";
@@ -703,8 +676,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     FROM ( ";
                     strSQL += "             select ";
                     strSQL += "                 [TXN_Type] AS [TXN_TYPE], ";
-                    strSQL += "                 [DTL_OrderTotal] AS [DTL_ORDER_TOTAL], ";
-                    strSQL += "                 [DTL_OrderTotal_TWD] AS [DTL_ORDER_TOTAL_TWD], ";
+                    strSQL += "                 [PYMT_OrderTotal] AS [PYMT_ORDER_TOTAL], ";
+                    strSQL += "                 [PYMT_OrderTotal_CONV] AS [PYMT_ORDER_TOTAL_COMV], ";
                     strSQL += "                 [Currency] AS [CURRENCY], ";
                     strSQL += "                 [PredictRate] AS [PRE_RATE], ";
                     strSQL += "                 [PricingMethod] AS [PRICING_METHOD], ";
@@ -804,19 +777,19 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_BPM_FORM_NO ?? DBNull.Value },
                     new SqlParameter("@MEDIA_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)medialOrderformData.SERIAL_ID ?? DBNull.Value },
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_NUM", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_DATE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_EXCL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_EXCL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_TAX_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_NET_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_GROSS_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DATE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EXCL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EXCL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NET_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GROSS_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -837,13 +810,11 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     foreach (var item in model.MEDIA_INVOICE_DTLS_CONFIG)
                     {
+                        strJson = jsonFunction.ObjectToJSON(item);
+
                         #region - 確認小數點後第二位 -
 
-                        item.INV_EXCL = Math.Round(item.INV_EXCL, 2);
-                        item.INV_TAX = Math.Round(item.INV_TAX, 2);
-                        item.INV_NET = Math.Round(item.INV_NET, 2);
-                        item.INV_GROSS = Math.Round(item.INV_GROSS, 2);
-                        item.INV_AMOUNT = Math.Round(item.INV_AMOUNT, 2);
+                        GlobalParameters.IsDouble(strJson);
 
                         #endregion
 
@@ -852,8 +823,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaInvoice_INV]([RequisitionID],[Period],[MediaOrderRequisitionID],[MediaOrderBPMFormNo],[MediaOrderERPFormNo],[INV_Num],[INV_Date],[INV_Excl],[INV_Excl_TWD],[INV_Tax],[INV_Tax_TWD],[INV_Net],[INV_Net_TWD],[INV_Gross],[INV_Gross_TWD],[INV_Amount],[INV_Amount_TWD],[INV_Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@MEDIA_ORDER_REQUISITION_ID,@MEDIA_ORDER_BPM_FORM_NO,@MEDIA_ORDER_ERP_FORM_NO,@INV_NUM,@INV_DATE,@INV_EXCL,@INV_EXCL_TWD,@INV_TAX,@INV_TAX_TWD,@INV_NET,@INV_NET_TWD,@INV_GROSS,@INV_GROSS_TWD,@INV_AMOUNT,@INV_AMOUNT_TWD,@INV_NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaInvoice_INV]([RequisitionID],[Period],[MediaOrderRequisitionID],[MediaOrderBPMFormNo],[MediaOrderERPFormNo],[Num],[Date],[Excl],[Excl_TWD],[Tax],[Tax_TWD],[Net],[Net_TWD],[Gross],[Gross_TWD],[Amount],[Amount_TWD],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@MEDIA_ORDER_REQUISITION_ID,@MEDIA_ORDER_BPM_FORM_NO,@MEDIA_ORDER_ERP_FORM_NO,@NUM,@DATE,@EXCL,@EXCL_TWD,@TAX,@TAX_TWD,@NET,@NET_TWD,@GROSS,@GROSS_TWD,@AMOUNT,@AMOUNT_TWD,@NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }

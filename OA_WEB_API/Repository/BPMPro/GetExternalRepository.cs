@@ -2050,7 +2050,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     mediaAcceptanceDetailsConfig.ForEach(ACPT =>
                     {
-                        ACPT.DTL_GET_MASTERING_DATE = DateTime.Today;
+                        ACPT.GET_MASTERING_DATE = DateTime.Today;
                     });
 
                     #endregion

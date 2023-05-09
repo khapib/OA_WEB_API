@@ -252,6 +252,11 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 FM7Subject = model.MEDIA_WAREHOUSE_COPY_TITLE.FM7_SUBJECT;
 
+                if(String.IsNullOrEmpty(FM7Subject) || String.IsNullOrWhiteSpace(FM7Subject))
+                {
+                    FM7Subject = "拷貝申請單_" + model.MEDIA_WAREHOUSE_COPY_DTLS_CONFIG.Select(D => D.PROGRAM_NAME).FirstOrDefault() + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
+                }
+
                 #endregion
 
                 #endregion
@@ -329,6 +334,15 @@ namespace OA_WEB_API.Repository.BPMPro
                 #endregion
 
                 #region - 拷貝申請單 表單內容：MediaWarehouseCopy_M -
+
+                #region - 期望交付日 -
+
+                if(String.IsNullOrEmpty(model.MEDIA_WAREHOUSE_COPY_CONFIG.EXPECTED_DATE.ToString()) || String.IsNullOrWhiteSpace(model.MEDIA_WAREHOUSE_COPY_CONFIG.EXPECTED_DATE.ToString()))
+                {
+                    model.MEDIA_WAREHOUSE_COPY_CONFIG.EXPECTED_DATE= DateTime.Today.AddMonths(1);
+                }
+
+                #endregion
 
                 if (model.MEDIA_WAREHOUSE_COPY_CONFIG != null)
                 {

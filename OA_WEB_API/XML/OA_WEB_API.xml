@@ -2954,10 +2954,10 @@
             <summary>行政採購 路徑</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.GENERAL_ORDER_PYMT_GROSS_TOTAL">
-            <summary>行政採購 採購單 總金額</summary>
+            <summary>行政採購 採購單 付款辦法總額</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.GENERAL_ORDER_PYMT_GROSS_TOTAL_CONV">
-            <summary>行政採購 採購單 總金額_台幣</summary>
+            <summary>行政採購 採購單 付款辦法總額_台幣(換算)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceConfig.GENERAL_ACCEPTANCE_REQUISITION_ID">
             <summary>行政採購點驗收單 系統編號</summary>

@@ -79,10 +79,10 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>行政採購 路徑</summary>
         public string GENERAL_ORDER_PATH { get; set; }
 
-        /// <summary>行政採購 採購單 總金額</summary>
+        /// <summary>行政採購 採購單 付款辦法總額</summary>
         public double GENERAL_ORDER_PYMT_GROSS_TOTAL { get; set; }
 
-        /// <summary>行政採購 採購單 總金額_台幣</summary>
+        /// <summary>行政採購 採購單 付款辦法總額_台幣(換算)</summary>
         public int GENERAL_ORDER_PYMT_GROSS_TOTAL_CONV { get; set; }
 
         /// <summary>行政採購點驗收單 系統編號</summary>

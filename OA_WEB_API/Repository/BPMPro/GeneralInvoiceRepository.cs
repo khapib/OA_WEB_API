@@ -22,6 +22,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
         FormRepository formRepository = new FormRepository();
         CommonRepository commonRepository = new CommonRepository();
+        NotifyRepository notifyRepository = new NotifyRepository();
 
         #endregion
 
@@ -64,6 +65,18 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
+            #region - M表寫入BPM表單單號 -
+
+            //避免儲存後送出表單BPM表單單號沒寫入的情形
+            var formQuery = new FormQueryModel()
+            {
+                REQUISITION_ID = query.REQUISITION_ID
+            };
+
+            if (applicantInfo.DRAFT_FLAG == 0) notifyRepository.ByInsertBPMFormNo(formQuery);
+
+            #endregion
+
             #region - 行政採購請款單 表頭資訊 -
 
             strSQL = "";
@@ -89,8 +102,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [GeneralOrderERPFormNo] AS [GENERAL_ORDER_ERP_FORM_NO], ";
             strSQL += "     [GeneralOrderTXN_Type] AS [GENERAL_ORDER_TXN_TYPE], ";
             strSQL += "     [GeneralOrderPath] AS [GENERAL_ORDER_PATH], ";
-            strSQL += "     [GeneralOrderDTL_OrderTotal] AS [GENERAL_ORDER_DTL_ORDER_TOTAL], ";
-            strSQL += "     [GeneralOrderDTL_OrderTotal_TWD] AS [GENERAL_ORDER_DTL_ORDER_TOTAL_TWD], ";
+            strSQL += "     [GeneralOrderPYMT_GrossTotal] AS [GENERAL_ORDER_PYMT_GROSS_TOTAL], ";
+            strSQL += "     [GeneralOrderPYMT_GrossTotal_CONV] AS [GENERAL_ORDER_PYMT_GROSS_TOTAL_CONV], ";
             strSQL += "     [GeneralAcceptanceRequisitionID] AS [GENERAL_ACCEPTANCE_REQUISITION_ID], ";
             strSQL += "     [Currency] AS [CURRENCY], ";
             strSQL += "     [PredictRate] AS [PRE_RATE], ";
@@ -127,6 +140,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [Note] AS [NOTE], ";
             strSQL += "     [PYMT_CurrentTotal] AS [PYMT_CURRENT_TOTAL], ";
             strSQL += "     [PYMT_CurrentTotal_TWD] AS [PYMT_CURRENT_TOTAL_TWD], ";
+            strSQL += "     [INV_TaxTotal] AS [INV_TAX_TOTAL], ";
+            strSQL += "     [INV_TaxTotal_TWD] AS [INV_TAX_TOTAL_TWD], ";
             strSQL += "     [INV_AmountTotal] AS [INV_AMOUNT_TOTAL], ";
             strSQL += "     [INV_AmountTotal_TWD] AS [INV_AMOUNT_TOTAL_TWD], ";
             strSQL += "     [ActualPayAmount] AS [ACTUAL_PAY_AMOUNT], ";
@@ -153,21 +168,20 @@ namespace OA_WEB_API.Repository.BPMPro
 
             strSQL = "";
             strSQL += "SELECT ";
-            strSQL += "     DTL.[DTL_ProjectFormNo] AS [DTL_PROJECT_FORM_NO], ";
-            strSQL += "     DTL.[DTL_ProjectName] AS [DTL_PROJECT_NAME], ";
-            strSQL += "     DTL.[DTL_ProjectNickname] AS [DTL_PROJECT_NICKNAME], ";
-            strSQL += "     DTL.[DTL_ProjectUseYear] AS [DTL_PROJECT_USE_YEAR], ";
-            strSQL += "     DTL.[DTL_Note] AS [DTL_NOTE], ";
+            strSQL += "     DTL.[ProjectFormNo] AS [PROJECT_FORM_NO], ";
+            strSQL += "     DTL.[ProjectName] AS [PROJECT_NAME], ";
+            strSQL += "     DTL.[ProjectNickname] AS [PROJECT_NICKNAME], ";
+            strSQL += "     DTL.[ProjectUseYear] AS [PROJECT_USE_YEAR], ";
+            strSQL += "     DTL.[Note] AS [NOTE], ";
             strSQL += "     ACPT.[Period] AS [PERIOD], ";
-            strSQL += "     ACPT.[PA_SupProdANo] AS [PA_SUP_PROD_A_NO], ";
-            strSQL += "     ACPT.[PA_ItemName] AS [PA_ITEM_NAME], ";
-            strSQL += "     ACPT.[PA_Model] AS [PA_MODEL], ";
-            strSQL += "     ACPT.[PA_Specifications] AS [PA_SPECIFICATIONS], ";
-            strSQL += "     ACPT.[PA_Quantity] AS [PA_QUANTITY], ";
-            strSQL += "     ACPT.[PA_Unit] AS [PA_UNIT], ";
-            strSQL += "     ACPT.[PA_Note] AS [PA_NOTE] ";
+            strSQL += "     ACPT.[SupProdANo] AS [SUP_PROD_A_NO], ";
+            strSQL += "     ACPT.[ItemName] AS [ITEM_NAME], ";
+            strSQL += "     ACPT.[Model] AS [MODEL], ";
+            strSQL += "     ACPT.[Specifications] AS [SPECIFICATIONS], ";
+            strSQL += "     ACPT.[Quantity] AS [QUANTITY], ";
+            strSQL += "     ACPT.[Unit] AS [UNIT] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralOrder_ACPT] AS ACPT ";
-            strSQL += "	    INNER JOIN [BPMPro].[dbo].[FM7T_GeneralOrder_DTL] AS DTL ON ACPT.[RequisitionID]=DTL.[RequisitionID] AND ACPT.[PA_SupProdANo]=DTL.[DTL_SupProdANo] ";
+            strSQL += "	    INNER JOIN [BPMPro].[dbo].[FM7T_GeneralOrder_DTL] AS DTL ON ACPT.[RequisitionID]=DTL.[RequisitionID] AND ACPT.[SupProdANo]=DTL.[SupProdANo] ";
             strSQL += "WHERE 1=1 ";
             strSQL += "         AND ACPT.[RequisitionID]=@REQUISITION_ID ";
             strSQL += "         AND ACPT.[Period]=@PERIOD ";
@@ -183,15 +197,15 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [PYMT_Project] AS [PYMT_PROJECT], ";
-            strSQL += "     [PYMT_Terms] AS [PYMT_TERMS], ";
-            strSQL += "     [PYMT_MethodID] AS [PYMT_METHOD_ID], ";
-            strSQL += "     [PYMT_Tax] AS [PYMT_TAX], ";
-            strSQL += "     [PYMT_Net] AS [PYMT_NET], ";
-            strSQL += "     [PYMT_Gross] AS [PYMT_GROSS], ";
-            strSQL += "     [PYMT_PredictRate] AS [PYMT_PRE_RATE], ";
-            strSQL += "     [PYMT_Gross_CONV] AS [PYMT_GROSS_CONV], ";
-            strSQL += "     [PYMT_UseBudget] AS [PYMT_USE_BUDGET], ";
+            strSQL += "     [Project] AS [PROJECT], ";
+            strSQL += "     [Terms] AS [TERMS], ";
+            strSQL += "     [MethodID] AS [METHOD_ID], ";
+            strSQL += "     [Tax] AS [TAX], ";
+            strSQL += "     [Net] AS [NET], ";
+            strSQL += "     [Gross] AS [GROSS], ";
+            strSQL += "     [PredictRate] AS [PRE_RATE], ";
+            strSQL += "     [Gross_CONV] AS [GROSS_CONV], ";
+            strSQL += "     [UseBudget] AS [USE_BUDGET], ";
             strSQL += "     [ACCT_Category] AS [ACCT_CATEGORY] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralOrder_PYMT] ";
             strSQL += "WHERE 1=1 ";
@@ -208,13 +222,13 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [BUDG_FormNo] AS [BUDG_FORM_NO], ";
-            strSQL += "     [BUDG_CreateYear] AS [BUDG_CREATE_YEAR], ";
-            strSQL += "     [BUDG_Name] AS [BUDG_NAME], ";
-            strSQL += "     [BUDG_OwnerDept] AS [BUDG_OWNER_DEPT], ";
-            strSQL += "     [BUDG_Total] AS [BUDG_TOTAL], ";
-            strSQL += "     [BUDG_AvailableBudgetAmount] AS [BUDG_AVAILABLE_BUDGET_AMOUNT], ";
-            strSQL += "     [BUDG_UseBudgetAmount] AS [BUDG_USE_BUDGET_AMOUNT] ";
+            strSQL += "     [FormNo] AS [FORM_NO], ";
+            strSQL += "     [CreateYear] AS [CREATE_YEAR], ";
+            strSQL += "     [Name] AS [NAME], ";
+            strSQL += "     [OwnerDept] AS [OWNER_DEPT], ";
+            strSQL += "     [Total] AS [TOTAL], ";
+            strSQL += "     [AvailableBudgetAmount] AS [AVAILABLE_BUDGET_AMOUNT], ";
+            strSQL += "     [UseBudgetAmount] AS [USE_BUDGET_AMOUNT] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralOrder_BUDG] ";
             strSQL += "WHERE 1=1 ";
             strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
@@ -225,16 +239,24 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 行政採購請款單 發票明細 -
+            #region - 行政採購請款單 憑證明細 -
 
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [INV_Num] AS [INV_NUM], ";
-            strSQL += "     [INV_Date] AS [INV_DATE], ";
-            strSQL += "     [INV_Amount] AS [INV_AMOUNT], ";
-            strSQL += "     [INV_Amount_TWD] AS [INV_AMOUNT_TWD], ";
-            strSQL += "     [INV_Note] AS [INV_NOTE] ";
+            strSQL += "     [Num] AS [NUM], ";
+            strSQL += "     [Date] AS [DATE], ";
+            strSQL += "     [Excl] AS [EXCL], ";
+            strSQL += "     [Excl_TWD] AS [EXCL_TWD], ";
+            strSQL += "     [Tax] AS [TAX], ";
+            strSQL += "     [Tax_TWD] AS [TAX_TWD], ";
+            strSQL += "     [Net] AS [NET], ";
+            strSQL += "     [Net_TWD] AS [NET_TWD], ";
+            strSQL += "     [Gross] AS [GROSS], ";
+            strSQL += "     [Gross_TWD] AS [GROSS_TWD], ";
+            strSQL += "     [Amount] AS [AMOUNT], ";
+            strSQL += "     [Amount_TWD] AS [AMOUNT_TWD], ";
+            strSQL += "     [Note] AS [NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralInvoice_INV] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
@@ -458,6 +480,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_CURRENT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_CURRENT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@INV_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@INV_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@INV_AMOUNT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@INV_AMOUNT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@ACTUAL_PAY_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -479,8 +503,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [GeneralOrderTXN_Type]=MAIN.[TXN_TYPE], ";
                     strSQL += "     [GeneralOrderSubject]=@GENERAL_ORDER_SUBJECT, ";
                     strSQL += "     [GeneralOrderPath]=@GENERAL_ORDER_PATH, ";
-                    strSQL += "     [GeneralOrderDTL_OrderTotal]=MAIN.[DTL_ORDER_TOTAL], ";
-                    strSQL += "     [GeneralOrderDTL_OrderTotal_TWD]=MAIN.[DTL_ORDER_TOTAL_TWD], ";
+                    strSQL += "     [GeneralOrderPYMT_GrossTotal]=MAIN.[PYMT_GROSS_TOTAL], ";
+                    strSQL += "     [GeneralOrderPYMT_GrossTotal_CONV]=MAIN.[PYMT_GROSS_TOTAL_CONV], ";
                     strSQL += "     [GeneralAcceptanceRequisitionID]=@GENERAL_ACCEPTANCE_REQUISITION_ID, ";
                     strSQL += "     [Currency]=MAIN.[CURRENCY], ";
                     strSQL += "     [PredictRate]=MAIN.[PRE_RATE], ";
@@ -517,6 +541,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [Note]=@NOTE, ";                    
                     strSQL += "     [PYMT_CurrentTotal]=@PYMT_CURRENT_TOTAL, ";
                     strSQL += "     [PYMT_CurrentTotal_TWD]=@PYMT_CURRENT_TOTAL_TWD, ";
+                    strSQL += "     [INV_TaxTotal]=@INV_TAX_TOTAL, ";
+                    strSQL += "     [INV_TaxTotal_TWD]=@INV_TAX_TOTAL_TWD, ";
                     strSQL += "     [INV_AmountTotal]=@INV_AMOUNT_TOTAL, ";
                     strSQL += "     [INV_AmountTotal_TWD]=@INV_AMOUNT_TOTAL_TWD, ";
                     strSQL += "     [ActualPayAmount]=@ACTUAL_PAY_AMOUNT, ";
@@ -531,8 +557,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "                 [PredictRate] AS [PRE_RATE], ";
                     strSQL += "                 [PricingMethod] AS [PRICING_METHOD], ";
                     strSQL += "                 [TaxRate] AS [TAX_RATE], ";
-                    strSQL += "                 [DTL_OrderTotal] AS [DTL_ORDER_TOTAL], ";
-                    strSQL += "                 [DTL_OrderTotal_TWD] AS [DTL_ORDER_TOTAL_TWD], ";
+                    strSQL += "                 [PYMT_GrossTotal] AS [PYMT_GROSS_TOTAL], ";
+                    strSQL += "                 [PYMT_GrossTotal_CONV] AS [PYMT_GROSS_TOTAL_CONV], ";
                     strSQL += "                 [SupNo] AS [SUP_NO], ";
                     strSQL += "                 [SupName] AS [SUP_NAME], ";
                     strSQL += "                 [RegisterKind] AS [REG_KIND], ";
@@ -603,21 +629,29 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 行政採購請款單 發票明細：GeneralInvoice_INV -
-                                
+                #region - 行政採購請款單 憑證明細：GeneralInvoice_INV -
+
                 var parameterDetails = new List<SqlParameter>()
                 {
-                    //行政採購請款單 發票明細
+                    //行政採購請款單 憑證明細
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
                     new SqlParameter("@GENERAL_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_REQUISITION_ID ?? DBNull.Value },
                     new SqlParameter("@GENERAL_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_ERP_FORM_NO ?? DBNull.Value },
                     new SqlParameter("@GENERAL_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)GeneralOrderformData.SERIAL_ID ?? DBNull.Value },
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_NUM", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_DATE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DATE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EXCL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EXCL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NET_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GROSS_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -638,19 +672,20 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     foreach (var item in model.GENERAL_INVOICE_DETAILS_CONFIG)
                     {
+                        strJson = jsonFunction.ObjectToJSON(item);
+
                         #region - 確認小數點後第二位 -
 
-                        item.INV_AMOUNT = Math.Round(item.INV_AMOUNT, 2);
+                        GlobalParameters.IsDouble(strJson);
 
                         #endregion
 
-                        //寫入：行政採購申請 發票明細parameter
-                        strJson = jsonFunction.ObjectToJSON(item);
+                        //寫入：行政採購申請 憑證明細parameter
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralInvoice_INV]([RequisitionID],[Period],[GeneralOrderRequisitionID],[GeneralOrderBPMFormNo],[GeneralOrderERPFormNo],[INV_Num],[INV_Date],[INV_Amount],[INV_Amount_TWD],[INV_Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@GENERAL_ORDER_REQUISITION_ID,@GENERAL_ORDER_BPM_FORM_NO,@GENERAL_ORDER_ERP_FORM_NO,@INV_NUM,@INV_DATE,@INV_AMOUNT,@INV_AMOUNT_TWD,@INV_NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralInvoice_INV]([RequisitionID],[Period],[GeneralOrderRequisitionID],[GeneralOrderBPMFormNo],[GeneralOrderERPFormNo],[Num],[Date],[Excl],[Excl_TWD],[Tax],[Tax_TWD],[Net],[Net_TWD],[Gross],[Gross_TWD],[Amount],[Amount_TWD],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@GENERAL_ORDER_REQUISITION_ID,@GENERAL_ORDER_BPM_FORM_NO,@GENERAL_ORDER_ERP_FORM_NO,@NUM,@DATE,@EXCL,@EXCL_TWD,@TAX,@TAX_TWD,@NET,@NET_TWD,@GROSS,@GROSS_TWD,@AMOUNT,@AMOUNT_TWD,@NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }

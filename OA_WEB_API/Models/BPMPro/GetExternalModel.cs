@@ -26,6 +26,9 @@ namespace OA_WEB_API.Models.BPMPro
 
     #region - 共用抬頭(外部起單) -
 
+    /// <summary>
+    /// 外部起單 抬頭
+    /// </summary>
     public class InfoTitle
     {
         /// <summary>BPM表 單唯一碼</summary>
@@ -39,6 +42,16 @@ namespace OA_WEB_API.Models.BPMPro
 
     }
 
+    /// <summary>
+    /// 外部起單的通用表單 抬頭
+    /// </summary>
+    public class COMM_FormInfoTitle: InfoTitle
+    {
+        /// <summary>ERP起案人</summary>
+        public string START_ID { get; set; }
+
+    }
+
     #endregion
 
     #region - 專案建立審核單(外部起單) -
@@ -46,7 +59,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 專案建立審核單(外部起單)ERP資料
     /// </summary>
-    public class ProjectReviewERPInfo : InfoTitle
+    public class ProjectReviewERPInfo : COMM_FormInfoTitle
     {
         /// <summary>專案群組名稱</summary>
         public string PROJECT_NAME { get; set; }
@@ -56,9 +69,6 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>執行年分</summary>
         public string USE_YEAR { get; set; }
-
-        /// <summary>ERP起案人</summary>
-        public string START_ID { get; set; }
 
         /// <summary>建檔日期</summary>
         public string CREATE_DATE { get; set; }
@@ -233,6 +243,84 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
+    #region - 內容評估表(外部起單) -
+
+    #region - 內容評估表(外部起單) -
+
+    /// <summary>
+    /// 內容評估表(外部起單)
+    /// </summary>
+    public class EvaluateContentERPInfo
+    {
+        /// <summary>內容評估表(表頭內容)</summary>
+        public EvaluateContentERPInfoTitle TITLE { get; set; }
+
+        /// <summary>內容評估表(表單內容)</summary>
+        public EvaluateContentConfig INFO { get; set; }
+
+        /// <summary>內容評估表(附件)</summary>
+        public IList<AttachmentConfig> ATTACHMENT { get; set; }
+
+    }
+
+    /// <summary>
+    /// 內容評估表(表頭內容)
+    /// </summary>
+    public class EvaluateContentERPInfoTitle : InfoTitle
+    {
+        /// <summary>
+        /// 評估類別：
+        /// MADE.自製
+        /// PUR.外購
+        /// </summary>
+        public string EVALUATE_CATEGORY { get; set; }
+
+        /// <summary>評估編號</summary>
+        public string SORT_NO { get; set; }
+    }
+
+    #endregion
+
+    #region - 內容評估表_補充意見(外部起單) -
+
+    /// <summary>
+    /// 內容評估表_補充意見(外部起單)
+    /// </summary>
+    public class EvaluateContentReplenishERPInfo
+    {
+        /// <summary>內容評估表_補充意見(表頭內容)</summary>
+        public EvaluateContentReplenishERPInfoTitle TITLE { get; set; }
+
+        /// <summary>內容評估表_補充意見(表單內容)</summary>
+        public EvaluateContentReplenishConfig INFO { get; set; }
+
+        /// <summary>內容評估表_補充意見(附件)</summary>
+        public IList<AttachmentConfig> ATTACHMENT { get; set; }
+
+        /// <summary>表單關聯</summary>
+        public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
+    }
+
+    /// <summary>
+    /// 內容評估表_補充意見(表頭內容)
+    /// </summary>
+    public class EvaluateContentReplenishERPInfoTitle : InfoTitle
+    {
+        /// <summary>
+        /// 評估類別：
+        /// MADE.自製
+        /// PUR.外購
+        /// </summary>
+        public string EVALUATE_CATEGORY { get; set; }
+
+        /// <summary>補充意見編號</summary>
+        public string SORT_NO { get; set; }
+    }
+
+    #endregion
+
+    #endregion
+
     #region - 版權採購類_(外部起單) -
 
     #region - 版權採購申請單(外部起單) -
@@ -338,6 +426,85 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
+    }
+
+    #endregion
+
+    #endregion
+
+    #region - 四方四隅(外部起單) -
+
+    #region - 四方四隅_內容評估表(外部起單) -
+
+    /// <summary>
+    /// 四方四隅_內容評估表(外部起單)
+    /// </summary>
+    public class GPI_EvaluateContentERPInfo
+    {
+        /// <summary>四方四隅_內容評估表(表頭內容)</summary>
+        public GPI_EvaluateContentERPInfoTitle TITLE { get; set; }
+
+        /// <summary>四方四隅_內容評估表(表單內容)</summary>
+        public GPI_EvaluateContentConfig INFO { get; set; }
+
+        /// <summary>四方四隅_內容評估表(附件)</summary>
+        public IList<AttachmentConfig> ATTACHMENT { get; set; }
+
+    }
+
+    /// <summary>
+    /// 內容評估表(表頭內容)
+    /// </summary>
+    public class GPI_EvaluateContentERPInfoTitle : InfoTitle
+    {
+        /// <summary>
+        /// 評估類別：
+        /// MADE.自製
+        /// PUR.外購
+        /// </summary>
+        public string EVALUATE_CATEGORY { get; set; }
+
+        /// <summary>評估編號</summary>
+        public string SORT_NO { get; set; }
+    }
+
+
+    #endregion
+
+    #region - 四方四隅_內容評估表_補充意見(外部起單) -
+
+    /// <summary>
+    /// 四方四隅_內容評估表_補充意見(外部起單)
+    /// </summary>
+    public class GPI_EvaluateContentReplenishERPInfo
+    {
+        /// <summary>四方四隅_內容評估表_補充意見(表頭內容)</summary>
+        public GPI_EvaluateContentReplenishERPInfoTitle TITLE { get; set; }
+
+        /// <summary>四方四隅_內容評估表_補充意見(表單內容)</summary>
+        public GPI_EvaluateContentReplenishConfig INFO { get; set; }
+
+        /// <summary>四方四隅_內容評估表_補充意見(附件)</summary>
+        public IList<AttachmentConfig> ATTACHMENT { get; set; }
+
+        /// <summary>表單關聯</summary>
+        public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
+    }
+
+    /// <summary>
+    /// 四方四隅_內容評估表_補充意見(表頭內容)
+    /// </summary>
+    public class GPI_EvaluateContentReplenishERPInfoTitle : InfoTitle
+    {
+        /// <summary>
+        /// 評估類別：
+        /// MADE.自製
+        /// PUR.外購
+        /// </summary>
+        public string EVALUATE_CATEGORY { get; set; }
+
+        /// <summary>補充意見編號</summary>
+        public string SORT_NO { get; set; }
     }
 
     #endregion

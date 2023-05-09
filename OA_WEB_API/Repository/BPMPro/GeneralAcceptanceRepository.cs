@@ -22,6 +22,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
         FormRepository formRepository = new FormRepository();
         CommonRepository commonRepository = new CommonRepository();
+        NotifyRepository notifyRepository = new NotifyRepository();
 
         #endregion
 
@@ -61,6 +62,18 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
             var applicantInfo = dbFun.DoQuery(strSQL, parameter).ToList<ApplicantInfo>().FirstOrDefault();
+
+            #endregion
+
+            #region - M表寫入BPM表單單號 -
+
+            //避免儲存後送出表單BPM表單單號沒寫入的情形
+            var formQuery = new FormQueryModel()
+            {
+                REQUISITION_ID = query.REQUISITION_ID
+            };
+
+            if (applicantInfo.DRAFT_FLAG == 0) notifyRepository.ByInsertBPMFormNo(formQuery);
 
             #endregion
 
@@ -107,23 +120,23 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [DTL_SupProdANo] AS [DTL_SUP_PROD_A_NO], ";
-            strSQL += "     [DTL_RowNo] AS [DTL_ROW_NO], ";
-            strSQL += "     [DTL_ItemName] AS [DTL_ITEM_NAME], ";
-            strSQL += "     [DTL_Model] AS [DTL_MODEL], ";
-            strSQL += "     [DTL_Specifications] AS [DTL_SPECIFICATIONS], ";
-            strSQL += "     [DTL_AcceptanceQuantity] AS [DTL_ACPT_QUANTITY], ";
-            strSQL += "     [DTL_Quantity] AS [DTL_QUANTITY], ";
-            strSQL += "     [DTL_Unit] AS [DTL_UNIT], ";
-            strSQL += "     [DTL_OwnerDeptMainID] AS [DTL_OWNER_DEPT_MAIN_ID], ";
-            strSQL += "     [DTL_OwnerDeptID] AS [DTL_OWNER_DEPT_ID], ";
-            strSQL += "     [DTL_OwnerID] AS [DTL_OWNER_ID], ";
-            strSQL += "     [DTL_OwnerName] AS [DTL_OWNER_NAME], ";
-            strSQL += "     [DTL_AcceptanceNote] AS [DTL_ACPT_NOTE], ";
-            strSQL += "     [DTL_Status] AS [DTL_STATUS], ";
-            strSQL += "     [DTL_Note] AS [DTL_NOTE], ";
-            strSQL += "     [IsOriginal] AS [IS_ORIGINAL], ";
-            strSQL += "     [OriginNum] AS [ORIGIN_NUM] ";
+            strSQL += "     [SupProdANo] AS [SUP_PROD_A_NO], ";
+            strSQL += "     [RowNo] AS [ROW_NO], ";
+            strSQL += "     [OrderRowNo] AS [ORDER_ROW_NO], ";
+            strSQL += "     [ItemName] AS [ITEM_NAME], ";
+            strSQL += "     [Model] AS [MODEL], ";
+            strSQL += "     [Specifications] AS [SPECIFICATIONS], ";
+            strSQL += "     [AcceptanceQuantity] AS [ACPT_QUANTITY], ";
+            strSQL += "     [Quantity] AS [QUANTITY], ";
+            strSQL += "     [Unit] AS [UNIT], ";
+            strSQL += "     [OwnerDeptMainID] AS [OWNER_DEPT_MAIN_ID], ";
+            strSQL += "     [OwnerDeptID] AS [OWNER_DEPT_ID], ";
+            strSQL += "     [OwnerID] AS [OWNER_ID], ";
+            strSQL += "     [OwnerName] AS [OWNER_NAME], ";
+            strSQL += "     [AcceptanceNote] AS [ACPT_NOTE], ";
+            strSQL += "     [Status] AS [STATUS], ";
+            strSQL += "     [Note] AS [NOTE], ";
+            strSQL += "     [IsOriginal] AS [IS_ORIGINAL] ";            
             strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralAcceptance_DTL] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             var generalAcceptanceDetailsConfig = dbFun.DoQuery(strSQL, parameter).ToList<GeneralAcceptanceDetailsConfig>();
@@ -343,23 +356,23 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@GENERAL_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)model.GENERAL_ACCEPTANCE_CONFIG.GENERAL_ORDER_REQUISITION_ID ?? DBNull.Value },
                     new SqlParameter("@GENERAL_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_ACCEPTANCE_CONFIG.GENERAL_ORDER_BPM_FORM_NO ?? DBNull.Value },
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)model.GENERAL_ACCEPTANCE_CONFIG.PERIOD ?? DBNull.Value },
-                    new SqlParameter("@DTL_SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_MODEL", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_SPECIFICATIONS", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ACPT_QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_UNIT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_OWNER_DEPT_MAIN_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_OWNER_DEPT_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_OWNER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_OWNER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ACPT_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_STATUS", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ORDER_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MODEL", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@SPECIFICATIONS", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ACPT_QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@UNIT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@OWNER_DEPT_MAIN_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@OWNER_DEPT_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@OWNER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@OWNER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ACPT_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@STATUS", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@IS_ORIGINAL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@ORIGIN_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -385,8 +398,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralAcceptance_DTL]([RequisitionID],[GeneralOrderRequisitionID],[GeneralOrderBPMFormNo],[Period],[DTL_SupProdANo],[DTL_RowNo],[DTL_ItemName],[DTL_MODEL],[DTL_Specifications],[DTL_AcceptanceQuantity],[DTL_Quantity],[DTL_Unit],[DTL_OwnerDeptMainID],[DTL_OwnerDeptID],[DTL_OwnerID],[DTL_OwnerName],[DTL_AcceptanceNote],[DTL_Status],[DTL_Note],[IsOriginal],[OriginNum]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@GENERAL_ORDER_REQUISITION_ID,@GENERAL_ORDER_BPM_FORM_NO,@PERIOD,@DTL_SUP_PROD_A_NO,@DTL_ROW_NO,@DTL_ITEM_NAME,@DTL_MODEL,@DTL_SPECIFICATIONS,@DTL_ACPT_QUANTITY,@DTL_QUANTITY,@DTL_UNIT,@DTL_OWNER_DEPT_MAIN_ID,@DTL_OWNER_DEPT_ID,@DTL_OWNER_ID,@DTL_OWNER_NAME,@DTL_ACPT_NOTE,@DTL_STATUS,@DTL_NOTE,@IS_ORIGINAL,@ORIGIN_NUM) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralAcceptance_DTL]([RequisitionID],[GeneralOrderRequisitionID],[GeneralOrderBPMFormNo],[Period],[SupProdANo],[RowNo],[OrderRowNo],[ItemName],[MODEL],[Specifications],[AcceptanceQuantity],[Quantity],[Unit],[OwnerDeptMainID],[OwnerDeptID],[OwnerID],[OwnerName],[AcceptanceNote],[Status],[Note],[IsOriginal]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@GENERAL_ORDER_REQUISITION_ID,@GENERAL_ORDER_BPM_FORM_NO,@PERIOD,@SUP_PROD_A_NO,@ROW_NO,@ORDER_ROW_NO,@ITEM_NAME,@MODEL,@SPECIFICATIONS,@ACPT_QUANTITY,@QUANTITY,@UNIT,@OWNER_DEPT_MAIN_ID,@OWNER_DEPT_ID,@OWNER_ID,@OWNER_NAME,@ACPT_NOTE,@STATUS,@NOTE,@IS_ORIGINAL) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }
@@ -522,9 +535,9 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     //行政採購點驗收單 驗收簽核
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },
-                    new SqlParameter("@DTL_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ACPT_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_STATUS", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ACPT_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@STATUS", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
                   
                 if (!String.IsNullOrEmpty(model.REQUISITION_ID) || !String.IsNullOrWhiteSpace(model.REQUISITION_ID))
@@ -539,11 +552,11 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         strSQL = "";
                         strSQL += "UPDATE [BPMPro].[dbo].[FM7T_GeneralAcceptance_DTL] ";
-                        strSQL += "SET  [DTL_AcceptanceNote]=@DTL_ACPT_NOTE, ";
-                        strSQL += "     [DTL_Status]=@DTL_STATUS ";
+                        strSQL += "SET  [AcceptanceNote]=@ACPT_NOTE, ";
+                        strSQL += "     [Status]=@STATUS ";
                         strSQL += "WHERE 1=1 ";
                         strSQL += "     AND [RequisitionID]=@REQUISITION_ID ";
-                        strSQL += "     AND [DTL_RowNo]=@DTL_ROW_NO ";
+                        strSQL += "     AND [RowNo]=@ROW_NO ";
 
                         dbFun.DoTran(strSQL, parameterApprove);
                     }

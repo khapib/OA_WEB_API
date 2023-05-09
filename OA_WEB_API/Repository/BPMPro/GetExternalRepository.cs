@@ -58,6 +58,24 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
+        #region 內容評估表
+
+        #region 內容評估表
+
+        /// <summary>內容評估表</summary>
+        EvaluateContentRepository evaluateContentRepository = new EvaluateContentRepository();
+
+        #endregion
+
+        #region 內容評估表_補充意見
+
+        /// <summary>內容評估表_補充意見</summary>
+        EvaluateContentReplenishRepository evaluateContentReplenishRepository = new EvaluateContentReplenishRepository();
+
+        #endregion
+
+        #endregion
+
         #region 版權採購類
         /// <summary>版權採購申請單</summary>
         MediaOrderRepository mediaOrderRepository = new MediaOrderRepository();
@@ -67,6 +85,15 @@ namespace OA_WEB_API.Repository.BPMPro
         MediaAcceptanceRepository mediaAcceptanceRepository = new MediaAcceptanceRepository();
         /// <summary>版權採購請款單</summary>
         MediaInvoiceRepository mediaInvoiceRepository =new MediaInvoiceRepository();
+
+        #endregion
+
+        #region 四方四隅
+
+        /// <summary>四方四隅_內容評估表</summary>
+        GPI_EvaluateContentRepository GPI_evaluateContentRepository = new GPI_EvaluateContentRepository();
+        /// <summary>四方四隅_內容評估表_補充意見</summary>
+        GPI_EvaluateContentReplenishRepository GPI_evaluateContentReplenishRepository = new GPI_EvaluateContentReplenishRepository();
 
         #endregion
 
@@ -1238,17 +1265,350 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
-        #region - 內容評估表_(外部起單) -
+        #region - 內容評估表(外部起單) -
 
-        #region - 內容評估表_外購(外部起單) -
+        #region - 內容評估表(外部起單) -
 
-        ///// <summary>
-        ///// 行政採購申請單(外部起單)
-        ///// </summary>
-        //public GetExternalData PutEvaluateContent_PurchaseGetExternal(EvaluateContent_PurchaseERPInfo model)
-        //{
+        /// <summary>
+        /// 內容評估表(外部起單)
+        /// </summary>
+        public GetExternalData PutEvaluateContentGetExternal(EvaluateContentERPInfo model)
+        {
+            try
+            {
+                #region - 初始化宣告 -
 
-        //}
+                //表單ID
+                IDENTIFY = "EvaluateContent";
+
+                strFormNo = model.TITLE.ERP_FORM_NO;
+                var request = new GTVInApproveProgress()
+                {
+                    FORM_NO = strFormNo,
+                    IDENTIFY = IDENTIFY
+                };
+
+                //BPM 系統編號
+                if (model.TITLE.BPM_REQ_ID == null)
+                {
+                    strREQ = Guid.NewGuid().ToString();
+
+                }
+                else
+                {
+                    strREQ = model.TITLE.BPM_REQ_ID;
+                }
+
+                #endregion
+
+                #region 確認是否已起單且簽核中
+
+                var ApproveProgress = commonRepository.PostGTVInApproveProgress(request);
+
+                //確認是否已起單且簽核中或草稿中
+                if (!ApproveProgress.vResult)
+                {
+                    #region - 起單 -
+
+                    #region - 申請人資訊:ApplicantInfo -
+
+                    //表單資訊
+                    var applicantInfo = new ApplicantInfo()
+                    {
+                        REQUISITION_ID = strREQ,
+                        DIAGRAM_ID = IDENTIFY + "_P1",
+                        PRIORITY = 2,
+                        DRAFT_FLAG = 0,
+                        FLOW_ACTIVATED = 1
+                    };
+
+                    //申請人資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.TITLE.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.APPLICANT_DEPT = item.DEPT_ID;
+                        applicantInfo.APPLICANT_DEPT_NAME = item.DEPT_NAME;
+                        applicantInfo.APPLICANT_ID = item.USER_ID;
+                        applicantInfo.APPLICANT_NAME = item.USER_NAME;
+                        applicantInfo.APPLICANT_PHONE = item.MOBILE;
+                    }
+
+                    //(填單人/代填單人)資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.TITLE.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.FILLER_ID = item.USER_ID;
+                        applicantInfo.FILLER_NAME = item.USER_NAME;
+                    }
+
+                    #endregion
+
+                    #region - 內容評估表(表頭內容):EvaluateContentTitle -
+
+                    strJson = jsonFunction.ObjectToJSON(model.TITLE);
+                    var evaluateContentTitle = jsonFunction.JsonToObject<EvaluateContentTitle>(strJson);
+                    evaluateContentTitle.FORM_NO = strFormNo;
+
+                    #endregion
+
+                    #region - 內容評估表_外購(表單內容):EvaluateContentConfig -
+
+                    strJson = jsonFunction.ObjectToJSON(model.INFO);
+                    var evaluateContentConfig = jsonFunction.JsonToObject<EvaluateContentConfig>(strJson);
+
+                    #endregion
+
+                    #region - 內容評估表_外購(附件)上傳:AttachmentConfig -
+
+                    //附件的設定
+                    strJson = jsonFunction.ObjectToJSON(model.ATTACHMENT);
+                    var attachmentConfig = jsonFunction.JsonToObject<List<AttachmentConfig>>(strJson);
+                    attachmentConfig.ForEach(Attachment =>
+                    {
+                        Attachment.CREATE_DATE = DateTime.Parse(Attachment.CREATE_DATE).ToString("yyyy/MM/dd HH:mm:ss");
+                    });
+
+
+                    #endregion
+
+                    #region - 送單 -
+
+                    //送單
+                    var evaluateContentViewModel = new EvaluateContentViewModel()
+                    {
+                        APPLICANT_INFO = applicantInfo,
+                        EVALUATE_CONTENT_TITLE = evaluateContentTitle,
+                        EVALUATE_CONTENT_CONFIG = evaluateContentConfig,
+                        ATTACHMENT_CONFIG = attachmentConfig
+                    };
+
+                    if (evaluateContentRepository.PutEvaluateContentSingle(evaluateContentViewModel))
+                    {
+                        //起單成功
+                        State = BPMStatusCode.PROGRESS;
+                    }
+                    else
+                    {
+                        //起單失敗
+                        State = BPMStatusCode.FAIL;
+                    }
+
+                    #endregion
+
+                    #endregion
+                }
+                else
+                {
+                    strREQ = ApproveProgress.REQUISITION_ID;
+                    State = ApproveProgress.BPMStatus;
+                }
+
+                #endregion
+
+                #region - 回傳狀態資訊 -
+
+                var getExternalData = new GetExternalData()
+                {
+                    BPM_REQ_ID = strREQ,
+                    ERP_FORM_NO = strFormNo,
+                    STATE = State
+                };
+
+                return getExternalData;
+
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("內容評估表(外部起單)失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region - 內容評估表_補充意見(外部起單) -
+
+        /// <summary>
+        /// 內容評估表_補充意見(外部起單)
+        /// </summary>
+        public GetExternalData PutEvaluateContentReplenishGetExternal(EvaluateContentReplenishERPInfo model)
+        {
+            try
+            {
+                #region - 初始化宣告 -
+
+                //表單ID
+                IDENTIFY = "EvaluateContentReplenish";
+
+                strFormNo = model.TITLE.ERP_FORM_NO;
+                var request = new GTVInApproveProgress()
+                {
+                    FORM_NO = strFormNo,
+                    IDENTIFY = IDENTIFY
+                };
+
+                //BPM 系統編號
+                if (model.TITLE.BPM_REQ_ID == null)
+                {
+                    strREQ = Guid.NewGuid().ToString();
+
+                }
+                else
+                {
+                    strREQ = model.TITLE.BPM_REQ_ID;
+                }
+
+                #endregion
+
+                #region 確認是否已起單且簽核中
+
+                var ApproveProgress = commonRepository.PostGTVInApproveProgress(request);
+
+                //確認是否已起單且簽核中或草稿中
+                if (!ApproveProgress.vResult)
+                {
+                    #region - 起單 -
+
+                    #region - 申請人資訊:ApplicantInfo -
+
+                    //表單資訊
+                    var applicantInfo = new ApplicantInfo()
+                    {
+                        REQUISITION_ID = strREQ,
+                        DIAGRAM_ID = IDENTIFY + "_P1",
+                        PRIORITY = 2,
+                        DRAFT_FLAG = 0,
+                        FLOW_ACTIVATED = 1
+                    };
+
+                    //申請人資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.TITLE.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.APPLICANT_DEPT = item.DEPT_ID;
+                        applicantInfo.APPLICANT_DEPT_NAME = item.DEPT_NAME;
+                        applicantInfo.APPLICANT_ID = item.USER_ID;
+                        applicantInfo.APPLICANT_NAME = item.USER_NAME;
+                        applicantInfo.APPLICANT_PHONE = item.MOBILE;
+                    }
+
+                    //(填單人/代填單人)資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.TITLE.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.FILLER_ID = item.USER_ID;
+                        applicantInfo.FILLER_NAME = item.USER_NAME;
+                    }
+
+                    #endregion
+
+                    #region - 內容評估表_補充意見(表頭內容):EvaluateContentReplenishTitle -
+
+                    strJson = jsonFunction.ObjectToJSON(model.TITLE);
+                    var evaluateContentReplenishTitle = jsonFunction.JsonToObject<EvaluateContentReplenishTitle>(strJson);
+                    evaluateContentReplenishTitle.FORM_NO = strFormNo;
+
+                    #endregion
+
+                    #region - 內容評估表_補充意見(表單內容):EvaluateContentReplenishConfig -
+
+                    strJson = jsonFunction.ObjectToJSON(model.INFO);
+                    var evaluateContentReplenishConfig = jsonFunction.JsonToObject<EvaluateContentReplenishConfig>(strJson);
+
+                    #endregion
+
+                    #region - 內容評估表_補充意見(附件)上傳:AttachmentConfig -
+
+                    //附件的設定
+                    strJson = jsonFunction.ObjectToJSON(model.ATTACHMENT);
+                    var attachmentConfig = jsonFunction.JsonToObject<List<AttachmentConfig>>(strJson);
+                    attachmentConfig.ForEach(Attachment =>
+                    {
+                        Attachment.CREATE_DATE = DateTime.Parse(Attachment.CREATE_DATE).ToString("yyyy/MM/dd HH:mm:ss");
+                    });
+
+
+                    #endregion
+
+                    #region - 內容評估表_補充意見(關聯表單):AttachmentConfig -
+
+                    //關聯表單的設定
+                    strJson = jsonFunction.ObjectToJSON(model.ASSOCIATED_FORM_CONFIG);
+                    var associatedFormConfig = jsonFunction.JsonToObject<List<AssociatedFormConfig>>(strJson);
+
+                    #endregion
+
+                    #region - 送單 -
+
+                    //送單
+                    var evaluateContentReplenishViewModel = new EvaluateContentReplenishViewModel()
+                    {
+                        APPLICANT_INFO = applicantInfo,
+                        EVALUATE_CONTENT_REPLENISH_TITLE = evaluateContentReplenishTitle,
+                        EVALUATE_CONTENT_REPLENISH_CONFIG = evaluateContentReplenishConfig,
+                        ATTACHMENT_CONFIG = attachmentConfig,
+                        ASSOCIATED_FORM_CONFIG= associatedFormConfig,
+                    };
+
+                    if (evaluateContentReplenishRepository.PutEvaluateContentReplenishSingle(evaluateContentReplenishViewModel))
+                    {
+                        //起單成功
+                        State = BPMStatusCode.PROGRESS;
+                    }
+                    else
+                    {
+                        //起單失敗
+                        State = BPMStatusCode.FAIL;
+                    }
+
+                    #endregion
+
+                    #endregion
+                }
+                else
+                {
+                    strREQ = ApproveProgress.REQUISITION_ID;
+                    State = ApproveProgress.BPMStatus;
+                }
+
+                #endregion
+
+                #region - 回傳狀態資訊 -
+
+                var getExternalData = new GetExternalData()
+                {
+                    BPM_REQ_ID = strREQ,
+                    ERP_FORM_NO = strFormNo,
+                    STATE = State
+                };
+
+                return getExternalData;
+
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("內容評估表_外購(外部起單)失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
 
         #endregion
 
@@ -1690,7 +2050,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     mediaAcceptanceDetailsConfig.ForEach(ACPT =>
                     {
-                        ACPT.DTL_GET_MASTERING_DATE = DateTime.Today;
+                        ACPT.GET_MASTERING_DATE = DateTime.Today;
                     });
 
                     #endregion
@@ -1905,6 +2265,355 @@ namespace OA_WEB_API.Repository.BPMPro
             catch (Exception ex)
             {
                 CommLib.Logger.Error("行政採購請款單(外部起單)失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region - 四方四隅(外部起單) -
+
+        #region - 四方四隅_內容評估表(外部起單) -
+
+        /// <summary>
+        /// 四方四隅_內容評估表(外部起單)
+        /// </summary>
+        public GetExternalData PutGPI_EvaluateContentGetExternal(GPI_EvaluateContentERPInfo model)
+        {
+            try
+            {
+                #region - 初始化宣告 -
+
+                //表單ID
+                IDENTIFY = "GPI_EvaluateContent";
+
+                strFormNo = model.TITLE.ERP_FORM_NO;
+                var request = new GTVInApproveProgress()
+                {
+                    FORM_NO = strFormNo,
+                    IDENTIFY = IDENTIFY
+                };
+
+                //BPM 系統編號
+                if (model.TITLE.BPM_REQ_ID == null)
+                {
+                    strREQ = Guid.NewGuid().ToString();
+
+                }
+                else
+                {
+                    strREQ = model.TITLE.BPM_REQ_ID;
+                }
+
+                #endregion
+
+                #region 確認是否已起單且簽核中
+
+                var ApproveProgress = commonRepository.PostGTVInApproveProgress(request);
+
+                //確認是否已起單且簽核中或草稿中
+                if (!ApproveProgress.vResult)
+                {
+                    #region - 起單 -
+
+                    #region - 申請人資訊:ApplicantInfo -
+
+                    //表單資訊
+                    var applicantInfo = new ApplicantInfo()
+                    {
+                        REQUISITION_ID = strREQ,
+                        DIAGRAM_ID = IDENTIFY + "_P1",
+                        PRIORITY = 2,
+                        DRAFT_FLAG = 0,
+                        FLOW_ACTIVATED = 1
+                    };
+
+                    //申請人資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.TITLE.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.APPLICANT_DEPT = item.DEPT_ID;
+                        applicantInfo.APPLICANT_DEPT_NAME = item.DEPT_NAME;
+                        applicantInfo.APPLICANT_ID = item.USER_ID;
+                        applicantInfo.APPLICANT_NAME = item.USER_NAME;
+                        applicantInfo.APPLICANT_PHONE = item.MOBILE;
+                    }
+
+                    //(填單人/代填單人)資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.TITLE.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.FILLER_ID = item.USER_ID;
+                        applicantInfo.FILLER_NAME = item.USER_NAME;
+                    }
+
+                    #endregion
+
+                    #region - 四方四隅_內容評估表(表頭內容):GPI_EvaluateContentTitle -
+
+                    strJson = jsonFunction.ObjectToJSON(model.TITLE);
+                    var GPI_evaluateContentTitle = jsonFunction.JsonToObject<GPI_EvaluateContentTitle>(strJson);
+                    GPI_evaluateContentTitle.FORM_NO = strFormNo;
+
+                    #endregion
+
+                    #region - 四方四隅_內容評估表_外購(表單內容):EvaluateContentConfig -
+
+                    strJson = jsonFunction.ObjectToJSON(model.INFO);
+                    var GPI_evaluateContentConfig = jsonFunction.JsonToObject<GPI_EvaluateContentConfig>(strJson);
+
+                    #endregion
+
+                    #region - 四方四隅_內容評估表_外購(附件)上傳:AttachmentConfig -
+
+                    //附件的設定
+                    strJson = jsonFunction.ObjectToJSON(model.ATTACHMENT);
+                    var attachmentConfig = jsonFunction.JsonToObject<List<AttachmentConfig>>(strJson);
+                    attachmentConfig.ForEach(Attachment =>
+                    {
+                        Attachment.CREATE_DATE = DateTime.Parse(Attachment.CREATE_DATE).ToString("yyyy/MM/dd HH:mm:ss");
+                    });
+
+
+                    #endregion
+
+                    #region - 送單 -
+
+                    //送單
+                    var GPI_evaluateContentViewModel = new GPI_EvaluateContentViewModel()
+                    {
+                        APPLICANT_INFO = applicantInfo,
+                        GPI_EVALUATE_CONTENT_TITLE = GPI_evaluateContentTitle,
+                        GPI_EVALUATE_CONTENT_CONFIG = GPI_evaluateContentConfig,
+                        ATTACHMENT_CONFIG = attachmentConfig
+                    };
+
+                    if (GPI_evaluateContentRepository.PutGPI_EvaluateContentSingle(GPI_evaluateContentViewModel))
+                    {
+                        //起單成功
+                        State = BPMStatusCode.PROGRESS;
+                    }
+                    else
+                    {
+                        //起單失敗
+                        State = BPMStatusCode.FAIL;
+                    }
+
+                    #endregion
+
+                    #endregion
+                }
+                else
+                {
+                    strREQ = ApproveProgress.REQUISITION_ID;
+                    State = ApproveProgress.BPMStatus;
+                }
+
+                #endregion
+
+                #region - 回傳狀態資訊 -
+
+                var getExternalData = new GetExternalData()
+                {
+                    BPM_REQ_ID = strREQ,
+                    ERP_FORM_NO = strFormNo,
+                    STATE = State
+                };
+
+                return getExternalData;
+
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("四方四隅_內容評估表(外部起單)失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region - 四方四隅_內容評估表_補充意見(外部起單) -
+
+        /// <summary>
+        /// 四方四隅_內容評估表_補充意見(外部起單)
+        /// </summary>
+        public GetExternalData PutGPI_EvaluateContentReplenishGetExternal(GPI_EvaluateContentReplenishERPInfo model)
+        {
+            try
+            {
+                #region - 初始化宣告 -
+
+                //表單ID
+                IDENTIFY = "GPI_EvaluateContentReplenish";
+
+                strFormNo = model.TITLE.ERP_FORM_NO;
+                var request = new GTVInApproveProgress()
+                {
+                    FORM_NO = strFormNo,
+                    IDENTIFY = IDENTIFY
+                };
+
+                //BPM 系統編號
+                if (model.TITLE.BPM_REQ_ID == null)
+                {
+                    strREQ = Guid.NewGuid().ToString();
+
+                }
+                else
+                {
+                    strREQ = model.TITLE.BPM_REQ_ID;
+                }
+
+                #endregion
+
+                #region 確認是否已起單且簽核中
+
+                var ApproveProgress = commonRepository.PostGTVInApproveProgress(request);
+
+                //確認是否已起單且簽核中或草稿中
+                if (!ApproveProgress.vResult)
+                {
+                    #region - 起單 -
+
+                    #region - 申請人資訊:ApplicantInfo -
+
+                    //表單資訊
+                    var applicantInfo = new ApplicantInfo()
+                    {
+                        REQUISITION_ID = strREQ,
+                        DIAGRAM_ID = IDENTIFY + "_P1",
+                        PRIORITY = 2,
+                        DRAFT_FLAG = 0,
+                        FLOW_ACTIVATED = 1
+                    };
+
+                    //申請人資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.TITLE.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.APPLICANT_DEPT = item.DEPT_ID;
+                        applicantInfo.APPLICANT_DEPT_NAME = item.DEPT_NAME;
+                        applicantInfo.APPLICANT_ID = item.USER_ID;
+                        applicantInfo.APPLICANT_NAME = item.USER_NAME;
+                        applicantInfo.APPLICANT_PHONE = item.MOBILE;
+                    }
+
+                    //(填單人/代填單人)資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.TITLE.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.FILLER_ID = item.USER_ID;
+                        applicantInfo.FILLER_NAME = item.USER_NAME;
+                    }
+
+                    #endregion
+
+                    #region - 四方四隅_內容評估表_補充意見(表頭內容):GPI_EvaluateContentReplenishTitle -
+
+                    strJson = jsonFunction.ObjectToJSON(model.TITLE);
+                    var GPI_evaluateContentReplenishTitle = jsonFunction.JsonToObject<GPI_EvaluateContentReplenishTitle>(strJson);
+                    GPI_evaluateContentReplenishTitle.FORM_NO = strFormNo;
+
+                    #endregion
+
+                    #region - 四方四隅_內容評估表_補充意見(表單內容):GPI_EvaluateContentReplenishConfig -
+
+                    strJson = jsonFunction.ObjectToJSON(model.INFO);
+                    var GPI_evaluateContentReplenishConfig = jsonFunction.JsonToObject<GPI_EvaluateContentReplenishConfig>(strJson);
+
+                    #endregion
+
+                    #region - 四方四隅_內容評估表_補充意見(附件)上傳:AttachmentConfig -
+
+                    //附件的設定
+                    strJson = jsonFunction.ObjectToJSON(model.ATTACHMENT);
+                    var attachmentConfig = jsonFunction.JsonToObject<List<AttachmentConfig>>(strJson);
+                    attachmentConfig.ForEach(Attachment =>
+                    {
+                        Attachment.CREATE_DATE = DateTime.Parse(Attachment.CREATE_DATE).ToString("yyyy/MM/dd HH:mm:ss");
+                    });
+
+
+                    #endregion
+
+                    #region - 四方四隅_內容評估表_補充意見(關聯表單):AttachmentConfig -
+
+                    //關聯表單的設定
+                    strJson = jsonFunction.ObjectToJSON(model.ASSOCIATED_FORM_CONFIG);
+                    var associatedFormConfig = jsonFunction.JsonToObject<List<AssociatedFormConfig>>(strJson);
+
+                    #endregion
+
+                    #region - 送單 -
+
+                    //送單
+                    var GPI_evaluateContentReplenishViewModel = new GPI_EvaluateContentReplenishViewModel()
+                    {
+                        APPLICANT_INFO = applicantInfo,
+                        GPI_EVALUATE_CONTENT_REPLENISH_TITLE = GPI_evaluateContentReplenishTitle,
+                        GPI_EVALUATE_CONTENT_REPLENISH_CONFIG = GPI_evaluateContentReplenishConfig,
+                        ATTACHMENT_CONFIG = attachmentConfig,
+                        ASSOCIATED_FORM_CONFIG = associatedFormConfig,
+                    };
+
+                    if (GPI_evaluateContentReplenishRepository.PutGPI_EvaluateContentReplenishSingle(GPI_evaluateContentReplenishViewModel))
+                    {
+                        //起單成功
+                        State = BPMStatusCode.PROGRESS;
+                    }
+                    else
+                    {
+                        //起單失敗
+                        State = BPMStatusCode.FAIL;
+                    }
+
+                    #endregion
+
+                    #endregion
+                }
+                else
+                {
+                    strREQ = ApproveProgress.REQUISITION_ID;
+                    State = ApproveProgress.BPMStatus;
+                }
+
+                #endregion
+
+                #region - 回傳狀態資訊 -
+
+                var getExternalData = new GetExternalData()
+                {
+                    BPM_REQ_ID = strREQ,
+                    ERP_FORM_NO = strFormNo,
+                    STATE = State
+                };
+
+                return getExternalData;
+
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("內容評估表_外購(外部起單)失敗，原因：" + ex.Message);
                 throw;
             }
         }

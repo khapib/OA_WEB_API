@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using OA_WEB_API.Models.BPMPro;
 using OA_WEB_API.Models.ERP;
 using OA_WEB_API.Repository.BPMPro;
+using OA_WEB_API.Repository.ERP;
 
 using Newtonsoft.Json;
 using System.Drawing;
@@ -52,6 +53,15 @@ namespace OA_WEB_API.Repository.ERP
 
         #endregion
 
+        #region 內容評估表
+
+        /// <summary>內容評估表</summary>
+        EvaluateContentRepository evaluateContentRepository = new EvaluateContentRepository();
+        /// <summary>內容評估表_補充意見</summary>
+        EvaluateContentReplenishRepository evaluateContentReplenishRepository = new EvaluateContentReplenishRepository();
+
+        #endregion
+
         #region 版權採購類
 
         /// <summary>版權採購申請單</summary>
@@ -60,6 +70,15 @@ namespace OA_WEB_API.Repository.ERP
         MediaAcceptanceRepository mediaAcceptanceRepository = new MediaAcceptanceRepository();
         /// <summary>版權採購請款單</summary>
         MediaInvoiceRepository mediaInvoiceRepository = new MediaInvoiceRepository();
+
+        #endregion
+
+        #region 四方四隅
+
+        /// <summary>四方四隅_內容評估表</summary>
+        GPI_EvaluateContentRepository GPI_evaluateContentRepository = new GPI_EvaluateContentRepository();
+        /// <summary>四方四隅_內容評估表_補充意見</summary>
+        GPI_EvaluateContentReplenishRepository GPI_evaluateContentReplenishRepository = new GPI_EvaluateContentReplenishRepository();
 
         #endregion
 
@@ -239,7 +258,7 @@ namespace OA_WEB_API.Repository.ERP
         #region - 行政採購申請單 審核資訊_回傳ERP -
 
         /// <summary>
-        /// 行政採購申請單 審核資訊_回傳ERP_回傳ERP
+        /// 行政採購申請單 審核資訊_回傳ERP
         /// </summary>
         public GeneralOrderInfoRequest PostGeneralOrderInfoSingle(RequestQueryModel query)
         {
@@ -481,6 +500,172 @@ namespace OA_WEB_API.Repository.ERP
 
         #endregion
 
+        #region - 內容評估表_回傳ERP資訊  -
+
+        #region - 內容評估表 審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 內容評估表 審核資訊_回傳ERP
+        /// </summary>
+        public EvaluateContentInfoRequest PostEvaluateContentInfoSingle(RequestQueryModel query)
+        {
+            try
+            {
+                #region - 查詢及執行 -
+
+                #region - 內容評估表 申請審核資訊 -
+
+                #region 回傳表單內容
+
+                var evaluateContentQueryModel = new EvaluateContentQueryModel
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+
+                EvaluateContentInfoRequest evaluateContentInfoRequest = new EvaluateContentInfoRequest();
+                var evaluateContentContent = evaluateContentRepository.PostEvaluateContentSingle(evaluateContentQueryModel);
+                //Join 內容評估表(查詢)Function
+                strJson = jsonFunction.ObjectToJSON(evaluateContentContent);
+                //給予需要回傳ERP的資訊
+                evaluateContentInfoRequest = jsonFunction.JsonToObject<EvaluateContentInfoRequest>(strJson);
+                evaluateContentInfoRequest.REQUISITION_ID = evaluateContentContent.APPLICANT_INFO.REQUISITION_ID;
+
+                #endregion
+
+                #region 表單簽核狀態
+
+                var parameter = new List<SqlParameter>()
+                {
+                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID },
+                };
+                //表單資料
+                var formQueryModel = new FormQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+                var formData = formRepository.PostFormData(formQueryModel);
+                var stepFlowConfig = stepFlowRepository.StepFlowInfo(formData, parameter);
+
+                #endregion
+
+                #endregion
+
+                #region - 回傳ERP - 
+
+                evaluateContentInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                evaluateContentInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+
+                if (query.REQUEST_FLG)
+                {
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMPro) + "BPM/";
+                    Method = "POST";
+                    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, evaluateContentInfoRequest);
+
+                    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                    CommLib.Logger.Debug("內容評估表:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                    evaluateContentInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                }
+
+                #endregion
+
+                #endregion
+
+                strJson = jsonFunction.ObjectToJSON(evaluateContentInfoRequest);
+                CommLib.Logger.Debug("內容評估表:" + query.REQUISITION_ID + " BPM回傳內容：" + strJson);
+                return evaluateContentInfoRequest;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("內容評估表:" + query.REQUISITION_ID + " 申請審核資訊回傳ERP 失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region - 內容評估表_補充意見 審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 內容評估表_補充意見 審核資訊_回傳ERP
+        /// </summary>
+        public EvaluateContentReplenishInfoRequest PostEvaluateContentReplenishInfoSingle(RequestQueryModel query)
+        {
+            try
+            {
+                #region - 查詢及執行 -
+
+                #region - 內容評估表_補充意見 申請審核資訊 -
+
+                #region 回傳表單內容
+
+                var evaluateContentReplenishQueryModel = new EvaluateContentReplenishQueryModel
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+
+                EvaluateContentReplenishInfoRequest evaluateContentReplenishInfoRequest = new EvaluateContentReplenishInfoRequest();
+                var evaluateContentReplenishContent = evaluateContentReplenishRepository.PostEvaluateContentReplenishSingle(evaluateContentReplenishQueryModel);
+                //Join 內容評估表_補充意見(查詢)Function
+                strJson = jsonFunction.ObjectToJSON(evaluateContentReplenishContent);
+                //給予需要回傳ERP的資訊
+                evaluateContentReplenishInfoRequest = jsonFunction.JsonToObject<EvaluateContentReplenishInfoRequest>(strJson);
+                evaluateContentReplenishInfoRequest.REQUISITION_ID = evaluateContentReplenishContent.APPLICANT_INFO.REQUISITION_ID;
+
+                #endregion
+
+                #region 表單簽核狀態
+
+                var parameter = new List<SqlParameter>()
+                {
+                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID },
+                };
+                //表單資料
+                var formQueryModel = new FormQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+                var formData = formRepository.PostFormData(formQueryModel);
+                var stepFlowConfig = stepFlowRepository.StepFlowInfo(formData, parameter);
+
+                #endregion
+
+                #endregion
+
+                #region - 回傳ERP - 
+
+                evaluateContentReplenishInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                evaluateContentReplenishInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+
+                if (query.REQUEST_FLG)
+                {
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMPro) + "BPM/";
+                    Method = "POST";
+                    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, evaluateContentReplenishInfoRequest);
+
+                    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                    CommLib.Logger.Debug("內容評估表_補充意見:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                    evaluateContentReplenishInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                }
+
+                #endregion
+
+                #endregion
+
+                strJson = jsonFunction.ObjectToJSON(evaluateContentReplenishInfoRequest);
+                CommLib.Logger.Debug("內容評估表_補充意見:" + query.REQUISITION_ID + " BPM回傳內容：" + strJson);
+                return evaluateContentReplenishInfoRequest;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("內容評估表_補充意見:" + query.REQUISITION_ID + " 申請審核資訊回傳ERP 失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #endregion
+
         #region - 版權採購類_回傳ERP資訊 -
 
         #region - 版權採購申請單 審核資訊_回傳ERP -
@@ -504,12 +689,12 @@ namespace OA_WEB_API.Repository.ERP
                 };
 
                 MediaOrderInfoRequest mediaOrderInfoRequest = new MediaOrderInfoRequest();
-                var generalOrderContent = mediaOrderRepository.PostMediaOrderSingle(mediaOrderQueryModel);
+                var mediaOrderContent = mediaOrderRepository.PostMediaOrderSingle(mediaOrderQueryModel);
                 //Join 版權採購申請單(查詢)Function
-                strJson = jsonFunction.ObjectToJSON(generalOrderContent);
+                strJson = jsonFunction.ObjectToJSON(mediaOrderContent);
                 //給予需要回傳ERP的資訊
                 mediaOrderInfoRequest = jsonFunction.JsonToObject<MediaOrderInfoRequest>(strJson);
-                mediaOrderInfoRequest.REQUISITION_ID = generalOrderContent.APPLICANT_INFO.REQUISITION_ID;
+                mediaOrderInfoRequest.REQUISITION_ID = mediaOrderContent.APPLICANT_INFO.REQUISITION_ID;
 
                 #endregion
 
@@ -619,7 +804,7 @@ namespace OA_WEB_API.Repository.ERP
 
                 if (query.REQUEST_FLG)
                 {
-                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMPro) + "BPM/";
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMPro) + "BPM/UpdateMR_DetailContent";
                     Method = "POST";
                     strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, mediaAcceptanceInfoRequest);
 
@@ -702,7 +887,7 @@ namespace OA_WEB_API.Repository.ERP
 
                 if (query.REQUEST_FLG)
                 {
-                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/";
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMPro) + "BPM/UpdateSI_M_DetailContent";
                     Method = "POST";
                     strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, mediaInvoiceInfoRequest);
 
@@ -722,6 +907,172 @@ namespace OA_WEB_API.Repository.ERP
             catch (Exception ex)
             {
                 CommLib.Logger.Error("版權採購請款單:" + query.REQUISITION_ID + " 財務簽核資訊回傳ERP 失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region - 四方四隅_回傳ERP資訊  -
+
+        #region - 四方四隅_內容評估表 審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 四方四隅_內容評估表 審核資訊_回傳ERP
+        /// </summary>
+        public GPI_EvaluateContentInfoRequest PostGPI_EvaluateContentInfoSingle(RequestQueryModel query)
+        {
+            try
+            {
+                #region - 查詢及執行 -
+
+                #region - 四方四隅_內容評估表 申請審核資訊 -
+
+                #region 回傳表單內容
+
+                var GPI_evaluateContentQueryModel = new GPI_EvaluateContentQueryModel
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+
+                GPI_EvaluateContentInfoRequest GPI_evaluateContentInfoRequest = new GPI_EvaluateContentInfoRequest();
+                var GPI_evaluateContentContent = GPI_evaluateContentRepository.PostGPI_EvaluateContentSingle(GPI_evaluateContentQueryModel);
+                //Join 內容評估表(查詢)Function
+                strJson = jsonFunction.ObjectToJSON(GPI_evaluateContentContent);
+                //給予需要回傳ERP的資訊
+                GPI_evaluateContentInfoRequest = jsonFunction.JsonToObject<GPI_EvaluateContentInfoRequest>(strJson);
+                GPI_evaluateContentInfoRequest.REQUISITION_ID = GPI_evaluateContentContent.APPLICANT_INFO.REQUISITION_ID;
+
+                #endregion
+
+                #region 表單簽核狀態
+
+                var parameter = new List<SqlParameter>()
+                {
+                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID },
+                };
+                //表單資料
+                var formQueryModel = new FormQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+                var formData = formRepository.PostFormData(formQueryModel);
+                var stepFlowConfig = stepFlowRepository.StepFlowInfo(formData, parameter);
+
+                #endregion
+
+                #endregion
+
+                #region - 回傳ERP - 
+
+                GPI_evaluateContentInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                GPI_evaluateContentInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+
+                if (query.REQUEST_FLG)
+                {
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMPro) + "BPM/";
+                    Method = "POST";
+                    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, GPI_evaluateContentInfoRequest);
+
+                    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                    CommLib.Logger.Debug("四方四隅_內容評估表:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                    GPI_evaluateContentInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                }
+
+                #endregion
+
+                #endregion
+
+                strJson = jsonFunction.ObjectToJSON(GPI_evaluateContentInfoRequest);
+                CommLib.Logger.Debug("四方四隅_內容評估表:" + query.REQUISITION_ID + " BPM回傳內容：" + strJson);
+                return GPI_evaluateContentInfoRequest;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("四方四隅_內容評估表:" + query.REQUISITION_ID + " 申請審核資訊回傳ERP 失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region - 四方四隅_內容評估表_補充意見 審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 四方四隅_內容評估表_補充意見 審核資訊_回傳ERP
+        /// </summary>
+        public GPI_EvaluateContentReplenishInfoRequest PostGPI_EvaluateContentReplenishInfoSingle(RequestQueryModel query)
+        {
+            try
+            {
+                #region - 查詢及執行 -
+
+                #region - 四方四隅_內容評估表_補充意見 申請審核資訊 -
+
+                #region 回傳表單內容
+
+                var GPI_evaluateContentReplenishQueryModel = new GPI_EvaluateContentReplenishQueryModel
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+
+                GPI_EvaluateContentReplenishInfoRequest GPI_evaluateContentReplenishInfoRequest = new GPI_EvaluateContentReplenishInfoRequest();
+                var GPI_evaluateContentReplenishContent = GPI_evaluateContentReplenishRepository.PostGPI_EvaluateContentReplenishSingle(GPI_evaluateContentReplenishQueryModel);
+                //Join 四方四隅_內容評估表_補充意見(查詢)Function
+                strJson = jsonFunction.ObjectToJSON(GPI_evaluateContentReplenishContent);
+                //給予需要回傳ERP的資訊
+                GPI_evaluateContentReplenishInfoRequest = jsonFunction.JsonToObject<GPI_EvaluateContentReplenishInfoRequest>(strJson);
+                GPI_evaluateContentReplenishInfoRequest.REQUISITION_ID = GPI_evaluateContentReplenishContent.APPLICANT_INFO.REQUISITION_ID;
+
+                #endregion
+
+                #region 表單簽核狀態
+
+                var parameter = new List<SqlParameter>()
+                {
+                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID },
+                };
+                //表單資料
+                var formQueryModel = new FormQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+                var formData = formRepository.PostFormData(formQueryModel);
+                var stepFlowConfig = stepFlowRepository.StepFlowInfo(formData, parameter);
+
+                #endregion
+
+                #endregion
+
+                #region - 回傳ERP - 
+
+                GPI_evaluateContentReplenishInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                GPI_evaluateContentReplenishInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+
+                if (query.REQUEST_FLG)
+                {
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProTest) + "BPM/";
+                    Method = "POST";
+                    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, GPI_evaluateContentReplenishInfoRequest);
+
+                    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                    CommLib.Logger.Debug("四方四隅_內容評估表_補充意見:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                    GPI_evaluateContentReplenishInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                }
+
+                #endregion
+
+                #endregion
+
+                strJson = jsonFunction.ObjectToJSON(GPI_evaluateContentReplenishInfoRequest);
+                CommLib.Logger.Debug("四方四隅_內容評估表_補充意見:" + query.REQUISITION_ID + " BPM回傳內容：" + strJson);
+                return GPI_evaluateContentReplenishInfoRequest;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("四方四隅_內容評估表_補充意見:" + query.REQUISITION_ID + " 申請審核資訊回傳ERP 失敗，原因：" + ex.Message);
                 throw;
             }
         }

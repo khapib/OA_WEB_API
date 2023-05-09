@@ -15,6 +15,11 @@ using System.Data.SqlClient;
 
 
 using log4net;
+using System.Web.WebPages;
+using Microsoft.Ajax.Utilities;
+using System.Collections;
+using Newtonsoft.Json.Linq;
+using WebGrease.Css.Extensions;
 
 /// <summary> 
 /// 共用參數設定
@@ -464,6 +469,35 @@ public class GlobalParameters
     }
 
     /// <summary>
+    /// 確認小數點後第二位
+    /// </summary>
+    public static string IsDouble(string strJson)
+    {
+        var jss = new JavaScriptSerializer();
+        var dictionary = jss.Deserialize<Dictionary<string, string>>(strJson);        
+        foreach (var item in dictionary)
+        {
+            if (item.Value.IsFloat())
+            {
+                strJson=JsonChangeValue(strJson, item.Key, item.Value);
+            }
+        }
+
+        return strJson;
+    }
+
+    /// <summary>
+    /// 替換Json值
+    /// </summary>
+    public static string JsonChangeValue(string strJson, string strKey, string strVal)
+    {
+        var j = JObject.Parse(strJson);
+        j[strKey] = strVal;
+        return j.ToString();
+    }
+
+
+    /// <summary>
     /// 分頁
     /// </summary>
     public static IEnumerable<T> Pagination<T>(int Page, int PageSize, IList<T> list) where T : new()
@@ -512,6 +546,28 @@ public class BPMStatusCode
 
     /// <summary>草稿</summary>
     public const string DRAFT = "Draft";
+
+    /// <summary>失敗</summary>
+    public const string FAIL = "Fail";
+
+}
+
+/// <summary>
+/// OA狀態
+/// </summary>
+public class OAStatusCode
+{
+    /// <summary>新建</summary>
+    public const string NEW_CREATE = "Add";
+
+    /// <summary>已簽完</summary>
+    public const string CLOSE = "Close";
+
+    /// <summary>不同意結束</summary>
+    public const string DISAGREE_CLOSE = "Del";
+
+    /// <summary>簽核中</summary>
+    public const string MODIFY = "Modify";
 
     /// <summary>失敗</summary>
     public const string FAIL = "Fail";

@@ -22,6 +22,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
         FormRepository formRepository = new FormRepository();
         CommonRepository commonRepository = new CommonRepository();
+        NotifyRepository notifyRepository = new NotifyRepository();
 
         #endregion
 
@@ -61,6 +62,18 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
             var applicantInfo = dbFun.DoQuery(strSQL, parameter).ToList<ApplicantInfo>().FirstOrDefault();
+
+            #endregion
+
+            #region - M表寫入BPM表單單號 -
+
+            //避免儲存後送出表單BPM表單單號沒寫入的情形
+            var formQuery = new FormQueryModel()
+            {
+                REQUISITION_ID = query.REQUISITION_ID
+            };
+
+            if (applicantInfo.DRAFT_FLAG == 0) notifyRepository.ByInsertBPMFormNo(formQuery);
 
             #endregion
 
@@ -141,34 +154,35 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [DTL_RowNo] AS [DTL_ROW_NO], ";
-            strSQL += "     [DTL_SupProdANo] AS [DTL_SUP_PROD_A_NO], ";
-            strSQL += "     [DTL_ItemName] AS [DTL_ITEM_NAME], ";
-            strSQL += "     [DTL_MediaSpec] AS [DTL_MEDIA_SPEC], ";
-            strSQL += "     [DTL_MediaType] AS [DTL_MEDIA_TYPE], ";
-            strSQL += "     [DTL_StartEpisode] AS [DTL_START_EPISODE], ";
-            strSQL += "     [DTL_EndEpisode] AS [DTL_END_EPISODE], ";
-            strSQL += "     [DTL_OrderEpisode] AS [DTL_ORDER_EPISODE], ";
-            strSQL += "     [DTL_ACPT_Episode] AS [DTL_ACPT_EPISODE], ";
-            strSQL += "     [DTL_EpisodeTime] AS [DTL_EPISODE_TIME], ";
-            strSQL += "     [DTL_Net] AS [DTL_NET], ";
-            strSQL += "     [DTL_Net_TWD] AS [DTL_NET_TWD], ";
-            strSQL += "     [DTL_Tax] AS [DTL_TAX], ";
-            strSQL += "     [DTL_Tax_TWD] AS [DTL_TAX_TWD], ";
-            strSQL += "     [DTL_Gross] AS [DTL_GROSS], ";
-            strSQL += "     [DTL_Gross_TWD] AS [DTL_GROSS_TWD], ";
-            strSQL += "     [DTL_NetSum] AS [DTL_NET_SUM], ";
-            strSQL += "     [DTL_NetSum_TWD] AS [DTL_NET_SUM_TWD], ";
-            strSQL += "     [DTL_GrossSum] AS [DTL_GROSS_SUM], ";
-            strSQL += "     [DTL_GrossSum_TWD] AS [DTL_GROSS_SUM_TWD], ";
-            strSQL += "     [DTL_Material] AS [DTL_MATERIAL], ";
-            strSQL += "     [DTL_ItemSum] AS [DTL_ITEM_SUM], ";
-            strSQL += "     [DTL_ItemSum_TWD] AS [DTL_ITEM_SUM_TWD], ";
-            strSQL += "     [DTL_ProjectFormNo] AS [DTL_PROJECT_FORM_NO], ";
-            strSQL += "     [DTL_ProjectName] AS [DTL_PROJECT_NAME], ";
-            strSQL += "     [DTL_ProjectNickname] AS [DTL_PROJECT_NICKNAME], ";
-            strSQL += "     [DTL_ProjectUseYear] AS [DTL_PROJECT_USE_YEAR], ";
-            strSQL += "     [DTL_Note] AS [DTL_NOTE] ";
+            strSQL += "     [OrderRowNo] AS [ORDER_ROW_NO], ";
+            strSQL += "     [SupProdANo] AS [SUP_PROD_A_NO], ";
+            strSQL += "     [ItemName] AS [ITEM_NAME], ";
+            strSQL += "     [MediaSpec] AS [MEDIA_SPEC], ";
+            strSQL += "     [AUTH_All] AS [AUTH_ALL], ";
+            strSQL += "     [MediaType] AS [MEDIA_TYPE], ";
+            strSQL += "     [StartEpisode] AS [START_EPISODE], ";
+            strSQL += "     [EndEpisode] AS [END_EPISODE], ";
+            strSQL += "     [OrderEpisode] AS [ORDER_EPISODE], ";
+            strSQL += "     [ACPT_Episode] AS [ACPT_EPISODE], ";
+            strSQL += "     [EpisodeTime] AS [EPISODE_TIME], ";
+            strSQL += "     [Net] AS [NET], ";
+            strSQL += "     [Net_TWD] AS [NET_TWD], ";
+            strSQL += "     [Tax] AS [TAX], ";
+            strSQL += "     [Tax_TWD] AS [TAX_TWD], ";
+            strSQL += "     [Gross] AS [GROSS], ";
+            strSQL += "     [Gross_TWD] AS [GROSS_TWD], ";
+            strSQL += "     [NetSum] AS [NET_SUM], ";
+            strSQL += "     [NetSum_TWD] AS [NET_SUM_TWD], ";
+            strSQL += "     [GrossSum] AS [GROSS_SUM], ";
+            strSQL += "     [GrossSum_TWD] AS [GROSS_SUM_TWD], ";
+            strSQL += "     [Material] AS [MATERIAL], ";
+            strSQL += "     [ItemSum] AS [ITEM_SUM], ";
+            strSQL += "     [ItemSum_TWD] AS [ITEM_SUM_TWD], ";
+            strSQL += "     [ProjectFormNo] AS [PROJECT_FORM_NO], ";
+            strSQL += "     [ProjectName] AS [PROJECT_NAME], ";
+            strSQL += "     [ProjectNickname] AS [PROJECT_NICKNAME], ";
+            strSQL += "     [ProjectUseYear] AS [PROJECT_USE_YEAR], ";
+            strSQL += "     [Note] AS [NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_DTL] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
@@ -182,22 +196,22 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [AUTH_RowNo] AS [AUTH_ROW_NO], ";
-            strSQL += "     [AUTH_SupProdANo] AS [AUTH_SUP_PROD_A_NO], ";
-            strSQL += "     [AUTH_ItemName] AS [AUTH_ITEM_NAME], ";
-            strSQL += "     [AUTH_Continent] AS [AUTH_CONTINENT], ";
-            strSQL += "     [AUTH_Country] AS [AUTH_COUNTRY], ";
-            strSQL += "     [AUTH_PlayPlatform] AS [AUTH_PLAY_PLATFORM],";
-            strSQL += "     [AUTH_Play] AS [AUTH_PLAY], ";
-            strSQL += "     [AUTH_Sell] AS [AUTH_SELL], ";
-            strSQL += "     [AUTH_EditToPlay] AS [AUTH_EDIT_TO_PLAY], ";
-            strSQL += "     [AUTH_EditToSell] AS [AUTH_EDIT_TO_SELL], ";
-            strSQL += "     [AUTH_AllotedTimeType] AS [AUTH_ALLOTED_TIME_TYPE], ";
-            strSQL += "     [AUTH_StartDate] AS [AUTH_START_DATE], ";
-            strSQL += "     [AUTH_EndDate] AS [AUTH_END_DATE], ";
-            strSQL += "     [AUTH_FrequencyType] AS [AUTH_FREQUENCY_TYPE], ";
-            strSQL += "     [AUTH_PlayFrequency] AS [AUTH_PLAY_FREQUENCY], ";
-            strSQL += "     [AUTH_Note] AS [AUTH_NOTE] ";
+            strSQL += "     [OrderRowNo] AS [ORDER_ROW_NO], ";
+            strSQL += "     [SupProdANo] AS [SUP_PROD_A_NO], ";
+            strSQL += "     [ItemName] AS [ITEM_NAME], ";
+            strSQL += "     [Continent] AS [CONTINENT], ";
+            strSQL += "     [Country] AS [COUNTRY], ";
+            strSQL += "     [PlayPlatform] AS [PLAY_PLATFORM],";
+            strSQL += "     [Play] AS [PLAY], ";
+            strSQL += "     [Sell] AS [SELL], ";
+            strSQL += "     [EditToPlay] AS [EDIT_TO_PLAY], ";
+            strSQL += "     [EditToSell] AS [EDIT_TO_SELL], ";
+            strSQL += "     [AllotedTimeType] AS [ALLOTED_TIME_TYPE], ";
+            strSQL += "     [StartDate] AS [START_DATE], ";
+            strSQL += "     [EndDate] AS [END_DATE], ";
+            strSQL += "     [FrequencyType] AS [FREQUENCY_TYPE], ";
+            strSQL += "     [PlayFrequency] AS [PLAY_FREQUENCY], ";
+            strSQL += "     [Note] AS [NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_AUTH] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
@@ -211,18 +225,17 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [EX_RowNo] AS [EX_ROW_NO], ";
-            strSQL += "     [EX_Name] AS [EX_NAME], ";
-            strSQL += "     [EX_Amount] AS [EX_AMOUNT], ";
-            strSQL += "     [EX_Amount_TWD] AS [EX_AMOUNT_TWD], ";
-            strSQL += "     [EX_Tax] AS [EX_TAX], ";
-            strSQL += "     [EX_Tax_TWD] AS [EX_TAX_TWD], ";
+            strSQL += "     [Name] AS [NAME], ";
+            strSQL += "     [Amount] AS [AMOUNT], ";
+            strSQL += "     [Amount_TWD] AS [AMOUNT_TWD], ";
+            strSQL += "     [Tax] AS [TAX], ";
+            strSQL += "     [Tax_TWD] AS [TAX_TWD], ";
             strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [EX_ProjectFormNo] AS [EX_PROJECT_FORM_NO], ";
-            strSQL += "     [EX_ProjectName] AS [EX_PROJECT_NAME], ";
-            strSQL += "     [EX_ProjectNickname] AS [EX_PROJECT_NICKNAME], ";
-            strSQL += "     [EX_ProjectUseYear] AS [EX_PROJECT_USE_YEAR], ";
-            strSQL += "     [EX_Note] AS [EX_NOTE] ";
+            strSQL += "     [ProjectFormNo] AS [PROJECT_FORM_NO], ";
+            strSQL += "     [ProjectName] AS [PROJECT_NAME], ";
+            strSQL += "     [ProjectNickname] AS [PROJECT_NICKNAME], ";
+            strSQL += "     [ProjectUseYear] AS [PROJECT_USE_YEAR], ";
+            strSQL += "     [Note] AS [NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_EX] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
@@ -236,21 +249,20 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [PYMT_RowNo] AS [PYMT_ROW_NO], ";
             strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [PYMT_Project] AS [PYMT_PROJECT], ";
-            strSQL += "     [PYMT_Terms] AS [PYMT_TERMS], ";
-            strSQL += "     [PYMT_MethodID] AS [PYMT_METHOD_ID], ";
-            strSQL += "     [PYMT_Tax] AS [PYMT_TAX], ";
-            strSQL += "     [PYMT_Net] AS [PYMT_NET], ";
-            strSQL += "     [PYMT_Gross] AS [PYMT_GROSS], ";
-            strSQL += "     [PYMT_PredictRate] AS [PYMT_PRE_RATE], ";
-            strSQL += "     [PYMT_Material] AS [PYMT_MATERIAL], ";
-            strSQL += "     [PYMT_EX_Amount] AS [PYMT_EX_AMOUNT], ";
-            strSQL += "     [PYMT_EX_Tax] AS [PYMT_EX_TAX], ";
-            strSQL += "     [PYMT_OrderSum] AS [PYMT_ORDER_SUM], ";
-            strSQL += "     [PYMT_OrderSum_CONV] AS [PYMT_ORDER_SUM_CONV], ";
-            strSQL += "     [PYMT_UseBudget] AS [PYMT_USE_BUDGET] ";
+            strSQL += "     [Project] AS [PROJECT], ";
+            strSQL += "     [Terms] AS [TERMS], ";
+            strSQL += "     [MethodID] AS [METHOD_ID], ";
+            strSQL += "     [Tax] AS [TAX], ";
+            strSQL += "     [Net] AS [NET], ";
+            strSQL += "     [Gross] AS [GROSS], ";
+            strSQL += "     [PredictRate] AS [PRE_RATE], ";
+            strSQL += "     [Material] AS [MATERIAL], ";
+            strSQL += "     [EX_Amount] AS [EX_AMOUNT], ";
+            strSQL += "     [EX_Tax] AS [EX_TAX], ";
+            strSQL += "     [OrderSum] AS [ORDER_SUM], ";
+            strSQL += "     [OrderSum_CONV] AS [ORDER_SUM_CONV], ";
+            strSQL += "     [UseBudget] AS [USE_BUDGET] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_PYMT] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
@@ -264,15 +276,14 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [BUDG_RowNo] AS [BUDG_ROW_NO], ";
             strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [BUDG_FormNo] AS [BUDG_FORM_NO], ";
-            strSQL += "     [BUDG_CreateYear] AS [BUDG_CREATE_YEAR], ";
-            strSQL += "     [BUDG_Name] AS [BUDG_NAME], ";
-            strSQL += "     [BUDG_OwnerDept] AS [BUDG_OWNER_DEPT], ";
-            strSQL += "     [BUDG_Total] AS [BUDG_TOTAL], ";
-            strSQL += "     [BUDG_AvailableBudgetAmount] AS [BUDG_AVAILABLE_BUDGET_AMOUNT], ";
-            strSQL += "     [BUDG_UseBudgetAmount] AS [BUDG_USE_BUDGET_AMOUNT] ";
+            strSQL += "     [FormNo] AS [FORM_NO], ";
+            strSQL += "     [CreateYear] AS [CREATE_YEAR], ";
+            strSQL += "     [Name] AS [NAME], ";
+            strSQL += "     [OwnerDept] AS [OWNER_DEPT], ";
+            strSQL += "     [Total] AS [TOTAL], ";
+            strSQL += "     [AvailableBudgetAmount] AS [AVAILABLE_BUDGET_AMOUNT], ";
+            strSQL += "     [UseBudgetAmount] AS [USE_BUDGET_AMOUNT] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_BUDG] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
@@ -286,16 +297,16 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [PA_RowNo] AS [PA_ROW_NO], ";
+            strSQL += "     [OrderRowNo] AS [ORDER_ROW_NO], ";
             strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [PA_SupProdANo] AS [PA_SUP_PROD_A_NO], ";
-            strSQL += "     [PA_ItemName] AS [PA_ITEM_NAME], ";
-            strSQL += "     [PA_MediaType] AS [PA_MEDIA_TYPE], ";
-            strSQL += "     [PA_StartEpisode] AS [PA_START_EPISODE], ";
-            strSQL += "     [PA_EndEpisode] AS [PA_END_EPISODE], ";
-            strSQL += "     [PA_OrderEpisode] AS [PA_ORDER_EPISODE], ";
-            strSQL += "     [PA_ACPT_Episode] AS [PA_ACPT_EPISODE], ";
-            strSQL += "     [PA_Note] AS [PA_NOTE] ";
+            strSQL += "     [SupProdANo] AS [SUP_PROD_A_NO], ";
+            strSQL += "     [ItemName] AS [ITEM_NAME], ";
+            strSQL += "     [MediaType] AS [MEDIA_TYPE], ";
+            strSQL += "     [StartEpisode] AS [START_EPISODE], ";
+            strSQL += "     [EndEpisode] AS [END_EPISODE], ";
+            strSQL += "     [OrderEpisode] AS [ORDER_EPISODE], ";
+            strSQL += "     [ACPT_Episode] AS [ACPT_EPISODE], ";
+            strSQL += "     [Note] AS [NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_ACPT] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
@@ -361,7 +372,6 @@ namespace OA_WEB_API.Repository.BPMPro
 
             return mediaOrderViewModel;
         }
-
 
         #region - 依此單內容重送 -
 
@@ -661,34 +671,35 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     //版權採購申請單 採購明細
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@DTL_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_MEDIA_SPEC", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_START_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_END_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ORDER_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ACPT_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_EPISODE_TIME", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_NET_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_TAX_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_GROSS_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_NET_SUM", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_NET_SUM_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_GROSS_SUM", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_GROSS_SUM_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_MATERIAL", SqlDbType.Float) { Value =(object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ITEM_SUM", SqlDbType.Float) { Value =(object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ITEM_SUM_TWD", SqlDbType.Int) { Value =(object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_PROJECT_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value =(object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_PROJECT_NAME", SqlDbType.NVarChar) { Size = 500, Value =(object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_PROJECT_NICKNAME", SqlDbType.NVarChar) { Size = 4000, Value =(object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_PROJECT_USE_YEAR", SqlDbType.NVarChar) { Size = 50, Value =(object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ORDER_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_SPEC", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AUTH_ALL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@START_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@END_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ORDER_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ACPT_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EPISODE_TIME", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NET_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GROSS_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NET_SUM", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NET_SUM_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GROSS_SUM", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GROSS_SUM_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MATERIAL", SqlDbType.Float) { Value =(object) DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ITEM_SUM", SqlDbType.Float) { Value =(object) DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ITEM_SUM_TWD", SqlDbType.Int) { Value =(object) DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value =(object) DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_NAME", SqlDbType.NVarChar) { Size = 500, Value =(object) DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_NICKNAME", SqlDbType.NVarChar) { Size = 4000, Value =(object) DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_USE_YEAR", SqlDbType.NVarChar) { Size = 50, Value =(object) DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -709,25 +720,20 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     foreach (var item in model.MEDIA_ORDER_DTLS_CONFIG)
                     {
+                        strJson = jsonFunction.ObjectToJSON(item);
+
                         #region - 確認小數點後第二位 -
 
-                        item.DTL_NET = Math.Round(item.DTL_NET, 2);
-                        item.DTL_GROSS = Math.Round(item.DTL_GROSS, 2);
-                        item.DTL_NET_SUM = Math.Round(item.DTL_NET_SUM, 2);
-                        item.DTL_TAX = Math.Round(item.DTL_TAX, 2);
-                        item.DTL_GROSS_SUM = Math.Round(item.DTL_GROSS_SUM, 2);
-                        item.DTL_MATERIAL = Math.Round(item.DTL_MATERIAL, 2);
-                        item.DTL_ITEM_SUM = Math.Round(item.DTL_ITEM_SUM, 2);
+                        GlobalParameters.IsDouble(strJson);
 
                         #endregion
 
                         //寫入：版權採購申請單 採購明細parameter
-                        strJson = jsonFunction.ObjectToJSON(item);
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_DTL]([RequisitionID],[DTL_RowNo],[DTL_SupProdANo],[DTL_ItemName],[DTL_MediaSpec],[DTL_MediaType],[DTL_StartEpisode],[DTL_EndEpisode],[DTL_OrderEpisode],[DTL_ACPT_Episode],[DTL_EpisodeTime],[DTL_Net],[DTL_Net_TWD],[DTL_Tax],[DTL_Tax_TWD],[DTL_Gross],[DTL_Gross_TWD],[DTL_NetSum],[DTL_NetSum_TWD],[DTL_GrossSum],[DTL_GrossSum_TWD],[DTL_Material],[DTL_ItemSum],[DTL_ItemSum_TWD],[DTL_ProjectFormNo],[DTL_ProjectName],[DTL_ProjectNickname],[DTL_ProjectUseYear],[DTL_Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@DTL_ROW_NO,@DTL_SUP_PROD_A_NO,@DTL_ITEM_NAME,@DTL_MEDIA_SPEC,@DTL_MEDIA_TYPE,@DTL_START_EPISODE,@DTL_END_EPISODE,@DTL_ORDER_EPISODE,@DTL_ACPT_EPISODE,@DTL_EPISODE_TIME,@DTL_NET,@DTL_NET_TWD,@DTL_TAX,@DTL_TAX_TWD,@DTL_GROSS,@DTL_GROSS_TWD,@DTL_NET_SUM,@DTL_NET_SUM_TWD,@DTL_GROSS_SUM,@DTL_GROSS_SUM_TWD,@DTL_MATERIAL,@DTL_ITEM_SUM,@DTL_ITEM_SUM_TWD,@DTL_PROJECT_FORM_NO,@DTL_PROJECT_NAME,@DTL_PROJECT_NICKNAME,@DTL_PROJECT_USE_YEAR,@DTL_NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_DTL]([RequisitionID],[OrderRowNo],[SupProdANo],[ItemName],[MediaSpec],[AUTH_All],[MediaType],[StartEpisode],[EndEpisode],[OrderEpisode],[ACPT_Episode],[EpisodeTime],[Net],[Net_TWD],[Tax],[Tax_TWD],[Gross],[Gross_TWD],[NetSum],[NetSum_TWD],[GrossSum],[GrossSum_TWD],[Material],[ItemSum],[ItemSum_TWD],[ProjectFormNo],[ProjectName],[ProjectNickname],[ProjectUseYear],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@ORDER_ROW_NO,@SUP_PROD_A_NO,@ITEM_NAME,@MEDIA_SPEC,@AUTH_ALL,@MEDIA_TYPE,@START_EPISODE,@END_EPISODE,@ORDER_EPISODE,@ACPT_EPISODE,@EPISODE_TIME,@NET,@NET_TWD,@TAX,@TAX_TWD,@GROSS,@GROSS_TWD,@NET_SUM,@NET_SUM_TWD,@GROSS_SUM,@GROSS_SUM_TWD,@MATERIAL,@ITEM_SUM,@ITEM_SUM_TWD,@PROJECT_FORM_NO,@PROJECT_NAME,@PROJECT_NICKNAME,@PROJECT_USE_YEAR,@NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }
@@ -743,22 +749,22 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     //版權採購申請單 授權權利
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@AUTH_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_CONTINENT", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_COUNTRY", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_PLAY_PLATFORM", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_PLAY", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_SELL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_EDIT_TO_PLAY", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_EDIT_TO_SELL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_ALLOTED_TIME_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_START_DATE", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_END_DATE", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_FREQUENCY_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_PLAY_FREQUENCY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AUTH_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ORDER_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@CONTINENT", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@COUNTRY", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PLAY_PLATFORM", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PLAY", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@SELL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EDIT_TO_PLAY", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EDIT_TO_SELL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ALLOTED_TIME_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@START_DATE", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@END_DATE", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@FREQUENCY_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PLAY_FREQUENCY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -785,8 +791,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterAuthorizes);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_AUTH]([RequisitionID],[AUTH_RowNo],[AUTH_SupProdANo],[AUTH_ItemName],[AUTH_Continent],[AUTH_Country],[AUTH_PlayPlatform],[AUTH_Play],[AUTH_Sell],[AUTH_EditToPlay],[AUTH_EditToSell],[AUTH_AllotedTimeType],[AUTH_StartDate],[AUTH_EndDate],[AUTH_FrequencyType],[AUTH_PlayFrequency],[AUTH_Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@AUTH_ROW_NO,@AUTH_SUP_PROD_A_NO,@AUTH_ITEM_NAME,@AUTH_CONTINENT,@AUTH_COUNTRY,@AUTH_PLAY_PLATFORM,@AUTH_PLAY,@AUTH_SELL,@AUTH_EDIT_TO_PLAY,@AUTH_EDIT_TO_SELL,@AUTH_ALLOTED_TIME_TYPE,@AUTH_START_DATE,@AUTH_END_DATE,@AUTH_FREQUENCY_TYPE,@AUTH_PLAY_FREQUENCY,@AUTH_NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_AUTH]([RequisitionID],[OrderRowNo],[SupProdANo],[ItemName],[Continent],[Country],[PlayPlatform],[Play],[Sell],[EditToPlay],[EditToSell],[AllotedTimeType],[StartDate],[EndDate],[FrequencyType],[PlayFrequency],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@ORDER_ROW_NO,@SUP_PROD_A_NO,@ITEM_NAME,@CONTINENT,@COUNTRY,@PLAY_PLATFORM,@PLAY,@SELL,@EDIT_TO_PLAY,@EDIT_TO_SELL,@ALLOTED_TIME_TYPE,@START_DATE,@END_DATE,@FREQUENCY_TYPE,@PLAY_FREQUENCY,@NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterAuthorizes);
                     }
@@ -802,18 +808,17 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     //版權採購申請單 額外項目
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@EX_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@EX_NAME", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@EX_AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@EX_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@EX_TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@EX_TAX_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Size = 2, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@EX_PROJECT_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@EX_PROJECT_NAME", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@EX_PROJECT_NICKNAME", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@EX_PROJECT_USE_YEAR", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@EX_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_NAME", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_NICKNAME", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_USE_YEAR", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -834,20 +839,20 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     foreach (var item in model.MEDIA_ORDER_EXS_CONFIG)
                     {
+                        strJson = jsonFunction.ObjectToJSON(item);
+
                         #region - 確認小數點後第二位 -
 
-                        item.EX_AMOUNT = Math.Round(item.EX_AMOUNT, 2);
-                        item.EX_TAX = Math.Round(item.EX_TAX, 2);
+                        GlobalParameters.IsDouble(strJson);
 
                         #endregion
 
                         //寫入：版權採購申請單 授權權利parameter
-                        strJson = jsonFunction.ObjectToJSON(item);
                         GlobalParameters.Infoparameter(strJson, parameterExtras);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_EX]([RequisitionID],[EX_RowNo],[EX_Name],[EX_Amount],[EX_Amount_TWD],[EX_Tax],[EX_Tax_TWD],[Period],[EX_ProjectFormNo],[EX_ProjectName],[EX_ProjectNickname],[EX_ProjectUseYear],[EX_Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@EX_ROW_NO,@EX_NAME,@EX_AMOUNT,@EX_AMOUNT_TWD,@EX_TAX,@EX_TAX_TWD,@PERIOD,@EX_PROJECT_FORM_NO,@EX_PROJECT_NAME,@EX_PROJECT_NICKNAME,@EX_PROJECT_USE_YEAR,@EX_NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_EX]([RequisitionID],[Name],[Amount],[Amount_TWD],[Tax],[Tax_TWD],[Period],[ProjectFormNo],[ProjectName],[ProjectNickname],[ProjectUseYear],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@NAME,@AMOUNT,@AMOUNT_TWD,@TAX,@TAX_TWD,@PERIOD,@PROJECT_FORM_NO,@PROJECT_NAME,@PROJECT_NICKNAME,@PROJECT_USE_YEAR,@NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterExtras);
                     }
@@ -864,21 +869,20 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     //版權採購申請單 付款辦法
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@PYMT_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Size = 2, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PYMT_PROJECT", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PYMT_TERMS", SqlDbType.NVarChar) { Size = 25, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PYMT_METHOD_ID", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PYMT_TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PYMT_NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PYMT_GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PYMT_PRE_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PYMT_MATERIAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PYMT_EX_AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PYMT_EX_TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PYMT_ORDER_SUM", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PYMT_ORDER_SUM_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PYMT_USE_BUDGET", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TERMS", SqlDbType.NVarChar) { Size = 25, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@METHOD_ID", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PRE_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MATERIAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EX_AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EX_TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ORDER_SUM", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ORDER_SUM_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@USE_BUDGET", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                 };
                  
                 #region 先刪除舊資料
@@ -899,27 +903,21 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     foreach (var item in model.MEDIA_ORDER_PYMTS_CONFIG)
                     {
+                        strJson = jsonFunction.ObjectToJSON(item);
+
                         #region - 確認小數點後第二位 -
 
-                        item.PYMT_TAX = Math.Round(item.PYMT_TAX, 2);
-                        item.PYMT_NET = Math.Round(item.PYMT_NET, 2);
-                        item.PYMT_GROSS = Math.Round(item.PYMT_GROSS, 2);
-                        item.PYMT_PRE_RATE = Math.Round(item.PYMT_PRE_RATE, 2);
-                        item.PYMT_MATERIAL = Math.Round(item.PYMT_MATERIAL, 2);
-                        item.PYMT_EX_AMOUNT = Math.Round(item.PYMT_EX_AMOUNT, 2);
-                        item.PYMT_EX_TAX = Math.Round(item.PYMT_EX_TAX, 2);
-                        item.PYMT_ORDER_SUM = Math.Round(item.PYMT_ORDER_SUM, 2);
+                        GlobalParameters.IsDouble(strJson);
 
                         #endregion
 
                         //寫入：版權採購申請單 付款辦法parameter
 
-                        strJson = jsonFunction.ObjectToJSON(item);
                         GlobalParameters.Infoparameter(strJson, parameterPayments);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_PYMT]([RequisitionID],[PYMT_RowNo],[Period],[PYMT_Project],[PYMT_Terms],[PYMT_MethodID],[PYMT_Tax],[PYMT_Net],[PYMT_Gross],[PYMT_PredictRate],[PYMT_Material],[PYMT_EX_Amount],[PYMT_EX_Tax],[PYMT_OrderSum],[PYMT_OrderSum_CONV],[PYMT_UseBudget]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@PYMT_ROW_NO,@PERIOD,@PYMT_PROJECT,@PYMT_TERMS,@PYMT_METHOD_ID,@PYMT_TAX,@PYMT_NET,@PYMT_GROSS,@PYMT_PRE_RATE,@PYMT_MATERIAL,@PYMT_EX_AMOUNT,@PYMT_EX_TAX,@PYMT_ORDER_SUM,@PYMT_ORDER_SUM_CONV,@PYMT_USE_BUDGET) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_PYMT]([RequisitionID],[Period],[Project],[Terms],[MethodID],[Tax],[Net],[Gross],[PredictRate],[Material],[EX_Amount],[EX_Tax],[OrderSum],[OrderSum_CONV],[UseBudget]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@PROJECT,@TERMS,@METHOD_ID,@TAX,@NET,@GROSS,@PRE_RATE,@MATERIAL,@EX_AMOUNT,@EX_TAX,@ORDER_SUM,@ORDER_SUM_CONV,@USE_BUDGET) ";
 
                         dbFun.DoTran(strSQL, parameterPayments);
                     }
@@ -935,15 +933,14 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     //版權採購申請單 使用預算
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@BUDG_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Size = 2, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@BUDG_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@BUDG_CREATE_YEAR", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@BUDG_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@BUDG_OWNER_DEPT", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@BUDG_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@BUDG_AVAILABLE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@BUDG_USE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@CREATE_YEAR", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@OWNER_DEPT", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AVAILABLE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@USE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -969,8 +966,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterBudgets);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_BUDG]([RequisitionID],[BUDG_RowNo],[Period],[BUDG_FormNo],[BUDG_CreateYear],[BUDG_Name],[BUDG_OwnerDept],[BUDG_Total],[BUDG_AvailableBudgetAmount],[BUDG_UseBudgetAmount]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@BUDG_ROW_NO,@PERIOD,@BUDG_FORM_NO,@BUDG_CREATE_YEAR,@BUDG_NAME,@BUDG_OWNER_DEPT,@BUDG_TOTAL,@BUDG_AVAILABLE_BUDGET_AMOUNT,@BUDG_USE_BUDGET_AMOUNT) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_BUDG]([RequisitionID],[Period],[FormNo],[CreateYear],[Name],[OwnerDept],[Total],[AvailableBudgetAmount],[UseBudgetAmount]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@FORM_NO,@CREATE_YEAR,@NAME,@OWNER_DEPT,@TOTAL,@AVAILABLE_BUDGET_AMOUNT,@USE_BUDGET_AMOUNT) ";
 
                         dbFun.DoTran(strSQL, parameterBudgets);
                     }
@@ -986,16 +983,16 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     //版權採購申請單 驗收項目
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@PA_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ORDER_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PA_SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PA_ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PA_MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PA_START_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PA_END_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PA_ORDER_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PA_ACPT_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PA_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@START_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@END_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ORDER_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ACPT_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -1021,8 +1018,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterAcceptance);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_ACPT]([RequisitionID],[PA_RowNo],[Period],[PA_SupProdANo],[PA_ItemName],[PA_MediaType],[PA_StartEpisode],[PA_EndEpisode],[PA_OrderEpisode],[PA_ACPT_Episode],[PA_Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@PA_ROW_NO,@PERIOD,@PA_SUP_PROD_A_NO,@PA_ITEM_NAME,@PA_MEDIA_TYPE,@PA_START_EPISODE,@PA_END_EPISODE,@PA_ORDER_EPISODE,@PA_ACPT_EPISODE,@PA_NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_ACPT]([RequisitionID],[OrderRowNo],[Period],[SupProdANo],[ItemName],[MediaType],[StartEpisode],[EndEpisode],[OrderEpisode],[ACPT_Episode],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@ORDER_ROW_NO,@PERIOD,@SUP_PROD_A_NO,@ITEM_NAME,@MEDIA_TYPE,@START_EPISODE,@END_EPISODE,@ORDER_EPISODE,@ACPT_EPISODE,@NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterAcceptance);
                     }
@@ -1166,9 +1163,9 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region 寫回【子表單】不可被覆蓋內容
 
-                //行政採購申請 表頭資訊: 避免 子表單的 表單操作 被原單覆蓋
+                //版權採購申請 表頭資訊: 避免 子表單的 表單操作 被原單覆蓋
                 model.MEDIA_ORDER_TITLE.FORM_ACTION = ChildFormAction;
-                //行政採購申請 設定:避免 子表單的 不可異動標住 被原單覆蓋
+                //版權採購申請 設定:避免 子表單的 不可異動標住 被原單覆蓋
                 model.MEDIA_ORDER_CONFIG.PYMT_LOCK_PERIOD = ChildPYMT_LockPeriod;
 
                 #endregion

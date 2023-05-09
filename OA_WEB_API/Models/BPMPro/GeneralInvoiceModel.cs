@@ -79,11 +79,11 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>行政採購 路徑</summary>
         public string GENERAL_ORDER_PATH { get; set; }
 
-        /// <summary>行政採購 採購單 總金額</summary>
-        public double GENERAL_ORDER_DTL_ORDER_TOTAL { get; set; }
+        /// <summary>行政採購 採購單 付款辦法總額</summary>
+        public double GENERAL_ORDER_PYMT_GROSS_TOTAL { get; set; }
 
-        /// <summary>行政採購 採購單 總金額_台幣</summary>
-        public int GENERAL_ORDER_DTL_ORDER_TOTAL_TWD { get; set; }
+        /// <summary>行政採購 採購單 付款辦法總額_台幣(換算)</summary>
+        public int GENERAL_ORDER_PYMT_GROSS_TOTAL_CONV { get; set; }
 
         /// <summary>行政採購點驗收單 系統編號</summary>
         public string GENERAL_ACCEPTANCE_REQUISITION_ID { get; set; }
@@ -159,10 +159,16 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>付款辦法 本期付款總額_台幣</summary>
         public int PYMT_CURRENT_TOTAL_TWD { get; set; }
 
-        /// <summary>發票明細 合計</summary>
+        /// <summary>憑證總稅額</summary>
+        public double INV_TAX_TOTAL { get; set; }
+
+        /// <summary>憑證總稅額_台幣</summary>
+        public int INV_TAX_TOTAL_TWD { get; set; }
+
+        /// <summary>憑證明細 合計</summary>
         public double INV_AMOUNT_TOTAL { get; set; }
 
-        /// <summary>發票明細 合計_台幣</summary>
+        /// <summary>憑證明細 合計_台幣</summary>
         public int INV_AMOUNT_TOTAL_TWD { get; set; }
 
         /// <summary>實際支付金額</summary>
@@ -188,19 +194,16 @@ namespace OA_WEB_API.Models.BPMPro
     public class GeneralInvoiceAcceptancesConfig : GeneralOrderAcceptancesConfig
     {
         /// <summary>所屬專案 ERP 單號</summary>
-        public string DTL_PROJECT_FORM_NO { get; set; }
+        public string PROJECT_FORM_NO { get; set; }
 
         /// <summary>所屬專案名稱</summary>
-        public string DTL_PROJECT_NAME { get; set; }
+        public string PROJECT_NAME { get; set; }
 
         /// <summary>所屬專案描述</summary>
-        public string DTL_PROJECT_NICKNAME { get; set; }
+        public string PROJECT_NICKNAME { get; set; }
 
         /// <summary>所屬專案起案年度</summary>
-        public string DTL_PROJECT_USE_YEAR { get; set; }
-
-        /// <summary>備註</summary>
-        public string DTL_NOTE { get; set; }
+        public string PROJECT_USE_YEAR { get; set; }
     }
 
     /// <summary>
@@ -229,18 +232,42 @@ namespace OA_WEB_API.Models.BPMPro
         public int PERIOD { get; set; }
 
         /// <summary>憑證號碼</summary>
-        public string INV_NUM { get; set; }
+        public string NUM { get; set; }
 
         /// <summary>憑證日期</summary>
-        public string INV_DATE { get; set; }
+        public string DATE { get; set; }
 
-        /// <summary>發票金額</summary>
-        public double INV_AMOUNT { get; set; }
+        /// <summary>憑證免稅額</summary>
+        public double EXCL { get; set; }
 
-        /// <summary>發票金額</summary>
-        public int INV_AMOUNT_TWD { get; set; }
+        /// <summary>憑證免稅額_台幣</summary>
+        public int EXCL_TWD { get; set; }
+
+        /// <summary>憑證稅額</summary>
+        public double TAX { get; set; }
+
+        /// <summary>憑證稅額_台幣</summary>
+        public int TAX_TWD { get; set; }
+
+        /// <summary>憑證未稅金額</summary>
+        public double NET { get; set; }
+
+        /// <summary>憑證未稅金額_台幣</summary>
+        public int NET_TWD { get; set; }
+
+        /// <summary>憑證含稅金額</summary>
+        public double GROSS { get; set; }
+
+        /// <summary>憑證含稅金額_台幣</summary>
+        public int GROSS_TWD { get; set; }
+
+        /// <summary>憑證金額</summary>
+        public double AMOUNT { get; set; }
+
+        /// <summary>憑證金額_台幣</summary>
+        public int AMOUNT_TWD { get; set; }
 
         /// <summary>備註</summary>
-        public string INV_NOTE { get; set; }
+        public string NOTE { get; set; }
     }
 }

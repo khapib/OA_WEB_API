@@ -620,6 +620,11 @@ namespace OA_WEB_API.Repository.BPMPro
             bool vResult = false;
             try
             {
+                if(model.NOTIFY_BY == null)
+                {
+                    model.NOTIFY_BY= new List<string>();
+                }
+
                 ReceiverID = "";
 
                 foreach (var requisitionID in model.REQUISITION_ID)
@@ -628,21 +633,25 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     if (String.IsNullOrWhiteSpace(ReceiverID))
                     {
+
                         #region - 被知會特定角色 -
 
-                        foreach (var role in model.ROLE_ID)
+                        if (model.ROLE_ID != null)
                         {
-                            if (role != null)
+                            foreach (var role in model.ROLE_ID)
                             {
-                                var RolesUserID = CommonRepository.GetRoles()
-                                                            .Where(R => R.ROLE_ID.Contains(role))
-                                                            .Select(R => R).ToList();
-                                RolesUserID.ForEach(roleuser =>
+                                if (role != null)
                                 {
-                                    model.NOTIFY_BY.Add(roleuser.USER_ID);
-                                });
+                                    var RolesUserID = CommonRepository.GetRoles()
+                                                                .Where(R => R.ROLE_ID.Contains(role))
+                                                                .Select(R => R).ToList();
+                                    RolesUserID.ForEach(roleuser =>
+                                    {
+                                        model.NOTIFY_BY.Add(roleuser.USER_ID);
+                                    });
+                                }
                             }
-                        }
+                        }                        
 
                         #endregion
 
@@ -653,7 +662,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         #endregion
 
-                        #region - 排除 NOTIFY_BY List 是 null -
+                        #region - 排除 NOTIFY_BY List Value 是 null -
 
                         model.NOTIFY_BY = model.NOTIFY_BY.Where(N => N != null)
                                                             .Select(R => R)

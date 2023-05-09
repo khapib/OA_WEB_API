@@ -95,55 +95,55 @@ namespace OA_WEB_API.Models.BPMPro
     public class GeneralAcceptanceDetailsConfig
     {
         /// <summary>商品代碼</summary>
-        public string DTL_SUP_PROD_A_NO { get; set; }
+        public string SUP_PROD_A_NO { get; set; }
 
         /// <summary>行數編號</summary>
-        public int DTL_ROW_NO { get; set; }
+        public int ROW_NO { get; set; }
+
+        /// <summary>訂單行數編號</summary>
+        public int ORDER_ROW_NO { get; set; }
 
         /// <summary>商品名稱</summary>
-        public string DTL_ITEM_NAME { get; set; }
+        public string ITEM_NAME { get; set; }
 
         /// <summary>型號</summary>
-        public string DTL_MODEL { get; set; }
+        public string MODEL { get; set; }
 
         /// <summary>規格</summary>
-        public string DTL_SPECIFICATIONS { get; set; }
+        public string SPECIFICATIONS { get; set; }
 
         /// <summary>驗收量</summary>
-        public int DTL_ACPT_QUANTITY { get; set; }
+        public int ACPT_QUANTITY { get; set; }
 
         /// <summary>總採購量</summary>
-        public int DTL_QUANTITY { get; set; }
+        public int QUANTITY { get; set; }
 
         /// <summary>單位</summary>
-        public string DTL_UNIT { get; set; }
+        public string UNIT { get; set; }
 
         /// <summary>驗收負責人主要部門</summary>
-        public string DTL_OWNER_DEPT_MAIN_ID { get; set; }
+        public string OWNER_DEPT_MAIN_ID { get; set; }
 
         /// <summary>驗收負責人部門</summary>
-        public string DTL_OWNER_DEPT_ID { get; set; }
+        public string OWNER_DEPT_ID { get; set; }
 
         /// <summary>驗收負責人編號</summary>
-        public string DTL_OWNER_ID { get; set; }
+        public string OWNER_ID { get; set; }
 
         /// <summary>驗收負責人姓名</summary>
-        public string DTL_OWNER_NAME { get; set; }
+        public string OWNER_NAME { get; set; }
 
         /// <summary>驗收備註</summary>
-        public string DTL_ACPT_NOTE { get; set; }
+        public string ACPT_NOTE { get; set; }
 
         /// <summary>驗收結果</summary>
-        public string DTL_STATUS { get; set; }
+        public string STATUS { get; set; }
 
         /// <summary>商品備註</summary>
-        public string DTL_NOTE { get; set; }
+        public string NOTE { get; set; }
 
         /// <summary>是否為原始列</summary>
         public string IS_ORIGINAL { get; set; }
-
-        /// <summary>原始列編碼</summary>
-        public int? ORIGIN_NUM { get; set; }
     }
 
     #region - 行政採購點驗收單 驗收簽核 -

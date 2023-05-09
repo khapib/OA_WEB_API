@@ -22,6 +22,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
         FormRepository formRepository = new FormRepository();
         CommonRepository commonRepository = new CommonRepository();
+        NotifyRepository notifyRepository = new NotifyRepository();
 
         #endregion
 
@@ -64,6 +65,18 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
+            #region - M表寫入BPM表單單號 -
+
+            //避免儲存後送出表單BPM表單單號沒寫入的情形
+            var formQuery = new FormQueryModel()
+            {
+                REQUISITION_ID = query.REQUISITION_ID
+            };
+
+            if (applicantInfo.DRAFT_FLAG == 0) notifyRepository.ByInsertBPMFormNo(formQuery);
+
+            #endregion
+
             #region - 費用申請單 表頭資訊 -
 
             strSQL = "";
@@ -98,6 +111,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [BFCY_Name] AS [BFCY_NAME], ";
             strSQL += "     [BFCY_TEL] AS [BFCY_TEL], ";
             strSQL += "     [BFCY_Email] AS [BFCY_EMAIL], ";
+            strSQL += "     [Reason] AS [REASON], ";
             strSQL += "     [Note] AS [NOTE], ";
             strSQL += "     [IsVicePresident] AS [IS_VICE_PRESIDENT], ";
             strSQL += "     [FinancAuditID_1] AS [FINANC_AUDIT_ID_1], ";
@@ -122,8 +136,16 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [INV_Date] AS [INV_DATE], ";
             strSQL += "     [ItemName] AS [ITEM_NAME], ";
             strSQL += "     [ItemType] AS [ITEM_TYPE], ";
-            strSQL += "     [Reason] AS [REASON], ";
+            strSQL += "     [INV_Excl] AS [INV_EXCL], ";
+            strSQL += "     [INV_Excl_TWD] AS [INV_EXCL_TWD], ";
+            strSQL += "     [INV_Tax] AS [INV_TAX], ";
+            strSQL += "     [INV_Tax_TWD] AS [INV_TAX_TWD], ";
+            strSQL += "     [INV_Net] AS [INV_NET], ";
+            strSQL += "     [INV_Net_TWD] AS [INV_NET_TWD], ";
+            strSQL += "     [INV_Gross] AS [INV_GROSS], ";
+            strSQL += "     [INV_Gross_TWD] AS [INV_GROSS_TWD], ";
             strSQL += "     [INV_Amount] AS [INV_AMOUNT], ";
+            strSQL += "     [INV_Amount_TWD] AS [INV_AMOUNT_TWD], ";
             strSQL += "     [ExchangeRate] AS [EXCH_RATE], ";
             strSQL += "     [Amount_CONV] AS [AMOUNT_CONV], ";
             strSQL += "     [Currency] AS [CURRENCY], ";
@@ -358,6 +380,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@BFCY_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@BFCY_TEL", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@BFCY_EMAIL", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@REASON", SqlDbType.NVarChar) { Size = 4000 , Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@IS_VICE_PRESIDENT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@FINANC_AUDIT_ID_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -388,6 +411,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [BFCY_Name]=@BFCY_NAME, ";
                     strSQL += "     [BFCY_TEL]=@BFCY_TEL, ";
                     strSQL += "     [BFCY_Email]=@BFCY_EMAIL, ";
+                    strSQL += "     [Reason]=@REASON, ";
                     strSQL += "     [Note]=@NOTE, ";
                     strSQL += "     [IsVicePresident]=@IS_VICE_PRESIDENT, ";
                     strSQL += "     [FinancAuditID_1]=@FINANC_AUDIT_ID_1, ";
@@ -415,8 +439,16 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@INV_DATE", SqlDbType.NVarChar) { Size = 64 , Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100 , Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ITEM_TYPE", SqlDbType.NVarChar) { Size = 100 , Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@REASON", SqlDbType.NVarChar) { Size = 4000 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_EXCL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_EXCL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_TAX_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_NET_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_GROSS_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@INV_AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@EXCH_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AMOUNT_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@CURRENCY", SqlDbType.NVarChar) { Size = 10 , Value = (object)DBNull.Value ?? DBNull.Value },
@@ -447,6 +479,10 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         #region - 確認小數點後第二位 -
 
+                        item.INV_EXCL = Math.Round(item.INV_EXCL, 2);
+                        item.INV_TAX = Math.Round(item.INV_TAX, 2);
+                        item.INV_NET = Math.Round(item.INV_NET, 2);
+                        item.INV_GROSS = Math.Round(item.INV_GROSS, 2);
                         item.INV_AMOUNT = Math.Round(item.INV_AMOUNT, 2);
                         item.EXCH_RATE = Math.Round(item.EXCH_RATE, 2);                        
 
@@ -457,8 +493,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_ExpensesReimburse_DTL]([RequisitionID],[DTL_RowNo],[INV_Type],[INV_Num],[INV_Date],[ItemName],[ItemType],[Reason],[INV_Amount],[ExchangeRate],[Amount_CONV],[Currency],[ACCT_Category],[ProjectFormNo],[ProjectName],[ProjectNickname],[ProjectUseYear]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@DTL_ROW_NO,@INV_TYPE,@INV_NUM,@INV_DATE,@ITEM_NAME,@ITEM_TYPE,@REASON,@INV_AMOUNT,@EXCH_RATE,@AMOUNT_CONV,@CURRENCY,@ACCT_CATEGORY,@PROJECT_FORM_NO,@PROJECT_NAME,@PROJECT_NICKNAME,@PROJECT_USE_YEAR) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_ExpensesReimburse_DTL]([RequisitionID],[DTL_RowNo],[INV_Type],[INV_Num],[INV_Date],[ItemName],[ItemType],[INV_Excl],[INV_Excl_TWD],[INV_Tax],[INV_Tax_TWD],[INV_Net],[INV_Net_TWD],[INV_Gross],[INV_Gross_TWD],[INV_Amount],[INV_Amount_TWD],[ExchangeRate],[Amount_CONV],[Currency],[ACCT_Category],[ProjectFormNo],[ProjectName],[ProjectNickname],[ProjectUseYear]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@DTL_ROW_NO,@INV_TYPE,@INV_NUM,@INV_DATE,@ITEM_NAME,@ITEM_TYPE,@INV_EXCL,@INV_EXCL_TWD,@INV_TAX,@INV_TAX_TWD,@INV_NET,@INV_NET_TWD,@INV_GROSS,@INV_GROSS_TWD,@INV_AMOUNT,@INV_AMOUNT_TWD,@EXCH_RATE,@AMOUNT_CONV,@CURRENCY,@ACCT_CATEGORY,@PROJECT_FORM_NO,@PROJECT_NAME,@PROJECT_NICKNAME,@PROJECT_USE_YEAR) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }

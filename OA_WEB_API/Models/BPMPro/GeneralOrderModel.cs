@@ -173,61 +173,64 @@ namespace OA_WEB_API.Models.BPMPro
     public class GeneralOrderDetailsConfig
     {
         /// <summary>商品代碼</summary>
-        public string DTL_SUP_PROD_A_NO { get; set; }
+        public string SUP_PROD_A_NO { get; set; }
+
+        /// <summary>訂單行數編號</summary>
+        public int ORDER_ROW_NO { get; set; }
 
         /// <summary>商品名稱</summary>
-        public string DTL_ITEM_NAME { get; set; }
+        public string ITEM_NAME { get; set; }
 
         /// <summary>型號</summary>
-        public string DTL_MODEL { get; set; }
+        public string MODEL { get; set; }
 
         /// <summary>規格</summary>
-        public string DTL_SPECIFICATIONS { get; set; }
+        public string SPECIFICATIONS { get; set; }
 
         /// <summary>數量</summary>
-        public int DTL_QUANTITY { get; set; }
+        public int QUANTITY { get; set; }
 
         /// <summary>單位</summary>
-        public string DTL_UNIT { get; set; }
+        public string UNIT { get; set; }
 
         /// <summary>未稅單價/NET單價</summary>
-        public double DTL_NET { get; set; }
+        public double NET { get; set; }
 
         /// <summary>未稅單價_台幣/NET單價_台幣</summary>
-        public int DTL_NET_TWD { get; set; }
+        public int NET_TWD { get; set; }
 
         /// <summary>含稅單價/GROSS單價</summary>
-        public double DTL_GROSS { get; set; }
+        public double GROSS { get; set; }
 
         /// <summary>含稅單價_台幣/GROSS單價_台幣</summary>
-        public int DTL_GROSS_TWD { get; set; }
+        public int GROSS_TWD { get; set; }
 
         /// <summary>未稅小計/NET小計</summary>
-        public double DTL_NET_SUM { get; set; }
+        public double NET_SUM { get; set; }
 
         /// <summary>未稅小計_台幣/NET小計_台幣</summary>
-        public int DTL_NET_SUM_TWD { get; set; }
+        public int NET_SUM_TWD { get; set; }
 
         /// <summary>含稅小計/GROSS小計</summary>
-        public double DTL_GROSS_SUM { get; set; }
+        public double GROSS_SUM { get; set; }
 
         /// <summary>含稅小計_台幣/GROSS小計_台幣</summary>
-        public int DTL_GROSS_SUM_TWD { get; set; }
+        public int GROSS_SUM_TWD { get; set; }
 
         /// <summary>所屬專案 ERP 單號</summary>
-        public string DTL_PROJECT_FORM_NO { get; set; }
+        public string PROJECT_FORM_NO { get; set; }
 
         /// <summary>所屬專案名稱</summary>
-        public string DTL_PROJECT_NAME { get; set; }
+        public string PROJECT_NAME { get; set; }
 
         /// <summary>所屬專案描述</summary>
-        public string DTL_PROJECT_NICKNAME { get; set; }
+        public string PROJECT_NICKNAME { get; set; }
 
         /// <summary>所屬專案起案年度</summary>
-        public string DTL_PROJECT_USE_YEAR { get; set; }
+        public string PROJECT_USE_YEAR { get; set; }
 
         /// <summary>備註</summary>
-        public string DTL_NOTE { get; set; }
+        public string NOTE { get; set; }
     }
 
     /// <summary>
@@ -239,10 +242,10 @@ namespace OA_WEB_API.Models.BPMPro
         public int PERIOD { get; set; }
 
         /// <summary>付款項目</summary>
-        public string PYMT_PROJECT { get; set; }
+        public string PROJECT { get; set; }
 
         /// <summary>付款條件</summary>
-        public string PYMT_TERMS { get; set; }
+        public string TERMS { get; set; }
 
         /// <summary>
         /// 付款方式編號：
@@ -250,25 +253,25 @@ namespace OA_WEB_API.Models.BPMPro
         /// FF.電匯
         /// CS.現金
         /// </summary>
-        public string PYMT_METHOD_ID { get; set; }
+        public string METHOD_ID { get; set; }
 
         /// <summary>稅額</summary>
-        public double PYMT_TAX { get; set; }
+        public double TAX { get; set; }
 
         /// <summary>未稅金額/NET單價</summary>
-        public double PYMT_NET { get; set; }
+        public double NET { get; set; }
 
         /// <summary>含稅總額/GROSS單價</summary>
-        public double PYMT_GROSS { get; set; }
+        public double GROSS { get; set; }
 
         /// <summary>當期預計匯率</summary>
-        public double PYMT_PRE_RATE { get; set; }
+        public double PRE_RATE { get; set; }
 
         /// <summary>含稅總額(換算)/GROSS價(換算)</summary>
-        public int PYMT_GROSS_CONV { get; set; }
+        public int GROSS_CONV { get; set; }
 
         /// <summary>使用預算金額</summary>
-        public int PYMT_USE_BUDGET { get; set; }
+        public int USE_BUDGET { get; set; }
     }
 
     /// <summary>
@@ -280,25 +283,25 @@ namespace OA_WEB_API.Models.BPMPro
         public int PERIOD { get; set; }
 
         /// <summary>預算 ERP唯一碼</summary>        
-        public string BUDG_FORM_NO { get; set; }
+        public string FORM_NO { get; set; }
 
         /// <summary>預算編列年度</summary>
-        public string BUDG_CREATE_YEAR { get; set; }
+        public string CREATE_YEAR { get; set; }
 
         /// <summary>預算名稱</summary>
-        public string BUDG_NAME { get; set; }
+        public string NAME { get; set; }
 
         /// <summary>所屬部門</summary>
-        public string BUDG_OWNER_DEPT { get; set; }
+        public string OWNER_DEPT { get; set; }
 
         /// <summary>預算總額</summary>
-        public int BUDG_TOTAL { get; set; }
+        public int TOTAL { get; set; }
 
         /// <summary>可用預算金額</summary>
-        public int BUDG_AVAILABLE_BUDGET_AMOUNT { get; set; }
+        public int AVAILABLE_BUDGET_AMOUNT { get; set; }
 
         /// <summary>使用預算金額</summary>
-        public int BUDG_USE_BUDGET_AMOUNT { get; set; }
+        public int USE_BUDGET_AMOUNT { get; set; }
     }
 
     /// <summary>
@@ -310,24 +313,27 @@ namespace OA_WEB_API.Models.BPMPro
         public int PERIOD { get; set; }
                 
         /// <summary>商品代碼</summary>
-        public string PA_SUP_PROD_A_NO { get; set; }
+        public string SUP_PROD_A_NO { get; set; }
+
+        /// <summary>訂單行數編號</summary>
+        public int ORDER_ROW_NO { get; set; }
 
         /// <summary>商品名稱</summary>
-        public string PA_ITEM_NAME { get; set; }
+        public string ITEM_NAME { get; set; }
 
         /// <summary>型號</summary>
-        public string PA_MODEL { get; set; }
+        public string MODEL { get; set; }
 
         /// <summary>規格</summary>
-        public string PA_SPECIFICATIONS { get; set; }
+        public string SPECIFICATIONS { get; set; }
 
         /// <summary>數量</summary>
-        public int PA_QUANTITY { get; set; }
+        public int QUANTITY { get; set; }
 
         /// <summary>單位</summary>
-        public string PA_UNIT { get; set; }
+        public string UNIT { get; set; }
 
         /// <summary>商品備註</summary>
-        public string PA_NOTE { get; set;}
+        public string NOTE { get; set;}
     }
 }

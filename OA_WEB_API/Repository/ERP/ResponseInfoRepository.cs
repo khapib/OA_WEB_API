@@ -689,12 +689,12 @@ namespace OA_WEB_API.Repository.ERP
                 };
 
                 MediaOrderInfoRequest mediaOrderInfoRequest = new MediaOrderInfoRequest();
-                var generalOrderContent = mediaOrderRepository.PostMediaOrderSingle(mediaOrderQueryModel);
+                var mediaOrderContent = mediaOrderRepository.PostMediaOrderSingle(mediaOrderQueryModel);
                 //Join 版權採購申請單(查詢)Function
-                strJson = jsonFunction.ObjectToJSON(generalOrderContent);
+                strJson = jsonFunction.ObjectToJSON(mediaOrderContent);
                 //給予需要回傳ERP的資訊
                 mediaOrderInfoRequest = jsonFunction.JsonToObject<MediaOrderInfoRequest>(strJson);
-                mediaOrderInfoRequest.REQUISITION_ID = generalOrderContent.APPLICANT_INFO.REQUISITION_ID;
+                mediaOrderInfoRequest.REQUISITION_ID = mediaOrderContent.APPLICANT_INFO.REQUISITION_ID;
 
                 #endregion
 

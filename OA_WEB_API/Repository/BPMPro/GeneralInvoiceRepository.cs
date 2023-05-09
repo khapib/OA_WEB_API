@@ -102,8 +102,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [GeneralOrderERPFormNo] AS [GENERAL_ORDER_ERP_FORM_NO], ";
             strSQL += "     [GeneralOrderTXN_Type] AS [GENERAL_ORDER_TXN_TYPE], ";
             strSQL += "     [GeneralOrderPath] AS [GENERAL_ORDER_PATH], ";
-            strSQL += "     [GeneralOrderDTL_OrderTotal] AS [GENERAL_ORDER_DTL_ORDER_TOTAL], ";
-            strSQL += "     [GeneralOrderDTL_OrderTotal_TWD] AS [GENERAL_ORDER_DTL_ORDER_TOTAL_TWD], ";
+            strSQL += "     [GeneralOrderPYMT_GrossTotal] AS [GENERAL_ORDER_PYMT_GROSS_TOTAL], ";
+            strSQL += "     [GeneralOrderPYMT_GrossTotal_CONV] AS [GENERAL_ORDER_PYMT_GROSS_TOTAL_CONV], ";
             strSQL += "     [GeneralAcceptanceRequisitionID] AS [GENERAL_ACCEPTANCE_REQUISITION_ID], ";
             strSQL += "     [Currency] AS [CURRENCY], ";
             strSQL += "     [PredictRate] AS [PRE_RATE], ";
@@ -140,6 +140,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [Note] AS [NOTE], ";
             strSQL += "     [PYMT_CurrentTotal] AS [PYMT_CURRENT_TOTAL], ";
             strSQL += "     [PYMT_CurrentTotal_TWD] AS [PYMT_CURRENT_TOTAL_TWD], ";
+            strSQL += "     [INV_TaxTotal] AS [INV_TAX_TOTAL], ";
+            strSQL += "     [INV_TaxTotal_TWD] AS [INV_TAX_TOTAL_TWD], ";
             strSQL += "     [INV_AmountTotal] AS [INV_AMOUNT_TOTAL], ";
             strSQL += "     [INV_AmountTotal_TWD] AS [INV_AMOUNT_TOTAL_TWD], ";
             strSQL += "     [ActualPayAmount] AS [ACTUAL_PAY_AMOUNT], ";
@@ -478,6 +480,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_CURRENT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_CURRENT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@INV_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@INV_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@INV_AMOUNT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@INV_AMOUNT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@ACTUAL_PAY_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -499,8 +503,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [GeneralOrderTXN_Type]=MAIN.[TXN_TYPE], ";
                     strSQL += "     [GeneralOrderSubject]=@GENERAL_ORDER_SUBJECT, ";
                     strSQL += "     [GeneralOrderPath]=@GENERAL_ORDER_PATH, ";
-                    strSQL += "     [GeneralOrderDTL_OrderTotal]=MAIN.[DTL_ORDER_TOTAL], ";
-                    strSQL += "     [GeneralOrderDTL_OrderTotal_TWD]=MAIN.[DTL_ORDER_TOTAL_TWD], ";
+                    strSQL += "     [GeneralOrderPYMT_GrossTotal]=MAIN.[PYMT_GROSS_TOTAL], ";
+                    strSQL += "     [GeneralOrderPYMT_GrossTotal_CONV]=MAIN.[PYMT_GROSS_TOTAL_CONV], ";
                     strSQL += "     [GeneralAcceptanceRequisitionID]=@GENERAL_ACCEPTANCE_REQUISITION_ID, ";
                     strSQL += "     [Currency]=MAIN.[CURRENCY], ";
                     strSQL += "     [PredictRate]=MAIN.[PRE_RATE], ";
@@ -537,6 +541,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [Note]=@NOTE, ";                    
                     strSQL += "     [PYMT_CurrentTotal]=@PYMT_CURRENT_TOTAL, ";
                     strSQL += "     [PYMT_CurrentTotal_TWD]=@PYMT_CURRENT_TOTAL_TWD, ";
+                    strSQL += "     [INV_TaxTotal]=@INV_TAX_TOTAL, ";
+                    strSQL += "     [INV_TaxTotal_TWD]=@INV_TAX_TOTAL_TWD, ";
                     strSQL += "     [INV_AmountTotal]=@INV_AMOUNT_TOTAL, ";
                     strSQL += "     [INV_AmountTotal_TWD]=@INV_AMOUNT_TOTAL_TWD, ";
                     strSQL += "     [ActualPayAmount]=@ACTUAL_PAY_AMOUNT, ";
@@ -551,8 +557,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "                 [PredictRate] AS [PRE_RATE], ";
                     strSQL += "                 [PricingMethod] AS [PRICING_METHOD], ";
                     strSQL += "                 [TaxRate] AS [TAX_RATE], ";
-                    strSQL += "                 [DTL_OrderTotal] AS [DTL_ORDER_TOTAL], ";
-                    strSQL += "                 [DTL_OrderTotal_TWD] AS [DTL_ORDER_TOTAL_TWD], ";
+                    strSQL += "                 [PYMT_GrossTotal] AS [PYMT_GROSS_TOTAL], ";
+                    strSQL += "                 [PYMT_GrossTotal_CONV] AS [PYMT_GROSS_TOTAL_CONV], ";
                     strSQL += "                 [SupNo] AS [SUP_NO], ";
                     strSQL += "                 [SupName] AS [SUP_NAME], ";
                     strSQL += "                 [RegisterKind] AS [REG_KIND], ";

@@ -79,11 +79,11 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>行政採購 路徑</summary>
         public string GENERAL_ORDER_PATH { get; set; }
 
-        /// <summary>行政採購 採購單 總金額</summary>
-        public double GENERAL_ORDER_DTL_ORDER_TOTAL { get; set; }
+        /// <summary>行政採購 採購單 付款辦法總額</summary>
+        public double GENERAL_ORDER_PYMT_GROSS_TOTAL { get; set; }
 
-        /// <summary>行政採購 採購單 總金額_台幣</summary>
-        public int GENERAL_ORDER_DTL_ORDER_TOTAL_TWD { get; set; }
+        /// <summary>行政採購 採購單 付款辦法總額_台幣(換算)</summary>
+        public int GENERAL_ORDER_PYMT_GROSS_TOTAL_CONV { get; set; }
 
         /// <summary>行政採購點驗收單 系統編號</summary>
         public string GENERAL_ACCEPTANCE_REQUISITION_ID { get; set; }
@@ -158,6 +158,12 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>付款辦法 本期付款總額_台幣</summary>
         public int PYMT_CURRENT_TOTAL_TWD { get; set; }
+
+        /// <summary>憑證總稅額</summary>
+        public double INV_TAX_TOTAL { get; set; }
+
+        /// <summary>憑證總稅額_台幣</summary>
+        public int INV_TAX_TOTAL_TWD { get; set; }
 
         /// <summary>憑證明細 合計</summary>
         public double INV_AMOUNT_TOTAL { get; set; }

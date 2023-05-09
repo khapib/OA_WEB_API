@@ -149,6 +149,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "SELECT ";
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
             strSQL += "     [SupProdANo] AS [SUP_PROD_A_NO], ";
+            strSQL += "     [OrderRowNo] AS [ORDER_ROW_NO], ";
             strSQL += "     [ItemName] AS [ITEM_NAME], ";
             strSQL += "     [Model] AS [MODEL], ";
             strSQL += "     [Specifications] AS [SPECIFICATIONS], ";
@@ -226,6 +227,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
             strSQL += "     [Period] AS [PERIOD], ";
             strSQL += "     [SupProdANo] AS [SUP_PROD_A_NO], ";
+            strSQL += "     [OrderRowNo] AS [ORDER_ROW_NO], ";
             strSQL += "     [ItemName] AS [ITEM_NAME], ";
             strSQL += "     [Model] AS [MODEL], ";
             strSQL += "     [Specifications] AS [SPECIFICATIONS], ";
@@ -566,6 +568,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     //行政採購申請 採購明細
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
                     new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ORDER_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@MODEL", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@SPECIFICATIONS", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -616,8 +619,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralOrder_DTL]([RequisitionID],[SupProdANo],[ItemName],[Model],[Specifications],[Quantity],[Unit],[Net],[Net_TWD],[Gross],[Gross_TWD],[NetSum],[NetSum_TWD],[GrossSum],[GrossSum_TWD],[ProjectFormNo],[ProjectName],[ProjectNickname],[ProjectUseYear],[Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@SUP_PROD_A_NO,@ITEM_NAME,@MODEL,@SPECIFICATIONS,@QUANTITY,@UNIT,@NET,@NET_TWD,@GROSS,@GROSS_TWD,@NET_SUM,@NET_SUM_TWD,@GROSS_SUM,@GROSS_SUM_TWD,@PROJECT_FORM_NO,@PROJECT_NAME,@PROJECT_NICKNAME,@PROJECT_USE_YEAR,@NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralOrder_DTL]([RequisitionID],[SupProdANo],[OrderRowNo],[ItemName],[Model],[Specifications],[Quantity],[Unit],[Net],[Net_TWD],[Gross],[Gross_TWD],[NetSum],[NetSum_TWD],[GrossSum],[GrossSum_TWD],[ProjectFormNo],[ProjectName],[ProjectNickname],[ProjectUseYear],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@SUP_PROD_A_NO,@ORDER_ROW_NO,@ITEM_NAME,@MODEL,@SPECIFICATIONS,@QUANTITY,@UNIT,@NET,@NET_TWD,@GROSS,@GROSS_TWD,@NET_SUM,@NET_SUM_TWD,@GROSS_SUM,@GROSS_SUM_TWD,@PROJECT_FORM_NO,@PROJECT_NAME,@PROJECT_NICKNAME,@PROJECT_USE_YEAR,@NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }
@@ -746,6 +749,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Size = 2, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ORDER_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@MODEL", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@SPECIFICATIONS", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -777,8 +781,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterAcceptance);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralOrder_ACPT]([RequisitionID],[Period],[SupProdANo],[ItemName],[Model],[Specifications],[Quantity],[Unit],[Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@SUP_PROD_A_NO,@ITEM_NAME,@MODEL,@SPECIFICATIONS,@QUANTITY,@UNIT,@NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralOrder_ACPT]([RequisitionID],[Period],[SupProdANo],[OrderRowNo],[ItemName],[Model],[Specifications],[Quantity],[Unit],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@SUP_PROD_A_NO,@ORDER_ROW_NO,@ITEM_NAME,@MODEL,@SPECIFICATIONS,@QUANTITY,@UNIT,@NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterAcceptance);
                     }

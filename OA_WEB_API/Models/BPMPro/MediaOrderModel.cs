@@ -212,96 +212,96 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaOrderDetailsConfig
     {
-        /// <summary>原始行數編號</summary>
-        public int ORIGIN_ROW_NO { get; set; }
+        /// <summary>訂單行數編號</summary>
+        public int ORDER_ROW_NO { get; set; }
 
         /// <summary>商品代碼</summary>
-        public string DTL_SUP_PROD_A_NO { get; set; }
+        public string SUP_PROD_A_NO { get; set; }
 
         /// <summary>商品名稱</summary>
-        public string DTL_ITEM_NAME { get; set; }
+        public string ITEM_NAME { get; set; }
 
         /// <summary>影帶規格：
         /// SD.
         /// HD.
         /// 4K.
         /// </summary>
-        public string DTL_MEDIA_SPEC { get; set; }
+        public string MEDIA_SPEC { get; set; }
 
         /// <summary>全部權利</summary>
-        public string DTL_AUTH_ALL { get; set; }
+        public string AUTH_ALL { get; set; }
 
         /// <summary>影片類型</summary>
-        public string DTL_MEDIA_TYPE { get; set; }
+        public string MEDIA_TYPE { get; set; }
 
         /// <summary>開始集數</summary>
-        public int DTL_START_EPISODE { get; set; }
+        public int START_EPISODE { get; set; }
 
         /// <summary>結束集數</summary>
-        public int DTL_END_EPISODE { get; set; }
+        public int END_EPISODE { get; set; }
 
         /// <summary>總採購集數</summary>
-        public int DTL_ORDER_EPISODE { get; set; }
+        public int ORDER_EPISODE { get; set; }
 
         /// <summary>驗收集數</summary>
-        public int DTL_ACPT_EPISODE { get; set; }
+        public int ACPT_EPISODE { get; set; }
 
         /// <summary>每集長度</summary>
-        public int DTL_EPISODE_TIME { get; set; }
+        public int EPISODE_TIME { get; set; }
 
         /// <summary>未稅單價/NET單價</summary>
-        public double DTL_NET { get; set; }
+        public double NET { get; set; }
 
         /// <summary>未稅單價_台幣/NET單價_台幣</summary>
-        public int DTL_NET_TWD { get; set; }
+        public int NET_TWD { get; set; }
 
         /// <summary>稅額/預估保留稅額</summary>
-        public double DTL_TAX { get; set; }
+        public double TAX { get; set; }
 
         /// <summary>稅額/預估保留稅額_台幣</summary>
-        public int DTL_TAX_TWD { get; set; }
+        public int TAX_TWD { get; set; }
 
         /// <summary>含稅單價/GROSS單價</summary>
-        public double DTL_GROSS { get; set; }
+        public double GROSS { get; set; }
 
         /// <summary>含稅單價_台幣/GROSS單價_台幣</summary>
-        public int DTL_GROSS_TWD { get; set; }
+        public int GROSS_TWD { get; set; }
 
         /// <summary>未稅小計/NET小計</summary>
-        public double DTL_NET_SUM { get; set; }
+        public double NET_SUM { get; set; }
 
         /// <summary>未稅小計_台幣/NET小計_台幣</summary>
-        public int DTL_NET_SUM_TWD { get; set; }
+        public int NET_SUM_TWD { get; set; }
 
         /// <summary>含稅小計/GROSS小計</summary>
-        public double DTL_GROSS_SUM { get; set; }
+        public double GROSS_SUM { get; set; }
 
         /// <summary>含稅小計_台幣/GROSS小計_台幣</summary>
-        public int DTL_GROSS_SUM_TWD { get; set; }
+        public int GROSS_SUM_TWD { get; set; }
 
         /// <summary>單集材料費</summary>
-        public double DTL_MATERIAL { get; set; }
+        public double MATERIAL { get; set; }
 
         /// <summary>明細單項小記</summary>
-        public double DTL_ITEM_SUM { get; set; }
+        public double ITEM_SUM { get; set; }
 
         /// <summary>明細單項小記_台幣</summary>
-        public int DTL_ITEM_SUM_TWD { get; set; }
+        public int ITEM_SUM_TWD { get; set; }
 
         /// <summary>所屬專案 ERP 單號</summary>
-        public string DTL_PROJECT_FORM_NO { get; set; }
+        public string PROJECT_FORM_NO { get; set; }
 
         /// <summary>所屬專案名稱</summary>
-        public string DTL_PROJECT_NAME { get; set; }
+        public string PROJECT_NAME { get; set; }
 
         /// <summary>所屬專案描述</summary>
-        public string DTL_PROJECT_NICKNAME { get; set; }
+        public string PROJECT_NICKNAME { get; set; }
 
         /// <summary>所屬專案起案年度</summary>
-        public string DTL_PROJECT_USE_YEAR { get; set; }
+        public string PROJECT_USE_YEAR { get; set; }
 
         /// <summary>備註</summary>
-        public string DTL_NOTE { get; set; }
+        public string NOTE { get; set; }
     }
 
     /// <summary>
@@ -309,53 +309,53 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaOrderAuthorizesConfig
     {
-        /// <summary>行數編號</summary>
-        public int AUTH_ROW_NO { get; set; }
+        /// <summary>訂單行數編號</summary>
+        public int ORDER_ROW_NO { get; set; }
 
         /// <summary>商品代碼</summary>
-        public string AUTH_SUP_PROD_A_NO { get; set; }
+        public string SUP_PROD_A_NO { get; set; }
 
         /// <summary>商品名稱</summary>
-        public string AUTH_ITEM_NAME { get; set; }
+        public string ITEM_NAME { get; set; }
 
         /// <summary>洲別</summary>
-        public string AUTH_CONTINENT { get; set; }
+        public string CONTINENT { get; set; }
 
         /// <summary>國家</summary>
-        public string AUTH_COUNTRY { get; set; }
+        public string COUNTRY { get; set; }
 
         /// <summary>播放平台</summary>
-        public string AUTH_PLAY_PLATFORM { get; set; }
+        public string PLAY_PLATFORM { get; set; }
 
         /// <summary>播放[標記]</summary>
-        public string AUTH_PLAY { get; set; }
+        public string PLAY { get; set; }
 
         /// <summary>販售[標記]</summary>
-        public string AUTH_SELL { get; set; }
+        public string SELL { get; set; }
 
         /// <summary>剪後播[標記]</summary>
-        public string AUTH_EDIT_TO_PLAY { get; set; }
+        public string EDIT_TO_PLAY { get; set; }
 
         /// <summary>剪後售[標記]</summary>
-        public string AUTH_EDIT_TO_SELL { get; set; }
+        public string EDIT_TO_SELL { get; set; }
 
         /// <summary>授權時間類型</summary>
-        public string AUTH_ALLOTED_TIME_TYPE { get; set; }
+        public string ALLOTED_TIME_TYPE { get; set; }
 
         /// <summary>授權開始時間(授權時間)</summary>
-        public Nullable<DateTime> AUTH_START_DATE { get; set; }
+        public Nullable<DateTime> START_DATE { get; set; }
 
         /// <summary>授權結束時間(授權時間)</summary>
-        public Nullable<DateTime> AUTH_END_DATE { get; set; }
+        public Nullable<DateTime> END_DATE { get; set; }
 
         /// <summary>授權方式類型</summary>
-        public string AUTH_FREQUENCY_TYPE { get; set; }
+        public string FREQUENCY_TYPE { get; set; }
 
         /// <summary>授權播放次數(授權方式)</summary>
-        public int AUTH_PLAY_FREQUENCY { get; set; }
+        public int PLAY_FREQUENCY { get; set; }
 
         /// <summary>備註</summary>
-        public string AUTH_NOTE { get; set; }
+        public string NOTE { get; set; }
 
     }
 
@@ -364,41 +364,38 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaOrderExtrasConfig
     {
-        /// <summary>行數編號</summary>
-        public int EX_ROW_NO { get; set; }
-
         /// <summary>名稱</summary>
-        public string EX_NAME { get; set; }
+        public string NAME { get; set; }
 
         /// <summary>金額</summary>
-        public double EX_AMOUNT { get; set; }
+        public double AMOUNT { get; set; }
 
         /// <summary>金額_台幣</summary>
-        public int EX_AMOUNT_TWD { get; set; }
+        public int AMOUNT_TWD { get; set; }
 
         /// <summary>稅額/預估保留稅額</summary>
-        public double EX_TAX { get; set; }
+        public double TAX { get; set; }
 
         /// <summary>稅額/預估保留稅額_台幣</summary>
-        public int EX_TAX_TWD { get; set; }
+        public int TAX_TWD { get; set; }
 
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
 
         /// <summary>所屬專案 ERP 單號</summary>
-        public string EX_PROJECT_FORM_NO { get; set; }
+        public string PROJECT_FORM_NO { get; set; }
 
         /// <summary>所屬專案名稱 </summary>
-        public string EX_PROJECT_NAME { get; set; }
+        public string PROJECT_NAME { get; set; }
 
         /// <summary>所屬專案描述</summary>
-        public string EX_PROJECT_NICKNAME { get; set; }
+        public string PROJECT_NICKNAME { get; set; }
 
         /// <summary>所屬專案年分</summary>
-        public string EX_PROJECT_USE_YEAR { get; set; }
+        public string PROJECT_USE_YEAR { get; set; }
 
         /// <summary>備註</summary>
-        public string EX_NOTE { get; set; }
+        public string NOTE { get; set; }
     }
 
     /// <summary>
@@ -406,17 +403,14 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaOrderPaymentsConfig
     {
-        /// <summary>行數編號</summary>
-        public int PYMT_ROW_NO { get; set; }
-
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
 
         /// <summary>付款項目</summary>
-        public string PYMT_PROJECT { get; set; }
+        public string PROJECT { get; set; }
 
         /// <summary>付款條件</summary>
-        public string PYMT_TERMS { get; set; }
+        public string TERMS { get; set; }
 
         /// <summary>
         /// 付款方式編號：
@@ -424,37 +418,37 @@ namespace OA_WEB_API.Models.BPMPro
         /// FF.電匯
         /// CS.現金
         /// </summary>
-        public string PYMT_METHOD_ID { get; set; }
+        public string METHOD_ID { get; set; }
 
         /// <summary>稅額</summary>
-        public double PYMT_TAX { get; set; }
+        public double TAX { get; set; }
 
         /// <summary>未稅金額/NET單價</summary>
-        public double PYMT_NET { get; set; }
+        public double NET { get; set; }
 
         /// <summary>含稅總額/GROSS單價</summary>
-        public double PYMT_GROSS { get; set; }
+        public double GROSS { get; set; }
 
         /// <summary>當期預計匯率</summary>
-        public double PYMT_PRE_RATE { get; set; }
+        public double PRE_RATE { get; set; }
 
         /// <summary>單集材料費</summary>
-        public double PYMT_MATERIAL { get; set; }
+        public double MATERIAL { get; set; }
 
         /// <summary>額外採購項目金額</summary>
-        public double PYMT_EX_AMOUNT { get; set; }
+        public double EX_AMOUNT { get; set; }
 
         /// <summary>額外採購項目稅額</summary>
-        public double PYMT_EX_TAX { get; set; }
+        public double EX_TAX { get; set; }
 
         /// <summary>小計</summary>
-        public double PYMT_ORDER_SUM { get; set; }
+        public double ORDER_SUM { get; set; }
 
         /// <summary>小計(換算)</summary>
-        public int PYMT_ORDER_SUM_CONV { get; set; }
+        public int ORDER_SUM_CONV { get; set; }
 
         /// <summary>使用預算金額</summary>
-        public int PYMT_USE_BUDGET { get; set; }
+        public int USE_BUDGET { get; set; }
     }
 
     /// <summary>
@@ -462,32 +456,29 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaOrderBudgetsConfig
     {
-        /// <summary>行數編號</summary>
-        public int BUDG_ROW_NO { get; set; }
-
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
 
         /// <summary>預算 ERP唯一碼</summary>        
-        public string BUDG_FORM_NO { get; set; }
+        public string FORM_NO { get; set; }
 
         /// <summary>預算編列年度</summary>
-        public string BUDG_CREATE_YEAR { get; set; }
+        public string CREATE_YEAR { get; set; }
 
         /// <summary>預算名稱</summary>
-        public string BUDG_NAME { get; set; }
+        public string NAME { get; set; }
 
         /// <summary>所屬部門</summary>
-        public string BUDG_OWNER_DEPT { get; set; }
+        public string OWNER_DEPT { get; set; }
 
         /// <summary>預算總額</summary>
-        public int BUDG_TOTAL { get; set; }
+        public int TOTAL { get; set; }
 
         /// <summary>可用預算金額</summary>
-        public int BUDG_AVAILABLE_BUDGET_AMOUNT { get; set; }
+        public int AVAILABLE_BUDGET_AMOUNT { get; set; }
 
         /// <summary>使用預算金額</summary>
-        public int BUDG_USE_BUDGET_AMOUNT { get; set; }
+        public int USE_BUDGET_AMOUNT { get; set; }
     }
 
     /// <summary>
@@ -496,35 +487,35 @@ namespace OA_WEB_API.Models.BPMPro
     public class MediaOrderAcceptancesConfig
     {
 
-        /// <summary>行數編號</summary>
-        public int PA_ROW_NO { get; set; }
+        /// <summary>訂單行數編號</summary>
+        public int ORDER_ROW_NO { get; set; }
 
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
 
         /// <summary>商品代碼</summary>
-        public string PA_SUP_PROD_A_NO { get; set; }
+        public string SUP_PROD_A_NO { get; set; }
 
         /// <summary>商品名稱</summary>
-        public string PA_ITEM_NAME { get; set; }
+        public string ITEM_NAME { get; set; }
 
         /// <summary>影片類型</summary>
-        public string PA_MEDIA_TYPE { get; set; }
+        public string MEDIA_TYPE { get; set; }
 
         /// <summary>開始集數</summary>
-        public int PA_START_EPISODE { get; set; }
+        public int START_EPISODE { get; set; }
 
         /// <summary>結束集數</summary>
-        public int PA_END_EPISODE { get; set; }
+        public int END_EPISODE { get; set; }
 
         /// <summary>總採購集數</summary>
-        public int PA_ORDER_EPISODE { get; set; }
+        public int ORDER_EPISODE { get; set; }
 
         /// <summary>驗收集數</summary>
-        public int PA_ACPT_EPISODE { get; set; }
+        public int ACPT_EPISODE { get; set; }
 
         /// <summary>商品備註</summary>
-        public string PA_NOTE { get; set; }
+        public string NOTE { get; set; }
     }
 
 }

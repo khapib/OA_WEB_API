@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using OA_WEB_API.Models;
 using System.Reflection;
 using Microsoft.SqlServer.Server;
+using System.Web.Http.Results;
 
 namespace OA_WEB_API.Repository.OA
 {
@@ -110,6 +111,25 @@ namespace OA_WEB_API.Repository.OA
                     strJson = jsonFunction.ObjectToJSON(query);
                     var stepFlowQuery = jsonFunction.JsonToObject<StepFlowQueryModel>(strJson);
                     mediaWarehouseCopyResponseOAInfoConfig.BPM_FORM_ACTION = formStateContentRepository.PostFormStateSingle(stepFlowQuery);
+                    if (mediaWarehouseCopyResponseOAInfoConfig.BPM_FORM_ACTION == OAStatusCode.MODIFY || mediaWarehouseCopyResponseOAInfoConfig.BPM_FORM_ACTION == OAStatusCode.NEW_CREATE)
+                    {
+                        //拷貝處裡確認後回傳OA「待領取」
+                        strSQL = "";
+                        strSQL += "SELECT ";
+                        strSQL += "     [Result] ";
+                        strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaWarehouseCopy_S] ";
+                        strSQL += "WHERE 1=1 ";
+                        strSQL += "          AND RequisitionID=@REQUISITION_ID ";
+                        strSQL += "          AND ProcessID='SpcRol02' ";
+
+                        dt = dbFun.DoQuery(strSQL, parameter);
+
+                        if (dt.Rows.Count > 0)
+                        {
+                            var strResult = dt.Rows[0][0].ToString();
+                            if (int.Parse(strResult) == 1) mediaWarehouseCopyResponseOAInfoConfig.BPM_FORM_ACTION = "PickUp";
+                        }
+                    }
 
                     #endregion
 

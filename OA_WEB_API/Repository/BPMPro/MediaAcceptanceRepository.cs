@@ -5,6 +5,8 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Linq;
 using System.Web;
+using OA_WEB_API.Models.ERP;
+using Newtonsoft.Json;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -22,6 +24,13 @@ namespace OA_WEB_API.Repository.BPMPro
         FormRepository formRepository = new FormRepository();
         CommonRepository commonRepository = new CommonRepository();
         NotifyRepository notifyRepository = new NotifyRepository();
+
+        #endregion
+
+        #region FormRepository
+
+        /// <summary>版權採購申請單</summary>
+        MediaOrderRepository mediaOrderRepository = new MediaOrderRepository();
 
         #endregion
 
@@ -120,66 +129,67 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [DTL_SupProdANo] AS [DTL_SUP_PROD_A_NO], ";
-            strSQL += "     [DTL_RowNo] AS [DTL_ROW_NO], ";
-            strSQL += "     [DTL_ItemName] AS [DTL_ITEM_NAME], ";
-            strSQL += "     [DTL_MediaSpec] AS [DTL_MEDIA_SPEC], ";
-            strSQL += "     [DTL_MediaType] AS [DTL_MEDIA_TYPE], ";
-            strSQL += "     [DTL_StartEpisode] AS [DTL_START_EPISODE], ";
-            strSQL += "     [DTL_EndEpisode] AS [DTL_END_EPISODE], ";
-            strSQL += "     [DTL_OrderEpisode] AS [DTL_ORDER_EPISODE], ";
-            strSQL += "     [DTL_ACPT_Episode] AS [DTL_ACPT_EPISODE], ";
-            strSQL += "     [DTL_DismantleEpisode] AS [DTL_DISMANTLE_EPISODE], ";
-            strSQL += "     [DTL_EpisodeTime] AS [DTL_EPISODE_TIME], ";
-            strSQL += "     [DTL_GetMasteringDate] AS [DTL_GET_MASTERING_DATE], ";
-            strSQL += "     [DTL_OwnerDeptMainID] AS [DTL_OWNER_DEPT_MAIN_ID], ";
-            strSQL += "     [DTL_OwnerDeptID] AS [DTL_OWNER_DEPT_ID], ";
-            strSQL += "     [DTL_OwnerID] AS [DTL_OWNER_ID], ";
-            strSQL += "     [DTL_OwnerName] AS [DTL_OWNER_NAME], ";
-            strSQL += "     [DTL_AcceptanceNote] AS [DTL_ACPT_NOTE], ";
-            strSQL += "     [DTL_Status] AS [DTL_STATUS], ";
-            strSQL += "     [DTL_Note] AS [DTL_NOTE], ";
+            strSQL += "     [SupProdANo] AS [SUP_PROD_A_NO], ";
+            strSQL += "     [RowNo] AS [ROW_NO], ";
+            strSQL += "     [ItemName] AS [ITEM_NAME], ";
+            strSQL += "     [MediaSpec] AS [MEDIA_SPEC], ";
+            strSQL += "     [MediaType] AS [MEDIA_TYPE], ";
+            strSQL += "     [StartEpisode] AS [START_EPISODE], ";
+            strSQL += "     [EndEpisode] AS [END_EPISODE], ";
+            strSQL += "     [OrderEpisode] AS [ORDER_EPISODE], ";
+            strSQL += "     [ACPT_Episode] AS [ACPT_EPISODE], ";
+            strSQL += "     [DismantleEpisode] AS [DISMANTLE_EPISODE], ";
+            strSQL += "     [EpisodeTime] AS [EPISODE_TIME], ";
+            strSQL += "     [GetMasteringDate] AS [GET_MASTERING_DATE], ";
+            strSQL += "     [OwnerDeptMainID] AS [OWNER_DEPT_MAIN_ID], ";
+            strSQL += "     [OwnerDeptID] AS [OWNER_DEPT_ID], ";
+            strSQL += "     [OwnerID] AS [OWNER_ID], ";
+            strSQL += "     [OwnerName] AS [OWNER_NAME], ";
+            strSQL += "     [AcceptanceNote] AS [ACPT_NOTE], ";
+            strSQL += "     [Status] AS [STATUS], ";
+            strSQL += "     [Note] AS [NOTE], ";
             strSQL += "     [IsOriginal] AS [IS_ORIGINAL], ";
-            strSQL += "     [OriginNum] AS [ORIGIN_NUM] ";
+            strSQL += "     [OrderRowNo] AS [ORDER_ROW_NO], ";
+            strSQL += "     [IsReturn] AS [IS_RETURN] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaAcceptance_DTL] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
             var mediaAcceptanceDetailsConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaAcceptanceDetailsConfig>();
 
-
             #endregion
-
-            var mediaOrderparameter = new List<SqlParameter>()
-            {
-                 new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = mediaAcceptanceConfig.MEDIA_ORDER_REQUISITION_ID },
-            };
 
             #region - 版權採購交片單 授權權利 -
 
+            var mediaOrderQueryModel = new MediaOrderQueryModel
+            {
+                REQUISITION_ID = mediaAcceptanceConfig.MEDIA_ORDER_REQUISITION_ID
+            };
+                        
+            var mediaOrderContent = mediaOrderRepository.PostMediaOrderSingle(mediaOrderQueryModel);            
+            strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_AUTHS_CONFIG);
+            var mediaAcceptanceAuthorizesConfig = JsonConvert.DeserializeObject<List<MediaAcceptanceAuthorizesConfig>>(strJson);
+
+            #endregion
+
+            #region - 版權採購交片單 退貨商品明細 -
+
             strSQL = "";
             strSQL += "SELECT ";
-            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [AUTH_RowNo] AS [AUTH_ROW_NO], ";
-            strSQL += "     [AUTH_SupProdANo] AS [AUTH_SUP_PROD_A_NO], ";
-            strSQL += "     [AUTH_ItemName] AS [AUTH_ITEM_NAME], ";
-            strSQL += "     [AUTH_Continent] AS [AUTH_CONTINENT], ";
-            strSQL += "     [AUTH_Country] AS [AUTH_COUNTRY], ";
-            strSQL += "     [AUTH_PlayPlatform] AS [AUTH_PLAY_PLATFORM],";
-            strSQL += "     [AUTH_Play] AS [AUTH_PLAY], ";
-            strSQL += "     [AUTH_Sell] AS [AUTH_SELL], ";
-            strSQL += "     [AUTH_EditToPlay] AS [AUTH_EDIT_TO_PLAY], ";
-            strSQL += "     [AUTH_EditToSell] AS [AUTH_EDIT_TO_SELL], ";
-            strSQL += "     [AUTH_AllotedTimeType] AS [AUTH_ALLOTED_TIME_TYPE], ";
-            strSQL += "     [AUTH_StartDate] AS [AUTH_START_DATE], ";
-            strSQL += "     [AUTH_EndDate] AS [AUTH_END_DATE], ";
-            strSQL += "     [AUTH_FrequencyType] AS [AUTH_FREQUENCY_TYPE], ";
-            strSQL += "     [AUTH_PlayFrequency] AS [AUTH_PLAY_FREQUENCY], ";
-            strSQL += "     [AUTH_Note] AS [AUTH_NOTE] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_AUTH] ";
+            strSQL += "     [INV_Num] AS [INV_NUM], ";
+            strSQL += "     [OrderRowNo] AS [ORDER_ROW_NO], ";
+            strSQL += "     [SupProdANo] AS [SUP_PROD_A_NO], ";
+            strSQL += "     [ItemName] AS [ITEM_NAME], ";
+            strSQL += "     [MediaSpec] AS [MEDIA_SPEC], ";
+            strSQL += "     [MediaType] AS [MEDIA_TYPE], ";
+            strSQL += "     [StartEpisode] AS [START_EPISODE], ";
+            strSQL += "     [EndEpisode] AS [END_EPISODE], ";
+            strSQL += "     [OrderEpisode] AS [ORDER_EPISODE], ";
+            strSQL += "     [ACPT_Episode] AS [ACPT_EPISODE], ";
+            strSQL += "     [EpisodeTime] AS [EPISODE_TIME] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaAcceptance_RFCOMM] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "ORDER BY [AutoCounter] ";
 
-            var mediaAcceptanceAuthorizesConfig = dbFun.DoQuery(strSQL, mediaOrderparameter).ToList<MediaAcceptanceAuthorizesConfig>();
+            var mediaOrderReturnRefundCommoditysConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaAcceptanceRefundCommoditysConfig>();
 
             #endregion
 
@@ -200,6 +210,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 MEDIA_ACCEPTANCE_CONFIG = mediaAcceptanceConfig,
                 MEDIA_ACCEPTANCE_DTLS_CONFIG = mediaAcceptanceDetailsConfig,
                 MEDIA_ACCEPTANCE_AUTHS_CONFIG = mediaAcceptanceAuthorizesConfig,
+                MEDIA_ACCEPTANCE_REFUND_COMMS_CONFIG= mediaOrderReturnRefundCommoditysConfig,
                 ASSOCIATED_FORM_CONFIG = associatedForm
             };
 
@@ -399,27 +410,28 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)model.MEDIA_ACCEPTANCE_CONFIG.MEDIA_ORDER_REQUISITION_ID ?? DBNull.Value },
                     new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_ACCEPTANCE_CONFIG.MEDIA_ORDER_BPM_FORM_NO ?? DBNull.Value },
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)model.MEDIA_ACCEPTANCE_CONFIG.PERIOD ?? DBNull.Value },
-                    new SqlParameter("@DTL_SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_MEDIA_SPEC", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_START_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_END_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ORDER_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ACPT_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_DISMANTLE_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_EPISODE_TIME", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_GET_MASTERING_DATE", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_OWNER_DEPT_MAIN_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_OWNER_DEPT_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_OWNER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_OWNER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ACPT_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_STATUS", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_SPEC", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@START_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@END_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ORDER_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ACPT_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DISMANTLE_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EPISODE_TIME", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GET_MASTERING_DATE", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@OWNER_DEPT_MAIN_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@OWNER_DEPT_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@OWNER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@OWNER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ACPT_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@STATUS", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@IS_ORIGINAL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@ORIGIN_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ORDER_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@IS_RETURN", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -445,8 +457,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaAcceptance_DTL]([RequisitionID],[MediaOrderRequisitionID],[MediaOrderBPMFormNo],[Period],[DTL_SupProdANo],[DTL_RowNo],[DTL_ItemName],[DTL_MediaSpec],[DTL_MediaType],[DTL_StartEpisode],[DTL_EndEpisode],[DTL_OrderEpisode],[DTL_ACPT_Episode],[DTL_DismantleEpisode],[DTL_EpisodeTime],[DTL_GetMasteringDate],[DTL_OwnerDeptMainID],[DTL_OwnerDeptID],[DTL_OwnerID],[DTL_OwnerName],[DTL_AcceptanceNote],[DTL_Status],[DTL_Note],[IsOriginal],[OriginNum]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@MEDIA_ORDER_REQUISITION_ID,@MEDIA_ORDER_BPM_FORM_NO,@PERIOD,@DTL_SUP_PROD_A_NO,@DTL_ROW_NO,@DTL_ITEM_NAME,@DTL_MEDIA_SPEC,@DTL_MEDIA_TYPE,@DTL_START_EPISODE,@DTL_END_EPISODE,@DTL_ORDER_EPISODE,@DTL_ACPT_EPISODE,@DTL_DISMANTLE_EPISODE,@DTL_EPISODE_TIME,@DTL_GET_MASTERING_DATE,@DTL_OWNER_DEPT_MAIN_ID,@DTL_OWNER_DEPT_ID,@DTL_OWNER_ID,@DTL_OWNER_NAME,@DTL_ACPT_NOTE,@DTL_STATUS,@DTL_NOTE,@IS_ORIGINAL,@ORIGIN_NUM) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaAcceptance_DTL]([RequisitionID],[MediaOrderRequisitionID],[MediaOrderBPMFormNo],[Period],[SupProdANo],[RowNo],[ItemName],[MediaSpec],[MediaType],[StartEpisode],[EndEpisode],[OrderEpisode],[ACPT_Episode],[DismantleEpisode],[EpisodeTime],[GetMasteringDate],[OwnerDeptMainID],[OwnerDeptID],[OwnerID],[OwnerName],[AcceptanceNote],[Status],[Note],[IsOriginal],[OrderRowNo],[IsReturn]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@MEDIA_ORDER_REQUISITION_ID,@MEDIA_ORDER_BPM_FORM_NO,@PERIOD,@SUP_PROD_A_NO,@ROW_NO,@ITEM_NAME,@MEDIA_SPEC,@MEDIA_TYPE,@START_EPISODE,@END_EPISODE,@ORDER_EPISODE,@ACPT_EPISODE,@DISMANTLE_EPISODE,@EPISODE_TIME,@GET_MASTERING_DATE,@OWNER_DEPT_MAIN_ID,@OWNER_DEPT_ID,@OWNER_ID,@OWNER_NAME,@ACPT_NOTE,@STATUS,@NOTE,@IS_ORIGINAL,@ORDER_ROW_NO,@IS_RETURN) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }
@@ -459,7 +471,59 @@ namespace OA_WEB_API.Repository.BPMPro
                 #region - 版權採購交片單 授權權利: MediaAcceptance_AUTHS -
 
                 //View 是執行
-                //版權採購交片單 授權權利(MediaAcceptance_AUTHS) 內容。
+                //版權採購申請單 授權權利(MediaOrder_AUTHS) 內容。
+
+                #endregion
+
+                #region - 版權採購交片單 退貨商品明細: MediaAcceptance_RFCOMMS -
+
+                var parameterRefundCommoditys = new List<SqlParameter>()
+                {
+                    //版權採購交片單 退貨商品明細
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@INV_NUM", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@ORDER_ROW_NO", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@MEDIA_SPEC", SqlDbType.NVarChar) { Size = 5, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@START_EPISODE", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@END_EPISODE", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@ORDER_EPISODE", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@ACPT_EPISODE", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@EPISODE_TIME", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
+                };
+                #region 先刪除舊資料
+
+                strSQL = "";
+                strSQL += "DELETE ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaAcceptance_RFCOMM] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoTran(strSQL, parameterDetails);
+
+                #endregion
+
+                if (model.MEDIA_ACCEPTANCE_REFUND_COMMS_CONFIG != null && model.MEDIA_ACCEPTANCE_REFUND_COMMS_CONFIG.Count > 0)
+                {
+                    #region 再新增資料
+
+                    foreach (var item in model.MEDIA_ACCEPTANCE_REFUND_COMMS_CONFIG)
+                    {
+                        //寫入：版權採購交片單 退貨商品明細parameter
+                        strJson = jsonFunction.ObjectToJSON(item);
+                        GlobalParameters.Infoparameter(strJson, parameterRefundCommoditys);
+
+                        strSQL = "";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaAcceptance_RFCOMM]([RequisitionID],[INV_Num],[OrderRowNo],[SupProdANo],[ItemName],[MediaSpec],[MediaType],[StartEpisode],[EndEpisode],[OrderEpisode],[ACPT_Episode],[EpisodeTime]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@INV_NUM,@ORDER_ROW_NO,@SUP_PROD_A_NO,@ITEM_NAME,@MEDIA_SPEC,@MEDIA_TYPE,@START_EPISODE,@END_EPISODE,@ORDER_EPISODE,@ACPT_EPISODE,@EPISODE_TIME) ";
+
+                        dbFun.DoTran(strSQL, parameterRefundCommoditys);
+                    }
+
+                    #endregion
+                }
 
                 #endregion
 
@@ -591,9 +655,9 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     //版權採購交片單 驗收簽核
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },
-                    new SqlParameter("@DTL_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ACPT_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_STATUS", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ACPT_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@STATUS", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 if (!String.IsNullOrEmpty(model.REQUISITION_ID) || !String.IsNullOrWhiteSpace(model.REQUISITION_ID))
@@ -608,11 +672,11 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         strSQL = "";
                         strSQL += "UPDATE [BPMPro].[dbo].[FM7T_MediaAcceptance_DTL] ";
-                        strSQL += "SET  [DTL_AcceptanceNote]=@DTL_ACPT_NOTE, ";
-                        strSQL += "     [DTL_Status]=@DTL_STATUS ";
+                        strSQL += "SET  [AcceptanceNote]=@ACPT_NOTE, ";
+                        strSQL += "     [Status]=@STATUS ";
                         strSQL += "WHERE 1=1 ";
                         strSQL += "     AND [RequisitionID]=@REQUISITION_ID ";
-                        strSQL += "     AND [DTL_RowNo]=@DTL_ROW_NO ";
+                        strSQL += "     AND [RowNo]=@ROW_NO ";
 
                         dbFun.DoTran(strSQL, parameterApprove);
                     }

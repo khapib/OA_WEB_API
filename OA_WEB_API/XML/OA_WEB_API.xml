@@ -5374,6 +5374,39 @@
             版權採購退貨折讓單
             </summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundViewModel.APPLICANT_INFO">
+            <summary>申請人資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundViewModel.MEDIA_ORDER_RETURN_REFUND_TITLE">
+            <summary>版權採購退貨折讓單 表頭資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundViewModel.MEDIA_ORDER_RETURN_REFUND_CONFIG">
+            <summary>版權採購退貨折讓單 表單內容 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundViewModel.MEDIA_ORDER_RETURN_REFUND_ACPTS_CONFIG">
+            <summary>版權採購退貨折讓單 驗收明細 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundViewModel.MEDIA_ORDER_RETURN_REFUND_AUTHS_CONFIG">
+            <summary>版權採購退貨折讓單 授權權利 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundViewModel.MEDIA_ORDER_RETURN_REFUND_EXS_CONFIG">
+            <summary>版權採購申請單 額外項目 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundViewModel.MEDIA_ORDER_RETURN_REFUND_PYMTS_CONFIG">
+            <summary>版權採購退貨折讓單 付款辦法 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundViewModel.MEDIA_ORDER_RETURN_REFUND_BUDGS_CONFIG">
+            <summary>版權採購退貨折讓單 使用預算 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundViewModel.MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG">
+            <summary>版權採購退貨折讓單 憑證明細 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundViewModel.MEDIA_ORDER_RETURN_REFUND_COMMS_CONFIG">
+            <summary>版權採購退貨折讓單 退貨商品明細 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundViewModel.ASSOCIATED_FORM_CONFIG">
+            <summary>表單關聯</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundTitle">
             <summary>
             版權採購退貨折讓單 表頭資訊
@@ -5402,10 +5435,10 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.MEDIA_INVOICE_PATH">
             <summary>版權請款 路徑</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.MEDIA_ORDER_DTL_ORDER_TOTAL">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.MEDIA_ORDER_PYMT_ORDER_TOTAL">
             <summary>版權採購 總金額</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.MEDIA_ORDER_DTL_ORDER_TOTAL_TWD">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV">
             <summary>版權採購 總金額_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.TXN_TYPE">
@@ -5539,6 +5572,36 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.FINANC_NOTE">
             <summary>其他類別</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundAcceptancesConfig">
+            <summary>
+            版權採購退貨折讓單 驗收明細 設定
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundAuthorizesConfig">
+            <summary>
+            版權採購退貨折讓單 授權權利 設定
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundExtrasConfig">
+            <summary>
+            版權採購退貨折讓單 額外項目 設定
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundPaymentsConfig">
+            <summary>
+            版權採購退貨折讓單 付款辦法 設定
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundBudgetsConfig">
+            <summary>
+            版權採購退貨折讓單 使用預算 設定
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundInvoicesConfig">
+            <summary>
+            版權採購退貨折讓單 憑證明細 設定
+            </summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundCommoditysConfig">
             <summary>
@@ -8786,6 +8849,9 @@
             會簽管理系統 - 行政採購請款單
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GeneralInvoiceRepository.generalOrderRepository">
+            <summary>行政採購申請單</summary>
+        </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.GeneralInvoiceRepository.PostGeneralInvoiceSingle(OA_WEB_API.Models.BPMPro.GeneralInvoiceQueryModel)">
             <summary>
             行政採購請款單(查詢)
@@ -9343,6 +9409,17 @@
         <member name="T:OA_WEB_API.Repository.BPMPro.MediaOrderReturnRefundRepository">
             <summary>
             會簽管理系統 - 版權採購退貨折讓單
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaOrderReturnRefundRepository.mediaOrderRepository">
+            <summary>版權採購申請單</summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaOrderReturnRefundRepository.mediaInvoiceRepository">
+            <summary>版權採購請款單</summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.MediaOrderReturnRefundRepository.PostMediaOrderReturnRefundSingle(OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundQueryModel)">
+            <summary>
+            版權採購退貨折讓單(查詢)
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaOrderReturnRefundRepository.strSQL">

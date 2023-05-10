@@ -313,6 +313,8 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
+            parameter.Add(new SqlParameter("@PERIOD", SqlDbType.Int) { Value = mediaInvoiceConfig.PERIOD });
+
             #region - 版權採購請款單 憑證明細 -
 
             strSQL = "";
@@ -332,7 +334,9 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [Amount_TWD] AS [AMOUNT_TWD], ";
             strSQL += "     [Note] AS [NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaInvoice_INV] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+            strSQL += "WHERE 1=1 ";
+            strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+            strSQL += "         AND [Period]=@PERIOD ";
             strSQL += "ORDER BY [AutoCounter] ";
 
             var mediaInvoiceDetailsConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaInvoiceDetailsConfig>();

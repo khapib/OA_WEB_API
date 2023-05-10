@@ -4,7 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
-
+using Newtonsoft.Json;
 using OA_WEB_API.Models.BPMPro;
 
 namespace OA_WEB_API.Repository.BPMPro
@@ -23,6 +23,13 @@ namespace OA_WEB_API.Repository.BPMPro
         FormRepository formRepository = new FormRepository();
         CommonRepository commonRepository = new CommonRepository();
         NotifyRepository notifyRepository = new NotifyRepository();
+
+        #endregion
+
+        #region FormRepository
+
+        /// <summary>行政採購申請單</summary>
+        GeneralOrderRepository generalOrderRepository = new GeneralOrderRepository();
 
         #endregion
 
@@ -181,7 +188,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     ACPT.[Quantity] AS [QUANTITY], ";
             strSQL += "     ACPT.[Unit] AS [UNIT] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralOrder_ACPT] AS ACPT ";
-            strSQL += "	    INNER JOIN [BPMPro].[dbo].[FM7T_GeneralOrder_DTL] AS DTL ON ACPT.[RequisitionID]=DTL.[RequisitionID] AND ACPT.[SupProdANo]=DTL.[SupProdANo] ";
+            strSQL += "	    INNER JOIN [BPMPro].[dbo].[FM7T_GeneralOrder_DTL] AS DTL ON ACPT.[RequisitionID]=DTL.[RequisitionID] AND ACPT.[SupProdANo]=DTL.[SupProdANo] AND ACPT.[OrderRowNo]=DTL.[OrderRowNo] ";
             strSQL += "WHERE 1=1 ";
             strSQL += "         AND ACPT.[RequisitionID]=@REQUISITION_ID ";
             strSQL += "         AND ACPT.[Period]=@PERIOD ";
@@ -190,54 +197,34 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 行政採購請款單 付款辦法 -
+            #region - 行政採購單 資訊 -
 
+            var generalOrderQueryModel = new GeneralOrderQueryModel
+            {
+                REQUISITION_ID = generalInvoiceConfig.GENERAL_ORDER_REQUISITION_ID
+            };
+
+            var generalOrderContent = generalOrderRepository.PostGeneralOrderSingle(generalOrderQueryModel);
+
+            #endregion
+
+            #region - 行政採購請款單 付款辦法 -
             //View的「付款辦法」是 行政採購申請單 的「付款辦法」
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [Project] AS [PROJECT], ";
-            strSQL += "     [Terms] AS [TERMS], ";
-            strSQL += "     [MethodID] AS [METHOD_ID], ";
-            strSQL += "     [Tax] AS [TAX], ";
-            strSQL += "     [Net] AS [NET], ";
-            strSQL += "     [Gross] AS [GROSS], ";
-            strSQL += "     [PredictRate] AS [PRE_RATE], ";
-            strSQL += "     [Gross_CONV] AS [GROSS_CONV], ";
-            strSQL += "     [UseBudget] AS [USE_BUDGET], ";
-            strSQL += "     [ACCT_Category] AS [ACCT_CATEGORY] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralOrder_PYMT] ";
-            strSQL += "WHERE 1=1 ";
-            strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "         AND [Period]=@PERIOD ";
-            strSQL += "ORDER BY [AutoCounter] ";
-
-            var generalInvoicePaymentsConfig = dbFun.DoQuery(strSQL, generalOrderparameter).ToList<GeneralInvoicePaymentsConfig>();
+            strJson = jsonFunction.ObjectToJSON(generalOrderContent.GENERAL_ORDER_PAYMENTS_CONFIG.Where(PYMT => PYMT.PERIOD == generalInvoiceConfig.PERIOD).Select(PYMT => PYMT));
+            var generalInvoicePaymentsConfig = JsonConvert.DeserializeObject<List<GeneralInvoicePaymentsConfig>>(strJson);
 
             #endregion
 
             #region - 行政採購申請單 使用預算 -
+            //View的「使用預算」是 行政採購申請單 的「使用預算」
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [FormNo] AS [FORM_NO], ";
-            strSQL += "     [CreateYear] AS [CREATE_YEAR], ";
-            strSQL += "     [Name] AS [NAME], ";
-            strSQL += "     [OwnerDept] AS [OWNER_DEPT], ";
-            strSQL += "     [Total] AS [TOTAL], ";
-            strSQL += "     [AvailableBudgetAmount] AS [AVAILABLE_BUDGET_AMOUNT], ";
-            strSQL += "     [UseBudgetAmount] AS [USE_BUDGET_AMOUNT] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralOrder_BUDG] ";
-            strSQL += "WHERE 1=1 ";
-            strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "         AND [Period]=@PERIOD ";
-            strSQL += "ORDER BY [AutoCounter] ";
-
-            var generalInvoiceBudgetsConfig = dbFun.DoQuery(strSQL, generalOrderparameter).ToList<GeneralInvoiceBudgetsConfig>();
+            strJson = jsonFunction.ObjectToJSON(generalOrderContent.GENERAL_ORDER_BUDGETS_CONFIG.Where(BUDG => BUDG.PERIOD == generalInvoiceConfig.PERIOD).Select(BUDG => BUDG));
+            var generalInvoiceBudgetsConfig = JsonConvert.DeserializeObject<List<GeneralInvoiceBudgetsConfig>>(strJson);
 
             #endregion
+
+            parameter.Add(new SqlParameter("@PERIOD", SqlDbType.Int) { Value = generalInvoiceConfig.PERIOD });
 
             #region - 行政採購請款單 憑證明細 -
 
@@ -258,7 +245,9 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [Amount_TWD] AS [AMOUNT_TWD], ";
             strSQL += "     [Note] AS [NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralInvoice_INV] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+            strSQL += "WHERE 1=1 ";
+            strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+            strSQL += "         AND [Period]=@PERIOD ";
             strSQL += "ORDER BY [AutoCounter] ";
 
             var generalInvoiceDetailsConfig = dbFun.DoQuery(strSQL, parameter).ToList<GeneralInvoiceDetailsConfig>();

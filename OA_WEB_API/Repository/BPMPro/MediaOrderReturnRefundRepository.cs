@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using Microsoft.SqlServer.Server;
+using Newtonsoft.Json;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -14,421 +15,359 @@ namespace OA_WEB_API.Repository.BPMPro
     /// </summary>
     public class MediaOrderReturnRefundRepository
     {
-        //#region - 宣告 -
+        #region - 宣告 -
 
-        //dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
 
-        //#region Repository
+        #region Repository
 
-        //FormRepository formRepository = new FormRepository();
-        //CommonRepository commonRepository = new CommonRepository();
-        //FlowRepository flowRepository = new FlowRepository();
+        FormRepository formRepository = new FormRepository();
+        CommonRepository commonRepository = new CommonRepository();
+        FlowRepository flowRepository = new FlowRepository();
 
-        //#endregion
+        #endregion
 
-        //#endregion
+        #region FormRepository
 
-        //#region - 方法 -
+        /// <summary>版權採購申請單</summary>
+        MediaOrderRepository mediaOrderRepository = new MediaOrderRepository();
+        /// <summary>版權採購請款單</summary>
+        MediaInvoiceRepository mediaInvoiceRepository = new MediaInvoiceRepository();
+
+        #endregion
+
+        #endregion
+
+        #region - 方法 -
+
+        /// <summary>
+        /// 版權採購退貨折讓單(查詢)
+        /// </summary>
+        public MediaOrderReturnRefundViewModel PostMediaOrderReturnRefundSingle(MediaOrderReturnRefundQueryModel query)
+        {
+            var parameter = new List<SqlParameter>()
+            {
+                 new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID }
+            };
+
+            #region - 申請人資訊 -
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
+            strSQL += "     [DiagramID] AS [DIAGRAM_ID], ";
+            strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
+            strSQL += "     [ApplicantDept] AS [APPLICANT_DEPT], ";
+            strSQL += "     [ApplicantDeptName] AS [APPLICANT_DEPT_NAME], ";
+            strSQL += "     [ApplicantID] AS [APPLICANT_ID], ";
+            strSQL += "     [ApplicantName] AS [APPLICANT_NAME], ";
+            strSQL += "     [ApplicantPhone] AS [APPLICANT_PHONE], ";
+            strSQL += "     [ApplicantDateTime] AS [APPLICANT_DATETIME], ";
+            strSQL += "     [FillerID] AS [FILLER_ID], ";
+            strSQL += "     [FillerName] AS [FILLER_NAME], ";
+            strSQL += "     [Priority] AS [PRIORITY], ";
+            strSQL += "     [DraftFlag] AS [DRAFT_FLAG], ";
+            strSQL += "     [FlowActivated] AS [FLOW_ACTIVATED] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
+            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+            var applicantInfo = dbFun.DoQuery(strSQL, parameter).ToList<ApplicantInfo>().FirstOrDefault();
+
+            #endregion
+
+            #region - 版權採購退貨折讓單 表頭資訊 -
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [FlowName] AS [FLOW_NAME], ";
+            strSQL += "     [FormNo] AS [FORM_NO], ";
+            strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
+            strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
+            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+            var mediaOrderReturnRefundTitle = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderReturnRefundTitle>().FirstOrDefault();
+
+            #endregion
+
+            #region - 版權採購退貨折讓單 表單內容 -
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [MediaInvoiceRequisitionID] AS [MEDIA_INVOICE_REQUISITION_ID], ";
+            strSQL += "     [MediaInvoiceSubject] AS [MEDIA_INVOICE_SUBJECT], ";
+            strSQL += "     [MediaInvoiceBPMFormNo] AS [MEDIA_INVOICE_BPM_FORM_NO], ";
+            strSQL += "     [MediaInvoiceERPFormNo] AS [MEDIA_INVOICE_ERP_FORM_NO], ";
+            strSQL += "     [MediaInvoicePath] AS [MEDIA_INVOICE_PATH], ";
+            strSQL += "     [MediaOrderPYMT_OrderTotal] AS [MEDIA_ORDER_PYMT_ORDER_TOTAL], ";
+            strSQL += "     [MediaOrderPYMT_OrderTotal_CONV] AS [MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV], ";
+            strSQL += "     [TXN_Type] AS [TXN_TYPE], ";
+            strSQL += "     [Period] AS [PERIOD], ";
+            strSQL += "     [TaxTate] AS [TAX_TATE], ";
+            strSQL += "     [RefundAmount] AS [REFUND_AMOUNT], ";
+            strSQL += "     [RefundAmount_TWD] AS [REFUND_AMOUNT_TWD], ";
+            strSQL += "     [TaxInclTotal] AS [TAX_INCL_TOTAL], ";
+            strSQL += "     [TaxInclTotal_TWD] AS [TAX_INCL_TOTAL_TWD], ";
+            strSQL += "     [Currency] AS [CURRENCY], ";
+            strSQL += "     [ExchangeRate] AS [EXCH_RATE], ";
+            strSQL += "     [Note] AS [NOTE], ";
+            strSQL += "     [SupNo] AS [SUP_NO], ";
+            strSQL += "     [SupName] AS [SUP_NAME], ";
+            strSQL += "     [RegisterKind] AS [REG_KIND], ";
+            strSQL += "     [RegisterNo] AS [REG_NO], ";
+            strSQL += "     [OwnerName] AS [OWNER_NAME], ";
+            strSQL += "     [OwnerTEL] AS [OWNER_TEL], ";
+            strSQL += "     [FinancAuditID_1] AS [FINANC_AUDIT_ID_1], ";
+            strSQL += "     [FinancAuditName_1] AS [FINANC_AUDIT_NAME_1], ";
+            strSQL += "     [FinancAuditID_2] AS [FINANC_AUDIT_ID_2], ";
+            strSQL += "     [FinancAuditName_2] AS [FINANC_AUDIT_NAME_2], ";
+            strSQL += "     [DTL_NetTotal] AS [DTL_NET_TOTAL], ";
+            strSQL += "     [DTL_NetTotal_TWD] AS [DTL_NET_TOTAL_TWD], ";
+            strSQL += "     [DTL_TaxTotal] AS [DTL_TAX_TOTAL], ";
+            strSQL += "     [DTL_TaxTotal_TWD] AS [DTL_TAX_TOTAL_TWD], ";
+            strSQL += "     [DTL_GrossTotal] AS [DTL_GROSS_TOTAL], ";
+            strSQL += "     [DTL_GrossTotal_TWD] AS [DTL_GROSS_TOTAL_TWD], ";
+            strSQL += "     [DTL_MaterialTotal] AS [DTL_MATERIAL_TOTAL], ";
+            strSQL += "     [DTL_MaterialTotal_TWD] AS [DTL_MATERIAL_TOTAL_TWD], ";
+            strSQL += "     [DTL_OrderTotal] AS [DTL_ORDER_TOTAL], ";
+            strSQL += "     [DTL_OrderTotal_TWD] AS [DTL_ORDER_TOTAL_TWD], ";
+            strSQL += "     [EX_AmountTotal] AS [EX_AMOUNT_TOTAL], ";
+            strSQL += "     [EX_AmountTotal_TWD] AS [EX_AMOUNT_TOTAL_TWD], ";
+            strSQL += "     [EX_TaxTotal] AS [EX_TAX_TOTAL], ";
+            strSQL += "     [EX_TaxTotal_TWD] AS [EX_TAX_TOTAL_TWD], ";
+            strSQL += "     [PYMT_CurrentTotal] AS [PYMT_CURRENT_TOTAL], ";
+            strSQL += "     [PYMT_CurrentTotal_TWD] AS [PYMT_CURRENT_TOTAL_TWD], ";
+            strSQL += "     [PYMT_EX_TaxTotal] AS [PYMT_EX_TAX_TOTAL], ";
+            strSQL += "     [PYMT_EX_TaxTotal_TWD] AS [PYMT_EX_TAX_TOTAL_TWD], ";
+            strSQL += "     [INV_AmountTotal] AS [INV_AMOUNT_TOTAL], ";
+            strSQL += "     [INV_AmountTotal_TWD] AS [INV_AMOUNT_TOTAL_TWD], ";
+            strSQL += "     [INV_TaxTotal] AS [INV_TAX_TOTAL], ";
+            strSQL += "     [INV_TaxTotal_TWD] AS [INV_TAX_TOTAL_TWD], ";
+            strSQL += "     [ProcessMethod] AS [PROCESS_METHOD], ";
+            strSQL += "     [FinancNote] AS [FINANC_NOTE] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
+            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+            var mediaOrderReturnRefundConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderReturnRefundConfig>().FirstOrDefault();
+
+            #endregion
+
+            #region - 版權採購請款單 資訊 -
+
+            var mediaInvoiceQueryModel = new MediaInvoiceQueryModel
+            {
+                REQUISITION_ID = mediaOrderReturnRefundConfig.MEDIA_INVOICE_REQUISITION_ID
+            };
+
+            var mediaInvoiceContent = mediaInvoiceRepository.PostMediaInvoiceSingle(mediaInvoiceQueryModel);
+
+            #endregion
+
+            #region - 版權採購申請單 資訊 -
+
+            var mediaOrderQueryModel = new MediaOrderQueryModel
+            {
+                REQUISITION_ID = mediaInvoiceContent.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_REQUISITION_ID
+            };
+
+            var mediaOrderContent = mediaOrderRepository.PostMediaOrderSingle(mediaOrderQueryModel);
+
+            #endregion
+                
+            var Orderparameter = new List<SqlParameter>()
+            {
+                 new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = mediaOrderContent.APPLICANT_INFO.REQUISITION_ID },
+                 new SqlParameter("@PERIOD", SqlDbType.Int) { Value = mediaOrderReturnRefundConfig.PERIOD }
+            };
+
+            #region - 版權採購退貨折讓單 驗收明細 -
+
+            //View的「驗收明細」是 版權採購申請單 的「驗收明細」加上 「採購明細」的所屬專案、金額及備註。
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     DTL.[EpisodeTime] AS [EPISODE_TIME], ";
+            strSQL += "     DTL.[MediaSpec] AS [MEDIA_SPEC], ";
+            strSQL += "     DTL.[Net] AS [NET], ";
+            strSQL += "     DTL.[Net_TWD] AS [NET_TWD], ";
+            strSQL += "     DTL.[Tax] AS [TAX], ";
+            strSQL += "     DTL.[Tax_TWD] AS [TAX_TWD], ";
+            strSQL += "     DTL.[Gross] AS [GROSS], ";
+            strSQL += "     DTL.[Gross_TWD] AS [GROSS_TWD], ";
+            strSQL += "     DTL.[NetSum] AS [NET_SUM], ";
+            strSQL += "     DTL.[NetSum_TWD] AS [NET_SUM_TWD], ";
+            strSQL += "     DTL.[GrossSum] AS [GROSS_SUM], ";
+            strSQL += "     DTL.[GrossSum_TWD] AS [GROSS_SUM_TWD], ";
+            strSQL += "     DTL.[Material] AS [MATERIAL], ";
+            strSQL += "     DTL.[ItemSum] AS [ITEM_SUM], ";
+            strSQL += "     DTL.[ItemSum_TWD] AS [ITEM_SUM_TWD], ";
+            strSQL += "     DTL.[ProjectFormNo] AS [PROJECT_FORM_NO], ";
+            strSQL += "     DTL.[ProjectName] AS [PROJECT_NAME], ";
+            strSQL += "     DTL.[ProjectNickname] AS [PROJECT_NICKNAME], ";
+            strSQL += "     DTL.[ProjectUseYear] AS [PROJECT_USE_YEAR], ";
+            strSQL += "     DTL.[Note] AS [NOTE], ";
+            strSQL += "     DTL.[OrderRowNo] AS [ORDER_ROW_NO], ";
+            strSQL += "     ACPT.[Period] AS [PERIOD], ";
+            strSQL += "     ACPT.[SupProdANo] AS [SUP_PROD_A_NO], ";
+            strSQL += "     ACPT.[ItemName] AS [ITEM_NAME], ";
+            strSQL += "     ACPT.[MediaType] AS [MEDIA_TYPE], ";
+            strSQL += "     ACPT.[StartEpisode] AS [START_EPISODE], ";
+            strSQL += "     ACPT.[EndEpisode] AS [END_EPISODE], ";
+            strSQL += "     ACPT.[ACPT_Episode] AS [ACPT_EPISODE], ";
+            strSQL += "     ACPT.[OrderEpisode] AS [ORDER_EPISODE] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_ACPT] AS ACPT ";
+            strSQL += "	    INNER JOIN [BPMPro].[dbo].[FM7T_MediaOrder_DTL] AS DTL ON ACPT.[RequisitionID]=DTL.[RequisitionID] AND ACPT.[SupProdANo]=DTL.[SupProdANo] AND ACPT.[OrderRowNo]=DTL.[OrderRowNo] ";
+            strSQL += "WHERE 1=1 ";
+            strSQL += "         AND ACPT.[RequisitionID]=@REQUISITION_ID ";
+            strSQL += "         AND ACPT.[Period]=@PERIOD ";
+
+            var mediaOrderReturnRefundAcceptancesConfig = dbFun.DoQuery(strSQL, Orderparameter).ToList<MediaOrderReturnRefundAcceptancesConfig>();
+
+            #endregion
+
+            #region - 版權採購退貨折讓單 授權權利 -
+            //View的「授權權利」是 版權採購申請單 的「授權權利」
+
+            List<MediaOrderReturnRefundAuthorizesConfig> mediaOrderReturnRefundAuthorizesConfig = new List<MediaOrderReturnRefundAuthorizesConfig>();
+            foreach (var item in mediaOrderReturnRefundAcceptancesConfig)
+            {
+                strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_AUTHS_CONFIG.Where(AUTH => AUTH.ORDER_ROW_NO == item.ORDER_ROW_NO && item.PERIOD == mediaOrderReturnRefundConfig.PERIOD).Select(AUTH => AUTH));
+                mediaOrderReturnRefundAuthorizesConfig.AddRange(JsonConvert.DeserializeObject<List<MediaOrderReturnRefundAuthorizesConfig>>(strJson));
+            }
+
+            #endregion
+
+            #region - 版權採購退貨折讓單 額外項目 -
+            //View的「額外項目」是 版權採購申請單 的「額外項目」
+
+            strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_EXS_CONFIG.Where(EX => EX.PERIOD == mediaOrderReturnRefundConfig.PERIOD).Select(EX => EX));
+            var mediaOrderReturnRefundExtrasConfig = JsonConvert.DeserializeObject<List<MediaOrderReturnRefundExtrasConfig>>(strJson);
+
+
+            #endregion
+
+            #region - 版權採購退貨折讓單 付款辦法 -
+            //View的「付款辦法」是 版權採購申請單 的「付款辦法」
+
+            strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_PYMTS_CONFIG.Where(PYMT => PYMT.PERIOD == mediaOrderReturnRefundConfig.PERIOD).Select(PYMT => PYMT));
+            var mediaOrderReturnRefundPaymentsConfig = JsonConvert.DeserializeObject<List<MediaOrderReturnRefundPaymentsConfig>>(strJson);
+
+
+            #endregion
+
+            #region - 版權採購退貨折讓單 使用預算 -
+            //View的「使用預算」是 版權採購申請單 的「使用預算」
+
+            strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_BUDGS_CONFIG.Where(BUDG => BUDG.PERIOD == mediaOrderReturnRefundConfig.PERIOD).Select(BUDG => BUDG));
+            var mediaOrderReturnRefundBudgetsConfig = JsonConvert.DeserializeObject<List<MediaOrderReturnRefundBudgetsConfig>>(strJson);
+
+
+            #endregion
+
+            #region - 版權採購請款單 憑證明細 -
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [Period] AS [PERIOD], ";
+            strSQL += "     [Num] AS [NUM], ";
+            strSQL += "     [Date] AS [DATE], ";
+            strSQL += "     [Excl] AS [EXCL], ";
+            strSQL += "     [Excl_TWD] AS [EXCL_TWD], ";
+            strSQL += "     [Tax] AS [TAX], ";
+            strSQL += "     [Tax_TWD] AS [TAX_TWD], ";
+            strSQL += "     [Net] AS [NET], ";
+            strSQL += "     [Net_TWD] AS [NET_TWD], ";
+            strSQL += "     [Gross] AS [GROSS], ";
+            strSQL += "     [Gross_TWD] AS [GROSS_TWD], ";
+            strSQL += "     [Amount] AS [AMOUNT], ";
+            strSQL += "     [Amount_TWD] AS [AMOUNT_TWD], ";
+            strSQL += "     [Note] AS [NOTE] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaInvoice_INV] ";
+            strSQL += "WHERE 1=1 ";
+            strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+            strSQL += "         AND [Period]=@PERIOD ";
+            strSQL += "ORDER BY [AutoCounter] ";
+
+            var mediaOrderReturnRefundInvoicesConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderReturnRefundInvoicesConfig>();
+
+            #endregion
+
+            #region - 版權採購退貨折讓單 退貨商品明細 -
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [INV_Num] AS [INV_NUM], ";
+            strSQL += "     [OrderRowNo] AS [ORDER_ROW_NO], ";
+            strSQL += "     [SupProdANo] AS [SUP_PROD_A_NO], ";
+            strSQL += "     [ItemName] AS [ITEM_NAME], ";
+            strSQL += "     [MediaSpec] AS [MEDIA_SPEC], ";
+            strSQL += "     [MediaType] AS [MEDIA_TYPE], ";
+            strSQL += "     [StartEpisode] AS [START_EPISODE], ";
+            strSQL += "     [EndEpisode] AS [END_EPISODE], ";
+            strSQL += "     [OrderEpisode] AS [ORDER_EPISODE], ";
+            strSQL += "     [ACPT_Episode] AS [ACPT_EPISODE], ";
+            strSQL += "     [EpisodeTime] AS [EPISODE_TIME] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_RFCOMM] ";
+            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+            var mediaOrderReturnRefundCommoditysConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderReturnRefundCommoditysConfig>();
+
+            #endregion
+
+            #region - 版權採購退貨折讓單 表單關聯 -
+
+            var formQueryModel = new FormQueryModel()
+            {
+                REQUISITION_ID = query.REQUISITION_ID
+            };
+            var associatedForm = commonRepository.PostAssociatedForm(formQueryModel);
+
+            #endregion
+
+            var mediaOrderReturnRefundViewModel = new MediaOrderReturnRefundViewModel()
+            {
+                APPLICANT_INFO = applicantInfo,
+                MEDIA_ORDER_RETURN_REFUND_TITLE = mediaOrderReturnRefundTitle,
+                MEDIA_ORDER_RETURN_REFUND_CONFIG = mediaOrderReturnRefundConfig,
+                MEDIA_ORDER_RETURN_REFUND_ACPTS_CONFIG = mediaOrderReturnRefundAcceptancesConfig,
+                MEDIA_ORDER_RETURN_REFUND_AUTHS_CONFIG = mediaOrderReturnRefundAuthorizesConfig,
+                MEDIA_ORDER_RETURN_REFUND_EXS_CONFIG = mediaOrderReturnRefundExtrasConfig,
+                MEDIA_ORDER_RETURN_REFUND_PYMTS_CONFIG = mediaOrderReturnRefundPaymentsConfig,
+                MEDIA_ORDER_RETURN_REFUND_BUDGS_CONFIG = mediaOrderReturnRefundBudgetsConfig,
+                MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG = mediaOrderReturnRefundInvoicesConfig,
+                MEDIA_ORDER_RETURN_REFUND_COMMS_CONFIG = mediaOrderReturnRefundCommoditysConfig
+            };
+
+            return mediaOrderReturnRefundViewModel;
+        }
+
+        #region - 依此單內容重送 -
 
         ///// <summary>
-        ///// 版權採購退貨折讓單(查詢)
-        ///// </summary>
-        //public MediaOrderReturnRefundViewModel PostMediaOrderReturnRefundSingle(MediaOrderReturnRefundQueryModel query)
+        ///// 版權採購退貨折讓單(依此單內容重送)(僅外部起單使用)
+        ///// </summary>        
+        //public bool PutMediaOrderReturnRefundRefill(MediaOrderReturnRefundQueryModel query)
         //{
-        //    var parameter = new List<SqlParameter>()
+        //    bool vResult = false;
+        //    try
         //    {
-        //         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID }
-        //    };
 
-        //    #region - 申請人資訊 -
 
-        //    strSQL = "";
-        //    strSQL += "SELECT ";
-        //    strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-        //    strSQL += "     [DiagramID] AS [DIAGRAM_ID], ";
-        //    strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
-        //    strSQL += "     [ApplicantDept] AS [APPLICANT_DEPT], ";
-        //    strSQL += "     [ApplicantDeptName] AS [APPLICANT_DEPT_NAME], ";
-        //    strSQL += "     [ApplicantID] AS [APPLICANT_ID], ";
-        //    strSQL += "     [ApplicantName] AS [APPLICANT_NAME], ";
-        //    strSQL += "     [ApplicantPhone] AS [APPLICANT_PHONE], ";
-        //    strSQL += "     [ApplicantDateTime] AS [APPLICANT_DATETIME], ";
-        //    strSQL += "     [FillerID] AS [FILLER_ID], ";
-        //    strSQL += "     [FillerName] AS [FILLER_NAME], ";
-        //    strSQL += "     [Priority] AS [PRIORITY], ";
-        //    strSQL += "     [DraftFlag] AS [DRAFT_FLAG], ";
-        //    strSQL += "     [FlowActivated] AS [FLOW_ACTIVATED] ";
-        //    strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
-        //    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-        //    var applicantInfo = dbFun.DoQuery(strSQL, parameter).ToList<ApplicantInfo>().FirstOrDefault();
-
-        //    #endregion
-
-        //    #region - 版權採購退貨折讓單 表頭資訊 -
-
-        //    strSQL = "";
-        //    strSQL += "SELECT ";
-        //    strSQL += "     [FlowName] AS [FLOW_NAME], ";
-        //    strSQL += "     [FormNo] AS [FORM_NO], ";
-        //    strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
-        //    strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
-        //    strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
-        //    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-
-        //    var mediaOrderReturnRefundTitle = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderReturnRefundTitle>().FirstOrDefault();
-
-        //    #endregion
-
-        //    #region - 版權採購退貨折讓單 表單內容 -
-
-        //    strSQL = "";
-        //    strSQL += "SELECT ";
-        //    strSQL += "     [MediaInvoiceRequisitionID] AS [MEDIA_INVOICE_REQUISITION_ID], ";
-        //    strSQL += "     [MediaInvoiceSubject] AS [MEDIA_INVOICE_SUBJECT], ";
-        //    strSQL += "     [MediaInvoiceBPMFormNo] AS [MEDIA_INVOICE_BPM_FORM_NO], ";
-        //    strSQL += "     [MediaInvoiceERPFormNo] AS [MEDIA_INVOICE_ERP_FORM_NO], ";
-        //    strSQL += "     [MediaInvoicePath] AS [MEDIA_INVOICE_PATH], ";
-        //    strSQL += "     [MediaOrderDTL_OrderTotal] AS [MEDIA_ORDER_DTL_ORDER_TOTAL], ";
-        //    strSQL += "     [MediaOrderDTL_OrderTotal_TWD] AS [MEDIA_ORDER_DTL_ORDER_TOTAL_TWD], ";
-        //    strSQL += "     [TXN_Type] AS [TXN_TYPE], ";
-        //    strSQL += "     [Period] AS [PERIOD], ";
-        //    strSQL += "     [TaxTate] AS [TAX_TATE], ";
-        //    strSQL += "     [RefundAmount] AS [REFUND_AMOUNT], ";
-        //    strSQL += "     [RefundAmount_TWD] AS [REFUND_AMOUNT_TWD], ";
-        //    strSQL += "     [TaxInclTotal] AS [TAX_INCL_TOTAL], ";
-        //    strSQL += "     [TaxInclTotal_TWD] AS [TAX_INCL_TOTAL_TWD], ";
-        //    strSQL += "     [Currency] AS [CURRENCY], ";
-        //    strSQL += "     [ExchangeRate] AS [EXCH_RATE], ";
-        //    strSQL += "     [Note] AS [NOTE], ";
-        //    strSQL += "     [SupNo] AS [SUP_NO], ";
-        //    strSQL += "     [SupName] AS [SUP_NAME], ";
-        //    strSQL += "     [RegisterKind] AS [REG_KIND], ";
-        //    strSQL += "     [RegisterNo] AS [REG_NO], ";
-        //    strSQL += "     [OwnerName] AS [OWNER_NAME], ";
-        //    strSQL += "     [OwnerTEL] AS [OWNER_TEL], ";
-        //    strSQL += "     [FinancAuditID_1] AS [FINANC_AUDIT_ID_1], ";
-        //    strSQL += "     [FinancAuditName_1] AS [FINANC_AUDIT_NAME_1], ";
-        //    strSQL += "     [FinancAuditID_2] AS [FINANC_AUDIT_ID_2], ";
-        //    strSQL += "     [FinancAuditName_2] AS [FINANC_AUDIT_NAME_2], ";
-        //    strSQL += "     [DTL_NetTotal] AS [DTL_NET_TOTAL], ";
-        //    strSQL += "     [DTL_NetTotal_TWD] AS [DTL_NET_TOTAL_TWD], ";
-        //    strSQL += "     [DTL_TaxTotal] AS [DTL_TAX_TOTAL], ";
-        //    strSQL += "     [DTL_TaxTotal_TWD] AS [DTL_TAX_TOTAL_TWD], ";
-        //    strSQL += "     [DTL_GrossTotal] AS [DTL_GROSS_TOTAL], ";
-        //    strSQL += "     [DTL_GrossTotal_TWD] AS [DTL_GROSS_TOTAL_TWD], ";
-        //    strSQL += "     [DTL_MaterialTotal] AS [DTL_MATERIAL_TOTAL], ";
-        //    strSQL += "     [DTL_MaterialTotal_TWD] AS [DTL_MATERIAL_TOTAL_TWD], ";
-        //    strSQL += "     [DTL_OrderTotal] AS [DTL_ORDER_TOTAL], ";
-        //    strSQL += "     [DTL_OrderTotal_TWD] AS [DTL_ORDER_TOTAL_TWD], ";
-        //    strSQL += "     [EX_AmountTotal] AS [EX_AMOUNT_TOTAL], ";
-        //    strSQL += "     [EX_AmountTotal_TWD] AS [EX_AMOUNT_TOTAL_TWD], ";
-        //    strSQL += "     [EX_TaxTotal] AS [EX_TAX_TOTAL], ";
-        //    strSQL += "     [EX_TaxTotal_TWD] AS [EX_TAX_TOTAL_TWD], ";
-        //    strSQL += "     [PYMT_CurrentTotal] AS [PYMT_CURRENT_TOTAL], ";
-        //    strSQL += "     [PYMT_CurrentTotal_TWD] AS [PYMT_CURRENT_TOTAL_TWD], ";
-        //    strSQL += "     [PYMT_EX_TaxTotal] AS [PYMT_EX_TAX_TOTAL], ";
-        //    strSQL += "     [PYMT_EX_TaxTotal_TWD] AS [PYMT_EX_TAX_TOTAL_TWD], ";
-        //    strSQL += "     [INV_AmountTotal] AS [INV_AMOUNT_TOTAL], ";
-        //    strSQL += "     [INV_AmountTotal_TWD] AS [INV_AMOUNT_TOTAL_TWD], ";
-        //    strSQL += "     [INV_TaxTotal] AS [INV_TAX_TOTAL], ";
-        //    strSQL += "     [INV_TaxTotal_TWD] AS [INV_TAX_TOTAL_TWD], ";
-        //    strSQL += "     [ProcessMethod] AS [PROCESS_METHOD], ";
-        //    strSQL += "     [FinancNote] AS [FINANC_NOTE] ";
-        //    strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
-        //    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-
-        //    var mediaOrderReturnRefundConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderReturnRefundConfig>().FirstOrDefault();
-
-        //    #endregion
-
-        //    #region - 採購單 系統編號 -
-
-        //    var Invoiceparameter = new List<SqlParameter>()
+        //    }
+        //    catch (Exception ex)
         //    {
-        //         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = mediaOrderReturnRefundConfig.MEDIA_INVOICE_REQUISITION_ID }
-        //    };
-
-        //    var formQueryModel = new FormQueryModel
-        //    {
-        //        REQUISITION_ID = mediaOrderReturnRefundConfig.MEDIA_INVOICE_REQUISITION_ID
-        //    };
-
-        //    var formData = formRepository.PostFormData(formQueryModel);
-
-        //    strSQL = "";
-        //    strSQL += "SELECT ";
-        //    strSQL += "      [MediaOrderRequisitionID] ";
-        //    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + formData.IDENTIFY + "_M] ";
-        //    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-
-        //    var dtOrder = dbFun.DoQuery(strSQL, parameter);
-        //    var OrderRequisitionID = dtOrder.Rows[0][0].ToString();
-
-        //    #endregion
-
-        //    var Orderparameter = new List<SqlParameter>()
-        //    {
-        //         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = OrderRequisitionID },
-        //         new SqlParameter("@PERIOD", SqlDbType.Int) { Value = mediaOrderReturnRefundConfig.PERIOD }
-        //    };
-
-        //    #region - 版權採購退貨折讓單 驗收明細 -
-
-        //    //View的「驗收明細」是 版權採購退貨折讓單 的「驗收明細」加上 「採購明細」的所屬專案、金額及備註。
-
-        //    strSQL = "";
-        //    strSQL += "SELECT ";
-        //    strSQL += "     DTL.[DTL_RowNo] AS [ROW_NO], ";
-        //    strSQL += "     DTL.[DTL_EpisodeTime] AS [EPISODE_TIME], ";
-        //    strSQL += "     DTL.[DTL_MediaSpec] AS [MEDIA_SPEC], ";
-        //    strSQL += "     DTL.[DTL_Net] AS [NET], ";
-        //    strSQL += "     DTL.[DTL_Net_TWD] AS [NET_TWD], ";
-        //    strSQL += "     DTL.[DTL_Tax] AS [TAX], ";
-        //    strSQL += "     DTL.[DTL_Tax_TWD] AS [TAX_TWD], ";
-        //    strSQL += "     DTL.[DTL_Gross] AS [GROSS], ";
-        //    strSQL += "     DTL.[DTL_Gross_TWD] AS [GROSS_TWD], ";
-        //    strSQL += "     DTL.[DTL_NetSum] AS [NET_SUM], ";
-        //    strSQL += "     DTL.[DTL_NetSum_TWD] AS [NET_SUM_TWD], ";
-        //    strSQL += "     DTL.[DTL_GrossSum] AS [GROSS_SUM], ";
-        //    strSQL += "     DTL.[DTL_GrossSum_TWD] AS [GROSS_SUM_TWD], ";
-        //    strSQL += "     DTL.[DTL_Material] AS [MATERIAL], ";
-        //    strSQL += "     DTL.[DTL_ItemSum] AS [ITEM_SUM], ";
-        //    strSQL += "     DTL.[DTL_ItemSum_TWD] AS [ITEM_SUM_TWD], ";
-        //    strSQL += "     DTL.[DTL_ProjectFormNo] AS [PROJECT_FORM_NO], ";
-        //    strSQL += "     DTL.[DTL_ProjectName] AS [PROJECT_NAME], ";
-        //    strSQL += "     DTL.[DTL_ProjectNickname] AS [PROJECT_NICKNAME], ";
-        //    strSQL += "     DTL.[DTL_ProjectUseYear] AS [PROJECT_USE_YEAR], ";
-        //    strSQL += "     ACPT.[PA_RowNo] AS [PA_ROW_NO], ";
-        //    strSQL += "     ACPT.[Period] AS [PERIOD], ";
-        //    strSQL += "     ACPT.[PA_SupProdANo] AS [SUP_PROD_A_NO], ";
-        //    strSQL += "     ACPT.[PA_ItemName] AS [ITEM_NAME], ";
-        //    strSQL += "     ACPT.[PA_MediaType] AS [MEDIA_TYPE], ";
-        //    strSQL += "     ACPT.[PA_StartEpisode] AS [START_EPISODE], ";
-        //    strSQL += "     ACPT.[PA_EndEpisode] AS [END_EPISODE], ";
-        //    strSQL += "     ACPT.[PA_ACPT_Episode] AS [ACPT_EPISODE], ";
-        //    strSQL += "     ACPT.[PA_Note] AS [PA_NOTE] ";
-        //    strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_ACPT] AS ACPT ";
-        //    strSQL += "	    INNER JOIN [BPMPro].[dbo].[FM7T_MediaOrder_DTL] AS DTL ON ACPT.[RequisitionID]=DTL.[RequisitionID] AND ACPT.[PA_SupProdANo]=DTL.[DTL_SupProdANo] AND ACPT.[PA_RowNo]=DTL.[DTL_RowNo] ";
-        //    strSQL += "WHERE 1=1 ";
-        //    strSQL += "         AND ACPT.[RequisitionID]=@REQUISITION_ID ";
-        //    strSQL += "         AND ACPT.[Period]=@PERIOD ";
-
-        //    var mediaOrderReturnRefundAcceptancesConfig = dbFun.DoQuery(strSQL, Orderparameter).ToList<MediaOrderReturnRefundAcceptancesConfig>();
-
-        //    #endregion
-
-        //    #region - 版權採購退貨折讓單 授權權利 -
-
-        //    //View的「授權權利」是 版權採購申請單 的「授權權利」
-
-        //    strSQL = "";
-        //    strSQL += "SELECT ";
-        //    strSQL += "     AUTH.[RequisitionID] AS [REQUISITION_ID], ";
-        //    strSQL += "     [AUTH_RowNo] AS [ROW_NO], ";
-        //    strSQL += "     [AUTH_SupProdANo] AS [SUP_PROD_A_NO], ";
-        //    strSQL += "     [AUTH_ItemName] AS [ITEM_NAME], ";
-        //    strSQL += "     [AUTH_Continent] AS [CONTINENT], ";
-        //    strSQL += "     [AUTH_Country] AS [COUNTRY], ";
-        //    strSQL += "     [AUTH_PlayPlatform] AS [PLAY_PLATFORM],";
-        //    strSQL += "     [AUTH_Play] AS [PLAY], ";
-        //    strSQL += "     [AUTH_Sell] AS [SELL], ";
-        //    strSQL += "     [AUTH_EditToPlay] AS [EDIT_TO_PLAY], ";
-        //    strSQL += "     [AUTH_EditToSell] AS [EDIT_TO_SELL], ";
-        //    strSQL += "     [AUTH_AllotedTimeType] AS [ALLOTED_TIME_TYPE], ";
-        //    strSQL += "     [AUTH_StartDate] AS [START_DATE], ";
-        //    strSQL += "     [AUTH_EndDate] AS [END_DATE], ";
-        //    strSQL += "     [AUTH_FrequencyType] AS [FREQUENCY_TYPE], ";
-        //    strSQL += "     [AUTH_PlayFrequency] AS [PLAY_FREQUENCY], ";
-        //    strSQL += "     [AUTH_Note] AS [NOTE] ";
-        //    strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_AUTH] AS AUTH ";
-        //    strSQL += "     INNER JOIN [BPMPro].[dbo].[FM7T_MediaOrder_ACPT] AS ACPT ON AUTH.[RequisitionID]=ACPT.[RequisitionID] AND AUTH.[AUTH_RowNo]=ACPT.[PA_RowNo] ";
-        //    strSQL += "WHERE 1=1 ";
-        //    strSQL += "         AND AUTH.[RequisitionID]=@REQUISITION_ID ";
-        //    strSQL += "         AND ACPT.[Period]=@PERIOD ";
-        //    strSQL += "ORDER BY AUTH.[AutoCounter] ";
-
-        //    var mediaOrderReturnRefundAuthorizesConfig = dbFun.DoQuery(strSQL, Orderparameter).ToList<MediaOrderReturnRefundAuthorizesConfig>();
-
-        //    #endregion
-
-        //    #region - 版權採購退貨折讓單 額外項目 -
-
-        //    //View的「額外項目」是 版權採購申請單 的「額外項目」
-
-        //    strSQL = "";
-        //    strSQL += "SELECT ";
-        //    strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-        //    strSQL += "     [EX_RowNo] AS [ROW_NO], ";
-        //    strSQL += "     [EX_Name] AS [NAME], ";
-        //    strSQL += "     [EX_Amount] AS [AMOUNT], ";
-        //    strSQL += "     [EX_Amount_TWD] AS [AMOUNT_TWD], ";
-        //    strSQL += "     [EX_Tax] AS [TAX], ";
-        //    strSQL += "     [EX_Tax_TWD] AS [TAX_TWD], ";
-        //    strSQL += "     [Period] AS [PERIOD], ";
-        //    strSQL += "     [EX_ProjectFormNo] AS [PROJECT_FORM_NO], ";
-        //    strSQL += "     [EX_ProjectName] AS [PROJECT_NAME], ";
-        //    strSQL += "     [EX_ProjectNickname] AS [PROJECT_NICKNAME], ";
-        //    strSQL += "     [EX_ProjectUseYear] AS [PROJECT_USE_YEAR], ";
-        //    strSQL += "     [EX_Note] AS [NOTE] ";
-        //    strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_EX] ";
-        //    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-        //    strSQL += "ORDER BY [AutoCounter] ";
-
-        //    var mediaOrderReturnRefundExtrasConfig = dbFun.DoQuery(strSQL, Orderparameter).ToList<MediaOrderReturnRefundExtrasConfig>();
-
-        //    #endregion
-
-        //    #region - 版權採購退貨折讓單 付款辦法 -
-
-        //    //View的「付款辦法」是 版權採購退貨折讓單 的「付款辦法」
-
-        //    strSQL = "";
-        //    strSQL += "SELECT ";
-        //    strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-        //    strSQL += "     [PYMT_Project] AS [PYMT_PROJECT], ";
-        //    strSQL += "     [PYMT_Terms] AS [PYMT_TERMS], ";
-        //    strSQL += "     [PYMT_MethodID] AS [PYMT_METHOD_ID], ";
-        //    strSQL += "     [PYMT_Tax] AS [TAX], ";
-        //    strSQL += "     [PYMT_Net] AS [NET], ";
-        //    strSQL += "     [PYMT_Gross] AS [GROSS], ";
-        //    strSQL += "     [PYMT_Material] AS [MATERIAL], ";
-        //    strSQL += "     [PYMT_EX_Amount] AS [EX_AMOUNT], ";
-        //    strSQL += "     [PYMT_EX_Tax] AS [EX_TAX], ";
-        //    strSQL += "     [PYMT_OrderSum] AS [ORDER_SUM], ";
-        //    strSQL += "     [PYMT_OrderSum_CONV] AS [ORDER_SUM_CONV], ";
-        //    strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_PYMT] ";
-        //    strSQL += "WHERE 1=1 ";
-        //    strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
-        //    strSQL += "         AND [Period]=@PERIOD ";
-        //    strSQL += "ORDER BY [AutoCounter] ";
-
-        //    var mediaOrderReturnRefundPaymentsConfig = dbFun.DoQuery(strSQL, Orderparameter).ToList<MediaOrderReturnRefundPaymentsConfig>();
-
-        //    #endregion
-
-        //    #region - 版權採購退貨折讓單 使用預算 -
-
-        //    //View的「使用預算」是 版權採購退貨折讓單 的「使用預算」
-
-        //    strSQL = "";
-        //    strSQL += "SELECT ";
-        //    strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-        //    strSQL += "     [Period] AS [PERIOD], ";
-        //    strSQL += "     [BUDG_FormNo] AS [BUDG_FORM_NO], ";
-        //    strSQL += "     [BUDG_CreateYear] AS [BUDG_CREATE_YEAR], ";
-        //    strSQL += "     [BUDG_Name] AS [BUDG_NAME], ";
-        //    strSQL += "     [BUDG_OwnerDept] AS [OWNER_DEPT], ";
-        //    strSQL += "     [BUDG_Total] AS [BUDG_TOTAL], ";
-        //    strSQL += "     [BUDG_AvailableBudgetAmount] AS [BUDG_AVAILABLE_BUDGET_AMOUNT], ";
-        //    strSQL += "     [BUDG_UseBudgetAmount] AS [BUDG_USE_BUDGET_AMOUNT] ";
-        //    strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_BUDG] ";
-        //    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-        //    strSQL += "ORDER BY [AutoCounter] ";
-
-        //    var mediaOrderReturnRefundBudgetsConfig = dbFun.DoQuery(strSQL, Orderparameter).ToList<MediaOrderReturnRefundBudgetsConfig>();
-
-        //    #endregion
-
-        //    #region - 版權採購退貨折讓單 憑證明細 -
-
-        //    strSQL = "";
-        //    strSQL += "SELECT ";
-        //    strSQL += "     [Period] AS [PERIOD], ";
-        //    strSQL += "     [RowNo] AS [ROW_NO], ";
-        //    strSQL += "     [INV_Num] AS [INV_NUM], ";
-        //    strSQL += "     [INV_Date] AS [INV_DATE], ";
-        //    strSQL += "     [Amount] AS [AMOUNT], ";
-        //    strSQL += "     [Amount_TWD] AS [AMOUNT_TWD], ";
-        //    strSQL += "     [Net] AS [NET], ";
-        //    strSQL += "     [Net_TWD] AS [NET_TWD], ";
-        //    strSQL += "     [Gross] AS [GROSS], ";
-        //    strSQL += "     [Gross_TWD] AS [GROSS_TWD], ";
-        //    strSQL += "     [Tax] AS [TAX], ";
-        //    strSQL += "     [Tax_TWD] AS [TAX_TWD], ";
-        //    strSQL += "     [Note] AS [NOTE], ";
-        //    strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_INV] ";
-        //    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-        //    strSQL += "ORDER BY [AutoCounter] ";
-
-        //    var mediaOrderReturnRefundInvoicesConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderReturnRefundInvoicesConfig>();
-
-        //    #endregion
-
-        //    #region - 版權採購退貨折讓單 退貨商品明細 -
-
-        //    strSQL = "";
-        //    strSQL += "SELECT ";
-        //    strSQL += "     [RowNo] AS [ROW_NO], ";
-        //    strSQL += "     [INV_Num] AS [INV_NUM], ";
-        //    strSQL += "     [ItemName] AS [ITEM_NAME], ";
-        //    strSQL += "     [MediaType] AS [MEDIA_TYPE], ";
-        //    strSQL += "     [StartEpisode] AS [START_EPISODE], ";
-        //    strSQL += "     [EndEpisode] AS [END_EPISODE], ";
-        //    strSQL += "     [OrderEpisode] AS [ORDER_EPISODE], ";
-        //    strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_COMM] ";
-        //    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-        //    strSQL += "ORDER BY [AutoCounter] ";
-
-        //    var mediaOrderReturnRefundCommoditysConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderReturnRefundCommoditysConfig>();
-
-        //    #endregion
-
-        //    #region - 版權採購退貨折讓單 表單關聯 -
-
-        //    formQueryModel = new FormQueryModel()
-        //    {
-        //        REQUISITION_ID = query.REQUISITION_ID
-        //    };
-        //    var associatedForm = commonRepository.PostAssociatedForm(formQueryModel);
-
-        //    #endregion
-
-        //    var mediaOrderReturnRefundViewModel = new MediaOrderReturnRefundViewModel()
-        //    {
-        //        APPLICANT_INFO = applicantInfo,
-        //        MEDIA_ORDER_RETURN_REFUND_TITLE = mediaOrderReturnRefundTitle,
-        //        MEDIA_ORDER_RETURN_REFUND_CONFIG = mediaOrderReturnRefundConfig,
-        //        MEDIA_ORDER_RETURN_REFUND_ACPTS_CONFIG = mediaOrderReturnRefundAcceptancesConfig,
-        //        MEDIA_ORDER_RETURN_REFUND_AUTHS_CONFIG = mediaOrderReturnRefundAuthorizesConfig,
-        //        MEDIA_ORDER_RETURN_REFUND_EXS_CONFIG = mediaOrderReturnRefundExtrasConfig,
-        //        MEDIA_ORDER_RETURN_REFUND_PYMTS_CONFIG = mediaOrderReturnRefundPaymentsConfig,
-        //        MEDIA_ORDER_RETURN_REFUND_BUDGS_CONFIG = mediaOrderReturnRefundBudgetsConfig,
-        //        MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG = mediaOrderReturnRefundInvoicesConfig,
-        //        MEDIA_ORDER_RETURN_REFUND_COMMS_CONFIG = mediaOrderReturnRefundCommoditysConfig
-        //    };
-
-        //    return mediaOrderReturnRefundViewModel;
+        //        vResult = false;
+        //        CommLib.Logger.Error("版權採購退貨折讓單(依此單內容重送)失敗，原因" + ex.Message);
+        //    }
+        //    return vResult;
         //}
 
-        //#region - 依此單內容重送 -
+        #endregion
 
-        /////// <summary>
-        /////// 版權採購退貨折讓單(依此單內容重送)(僅外部起單使用)
-        /////// </summary>        
-        ////public bool PutMediaOrderReturnRefundRefill(MediaOrderReturnRefundQueryModel query)
-        ////{
-        ////    bool vResult = false;
-        ////    try
-        ////    {
-
-
-
-        ////    }
-        ////    catch (Exception ex)
-        ////    {
-        ////        vResult = false;
-        ////        CommLib.Logger.Error("版權採購退貨折讓單(依此單內容重送)失敗，原因" + ex.Message);
-        ////    }
-        ////    return vResult;
-        ////}
-
-        //#endregion
-
-
-        ///// <summary>
-        ///// 版權採購退貨折讓單(新增/修改/草稿)
-        ///// </summary>
+        /// <summary>
+        /// 版權採購退貨折讓單(新增/修改/草稿)
+        /// </summary>
         //public bool PutMediaOrderReturnRefundSingle(MediaOrderReturnRefundViewModel model)
         //{
         //    bool vResult = false;
@@ -597,7 +536,7 @@ namespace OA_WEB_API.Repository.BPMPro
         //                new SqlParameter("@INV_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
         //                new SqlParameter("@INV_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
         //                new SqlParameter("@PROCESS_METHOD", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@FINANC_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },                        
+        //                new SqlParameter("@FINANC_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
         //            };
 
         //            strJson = jsonFunction.ObjectToJSON(model.MEDIA_ORDER_RETURN_REFUND_CONFIG);
@@ -648,7 +587,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
         //}
 
-        //#endregion
+        #endregion
 
         #region - 欄位和屬性 -
 

@@ -101,22 +101,22 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [MediaInvoicePath] AS [MEDIA_INVOICE_PATH], ";
             strSQL += "     [MediaOrderPYMT_OrderTotal] AS [MEDIA_ORDER_PYMT_ORDER_TOTAL], ";
             strSQL += "     [MediaOrderPYMT_OrderTotal_CONV] AS [MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV], ";
+            strSQL += "     [RefundAmount] AS [REFUND_AMOUNT], ";
+            strSQL += "     [RefundAmount_TWD] AS [REFUND_AMOUNT_TWD], ";
+            strSQL += "     [OrderGrossTotal] AS [ORDER_GROSS_TOTAL], ";
+            strSQL += "     [OrderGrossTotal_TWD] AS [ORDER_GROSS_TOTAL_TWD], ";
             strSQL += "     [TXN_Type] AS [TXN_TYPE], ";
             strSQL += "     [Period] AS [PERIOD], ";
             strSQL += "     [TaxTate] AS [TAX_TATE], ";
-            strSQL += "     [RefundAmount] AS [REFUND_AMOUNT], ";
-            strSQL += "     [RefundAmount_TWD] AS [REFUND_AMOUNT_TWD], ";
-            strSQL += "     [TaxInclTotal] AS [TAX_INCL_TOTAL], ";
-            strSQL += "     [TaxInclTotal_TWD] AS [TAX_INCL_TOTAL_TWD], ";
             strSQL += "     [Currency] AS [CURRENCY], ";
-            strSQL += "     [ExchangeRate] AS [EXCH_RATE], ";
-            strSQL += "     [Note] AS [NOTE], ";
+            strSQL += "     [PredictRate] AS [PRE_RATE], ";
             strSQL += "     [SupNo] AS [SUP_NO], ";
             strSQL += "     [SupName] AS [SUP_NAME], ";
             strSQL += "     [RegisterKind] AS [REG_KIND], ";
             strSQL += "     [RegisterNo] AS [REG_NO], ";
             strSQL += "     [OwnerName] AS [OWNER_NAME], ";
             strSQL += "     [OwnerTEL] AS [OWNER_TEL], ";
+            strSQL += "     [Note] AS [NOTE], ";
             strSQL += "     [FinancAuditID_1] AS [FINANC_AUDIT_ID_1], ";
             strSQL += "     [FinancAuditName_1] AS [FINANC_AUDIT_NAME_1], ";
             strSQL += "     [FinancAuditID_2] AS [FINANC_AUDIT_ID_2], ";
@@ -261,34 +261,37 @@ namespace OA_WEB_API.Repository.BPMPro
             strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_BUDGS_CONFIG.Where(BUDG => BUDG.PERIOD == mediaOrderReturnRefundConfig.PERIOD).Select(BUDG => BUDG));
             var mediaOrderReturnRefundBudgetsConfig = JsonConvert.DeserializeObject<List<MediaOrderReturnRefundBudgetsConfig>>(strJson);
 
+            #endregion
+
+            #region - 版權採購退貨折讓單 憑證明細 -
+            //View的「憑證明細」是 版權採購申請單 的「憑證明細」
+
+            strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_INVS_CONFIG.Where(BUDG => BUDG.PERIOD == mediaOrderReturnRefundConfig.PERIOD).Select(BUDG => BUDG));
+            var mediaOrderReturnRefundBudgetsConfig = JsonConvert.DeserializeObject<List<MediaOrderReturnRefundBudgetsConfig>>(strJson);
 
             #endregion
 
-            #region - 版權採購請款單 憑證明細 -
+            parameter.Add(new SqlParameter("@PERIOD", SqlDbType.Int) { Value = mediaOrderReturnRefundConfig.PERIOD });
+
+            #region - 版權採購退貨折讓單 退貨細項 -
 
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [Period] AS [PERIOD], ";
+            strSQL += "     [InvoiceRowNo] AS [INV_ROW_NO], ";
             strSQL += "     [Num] AS [NUM], ";
-            strSQL += "     [Date] AS [DATE], ";
-            strSQL += "     [Excl] AS [EXCL], ";
-            strSQL += "     [Excl_TWD] AS [EXCL_TWD], ";
-            strSQL += "     [Tax] AS [TAX], ";
-            strSQL += "     [Tax_TWD] AS [TAX_TWD], ";
-            strSQL += "     [Net] AS [NET], ";
-            strSQL += "     [Net_TWD] AS [NET_TWD], ";
-            strSQL += "     [Gross] AS [GROSS], ";
-            strSQL += "     [Gross_TWD] AS [GROSS_TWD], ";
+            strSQL += "     [Name] AS [NAME], ";
+            strSQL += "     [Quantity] AS [QUANTITY], ";
             strSQL += "     [Amount] AS [AMOUNT], ";
             strSQL += "     [Amount_TWD] AS [AMOUNT_TWD], ";
-            strSQL += "     [Note] AS [NOTE] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaInvoice_INV] ";
+            strSQL += "     [IsExcl] AS [IS_EXCL] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaInvoice_INV_DTL] ";
             strSQL += "WHERE 1=1 ";
             strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
             strSQL += "         AND [Period]=@PERIOD ";
             strSQL += "ORDER BY [AutoCounter] ";
 
-            var mediaOrderReturnRefundInvoicesConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderReturnRefundInvoicesConfig>();
+            var mediaOrderReturnRefundInvoiceDetailsConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderReturnRefundInvoiceDetailsConfig>();
 
             #endregion
 
@@ -310,7 +313,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_RFCOMM] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-            var mediaOrderReturnRefundCommoditysConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderReturnRefundCommoditysConfig>();
+            var mediaOrderReturnRefundRefundCommoditysConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderReturnRefundRefundCommoditysConfig>();
 
             #endregion
 
@@ -335,7 +338,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 MEDIA_ORDER_RETURN_REFUND_PYMTS_CONFIG = mediaOrderReturnRefundPaymentsConfig,
                 MEDIA_ORDER_RETURN_REFUND_BUDGS_CONFIG = mediaOrderReturnRefundBudgetsConfig,
                 MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG = mediaOrderReturnRefundInvoicesConfig,
-                MEDIA_ORDER_RETURN_REFUND_COMMS_CONFIG = mediaOrderReturnRefundCommoditysConfig
+                MEDIA_ORDER_RETURN_REFUND_REFUND_COMMS_CONFIG = mediaOrderReturnRefundRefundCommoditysConfig
             };
 
             return mediaOrderReturnRefundViewModel;
@@ -373,11 +376,11 @@ namespace OA_WEB_API.Repository.BPMPro
         //    bool vResult = false;
         //    try
         //    {
-        //        var InvoiceformQueryModel = new FormQueryModel()
+        //        var mediaInvoiceformQueryModel = new FormQueryModel()
         //        {
         //            REQUISITION_ID = model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_REQUISITION_ID
         //        };
-        //        var InvoiceformData = formRepository.PostFormData(InvoiceformQueryModel);
+        //        var mediaInvoiceformData = formRepository.PostFormData(mediaInvoiceformQueryModel);
 
         //        #region - 宣告 -
 
@@ -387,7 +390,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
         //        if (FM7Subject == null)
         //        {
-        //            FM7Subject = "【退貨折讓】第" + model.MEDIA_ORDER_RETURN_REFUND_CONFIG.PERIOD + "期-" + InvoiceformData.FORM_SUBJECT;
+        //            FM7Subject = "【退貨折讓】第" + model.MEDIA_ORDER_RETURN_REFUND_CONFIG.PERIOD + "期-" + medialOrderformData.FORM_SUBJECT;
         //        }
 
         //        #endregion
@@ -470,45 +473,34 @@ namespace OA_WEB_API.Repository.BPMPro
 
         //        #endregion
 
+        //        #region - 【版權採購申請單】資訊 -
+
+        //        model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_REQUISITION_ID = mediaInvoiceformData.REQUISITION_ID;
+        //        model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_SUBJECT = mediaInvoiceformData.FORM_SUBJECT;
+        //        model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_PATH = GlobalParameters.FormContentPath(model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_REQUISITION_ID, mediaInvoiceformData.IDENTIFY, mediaInvoiceformData.DIAGRAM_NAME);
+
+        //        #endregion
+
         //        #region - 版權採購退貨折讓單 表單內容：MediaOrderReturnRefund_M -
 
         //        if (model.MEDIA_ORDER_RETURN_REFUND_CONFIG != null)
         //        {
-        //            #region - 【版權採購退貨折讓單】資訊 -
-
-        //            model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_BPM_FORM_NO = InvoiceformData.SERIAL_ID;
-        //            model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_SUBJECT = InvoiceformData.FORM_SUBJECT;
-        //            model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_PATH = GlobalParameters.FormContentPath(model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_REQUISITION_ID, InvoiceformData.IDENTIFY, InvoiceformData.DIAGRAM_NAME);
-
-        //            #endregion
-
         //            var parameterInfo = new List<SqlParameter>()
         //            {
-        //                //版權採購請款單 表單內容
+        //                //版權採購退貨折讓單 表單內容
         //                new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
         //                new SqlParameter("@MEDIA_INVOICE_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
         //                new SqlParameter("@MEDIA_INVOICE_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
         //                new SqlParameter("@MEDIA_INVOICE_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
         //                new SqlParameter("@MEDIA_INVOICE_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
         //                new SqlParameter("@MEDIA_INVOICE_PATH", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@MEDIA_ORDER_DTL_ORDER_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@MEDIA_ORDER_DTL_ORDER_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@TXN_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@TAX_TATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+        //                new SqlParameter("@MEDIA_ORDER_PYMT_ORDER_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+        //                new SqlParameter("@MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
         //                new SqlParameter("@REFUND_AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
         //                new SqlParameter("@REFUND_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@TAX_INCL_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@TAX_INCL_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@CURRENCY", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@EXCH_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+        //                new SqlParameter("@", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+        //                new SqlParameter("@", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
         //                new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@SUP_NO", SqlDbType.NVarChar) { Size = 16, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@SUP_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@REG_KIND", SqlDbType.NVarChar) { Size = 15, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@REG_NO", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@OWNER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@OWNER_TEL", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
         //                new SqlParameter("@FINANC_AUDIT_ID_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
         //                new SqlParameter("@FINANC_AUDIT_NAME_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
         //                new SqlParameter("@FINANC_AUDIT_ID_2", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -551,32 +543,69 @@ namespace OA_WEB_API.Repository.BPMPro
 
         //            strSQL = "";
         //            strSQL += "UPDATE [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
-        //            strSQL += "SET []=@, ";
-        //            strSQL += "     []=@, ";
-
-        //            strSQL += "     FROM ( ";
-        //            strSQL += "             select ";
-        //            strSQL += "                 [TXN_Type] AS [TXN_TYPE], ";
-        //            strSQL += "                 [DTL_OrderTotal] AS [DTL_ORDER_TOTAL], ";
-        //            strSQL += "                 [DTL_OrderTotal_TWD] AS [DTL_ORDER_TOTAL_TWD], ";
-        //            strSQL += "                 [Currency] AS [CURRENCY], ";
-        //            strSQL += "                 [PredictRate] AS [PRE_RATE], ";
-        //            strSQL += "                 [PricingMethod] AS [PRICING_METHOD], ";
-        //            strSQL += "                 [TaxRate] AS [TAX_RATE], ";
-        //            strSQL += "                 [SupNo] AS [SUP_NO], ";
-        //            strSQL += "                 [SupName] AS [SUP_NAME], ";
-        //            strSQL += "                 [RegisterKind] AS [REG_KIND], ";
-        //            strSQL += "                 [RegisterNo] AS [REG_NO] ";
-        //            strSQL += "             FROM [BPMPro].[dbo].[FM7T_MediaInvoice_M] ";
-        //            strSQL += "             WHERE [RequisitionID] = @MEDIA_ORDER_REQUISITION_ID ";
-        //            strSQL += "     ) AS MAIN ";
-        //            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+        //            strSQL += "SET [MediaInvoiceRequisitionID]=@MEDIA_INVOICE_REQUISITION_ID, ";
+        //            strSQL += "    [MediaInvoiceSubject]=@MEDIA_INVOICE_SUBJECT, ";
+        //            strSQL += " [MediaInvoiceBPMFormNo]=@MEDIA_INVOICE_BPM_FORM_NO, ";
+        //            strSQL += " [MediaInvoiceERPFormNo]=@MEDIA_INVOICE_ERP_FORM_NO, ";
+        //            strSQL += " [MediaInvoicePath]=@MEDIA_INVOICE_PATH, ";
+        //            strSQL += " [MediaOrderPYMT_OrderTotal]=@MEDIA_ORDER_PYMT_ORDER_TOTAL, ";
+        //            strSQL += " [MediaOrderPYMT_OrderTotal_CONV]=@MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV, ";
+        //            strSQL += " [RefundAmount]=@REFUND_AMOUNT, ";
+        //            strSQL += " [RefundAmount_TWD]=@REFUND_AMOUNT_TWD, ";
+        //            strSQL += " [OrderGrossTotal]=, ";
+        //            strSQL += " [OrderGrossTotal_TWD]=, ";
+        //            strSQL += " [TXN_Type]=, ";
+        //            strSQL += " [Period]=, ";
+        //            strSQL += " [TaxTate]=, ";
+        //            strSQL += " [Currency]=, ";
+        //            strSQL += " [PredictRate]=, ";
+        //            strSQL += " [SupNo]=@SUP_NO, ";
+        //            strSQL += " [SupName]=@SUP_NAME, ";
+        //            strSQL += " [RegisterKind]=@REG_KIND, ";
+        //            strSQL += "SET [RegisterNo]=@REG_NO, ";
+        //            strSQL += "SET [OwnerName]=@OWNER_NAME, ";
+        //            strSQL += "SET [OwnerTEL]=@OWNER_TEL, ";
+        //            strSQL += " [Note]=@NOTE, ";
+        //            strSQL += "SET [FinancAuditID_1]=@FINANC_AUDIT_ID_1, ";
+        //            strSQL += "SET [FinancAuditName_1]=@FINANC_AUDIT_NAME_1, ";
+        //            strSQL += "SET [FinancAuditID_2]=@FINANC_AUDIT_ID_2, ";
+        //            strSQL += "SET [FinancAuditName_2]=@FINANC_AUDIT_NAME_2, ";
+        //            strSQL += "SET [DTL_NetTotal]=@DTL_NET_TOTAL, ";
+        //            strSQL += "SET [DTL_NetTotal_TWD]=@DTL_NET_TOTAL_TWD, ";
+        //            strSQL += "SET [DTL_TaxTotal]=@DTL_TAX_TOTAL, ";
+        //            strSQL += "SET [DTL_TaxTotal_TWD]=@DTL_TAX_TOTAL_TWD, ";
+        //            strSQL += "SET [DTL_GrossTotal]=@DTL_GROSS_TOTAL, ";
+        //            strSQL += "SET [DTL_GrossTotal_TWD]=@DTL_GROSS_TOTAL_TWD, ";
+        //            strSQL += "SET [DTL_MaterialTotal]=@DTL_MATERIAL_TOTAL, ";
+        //            strSQL += "SET [DTL_MaterialTotal_TWD]=@DTL_MATERIAL_TOTAL_TWD, ";
+        //            strSQL += "SET [DTL_OrderTotal]=@DTL_ORDER_TOTAL, ";
+        //            strSQL += "SET [DTL_OrderTotal_TWD]=@DTL_ORDER_TOTAL_TWD, ";
+        //            strSQL += "SET [EX_AmountTotal]=@EX_AMOUNT_TOTAL, ";
+        //            strSQL += "SET [EX_AmountTotal_TWD]=@EX_AMOUNT_TOTAL_TWD, ";
+        //            strSQL += "SET [EX_TaxTotal]=@EX_TAX_TOTAL, ";
+        //            strSQL += "SET [EX_TaxTotal_TWD]=@EX_TAX_TOTAL_TWD, ";
+        //            strSQL += "SET [PYMT_CurrentTotal]=@PYMT_CURRENT_TOTAL, ";
+        //            strSQL += "SET [PYMT_CurrentTotal_TWD]=@PYMT_CURRENT_TOTAL_TWD, ";
+        //            strSQL += "SET [PYMT_EX_TaxTotal]=@PYMT_EX_TAX_TOTAL, ";
+        //            strSQL += "SET [PYMT_EX_TaxTotal_TWD]=@PYMT_EX_TAX_TOTAL_TWD, ";
+        //            strSQL += "SET [INV_AmountTotal]=@INV_AMOUNT_TOTAL, ";
+        //            strSQL += "SET [INV_AmountTotal_TWD]=@INV_AMOUNT_TOTAL_TWD, ";
+        //            strSQL += "SET [INV_TaxTotal]=@INV_TAX_TOTAL, ";
+        //            strSQL += "SET [INV_TaxTotal_TWD]=@INV_TAX_TOTAL_TWD, ";
+        //            strSQL += "SET [ProcessMethod]=@PROCESS_METHOD, ";
+        //            strSQL += "SET [FinancNote]=@FINANC_NOTE ";
+        //            strSQL += "WHERE 1=1 ";
+        //            strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+        //            strSQL += "ORDER BY [AutoCounter] ";
 
         //            dbFun.DoTran(strSQL, parameterInfo);
 
         //        }
 
         //        #endregion
+            
+                
+
         //    }
         //    catch (Exception ex)
         //    {

@@ -2876,13 +2876,13 @@
             行政採購點驗收單 驗收簽核 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceApprovesConfig.DTL_ROW_NO">
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceApprovesConfig.ROW_NO">
             <summary>行數編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceApprovesConfig.DTL_STATUS">
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceApprovesConfig.STATUS">
             <summary>驗收結果</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceApprovesConfig.DTL_ACPT_NOTE">
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceApprovesConfig.ACPT_NOTE">
             <summary>驗收備註</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GeneralInvoiceQueryModel">
@@ -3793,6 +3793,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceERPInfo.DTL">
             <summary>行政採購點驗收單(驗收明細)</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceERPInfo.RF_COMM">
+            <summary>行政採購點驗收單(退貨商品明細)</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceInfoTitle.FLOW_NAME">
             <summary>ERP 工作流程名稱</summary>
         </member>
@@ -4480,8 +4483,11 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel.MEDIA_INVOICE_BUDGS_CONFIG">
             <summary>版權採購請款單 使用預算 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel.MEDIA_INVOICE_DTLS_CONFIG">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel.MEDIA_INVOICE_INVS_CONFIG">
             <summary>版權採購請款單 憑證明細 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel.MEDIA_INVOICE_INV_DTLS_CONFIG">
+            <summary>版權採購請款單 憑證細項 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel.ASSOCIATED_FORM_CONFIG">
             <summary>表單關聯</summary>
@@ -4657,6 +4663,12 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.INV_TAX_TOTAL_TWD">
             <summary>憑證明細 總稅額/總預估保留稅額_台幣(憑證明細)</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.INV_DTL_AMOUNT_TOTAL">
+            <summary>憑證細項 合計</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.INV_DTL_AMOUNT_TOTAL_TWD">
+            <summary>憑證細項 合計_台幣</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.ACTUAL_PAY_AMOUNT">
             <summary>實際支付金額</summary>
         </member>
@@ -4757,52 +4769,84 @@
             版權採購請款單 使用預算 設定
             </summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig">
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoicesConfig">
             <summary>
             版權採購請款單 憑證明細 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.PERIOD">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoicesConfig.PERIOD">
             <summary>期別</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.NUM">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoicesConfig.INV_ROW_NO">
+            <summary>憑證行數編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoicesConfig.NUM">
             <summary>憑證號碼</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.DATE">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoicesConfig.DATE">
             <summary>憑證日期</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.EXCL">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoicesConfig.EXCL">
             <summary>憑證免稅額</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.EXCL_TWD">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoicesConfig.EXCL_TWD">
             <summary>憑證免稅額_台幣</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.TAX">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoicesConfig.TAX">
             <summary>憑證稅額</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.TAX_TWD">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoicesConfig.TAX_TWD">
             <summary>憑證稅額_台幣</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.NET">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoicesConfig.NET">
             <summary>憑證未稅金額</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.NET_TWD">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoicesConfig.NET_TWD">
             <summary>憑證未稅金額_台幣</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.GROSS">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoicesConfig.GROSS">
             <summary>憑證含稅金額</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.GROSS_TWD">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoicesConfig.GROSS_TWD">
             <summary>憑證含稅金額_台幣</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.AMOUNT">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoicesConfig.AMOUNT">
             <summary>憑證金額</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.AMOUNT_TWD">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoicesConfig.AMOUNT_TWD">
             <summary>憑證金額</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceDetailsConfig.NOTE">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoicesConfig.NOTE">
             <summary>備註</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoiceDetailsConfig">
+            <summary>
+            版權採購請款單 憑證細項 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoiceDetailsConfig.PERIOD">
+            <summary>期別</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoiceDetailsConfig.INV_ROW_NO">
+            <summary>憑證行數編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoiceDetailsConfig.NUM">
+            <summary>憑證號碼</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoiceDetailsConfig.NAME">
+            <summary>名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoiceDetailsConfig.QUANTITY">
+            <summary>數量</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoiceDetailsConfig.AMOUNT">
+            <summary>金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoiceDetailsConfig.AMOUNT_TWD">
+            <summary>金額_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceInvoiceDetailsConfig.IS_EXCL">
+            <summary>是否免稅[註記]</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaOrderChangeQueryModel">
             <summary>
@@ -5401,7 +5445,10 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundViewModel.MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG">
             <summary>版權採購退貨折讓單 憑證明細 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundViewModel.MEDIA_ORDER_RETURN_REFUND_COMMS_CONFIG">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundViewModel.MEDIA_ORDER_RETURN_REFUND_INV_DTLS_CONFIG">
+            <summary>版權採購退貨折讓單 憑證細項 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundViewModel.MEDIA_ORDER_RETURN_REFUND_REFUND_COMMS_CONFIG">
             <summary>版權採購退貨折讓單 退貨商品明細 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundViewModel.ASSOCIATED_FORM_CONFIG">
@@ -5441,6 +5488,18 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV">
             <summary>版權採購 總金額_台幣</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.REFUND_AMOUNT">
+            <summary>退款金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.REFUND_AMOUNT_TWD">
+            <summary>退款金額_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.ORDER_GROSS_TOTAL">
+            <summary>含稅總額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.ORDER_GROSS_TOTAL_TWD">
+            <summary>含稅總額_台幣</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.TXN_TYPE">
             <summary>交易類型</summary>
         </member>
@@ -5450,26 +5509,11 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.TAX_TATE">
             <summary>營業稅/[稅率]租稅協定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.REFUND_AMOUNT">
-            <summary>退款金額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.REFUND_AMOUNT_TWD">
-            <summary>退款金額_台幣</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.TAX_INCL_TOTAL">
-            <summary>含稅總額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.TAX_INCL_TOTAL_TWD">
-            <summary>含稅總額_台幣</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.CURRENCY">
             <summary>幣別</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.EXCH_RATE">
-            <summary>匯率</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.NOTE">
-            <summary>備註</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.PRE_RATE">
+            <summary>預計匯率</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.SUP_NO">
             <summary>廠商編號</summary>
@@ -5500,6 +5544,9 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.FINANC_AUDIT_NAME_2">
             <summary>財務覆核人員姓名</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.NOTE">
+            <summary>備註</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.DTL_NET_TOTAL">
             <summary>合計未稅金額(銷售明細)/NET總額(銷售明細)</summary>
@@ -5603,42 +5650,47 @@
             版權採購退貨折讓單 憑證明細 設定
             </summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundCommoditysConfig">
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundInvoiceDetailsConfig">
+            <summary>
+            版權採購退貨折讓單 憑證細項 設定
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundRefundCommoditysConfig">
             <summary>
             版權採購退貨折讓單 退貨商品明細 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundCommoditysConfig.INV_NUM">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundRefundCommoditysConfig.INV_NUM">
             <summary>憑證號碼</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundCommoditysConfig.ORDER_ROW_NO">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundRefundCommoditysConfig.ORDER_ROW_NO">
             <summary>訂單行數編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundCommoditysConfig.SUP_PROD_A_NO">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundRefundCommoditysConfig.SUP_PROD_A_NO">
             <summary>商品代碼</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundCommoditysConfig.ITEM_NAME">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundRefundCommoditysConfig.ITEM_NAME">
             <summary>名稱</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundCommoditysConfig.MEDIA_SPEC">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundRefundCommoditysConfig.MEDIA_SPEC">
             <summary>影帶規格</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundCommoditysConfig.MEDIA_TYPE">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundRefundCommoditysConfig.MEDIA_TYPE">
             <summary>影片類型</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundCommoditysConfig.START_EPISODE">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundRefundCommoditysConfig.START_EPISODE">
             <summary>開始集數</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundCommoditysConfig.END_EPISODE">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundRefundCommoditysConfig.END_EPISODE">
             <summary>結束集數</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundCommoditysConfig.ORDER_EPISODE">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundRefundCommoditysConfig.ORDER_EPISODE">
             <summary>總集數</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundCommoditysConfig.ACPT_EPISODE">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundRefundCommoditysConfig.ACPT_EPISODE">
             <summary>驗收集數</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundCommoditysConfig.EPISODE_TIME">
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundRefundCommoditysConfig.EPISODE_TIME">
             <summary>每集長度</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaSaleQueryModel">
@@ -7949,8 +8001,11 @@
         <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.MEDIA_INVOICE_BUDGS_CONFIG">
             <summary>版權採購請款單 使用預算 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.MEDIA_INVOICE_DTLS_CONFIG">
-            <summary>版權採購請款單 發票明細 設定</summary>
+        <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.MEDIA_INVOICE_INVS_CONFIG">
+            <summary>版權採購請款單 憑證 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.MEDIA_INVOICE_INV_DTLS_CONFIG">
+            <summary>版權採購請款單 憑證明細 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.LoginId">
             <summary>最後簽核人員工編號</summary>

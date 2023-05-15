@@ -52,8 +52,11 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>版權採購退貨折讓單 憑證明細 設定</summary>
         public IList<MediaOrderReturnRefundInvoicesConfig> MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG { get; set; }
 
+        /// <summary>版權採購退貨折讓單 細項 設定</summary>
+        public IList<MediaOrderReturnRefundInvoiceDetailsConfig> MEDIA_ORDER_RETURN_REFUND_INV_DTLS_CONFIG { get; set; }
+
         /// <summary>版權採購退貨折讓單 退貨商品明細 設定</summary>
-        public IList<MediaOrderReturnRefundCommoditysConfig> MEDIA_ORDER_RETURN_REFUND_COMMS_CONFIG { get; set; }
+        public IList<MediaOrderReturnRefundRefundCommoditysConfig> MEDIA_ORDER_RETURN_REFUND_REFUND_COMMS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
@@ -95,6 +98,18 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>版權採購 總金額_台幣</summary>
         public int MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV { get; set; }
 
+        /// <summary>退款金額</summary>
+        public double REFUND_AMOUNT { get; set; }
+
+        /// <summary>退款金額_台幣</summary>
+        public int REFUND_AMOUNT_TWD { get; set; }
+
+        /// <summary>含稅總額</summary>
+        public double ORDER_GROSS_TOTAL { get; set; }
+
+        /// <summary>含稅總額_台幣</summary>
+        public int ORDER_GROSS_TOTAL_TWD { get; set; }
+
         /// <summary>交易類型</summary>
         public string TXN_TYPE { get; set; }
 
@@ -104,26 +119,11 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>營業稅/[稅率]租稅協定</summary>
         public double TAX_TATE { get; set; }
 
-        /// <summary>退款金額</summary>
-        public double REFUND_AMOUNT { get; set; }
-
-        /// <summary>退款金額_台幣</summary>
-        public int REFUND_AMOUNT_TWD { get; set; }
-
-        /// <summary>含稅總額</summary>
-        public double TAX_INCL_TOTAL { get; set; }
-
-        /// <summary>含稅總額_台幣</summary>
-        public int TAX_INCL_TOTAL_TWD { get; set; }
-
         /// <summary>幣別</summary>
         public string CURRENCY { get; set; }
 
-        /// <summary>匯率</summary>
-        public double EXCH_RATE { get; set; }
-
-        /// <summary>備註</summary>
-        public string NOTE { get; set; }
+        /// <summary>預計匯率</summary>
+        public double PRE_RATE { get; set; }
 
         /// <summary>廠商編號</summary>
         public string SUP_NO { get; set; }
@@ -154,6 +154,9 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>財務覆核人員姓名</summary>
         public string FINANC_AUDIT_NAME_2 { get; set; }
+
+        /// <summary>備註</summary>
+        public string NOTE { get; set; }
 
         /// <summary>合計未稅金額(銷售明細)/NET總額(銷售明細)</summary>
         public double DTL_NET_TOTAL { get; set; }
@@ -272,16 +275,32 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 版權採購退貨折讓單 憑證明細 設定
     /// </summary>
+    public class MediaOrderReturnRefundInvoicesConfig: MediaInvoiceInvoicesConfig
+    {
+        
+    }
 
-    public class MediaOrderReturnRefundInvoicesConfig: MediaInvoiceDetailsConfig
+    /// <summary>
+    /// 版權採購退貨折讓單 退貨明細 設定
+    /// </summary>
+    public class MediaOrderReturnRefundRefundDetailsConfig
     {
 
     }
 
     /// <summary>
+    /// 版權採購退貨折讓單 退貨細項 設定
+    /// </summary>
+    public class MediaOrderReturnRefundRefundContentsConfig : MediaInvoiceInvoiceDetailsConfig
+    {
+
+    }
+
+
+    /// <summary>
     /// 版權採購退貨折讓單 退貨商品明細 設定
     /// </summary>
-    public class MediaOrderReturnRefundCommoditysConfig
+    public class MediaOrderReturnRefundRefundCommoditysConfig
     {
         /// <summary>憑證號碼</summary>
         public string INV_NUM { get; set; }

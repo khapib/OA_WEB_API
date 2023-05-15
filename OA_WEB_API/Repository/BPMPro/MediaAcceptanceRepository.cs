@@ -158,16 +158,25 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 版權採購交片單 授權權利 -
+            #region - 版權採購單 資訊 -
 
             var mediaOrderQueryModel = new MediaOrderQueryModel
             {
                 REQUISITION_ID = mediaAcceptanceConfig.MEDIA_ORDER_REQUISITION_ID
             };
-                        
-            var mediaOrderContent = mediaOrderRepository.PostMediaOrderSingle(mediaOrderQueryModel);            
-            strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_AUTHS_CONFIG);
-            var mediaAcceptanceAuthorizesConfig = JsonConvert.DeserializeObject<List<MediaAcceptanceAuthorizesConfig>>(strJson);
+
+            var mediaOrderContent = mediaOrderRepository.PostMediaOrderSingle(mediaOrderQueryModel);
+
+            #endregion
+
+            #region - 版權採購交片單 授權權利 -
+
+            List<MediaAcceptanceAuthorizesConfig> mediaAcceptanceAuthorizesConfig = new List<MediaAcceptanceAuthorizesConfig>();
+            foreach (var item in mediaAcceptanceDetailsConfig)
+            {
+                strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_AUTHS_CONFIG.Where(AUTH => AUTH.ORDER_ROW_NO == item.ORDER_ROW_NO).Select(AUTH => AUTH));
+                mediaAcceptanceAuthorizesConfig.AddRange(JsonConvert.DeserializeObject<List<MediaAcceptanceAuthorizesConfig>>(strJson));
+            }
 
             #endregion
 
@@ -186,7 +195,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [OrderEpisode] AS [ORDER_EPISODE], ";
             strSQL += "     [ACPT_Episode] AS [ACPT_EPISODE], ";
             strSQL += "     [EpisodeTime] AS [EPISODE_TIME] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaAcceptance_RFCOMM] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaAcceptance_RF_COMM] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
             var mediaOrderReturnRefundCommoditysConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaAcceptanceRefundCommoditysConfig>();
@@ -475,7 +484,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 版權採購交片單 退貨商品明細: MediaAcceptance_RFCOMMS -
+                #region - 版權採購交片單 退貨商品明細: MediaAcceptance_RF_COMMS -
 
                 var parameterRefundCommoditys = new List<SqlParameter>()
                 {
@@ -493,11 +502,12 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@ACPT_EPISODE", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
                     new SqlParameter("@EPISODE_TIME", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
                 };
+
                 #region 先刪除舊資料
 
                 strSQL = "";
                 strSQL += "DELETE ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaAcceptance_RFCOMM] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaAcceptance_RF_COMM] ";
                 strSQL += "WHERE 1=1 ";
                 strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
 
@@ -516,7 +526,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterRefundCommoditys);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaAcceptance_RFCOMM]([RequisitionID],[INV_Num],[OrderRowNo],[SupProdANo],[ItemName],[MediaSpec],[MediaType],[StartEpisode],[EndEpisode],[OrderEpisode],[ACPT_Episode],[EpisodeTime]) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaAcceptance_RF_COMM]([RequisitionID],[INV_Num],[OrderRowNo],[SupProdANo],[ItemName],[MediaSpec],[MediaType],[StartEpisode],[EndEpisode],[OrderEpisode],[ACPT_Episode],[EpisodeTime]) ";
                         strSQL += "VALUES(@REQUISITION_ID,@INV_NUM,@ORDER_ROW_NO,@SUP_PROD_A_NO,@ITEM_NAME,@MEDIA_SPEC,@MEDIA_TYPE,@START_EPISODE,@END_EPISODE,@ORDER_EPISODE,@ACPT_EPISODE,@EPISODE_TIME) ";
 
                         dbFun.DoTran(strSQL, parameterRefundCommoditys);

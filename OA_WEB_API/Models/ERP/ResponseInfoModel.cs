@@ -387,8 +387,11 @@ namespace OA_WEB_API.Models.ERP
         /// <summary>版權採購請款單 使用預算 設定</summary>
         public IList<MediaInvoiceBudgetsConfig> MEDIA_INVOICE_BUDGS_CONFIG { get; set; }
 
-        /// <summary>版權採購請款單 發票明細 設定</summary>
-        public IList<MediaInvoiceDetailsConfig> MEDIA_INVOICE_DTLS_CONFIG { get; set; }
+        /// <summary>版權採購請款單 憑證 設定</summary>
+        public IList<MediaInvoiceInvoicesConfig> MEDIA_INVOICE_INVS_CONFIG { get; set; }
+
+        /// <summary>版權採購請款單 憑證明細 設定</summary>
+        public IList<MediaInvoiceInvoiceDetailsConfig> MEDIA_INVOICE_INV_DTLS_CONFIG { get; set; }
 
         /// <summary>最後簽核人員工編號</summary>
         public string LoginId { get; set; }

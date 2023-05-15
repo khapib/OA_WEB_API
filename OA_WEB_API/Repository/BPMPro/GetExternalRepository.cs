@@ -2057,6 +2057,13 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     #endregion
 
+                    #region - 版權採購交片單(退貨商品明細):mediaAcceptanceRefundCommoditysConfig -
+
+                    strJson = jsonFunction.ObjectToJSON(model.RF_COMM);
+                    var mediaAcceptanceRefundCommoditysConfig = jsonFunction.JsonToObject<List<MediaAcceptanceRefundCommoditysConfig>>(strJson);
+                    
+                    #endregion
+
                     #region - 送單 -
 
                     //送單
@@ -2065,7 +2072,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         APPLICANT_INFO = applicantInfo,
                         MEDIA_ACCEPTANCE_TITLE = mediaAcceptanceTitle,
                         MEDIA_ACCEPTANCE_CONFIG = mediaAcceptanceConfig,
-                        MEDIA_ACCEPTANCE_DTLS_CONFIG = mediaAcceptanceDetailsConfig
+                        MEDIA_ACCEPTANCE_DTLS_CONFIG = mediaAcceptanceDetailsConfig,
+                        MEDIA_ACCEPTANCE_REFUND_COMMS_CONFIG= mediaAcceptanceRefundCommoditysConfig,
                     };
 
                     if (mediaAcceptanceRepository.PutMediaAcceptanceSingle(mediaAcceptanceViewModel))

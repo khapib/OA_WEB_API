@@ -47,7 +47,10 @@ namespace OA_WEB_API.Models.BPMPro
         public IList<MediaInvoiceBudgetsConfig> MEDIA_INVOICE_BUDGS_CONFIG { get; set; }
 
         /// <summary>版權採購請款單 憑證明細 設定</summary>
-        public IList<MediaInvoiceDetailsConfig> MEDIA_INVOICE_DTLS_CONFIG { get; set; }
+        public IList<MediaInvoiceInvoicesConfig> MEDIA_INVOICE_INVS_CONFIG { get; set; }
+
+        /// <summary>版權採購請款單 憑證細項 設定</summary>
+        public IList<MediaInvoiceInvoiceDetailsConfig> MEDIA_INVOICE_INV_DTLS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
@@ -225,6 +228,12 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>憑證明細 總稅額/總預估保留稅額_台幣(憑證明細)</summary>
         public int INV_TAX_TOTAL_TWD { get; set; }
 
+        /// <summary>憑證細項 合計</summary>
+        public double INV_DTL_AMOUNT_TOTAL { get; set; }
+
+        /// <summary>憑證細項 合計_台幣</summary>
+        public int INV_DTL_AMOUNT_TOTAL_TWD { get; set; }
+
         /// <summary>實際支付金額</summary>
         public int ACTUAL_PAY_AMOUNT { get; set; }
 
@@ -340,10 +349,13 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 版權採購請款單 憑證明細 設定
     /// </summary>
-    public class MediaInvoiceDetailsConfig
+    public class MediaInvoiceInvoicesConfig
     {
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
+ 
+        /// <summary>憑證行數編號</summary>
+        public int INV_ROW_NO { get; set; }
 
         /// <summary>憑證號碼</summary>
         public string NUM { get; set; }
@@ -383,5 +395,35 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>備註</summary>
         public string NOTE { get; set; }
+    }
+
+    /// <summary>
+    /// 版權採購請款單 憑證細項 設定
+    /// </summary>
+    public class MediaInvoiceInvoiceDetailsConfig
+    {
+        /// <summary>期別</summary>
+        public int PERIOD { get; set; }
+
+        /// <summary>憑證行數編號</summary>
+        public int INV_ROW_NO { get; set; }
+
+        /// <summary>憑證號碼</summary>
+        public string NUM { get; set; }
+
+        /// <summary>名稱</summary>
+        public string NAME { get; set; }
+
+        /// <summary>數量</summary>
+        public int QUANTITY { get; set; }
+
+        /// <summary>金額</summary>
+        public double AMOUNT { get; set; }
+
+        /// <summary>金額_台幣</summary>
+        public int AMOUNT_TWD { get; set; }
+
+        /// <summary>是否免稅[註記]</summary>
+        public string IS_EXCL { get; set; }
     }
 }

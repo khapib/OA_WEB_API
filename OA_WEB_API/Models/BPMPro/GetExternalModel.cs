@@ -376,6 +376,9 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>行政採購點驗收單(驗收明細)</summary>
         public IList<MediaAcceptanceDetailsConfig> DTL { get; set; }
+
+        /// <summary>行政採購點驗收單(退貨商品明細)</summary>
+        public IList<MediaAcceptanceRefundCommoditysConfig> RF_COMM { get; set; }
     }
 
     public class MediaAcceptanceInfoTitle : InfoTitle

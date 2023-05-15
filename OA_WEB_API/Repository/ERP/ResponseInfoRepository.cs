@@ -843,7 +843,7 @@ namespace OA_WEB_API.Repository.ERP
             {
                 #region - 查詢及執行 -
 
-                #region - 行政採購點驗收單 財務審核資訊 -
+                #region - 版權採購請款單 財務審核資訊 -
 
                 #region 回傳表單內容
 
@@ -854,7 +854,7 @@ namespace OA_WEB_API.Repository.ERP
 
                 MediaInvoiceInfoRequest mediaInvoiceInfoRequest = new MediaInvoiceInfoRequest();
                 var mediaInvoiceContent = mediaInvoiceRepository.PostMediaInvoiceSingle(mediaInvoiceQueryModel);
-                //Join 行政採購點驗收單(查詢)Function
+                //Join 版權採購請款單(查詢)Function
                 strJson = jsonFunction.ObjectToJSON(mediaInvoiceContent);
                 //給予需要回傳ERP的資訊
                 mediaInvoiceInfoRequest = jsonFunction.JsonToObject<MediaInvoiceInfoRequest>(strJson);

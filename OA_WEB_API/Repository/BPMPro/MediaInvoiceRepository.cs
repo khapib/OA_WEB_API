@@ -156,8 +156,6 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [INV_AmountTotal_TWD] AS [INV_AMOUNT_TOTAL_TWD], ";
             strSQL += "     [INV_TaxTotal] AS [INV_TAX_TOTAL], ";
             strSQL += "     [INV_TaxTotal_TWD] AS [INV_TAX_TOTAL_TWD], ";
-            strSQL += "     [INV_DTL_AmountTotal] AS [INV_DTL_AMOUNT_TOTAL], ";
-            strSQL += "     [INV_DTL_AmountTotal_TWD] AS [INV_DTL_AMOUNT_TOTAL_TWD], ";
             strSQL += "     [ActualPayAmount] AS [ACTUAL_PAY_AMOUNT], ";
             strSQL += "     [FinancAuditID_1] AS [FINANC_AUDIT_ID_1], ";
             strSQL += "     [FinancAuditName_1] AS [FINANC_AUDIT_NAME_1], ";
@@ -335,7 +333,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [Gross_TWD] AS [GROSS_TWD], ";
             strSQL += "     [Amount] AS [AMOUNT], ";
             strSQL += "     [Amount_TWD] AS [AMOUNT_TWD], ";
-            strSQL += "     [Note] AS [NOTE] ";
+            strSQL += "     [Note] AS [NOTE], ";
+            strSQL += "     [IsExcl] AS [IS_EXCL] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaInvoice_INV] ";
             strSQL += "WHERE 1=1 ";
             strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
@@ -683,8 +682,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [INV_AmountTotal_TWD]=@INV_AMOUNT_TOTAL_TWD, ";
                     strSQL += "     [INV_TaxTotal]=@INV_TAX_TOTAL, ";
                     strSQL += "     [INV_TaxTotal_TWD]=@INV_TAX_TOTAL_TWD, ";
-                    strSQL += "     [INV_DTL_AmountTotal]=@INV_DTL_AMOUNT_TOTAL, ";
-                    strSQL += "     [INV_DTL_AmountTotal_TWD]=@INV_DTL_AMOUNT_TOTAL_TWD, ";
                     strSQL += "     [ActualPayAmount]=@ACTUAL_PAY_AMOUNT, ";
                     strSQL += "     [FinancAuditID_1]=@FINANC_AUDIT_ID_1, ";
                     strSQL += "     [FinancAuditName_1]=@FINANC_AUDIT_NAME_1, ";
@@ -823,6 +820,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -856,8 +854,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterInvoices);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaInvoice_INV]([RequisitionID],[MediaOrderRequisitionID],[MediaOrderBPMFormNo],[MediaOrderERPFormNo],[Period],[InvoiceRowNo],[Num],[Date],[Excl],[Excl_TWD],[Tax],[Tax_TWD],[Net],[Net_TWD],[Gross],[Gross_TWD],[Amount],[Amount_TWD],[Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@MEDIA_ORDER_REQUISITION_ID,@MEDIA_ORDER_BPM_FORM_NO,@MEDIA_ORDER_ERP_FORM_NO,@PERIOD,@INV_ROW_NO,@NUM,@DATE,@EXCL,@EXCL_TWD,@TAX,@TAX_TWD,@NET,@NET_TWD,@GROSS,@GROSS_TWD,@AMOUNT,@AMOUNT_TWD,@NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaInvoice_INV]([RequisitionID],[MediaOrderRequisitionID],[MediaOrderBPMFormNo],[MediaOrderERPFormNo],[Period],[InvoiceRowNo],[Num],[Date],[Excl],[Excl_TWD],[Tax],[Tax_TWD],[Net],[Net_TWD],[Gross],[Gross_TWD],[Amount],[Amount_TWD],[Note],[IsExcl]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@MEDIA_ORDER_REQUISITION_ID,@MEDIA_ORDER_BPM_FORM_NO,@MEDIA_ORDER_ERP_FORM_NO,@PERIOD,@INV_ROW_NO,@NUM,@DATE,@EXCL,@EXCL_TWD,@TAX,@TAX_TWD,@NET,@NET_TWD,@GROSS,@GROSS_TWD,@AMOUNT,@AMOUNT_TWD,@NOTE,@IS_EXCL) ";
 
                         dbFun.DoTran(strSQL, parameterInvoices);
                     }
@@ -912,7 +910,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         #endregion
 
-                        //寫入：版權採購請款 發票明細parameter
+                        //寫入：版權採購請款 憑證細項parameter
                         strJson = jsonFunction.ObjectToJSON(item);
                         GlobalParameters.Infoparameter(strJson, parameterInvoiceDetails);
 

@@ -183,8 +183,8 @@ namespace OA_WEB_API.Models.ERP
         /// <summary>行政採購請款單 付款辦法 設定</summary>
         public IList<GeneralInvoicePaymentsConfig> GENERAL_INVOICE_PAYMENTS_CONFIG { get; set; }
 
-        /// <summary>行政採購申請 發票明細 設定</summary>
-        public IList<GeneralInvoiceDetailsConfig> GENERAL_INVOICE_DETAILS_CONFIG { get; set; }
+        /// <summary>行政採購申請 憑證明細 設定</summary>
+        public IList<GeneralInvoiceInvoicsConfig> GENERAL_INVOICE_INVS_CONFIG { get; set; }
 
         /// <summary>最後簽核人員工編號</summary>
         public string LoginId { get; set; }
@@ -392,6 +392,28 @@ namespace OA_WEB_API.Models.ERP
 
         /// <summary>版權採購請款單 憑證明細 設定</summary>
         public IList<MediaInvoiceInvoiceDetailsConfig> MEDIA_INVOICE_INV_DTLS_CONFIG { get; set; }
+
+        /// <summary>最後簽核人員工編號</summary>
+        public string LoginId { get; set; }
+
+        /// <summary>最後簽核人姓名</summary>
+        public string LoginName { get; set; }
+    }
+
+    #endregion
+
+    #region - 版權採購退貨折讓單 審核資訊_回傳ERP -
+
+    /// <summary>
+    /// 版權採購退貨折讓單 審核資訊_回傳ERP
+    /// </summary>
+    public class MediaOrderReturnRefundInfoRequest
+    {
+        /// <summary>接收ERP回傳狀態</summary>
+        public ErpResponseState ERP_RESPONSE_STATE { get; set; }
+
+        /// <summary>版權採購退貨折讓單 test</summary>
+        public MediaOrderReturnRefundViewModel MEDIA_ORDER_RETURN_REFUND_VIEW { get; set; }
 
         /// <summary>最後簽核人員工編號</summary>
         public string LoginId { get; set; }

@@ -477,14 +477,14 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 版權採購交片單 授權權利: MediaAcceptance_AUTHS -
+                #region - 版權採購交片單 授權權利: MediaAcceptance_AUTH -
 
                 //View 是執行
                 //版權採購申請單 授權權利(MediaOrder_AUTHS) 內容。
 
                 #endregion
 
-                #region - 版權採購交片單 退貨商品明細: MediaAcceptance_RF_COMMS -
+                #region - 版權採購交片單 退貨商品明細: MediaAcceptance_RF_COMM -
 
                 var parameterRefundCommoditys = new List<SqlParameter>()
                 {
@@ -511,7 +511,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "WHERE 1=1 ";
                 strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
 
-                dbFun.DoTran(strSQL, parameterDetails);
+                dbFun.DoTran(strSQL, parameterRefundCommoditys);
 
                 #endregion
 

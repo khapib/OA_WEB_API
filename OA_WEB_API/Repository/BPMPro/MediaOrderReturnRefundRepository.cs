@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using Microsoft.SqlServer.Server;
 using Newtonsoft.Json;
+using System.Collections;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -27,7 +28,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
-        #region FormRepository
+        #region FormRepsitory
 
         /// <summary>版權採購申請單</summary>
         MediaOrderRepository mediaOrderRepository = new MediaOrderRepository();
@@ -99,199 +100,28 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [MediaInvoiceBPMFormNo] AS [MEDIA_INVOICE_BPM_FORM_NO], ";
             strSQL += "     [MediaInvoiceERPFormNo] AS [MEDIA_INVOICE_ERP_FORM_NO], ";
             strSQL += "     [MediaInvoicePath] AS [MEDIA_INVOICE_PATH], ";
-            strSQL += "     [MediaOrderPYMT_OrderTotal] AS [MEDIA_ORDER_PYMT_ORDER_TOTAL], ";
-            strSQL += "     [MediaOrderPYMT_OrderTotal_CONV] AS [MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV], ";
-            strSQL += "     [RefundAmount] AS [REFUND_AMOUNT], ";
-            strSQL += "     [RefundAmount_TWD] AS [REFUND_AMOUNT_TWD], ";
-            strSQL += "     [OrderGrossTotal] AS [ORDER_GROSS_TOTAL], ";
-            strSQL += "     [OrderGrossTotal_TWD] AS [ORDER_GROSS_TOTAL_TWD], ";
-            strSQL += "     [TXN_Type] AS [TXN_TYPE], ";
-            strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [TaxTate] AS [TAX_TATE], ";
-            strSQL += "     [Currency] AS [CURRENCY], ";
-            strSQL += "     [PredictRate] AS [PRE_RATE], ";
-            strSQL += "     [SupNo] AS [SUP_NO], ";
-            strSQL += "     [SupName] AS [SUP_NAME], ";
-            strSQL += "     [RegisterKind] AS [REG_KIND], ";
-            strSQL += "     [RegisterNo] AS [REG_NO], ";
-            strSQL += "     [OwnerName] AS [OWNER_NAME], ";
-            strSQL += "     [OwnerTEL] AS [OWNER_TEL], ";
-            strSQL += "     [Note] AS [NOTE], ";
             strSQL += "     [FinancAuditID_1] AS [FINANC_AUDIT_ID_1], ";
             strSQL += "     [FinancAuditName_1] AS [FINANC_AUDIT_NAME_1], ";
             strSQL += "     [FinancAuditID_2] AS [FINANC_AUDIT_ID_2], ";
             strSQL += "     [FinancAuditName_2] AS [FINANC_AUDIT_NAME_2], ";
-            strSQL += "     [DTL_NetTotal] AS [DTL_NET_TOTAL], ";
-            strSQL += "     [DTL_NetTotal_TWD] AS [DTL_NET_TOTAL_TWD], ";
-            strSQL += "     [DTL_TaxTotal] AS [DTL_TAX_TOTAL], ";
-            strSQL += "     [DTL_TaxTotal_TWD] AS [DTL_TAX_TOTAL_TWD], ";
-            strSQL += "     [DTL_GrossTotal] AS [DTL_GROSS_TOTAL], ";
-            strSQL += "     [DTL_GrossTotal_TWD] AS [DTL_GROSS_TOTAL_TWD], ";
-            strSQL += "     [DTL_MaterialTotal] AS [DTL_MATERIAL_TOTAL], ";
-            strSQL += "     [DTL_MaterialTotal_TWD] AS [DTL_MATERIAL_TOTAL_TWD], ";
-            strSQL += "     [DTL_OrderTotal] AS [DTL_ORDER_TOTAL], ";
-            strSQL += "     [DTL_OrderTotal_TWD] AS [DTL_ORDER_TOTAL_TWD], ";
-            strSQL += "     [EX_AmountTotal] AS [EX_AMOUNT_TOTAL], ";
-            strSQL += "     [EX_AmountTotal_TWD] AS [EX_AMOUNT_TOTAL_TWD], ";
-            strSQL += "     [EX_TaxTotal] AS [EX_TAX_TOTAL], ";
-            strSQL += "     [EX_TaxTotal_TWD] AS [EX_TAX_TOTAL_TWD], ";
-            strSQL += "     [PYMT_CurrentTotal] AS [PYMT_CURRENT_TOTAL], ";
-            strSQL += "     [PYMT_CurrentTotal_TWD] AS [PYMT_CURRENT_TOTAL_TWD], ";
-            strSQL += "     [PYMT_EX_TaxTotal] AS [PYMT_EX_TAX_TOTAL], ";
-            strSQL += "     [PYMT_EX_TaxTotal_TWD] AS [PYMT_EX_TAX_TOTAL_TWD], ";
-            strSQL += "     [INV_AmountTotal] AS [INV_AMOUNT_TOTAL], ";
-            strSQL += "     [INV_AmountTotal_TWD] AS [INV_AMOUNT_TOTAL_TWD], ";
-            strSQL += "     [INV_TaxTotal] AS [INV_TAX_TOTAL], ";
-            strSQL += "     [INV_TaxTotal_TWD] AS [INV_TAX_TOTAL_TWD], ";
+            strSQL += "     [Period] AS [PERIOD], ";
+            strSQL += "     [Note] AS [NOTE], ";
+            strSQL += "     [RF_ExclTotal] AS [RF_EXCL_TOTAL], ";
+            strSQL += "     [RF_ExclTotal_TWD] AS [RF_EXCL_TOTAL_TWD], ";
+            strSQL += "     [RF_TaxTotal] AS [RF_TAX_TOTAL], ";
+            strSQL += "     [RF_TaxTotal_TWD] AS [RF_TAX_TOTAL_TWD], ";
+            strSQL += "     [RF_NetTotal] AS [RF_NET_TOTAL], ";
+            strSQL += "     [RF_NetTotal_TWD] AS [RF_NET_TOTAL_TWD], ";
+            strSQL += "     [RF_GrossTotal] AS [RF_GROSS_TOTAL], ";
+            strSQL += "     [RF_GrossTotal_TWD] AS [RF_GROSS_TOTAL_TWD], ";
+            strSQL += "     [RF_AmountTotal] AS [RF_AMOUNT_TOTAL], ";
+            strSQL += "     [RF_AmountTotal_TWD] AS [RF_AMOUNT_TOTAL_TWD], ";
             strSQL += "     [ProcessMethod] AS [PROCESS_METHOD], ";
             strSQL += "     [FinancNote] AS [FINANC_NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
             var mediaOrderReturnRefundConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderReturnRefundConfig>().FirstOrDefault();
-
-            #endregion
-
-            #region - 版權採購請款單 資訊 -
-
-            var mediaInvoiceQueryModel = new MediaInvoiceQueryModel
-            {
-                REQUISITION_ID = mediaOrderReturnRefundConfig.MEDIA_INVOICE_REQUISITION_ID
-            };
-
-            var mediaInvoiceContent = mediaInvoiceRepository.PostMediaInvoiceSingle(mediaInvoiceQueryModel);
-
-            #endregion
-
-            #region - 版權採購申請單 資訊 -
-
-            var mediaOrderQueryModel = new MediaOrderQueryModel
-            {
-                REQUISITION_ID = mediaInvoiceContent.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_REQUISITION_ID
-            };
-
-            var mediaOrderContent = mediaOrderRepository.PostMediaOrderSingle(mediaOrderQueryModel);
-
-            #endregion
-                
-            var Orderparameter = new List<SqlParameter>()
-            {
-                 new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = mediaOrderContent.APPLICANT_INFO.REQUISITION_ID },
-                 new SqlParameter("@PERIOD", SqlDbType.Int) { Value = mediaOrderReturnRefundConfig.PERIOD }
-            };
-
-            #region - 版權採購退貨折讓單 驗收明細 -
-
-            //View的「驗收明細」是 版權採購申請單 的「驗收明細」加上 「採購明細」的所屬專案、金額及備註。
-
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     DTL.[EpisodeTime] AS [EPISODE_TIME], ";
-            strSQL += "     DTL.[MediaSpec] AS [MEDIA_SPEC], ";
-            strSQL += "     DTL.[Net] AS [NET], ";
-            strSQL += "     DTL.[Net_TWD] AS [NET_TWD], ";
-            strSQL += "     DTL.[Tax] AS [TAX], ";
-            strSQL += "     DTL.[Tax_TWD] AS [TAX_TWD], ";
-            strSQL += "     DTL.[Gross] AS [GROSS], ";
-            strSQL += "     DTL.[Gross_TWD] AS [GROSS_TWD], ";
-            strSQL += "     DTL.[NetSum] AS [NET_SUM], ";
-            strSQL += "     DTL.[NetSum_TWD] AS [NET_SUM_TWD], ";
-            strSQL += "     DTL.[GrossSum] AS [GROSS_SUM], ";
-            strSQL += "     DTL.[GrossSum_TWD] AS [GROSS_SUM_TWD], ";
-            strSQL += "     DTL.[Material] AS [MATERIAL], ";
-            strSQL += "     DTL.[ItemSum] AS [ITEM_SUM], ";
-            strSQL += "     DTL.[ItemSum_TWD] AS [ITEM_SUM_TWD], ";
-            strSQL += "     DTL.[ProjectFormNo] AS [PROJECT_FORM_NO], ";
-            strSQL += "     DTL.[ProjectName] AS [PROJECT_NAME], ";
-            strSQL += "     DTL.[ProjectNickname] AS [PROJECT_NICKNAME], ";
-            strSQL += "     DTL.[ProjectUseYear] AS [PROJECT_USE_YEAR], ";
-            strSQL += "     DTL.[Note] AS [NOTE], ";
-            strSQL += "     DTL.[OrderRowNo] AS [ORDER_ROW_NO], ";
-            strSQL += "     ACPT.[Period] AS [PERIOD], ";
-            strSQL += "     ACPT.[SupProdANo] AS [SUP_PROD_A_NO], ";
-            strSQL += "     ACPT.[ItemName] AS [ITEM_NAME], ";
-            strSQL += "     ACPT.[MediaType] AS [MEDIA_TYPE], ";
-            strSQL += "     ACPT.[StartEpisode] AS [START_EPISODE], ";
-            strSQL += "     ACPT.[EndEpisode] AS [END_EPISODE], ";
-            strSQL += "     ACPT.[ACPT_Episode] AS [ACPT_EPISODE], ";
-            strSQL += "     ACPT.[OrderEpisode] AS [ORDER_EPISODE] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_ACPT] AS ACPT ";
-            strSQL += "	    INNER JOIN [BPMPro].[dbo].[FM7T_MediaOrder_DTL] AS DTL ON ACPT.[RequisitionID]=DTL.[RequisitionID] AND ACPT.[SupProdANo]=DTL.[SupProdANo] AND ACPT.[OrderRowNo]=DTL.[OrderRowNo] ";
-            strSQL += "WHERE 1=1 ";
-            strSQL += "         AND ACPT.[RequisitionID]=@REQUISITION_ID ";
-            strSQL += "         AND ACPT.[Period]=@PERIOD ";
-
-            var mediaOrderReturnRefundAcceptancesConfig = dbFun.DoQuery(strSQL, Orderparameter).ToList<MediaOrderReturnRefundAcceptancesConfig>();
-
-            #endregion
-
-            #region - 版權採購退貨折讓單 授權權利 -
-            //View的「授權權利」是 版權採購申請單 的「授權權利」
-
-            List<MediaOrderReturnRefundAuthorizesConfig> mediaOrderReturnRefundAuthorizesConfig = new List<MediaOrderReturnRefundAuthorizesConfig>();
-            foreach (var item in mediaOrderReturnRefundAcceptancesConfig)
-            {
-                strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_AUTHS_CONFIG.Where(AUTH => AUTH.ORDER_ROW_NO == item.ORDER_ROW_NO && item.PERIOD == mediaOrderReturnRefundConfig.PERIOD).Select(AUTH => AUTH));
-                mediaOrderReturnRefundAuthorizesConfig.AddRange(JsonConvert.DeserializeObject<List<MediaOrderReturnRefundAuthorizesConfig>>(strJson));
-            }
-
-            #endregion
-
-            #region - 版權採購退貨折讓單 額外項目 -
-            //View的「額外項目」是 版權採購申請單 的「額外項目」
-
-            strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_EXS_CONFIG.Where(EX => EX.PERIOD == mediaOrderReturnRefundConfig.PERIOD).Select(EX => EX));
-            var mediaOrderReturnRefundExtrasConfig = JsonConvert.DeserializeObject<List<MediaOrderReturnRefundExtrasConfig>>(strJson);
-
-
-            #endregion
-
-            #region - 版權採購退貨折讓單 付款辦法 -
-            //View的「付款辦法」是 版權採購申請單 的「付款辦法」
-
-            strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_PYMTS_CONFIG.Where(PYMT => PYMT.PERIOD == mediaOrderReturnRefundConfig.PERIOD).Select(PYMT => PYMT));
-            var mediaOrderReturnRefundPaymentsConfig = JsonConvert.DeserializeObject<List<MediaOrderReturnRefundPaymentsConfig>>(strJson);
-
-
-            #endregion
-
-            #region - 版權採購退貨折讓單 使用預算 -
-            //View的「使用預算」是 版權採購申請單 的「使用預算」
-
-            strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_BUDGS_CONFIG.Where(BUDG => BUDG.PERIOD == mediaOrderReturnRefundConfig.PERIOD).Select(BUDG => BUDG));
-            var mediaOrderReturnRefundBudgetsConfig = JsonConvert.DeserializeObject<List<MediaOrderReturnRefundBudgetsConfig>>(strJson);
-
-            #endregion
-
-            #region - 版權採購退貨折讓單 憑證明細 -
-            //View的「憑證明細」是 版權採購申請單 的「憑證明細」
-
-            strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_INVS_CONFIG.Where(BUDG => BUDG.PERIOD == mediaOrderReturnRefundConfig.PERIOD).Select(BUDG => BUDG));
-            var mediaOrderReturnRefundBudgetsConfig = JsonConvert.DeserializeObject<List<MediaOrderReturnRefundBudgetsConfig>>(strJson);
-
-            #endregion
-
-            parameter.Add(new SqlParameter("@PERIOD", SqlDbType.Int) { Value = mediaOrderReturnRefundConfig.PERIOD });
-
-            #region - 版權採購退貨折讓單 退貨細項 -
-
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [InvoiceRowNo] AS [INV_ROW_NO], ";
-            strSQL += "     [Num] AS [NUM], ";
-            strSQL += "     [Name] AS [NAME], ";
-            strSQL += "     [Quantity] AS [QUANTITY], ";
-            strSQL += "     [Amount] AS [AMOUNT], ";
-            strSQL += "     [Amount_TWD] AS [AMOUNT_TWD], ";
-            strSQL += "     [IsExcl] AS [IS_EXCL] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaInvoice_INV_DTL] ";
-            strSQL += "WHERE 1=1 ";
-            strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "         AND [Period]=@PERIOD ";
-            strSQL += "ORDER BY [AutoCounter] ";
-
-            var mediaOrderReturnRefundInvoiceDetailsConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderReturnRefundInvoiceDetailsConfig>();
 
             #endregion
 
@@ -310,12 +140,62 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [OrderEpisode] AS [ORDER_EPISODE], ";
             strSQL += "     [ACPT_Episode] AS [ACPT_EPISODE], ";
             strSQL += "     [EpisodeTime] AS [EPISODE_TIME] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_RFCOMM] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_RF_COMM] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
             var mediaOrderReturnRefundRefundCommoditysConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderReturnRefundRefundCommoditysConfig>();
 
             #endregion
+
+            #region - 版權採購退貨折讓單 憑證退款明細 -
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [Period] AS [PERIOD], ";
+            strSQL += "     [InvoiceRowNo] AS [INV_ROW_NO], ";
+            strSQL += "     [Num] AS [NUM], ";
+            strSQL += "     [Date] AS [DATE], ";
+            strSQL += "     [Excl] AS [EXCL], ";
+            strSQL += "     [Excl_TWD] AS [EXCL_TWD], ";
+            strSQL += "     [Tax] AS [TAX], ";
+            strSQL += "     [Tax_TWD] AS [TAX_TWD], ";
+            strSQL += "     [Net] AS [NET], ";
+            strSQL += "     [Net_TWD] AS [NET_TWD], ";
+            strSQL += "     [Gross] AS [GROSS], ";
+            strSQL += "     [Gross_TWD] AS [GROSS_TWD], ";
+            strSQL += "     [Amount] AS [AMOUNT], ";
+            strSQL += "     [Amount_TWD] AS [AMOUNT_TWD], ";
+            strSQL += "     [Note] AS [NOTE], ";
+            strSQL += "     [IsExcl] AS [IS_EXCL] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_INV] ";
+            strSQL += "WHERE 1=1 ";
+            strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+            strSQL += "ORDER BY [AutoCounter] ";
+
+            var mediaOrderReturnRefundInvoicesConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderReturnRefundInvoicesConfig>();
+
+            #endregion
+
+            #region - 版權採購退貨折讓單 憑證退款細項 -
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [Period] AS [PERIOD], ";
+            strSQL += "     [InvoiceRowNo] AS [INV_ROW_NO], ";
+            strSQL += "     [Num] AS [NUM], ";
+            strSQL += "     [Name] AS [NAME], ";
+            strSQL += "     [Quantity] AS [QUANTITY], ";
+            strSQL += "     [Amount] AS [AMOUNT], ";
+            strSQL += "     [Amount_TWD] AS [AMOUNT_TWD], ";
+            strSQL += "     [IsExcl] AS [IS_EXCL] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_INV_DTL] ";
+            strSQL += "WHERE 1=1 ";
+            strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+            strSQL += "ORDER BY [AutoCounter] ";
+
+            var mediaOrderReturnRefundInvoiceDetailsConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderReturnRefundInvoiceDetailsConfig>();
+
+            #endregion            
 
             #region - 版權採購退貨折讓單 表單關聯 -
 
@@ -332,13 +212,10 @@ namespace OA_WEB_API.Repository.BPMPro
                 APPLICANT_INFO = applicantInfo,
                 MEDIA_ORDER_RETURN_REFUND_TITLE = mediaOrderReturnRefundTitle,
                 MEDIA_ORDER_RETURN_REFUND_CONFIG = mediaOrderReturnRefundConfig,
-                MEDIA_ORDER_RETURN_REFUND_ACPTS_CONFIG = mediaOrderReturnRefundAcceptancesConfig,
-                MEDIA_ORDER_RETURN_REFUND_AUTHS_CONFIG = mediaOrderReturnRefundAuthorizesConfig,
-                MEDIA_ORDER_RETURN_REFUND_EXS_CONFIG = mediaOrderReturnRefundExtrasConfig,
-                MEDIA_ORDER_RETURN_REFUND_PYMTS_CONFIG = mediaOrderReturnRefundPaymentsConfig,
-                MEDIA_ORDER_RETURN_REFUND_BUDGS_CONFIG = mediaOrderReturnRefundBudgetsConfig,
+                MEDIA_ORDER_RETURN_REFUND_RF_COMMS_CONFIG = mediaOrderReturnRefundRefundCommoditysConfig,
                 MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG = mediaOrderReturnRefundInvoicesConfig,
-                MEDIA_ORDER_RETURN_REFUND_REFUND_COMMS_CONFIG = mediaOrderReturnRefundRefundCommoditysConfig
+                MEDIA_ORDER_RETURN_REFUND_INV_DTLS_CONFIG = mediaOrderReturnRefundInvoiceDetailsConfig,
+                ASSOCIATED_FORM_CONFIG = associatedForm
             };
 
             return mediaOrderReturnRefundViewModel;
@@ -371,250 +248,481 @@ namespace OA_WEB_API.Repository.BPMPro
         /// <summary>
         /// 版權採購退貨折讓單(新增/修改/草稿)
         /// </summary>
-        //public bool PutMediaOrderReturnRefundSingle(MediaOrderReturnRefundViewModel model)
-        //{
-        //    bool vResult = false;
-        //    try
-        //    {
-        //        var mediaInvoiceformQueryModel = new FormQueryModel()
-        //        {
-        //            REQUISITION_ID = model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_REQUISITION_ID
-        //        };
-        //        var mediaInvoiceformData = formRepository.PostFormData(mediaInvoiceformQueryModel);
+        public bool PutMediaOrderReturnRefundSingle(MediaOrderReturnRefundViewModel model)
+        {
+            bool vResult = false;
+            try
+            {
+                var mediaInvoiceformQueryModel = new FormQueryModel()
+                {
+                    REQUISITION_ID = model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_REQUISITION_ID
+                };
+                var mediaInvoiceformData = formRepository.PostFormData(mediaInvoiceformQueryModel);
 
-        //        #region - 宣告 -
+                #region - 【版權採購請款單】資訊 -
 
-        //        #region - 主旨 -
+                var mediaInvoiceQueryModel = new MediaInvoiceQueryModel()
+                {
+                    REQUISITION_ID = model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_REQUISITION_ID
+                };
 
-        //        FM7Subject = model.MEDIA_ORDER_RETURN_REFUND_TITLE.FM7_SUBJECT;
+                var strmediaInvoiceQuery = mediaInvoiceRepository.PostMediaInvoiceSingle(mediaInvoiceQueryModel);
 
-        //        if (FM7Subject == null)
-        //        {
-        //            FM7Subject = "【退貨折讓】第" + model.MEDIA_ORDER_RETURN_REFUND_CONFIG.PERIOD + "期-" + medialOrderformData.FORM_SUBJECT;
-        //        }
-
-        //        #endregion
-
-        //        #endregion
-
-        //        #region - 版權採購退貨折讓單 表頭資訊：MediaOrderReturnRefund_M -
-
-        //        var parameterTitle = new List<SqlParameter>()
-        //        {
-        //            //表單資訊
-        //            new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  model.APPLICANT_INFO.REQUISITION_ID},
-        //            new SqlParameter("@DIAGRAM_ID", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.DIAGRAM_ID },
-        //            new SqlParameter("@PRIORITY", SqlDbType.Int) { Value =  model.APPLICANT_INFO.PRIORITY},
-        //            new SqlParameter("@DRAFT_FLAG", SqlDbType.Int) { Value =  model.APPLICANT_INFO.DRAFT_FLAG},
-        //            new SqlParameter("@FLOW_ACTIVATED", SqlDbType.Int) { Value =  model.APPLICANT_INFO.FLOW_ACTIVATED},
-        //            //(申請人/起案人)資訊
-        //            new SqlParameter("@APPLICANT_DEPT", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_DEPT },
-        //            new SqlParameter("@APPLICANT_DEPT_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_DEPT_NAME },
-        //            new SqlParameter("@APPLICANT_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_ID },
-        //            new SqlParameter("@APPLICANT_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_NAME },
-        //            new SqlParameter("@APPLICANT_PHONE", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.APPLICANT_PHONE ?? String.Empty },
-        //            new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) },
-        //            //(填單人/代填單人)資訊
-        //            new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_ID },
-        //            new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
-        //            //版權採購退貨折讓單 表頭
-        //            new SqlParameter("@FLOW_NAME", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_ORDER_RETURN_REFUND_TITLE.FLOW_NAME ?? DBNull.Value },
-        //            new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_ORDER_RETURN_REFUND_TITLE.FORM_NO ?? DBNull.Value },
-        //            new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
-        //        };
-
-        //        strSQL = "";
-        //        strSQL += "SELECT ";
-        //        strSQL += "      [RequisitionID] ";
-        //        strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
-        //        strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-
-        //        var dtA = dbFun.DoQuery(strSQL, parameterTitle);
-
-        //        if (dtA.Rows.Count > 0)
-        //        {
-        //            #region - 修改 -
-
-        //            strSQL = "";
-        //            strSQL += "UPDATE [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
-        //            strSQL += "SET [DiagramID] =@DIAGRAM_ID, ";
-        //            strSQL += "     [ApplicantDept]=@APPLICANT_DEPT, ";
-        //            strSQL += "     [ApplicantDeptName]=@APPLICANT_DEPT_NAME, ";
-        //            strSQL += "     [ApplicantID]=@APPLICANT_ID, ";
-        //            strSQL += "     [ApplicantName]=@APPLICANT_NAME, ";
-        //            strSQL += "     [ApplicantPhone]=@APPLICANT_PHONE, ";
-        //            strSQL += "     [ApplicantDateTime]=@APPLICANT_DATETIME, ";
-        //            strSQL += "     [FillerID]=@FILLER_ID, ";
-        //            strSQL += "     [FillerName]=@FILLER_NAME, ";
-        //            strSQL += "     [Priority]=@PRIORITY, ";
-        //            strSQL += "     [DraftFlag]=@DRAFT_FLAG, ";
-        //            strSQL += "     [FlowActivated]=@FLOW_ACTIVATED, ";
-        //            strSQL += "     [FlowName]=@FLOW_NAME, ";
-        //            strSQL += "     [FormNo]=@FORM_NO, ";
-        //            strSQL += "     [FM7Subject]=@FM7_SUBJECT ";
-        //            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-
-        //            dbFun.DoTran(strSQL, parameterTitle);
-
-        //            #endregion
-        //        }
-        //        else
-        //        {
-        //            #region - 新增 -
-
-        //            strSQL = "";
-        //            strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FlowName],[FormNo],[FM7Subject]) ";
-        //            strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FLOW_NAME,@FORM_NO,@FM7_SUBJECT) ";
-
-        //            dbFun.DoTran(strSQL, parameterTitle);
-
-        //            #endregion
-        //        }
-
-        //        #endregion
-
-        //        #region - 【版權採購申請單】資訊 -
-
-        //        model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_REQUISITION_ID = mediaInvoiceformData.REQUISITION_ID;
-        //        model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_SUBJECT = mediaInvoiceformData.FORM_SUBJECT;
-        //        model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_PATH = GlobalParameters.FormContentPath(model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_REQUISITION_ID, mediaInvoiceformData.IDENTIFY, mediaInvoiceformData.DIAGRAM_NAME);
-
-        //        #endregion
-
-        //        #region - 版權採購退貨折讓單 表單內容：MediaOrderReturnRefund_M -
-
-        //        if (model.MEDIA_ORDER_RETURN_REFUND_CONFIG != null)
-        //        {
-        //            var parameterInfo = new List<SqlParameter>()
-        //            {
-        //                //版權採購退貨折讓單 表單內容
-        //                new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-        //                new SqlParameter("@MEDIA_INVOICE_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@MEDIA_INVOICE_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@MEDIA_INVOICE_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@MEDIA_INVOICE_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@MEDIA_INVOICE_PATH", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@MEDIA_ORDER_PYMT_ORDER_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@REFUND_AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@REFUND_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@FINANC_AUDIT_ID_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@FINANC_AUDIT_NAME_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@FINANC_AUDIT_ID_2", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@FINANC_AUDIT_NAME_2", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@DTL_NET_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@DTL_NET_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@DTL_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@DTL_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@DTL_GROSS_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@DTL_GROSS_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@DTL_MATERIAL_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@DTL_MATERIAL_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@DTL_ORDER_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@DTL_ORDER_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@EX_AMOUNT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@EX_AMOUNT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@EX_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@EX_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@PYMT_CURRENT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@PYMT_CURRENT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@PYMT_EX_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@PYMT_EX_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@INV_AMOUNT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@INV_AMOUNT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@INV_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@INV_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@PROCESS_METHOD", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-        //                new SqlParameter("@FINANC_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-        //            };
-
-        //            strJson = jsonFunction.ObjectToJSON(model.MEDIA_ORDER_RETURN_REFUND_CONFIG);
-
-        //            #region - 確認小數點後第二位 -
-
-        //            GlobalParameters.IsDouble(strJson);
-
-        //            #endregion
-
-        //            GlobalParameters.Infoparameter(strJson, parameterInfo);
-
-        //            strSQL = "";
-        //            strSQL += "UPDATE [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
-        //            strSQL += "SET [MediaInvoiceRequisitionID]=@MEDIA_INVOICE_REQUISITION_ID, ";
-        //            strSQL += "    [MediaInvoiceSubject]=@MEDIA_INVOICE_SUBJECT, ";
-        //            strSQL += " [MediaInvoiceBPMFormNo]=@MEDIA_INVOICE_BPM_FORM_NO, ";
-        //            strSQL += " [MediaInvoiceERPFormNo]=@MEDIA_INVOICE_ERP_FORM_NO, ";
-        //            strSQL += " [MediaInvoicePath]=@MEDIA_INVOICE_PATH, ";
-        //            strSQL += " [MediaOrderPYMT_OrderTotal]=@MEDIA_ORDER_PYMT_ORDER_TOTAL, ";
-        //            strSQL += " [MediaOrderPYMT_OrderTotal_CONV]=@MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV, ";
-        //            strSQL += " [RefundAmount]=@REFUND_AMOUNT, ";
-        //            strSQL += " [RefundAmount_TWD]=@REFUND_AMOUNT_TWD, ";
-        //            strSQL += " [OrderGrossTotal]=, ";
-        //            strSQL += " [OrderGrossTotal_TWD]=, ";
-        //            strSQL += " [TXN_Type]=, ";
-        //            strSQL += " [Period]=, ";
-        //            strSQL += " [TaxTate]=, ";
-        //            strSQL += " [Currency]=, ";
-        //            strSQL += " [PredictRate]=, ";
-        //            strSQL += " [SupNo]=@SUP_NO, ";
-        //            strSQL += " [SupName]=@SUP_NAME, ";
-        //            strSQL += " [RegisterKind]=@REG_KIND, ";
-        //            strSQL += "SET [RegisterNo]=@REG_NO, ";
-        //            strSQL += "SET [OwnerName]=@OWNER_NAME, ";
-        //            strSQL += "SET [OwnerTEL]=@OWNER_TEL, ";
-        //            strSQL += " [Note]=@NOTE, ";
-        //            strSQL += "SET [FinancAuditID_1]=@FINANC_AUDIT_ID_1, ";
-        //            strSQL += "SET [FinancAuditName_1]=@FINANC_AUDIT_NAME_1, ";
-        //            strSQL += "SET [FinancAuditID_2]=@FINANC_AUDIT_ID_2, ";
-        //            strSQL += "SET [FinancAuditName_2]=@FINANC_AUDIT_NAME_2, ";
-        //            strSQL += "SET [DTL_NetTotal]=@DTL_NET_TOTAL, ";
-        //            strSQL += "SET [DTL_NetTotal_TWD]=@DTL_NET_TOTAL_TWD, ";
-        //            strSQL += "SET [DTL_TaxTotal]=@DTL_TAX_TOTAL, ";
-        //            strSQL += "SET [DTL_TaxTotal_TWD]=@DTL_TAX_TOTAL_TWD, ";
-        //            strSQL += "SET [DTL_GrossTotal]=@DTL_GROSS_TOTAL, ";
-        //            strSQL += "SET [DTL_GrossTotal_TWD]=@DTL_GROSS_TOTAL_TWD, ";
-        //            strSQL += "SET [DTL_MaterialTotal]=@DTL_MATERIAL_TOTAL, ";
-        //            strSQL += "SET [DTL_MaterialTotal_TWD]=@DTL_MATERIAL_TOTAL_TWD, ";
-        //            strSQL += "SET [DTL_OrderTotal]=@DTL_ORDER_TOTAL, ";
-        //            strSQL += "SET [DTL_OrderTotal_TWD]=@DTL_ORDER_TOTAL_TWD, ";
-        //            strSQL += "SET [EX_AmountTotal]=@EX_AMOUNT_TOTAL, ";
-        //            strSQL += "SET [EX_AmountTotal_TWD]=@EX_AMOUNT_TOTAL_TWD, ";
-        //            strSQL += "SET [EX_TaxTotal]=@EX_TAX_TOTAL, ";
-        //            strSQL += "SET [EX_TaxTotal_TWD]=@EX_TAX_TOTAL_TWD, ";
-        //            strSQL += "SET [PYMT_CurrentTotal]=@PYMT_CURRENT_TOTAL, ";
-        //            strSQL += "SET [PYMT_CurrentTotal_TWD]=@PYMT_CURRENT_TOTAL_TWD, ";
-        //            strSQL += "SET [PYMT_EX_TaxTotal]=@PYMT_EX_TAX_TOTAL, ";
-        //            strSQL += "SET [PYMT_EX_TaxTotal_TWD]=@PYMT_EX_TAX_TOTAL_TWD, ";
-        //            strSQL += "SET [INV_AmountTotal]=@INV_AMOUNT_TOTAL, ";
-        //            strSQL += "SET [INV_AmountTotal_TWD]=@INV_AMOUNT_TOTAL_TWD, ";
-        //            strSQL += "SET [INV_TaxTotal]=@INV_TAX_TOTAL, ";
-        //            strSQL += "SET [INV_TaxTotal_TWD]=@INV_TAX_TOTAL_TWD, ";
-        //            strSQL += "SET [ProcessMethod]=@PROCESS_METHOD, ";
-        //            strSQL += "SET [FinancNote]=@FINANC_NOTE ";
-        //            strSQL += "WHERE 1=1 ";
-        //            strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
-        //            strSQL += "ORDER BY [AutoCounter] ";
-
-        //            dbFun.DoTran(strSQL, parameterInfo);
-
-        //        }
-
-        //        #endregion
-            
+                model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_REQUISITION_ID = mediaInvoiceformData.REQUISITION_ID;
+                model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_BPM_FORM_NO = strmediaInvoiceQuery.MEDIA_INVOICE_TITLE.BPM_FORM_NO;
+                model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_ERP_FORM_NO = strmediaInvoiceQuery.MEDIA_INVOICE_TITLE.FORM_NO;
+                model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_SUBJECT = mediaInvoiceformData.FORM_SUBJECT;
+                model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_PATH = GlobalParameters.FormContentPath(model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_REQUISITION_ID, mediaInvoiceformData.IDENTIFY, mediaInvoiceformData.DIAGRAM_NAME);
                 
+                #endregion
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        vResult = false;
-        //        CommLib.Logger.Error("版權採購退貨折讓單 (新增/修改/草稿)失敗，原因：" + ex.Message);
-        //    }
-        //    return vResult;
+                #region - 宣告 -
 
-        //}
+                #region - 主旨 -
+
+                FM7Subject = model.MEDIA_ORDER_RETURN_REFUND_TITLE.FM7_SUBJECT;
+
+                if (FM7Subject == null)
+                {
+                    FM7Subject = "【退貨折讓】第" + model.MEDIA_ORDER_RETURN_REFUND_CONFIG.PERIOD + "期-" + strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_SUBJECT;
+                }
+
+                #endregion
+
+                #endregion
+
+                #region - 版權採購退貨折讓單 表頭資訊：MediaOrderReturnRefund_M -
+
+                var parameterTitle = new List<SqlParameter>()
+                {
+                    //表單資訊
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  model.APPLICANT_INFO.REQUISITION_ID},
+                    new SqlParameter("@DIAGRAM_ID", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.DIAGRAM_ID },
+                    new SqlParameter("@PRIORITY", SqlDbType.Int) { Value =  model.APPLICANT_INFO.PRIORITY},
+                    new SqlParameter("@DRAFT_FLAG", SqlDbType.Int) { Value =  model.APPLICANT_INFO.DRAFT_FLAG},
+                    new SqlParameter("@FLOW_ACTIVATED", SqlDbType.Int) { Value =  model.APPLICANT_INFO.FLOW_ACTIVATED},
+                    //(申請人/起案人)資訊
+                    new SqlParameter("@APPLICANT_DEPT", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_DEPT },
+                    new SqlParameter("@APPLICANT_DEPT_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_DEPT_NAME },
+                    new SqlParameter("@APPLICANT_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_ID },
+                    new SqlParameter("@APPLICANT_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_NAME },
+                    new SqlParameter("@APPLICANT_PHONE", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.APPLICANT_PHONE ?? String.Empty },
+                    new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) },
+                    //(填單人/代填單人)資訊
+                    new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_ID },
+                    new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
+                    //版權採購退貨折讓單 表頭
+                    new SqlParameter("@FLOW_NAME", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_ORDER_RETURN_REFUND_TITLE.FLOW_NAME ?? DBNull.Value },
+                    new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_ORDER_RETURN_REFUND_TITLE.FORM_NO ?? DBNull.Value },
+                    new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
+                };
+
+                strSQL = "";
+                strSQL += "SELECT ";
+                strSQL += "      [RequisitionID] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
+                strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+                var dtA = dbFun.DoQuery(strSQL, parameterTitle);
+
+                if (dtA.Rows.Count > 0)
+                {
+                    #region - 修改 -
+
+                    strSQL = "";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
+                    strSQL += "SET [DiagramID] =@DIAGRAM_ID, ";
+                    strSQL += "     [ApplicantDept]=@APPLICANT_DEPT, ";
+                    strSQL += "     [ApplicantDeptName]=@APPLICANT_DEPT_NAME, ";
+                    strSQL += "     [ApplicantID]=@APPLICANT_ID, ";
+                    strSQL += "     [ApplicantName]=@APPLICANT_NAME, ";
+                    strSQL += "     [ApplicantPhone]=@APPLICANT_PHONE, ";
+                    strSQL += "     [ApplicantDateTime]=@APPLICANT_DATETIME, ";
+                    strSQL += "     [FillerID]=@FILLER_ID, ";
+                    strSQL += "     [FillerName]=@FILLER_NAME, ";
+                    strSQL += "     [Priority]=@PRIORITY, ";
+                    strSQL += "     [DraftFlag]=@DRAFT_FLAG, ";
+                    strSQL += "     [FlowActivated]=@FLOW_ACTIVATED, ";
+                    strSQL += "     [FlowName]=@FLOW_NAME, ";
+                    strSQL += "     [FormNo]=@FORM_NO, ";
+                    strSQL += "     [FM7Subject]=@FM7_SUBJECT ";
+                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+                    dbFun.DoTran(strSQL, parameterTitle);
+
+                    #endregion
+                }
+                else
+                {
+                    #region - 新增 -
+
+                    strSQL = "";
+                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FlowName],[FormNo],[FM7Subject]) ";
+                    strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FLOW_NAME,@FORM_NO,@FM7_SUBJECT) ";
+
+                    dbFun.DoTran(strSQL, parameterTitle);
+
+                    #endregion
+                }
+
+                #endregion             
+
+                #region - 版權採購退貨折讓單 表單內容：MediaOrderReturnRefund_M -
+
+                if (model.MEDIA_ORDER_RETURN_REFUND_CONFIG != null)
+                {
+                    var parameterInfo = new List<SqlParameter>()
+                    {
+                        //版權採購退貨折讓單 表單內容
+                        new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                        new SqlParameter("@MEDIA_INVOICE_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@MEDIA_INVOICE_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@MEDIA_INVOICE_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@MEDIA_INVOICE_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@MEDIA_INVOICE_PATH", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PERIOD", SqlDbType.Int) { Value = model.MEDIA_ORDER_RETURN_REFUND_CONFIG.PERIOD },
+                        new SqlParameter("@FINANC_AUDIT_ID_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@FINANC_AUDIT_NAME_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@FINANC_AUDIT_ID_2", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@FINANC_AUDIT_NAME_2", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@RF_EXCL_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@RF_EXCL_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@RF_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@RF_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@RF_NET_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@RF_NET_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@RF_GROSS_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@RF_GROSS_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@RF_AMOUNT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@RF_AMOUNT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PROCESS_METHOD", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@FINANC_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    };
+
+                    strJson = jsonFunction.ObjectToJSON(model.MEDIA_ORDER_RETURN_REFUND_CONFIG);
+
+                    #region - 確認小數點後第二位 -
+
+                    GlobalParameters.IsDouble(strJson);
+
+                    #endregion
+
+                    GlobalParameters.Infoparameter(strJson, parameterInfo);
+
+                    strSQL = "";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
+                    strSQL += "SET [MediaInvoiceRequisitionID]=@MEDIA_INVOICE_REQUISITION_ID, ";
+                    strSQL += "     [MediaInvoiceSubject]=@MEDIA_INVOICE_SUBJECT, ";
+                    strSQL += "     [MediaInvoiceBPMFormNo]=@MEDIA_INVOICE_BPM_FORM_NO, ";
+                    strSQL += "     [MediaInvoiceERPFormNo]=@MEDIA_INVOICE_ERP_FORM_NO, ";
+                    strSQL += "     [MediaInvoicePath]=@MEDIA_INVOICE_PATH, ";
+                    strSQL += "     [Period]=@PERIOD, ";
+                    strSQL += "     [FinancAuditID_1]=@FINANC_AUDIT_ID_1, ";
+                    strSQL += "     [FinancAuditName_1]=@FINANC_AUDIT_NAME_1, ";
+                    strSQL += "     [FinancAuditID_2]=@FINANC_AUDIT_ID_2, ";
+                    strSQL += "     [FinancAuditName_2]=@FINANC_AUDIT_NAME_2, ";
+                    strSQL += "     [Note]=@NOTE, ";
+                    strSQL += "     [RF_ExclTotal]=@RF_EXCL_TOTAL, ";
+                    strSQL += "     [RF_ExclTotal_TWD]=@RF_EXCL_TOTAL_TWD, ";
+                    strSQL += "     [RF_TaxTotal]=@RF_TAX_TOTAL, ";
+                    strSQL += "     [RF_TaxTotal_TWD]=@RF_TAX_TOTAL_TWD, ";
+                    strSQL += "     [RF_NetTotal]=@RF_NET_TOTAL, ";
+                    strSQL += "     [RF_NetTotal_TWD]=@RF_NET_TOTAL_TWD, ";
+                    strSQL += "     [RF_GrossTotal]=@RF_GROSS_TOTAL, ";
+                    strSQL += "     [RF_GrossTotal_TWD]=@RF_GROSS_TOTAL_TWD, ";
+                    strSQL += "     [RF_AmountTotal]=@RF_AMOUNT_TOTAL, ";
+                    strSQL += "     [RF_AmountTotal_TWD]=@RF_AMOUNT_TOTAL_TWD, ";
+                    strSQL += "     [ProcessMethod]=@PROCESS_METHOD, ";
+                    strSQL += "     [FinancNote]=@FINANC_NOTE ";
+                    strSQL += "WHERE 1=1 ";
+                    strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+
+                    dbFun.DoTran(strSQL, parameterInfo);
+
+                }
+
+                #endregion
+
+                #region - 版權採購退貨折讓單 退貨商品明細: MediaOrderReturnRefund_RF_COMM -
+
+                var parameterRefundCommoditys = new List<SqlParameter>()
+                {
+                    //版權採購退貨折讓單 退貨商品明細
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@INV_NUM", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@ORDER_ROW_NO", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@MEDIA_SPEC", SqlDbType.NVarChar) { Size = 5, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@START_EPISODE", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@END_EPISODE", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@ORDER_EPISODE", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@ACPT_EPISODE", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@EPISODE_TIME", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
+                };
+
+                #region 先刪除舊資料
+
+                strSQL = "";
+                strSQL += "DELETE ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_RF_COMM] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoTran(strSQL, parameterRefundCommoditys);
+
+                #endregion
+
+                if (model.MEDIA_ORDER_RETURN_REFUND_RF_COMMS_CONFIG != null && model.MEDIA_ORDER_RETURN_REFUND_RF_COMMS_CONFIG.Count > 0)
+                {
+                    #region 再新增資料
+
+                    foreach (var item in model.MEDIA_ORDER_RETURN_REFUND_RF_COMMS_CONFIG)
+                    {
+                        //寫入：版權採購交片單 退貨商品明細parameter
+                        strJson = jsonFunction.ObjectToJSON(item);
+                        GlobalParameters.Infoparameter(strJson, parameterRefundCommoditys);
+
+                        strSQL = "";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_RF_COMM]([RequisitionID],[INV_Num],[OrderRowNo],[SupProdANo],[ItemName],[MediaSpec],[MediaType],[StartEpisode],[EndEpisode],[OrderEpisode],[ACPT_Episode],[EpisodeTime]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@INV_NUM,@ORDER_ROW_NO,@SUP_PROD_A_NO,@ITEM_NAME,@MEDIA_SPEC,@MEDIA_TYPE,@START_EPISODE,@END_EPISODE,@ORDER_EPISODE,@ACPT_EPISODE,@EPISODE_TIME) ";
+
+                        dbFun.DoTran(strSQL, parameterRefundCommoditys);
+                    }
+
+                    #endregion
+                }
+
+                #endregion
+
+                #region - 版權採購退貨折讓單 憑證退款明細：MediaOrderReturnRefund_INV -
+
+                var parameterInvoices = new List<SqlParameter>()
+                {
+                    //版權採購退貨折讓單 憑證
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_REQUISITION_ID ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_BPM_FORM_NO ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_ERP_FORM_NO ?? DBNull.Value },
+                    new SqlParameter("@PERIOD", SqlDbType.Int) { Value = model.MEDIA_ORDER_RETURN_REFUND_CONFIG.PERIOD },
+                    new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DATE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EXCL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EXCL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NET_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GROSS_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                };
+
+                #region 先刪除舊資料
+
+                strSQL = "";
+                strSQL += "DELETE ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_INV] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoTran(strSQL, parameterInvoices);
+
+                #endregion
+
+                if (model.MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG != null && model.MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG.Count > 0)
+                {
+                    #region 再新增資料
+
+                    foreach (var item in model.MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG)
+                    {
+                        strJson = jsonFunction.ObjectToJSON(item);
+
+                        #region - 確認小數點後第二位 -
+
+                        GlobalParameters.IsDouble(strJson);
+
+                        #endregion
+
+                        //寫入：版權採購請款 發票明細parameter
+                        strJson = jsonFunction.ObjectToJSON(item);
+                        GlobalParameters.Infoparameter(strJson, parameterInvoices);
+
+                        strSQL = "";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_INV]([RequisitionID],[MediaOrderRequisitionID],[MediaOrderBPMFormNo],[MediaOrderERPFormNo],[Period],[InvoiceRowNo],[Num],[Date],[Excl],[Excl_TWD],[Tax],[Tax_TWD],[Net],[Net_TWD],[Gross],[Gross_TWD],[Amount],[Amount_TWD],[Note],[IsExcl]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@MEDIA_ORDER_REQUISITION_ID,@MEDIA_ORDER_BPM_FORM_NO,@MEDIA_ORDER_ERP_FORM_NO,@PERIOD,@INV_ROW_NO,@NUM,@DATE,@EXCL,@EXCL_TWD,@TAX,@TAX_TWD,@NET,@NET_TWD,@GROSS,@GROSS_TWD,@AMOUNT,@AMOUNT_TWD,@NOTE,@IS_EXCL) ";
+
+                        dbFun.DoTran(strSQL, parameterInvoices);
+                    }
+
+                    #endregion
+                }
+
+                #endregion
+
+                #region - 版權採購退貨折讓單 憑證退款細項：MediaOrderReturnRefund_INV_DTL -
+
+                var parameterInvoiceDetails = new List<SqlParameter>()
+                {
+                    //版權採購退貨折讓單 憑證明細
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_REQUISITION_ID ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_BPM_FORM_NO ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_ERP_FORM_NO ?? DBNull.Value },                    new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5 , Value = (object)DBNull.Value ?? DBNull.Value },
+                };
+
+                #region 先刪除舊資料
+
+                strSQL = "";
+                strSQL += "DELETE ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_INV_DTL] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoTran(strSQL, parameterInvoiceDetails);
+
+                #endregion
+
+                if (model.MEDIA_ORDER_RETURN_REFUND_INV_DTLS_CONFIG != null && model.MEDIA_ORDER_RETURN_REFUND_INV_DTLS_CONFIG.Count > 0)
+                {
+                    #region 再新增資料
+
+                    foreach (var item in model.MEDIA_ORDER_RETURN_REFUND_INV_DTLS_CONFIG)
+                    {
+                        strJson = jsonFunction.ObjectToJSON(item);
+
+                        #region - 確認小數點後第二位 -
+
+                        GlobalParameters.IsDouble(strJson);
+
+                        #endregion
+
+                        //寫入：版權採購請款 憑證細項parameter
+                        strJson = jsonFunction.ObjectToJSON(item);
+                        GlobalParameters.Infoparameter(strJson, parameterInvoiceDetails);
+
+                        strSQL = "";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_INV_DTL]([RequisitionID],[MediaOrderRequisitionID],[MediaOrderBPMFormNo],[MediaOrderERPFormNo],[Period],[InvoiceRowNo],[Num],[Name],[Quantity],[Amount],[Amount_TWD],[IsExcl]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@MEDIA_ORDER_REQUISITION_ID,@MEDIA_ORDER_BPM_FORM_NO,@MEDIA_ORDER_ERP_FORM_NO,@PERIOD,@INV_ROW_NO,@NUM,@NAME,@QUANTITY,@AMOUNT,@AMOUNT_TWD,@IS_EXCL) ";
+
+                        dbFun.DoTran(strSQL, parameterInvoiceDetails);
+                    }
+
+                    #endregion
+                }
+
+
+                #endregion
+
+                #region - 版權採購退貨折讓單 表單關聯：AssociatedForm -
+                //關聯表:匯入【版權採購請款單】的「關聯表單」
+
+                var importAssociatedForm = commonRepository.PostAssociatedForm(mediaInvoiceformQueryModel);
+
+                var associatedFormConfig = model.ASSOCIATED_FORM_CONFIG;
+                if (associatedFormConfig == null || associatedFormConfig.Count <= 0)
+                {
+                    associatedFormConfig = importAssociatedForm;
+                }
+
+                var associatedFormModel = new AssociatedFormModel()
+                {
+                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    ASSOCIATED_FORM_CONFIG = associatedFormConfig
+                };
+
+                //寫入「關聯表單」
+                commonRepository.PutAssociatedForm(associatedFormModel);
+
+                #endregion
+
+                #region - 表單主旨：FormHeader -
+
+                FormHeader header = new FormHeader();
+                header.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                header.ITEM_NAME = "Subject";
+                header.ITEM_VALUE = FM7Subject;
+
+                formRepository.PutFormHeader(header);
+
+                #endregion
+
+                #region - 儲存草稿：FormDraftList -
+
+                if (model.APPLICANT_INFO.DRAFT_FLAG.Equals(1))
+                {
+                    FormDraftList draftList = new FormDraftList();
+                    draftList.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                    draftList.IDENTIFY = IDENTIFY;
+                    draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
+
+                    formRepository.PutFormDraftList(draftList, true);
+                }
+
+                #endregion
+
+                #region - 送出表單：FormAutoStart -
+
+                if (model.APPLICANT_INFO.DRAFT_FLAG.Equals(0))
+                {
+                    #region 送出表單前，先刪除草稿清單
+
+                    FormDraftList draftList = new FormDraftList();
+                    draftList.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                    draftList.IDENTIFY = IDENTIFY;
+                    draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
+
+                    formRepository.PutFormDraftList(draftList, false);
+
+                    #endregion
+
+                    FormAutoStart autoStart = new FormAutoStart();
+                    autoStart.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                    autoStart.DIAGRAM_ID = model.APPLICANT_INFO.DIAGRAM_ID;
+                    autoStart.APPLICANT_ID = model.APPLICANT_INFO.APPLICANT_ID;
+                    autoStart.APPLICANT_DEPT = model.APPLICANT_INFO.APPLICANT_DEPT;
+
+                    formRepository.PutFormAutoStart(autoStart);
+                }
+
+                #endregion
+
+                #region - 表單機能啟用：BPMFormFunction -
+
+                var BPM_FormFunction = new BPMFormFunction()
+                {
+                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    IDENTIFY = IDENTIFY,
+                    DRAFT_FLAG = 0
+                };
+                commonRepository.PostBPMFormFunction(BPM_FormFunction);
+
+                #endregion
+
+                vResult = true;
+
+            }
+            catch (Exception ex)
+            {
+                vResult = false;
+                CommLib.Logger.Error("版權採購退貨折讓單 (新增/修改/草稿)失敗，原因：" + ex.Message);
+            }
+            return vResult;
+
+        }
 
         #endregion
 

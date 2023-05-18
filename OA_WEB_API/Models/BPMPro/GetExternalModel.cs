@@ -343,7 +343,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaOrderChangeERPInfo : InfoTitle
     {
-        /// <summary>行政採購:新單ERP 表單唯一碼</summary>
+        /// <summary>版權採購:新單ERP 表單唯一碼</summary>
         public string ERP_MODIFY_FORM_NO { get; set; }
 
         /// <summary>ERP 工作流程名稱</summary>
@@ -368,16 +368,16 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaAcceptanceERPInfo
     {
-        /// <summary>行政採購點驗收單(表頭內容)</summary>
+        /// <summary>版權採購交片單(表頭內容)</summary>
         public MediaAcceptanceInfoTitle TITLE { get; set; }
 
-        /// <summary>行政採購點驗收單(表單內容)</summary>
+        /// <summary>版權採購交片單(表單內容)</summary>
         public MediaAcceptanceConfig INFO { get; set; }
 
-        /// <summary>行政採購點驗收單(驗收明細)</summary>
+        /// <summary>版權採購交片單(驗收明細)</summary>
         public IList<MediaAcceptanceDetailsConfig> DTL { get; set; }
 
-        /// <summary>行政採購點驗收單(退貨商品明細)</summary>
+        /// <summary>版權採購交片單(退貨商品明細)</summary>
         public IList<MediaAcceptanceRefundCommoditysConfig> RF_COMM { get; set; }
     }
 
@@ -397,15 +397,15 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaInvoiceERPInfo
     {
-        /// <summary>行政採購點驗收單(表頭內容)</summary>
+        /// <summary>版權採購請購單(抬頭)</summary>
         public MediaInvoiceInfoTitle TITLE { get; set; }
 
-        /// <summary>行政採購請購單(表單內容)</summary>
+        /// <summary>版權採購請購單(表單內容)</summary>
         public MediaInvoiceInfoConfig INFO { get; set; }
     }
 
     /// <summary>
-    /// 版權採購請購單(表頭內容)
+    /// 版權採購請購單(抬頭)
     /// </summary>
     public class MediaInvoiceInfoTitle : InfoTitle
     {
@@ -429,6 +429,45 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
+    }
+
+    #endregion
+
+    #region - 版權採購退貨折讓單(外部起單) -
+
+    /// <summary>
+    /// 版權採購退貨折讓單(外部起單)
+    /// </summary>
+    public class MediaOrderReturnRefundERPInfo
+    {
+        /// <summary>版權採購退貨折讓單(抬頭)</summary>
+        public MediaOrderReturnRefundInfoTitle TITLE { get; set; }
+
+        /// <summary>版權採購退貨折讓單(表單內容)</summary>
+        public MediaOrderReturnRefundInfoConfig INFO { get; set; }
+
+    }
+
+    /// <summary>
+    /// 版權採購退貨折讓單(抬頭)
+    /// </summary>
+    public class MediaOrderReturnRefundInfoTitle : InfoTitle
+    {
+        /// <summary>ERP 工作流程名稱</summary>
+        public string FLOW_NAME { get; set; }
+    }
+
+    /// <summary>
+    /// 版權採購退貨折讓單(表單內容)
+    /// </summary>
+    public class MediaOrderReturnRefundInfoConfig
+    {
+        /// <summary>版權請款 系統編號</summary>
+        public string MEDIA_INVOICE_REQUISITION_ID { get; set; }
+
+        /// <summary>期別</summary>
+        public int PERIOD { get; set; }
+
     }
 
     #endregion

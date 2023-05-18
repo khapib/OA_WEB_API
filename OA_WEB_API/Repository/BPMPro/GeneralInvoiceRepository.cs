@@ -231,6 +231,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [Period] AS [PERIOD], ";
+            strSQL += "     [InvoiceRowNo] AS [INV_ROW_NO], ";
             strSQL += "     [Num] AS [NUM], ";
             strSQL += "     [Date] AS [DATE], ";
             strSQL += "     [Excl] AS [EXCL], ";
@@ -243,14 +244,37 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [Gross_TWD] AS [GROSS_TWD], ";
             strSQL += "     [Amount] AS [AMOUNT], ";
             strSQL += "     [Amount_TWD] AS [AMOUNT_TWD], ";
-            strSQL += "     [Note] AS [NOTE] ";
+            strSQL += "     [Note] AS [NOTE], ";
+            strSQL += "     [IsExcl] AS [IS_EXCL] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralInvoice_INV] ";
             strSQL += "WHERE 1=1 ";
             strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
             strSQL += "         AND [Period]=@PERIOD ";
             strSQL += "ORDER BY [AutoCounter] ";
 
-            var generalInvoiceDetailsConfig = dbFun.DoQuery(strSQL, parameter).ToList<GeneralInvoiceDetailsConfig>();
+            var generalInvoiceInvoicsConfig = dbFun.DoQuery(strSQL, parameter).ToList<GeneralInvoiceInvoicsConfig>();
+
+            #endregion
+
+            #region - 行政採購請款單 憑證細項 -
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [Period] AS [PERIOD], ";
+            strSQL += "     [InvoiceRowNo] AS [INV_ROW_NO], ";
+            strSQL += "     [Num] AS [NUM], ";
+            strSQL += "     [Name] AS [NAME], ";
+            strSQL += "     [Quantity] AS [QUANTITY], ";
+            strSQL += "     [Amount] AS [AMOUNT], ";
+            strSQL += "     [Amount_TWD] AS [AMOUNT_TWD], ";
+            strSQL += "     [IsExcl] AS [IS_EXCL] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralInvoice_INV_DTL] ";
+            strSQL += "WHERE 1=1 ";
+            strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+            strSQL += "         AND [Period]=@PERIOD ";
+            strSQL += "ORDER BY [AutoCounter] ";
+
+            var generalInvoiceInvoiceDetailsConfig = dbFun.DoQuery(strSQL, parameter).ToList<GeneralInvoiceInvoiceDetailsConfig>();
 
             #endregion
 
@@ -271,8 +295,9 @@ namespace OA_WEB_API.Repository.BPMPro
                 GENERAL_INVOICE_CONFIG = generalInvoiceConfig,
                 GENERAL_INVOICE_ACCEPTANCES_CONFIG = generalInvoiceAcceptancesConfig,
                 GENERAL_INVOICE_PAYMENTS_CONFIG = generalInvoicePaymentsConfig,
-                GENERAL_INVOICE_BUDGETS_CONFIG= generalInvoiceBudgetsConfig,
-                GENERAL_INVOICE_DETAILS_CONFIG = generalInvoiceDetailsConfig,
+                GENERAL_INVOICE_BUDGETS_CONFIG = generalInvoiceBudgetsConfig,
+                GENERAL_INVOICE_INVS_CONFIG = generalInvoiceInvoicsConfig,
+                GENERAL_INVOICE_INV_DTLS_CONFIG = generalInvoiceInvoiceDetailsConfig,
                 ASSOCIATED_FORM_CONFIG = associatedForm
             };
 
@@ -617,17 +642,18 @@ namespace OA_WEB_API.Repository.BPMPro
                 //行政採購的 使用預算(GeneralOrder_BUDG) 內容。
 
                 #endregion
-
+                
                 #region - 行政採購請款單 憑證明細：GeneralInvoice_INV -
 
-                var parameterDetails = new List<SqlParameter>()
+                var parameterInvoices = new List<SqlParameter>()
                 {
-                    //行政採購請款單 憑證明細
+                    //行政採購請款單 憑證
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
                     new SqlParameter("@GENERAL_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_REQUISITION_ID ?? DBNull.Value },
-                    new SqlParameter("@GENERAL_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_ERP_FORM_NO ?? DBNull.Value },
+                    new SqlParameter("@GENERAL_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_BPM_FORM_NO ?? DBNull.Value },
                     new SqlParameter("@GENERAL_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_ERP_FORM_NO ?? DBNull.Value },
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DATE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@EXCL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -641,6 +667,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -651,15 +678,15 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "WHERE 1=1 ";
                 strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
 
-                dbFun.DoTran(strSQL, parameterDetails);
+                dbFun.DoTran(strSQL, parameterInvoices);
 
                 #endregion
 
-                if (model.GENERAL_INVOICE_DETAILS_CONFIG != null && model.GENERAL_INVOICE_DETAILS_CONFIG.Count > 0)
+                if (model.GENERAL_INVOICE_INVS_CONFIG != null && model.GENERAL_INVOICE_INVS_CONFIG.Count > 0)
                 {
                     #region 再新增資料
 
-                    foreach (var item in model.GENERAL_INVOICE_DETAILS_CONFIG)
+                    foreach (var item in model.GENERAL_INVOICE_INVS_CONFIG)
                     {
                         strJson = jsonFunction.ObjectToJSON(item);
 
@@ -669,14 +696,76 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         #endregion
 
-                        //寫入：行政採購申請 憑證明細parameter
-                        GlobalParameters.Infoparameter(strJson, parameterDetails);
+                        //寫入：行政採購請款單 發票明細parameter
+                        strJson = jsonFunction.ObjectToJSON(item);
+                        GlobalParameters.Infoparameter(strJson, parameterInvoices);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralInvoice_INV]([RequisitionID],[Period],[GeneralOrderRequisitionID],[GeneralOrderBPMFormNo],[GeneralOrderERPFormNo],[Num],[Date],[Excl],[Excl_TWD],[Tax],[Tax_TWD],[Net],[Net_TWD],[Gross],[Gross_TWD],[Amount],[Amount_TWD],[Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@GENERAL_ORDER_REQUISITION_ID,@GENERAL_ORDER_BPM_FORM_NO,@GENERAL_ORDER_ERP_FORM_NO,@NUM,@DATE,@EXCL,@EXCL_TWD,@TAX,@TAX_TWD,@NET,@NET_TWD,@GROSS,@GROSS_TWD,@AMOUNT,@AMOUNT_TWD,@NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralInvoice_INV]([RequisitionID],[GeneralOrderRequisitionID],[GeneralOrderBPMFormNo],[GeneralOrderERPFormNo],[Period],[InvoiceRowNo],[Num],[Date],[Excl],[Excl_TWD],[Tax],[Tax_TWD],[Net],[Net_TWD],[Gross],[Gross_TWD],[Amount],[Amount_TWD],[Note],[IsExcl]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@GENERAL_ORDER_REQUISITION_ID,@GENERAL_ORDER_BPM_FORM_NO,@GENERAL_ORDER_ERP_FORM_NO,@PERIOD,@INV_ROW_NO,@NUM,@DATE,@EXCL,@EXCL_TWD,@TAX,@TAX_TWD,@NET,@NET_TWD,@GROSS,@GROSS_TWD,@AMOUNT,@AMOUNT_TWD,@NOTE,@IS_EXCL) ";
 
-                        dbFun.DoTran(strSQL, parameterDetails);
+                        dbFun.DoTran(strSQL, parameterInvoices);
+                    }
+
+                    #endregion
+                }
+
+                #endregion
+
+                #region - 行政採購請款單 憑證細項：GeneralInvoice_INV_DTL -
+
+                var parameterInvoiceDetails = new List<SqlParameter>()
+                {
+                    //行政採購請款單 憑證明細
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@GENERAL_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_REQUISITION_ID ?? DBNull.Value },
+                    new SqlParameter("@GENERAL_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_BPM_FORM_NO ?? DBNull.Value },
+                    new SqlParameter("@GENERAL_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_ERP_FORM_NO ?? DBNull.Value },
+                    new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5 , Value = (object)DBNull.Value ?? DBNull.Value },
+                };
+
+                #region 先刪除舊資料
+
+                strSQL = "";
+                strSQL += "DELETE ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralInvoice_INV_DTL] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoTran(strSQL, parameterInvoiceDetails);
+
+                #endregion
+
+                if (model.GENERAL_INVOICE_INV_DTLS_CONFIG != null && model.GENERAL_INVOICE_INV_DTLS_CONFIG.Count > 0)
+                {
+                    #region 再新增資料
+
+                    foreach (var item in model.GENERAL_INVOICE_INV_DTLS_CONFIG)
+                    {
+                        strJson = jsonFunction.ObjectToJSON(item);
+
+                        #region - 確認小數點後第二位 -
+
+                        GlobalParameters.IsDouble(strJson);
+
+                        #endregion
+
+                        //寫入：行政採購請款單 憑證細項parameter
+                        strJson = jsonFunction.ObjectToJSON(item);
+                        GlobalParameters.Infoparameter(strJson, parameterInvoiceDetails);
+
+                        strSQL = "";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralInvoice_INV_DTL]([RequisitionID],[GeneralOrderRequisitionID],[GeneralOrderBPMFormNo],[GeneralOrderERPFormNo],[Period],[InvoiceRowNo],[Num],[Name],[Quantity],[Amount],[Amount_TWD],[IsExcl]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@GENERAL_ORDER_REQUISITION_ID,@GENERAL_ORDER_BPM_FORM_NO,@GENERAL_ORDER_ERP_FORM_NO,@PERIOD,@INV_ROW_NO,@NUM,@NAME,@QUANTITY,@AMOUNT,@AMOUNT_TWD,@IS_EXCL) ";
+
+                        dbFun.DoTran(strSQL, parameterInvoiceDetails);
                     }
 
                     #endregion

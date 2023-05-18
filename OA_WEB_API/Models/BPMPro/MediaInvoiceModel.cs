@@ -228,12 +228,6 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>憑證明細 總稅額/總預估保留稅額_台幣(憑證明細)</summary>
         public int INV_TAX_TOTAL_TWD { get; set; }
 
-        /// <summary>憑證細項 合計</summary>
-        public double INV_DTL_AMOUNT_TOTAL { get; set; }
-
-        /// <summary>憑證細項 合計_台幣</summary>
-        public int INV_DTL_AMOUNT_TOTAL_TWD { get; set; }
-
         /// <summary>實際支付金額</summary>
         public int ACTUAL_PAY_AMOUNT { get; set; }
 
@@ -349,81 +343,16 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 版權採購請款單 憑證明細 設定
     /// </summary>
-    public class MediaInvoiceInvoicesConfig
+    public class MediaInvoiceInvoicesConfig : InvoicesConfig
     {
-        /// <summary>期別</summary>
-        public int PERIOD { get; set; }
- 
-        /// <summary>憑證行數編號</summary>
-        public int INV_ROW_NO { get; set; }
 
-        /// <summary>憑證號碼</summary>
-        public string NUM { get; set; }
-
-        /// <summary>憑證日期</summary>
-        public string DATE { get; set; }
-
-        /// <summary>憑證免稅額</summary>
-        public double EXCL { get; set; }
-
-        /// <summary>憑證免稅額_台幣</summary>
-        public int EXCL_TWD { get; set; }
-
-        /// <summary>憑證稅額</summary>
-        public double TAX { get; set; }
-
-        /// <summary>憑證稅額_台幣</summary>
-        public int TAX_TWD { get; set; }
-
-        /// <summary>憑證未稅金額</summary>
-        public double NET { get; set; }
-
-        /// <summary>憑證未稅金額_台幣</summary>
-        public int NET_TWD { get; set; }
-
-        /// <summary>憑證含稅金額</summary>
-        public double GROSS { get; set; }
-
-        /// <summary>憑證含稅金額_台幣</summary>
-        public int GROSS_TWD { get; set; }
-
-        /// <summary>憑證金額</summary>
-        public double AMOUNT { get; set; }
-
-        /// <summary>憑證金額</summary>
-        public int AMOUNT_TWD { get; set; }
-
-        /// <summary>備註</summary>
-        public string NOTE { get; set; }
     }
 
     /// <summary>
     /// 版權採購請款單 憑證細項 設定
     /// </summary>
-    public class MediaInvoiceInvoiceDetailsConfig
+    public class MediaInvoiceInvoiceDetailsConfig : InvoiceDetailsConfig
     {
-        /// <summary>期別</summary>
-        public int PERIOD { get; set; }
 
-        /// <summary>憑證行數編號</summary>
-        public int INV_ROW_NO { get; set; }
-
-        /// <summary>憑證號碼</summary>
-        public string NUM { get; set; }
-
-        /// <summary>名稱</summary>
-        public string NAME { get; set; }
-
-        /// <summary>數量</summary>
-        public int QUANTITY { get; set; }
-
-        /// <summary>金額</summary>
-        public double AMOUNT { get; set; }
-
-        /// <summary>金額_台幣</summary>
-        public int AMOUNT_TWD { get; set; }
-
-        /// <summary>是否免稅[註記]</summary>
-        public string IS_EXCL { get; set; }
     }
 }

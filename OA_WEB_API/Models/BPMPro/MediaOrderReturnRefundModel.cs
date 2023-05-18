@@ -34,29 +34,14 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>版權採購退貨折讓單 表單內容 設定</summary>
         public MediaOrderReturnRefundConfig MEDIA_ORDER_RETURN_REFUND_CONFIG { get; set; }
 
-        /// <summary>版權採購退貨折讓單 驗收明細 設定</summary>
-        public IList<MediaOrderReturnRefundAcceptancesConfig> MEDIA_ORDER_RETURN_REFUND_ACPTS_CONFIG { get; set; }
+        /// <summary>版權採購退貨折讓單 退貨商品明細 設定</summary>
+        public IList<MediaOrderReturnRefundRefundCommoditysConfig> MEDIA_ORDER_RETURN_REFUND_RF_COMMS_CONFIG { get; set; }
 
-        /// <summary>版權採購退貨折讓單 授權權利 設定</summary>
-        public IList<MediaOrderReturnRefundAuthorizesConfig> MEDIA_ORDER_RETURN_REFUND_AUTHS_CONFIG { get; set; }
-
-        /// <summary>版權採購申請單 額外項目 設定</summary>
-        public IList<MediaOrderReturnRefundExtrasConfig> MEDIA_ORDER_RETURN_REFUND_EXS_CONFIG { get; set; }
-
-        /// <summary>版權採購退貨折讓單 付款辦法 設定</summary>
-        public IList<MediaOrderReturnRefundPaymentsConfig> MEDIA_ORDER_RETURN_REFUND_PYMTS_CONFIG { get; set; }
-
-        /// <summary>版權採購退貨折讓單 使用預算 設定</summary>
-        public IList<MediaOrderReturnRefundBudgetsConfig> MEDIA_ORDER_RETURN_REFUND_BUDGS_CONFIG { get; set; }
-
-        /// <summary>版權採購退貨折讓單 憑證明細 設定</summary>
+        /// <summary>版權採購退貨折讓單 憑證退款明細 設定</summary>
         public IList<MediaOrderReturnRefundInvoicesConfig> MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG { get; set; }
 
-        /// <summary>版權採購退貨折讓單 細項 設定</summary>
+        /// <summary>版權採購退貨折讓單 憑證退款細項 設定</summary>
         public IList<MediaOrderReturnRefundInvoiceDetailsConfig> MEDIA_ORDER_RETURN_REFUND_INV_DTLS_CONFIG { get; set; }
-
-        /// <summary>版權採購退貨折讓單 退貨商品明細 設定</summary>
-        public IList<MediaOrderReturnRefundRefundCommoditysConfig> MEDIA_ORDER_RETURN_REFUND_REFUND_COMMS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
@@ -92,56 +77,8 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>版權請款 路徑</summary>
         public string MEDIA_INVOICE_PATH { get; set; }
 
-        /// <summary>版權採購 總金額</summary>
-        public double MEDIA_ORDER_PYMT_ORDER_TOTAL { get; set; }
-
-        /// <summary>版權採購 總金額_台幣</summary>
-        public int MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV { get; set; }
-
-        /// <summary>退款金額</summary>
-        public double REFUND_AMOUNT { get; set; }
-
-        /// <summary>退款金額_台幣</summary>
-        public int REFUND_AMOUNT_TWD { get; set; }
-
-        /// <summary>含稅總額</summary>
-        public double ORDER_GROSS_TOTAL { get; set; }
-
-        /// <summary>含稅總額_台幣</summary>
-        public int ORDER_GROSS_TOTAL_TWD { get; set; }
-
-        /// <summary>交易類型</summary>
-        public string TXN_TYPE { get; set; }
-
-        /// <summary>期別</summary>
+        /// <summary>版權請款 期別</summary>
         public int PERIOD { get; set; }
-
-        /// <summary>營業稅/[稅率]租稅協定</summary>
-        public double TAX_TATE { get; set; }
-
-        /// <summary>幣別</summary>
-        public string CURRENCY { get; set; }
-
-        /// <summary>預計匯率</summary>
-        public double PRE_RATE { get; set; }
-
-        /// <summary>廠商編號</summary>
-        public string SUP_NO { get; set; }
-
-        /// <summary>廠商名稱</summary>
-        public string SUP_NAME { get; set; }
-
-        /// <summary>登記證號類別</summary>
-        public string REG_KIND { get; set; }
-
-        /// <summary>登記證號/統編</summary>
-        public string REG_NO { get; set; }
-
-        /// <summary>負責人</summary>
-        public string OWNER_NAME { get; set; }
-
-        /// <summary>負責人電話</summary>
-        public string OWNER_TEL { get; set; }
 
         /// <summary>財務審核人員編號</summary>
         public string FINANC_AUDIT_ID_1 { get; set; }
@@ -158,71 +95,35 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>備註</summary>
         public string NOTE { get; set; }
 
-        /// <summary>合計未稅金額(銷售明細)/NET總額(銷售明細)</summary>
-        public double DTL_NET_TOTAL { get; set; }
+        /// <summary>免稅總額(退貨明細)</summary>
+        public double RF_EXCL_TOTAL { get; set; }
 
-        /// <summary>合計未稅金額_台幣(銷售明細)/NET總額_台幣(銷售明細)</summary>
-        public int DTL_NET_TOTAL_TWD { get; set; }
+        /// <summary>免稅總額_台幣(退貨明細)</summary>
+        public int RF_EXCL_TOTAL_TWD { get; set; }
 
-        /// <summary>總稅額/總預估保留稅額(銷售明細)</summary>
-        public double DTL_TAX_TOTAL { get; set; }
+        /// <summary>總稅額(退貨明細)</summary>
+        public double RF_TAX_TOTAL { get; set; }
 
-        /// <summary>總稅額/總預估保留稅額_台幣(銷售明細)</summary>
-        public int DTL_TAX_TOTAL_TWD { get; set; }
+        /// <summary>總稅額_台幣(退貨明細)</summary>
+        public int RF_TAX_TOTAL_TWD { get; set; }
 
-        /// <summary>合計含稅總額(銷售明細)/GROSS總額(銷售明細)</summary>
-        public double DTL_GROSS_TOTAL { get; set; }
+        /// <summary>未稅總額(退貨明細)</summary>
+        public double RF_NET_TOTAL { get; set; }
 
-        /// <summary>合計含稅總額_台幣(銷售明細)/GROSS總額_台幣(銷售明細)</summary>
-        public int DTL_GROSS_TOTAL_TWD { get; set; }
+        /// <summary>未稅總額_台幣(退貨明細)</summary>
+        public int RF_NET_TOTAL_TWD { get; set; }
 
-        /// <summary>材料費總價(採購明細)</summary>
-        public double DTL_MATERIAL_TOTAL { get; set; }
+        /// <summary>含稅總額(退貨明細)</summary>
+        public double RF_GROSS_TOTAL { get; set; }
 
-        /// <summary>材料費總價_台幣(採購明細)</summary>
-        public int DTL_MATERIAL_TOTAL_TWD { get; set; }
+        /// <summary>含稅總額_台幣(退貨明細)</summary>
+        public int RF_GROSS_TOTAL_TWD { get; set; }
 
-        /// <summary>合計(採購明細)</summary>
-        public double DTL_ORDER_TOTAL { get; set; }
+        /// <summary>合計金額(退貨明細)</summary>
+        public double RF_AMOUNT_TOTAL { get; set; }
 
-        /// <summary>合計_台幣(採購明細)</summary>
-        public int DTL_ORDER_TOTAL_TWD { get; set; }
-
-        /// <summary>額外採購項目 總額(額外採購項目)</summary>
-        public double EX_AMOUNT_TOTAL { get; set; }
-
-        /// <summary>額外採購項目 總額_台幣(額外採購項目)</summary>
-        public int EX_AMOUNT_TOTAL_TWD { get; set; }
-
-        /// <summary>額外採購項目 總稅額/總預估保留稅額(額外採購項目)</summary>
-        public double EX_TAX_TOTAL { get; set; }
-
-        /// <summary>額外採購項目 總稅額/總預估保留稅額_台幣(額外採購項目)</summary>
-        public int EX_TAX_TOTAL_TWD { get; set; }
-
-        /// <summary>本期付款總額(付款辦法)</summary>
-        public double PYMT_CURRENT_TOTAL { get; set; }
-
-        /// <summary>本期付款總額_台幣(付款辦法)</summary>
-        public int PYMT_CURRENT_TOTAL_TWD { get; set; }
-
-        /// <summary>額外採購項目 總稅額/總預估保留稅額(付款辦法)</summary>
-        public double PYMT_EX_TAX_TOTAL { get; set; }
-
-        /// <summary>額外採購項目 總稅額/總預估保留稅額_台幣(付款辦法)</summary>
-        public int PYMT_EX_TAX_TOTAL_TWD { get; set; }
-
-        /// <summary>退款總額</summary>
-        public double INV_AMOUNT_TOTAL { get; set; }
-
-        /// <summary>退款總額_台幣</summary>
-        public int INV_AMOUNT_TOTAL_TWD { get; set; }
-
-        /// <summary>退款總預估保留稅</summary>
-        public double INV_TAX_TOTAL { get; set; }
-
-        /// <summary>退款總預估保留稅_台幣</summary>
-        public int INV_TAX_TOTAL_TWD { get; set; }
+        /// <summary>合計金額_台幣(退貨明細)</summary>
+        public int RF_AMOUNT_TOTAL_TWD { get; set; }
 
         /// <summary>處理方式</summary>
         public string PROCESS_METHOD { get; set; }
@@ -230,72 +131,6 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>其他類別</summary>
         public string FINANC_NOTE { get; set; }
     }
-
-    /// <summary>
-    /// 版權採購退貨折讓單 驗收明細 設定
-    /// </summary>
-    public class MediaOrderReturnRefundAcceptancesConfig : MediaInvoiceAcceptancesConfig
-    {
-
-    }
-
-    /// <summary>
-    /// 版權採購退貨折讓單 授權權利 設定
-    /// </summary>
-    public class MediaOrderReturnRefundAuthorizesConfig : MediaInvoiceAuthorizesConfig
-    {
-
-    }
-
-    /// <summary>
-    /// 版權採購退貨折讓單 額外項目 設定
-    /// </summary>
-    public class MediaOrderReturnRefundExtrasConfig : MediaInvoiceExtrasConfig
-    {
-
-    }
-
-    /// <summary>
-    /// 版權採購退貨折讓單 付款辦法 設定
-    /// </summary>
-    public class MediaOrderReturnRefundPaymentsConfig : MediaOrderPaymentsConfig
-    {
-
-    }
-
-    /// <summary>
-    /// 版權採購退貨折讓單 使用預算 設定
-    /// </summary>
-    public class MediaOrderReturnRefundBudgetsConfig : MediaInvoiceBudgetsConfig
-    {
-
-    }
-
-
-    /// <summary>
-    /// 版權採購退貨折讓單 憑證明細 設定
-    /// </summary>
-    public class MediaOrderReturnRefundInvoicesConfig: MediaInvoiceInvoicesConfig
-    {
-        
-    }
-
-    /// <summary>
-    /// 版權採購退貨折讓單 退貨明細 設定
-    /// </summary>
-    public class MediaOrderReturnRefundRefundDetailsConfig
-    {
-
-    }
-
-    /// <summary>
-    /// 版權採購退貨折讓單 退貨細項 設定
-    /// </summary>
-    public class MediaOrderReturnRefundRefundContentsConfig : MediaInvoiceInvoiceDetailsConfig
-    {
-
-    }
-
 
     /// <summary>
     /// 版權採購退貨折讓單 退貨商品明細 設定
@@ -335,4 +170,22 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>每集長度</summary>
         public int EPISODE_TIME { get; set; }
     }
+
+
+    /// <summary>
+    /// 版權採購退貨折讓單 退貨明細 設定
+    /// </summary>
+    public class MediaOrderReturnRefundInvoicesConfig : InvoicesConfig
+    {
+        
+    }
+
+    /// <summary>
+    /// 版權採購退貨折讓單 退貨細項 設定
+    /// </summary>
+    public class MediaOrderReturnRefundInvoiceDetailsConfig : InvoiceDetailsConfig
+    {
+
+    }
+
 }

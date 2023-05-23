@@ -132,56 +132,56 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #region - 依此單內容重送 -
 
-        ///// <summary>
-        ///// 尚未播出檔拷貝申請單(依此單內容重送)(僅外部起單使用)
-        ///// </summary>
-        //public bool PutMediaWarehouseNotAiredCopyRefill(MediaWarehouseNotAiredCopyQueryModel query)
-        //{
-        //    bool vResult = false;
+        /// <summary>
+        /// 尚未播出檔拷貝申請單(依此單內容重送)(僅外部起單使用)
+        /// </summary>
+        public bool PutMediaWarehouseNotAiredCopyRefill(MediaWarehouseNotAiredCopyQueryModel query)
+        {
+            bool vResult = false;
 
-        //    try
-        //    {
-        //        #region - 宣告 -
+            try
+            {
+                #region - 宣告 -
 
-        //        var original = PostMediaWarehouseNotAiredCopySingle(query);
-        //        strJson = jsonFunction.ObjectToJSON(original);
+                var original = PostMediaWarehouseNotAiredCopySingle(query);
+                strJson = jsonFunction.ObjectToJSON(original);
 
-        //        var MediaWarehouseNotAiredCopyViewModel = new MediaWarehouseNotAiredCopyViewModel();
+                var MediaWarehouseNotAiredCopyViewModel = new MediaWarehouseNotAiredCopyViewModel();
 
-        //        var requisitionID = Guid.NewGuid().ToString();
+                var requisitionID = Guid.NewGuid().ToString();
 
-        //        #endregion
+                #endregion
 
-        //        #region - 重送內容 -
+                #region - 重送內容 -
 
-        //        MediaWarehouseNotAiredCopyViewModel = jsonFunction.JsonToObject<MediaWarehouseNotAiredCopyViewModel>(strJson);
+                MediaWarehouseNotAiredCopyViewModel = jsonFunction.JsonToObject<MediaWarehouseNotAiredCopyViewModel>(strJson);
 
-        //        #region - 申請人資訊 調整 -
+                #region - 申請人資訊 調整 -
 
-        //        MediaWarehouseNotAiredCopyViewModel.APPLICANT_INFO.REQUISITION_ID = requisitionID;
-        //        MediaWarehouseNotAiredCopyViewModel.APPLICANT_INFO.DRAFT_FLAG = 1;
-        //        MediaWarehouseNotAiredCopyViewModel.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Now;
+                MediaWarehouseNotAiredCopyViewModel.APPLICANT_INFO.REQUISITION_ID = requisitionID;
+                MediaWarehouseNotAiredCopyViewModel.APPLICANT_INFO.DRAFT_FLAG = 1;
+                MediaWarehouseNotAiredCopyViewModel.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Now;
 
-        //        #endregion
+                #endregion
 
-        //        #endregion
+                #endregion
 
-        //        #region - 送出 執行(新增/修改/草稿) -
+                #region - 送出 執行(新增/修改/草稿) -
 
-        //        PutMediaWarehouseNotAiredCopySingle(MediaWarehouseNotAiredCopyViewModel);
+                PutMediaWarehouseNotAiredCopySingle(MediaWarehouseNotAiredCopyViewModel);
 
-        //        #endregion
+                #endregion
 
-        //        vResult = true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        vResult = false;
-        //        CommLib.Logger.Error("尚未播出檔拷貝申請單(依此單內容重送)失敗，原因：" + ex.Message);
-        //    }
+                vResult = true;
+            }
+            catch (Exception ex)
+            {
+                vResult = false;
+                CommLib.Logger.Error("尚未播出檔拷貝申請單(依此單內容重送)失敗，原因：" + ex.Message);
+            }
 
-        //    return vResult;
-        //}
+            return vResult;
+        }
 
         #endregion
 

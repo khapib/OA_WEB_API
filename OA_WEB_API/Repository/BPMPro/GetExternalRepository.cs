@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 
 using OA_WEB_API.Models;
@@ -85,6 +86,8 @@ namespace OA_WEB_API.Repository.BPMPro
         MediaAcceptanceRepository mediaAcceptanceRepository = new MediaAcceptanceRepository();
         /// <summary>版權採購請款單</summary>
         MediaInvoiceRepository mediaInvoiceRepository =new MediaInvoiceRepository();
+        /// <summary>版權採購退貨折讓單</summary>
+        MediaOrderReturnRefundRepository mediaOrderReturnRefundRepository = new MediaOrderReturnRefundRepository();
 
         #endregion
 
@@ -2041,7 +2044,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     #endregion
 
-                    #region - 版權採購交片單(驗收明細):mediaAcceptanceDetailsConfig -
+                    #region - 版權採購交片單(驗收明細):MediaAcceptanceDetailsConfig -
 
                     strJson = jsonFunction.ObjectToJSON(model.DTL);
                     var mediaAcceptanceDetailsConfig = jsonFunction.JsonToObject<List<MediaAcceptanceDetailsConfig>>(strJson);
@@ -2056,7 +2059,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     #endregion
 
                     #endregion
-
+                                       
                     #region - 送單 -
 
                     //送單
@@ -2065,13 +2068,47 @@ namespace OA_WEB_API.Repository.BPMPro
                         APPLICANT_INFO = applicantInfo,
                         MEDIA_ACCEPTANCE_TITLE = mediaAcceptanceTitle,
                         MEDIA_ACCEPTANCE_CONFIG = mediaAcceptanceConfig,
-                        MEDIA_ACCEPTANCE_DTLS_CONFIG = mediaAcceptanceDetailsConfig
+                        MEDIA_ACCEPTANCE_DTLS_CONFIG = mediaAcceptanceDetailsConfig,
                     };
 
                     if (mediaAcceptanceRepository.PutMediaAcceptanceSingle(mediaAcceptanceViewModel))
                     {
                         //起單成功
                         State = BPMStatusCode.PROGRESS;
+
+
+                        if(model.ALDY_RF_COMM != null)
+                        {
+                            #region - 版權採購交片單 已退貨商品明細: MediaAcceptance_ALDY_RF_COMM -
+
+                            var parameterAlreadyRefundCommoditys = new List<SqlParameter>()
+                            {
+                                //版權採購退貨折讓單 已退貨商品明細
+                                new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                                new SqlParameter("@ORDER_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@MEDIA_SPEC", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@START_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@END_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@ORDER_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@ACPT_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@EPISODE_TIME", SqlDbType.Int) { Value = (object) DBNull.Value ?? DBNull.Value },
+                            };
+
+                            var CommonALDY_COMM = new BPMCommonModel<MediaCommodityConfig>()
+                            {
+                                IsALDY = true,
+                                IDENTIFY = IDENTIFY,
+                                parameter = parameterAlreadyRefundCommoditys,
+                                Model = model.ALDY_RF_COMM
+                            };
+                            commonRepository.PutMediaCommodityFunction(CommonALDY_COMM);
+
+                            #endregion
+                        }
+
                     }
                     else
                     {
@@ -2264,10 +2301,251 @@ namespace OA_WEB_API.Repository.BPMPro
             }
             catch (Exception ex)
             {
-                CommLib.Logger.Error("行政採購請款單(外部起單)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("版權採購請款單(外部起單)失敗，原因：" + ex.Message);
                 throw;
             }
         }
+
+        #endregion
+
+        #region - 版權採購退貨折讓單(外部起單) -
+
+        /// <summary>
+        /// 版權採購退貨折讓單(外部起單)
+        /// </summary>
+        public GetExternalData PutMediaOrderReturnRefundGetExternal(MediaOrderReturnRefundERPInfo model)
+        {
+            try
+            {
+                #region - 初始化宣告 -
+
+                //表單ID
+                IDENTIFY = "MediaOrderReturnRefund";
+
+                strFormNo = model.TITLE.ERP_FORM_NO;
+                var request = new GTVInApproveProgress()
+                {
+                    FORM_NO = strFormNo,
+                    IDENTIFY = IDENTIFY
+                };
+
+                //BPM 系統編號
+                if (model.TITLE.BPM_REQ_ID == null)
+                {
+                    strREQ = Guid.NewGuid().ToString();
+
+                }
+                else
+                {
+                    strREQ = model.TITLE.BPM_REQ_ID;
+                }
+
+                #endregion
+
+                #region 確認是否已起單且簽核中
+
+                var ApproveProgress = commonRepository.PostGTVInApproveProgress(request);
+
+                //確認是否已起單且簽核中或草稿中
+                if (!ApproveProgress.vResult)
+                {
+                    #region - 起單 -
+
+                    #region - 申請人資訊:ApplicantInfo -
+
+                    //表單資訊
+                    var applicantInfo = new ApplicantInfo()
+                    {
+                        REQUISITION_ID = strREQ,
+                        DIAGRAM_ID = IDENTIFY + "_P1",
+                        PRIORITY = 2,
+                        DRAFT_FLAG = 0,
+                        FLOW_ACTIVATED = 1
+                    };
+
+                    //申請人資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.TITLE.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.APPLICANT_DEPT = item.DEPT_ID;
+                        applicantInfo.APPLICANT_DEPT_NAME = item.DEPT_NAME;
+                        applicantInfo.APPLICANT_ID = item.USER_ID;
+                        applicantInfo.APPLICANT_NAME = item.USER_NAME;
+                        applicantInfo.APPLICANT_PHONE = item.MOBILE;
+                    }
+
+                    //(填單人/代填單人)資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.TITLE.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.FILLER_ID = item.USER_ID;
+                        applicantInfo.FILLER_NAME = item.USER_NAME;
+                    }
+
+                    #endregion
+
+                    #region - 版權採購退貨折讓單(表頭內容):MediaOrderReturnRefundInfoTitle -
+
+                    strJson = jsonFunction.ObjectToJSON(model.TITLE);
+                    var mediaOrderReturnRefundTitle = jsonFunction.JsonToObject<MediaOrderReturnRefundTitle>(strJson);
+                    mediaOrderReturnRefundTitle.FORM_NO = strFormNo;
+
+                    #endregion
+
+                    #region - 版權採購退貨折讓單(表單內容):MediaOrderReturnRefundInfoConfig -
+
+                    strJson = jsonFunction.ObjectToJSON(model.INFO);
+                    var mediaOrderReturnRefundConfig = jsonFunction.JsonToObject<MediaOrderReturnRefundConfig>(strJson);
+
+                    #region - 版權請款單(查詢) 資訊 -
+
+                    var mediaInvoiceQueryModel = new MediaInvoiceQueryModel()
+                    {
+                        REQUISITION_ID = mediaOrderReturnRefundConfig.MEDIA_INVOICE_REQUISITION_ID
+                    };
+                    var mediaInvoiceInfo = mediaInvoiceRepository.PostMediaInvoiceSingle(mediaInvoiceQueryModel);
+
+                    #endregion
+
+                    mediaOrderReturnRefundConfig.FINANC_AUDIT_ID_1 = mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.FINANC_AUDIT_ID_1;
+                    mediaOrderReturnRefundConfig.FINANC_AUDIT_NAME_1 = mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.FINANC_AUDIT_NAME_1;
+                    mediaOrderReturnRefundConfig.FINANC_AUDIT_ID_2 = mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.FINANC_AUDIT_ID_2;
+                    mediaOrderReturnRefundConfig.FINANC_AUDIT_NAME_2 = mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.FINANC_AUDIT_NAME_2;
+
+                    #endregion
+                    
+                    #region - 送單 -
+
+                    //送單
+                    var mediaOrderReturnRefundViewModel = new MediaOrderReturnRefundViewModel()
+                    {
+                        APPLICANT_INFO = applicantInfo,
+                        MEDIA_ORDER_RETURN_REFUND_TITLE= mediaOrderReturnRefundTitle,
+                        MEDIA_ORDER_RETURN_REFUND_CONFIG= mediaOrderReturnRefundConfig,
+                    };
+
+                    if (mediaOrderReturnRefundRepository.PutMediaOrderReturnRefundSingle(mediaOrderReturnRefundViewModel))
+                    {
+                        //起單成功
+                        State = BPMStatusCode.PROGRESS;
+
+                        if (model.ALDY_RF_COMM != null)
+                        {
+                            #region - 版權採購退貨折讓單 已退貨商品明細: MediaOrderReturnRefund_ALDY_RF_COMM -
+
+                            var parameterAlreadyRefundCommoditys = new List<SqlParameter>()
+                            {
+                                //版權採購退貨折讓單 已退貨商品明細
+                                new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                                new SqlParameter("@ORDER_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@MEDIA_SPEC", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@START_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@END_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@ORDER_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@ACPT_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@EPISODE_TIME", SqlDbType.Int) { Value = (object) DBNull.Value ?? DBNull.Value },
+                            };
+
+                            var CommonALDY_COMM = new BPMCommonModel<MediaCommodityConfig>()
+                            {
+                                IsALDY = true,
+                                IDENTIFY = IDENTIFY,
+                                parameter = parameterAlreadyRefundCommoditys,
+                                Model = model.ALDY_RF_COMM
+                            };
+                            commonRepository.PutMediaCommodityFunction(CommonALDY_COMM);
+
+                            #endregion
+                        }
+
+                        if(model.ALDY_INV_DTL != null)
+                        {                           
+
+                            #region - 版權採購退貨折讓單 憑證已退款細項：MediaOrderReturnRefund_ALDY_INV_DTL -
+
+                            var parameterInvoiceDetails = new List<SqlParameter>()
+                            {
+                                //版權採購退貨折讓單 憑證明細
+                                new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                                new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_REQUISITION_ID },
+                                new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_BPM_FORM_NO },
+                                new SqlParameter("@MEDIA_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_ERP_FORM_NO },
+                                new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@R_QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@R_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@R_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5 , Value = (object)DBNull.Value ?? DBNull.Value },
+                            };
+
+                            var CommonALDY_INV_DTL = new BPMCommonModel<InvoiceDetailConfig>()
+                            {
+                                IsALDY = true,
+                                IDENTIFY = IDENTIFY,
+                                parameter = parameterInvoiceDetails,
+                                Model = model.ALDY_INV_DTL
+                            };
+                            commonRepository.PutInvoiceDetailFunction(CommonALDY_INV_DTL);
+
+                            #endregion
+                        }
+
+                    }
+                    else
+                    {
+                        //起單失敗
+                        State = BPMStatusCode.FAIL;
+                    }
+
+                    #endregion
+
+                    #endregion
+                }
+                else
+                {
+                    strREQ = ApproveProgress.REQUISITION_ID;
+                    State = ApproveProgress.BPMStatus;
+                }
+
+                #endregion
+
+                #region - 回傳狀態資訊 -
+
+                var getExternalData = new GetExternalData()
+                {
+                    BPM_REQ_ID = strREQ,
+                    ERP_FORM_NO = strFormNo,
+                    STATE = State
+                };
+
+                return getExternalData;
+
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("版權採購退貨折讓單(外部起單)失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
 
         #endregion
 
@@ -2625,6 +2903,11 @@ namespace OA_WEB_API.Repository.BPMPro
         #endregion
 
         #region - 欄位和屬性 -
+
+        /// <summary>
+        /// T-SQL
+        /// </summary>
+        private string strSQL;
 
         /// <summary>
         /// 表單代號

@@ -70,6 +70,8 @@ namespace OA_WEB_API.Repository.ERP
         MediaAcceptanceRepository mediaAcceptanceRepository = new MediaAcceptanceRepository();
         /// <summary>版權採購請款單</summary>
         MediaInvoiceRepository mediaInvoiceRepository = new MediaInvoiceRepository();
+        /// <summary>版權採購退貨折讓單</summary>
+        MediaOrderReturnRefundRepository mediaOrderReturnRefundRepository = new MediaOrderReturnRefundRepository();
 
         #endregion
 
@@ -843,7 +845,7 @@ namespace OA_WEB_API.Repository.ERP
             {
                 #region - 查詢及執行 -
 
-                #region - 行政採購點驗收單 財務審核資訊 -
+                #region - 版權採購請款單 財務審核資訊 -
 
                 #region 回傳表單內容
 
@@ -854,7 +856,7 @@ namespace OA_WEB_API.Repository.ERP
 
                 MediaInvoiceInfoRequest mediaInvoiceInfoRequest = new MediaInvoiceInfoRequest();
                 var mediaInvoiceContent = mediaInvoiceRepository.PostMediaInvoiceSingle(mediaInvoiceQueryModel);
-                //Join 行政採購點驗收單(查詢)Function
+                //Join 版權採購請款單(查詢)Function
                 strJson = jsonFunction.ObjectToJSON(mediaInvoiceContent);
                 //給予需要回傳ERP的資訊
                 mediaInvoiceInfoRequest = jsonFunction.JsonToObject<MediaInvoiceInfoRequest>(strJson);
@@ -907,6 +909,83 @@ namespace OA_WEB_API.Repository.ERP
             catch (Exception ex)
             {
                 CommLib.Logger.Error("版權採購請款單:" + query.REQUISITION_ID + " 財務簽核資訊回傳ERP 失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region - 版權採購退貨折讓單 審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 版權採購退貨折讓單 審核資訊_回傳ERP
+        /// </summary>
+        public MediaOrderReturnRefundInfoRequest PostMediaOrderReturnRefundSingle(RequestQueryModel query)
+        {
+            try
+            {
+                #region - 查詢及執行 -
+
+                #region - 版權採購退貨折讓單 財務審核資訊 -
+
+                #region 回傳表單內容
+
+                MediaOrderReturnRefundQueryModel mediaOrderReturnRefundQueryModel = new MediaOrderReturnRefundQueryModel
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+
+                MediaOrderReturnRefundInfoRequest mediaOrderReturnRefundInfoRequest = new MediaOrderReturnRefundInfoRequest();
+                var mediaOrderReturnRefundContent = mediaOrderReturnRefundRepository.PostMediaOrderReturnRefundSingle(mediaOrderReturnRefundQueryModel);
+                mediaOrderReturnRefundInfoRequest.MEDIA_ORDER_RETURN_REFUND_VIEW = mediaOrderReturnRefundContent;
+
+                #endregion
+
+                #region 表單簽核狀態
+
+                var parameter = new List<SqlParameter>()
+                {
+                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID },
+                };
+                //表單資料
+                var formQueryModel = new FormQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+                var formData = formRepository.PostFormData(formQueryModel);
+                var stepFlowConfig = stepFlowRepository.StepFlowInfo(formData, parameter);
+
+                #endregion
+
+                #endregion
+
+                #region - 回傳ERP - 
+
+                mediaOrderReturnRefundInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                mediaOrderReturnRefundInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+
+                if (query.REQUEST_FLG)
+                {
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMPro) + "BPM/";
+                    Method = "POST";
+                    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, mediaOrderReturnRefundInfoRequest);
+
+                    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                    CommLib.Logger.Debug("版權採購退貨折讓單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                    mediaOrderReturnRefundInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                }
+
+                #endregion
+
+                #endregion
+
+                strJson = jsonFunction.ObjectToJSON(mediaOrderReturnRefundInfoRequest);
+                CommLib.Logger.Debug("版權採購退貨折讓單:" + query.REQUISITION_ID + " BPM回傳內容：" + strJson);
+                return mediaOrderReturnRefundInfoRequest;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("版權採購退貨折讓單:" + query.REQUISITION_ID + " 簽核資訊回傳ERP 失敗，原因：" + ex.Message);
                 throw;
             }
         }
@@ -1053,7 +1132,7 @@ namespace OA_WEB_API.Repository.ERP
 
                 if (query.REQUEST_FLG)
                 {
-                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProTest) + "BPM/";
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMPro) + "BPM/";
                     Method = "POST";
                     strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, GPI_evaluateContentReplenishInfoRequest);
 

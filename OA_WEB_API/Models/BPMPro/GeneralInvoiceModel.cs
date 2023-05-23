@@ -40,13 +40,16 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>行政採購申請 使用預算 設定</summary>
         public IList<GeneralInvoiceBudgetsConfig> GENERAL_INVOICE_BUDGETS_CONFIG { get; set; }
 
-        /// <summary>行政採購申請 發票明細 設定</summary>
-        public IList<GeneralInvoiceDetailsConfig> GENERAL_INVOICE_DETAILS_CONFIG { get; set; }
+        /// <summary>行政採購申請 憑證明細 設定</summary>
+        public List<GeneralInvoiceInvoicsConfig> GENERAL_INVOICE_INVS_CONFIG { get; set; }
+
+        /// <summary>版權採購請款單 憑證細項 設定</summary>
+        public List<GeneralInvoiceInvoiceDetailsConfig> GENERAL_INVOICE_INV_DTLS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
     }
-
+    
     /// <summary>
     /// 行政採購請款單 表頭資訊
     /// </summary>
@@ -226,48 +229,14 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 行政採購請款單 憑證明細 設定
     /// </summary>
-    public class GeneralInvoiceDetailsConfig
+    public class GeneralInvoiceInvoicsConfig : InvoiceConfig
     {
-        /// <summary>期別</summary>
-        public int PERIOD { get; set; }
 
-        /// <summary>憑證號碼</summary>
-        public string NUM { get; set; }
+    }
 
-        /// <summary>憑證日期</summary>
-        public string DATE { get; set; }
 
-        /// <summary>憑證免稅額</summary>
-        public double EXCL { get; set; }
+    public class GeneralInvoiceInvoiceDetailsConfig : InvoiceDetailConfig
+    {
 
-        /// <summary>憑證免稅額_台幣</summary>
-        public int EXCL_TWD { get; set; }
-
-        /// <summary>憑證稅額</summary>
-        public double TAX { get; set; }
-
-        /// <summary>憑證稅額_台幣</summary>
-        public int TAX_TWD { get; set; }
-
-        /// <summary>憑證未稅金額</summary>
-        public double NET { get; set; }
-
-        /// <summary>憑證未稅金額_台幣</summary>
-        public int NET_TWD { get; set; }
-
-        /// <summary>憑證含稅金額</summary>
-        public double GROSS { get; set; }
-
-        /// <summary>憑證含稅金額_台幣</summary>
-        public int GROSS_TWD { get; set; }
-
-        /// <summary>憑證金額</summary>
-        public double AMOUNT { get; set; }
-
-        /// <summary>憑證金額_台幣</summary>
-        public int AMOUNT_TWD { get; set; }
-
-        /// <summary>備註</summary>
-        public string NOTE { get; set; }
     }
 }

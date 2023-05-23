@@ -117,6 +117,177 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
+    /// <summary>
+    /// BPM表單共用模組
+    /// </summary>
+    /// <typeparam name="T">Model</typeparam>
+    public class BPMCommonModel<T>
+    {
+        /// <summary>是否為已退</summary>
+        public bool IsALDY { get; set; }
+
+        /// <summary>表單代號</summary>
+        public string IDENTIFY { get; set; }
+
+        /// <summary>SqlParameter</summary>
+        public List<SqlParameter> parameter { get; set; }
+
+        /// <summary>Models</summary>
+        public List<T> Model { get; set; }
+    }
+
+    #region - 憑證 -
+
+    #region - 憑證明細 -
+
+    /// <summary>
+    /// 憑證明細
+    /// </summary>
+    public class InvoiceConfig
+    {
+        /// <summary>期別</summary>
+        public int PERIOD { get; set; }
+
+        /// <summary>憑證行數編號</summary>
+        public int INV_ROW_NO { get; set; }
+
+        /// <summary>憑證號碼</summary>
+        public string NUM { get; set; }
+
+        /// <summary>憑證日期</summary>
+        public string DATE { get; set; }
+
+        /// <summary>憑證免稅額</summary>
+        public double EXCL { get; set; }
+
+        /// <summary>憑證免稅額_台幣</summary>
+        public int EXCL_TWD { get; set; }
+
+        /// <summary>憑證稅額</summary>
+        public double TAX { get; set; }
+
+        /// <summary>憑證稅額_台幣</summary>
+        public int TAX_TWD { get; set; }
+
+        /// <summary>憑證未稅金額</summary>
+        public double NET { get; set; }
+
+        /// <summary>憑證未稅金額_台幣</summary>
+        public int NET_TWD { get; set; }
+
+        /// <summary>憑證含稅金額</summary>
+        public double GROSS { get; set; }
+
+        /// <summary>憑證含稅金額_台幣</summary>
+        public int GROSS_TWD { get; set; }
+
+        /// <summary>憑證金額</summary>
+        public double AMOUNT { get; set; }
+
+        /// <summary>憑證金額</summary>
+        public int AMOUNT_TWD { get; set; }
+
+        /// <summary>備註</summary>
+        public string NOTE { get; set; }
+
+        /// <summary>是否免稅[註記]</summary>
+        public string IS_EXCL { get; set; }
+    }
+
+    #endregion
+
+    #region - 憑證細項 -
+
+    /// <summary>
+    /// 憑證細項
+    /// </summary>
+    public class InvoiceDetailConfig
+    {
+        /// <summary>期別</summary>
+        public int PERIOD { get; set; }
+
+        /// <summary>憑證行數編號</summary>
+        public int INV_ROW_NO { get; set; }
+
+        /// <summary>行數編號</summary>
+        public int ROW_NO { get; set; }
+
+        /// <summary>憑證號碼</summary>
+        public string NUM { get; set; }
+
+        /// <summary>名稱</summary>
+        public string NAME { get; set; }
+
+        /// <summary>數量</summary>
+        public int QUANTITY { get; set; }
+
+        /// <summary>金額</summary>
+        public double AMOUNT { get; set; }
+
+        /// <summary>金額_台幣</summary>
+        public int AMOUNT_TWD { get; set; }
+
+        /// <summary>剩餘數量</summary>
+        public int R_QUANTITY { get; set; }
+
+        /// <summary>剩餘金額</summary>
+        public double R_AMOUNT { get; set; }
+
+        /// <summary>剩餘金額_台幣</summary>
+        public int R_AMOUNT_TWD { get; set; }
+
+        /// <summary>是否免稅[註記]</summary>
+        public string IS_EXCL { get; set; }
+    }
+
+    #endregion
+
+    #endregion
+
+    #region - 商品 -
+
+    #region - 版權商品 -
+
+    /// <summary>
+    /// 版權商品
+    /// </summary>
+    public class MediaCommodityConfig
+    {
+        /// <summary>訂單行數編號</summary>
+        public int ORDER_ROW_NO { get; set; }
+
+        /// <summary>商品代碼</summary>
+        public string SUP_PROD_A_NO { get; set; }
+
+        /// <summary>名稱</summary>
+        public string ITEM_NAME { get; set; }
+
+        /// <summary>影帶規格</summary>
+        public string MEDIA_SPEC { get; set; }
+
+        /// <summary>影片類型</summary>
+        public string MEDIA_TYPE { get; set; }
+
+        /// <summary>開始集數</summary>
+        public int START_EPISODE { get; set; }
+
+        /// <summary>結束集數</summary>
+        public int END_EPISODE { get; set; }
+
+        /// <summary>總集數</summary>
+        public int ORDER_EPISODE { get; set; }
+
+        /// <summary>驗收集數</summary>
+        public int ACPT_EPISODE { get; set; }
+
+        /// <summary>每集長度</summary>
+        public int EPISODE_TIME { get; set; }
+    }
+
+    #endregion
+
+    #endregion
+
     #endregion
 
 

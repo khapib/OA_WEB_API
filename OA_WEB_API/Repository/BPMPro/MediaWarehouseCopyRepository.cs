@@ -185,56 +185,56 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #region - 依此單內容重送 -
 
-        ///// <summary>
-        ///// 拷貝申請單(依此單內容重送)(僅外部起單使用)
-        ///// </summary>
-        //public bool PutMediaWarehouseCopyRefill(MediaWarehouseCopyQueryModel query)
-        //{
-        //    bool vResult = false;
+        /// <summary>
+        /// 拷貝申請單(依此單內容重送)(僅外部起單使用)
+        /// </summary>
+        public bool PutMediaWarehouseCopyRefill(MediaWarehouseCopyQueryModel query)
+        {
+            bool vResult = false;
 
-        //    try
-        //    {
-        //        #region - 宣告 -
+            try
+            {
+                #region - 宣告 -
 
-        //        var original = PostMediaWarehouseCopySingle(query);
-        //        strJson = jsonFunction.ObjectToJSON(original);
+                var original = PostMediaWarehouseCopySingle(query);
+                strJson = jsonFunction.ObjectToJSON(original);
 
-        //        var MediaWarehouseCopyViewModel = new MediaWarehouseCopyViewModel();
+                var MediaWarehouseCopyViewModel = new MediaWarehouseCopyViewModel();
 
-        //        var requisitionID = Guid.NewGuid().ToString();
+                var requisitionID = Guid.NewGuid().ToString();
 
-        //        #endregion
+                #endregion
 
-        //        #region - 重送內容 -
+                #region - 重送內容 -
 
-        //        MediaWarehouseCopyViewModel = jsonFunction.JsonToObject<MediaWarehouseCopyViewModel>(strJson);
+                MediaWarehouseCopyViewModel = jsonFunction.JsonToObject<MediaWarehouseCopyViewModel>(strJson);
 
-        //        #region - 申請人資訊 調整 -
+                #region - 申請人資訊 調整 -
 
-        //        MediaWarehouseCopyViewModel.APPLICANT_INFO.REQUISITION_ID = requisitionID;
-        //        MediaWarehouseCopyViewModel.APPLICANT_INFO.DRAFT_FLAG = 1;
-        //        MediaWarehouseCopyViewModel.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Now;
+                MediaWarehouseCopyViewModel.APPLICANT_INFO.REQUISITION_ID = requisitionID;
+                MediaWarehouseCopyViewModel.APPLICANT_INFO.DRAFT_FLAG = 1;
+                MediaWarehouseCopyViewModel.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Now;
 
-        //        #endregion
+                #endregion
 
-        //        #endregion
+                #endregion
 
-        //        #region - 送出 執行(新增/修改/草稿) -
+                #region - 送出 執行(新增/修改/草稿) -
 
-        //        PutMediaWarehouseCopySingle(MediaWarehouseCopyViewModel);
+                PutMediaWarehouseCopySingle(MediaWarehouseCopyViewModel);
 
-        //        #endregion
+                #endregion
 
-        //        vResult = true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        vResult = false;
-        //        CommLib.Logger.Error("拷貝申請單(依此單內容重送)失敗，原因：" + ex.Message);
-        //    }
+                vResult = true;
+            }
+            catch (Exception ex)
+            {
+                vResult = false;
+                CommLib.Logger.Error("拷貝申請單(依此單內容重送)失敗，原因：" + ex.Message);
+            }
 
-        //    return vResult;
-        //}
+            return vResult;
+        }
 
         #endregion
 
@@ -254,7 +254,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if(String.IsNullOrEmpty(FM7Subject) || String.IsNullOrWhiteSpace(FM7Subject))
                 {
-                    FM7Subject = "拷貝申請單_" + model.MEDIA_WAREHOUSE_COPY_DTLS_CONFIG.Select(D => D.PROGRAM_NAME).FirstOrDefault() + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
+                    FM7Subject = "拷貝申請單_" + model.MEDIA_WAREHOUSE_COPY_DTLS_CONFIG.Select(D => D.PROGRAM_NAME).FirstOrDefault() + "_" + model.MEDIA_WAREHOUSE_COPY_CONFIG.CONTACT + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
                 }
 
                 #endregion
@@ -593,7 +593,6 @@ namespace OA_WEB_API.Repository.BPMPro
                 commonRepository.PostBPMFormFunction(BPM_FormFunction);
 
                 #endregion
-
 
                 vResult = true;
             }

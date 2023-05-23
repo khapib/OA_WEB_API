@@ -9,6 +9,7 @@ using System.Web;
 using Microsoft.SqlServer.Server;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -281,7 +282,7 @@ namespace OA_WEB_API.Repository.BPMPro
             List<MediaInvoiceAuthorizesConfig> mediaInvoiceAuthorizesConfig = new List<MediaInvoiceAuthorizesConfig>();
             foreach (var item in mediaInvoiceAcceptancesConfig)
             {
-                strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_AUTHS_CONFIG.Where(AUTH => AUTH.ORDER_ROW_NO == item.ORDER_ROW_NO && item.PERIOD == mediaInvoiceConfig.PERIOD).Select(AUTH=> AUTH));
+                strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_AUTHS_CONFIG.Where(AUTH => AUTH.ORDER_ROW_NO == item.ORDER_ROW_NO && item.PERIOD == mediaInvoiceConfig.PERIOD).Select(AUTH => AUTH));
                 mediaInvoiceAuthorizesConfig.AddRange(JsonConvert.DeserializeObject<List<MediaInvoiceAuthorizesConfig>>(strJson));
             }
 
@@ -290,7 +291,7 @@ namespace OA_WEB_API.Repository.BPMPro
             #region - 版權採購請款單 額外項目 -
             //View的「額外項目」是 版權採購申請單 的「額外項目」
 
-            strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_EXS_CONFIG.Where(EX => EX.PERIOD == mediaInvoiceConfig.PERIOD).Select(EX=>EX));
+            strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_EXS_CONFIG.Where(EX => EX.PERIOD == mediaInvoiceConfig.PERIOD).Select(EX => EX));
             var mediaInvoiceExtrasConfig = JsonConvert.DeserializeObject<List<MediaInvoiceExtrasConfig>>(strJson);
 
             #endregion
@@ -313,29 +314,30 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
+            parameter.Add(new SqlParameter("@PERIOD", SqlDbType.Int) { Value = mediaInvoiceConfig.PERIOD });
+
             #region - 版權採購請款單 憑證明細 -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [Num] AS [NUM], ";
-            strSQL += "     [Date] AS [DATE], ";
-            strSQL += "     [Excl] AS [EXCL], ";
-            strSQL += "     [Excl_TWD] AS [EXCL_TWD], ";
-            strSQL += "     [Tax] AS [TAX], ";
-            strSQL += "     [Tax_TWD] AS [TAX_TWD], ";
-            strSQL += "     [Net] AS [NET], ";
-            strSQL += "     [Net_TWD] AS [NET_TWD], ";
-            strSQL += "     [Gross] AS [GROSS], ";
-            strSQL += "     [Gross_TWD] AS [GROSS_TWD], ";
-            strSQL += "     [Amount] AS [AMOUNT], ";
-            strSQL += "     [Amount_TWD] AS [AMOUNT_TWD], ";
-            strSQL += "     [Note] AS [NOTE] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaInvoice_INV] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "ORDER BY [AutoCounter] ";
+            var CommonINV = new BPMCommonModel<InvoiceConfig>()
+            {
+                IDENTIFY = IDENTIFY,
+                parameter = parameter
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostInvoiceFunction(CommonINV));
+            var mediaInvoiceInvoicesConfig = jsonFunction.JsonToObject<List<MediaInvoiceInvoicesConfig>>(strJson);
 
-            var mediaInvoiceDetailsConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaInvoiceDetailsConfig>();
+            #endregion
+
+            #region - 版權採購請款單 憑證細項 -
+
+            var CommonINV_DTL = new BPMCommonModel<InvoiceDetailConfig>()
+            {
+                IsALDY = false,
+                IDENTIFY = IDENTIFY,
+                parameter = parameter
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostInvoiceDetailFunction(CommonINV_DTL));
+            var mediaInvoiceInvoiceDetailsConfig = jsonFunction.JsonToObject<List<MediaInvoiceInvoiceDetailsConfig>>(strJson);
 
             #endregion
 
@@ -359,7 +361,8 @@ namespace OA_WEB_API.Repository.BPMPro
                 MEDIA_INVOICE_EXS_CONFIG = mediaInvoiceExtrasConfig,
                 MEDIA_INVOICE_PYMTS_CONFIG = mediaInvoicePaymentsConfig,
                 MEDIA_INVOICE_BUDGS_CONFIG = mediaInvoiceBudgetsConfig,
-                MEDIA_INVOICE_DTLS_CONFIG = mediaInvoiceDetailsConfig,
+                MEDIA_INVOICE_INVS_CONFIG = mediaInvoiceInvoicesConfig,
+                MEDIA_INVOICE_INV_DTLS_CONFIG = mediaInvoiceInvoiceDetailsConfig,
                 ASSOCIATED_FORM_CONFIG = associatedForm
             };
 
@@ -509,7 +512,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region - 版權採購請款單 表單內容：MediaInvoice_M -
 
-                if(model.MEDIA_INVOICE_CONFIG != null)
+                if (model.MEDIA_INVOICE_CONFIG != null)
                 {
                     #region - 【版權採購申請單】資訊 -
 
@@ -584,7 +587,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     };
 
                     #region - 確認小數點後第二位 -
-                                      
+
                     model.MEDIA_INVOICE_CONFIG.DTL_NET_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.DTL_NET_TOTAL, 2);
                     model.MEDIA_INVOICE_CONFIG.DTL_TAX_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.DTL_TAX_TOTAL, 2);
                     model.MEDIA_INVOICE_CONFIG.DTL_GROSS_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.DTL_GROSS_TOTAL, 2);
@@ -769,14 +772,15 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region - 版權採購請款單 憑證明細：MediaInvoice_INV -
 
-                var parameterDetails = new List<SqlParameter>()
+                var parameterInvoices = new List<SqlParameter>()
                 {
-                    //版權採購請款單 憑證明細
+                    //版權採購請款單 憑證
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)model.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_REQUISITION_ID ?? DBNull.Value },
-                    new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_BPM_FORM_NO ?? DBNull.Value },
-                    new SqlParameter("@MEDIA_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)medialOrderformData.SERIAL_ID ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DATE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@EXCL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -790,46 +794,53 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
-                #region 先刪除舊資料
-
-                strSQL = "";
-                strSQL += "DELETE ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaInvoice_INV] ";
-                strSQL += "WHERE 1=1 ";
-                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
-
-                dbFun.DoTran(strSQL, parameterDetails);
+                if (model.MEDIA_INVOICE_INVS_CONFIG != null && model.MEDIA_INVOICE_INVS_CONFIG.Count > 0)
+                {
+                    var CommonINV = new BPMCommonModel<MediaInvoiceInvoicesConfig>()
+                    {
+                        IDENTIFY = IDENTIFY,
+                        parameter = parameterInvoices,
+                        Model = model.MEDIA_INVOICE_INVS_CONFIG
+                    };
+                    commonRepository.PutInvoiceFunction(CommonINV);
+                }
 
                 #endregion
 
-                if (model.MEDIA_INVOICE_DTLS_CONFIG != null && model.MEDIA_INVOICE_DTLS_CONFIG.Count > 0)
+                #region - 版權採購請款單 憑證細項：MediaInvoice_INV_DTL -
+
+                var parameterInvoiceDetails = new List<SqlParameter>()
                 {
-                    #region 再新增資料
+                    //版權採購請款單 憑證明細
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5 , Value = (object)DBNull.Value ?? DBNull.Value },
+                };
 
-                    foreach (var item in model.MEDIA_INVOICE_DTLS_CONFIG)
+                if (model.MEDIA_INVOICE_INV_DTLS_CONFIG != null && model.MEDIA_INVOICE_INV_DTLS_CONFIG.Count > 0)
+                {
+                    var CommonINV_DTL = new BPMCommonModel<MediaInvoiceInvoiceDetailsConfig>()
                     {
-                        strJson = jsonFunction.ObjectToJSON(item);
+                        IsALDY = false,
+                        IDENTIFY = IDENTIFY,
+                        parameter = parameterInvoiceDetails,
+                        Model = model.MEDIA_INVOICE_INV_DTLS_CONFIG
+                    };
+                    commonRepository.PutInvoiceDetailFunction(CommonINV_DTL);
 
-                        #region - 確認小數點後第二位 -
-
-                        GlobalParameters.IsDouble(strJson);
-
-                        #endregion
-
-                        //寫入：版權採購請款 發票明細parameter
-                        strJson = jsonFunction.ObjectToJSON(item);
-                        GlobalParameters.Infoparameter(strJson, parameterDetails);
-
-                        strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaInvoice_INV]([RequisitionID],[Period],[MediaOrderRequisitionID],[MediaOrderBPMFormNo],[MediaOrderERPFormNo],[Num],[Date],[Excl],[Excl_TWD],[Tax],[Tax_TWD],[Net],[Net_TWD],[Gross],[Gross_TWD],[Amount],[Amount_TWD],[Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@MEDIA_ORDER_REQUISITION_ID,@MEDIA_ORDER_BPM_FORM_NO,@MEDIA_ORDER_ERP_FORM_NO,@NUM,@DATE,@EXCL,@EXCL_TWD,@TAX,@TAX_TWD,@NET,@NET_TWD,@GROSS,@GROSS_TWD,@AMOUNT,@AMOUNT_TWD,@NOTE) ";
-
-                        dbFun.DoTran(strSQL, parameterDetails);
-                    }
-
-                    #endregion
                 }
 
                 #endregion
@@ -972,7 +983,6 @@ namespace OA_WEB_API.Repository.BPMPro
             }
             return vResult;
         }
-
 
         /// <summary>
         /// 版權採購請款單(財務審核關卡-關聯表單(知會))：

@@ -163,13 +163,13 @@ namespace OA_WEB_API.Models.BPMPro
     public class GeneralAcceptanceApprovesConfig
     {
         /// <summary>行數編號</summary>
-        public int DTL_ROW_NO { get; set; }
+        public int ROW_NO { get; set; }
 
         /// <summary>驗收結果</summary>
-        public string DTL_STATUS { get; set; }
+        public string STATUS { get; set; }
 
         /// <summary>驗收備註</summary>
-        public string DTL_ACPT_NOTE { get; set; }
+        public string ACPT_NOTE { get; set; }
     }
 
     #endregion

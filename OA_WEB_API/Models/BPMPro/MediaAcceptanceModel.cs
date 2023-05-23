@@ -37,8 +37,8 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>版權採購申請單 授權權利 設定</summary>
         public IList<MediaAcceptanceAuthorizesConfig> MEDIA_ACCEPTANCE_AUTHS_CONFIG { get; set; }
 
-        /// <summary>版權採購交片單 退貨商品明細 設定</summary>
-        public IList<MediaAcceptanceRefundCommoditysConfig> MEDIA_ACCEPTANCE_REFUND_COMMS_CONFIG { get; set; }
+        /// <summary>版權採購交片單 已退貨商品明細 設定</summary>
+        public IList<MediaAcceptanceAlreadyRefundCommoditysConfigConfig> MEDIA_ACCEPTANCE_ALDY_RF_COMMS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
@@ -179,9 +179,9 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 版權採購交片單 退貨商品明細 設定
+    /// 版權採購交片單 已退貨商品明細 設定
     /// </summary>
-    public class MediaAcceptanceRefundCommoditysConfig: MediaOrderReturnRefundCommoditysConfig
+    public class MediaAcceptanceAlreadyRefundCommoditysConfigConfig : MediaCommodityConfig
     {
 
     }

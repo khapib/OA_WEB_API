@@ -35,15 +35,15 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #region - 依此單內容重送 -
 
-        ///// <summary>
-        ///// 拷貝申請單(依此單內容重送)
-        ///// </summary>
-        //[Route("PutMediaWarehouseCopyRefill")]
-        //[HttpPost]
-        //public bool PutMediaWarehouseCopyRefill([FromBody] MediaWarehouseCopyQueryModel query)
-        //{
-        //    return mediaWarehouseCopyRepository.PutMediaWarehouseCopyRefill(query);
-        //}
+        /// <summary>
+        /// 拷貝申請單(依此單內容重送)
+        /// </summary>
+        [Route("PutMediaWarehouseCopyRefill")]
+        [HttpPost]
+        public bool PutMediaWarehouseCopyRefill([FromBody] MediaWarehouseCopyQueryModel query)
+        {
+            return mediaWarehouseCopyRepository.PutMediaWarehouseCopyRefill(query);
+        }
 
         #endregion
 

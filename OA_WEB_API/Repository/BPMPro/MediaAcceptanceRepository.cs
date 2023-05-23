@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using OA_WEB_API.Models.ERP;
 using Newtonsoft.Json;
+using System.Reflection;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -180,25 +181,16 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 版權採購交片單 退貨商品明細 -
+            #region - 版權採購交片單 已退貨商品明細 -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [INV_Num] AS [INV_NUM], ";
-            strSQL += "     [OrderRowNo] AS [ORDER_ROW_NO], ";
-            strSQL += "     [SupProdANo] AS [SUP_PROD_A_NO], ";
-            strSQL += "     [ItemName] AS [ITEM_NAME], ";
-            strSQL += "     [MediaSpec] AS [MEDIA_SPEC], ";
-            strSQL += "     [MediaType] AS [MEDIA_TYPE], ";
-            strSQL += "     [StartEpisode] AS [START_EPISODE], ";
-            strSQL += "     [EndEpisode] AS [END_EPISODE], ";
-            strSQL += "     [OrderEpisode] AS [ORDER_EPISODE], ";
-            strSQL += "     [ACPT_Episode] AS [ACPT_EPISODE], ";
-            strSQL += "     [EpisodeTime] AS [EPISODE_TIME] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaAcceptance_RF_COMM] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-
-            var mediaOrderReturnRefundCommoditysConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaAcceptanceRefundCommoditysConfig>();
+            var CommonALDY_COMM = new BPMCommonModel<MediaCommodityConfig>()
+            {
+                IsALDY = true,
+                IDENTIFY = IDENTIFY,
+                parameter = parameter
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostMediaCommodityFunction(CommonALDY_COMM));
+            var mediaAcceptanceAlreadyRefundCommoditysConfigConfig = jsonFunction.JsonToObject<List<MediaAcceptanceAlreadyRefundCommoditysConfigConfig>>(strJson);
 
             #endregion
 
@@ -219,7 +211,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 MEDIA_ACCEPTANCE_CONFIG = mediaAcceptanceConfig,
                 MEDIA_ACCEPTANCE_DTLS_CONFIG = mediaAcceptanceDetailsConfig,
                 MEDIA_ACCEPTANCE_AUTHS_CONFIG = mediaAcceptanceAuthorizesConfig,
-                MEDIA_ACCEPTANCE_REFUND_COMMS_CONFIG= mediaOrderReturnRefundCommoditysConfig,
+                MEDIA_ACCEPTANCE_ALDY_RF_COMMS_CONFIG = mediaAcceptanceAlreadyRefundCommoditysConfigConfig,
                 ASSOCIATED_FORM_CONFIG = associatedForm
             };
 
@@ -483,60 +475,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 //版權採購申請單 授權權利(MediaOrder_AUTHS) 內容。
 
                 #endregion
-
-                #region - 版權採購交片單 退貨商品明細: MediaAcceptance_RF_COMM -
-
-                var parameterRefundCommoditys = new List<SqlParameter>()
-                {
-                    //版權採購交片單 退貨商品明細
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@INV_NUM", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@ORDER_ROW_NO", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@MEDIA_SPEC", SqlDbType.NVarChar) { Size = 5, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@START_EPISODE", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@END_EPISODE", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@ORDER_EPISODE", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@ACPT_EPISODE", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@EPISODE_TIME", SqlDbType.Int) { Value = model.APPLICANT_INFO.REQUISITION_ID },
-                };
-
-                #region 先刪除舊資料
-
-                strSQL = "";
-                strSQL += "DELETE ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaAcceptance_RF_COMM] ";
-                strSQL += "WHERE 1=1 ";
-                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
-
-                dbFun.DoTran(strSQL, parameterRefundCommoditys);
-
-                #endregion
-
-                if (model.MEDIA_ACCEPTANCE_REFUND_COMMS_CONFIG != null && model.MEDIA_ACCEPTANCE_REFUND_COMMS_CONFIG.Count > 0)
-                {
-                    #region 再新增資料
-
-                    foreach (var item in model.MEDIA_ACCEPTANCE_REFUND_COMMS_CONFIG)
-                    {
-                        //寫入：版權採購交片單 退貨商品明細parameter
-                        strJson = jsonFunction.ObjectToJSON(item);
-                        GlobalParameters.Infoparameter(strJson, parameterRefundCommoditys);
-
-                        strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaAcceptance_RF_COMM]([RequisitionID],[INV_Num],[OrderRowNo],[SupProdANo],[ItemName],[MediaSpec],[MediaType],[StartEpisode],[EndEpisode],[OrderEpisode],[ACPT_Episode],[EpisodeTime]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@INV_NUM,@ORDER_ROW_NO,@SUP_PROD_A_NO,@ITEM_NAME,@MEDIA_SPEC,@MEDIA_TYPE,@START_EPISODE,@END_EPISODE,@ORDER_EPISODE,@ACPT_EPISODE,@EPISODE_TIME) ";
-
-                        dbFun.DoTran(strSQL, parameterRefundCommoditys);
-                    }
-
-                    #endregion
-                }
-
-                #endregion
-
+                                
                 #region - 版權採購交片單 表單關聯：AssociatedForm -
 
                 //關聯表:匯入【版權採購交片單】的「關聯表單」

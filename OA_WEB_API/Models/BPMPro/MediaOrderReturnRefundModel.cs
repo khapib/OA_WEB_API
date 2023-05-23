@@ -34,14 +34,20 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>版權採購退貨折讓單 表單內容 設定</summary>
         public MediaOrderReturnRefundConfig MEDIA_ORDER_RETURN_REFUND_CONFIG { get; set; }
 
+        /// <summary>版權採購退貨折讓單 已退貨商品明細 設定</summary>
+        public List<MediaOrderReturnRefundAlreadyRefundCommoditysConfig> MEDIA_ORDER_RETURN_REFUND_ALDY_RF_COMMS_CONFIG { get; set; }
+
         /// <summary>版權採購退貨折讓單 退貨商品明細 設定</summary>
-        public IList<MediaOrderReturnRefundRefundCommoditysConfig> MEDIA_ORDER_RETURN_REFUND_RF_COMMS_CONFIG { get; set; }
+        public List<MediaOrderReturnRefundRefundCommoditysConfig> MEDIA_ORDER_RETURN_REFUND_RF_COMMS_CONFIG { get; set; }
 
         /// <summary>版權採購退貨折讓單 憑證退款明細 設定</summary>
-        public IList<MediaOrderReturnRefundInvoicesConfig> MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG { get; set; }
+        public List<MediaOrderReturnRefundInvoicesConfig> MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG { get; set; }
 
         /// <summary>版權採購退貨折讓單 憑證退款細項 設定</summary>
-        public IList<MediaOrderReturnRefundInvoiceDetailsConfig> MEDIA_ORDER_RETURN_REFUND_INV_DTLS_CONFIG { get; set; }
+        public List<MediaOrderReturnRefundAlreadyInvoiceDetailsConfig> MEDIA_ORDER_RETURN_REFUND_ALDY_INV_DTLS_CONFIG { get; set; }
+
+        /// <summary>版權採購退貨折讓單 憑證退款細項 設定</summary>
+        public List<MediaOrderReturnRefundInvoiceDetailsConfig> MEDIA_ORDER_RETURN_REFUND_INV_DTLS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
@@ -133,57 +139,41 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
+    /// 版權採購退貨折讓單 已退貨商品明細 設定
+    /// </summary>
+    public class MediaOrderReturnRefundAlreadyRefundCommoditysConfig : MediaOrderReturnRefundRefundCommoditysConfig
+    {
+
+    }
+
+    /// <summary>
     /// 版權採購退貨折讓單 退貨商品明細 設定
     /// </summary>
-    public class MediaOrderReturnRefundRefundCommoditysConfig
+    public class MediaOrderReturnRefundRefundCommoditysConfig: MediaCommodityConfig
     {
-        /// <summary>憑證號碼</summary>
-        public string INV_NUM { get; set; }
 
-        /// <summary>訂單行數編號</summary>
-        public int ORDER_ROW_NO { get; set; }
-
-        /// <summary>商品代碼</summary>
-        public string SUP_PROD_A_NO { get; set; }
-
-        /// <summary>名稱</summary>
-        public string ITEM_NAME { get; set; }
-
-        /// <summary>影帶規格</summary>
-        public string MEDIA_SPEC { get; set; }
-
-        /// <summary>影片類型</summary>
-        public string MEDIA_TYPE { get; set; }
-
-        /// <summary>開始集數</summary>
-        public int START_EPISODE { get; set; }
-
-        /// <summary>結束集數</summary>
-        public int END_EPISODE { get; set; }
-
-        /// <summary>總集數</summary>
-        public int ORDER_EPISODE { get; set; }
-
-        /// <summary>驗收集數</summary>
-        public int ACPT_EPISODE { get; set; }
-
-        /// <summary>每集長度</summary>
-        public int EPISODE_TIME { get; set; }
-    }
-
-
-    /// <summary>
-    /// 版權採購退貨折讓單 退貨明細 設定
-    /// </summary>
-    public class MediaOrderReturnRefundInvoicesConfig : InvoicesConfig
-    {
-        
     }
 
     /// <summary>
-    /// 版權採購退貨折讓單 退貨細項 設定
+    /// 版權採購退貨折讓單 憑證退款明細 設定
     /// </summary>
-    public class MediaOrderReturnRefundInvoiceDetailsConfig : InvoiceDetailsConfig
+    public class MediaOrderReturnRefundInvoicesConfig : InvoiceConfig
+    {
+
+    }
+
+    /// <summary>
+    /// 版權採購退貨折讓單 憑證已退款細項 設定
+    /// </summary>
+    public class MediaOrderReturnRefundAlreadyInvoiceDetailsConfig : InvoiceDetailConfig
+    {
+
+    }
+
+    /// <summary>
+    /// 版權採購退貨折讓單 憑證退款細項 設定
+    /// </summary>
+    public class MediaOrderReturnRefundInvoiceDetailsConfig : InvoiceDetailConfig
     {
 
     }

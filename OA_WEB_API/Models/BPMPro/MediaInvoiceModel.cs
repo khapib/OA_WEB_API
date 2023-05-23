@@ -47,10 +47,10 @@ namespace OA_WEB_API.Models.BPMPro
         public IList<MediaInvoiceBudgetsConfig> MEDIA_INVOICE_BUDGS_CONFIG { get; set; }
 
         /// <summary>版權採購請款單 憑證明細 設定</summary>
-        public IList<MediaInvoiceInvoicesConfig> MEDIA_INVOICE_INVS_CONFIG { get; set; }
+        public List<MediaInvoiceInvoicesConfig> MEDIA_INVOICE_INVS_CONFIG { get; set; }
 
         /// <summary>版權採購請款單 憑證細項 設定</summary>
-        public IList<MediaInvoiceInvoiceDetailsConfig> MEDIA_INVOICE_INV_DTLS_CONFIG { get; set; }
+        public List<MediaInvoiceInvoiceDetailsConfig> MEDIA_INVOICE_INV_DTLS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
@@ -343,7 +343,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 版權採購請款單 憑證明細 設定
     /// </summary>
-    public class MediaInvoiceInvoicesConfig : InvoicesConfig
+    public class MediaInvoiceInvoicesConfig : InvoiceConfig
     {
 
     }
@@ -351,7 +351,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 版權採購請款單 憑證細項 設定
     /// </summary>
-    public class MediaInvoiceInvoiceDetailsConfig : InvoiceDetailsConfig
+    public class MediaInvoiceInvoiceDetailsConfig : InvoiceDetailConfig
     {
 
     }

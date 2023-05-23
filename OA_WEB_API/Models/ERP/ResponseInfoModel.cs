@@ -344,8 +344,11 @@ namespace OA_WEB_API.Models.ERP
         /// <summary>版權採購交片單 驗收明細 設定</summary>
         public IList<MediaAcceptanceDetailsConfig> MEDIA_ACCEPTANCE_DTLS_CONFIG { get; set; }
 
-        /// <summary>版權採購申請單 授權權利 設定</summary>
+        /// <summary>版權採購交片單 授權權利 設定</summary>
         public IList<MediaAcceptanceAuthorizesConfig> MEDIA_ACCEPTANCE_AUTHS_CONFIG { get; set; }
+
+        /// <summary>版權採購交片單 已退貨商品明細 設定</summary>
+        public IList<MediaAcceptanceAlreadyRefundCommoditysConfigConfig> MEDIA_ACCEPTANCE_ALREADY_REFUND_COMMS_CONFIG { get; set; }
 
         /// <summary>最後簽核人員工編號</summary>
         public string LoginId { get; set; }

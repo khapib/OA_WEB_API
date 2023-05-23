@@ -377,8 +377,8 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>版權採購交片單(驗收明細)</summary>
         public IList<MediaAcceptanceDetailsConfig> DTL { get; set; }
 
-        /// <summary>版權採購交片單(退貨商品明細)</summary>
-        public IList<MediaAcceptanceRefundCommoditysConfig> RF_COMM { get; set; }
+        /// <summary>版權採購交片單(已退貨商品明細)</summary>
+        public List<MediaCommodityConfig> ALDY_RF_COMM { get; set; }
     }
 
     public class MediaAcceptanceInfoTitle : InfoTitle
@@ -445,6 +445,12 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>版權採購退貨折讓單(表單內容)</summary>
         public MediaOrderReturnRefundInfoConfig INFO { get; set; }
+
+        /// <summary>版權採購退貨折讓單(已退貨商品明細)</summary>
+        public List<MediaCommodityConfig> ALDY_RF_COMM { get; set; }
+
+        /// <summary>版權採購退貨折讓單(憑證退款細項)</summary>
+        public List<InvoiceDetailConfig> ALDY_INV_DTL { get; set; }
 
     }
 

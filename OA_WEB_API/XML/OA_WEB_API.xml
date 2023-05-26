@@ -2950,7 +2950,7 @@
             <summary>行政採購申請 憑證明細 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceViewModel.GENERAL_INVOICE_INV_DTLS_CONFIG">
-            <summary>版權採購請款單 憑證細項 設定</summary>
+            <summary>行政採購申請 憑證細項 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceViewModel.ASSOCIATED_FORM_CONFIG">
             <summary>表單關聯</summary>
@@ -4672,12 +4672,6 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_CURRENT_TOTAL_TWD">
             <summary>付款辦法 本期付款總額_台幣(付款辦法)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_EX_TAX_TOTAL">
-            <summary>額外採購項目 總稅額/總預估保留稅額(付款辦法)</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_EX_TAX_TOTAL_TWD">
-            <summary>額外採購項目 總稅額/總預估保留稅額_台幣(付款辦法)</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.INV_AMOUNT_TOTAL">
             <summary>憑證明細 合計</summary>
         </member>
@@ -5039,12 +5033,6 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_MATERIAL_TOTAL">
             <summary>材料費總價(付款辦法)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_EX_AMOUNT_TOTAL">
-            <summary>額外項目總額(付款辦法)</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_EX_TAX_TOTAL">
-            <summary>額外項目_總稅額/總預估保留稅額(付款辦法)</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_ORDER_TOTAL">
             <summary>合計(付款辦法)</summary>
         </member>
@@ -5278,12 +5266,6 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.MATERIAL">
             <summary>單集材料費</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.EX_AMOUNT">
-            <summary>額外採購項目金額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.EX_TAX">
-            <summary>額外採購項目稅額</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.ORDER_SUM">
             <summary>小計</summary>
         </member>
@@ -5424,6 +5406,12 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.MEDIA_INVOICE_PATH">
             <summary>版權請款 路徑</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.MEDIA_ORDER_PYMT_ORDER_TOTAL">
+            <summary>版權採購 採購單 付款辦法總額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV">
+            <summary>版權採購 採購單 付款辦法總額_台幣(換算)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.PERIOD">
             <summary>版權請款 期別</summary>
@@ -7795,6 +7783,9 @@
         <member name="P:OA_WEB_API.Models.ERP.GeneralInvoiceInfoRequest.GENERAL_INVOICE_INVS_CONFIG">
             <summary>行政採購申請 憑證明細 設定</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.ERP.GeneralInvoiceInfoRequest.GENERAL_INVOICE_INV_DTLS_CONFIG">
+            <summary>行政採購申請 憑證細項 設定</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.ERP.GeneralInvoiceInfoRequest.LoginId">
             <summary>最後簽核人員工編號</summary>
         </member>
@@ -7924,7 +7915,7 @@
         <member name="P:OA_WEB_API.Models.ERP.MediaAcceptanceInfoRequest.MEDIA_ACCEPTANCE_AUTHS_CONFIG">
             <summary>版權採購交片單 授權權利 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.ERP.MediaAcceptanceInfoRequest.MEDIA_ACCEPTANCE_ALREADY_REFUND_COMMS_CONFIG">
+        <member name="P:OA_WEB_API.Models.ERP.MediaAcceptanceInfoRequest.MEDIA_ACCEPTANCE_ALDY_RF_COMMS_CONFIG">
             <summary>版權採購交片單 已退貨商品明細 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.MediaAcceptanceInfoRequest.LoginId">
@@ -7963,10 +7954,10 @@
             <summary>版權採購請款單 使用預算 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.MEDIA_INVOICE_INVS_CONFIG">
-            <summary>版權採購請款單 憑證 設定</summary>
+            <summary>版權採購請款單 憑證明細 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.MEDIA_INVOICE_INV_DTLS_CONFIG">
-            <summary>版權採購請款單 憑證明細 設定</summary>
+            <summary>版權採購請款單 憑證細項 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.LoginId">
             <summary>最後簽核人員工編號</summary>

@@ -210,12 +210,6 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>付款辦法 本期付款總額_台幣(付款辦法)</summary>
         public int PYMT_CURRENT_TOTAL_TWD { get; set; }
 
-        /// <summary>額外採購項目 總稅額/總預估保留稅額(付款辦法)</summary>
-        public double PYMT_EX_TAX_TOTAL { get; set; }
-
-        /// <summary>額外採購項目 總稅額/總預估保留稅額_台幣(付款辦法)</summary>
-        public int PYMT_EX_TAX_TOTAL_TWD { get; set; }
-
         /// <summary>憑證明細 合計</summary>
         public double INV_AMOUNT_TOTAL { get; set; }
 

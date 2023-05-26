@@ -191,12 +191,6 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>材料費總價(付款辦法)</summary>
         public double PYMT_MATERIAL_TOTAL { get; set; }
 
-        /// <summary>額外項目總額(付款辦法)</summary>
-        public double PYMT_EX_AMOUNT_TOTAL { get; set; }
-
-        /// <summary>額外項目_總稅額/總預估保留稅額(付款辦法)</summary>
-        public double PYMT_EX_TAX_TOTAL { get; set; }
-
         /// <summary>合計(付款辦法)</summary>
         public double PYMT_ORDER_TOTAL { get; set; }
 
@@ -434,12 +428,6 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>單集材料費</summary>
         public double MATERIAL { get; set; }
-
-        /// <summary>額外採購項目金額</summary>
-        public double EX_AMOUNT { get; set; }
-
-        /// <summary>額外採購項目稅額</summary>
-        public double EX_TAX { get; set; }
 
         /// <summary>小計</summary>
         public double ORDER_SUM { get; set; }

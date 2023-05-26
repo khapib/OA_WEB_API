@@ -43,7 +43,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>行政採購申請 憑證明細 設定</summary>
         public List<GeneralInvoiceInvoicsConfig> GENERAL_INVOICE_INVS_CONFIG { get; set; }
 
-        /// <summary>版權採購請款單 憑證細項 設定</summary>
+        /// <summary>行政採購申請 憑證細項 設定</summary>
         public List<GeneralInvoiceInvoiceDetailsConfig> GENERAL_INVOICE_INV_DTLS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>

@@ -2405,7 +2405,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strJson = jsonFunction.ObjectToJSON(model.INFO);
                     var mediaOrderReturnRefundConfig = jsonFunction.JsonToObject<MediaOrderReturnRefundConfig>(strJson);
 
-                    #region - 版權請款單(查詢) 資訊 -
+                    #region - 版權採購請款單(查詢) 資訊 -
 
                     var mediaInvoiceQueryModel = new MediaInvoiceQueryModel()
                     {

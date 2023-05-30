@@ -479,11 +479,11 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         #region - 確認小數點後第二位 -
 
-                        item.INV_EXCL = Math.Round(item.INV_EXCL, 2);
-                        item.INV_TAX = Math.Round(item.INV_TAX, 2);
-                        item.INV_NET = Math.Round(item.INV_NET, 2);
-                        item.INV_GROSS = Math.Round(item.INV_GROSS, 2);
-                        item.INV_AMOUNT = Math.Round(item.INV_AMOUNT, 2);
+                        //item.INV_EXCL = Math.Round(item.INV_EXCL, 2);
+                        //item.INV_TAX = Math.Round(item.INV_TAX, 2);
+                        //item.INV_NET = Math.Round(item.INV_NET, 2);
+                        //item.INV_GROSS = Math.Round(item.INV_GROSS, 2);
+                        //item.INV_AMOUNT = Math.Round(item.INV_AMOUNT, 2);
                         item.EXCH_RATE = Math.Round(item.EXCH_RATE, 2);                        
 
                         #endregion

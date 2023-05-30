@@ -456,6 +456,26 @@ namespace OA_WEB_API.Repository.BPMPro
                 };
 
                 strSQL = "";
+                #region Original Code /**兼職部門會有重複顯示問題 20230530 Leon**/ 
+
+                //strSQL += "WITH [CTE_SIGNATURE]([AUTO_COUNTER],[REQUISITION_ID],[PROCESS_ID],[APPROVER_DEPT],[APPROVER_ID],[APPROVER_NAME],[APPROVER_TIME],[RESULT_PROMPT],[COMMENT]) AS ";
+                //strSQL += "( ";
+                //strSQL += "     SELECT S.[AutoCounter],S.[RequisitionID],S.[ProcessID],S.[ApproverDept],S.[ApproverID],S.[ApproverName],S.[ApproveTime],S.[ResultPrompt],S.[Comment] ";
+                //strSQL += "     FROM [FM7T_" + formData.IDENTIFY + "_S] AS S ";
+                //strSQL += "     WHERE S.[RequisitionID]=@REQUISITION_ID ";
+                //strSQL += "     UNION ALL ";
+                //strSQL += "     SELECT '0',[RequisitionID],NULL,[ApplicantDept],[ApplicantID],[ApplicantName],[ApplicantDateTime],'提交申請',NULL ";
+                //strSQL += "     FROM [FM7T_" + formData.IDENTIFY + "_M] ";
+                //strSQL += "     WHERE [RequisitionID]=@REQUISITION_ID ";
+                //strSQL += ") ";
+                //strSQL += "SELECT S.[REQUISITION_ID],ISNULL(P.[DisplayName],'申請人') AS [PROCESS_NAME],A.[DEPT_NAME],A.[TITLE_NAME],S.[APPROVER_NAME],S.[APPROVER_TIME],S.[RESULT_PROMPT],S.[COMMENT] ";
+                //strSQL += "FROM [CTE_SIGNATURE] AS S ";
+                //strSQL += "         INNER JOIN [NUP].[dbo].[GTV_View_OrgRelationMember] AS A ON A.[COMPANY_ID]=@COMPANY_ID AND A.[USER_ID]=S.[APPROVER_ID] ";
+                //strSQL += "         LEFT JOIN [FSe7en_Sys_ProcessName] AS P ON P.[DiagramID]=@DIAGRAM_ID AND P.[ProcessID]=S.[PROCESS_ID] ";
+                //strSQL += "WHERE S.[APPROVER_NAME] IS NOT NULL ";
+                //strSQL += "ORDER BY S.[AUTO_COUNTER] DESC ";
+
+                #endregion
                 strSQL += "WITH [CTE_SIGNATURE]([AUTO_COUNTER],[REQUISITION_ID],[PROCESS_ID],[APPROVER_DEPT],[APPROVER_ID],[APPROVER_NAME],[APPROVER_TIME],[RESULT_PROMPT],[COMMENT]) AS ";
                 strSQL += "( ";
                 strSQL += "     SELECT S.[AutoCounter],S.[RequisitionID],S.[ProcessID],S.[ApproverDept],S.[ApproverID],S.[ApproverName],S.[ApproveTime],S.[ResultPrompt],S.[Comment] ";
@@ -468,7 +488,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += ") ";
                 strSQL += "SELECT S.[REQUISITION_ID],ISNULL(P.[DisplayName],'申請人') AS [PROCESS_NAME],A.[DEPT_NAME],A.[TITLE_NAME],S.[APPROVER_NAME],S.[APPROVER_TIME],S.[RESULT_PROMPT],S.[COMMENT] ";
                 strSQL += "FROM [CTE_SIGNATURE] AS S ";
-                strSQL += "         INNER JOIN [NUP].[dbo].[GTV_View_OrgRelationMember] AS A ON A.[COMPANY_ID]=@COMPANY_ID AND A.[USER_ID]=S.[APPROVER_ID] ";
+                strSQL += "         INNER JOIN [NUP].[dbo].[GTV_View_OrgRelationMember] AS A ON A.[COMPANY_ID]=@COMPANY_ID AND A.[USER_ID]=S.[APPROVER_ID] AND A.[DEPT_ID]=S.[APPROVER_DEPT] ";
                 strSQL += "         LEFT JOIN [FSe7en_Sys_ProcessName] AS P ON P.[DiagramID]=@DIAGRAM_ID AND P.[ProcessID]=S.[PROCESS_ID] ";
                 strSQL += "WHERE S.[APPROVER_NAME] IS NOT NULL ";
                 strSQL += "ORDER BY S.[AUTO_COUNTER] DESC ";

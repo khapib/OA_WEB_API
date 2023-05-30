@@ -37,7 +37,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>版權採購請款單 授權權利 設定</summary>
         public IList<MediaInvoiceAuthorizesConfig> MEDIA_INVOICE_AUTHS_CONFIG { get; set; }
 
-        /// <summary>版權採購申請單 額外項目 設定</summary>
+        /// <summary>版權採購請款單 額外項目 設定</summary>
         public IList<MediaInvoiceExtrasConfig> MEDIA_INVOICE_EXS_CONFIG { get; set; }
 
         /// <summary>版權採購請款單 付款辦法 設定</summary>

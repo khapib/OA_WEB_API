@@ -175,6 +175,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             strSQL = "";
             strSQL += "SELECT ";
+            strSQL += "     DTL.[OrderRowNo] AS [ORDER_ROW_NO], ";
             strSQL += "     DTL.[ProjectFormNo] AS [PROJECT_FORM_NO], ";
             strSQL += "     DTL.[ProjectName] AS [PROJECT_NAME], ";
             strSQL += "     DTL.[ProjectNickname] AS [PROJECT_NICKNAME], ";
@@ -669,7 +670,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@GENERAL_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_REQUISITION_ID ?? DBNull.Value },
                         new SqlParameter("@GENERAL_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_BPM_FORM_NO ?? DBNull.Value },
                         new SqlParameter("@GENERAL_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_ERP_FORM_NO ?? DBNull.Value },
-                        new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PERIOD", SqlDbType.Int) { Value = model.GENERAL_INVOICE_CONFIG.PERIOD },
                         new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },

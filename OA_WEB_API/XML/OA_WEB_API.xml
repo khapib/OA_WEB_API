@@ -2585,6 +2585,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_DTLS_CONFIG">
             <summary>費用申請單 費用明細 設定</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_INV_DTLS_CONFIG">
+            <summary>費用申請單 憑證細項 設定</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_BUDGS_CONFIG">
             <summary>費用申請單 使用預算 設定</summary>
         </member>
@@ -2647,17 +2650,17 @@
             <summary>財務覆核人員姓名</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.AMOUNT_CONV_TOTAL">
-            <summary>發票金額_換算台幣 合計</summary>
+            <summary>憑證金額_換算台幣 合計</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig">
             <summary>
-            費用申請單 明細 設定
+            費用申請單 費用明細 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.DTL_ROW_NO">
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.ROW_NO">
             <summary>行數編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_TYPE">
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.TYPE">
             <summary>
             憑證類型：
             INV_TW.統一發票、
@@ -2665,47 +2668,11 @@
             RECPT.收據
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_NUM">
-            <summary>憑證號碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_DATE">
-            <summary>憑證日期</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.ITEM_NAME">
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.NAME">
             <summary>項目名稱</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.ITEM_TYPE">
             <summary>項目類別</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_EXCL">
-            <summary>憑證免稅額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_EXCL_TWD">
-            <summary>憑證免稅額_台幣</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_TAX">
-            <summary>憑證稅額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_TAX_TWD">
-            <summary>憑證稅額_台幣</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_NET">
-            <summary>憑證未稅金額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_NET_TWD">
-            <summary>憑證未稅金額_台幣</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_GROSS">
-            <summary>憑證含稅金額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_GROSS_TWD">
-            <summary>憑證含稅金額_台幣</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_AMOUNT">
-            <summary>憑證金額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_AMOUNT_TWD">
-            <summary>憑證金額_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.EXCH_RATE">
             <summary>匯率</summary>
@@ -2731,33 +2698,38 @@
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.PROJECT_USE_YEAR">
             <summary>所屬專案年分</summary>
         </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseInvoiceDetailsConfig">
+            <summary>
+            費用申請單 憑證細項 設定
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig">
             <summary>
             費用申請單 使用預算 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.BUDG_ROW_NO">
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.ROW_NO">
             <summary>行數編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.BUDG_FORM_NO">
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.FORM_NO">
             <summary>預算 ERP唯一碼</summary>        
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.BUDG_CREATE_YEAR">
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.CREATE_YEAR">
             <summary>預算編列年度</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.BUDG_NAME">
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.NAME">
             <summary>預算名稱</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.BUDG_OWNER_DEPT">
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.OWNER_DEPT">
             <summary>所屬部門</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.BUDG_TOTAL">
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.TOTAL">
             <summary>預算總額</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.BUDG_AVAILABLE_BUDGET_AMOUNT">
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.AVAILABLE_BUDGET_AMOUNT">
             <summary>可用預算金額</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.BUDG_USE_BUDGET_AMOUNT">
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.USE_BUDGET_AMOUNT">
             <summary>使用預算金額</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GeneralAcceptanceQueryModel">
@@ -2950,7 +2922,7 @@
             <summary>行政採購申請 憑證明細 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceViewModel.GENERAL_INVOICE_INV_DTLS_CONFIG">
-            <summary>版權採購請款單 憑證細項 設定</summary>
+            <summary>行政採購申請 憑證細項 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceViewModel.ASSOCIATED_FORM_CONFIG">
             <summary>表單關聯</summary>
@@ -4502,7 +4474,7 @@
             <summary>版權採購請款單 授權權利 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel.MEDIA_INVOICE_EXS_CONFIG">
-            <summary>版權採購申請單 額外項目 設定</summary>
+            <summary>版權採購請款單 額外項目 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceViewModel.MEDIA_INVOICE_PYMTS_CONFIG">
             <summary>版權採購請款單 付款辦法 設定</summary>
@@ -4671,12 +4643,6 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_CURRENT_TOTAL_TWD">
             <summary>付款辦法 本期付款總額_台幣(付款辦法)</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_EX_TAX_TOTAL">
-            <summary>額外採購項目 總稅額/總預估保留稅額(付款辦法)</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.PYMT_EX_TAX_TOTAL_TWD">
-            <summary>額外採購項目 總稅額/總預估保留稅額_台幣(付款辦法)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.INV_AMOUNT_TOTAL">
             <summary>憑證明細 合計</summary>
@@ -5039,12 +5005,6 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_MATERIAL_TOTAL">
             <summary>材料費總價(付款辦法)</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_EX_AMOUNT_TOTAL">
-            <summary>額外項目總額(付款辦法)</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_EX_TAX_TOTAL">
-            <summary>額外項目_總稅額/總預估保留稅額(付款辦法)</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_ORDER_TOTAL">
             <summary>合計(付款辦法)</summary>
         </member>
@@ -5278,12 +5238,6 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.MATERIAL">
             <summary>單集材料費</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.EX_AMOUNT">
-            <summary>額外採購項目金額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.EX_TAX">
-            <summary>額外採購項目稅額</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderPaymentsConfig.ORDER_SUM">
             <summary>小計</summary>
         </member>
@@ -5424,6 +5378,12 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.MEDIA_INVOICE_PATH">
             <summary>版權請款 路徑</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.MEDIA_ORDER_PYMT_ORDER_TOTAL">
+            <summary>版權採購 採購單 付款辦法總額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV">
+            <summary>版權採購 採購單 付款辦法總額_台幣(換算)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderReturnRefundConfig.PERIOD">
             <summary>版權請款 期別</summary>
@@ -7002,9 +6962,6 @@
         <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.NOTE">
             <summary>備註</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.IS_EXCL">
-            <summary>是否免稅[註記]</summary>
-        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig">
             <summary>
             憑證細項
@@ -7795,6 +7752,9 @@
         <member name="P:OA_WEB_API.Models.ERP.GeneralInvoiceInfoRequest.GENERAL_INVOICE_INVS_CONFIG">
             <summary>行政採購申請 憑證明細 設定</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.ERP.GeneralInvoiceInfoRequest.GENERAL_INVOICE_INV_DTLS_CONFIG">
+            <summary>行政採購申請 憑證細項 設定</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.ERP.GeneralInvoiceInfoRequest.LoginId">
             <summary>最後簽核人員工編號</summary>
         </member>
@@ -7924,7 +7884,7 @@
         <member name="P:OA_WEB_API.Models.ERP.MediaAcceptanceInfoRequest.MEDIA_ACCEPTANCE_AUTHS_CONFIG">
             <summary>版權採購交片單 授權權利 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.ERP.MediaAcceptanceInfoRequest.MEDIA_ACCEPTANCE_ALREADY_REFUND_COMMS_CONFIG">
+        <member name="P:OA_WEB_API.Models.ERP.MediaAcceptanceInfoRequest.MEDIA_ACCEPTANCE_ALDY_RF_COMMS_CONFIG">
             <summary>版權採購交片單 已退貨商品明細 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.MediaAcceptanceInfoRequest.LoginId">
@@ -7963,10 +7923,10 @@
             <summary>版權採購請款單 使用預算 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.MEDIA_INVOICE_INVS_CONFIG">
-            <summary>版權採購請款單 憑證 設定</summary>
+            <summary>版權採購請款單 憑證明細 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.MEDIA_INVOICE_INV_DTLS_CONFIG">
-            <summary>版權採購請款單 憑證明細 設定</summary>
+            <summary>版權採購請款單 憑證細項 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.MediaInvoiceInfoRequest.LoginId">
             <summary>最後簽核人員工編號</summary>

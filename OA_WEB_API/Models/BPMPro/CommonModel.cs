@@ -189,9 +189,6 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>備註</summary>
         public string NOTE { get; set; }
-
-        /// <summary>是否免稅[註記]</summary>
-        public string IS_EXCL { get; set; }
     }
 
     #endregion

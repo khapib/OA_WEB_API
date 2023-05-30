@@ -31,6 +31,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>費用申請單 費用明細 設定</summary>
         public IList<ExpensesReimburseDetailsConfig> EXPENSES_REIMBURSE_DTLS_CONFIG { get; set; }
 
+        /// <summary>費用申請單 憑證細項 設定</summary>
+        public List<ExpensesReimburseInvoiceDetailsConfig> EXPENSES_REIMBURSE_INV_DTLS_CONFIG { get; set; }
+
         /// <summary>費用申請單 使用預算 設定</summary>
         public IList<ExpensesReimburseBudgetsConfig> EXPENSES_REIMBURSE_BUDGS_CONFIG { get; set; }
 
@@ -95,17 +98,17 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>財務覆核人員姓名</summary>
         public string FINANC_AUDIT_NAME_2 { get; set; }
 
-        /// <summary>發票金額_換算台幣 合計</summary>
+        /// <summary>憑證金額_換算台幣 合計</summary>
         public int AMOUNT_CONV_TOTAL { get; set; }
     }
 
     /// <summary>
-    /// 費用申請單 明細 設定
+    /// 費用申請單 費用明細 設定
     /// </summary>
-    public class ExpensesReimburseDetailsConfig
+    public class ExpensesReimburseDetailsConfig: InvoiceConfig
     {
         /// <summary>行數編號</summary>
-        public int DTL_ROW_NO { get; set; }
+        public int ROW_NO { get; set; }
 
         /// <summary>
         /// 憑證類型：
@@ -113,49 +116,13 @@ namespace OA_WEB_API.Models.BPMPro
         /// INV_F. Invoice、
         /// RECPT.收據
         /// </summary>
-        public string INV_TYPE { get; set; }
-
-        /// <summary>憑證號碼</summary>
-        public string INV_NUM { get; set; }
-
-        /// <summary>憑證日期</summary>
-        public string INV_DATE { get; set; }
+        public string TYPE { get; set; }
 
         /// <summary>項目名稱</summary>
-        public string ITEM_NAME { get; set; }
+        public string NAME { get; set; }
 
         /// <summary>項目類別</summary>
         public string ITEM_TYPE { get; set; }
-
-        /// <summary>憑證免稅額</summary>
-        public double INV_EXCL { get; set; }
-
-        /// <summary>憑證免稅額_台幣</summary>
-        public int INV_EXCL_TWD { get; set; }
-
-        /// <summary>憑證稅額</summary>
-        public double INV_TAX { get; set; }
-
-        /// <summary>憑證稅額_台幣</summary>
-        public int INV_TAX_TWD { get; set; }
-
-        /// <summary>憑證未稅金額</summary>
-        public double INV_NET { get; set; }
-
-        /// <summary>憑證未稅金額_台幣</summary>
-        public int INV_NET_TWD { get; set; }
-
-        /// <summary>憑證含稅金額</summary>
-        public double INV_GROSS { get; set; }
-
-        /// <summary>憑證含稅金額_台幣</summary>
-        public int INV_GROSS_TWD { get; set; }
-
-        /// <summary>憑證金額</summary>
-        public double INV_AMOUNT { get; set; }
-
-        /// <summary>憑證金額_台幣</summary>
-        public int INV_AMOUNT_TWD { get; set; }
 
         /// <summary>匯率</summary>
         public double EXCH_RATE { get; set; }
@@ -183,33 +150,41 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
+    /// 費用申請單 憑證細項 設定
+    /// </summary>
+    public class ExpensesReimburseInvoiceDetailsConfig: InvoiceDetailConfig
+    {
+
+    }
+
+    /// <summary>
     /// 費用申請單 使用預算 設定
     /// </summary>
     public class ExpensesReimburseBudgetsConfig
     {
         /// <summary>行數編號</summary>
-        public int BUDG_ROW_NO { get; set; }
+        public int ROW_NO { get; set; }
 
         /// <summary>預算 ERP唯一碼</summary>        
-        public string BUDG_FORM_NO { get; set; }
+        public string FORM_NO { get; set; }
 
         /// <summary>預算編列年度</summary>
-        public string BUDG_CREATE_YEAR { get; set; }
+        public string CREATE_YEAR { get; set; }
 
         /// <summary>預算名稱</summary>
-        public string BUDG_NAME { get; set; }
+        public string NAME { get; set; }
 
         /// <summary>所屬部門</summary>
-        public string BUDG_OWNER_DEPT { get; set; }
+        public string OWNER_DEPT { get; set; }
 
         /// <summary>預算總額</summary>
-        public int BUDG_TOTAL { get; set; }
+        public int TOTAL { get; set; }
 
         /// <summary>可用預算金額</summary>
-        public int BUDG_AVAILABLE_BUDGET_AMOUNT { get; set; }
+        public int AVAILABLE_BUDGET_AMOUNT { get; set; }
 
         /// <summary>使用預算金額</summary>
-        public int BUDG_USE_BUDGET_AMOUNT { get; set; }
+        public int USE_BUDGET_AMOUNT { get; set; }
     }
 
 }

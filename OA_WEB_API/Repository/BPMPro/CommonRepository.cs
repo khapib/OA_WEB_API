@@ -1057,8 +1057,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [Gross_TWD] AS [GROSS_TWD], ";
             strSQL += "     [Amount] AS [AMOUNT], ";
             strSQL += "     [Amount_TWD] AS [AMOUNT_TWD], ";
-            strSQL += "     [Note] AS [NOTE], ";
-            strSQL += "     [IsExcl] AS [IS_EXCL] ";
+            strSQL += "     [Note] AS [NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_"+ strTable + "_INV] ";
             strSQL += "WHERE 1=1 ";
             strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
@@ -1126,8 +1125,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, Common.parameter);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "_INV]([RequisitionID]," + strField_F + ",[Period],[InvoiceRowNo],[Num],[Date],[Excl],[Excl_TWD],[Tax],[Tax_TWD],[Net],[Net_TWD],[Gross],[Gross_TWD],[Amount],[Amount_TWD],[Note],[IsExcl]) ";
-                        strSQL += "VALUES(@REQUISITION_ID," + strField_V + ",@PERIOD,@INV_ROW_NO,@NUM,@DATE,@EXCL,@EXCL_TWD,@TAX,@TAX_TWD,@NET,@NET_TWD,@GROSS,@GROSS_TWD,@AMOUNT,@AMOUNT_TWD,@NOTE,@IS_EXCL) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "_INV]([RequisitionID]," + strField_F + ",[Period],[InvoiceRowNo],[Num],[Date],[Excl],[Excl_TWD],[Tax],[Tax_TWD],[Net],[Net_TWD],[Gross],[Gross_TWD],[Amount],[Amount_TWD],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID," + strField_V + ",@PERIOD,@INV_ROW_NO,@NUM,@DATE,@EXCL,@EXCL_TWD,@TAX,@TAX_TWD,@NET,@NET_TWD,@GROSS,@GROSS_TWD,@AMOUNT,@AMOUNT_TWD,@NOTE) ";
 
                         dbFun.DoTran(strSQL, Common.parameter);
                     }

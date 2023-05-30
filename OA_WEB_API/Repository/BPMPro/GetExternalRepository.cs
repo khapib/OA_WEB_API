@@ -2405,7 +2405,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strJson = jsonFunction.ObjectToJSON(model.INFO);
                     var mediaOrderReturnRefundConfig = jsonFunction.JsonToObject<MediaOrderReturnRefundConfig>(strJson);
 
-                    #region - 版權請款單(查詢) 資訊 -
+                    #region - 版權採購請款單(查詢) 資訊 -
 
                     var mediaInvoiceQueryModel = new MediaInvoiceQueryModel()
                     {
@@ -2421,7 +2421,27 @@ namespace OA_WEB_API.Repository.BPMPro
                     mediaOrderReturnRefundConfig.FINANC_AUDIT_NAME_2 = mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.FINANC_AUDIT_NAME_2;
 
                     #endregion
-                    
+
+                    #region - 版權採購退貨折讓單 憑證退款明細：MediaOrderReturnRefundInvoicesConfig -
+
+                    strJson = jsonFunction.ObjectToJSON(mediaInvoiceInfo.MEDIA_INVOICE_INVS_CONFIG);
+                    var mediaOrderReturnRefundInvoicesConfig = jsonFunction.JsonToObject<List<MediaOrderReturnRefundInvoicesConfig>>(strJson);
+                    mediaOrderReturnRefundInvoicesConfig.ForEach(INV =>
+                    {
+                        INV.EXCL = 0;
+                        INV.EXCL_TWD = 0;
+                        INV.TAX = 0;
+                        INV.TAX_TWD = 0;
+                        INV.NET = 0;
+                        INV.NET_TWD = 0;
+                        INV.GROSS = 0;
+                        INV.GROSS_TWD = 0;
+                        INV.AMOUNT = 0;
+                        INV.AMOUNT_TWD = 0;
+                    });
+
+                    #endregion
+
                     #region - 送單 -
 
                     //送單
@@ -2430,12 +2450,13 @@ namespace OA_WEB_API.Repository.BPMPro
                         APPLICANT_INFO = applicantInfo,
                         MEDIA_ORDER_RETURN_REFUND_TITLE= mediaOrderReturnRefundTitle,
                         MEDIA_ORDER_RETURN_REFUND_CONFIG= mediaOrderReturnRefundConfig,
+                        MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG= mediaOrderReturnRefundInvoicesConfig,
                     };
 
                     if (mediaOrderReturnRefundRepository.PutMediaOrderReturnRefundSingle(mediaOrderReturnRefundViewModel))
                     {
                         //起單成功
-                        State = BPMStatusCode.PROGRESS;
+                        State = BPMStatusCode.PROGRESS;                        
 
                         if (model.ALDY_RF_COMM != null)
                         {
@@ -2478,9 +2499,9 @@ namespace OA_WEB_API.Repository.BPMPro
                             {
                                 //版權採購退貨折讓單 憑證明細
                                 new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
-                                new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_REQUISITION_ID },
-                                new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_BPM_FORM_NO },
-                                new SqlParameter("@MEDIA_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_ERP_FORM_NO },
+                                new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_REQUISITION_ID ?? DBNull.Value },
+                                new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_BPM_FORM_NO ?? DBNull.Value },
+                                new SqlParameter("@MEDIA_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_ERP_FORM_NO ?? DBNull.Value },
                                 new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                                 new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                                 new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },

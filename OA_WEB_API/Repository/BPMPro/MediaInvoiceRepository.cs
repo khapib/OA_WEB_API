@@ -10,6 +10,7 @@ using Microsoft.SqlServer.Server;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -151,8 +152,6 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [EX_TaxTotal_TWD] AS [EX_TAX_TOTAL_TWD], ";
             strSQL += "     [PYMT_CurrentTotal] AS [PYMT_CURRENT_TOTAL], ";
             strSQL += "     [PYMT_CurrentTotal_TWD] AS [PYMT_CURRENT_TOTAL_TWD], ";
-            strSQL += "     [PYMT_EX_TaxTotal] AS [PYMT_EX_TAX_TOTAL], ";
-            strSQL += "     [PYMT_EX_TaxTotal_TWD] AS [PYMT_EX_TAX_TOTAL_TWD], ";
             strSQL += "     [INV_AmountTotal] AS [INV_AMOUNT_TOTAL], ";
             strSQL += "     [INV_AmountTotal_TWD] AS [INV_AMOUNT_TOTAL_TWD], ";
             strSQL += "     [INV_TaxTotal] AS [INV_TAX_TOTAL], ";
@@ -285,6 +284,8 @@ namespace OA_WEB_API.Repository.BPMPro
                 strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_AUTHS_CONFIG.Where(AUTH => AUTH.ORDER_ROW_NO == item.ORDER_ROW_NO && item.PERIOD == mediaInvoiceConfig.PERIOD).Select(AUTH => AUTH));
                 mediaInvoiceAuthorizesConfig.AddRange(JsonConvert.DeserializeObject<List<MediaInvoiceAuthorizesConfig>>(strJson));
             }
+            mediaInvoiceAuthorizesConfig = mediaInvoiceAuthorizesConfig.GroupBy(AUTH => new { AUTH.ORDER_ROW_NO, AUTH.PLAY_PLATFORM }).Select(g => g.First()).ToList();
+
 
             #endregion
 
@@ -514,6 +515,94 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (model.MEDIA_INVOICE_CONFIG != null)
                 {
+                    #region - 版權採購單 資訊 -
+
+                    var mediaOrderQueryModel = new MediaOrderQueryModel
+                    {
+                        REQUISITION_ID = medialOrderformData.REQUISITION_ID
+                    };
+
+                    var mediaOrderContent = mediaOrderRepository.PostMediaOrderSingle(mediaOrderQueryModel);
+
+                    #endregion
+
+                    #region - 版權採購請款單 驗收明細_金額總計 -
+
+                    strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_DTLS_CONFIG
+                        .Join(mediaOrderContent.MEDIA_ORDER_ACPTS_CONFIG,
+                        DTL => DTL.ORDER_ROW_NO,
+                        ACPT => ACPT.ORDER_ROW_NO,
+                        (DTL, ACPT) => new
+                        {
+                            DTL.ORDER_ROW_NO,
+                            DTL.SUP_PROD_A_NO,
+                            DTL.ITEM_NAME,
+                            DTL.MEDIA_SPEC,
+                            DTL.AUTH_ALL,
+                            DTL.MEDIA_TYPE,
+                            DTL.START_EPISODE,
+                            DTL.END_EPISODE,
+                            DTL.ORDER_EPISODE,
+                            DTL.EPISODE_TIME,
+                            DTL.NET,
+                            DTL.NET_TWD,
+                            DTL.TAX,
+                            DTL.TAX_TWD,
+                            DTL.GROSS,
+                            DTL.GROSS_TWD,
+                            DTL.NET_SUM,
+                            DTL.NET_SUM_TWD,
+                            DTL.GROSS_SUM,
+                            DTL.GROSS_SUM_TWD,
+                            DTL.MATERIAL,
+                            DTL.ITEM_SUM,
+                            DTL.ITEM_SUM_TWD,
+                            DTL.PROJECT_FORM_NO,
+                            DTL.PROJECT_NAME,
+                            DTL.PROJECT_NICKNAME,
+                            DTL.PROJECT_USE_YEAR,
+                            DTL.NOTE,
+                            ACPT
+                        })
+                        .OrderBy(ACPT_DTL => ACPT_DTL.ORDER_ROW_NO)
+                        .Where(ACPT_DTL=> ACPT_DTL.ACPT.PERIOD== model.MEDIA_INVOICE_CONFIG.PERIOD));
+                    var mediaOrderDetailsConfig = JsonConvert.DeserializeObject<List<MediaOrderDetailsConfig>>(strJson);
+                    if (mediaOrderDetailsConfig != null)
+                    {
+                        mediaOrderDetailsConfig.ForEach(DTL =>
+                        {
+                            model.MEDIA_INVOICE_CONFIG.DTL_NET_TOTAL += DTL.NET_SUM;
+                            model.MEDIA_INVOICE_CONFIG.DTL_NET_TOTAL_TWD += DTL.NET_SUM_TWD;
+                            model.MEDIA_INVOICE_CONFIG.DTL_GROSS_TOTAL += DTL.GROSS_SUM;
+                            model.MEDIA_INVOICE_CONFIG.DTL_GROSS_TOTAL_TWD += DTL.GROSS_SUM_TWD;
+                            model.MEDIA_INVOICE_CONFIG.DTL_MATERIAL_TOTAL += DTL.MATERIAL;
+                            model.MEDIA_INVOICE_CONFIG.DTL_MATERIAL_TOTAL_TWD = int.Parse((model.MEDIA_INVOICE_CONFIG.DTL_MATERIAL_TOTAL * model.MEDIA_INVOICE_CONFIG.PRE_RATE).ToString());
+                            model.MEDIA_INVOICE_CONFIG.DTL_ORDER_TOTAL += DTL.ITEM_SUM;
+                            model.MEDIA_INVOICE_CONFIG.DTL_ORDER_TOTAL_TWD += DTL.ITEM_SUM_TWD;
+                            model.MEDIA_INVOICE_CONFIG.DTL_TAX_TOTAL += DTL.TAX;
+                            model.MEDIA_INVOICE_CONFIG.DTL_TAX_TOTAL_TWD += DTL.TAX_TWD;
+                        });
+                    }
+
+                    #endregion
+
+                    #region - 版權採購請款單 額外項目_金額總計 -
+
+                    strJson = jsonFunction.ObjectToJSON(model.MEDIA_INVOICE_EXS_CONFIG);
+                    var mediaOrderExtrasConfig = JsonConvert.DeserializeObject<List<MediaOrderExtrasConfig>>(strJson);
+                    if (mediaOrderExtrasConfig != null)
+                    {
+                        mediaOrderExtrasConfig.ForEach(EX =>
+                        {
+                            model.MEDIA_INVOICE_CONFIG.EX_AMOUNT_TOTAL += EX.AMOUNT;
+                            model.MEDIA_INVOICE_CONFIG.EX_AMOUNT_TOTAL_TWD += EX.AMOUNT_TWD;
+                            model.MEDIA_INVOICE_CONFIG.EX_TAX_TOTAL += EX.TAX;
+                            model.MEDIA_INVOICE_CONFIG.EX_TAX_TOTAL_TWD += EX.TAX_TWD;
+                        });
+                    }
+
+                    #endregion
+
                     #region - 【版權採購申請單】資訊 -
 
                     model.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_BPM_FORM_NO = medialOrderformData.SERIAL_ID;
@@ -558,8 +647,6 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@EX_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_CURRENT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PYMT_CURRENT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PYMT_EX_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PYMT_EX_TAX_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@INV_AMOUNT_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@INV_AMOUNT_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@INV_TAX_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -595,7 +682,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     model.MEDIA_INVOICE_CONFIG.DTL_ORDER_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.DTL_ORDER_TOTAL, 2);
                     model.MEDIA_INVOICE_CONFIG.EX_AMOUNT_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.EX_AMOUNT_TOTAL, 2);
                     model.MEDIA_INVOICE_CONFIG.EX_TAX_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.EX_TAX_TOTAL, 2);
-                    model.MEDIA_INVOICE_CONFIG.PYMT_EX_TAX_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.PYMT_EX_TAX_TOTAL, 2);
                     model.MEDIA_INVOICE_CONFIG.PYMT_CURRENT_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.PYMT_CURRENT_TOTAL, 2);
                     model.MEDIA_INVOICE_CONFIG.INV_AMOUNT_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.INV_AMOUNT_TOTAL, 2);
                     model.MEDIA_INVOICE_CONFIG.INV_TAX_TOTAL = Math.Round(model.MEDIA_INVOICE_CONFIG.INV_TAX_TOTAL, 2);
@@ -650,8 +736,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [EX_TaxTotal_TWD]=@EX_TAX_TOTAL_TWD, ";
                     strSQL += "     [PYMT_CurrentTotal]=@PYMT_CURRENT_TOTAL, ";
                     strSQL += "     [PYMT_CurrentTotal_TWD]=@PYMT_CURRENT_TOTAL_TWD, ";
-                    strSQL += "     [PYMT_EX_TaxTotal]=@PYMT_EX_TAX_TOTAL, ";
-                    strSQL += "     [PYMT_EX_TaxTotal_TWD]=@PYMT_EX_TAX_TOTAL_TWD, ";
                     strSQL += "     [INV_AmountTotal]=@INV_AMOUNT_TOTAL, ";
                     strSQL += "     [INV_AmountTotal_TWD]=@INV_AMOUNT_TOTAL_TWD, ";
                     strSQL += "     [INV_TaxTotal]=@INV_TAX_TOTAL, ";
@@ -776,9 +860,9 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     //版權採購請款單 憑證
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@MEDIA_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)model.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_REQUISITION_ID ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_BPM_FORM_NO ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_ERP_FORM_NO ?? DBNull.Value },
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -816,9 +900,9 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     //版權採購請款單 憑證明細
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@MEDIA_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)model.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_REQUISITION_ID ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_BPM_FORM_NO ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_ERP_FORM_NO ?? DBNull.Value },
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },

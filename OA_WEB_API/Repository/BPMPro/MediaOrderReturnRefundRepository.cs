@@ -98,6 +98,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [MediaInvoiceBPMFormNo] AS [MEDIA_INVOICE_BPM_FORM_NO], ";
             strSQL += "     [MediaInvoiceERPFormNo] AS [MEDIA_INVOICE_ERP_FORM_NO], ";
             strSQL += "     [MediaInvoicePath] AS [MEDIA_INVOICE_PATH], ";
+            strSQL += "     [MediaOrderPYMT_OrderTotal] AS [MEDIA_ORDER_PYMT_ORDER_TOTAL], ";
+            strSQL += "     [MediaOrderPYMT_OrderTotal_CONV] AS [MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV], ";
             strSQL += "     [FinancAuditID_1] AS [FINANC_AUDIT_ID_1], ";
             strSQL += "     [FinancAuditName_1] AS [FINANC_AUDIT_NAME_1], ";
             strSQL += "     [FinancAuditID_2] AS [FINANC_AUDIT_ID_2], ";
@@ -267,6 +269,8 @@ namespace OA_WEB_API.Repository.BPMPro
                 model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_BPM_FORM_NO = strmediaInvoiceQuery.MEDIA_INVOICE_TITLE.BPM_FORM_NO;
                 model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_ERP_FORM_NO = strmediaInvoiceQuery.MEDIA_INVOICE_TITLE.FORM_NO;
                 model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_SUBJECT = mediaInvoiceformData.FORM_SUBJECT;
+                model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_ORDER_PYMT_ORDER_TOTAL = strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_PYMT_ORDER_TOTAL;
+                model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV = strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV;
                 model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_PATH = GlobalParameters.FormContentPath(model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_REQUISITION_ID, mediaInvoiceformData.IDENTIFY, mediaInvoiceformData.DIAGRAM_NAME);
 
                 #endregion
@@ -375,6 +379,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@MEDIA_INVOICE_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@MEDIA_INVOICE_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@MEDIA_INVOICE_PATH", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@MEDIA_ORDER_PYMT_ORDER_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PERIOD", SqlDbType.Int) { Value = model.MEDIA_ORDER_RETURN_REFUND_CONFIG.PERIOD },
                         new SqlParameter("@FINANC_AUDIT_ID_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@FINANC_AUDIT_NAME_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -412,6 +418,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [MediaInvoiceBPMFormNo]=@MEDIA_INVOICE_BPM_FORM_NO, ";
                     strSQL += "     [MediaInvoiceERPFormNo]=@MEDIA_INVOICE_ERP_FORM_NO, ";
                     strSQL += "     [MediaInvoicePath]=@MEDIA_INVOICE_PATH, ";
+                    strSQL += "     [MediaOrderPYMT_OrderTotal]=@MEDIA_ORDER_PYMT_ORDER_TOTAL, ";
+                    strSQL += "     [MediaOrderPYMT_OrderTotal_CONV]=@MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV, ";
                     strSQL += "     [Period]=@PERIOD, ";
                     strSQL += "     [FinancAuditID_1]=@FINANC_AUDIT_ID_1, ";
                     strSQL += "     [FinancAuditName_1]=@FINANC_AUDIT_NAME_1, ";
@@ -500,14 +508,14 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (model.MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG != null && model.MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG.Count > 0)
                 {
-                    var CommonINV_DTL = new BPMCommonModel<MediaOrderReturnRefundInvoicesConfig>()
+                    var CommonINV = new BPMCommonModel<MediaOrderReturnRefundInvoicesConfig>()
                     {
                         IsALDY = false,
                         IDENTIFY = IDENTIFY,
                         parameter = parameterInvoices,
                         Model = model.MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG
                     };
-                    commonRepository.PutInvoiceFunction(CommonINV_DTL);
+                    commonRepository.PutInvoiceFunction(CommonINV);
                 }
 
                 #endregion

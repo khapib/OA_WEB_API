@@ -37,7 +37,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>版權採購請款單 授權權利 設定</summary>
         public IList<MediaInvoiceAuthorizesConfig> MEDIA_INVOICE_AUTHS_CONFIG { get; set; }
 
-        /// <summary>版權採購申請單 額外項目 設定</summary>
+        /// <summary>版權採購請款單 額外項目 設定</summary>
         public IList<MediaInvoiceExtrasConfig> MEDIA_INVOICE_EXS_CONFIG { get; set; }
 
         /// <summary>版權採購請款單 付款辦法 設定</summary>
@@ -209,12 +209,6 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>付款辦法 本期付款總額_台幣(付款辦法)</summary>
         public int PYMT_CURRENT_TOTAL_TWD { get; set; }
-
-        /// <summary>額外採購項目 總稅額/總預估保留稅額(付款辦法)</summary>
-        public double PYMT_EX_TAX_TOTAL { get; set; }
-
-        /// <summary>額外採購項目 總稅額/總預估保留稅額_台幣(付款辦法)</summary>
-        public int PYMT_EX_TAX_TOTAL_TWD { get; set; }
 
         /// <summary>憑證明細 合計</summary>
         public double INV_AMOUNT_TOTAL { get; set; }

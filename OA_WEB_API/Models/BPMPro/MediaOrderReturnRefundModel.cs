@@ -83,6 +83,12 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>版權請款 路徑</summary>
         public string MEDIA_INVOICE_PATH { get; set; }
 
+        /// <summary>版權採購 採購單 付款辦法總額</summary>
+        public double MEDIA_ORDER_PYMT_ORDER_TOTAL { get; set; }
+
+        /// <summary>版權採購 採購單 付款辦法總額_台幣(換算)</summary>
+        public int MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV { get; set; }
+
         /// <summary>版權請款 期別</summary>
         public int PERIOD { get; set; }
 

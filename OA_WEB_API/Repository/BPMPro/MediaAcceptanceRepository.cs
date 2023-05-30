@@ -178,6 +178,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_AUTHS_CONFIG.Where(AUTH => AUTH.ORDER_ROW_NO == item.ORDER_ROW_NO).Select(AUTH => AUTH));
                 mediaAcceptanceAuthorizesConfig.AddRange(JsonConvert.DeserializeObject<List<MediaAcceptanceAuthorizesConfig>>(strJson));
             }
+            mediaAcceptanceAuthorizesConfig = mediaAcceptanceAuthorizesConfig.GroupBy(AUTH=> new {AUTH.ORDER_ROW_NO, AUTH.PLAY_PLATFORM}).Select(g => g.First()).ToList();
 
             #endregion
 

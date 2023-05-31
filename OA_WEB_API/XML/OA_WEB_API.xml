@@ -2660,7 +2660,7 @@
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.ROW_NO">
             <summary>行數編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.TYPE">
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_TYPE">
             <summary>
             憑證類型：
             INV_TW.統一發票、
@@ -2671,14 +2671,14 @@
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.NAME">
             <summary>項目名稱</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.ITEM_TYPE">
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.TYPE">
             <summary>項目類別</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.EXCH_RATE">
             <summary>匯率</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.AMOUNT_CONV">
-            <summary>發票金額_換算台幣</summary>
+            <summary>憑證金額_換算台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.CURRENCY">
             <summary>幣別</summary>

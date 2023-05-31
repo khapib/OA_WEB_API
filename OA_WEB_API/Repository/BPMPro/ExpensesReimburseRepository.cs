@@ -128,35 +128,51 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #region - 費用申請單 費用明細 -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [DTL_RowNo] AS [DTL_ROW_NO], ";
-            strSQL += "     [INV_Type] AS [INV_TYPE], ";
-            strSQL += "     [INV_Num] AS [INV_NUM], ";
-            strSQL += "     [INV_Date] AS [INV_DATE], ";
-            strSQL += "     [ItemName] AS [ITEM_NAME], ";
-            strSQL += "     [ItemType] AS [ITEM_TYPE], ";
-            strSQL += "     [INV_Excl] AS [INV_EXCL], ";
-            strSQL += "     [INV_Excl_TWD] AS [INV_EXCL_TWD], ";
-            strSQL += "     [INV_Tax] AS [INV_TAX], ";
-            strSQL += "     [INV_Tax_TWD] AS [INV_TAX_TWD], ";
-            strSQL += "     [INV_Net] AS [INV_NET], ";
-            strSQL += "     [INV_Net_TWD] AS [INV_NET_TWD], ";
-            strSQL += "     [INV_Gross] AS [INV_GROSS], ";
-            strSQL += "     [INV_Gross_TWD] AS [INV_GROSS_TWD], ";
-            strSQL += "     [INV_Amount] AS [INV_AMOUNT], ";
-            strSQL += "     [INV_Amount_TWD] AS [INV_AMOUNT_TWD], ";
-            strSQL += "     [ExchangeRate] AS [EXCH_RATE], ";
-            strSQL += "     [Amount_CONV] AS [AMOUNT_CONV], ";
-            strSQL += "     [Currency] AS [CURRENCY], ";
-            strSQL += "     [ACCT_Category] AS [ACCT_CATEGORY], ";
-            strSQL += "     [ProjectFormNo] AS [PROJECT_FORM_NO], ";
-            strSQL += "     [ProjectName] AS [PROJECT_NAME], ";
-            strSQL += "     [ProjectNickname] AS [PROJECT_NICKNAME], ";
-            strSQL += "     [ProjectUseYear] AS [PROJECT_USE_YEAR] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_ExpensesReimburse_DTL] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-            var expensesReimburseDetailsConfig = dbFun.DoQuery(strSQL, parameter).ToList<ExpensesReimburseDetailsConfig>();
+            var CommonDTL = new BPMCommonModel<InvoiceConfig>()
+            {
+                IsALDY = false,
+                IDENTIFY = IDENTIFY,
+                parameter = parameter
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostInvoiceFunction(CommonDTL));
+            var expensesReimburseDetailsConfig = jsonFunction.JsonToObject<List<ExpensesReimburseDetailsConfig>>(strJson);
+
+            expensesReimburseDetailsConfig.ForEach(DTL =>
+            {
+                parameter.Add(new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = DTL.ROW_NO });
+
+                strSQL = "";
+                strSQL += "SELECT ";
+                strSQL += "     [Name] AS [NAME], ";
+                strSQL += "     [Type] AS [TYPE], ";
+                strSQL += "     [INV_Type] AS [INV_TYPE], ";
+                strSQL += "     [ExchangeRate] AS [EXCH_RATE], ";
+                strSQL += "     [Amount_CONV] AS [AMOUNT_CONV], ";
+                strSQL += "     [Currency] AS [CURRENCY], ";
+                strSQL += "     [ACCT_Category] AS [ACCT_CATEGORY], ";
+                strSQL += "     [ProjectFormNo] AS [PROJECT_FORM_NO], ";
+                strSQL += "     [ProjectName] AS [PROJECT_NAME], ";
+                strSQL += "     [ProjectNickname] AS [PROJECT_NICKNAME], ";
+                strSQL += "     [ProjectUseYear] AS [PROJECT_USE_YEAR] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_ExpensesReimburse_DTL] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+                strSQL += "         AND [RowNo]=@ROW_NO ";
+
+                var temp = dbFun.DoQuery(strSQL, parameter).ToList<ExpensesReimburseDetailsConfig>().FirstOrDefault();
+
+                DTL.NAME = temp.NAME;
+                DTL.TYPE = temp.TYPE;
+                DTL.INV_TYPE = temp.INV_TYPE;
+                DTL.EXCH_RATE = temp.EXCH_RATE;
+                DTL.AMOUNT_CONV = temp.AMOUNT_CONV;
+                DTL.PROJECT_FORM_NO = temp.PROJECT_FORM_NO;
+                DTL.PROJECT_NAME = temp.PROJECT_NAME;
+                DTL.PROJECT_NICKNAME = temp.PROJECT_NICKNAME;
+                DTL.PROJECT_USE_YEAR = temp.PROJECT_USE_YEAR;
+
+                parameter.Remove(parameter.Where(SP => SP.ParameterName.Contains("@ROW_NO")).FirstOrDefault());
+            });
 
             #endregion
 
@@ -433,22 +449,10 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     //費用申請單 費用明細
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@DTL_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_TYPE", SqlDbType.NVarChar) { Size = 20 , Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_NUM", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_DATE", SqlDbType.NVarChar) { Size = 64 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TYPE", SqlDbType.NVarChar) { Size = 20 , Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100 , Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ITEM_TYPE", SqlDbType.NVarChar) { Size = 100 , Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_EXCL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_EXCL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_TAX_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_NET_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_GROSS_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@INV_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@EXCH_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AMOUNT_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@CURRENCY", SqlDbType.NVarChar) { Size = 10 , Value = (object)DBNull.Value ?? DBNull.Value },
@@ -457,49 +461,128 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@PROJECT_NAME", SqlDbType.NVarChar) { Size = 500 , Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PROJECT_NICKNAME", SqlDbType.NVarChar) { Size = 4000 , Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PROJECT_USE_YEAR", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DATE", SqlDbType.NVarChar) { Size = 64 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EXCL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EXCL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NET_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GROSS_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+
                 };
-
-                #region 先刪除舊資料
-
-                strSQL = "";
-                strSQL += "DELETE ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_ExpensesReimburse_DTL] ";
-                strSQL += "WHERE 1=1 ";
-                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
-
-                dbFun.DoTran(strSQL, parameterDetails);
-
-                #endregion
 
                 if (model.EXPENSES_REIMBURSE_DTLS_CONFIG != null && model.EXPENSES_REIMBURSE_DTLS_CONFIG.Count > 0)
                 {
-                    #region 再新增資料
-
-                    foreach (var item in model.EXPENSES_REIMBURSE_DTLS_CONFIG)
+                    var CommonDTL = new BPMCommonModel<ExpensesReimburseDetailsConfig>()
                     {
-                        #region - 確認小數點後第二位 -
+                        IDENTIFY = IDENTIFY,
+                        parameter = parameterDetails,
+                        Model = model.EXPENSES_REIMBURSE_DTLS_CONFIG
+                    };
+                    commonRepository.PutInvoiceFunction(CommonDTL);
 
-                        //item.INV_EXCL = Math.Round(item.INV_EXCL, 2);
-                        //item.INV_TAX = Math.Round(item.INV_TAX, 2);
-                        //item.INV_NET = Math.Round(item.INV_NET, 2);
-                        //item.INV_GROSS = Math.Round(item.INV_GROSS, 2);
-                        //item.INV_AMOUNT = Math.Round(item.INV_AMOUNT, 2);
-                        item.EXCH_RATE = Math.Round(item.EXCH_RATE, 2);                        
-
-                        #endregion
-
+                    model.EXPENSES_REIMBURSE_DTLS_CONFIG.ForEach(DTL =>
+                    {
                         //寫入：費用申請單 費用明細parameter
-                        strJson = jsonFunction.ObjectToJSON(item);
+                        strJson = jsonFunction.ObjectToJSON(DTL);
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_ExpensesReimburse_DTL]([RequisitionID],[DTL_RowNo],[INV_Type],[INV_Num],[INV_Date],[ItemName],[ItemType],[INV_Excl],[INV_Excl_TWD],[INV_Tax],[INV_Tax_TWD],[INV_Net],[INV_Net_TWD],[INV_Gross],[INV_Gross_TWD],[INV_Amount],[INV_Amount_TWD],[ExchangeRate],[Amount_CONV],[Currency],[ACCT_Category],[ProjectFormNo],[ProjectName],[ProjectNickname],[ProjectUseYear]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@DTL_ROW_NO,@INV_TYPE,@INV_NUM,@INV_DATE,@ITEM_NAME,@ITEM_TYPE,@INV_EXCL,@INV_EXCL_TWD,@INV_TAX,@INV_TAX_TWD,@INV_NET,@INV_NET_TWD,@INV_GROSS,@INV_GROSS_TWD,@INV_AMOUNT,@INV_AMOUNT_TWD,@EXCH_RATE,@AMOUNT_CONV,@CURRENCY,@ACCT_CATEGORY,@PROJECT_FORM_NO,@PROJECT_NAME,@PROJECT_NICKNAME,@PROJECT_USE_YEAR) ";
+                        strSQL += "UPDATE [BPMPro].[dbo].[FM7T_ExpensesReimburse_DTL] ";
+                        strSQL += "SET [Name] =@NAME, ";
+                        strSQL += "     [Type]=@TYPE, ";
+                        strSQL += "     [INV_Type]=@INV_TYPE, ";
+                        strSQL += "     [ExchangeRate]=@EXCH_RATE, ";
+                        strSQL += "     [Amount_CONV]=@AMOUNT_CONV, ";
+                        strSQL += "     [Currency]=@CURRENCY, ";
+                        strSQL += "     [ACCT_Category]=@ACCT_CATEGORY, ";
+                        strSQL += "     [ProjectFormNo]=@PROJECT_FORM_NO, ";
+                        strSQL += "     [ProjectName]=@PROJECT_NAME, ";
+                        strSQL += "     [ProjectNickname]=@PROJECT_NICKNAME, ";
+                        strSQL += "     [ProjectUseYear]=@PROJECT_USE_YEAR ";
+                        strSQL += "WHERE 1=1 ";
+                        strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+                        strSQL += "         AND [RowNo]=@ROW_NO ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
-                    }
+                    });
+                }
 
-                    #endregion
+                #endregion
+
+                #region - 費用申請單 費用憑證細項: ExpensesReimburse_INV_DTL -
+
+                var parameterInvoiceDetails = new List<SqlParameter>()
+                {
+                    //費用申請單 費用明細
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TYPE", SqlDbType.NVarChar) { Size = 20 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ITEM_TYPE", SqlDbType.NVarChar) { Size = 100 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EXCH_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@CURRENCY", SqlDbType.NVarChar) { Size = 10 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ACCT_CATEGORY", SqlDbType.NVarChar) { Size = 10 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_FORM_NO", SqlDbType.NVarChar) { Size = 20 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_NAME", SqlDbType.NVarChar) { Size = 500 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_NICKNAME", SqlDbType.NVarChar) { Size = 4000 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROJECT_USE_YEAR", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DATE", SqlDbType.NVarChar) { Size = 64 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EXCL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EXCL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TAX_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NET", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NET_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GROSS", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GROSS_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+
+                };
+
+                if (model.EXPENSES_REIMBURSE_DTLS_CONFIG != null && model.EXPENSES_REIMBURSE_DTLS_CONFIG.Count > 0)
+                {
+                    var CommonDTL = new BPMCommonModel<ExpensesReimburseDetailsConfig>()
+                    {
+                        IDENTIFY = IDENTIFY,
+                        parameter = parameterDetails,
+                        Model = model.EXPENSES_REIMBURSE_DTLS_CONFIG
+                    };
+                    commonRepository.PutInvoiceFunction(CommonDTL);
+
+                    model.EXPENSES_REIMBURSE_DTLS_CONFIG.ForEach(DTL =>
+                    {
+                        //寫入：費用申請單 費用明細parameter
+                        strJson = jsonFunction.ObjectToJSON(DTL);
+                        GlobalParameters.Infoparameter(strJson, parameterDetails);
+
+                        strSQL = "";
+                        strSQL += "UPDATE [BPMPro].[dbo].[FM7T_ExpensesReimburse_DTL] ";
+                        strSQL += "SET [Name] =@NAME, ";
+                        strSQL += "     [Type]=@TYPE, ";
+                        strSQL += "     [INV_Type]=@INV_TYPE, ";
+                        strSQL += "     [ExchangeRate]=@EXCH_RATE, ";
+                        strSQL += "     [Amount_CONV]=@AMOUNT_CONV, ";
+                        strSQL += "     [Currency]=@CURRENCY, ";
+                        strSQL += "     [ACCT_Category]=@ACCT_CATEGORY, ";
+                        strSQL += "     [ProjectFormNo]=@PROJECT_FORM_NO, ";
+                        strSQL += "     [ProjectName]=@PROJECT_NAME, ";
+                        strSQL += "     [ProjectNickname]=@PROJECT_NICKNAME, ";
+                        strSQL += "     [ProjectUseYear]=@PROJECT_USE_YEAR ";
+                        strSQL += "WHERE 1=1 ";
+                        strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+                        strSQL += "         AND [RowNo]=@ROW_NO ";
+
+                        dbFun.DoTran(strSQL, parameterDetails);
+                    });
                 }
 
                 #endregion

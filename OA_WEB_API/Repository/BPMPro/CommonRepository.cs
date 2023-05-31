@@ -1039,12 +1039,21 @@ namespace OA_WEB_API.Repository.BPMPro
             if (Common.IsALDY) strTable = Common.IDENTIFY + "_ALDY";
             else strTable = Common.IDENTIFY;
 
+            if (Common.IDENTIFY.Contains("General") || Common.IDENTIFY.Contains("Media"))
+            {
+                strField_V = "[Period] AS [PERIOD], [InvoiceRowNo] AS [INV_ROW_NO],";
+                strTable += "_INV";
+            }
+            else
+            {
+                strField_V = "[RowNo] AS [ROW_NO], ";
+            }
+
             #endregion
 
             strSQL = "";
             strSQL += "SELECT ";
-            strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [InvoiceRowNo] AS [INV_ROW_NO], ";
+            strSQL += strField_V;
             strSQL += "     [Num] AS [NUM], ";
             strSQL += "     [Date] AS [DATE], ";
             strSQL += "     [Excl] AS [EXCL], ";
@@ -1058,10 +1067,13 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [Amount] AS [AMOUNT], ";
             strSQL += "     [Amount_TWD] AS [AMOUNT_TWD], ";
             strSQL += "     [Note] AS [NOTE] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_"+ strTable + "_INV] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_"+ strTable + "] ";
             strSQL += "WHERE 1=1 ";
             strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "         AND [Period]=@PERIOD ";
+            if (Common.IDENTIFY.Contains("General") || Common.IDENTIFY.Contains("Media"))
+            {
+                strSQL += "         AND [Period]=@PERIOD ";
+            }                
             strSQL += "ORDER BY [AutoCounter] ";
 
 
@@ -1081,15 +1093,23 @@ namespace OA_WEB_API.Repository.BPMPro
                 if (Common.IsALDY) strTable = Common.IDENTIFY + "_ALDY";
                 else strTable = Common.IDENTIFY;
 
+
                 if (Common.IDENTIFY.Contains("General"))
                 {
-                    strField_F = "[GeneralOrderRequisitionID],[GeneralOrderBPMFormNo],[GeneralOrderERPFormNo]";
-                    strField_V = "@GENERAL_ORDER_REQUISITION_ID,@GENERAL_ORDER_BPM_FORM_NO,@GENERAL_ORDER_ERP_FORM_NO";
+                    strField_F = "[GeneralOrderRequisitionID],[GeneralOrderBPMFormNo],[GeneralOrderERPFormNo],[Period],[InvoiceRowNo],";
+                    strField_V = "@GENERAL_ORDER_REQUISITION_ID,@GENERAL_ORDER_BPM_FORM_NO,@GENERAL_ORDER_ERP_FORM_NO,@PERIOD,@INV_ROW_NO,";
+                    strTable += "_INV";
+                }
+                else if (Common.IDENTIFY.Contains("Media"))
+                {
+                    strField_F = "[MediaOrderRequisitionID],[MediaOrderBPMFormNo],[MediaOrderERPFormNo],[Period],[InvoiceRowNo],";
+                    strField_V = "@MEDIA_ORDER_REQUISITION_ID,@MEDIA_ORDER_BPM_FORM_NO,@MEDIA_ORDER_ERP_FORM_NO,@PERIOD,@INV_ROW_NO,";
+                    strTable += "_INV";
                 }
                 else
                 {
-                    strField_F = "[MediaOrderRequisitionID],[MediaOrderBPMFormNo],[MediaOrderERPFormNo]";
-                    strField_V = "@MEDIA_ORDER_REQUISITION_ID,@MEDIA_ORDER_BPM_FORM_NO,@MEDIA_ORDER_ERP_FORM_NO";
+                    strField_F = "[RowNo]";
+                    strField_V = "@ROW_NO";
                 }
 
                 #endregion
@@ -1098,7 +1118,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 strSQL = "";
                 strSQL += "DELETE ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + strTable + "_INV] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + strTable + "] ";
                 strSQL += "WHERE 1=1 ";
                 strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
 
@@ -1125,8 +1145,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, Common.parameter);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "_INV]([RequisitionID]," + strField_F + ",[Period],[InvoiceRowNo],[Num],[Date],[Excl],[Excl_TWD],[Tax],[Tax_TWD],[Net],[Net_TWD],[Gross],[Gross_TWD],[Amount],[Amount_TWD],[Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID," + strField_V + ",@PERIOD,@INV_ROW_NO,@NUM,@DATE,@EXCL,@EXCL_TWD,@TAX,@TAX_TWD,@NET,@NET_TWD,@GROSS,@GROSS_TWD,@AMOUNT,@AMOUNT_TWD,@NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "]([RequisitionID]," + strField_F + "[Num],[Date],[Excl],[Excl_TWD],[Tax],[Tax_TWD],[Net],[Net_TWD],[Gross],[Gross_TWD],[Amount],[Amount_TWD],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID," + strField_V + "@NUM,@DATE,@EXCL,@EXCL_TWD,@TAX,@TAX_TWD,@NET,@NET_TWD,@GROSS,@GROSS_TWD,@AMOUNT,@AMOUNT_TWD,@NOTE) ";
 
                         dbFun.DoTran(strSQL, Common.parameter);
                     }
@@ -1199,13 +1219,14 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (Common.IDENTIFY.Contains("General"))
                 {
-                    strField_F = "[GeneralOrderRequisitionID],[GeneralOrderBPMFormNo],[GeneralOrderERPFormNo]";
-                    strField_V = "@GENERAL_ORDER_REQUISITION_ID,@GENERAL_ORDER_BPM_FORM_NO,@GENERAL_ORDER_ERP_FORM_NO";
+                    strField_F = "[GeneralOrderRequisitionID],[GeneralOrderBPMFormNo],[GeneralOrderERPFormNo],[Period],[InvoiceRowNo],";
+                    strField_V = "@GENERAL_ORDER_REQUISITION_ID,@GENERAL_ORDER_BPM_FORM_NO,@GENERAL_ORDER_ERP_FORM_NO,@PERIOD,@INV_ROW_NO,";
+                    strTable += "_INV_DTL";
                 }
                 else
                 {
-                    strField_F = "[MediaOrderRequisitionID],[MediaOrderBPMFormNo],[MediaOrderERPFormNo]";
-                    strField_V = "@MEDIA_ORDER_REQUISITION_ID,@MEDIA_ORDER_BPM_FORM_NO,@MEDIA_ORDER_ERP_FORM_NO";
+                    strField_F = "[MediaOrderRequisitionID],[MediaOrderBPMFormNo],[MediaOrderERPFormNo],[Period],[InvoiceRowNo],";
+                    strField_V = "@MEDIA_ORDER_REQUISITION_ID,@MEDIA_ORDER_BPM_FORM_NO,@MEDIA_ORDER_ERP_FORM_NO,@PERIOD,@INV_ROW_NO,";
                 }
 
                 #endregion
@@ -1248,8 +1269,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         }
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "_INV_DTL]([RequisitionID]," + strField_F + ",[Period],[InvoiceRowNo],[RowNo],[Num],[Name],[Quantity],[Amount],[Amount_TWD],[RemainingQuantity],[RemainingAmount],[RemainingAmount_TWD],[IsExcl]) ";
-                        strSQL += "VALUES(@REQUISITION_ID," + strField_V + ",@PERIOD,@INV_ROW_NO,@ROW_NO,@NUM,@NAME,@QUANTITY,@AMOUNT,@AMOUNT_TWD,@R_QUANTITY,@R_AMOUNT,@R_AMOUNT_TWD,@IS_EXCL) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "]([RequisitionID]," + strField_F + "[RowNo],[Num],[Name],[Quantity],[Amount],[Amount_TWD],[RemainingQuantity],[RemainingAmount],[RemainingAmount_TWD],[IsExcl]) ";
+                        strSQL += "VALUES(@REQUISITION_ID," + strField_V + "@ROW_NO,@NUM,@NAME,@QUANTITY,@AMOUNT,@AMOUNT_TWD,@R_QUANTITY,@R_AMOUNT,@R_AMOUNT_TWD,@IS_EXCL) ";
 
                         dbFun.DoTran(strSQL, Common.parameter);
 

@@ -223,8 +223,8 @@ namespace OA_WEB_API.Repository.OA
                     strSQL += "     D.[Volume] AS [VOLUME], ";
                     strSQL += "     D.[MeterialType] AS [METERIAL_TYPE], ";
                     strSQL += "     D.[MeterialTypeOthers] AS [METERIAL_TYPE_OTHERS], ";
-                    strSQL += "     D.[CopyType] AS [COPY_TYPE], ";
-                    strSQL += "     D.[CopyTypeOthers] AS [COPY_TYPE_OTHERS], ";
+                    strSQL += "     M.[SaveType] AS [COPY_TYPE], ";
+                    strSQL += "     M.[SaveTypeOthers] AS [COPY_TYPE_OTHERS], ";
                     strSQL += "     D.[Length] AS [LENGTH], ";
                     strSQL += "     D.[LengthOthers] AS [LENGTH_OTHERS] ";
                     strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaWarehouseCopy_D] AS D ";

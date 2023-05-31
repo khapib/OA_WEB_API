@@ -321,6 +321,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             var CommonINV = new BPMCommonModel<InvoiceConfig>()
             {
+                IsALDY = false,
                 IDENTIFY = IDENTIFY,
                 parameter = parameter
             };
@@ -885,6 +886,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     var CommonINV = new BPMCommonModel<MediaInvoiceInvoicesConfig>()
                     {
+                        IsALDY = false,
                         IDENTIFY = IDENTIFY,
                         parameter = parameterInvoices,
                         Model = model.MEDIA_INVOICE_INVS_CONFIG

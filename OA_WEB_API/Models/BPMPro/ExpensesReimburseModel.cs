@@ -29,7 +29,7 @@ namespace OA_WEB_API.Models.BPMPro
         public ExpensesReimburseConfig EXPENSES_REIMBURSE_CONFIG { get; set; }
 
         /// <summary>費用申請單 費用明細 設定</summary>
-        public IList<ExpensesReimburseDetailsConfig> EXPENSES_REIMBURSE_DTLS_CONFIG { get; set; }
+        public List<ExpensesReimburseDetailsConfig> EXPENSES_REIMBURSE_DTLS_CONFIG { get; set; }
 
         /// <summary>費用申請單 憑證細項 設定</summary>
         public List<ExpensesReimburseInvoiceDetailsConfig> EXPENSES_REIMBURSE_INV_DTLS_CONFIG { get; set; }
@@ -116,18 +116,18 @@ namespace OA_WEB_API.Models.BPMPro
         /// INV_F. Invoice、
         /// RECPT.收據
         /// </summary>
-        public string TYPE { get; set; }
+        public string INV_TYPE { get; set; }
 
         /// <summary>項目名稱</summary>
         public string NAME { get; set; }
 
         /// <summary>項目類別</summary>
-        public string ITEM_TYPE { get; set; }
+        public string TYPE { get; set; }
 
         /// <summary>匯率</summary>
         public double EXCH_RATE { get; set; }
 
-        /// <summary>發票金額_換算台幣</summary>
+        /// <summary>憑證金額_換算台幣</summary>
         public int AMOUNT_CONV { get; set; }
 
         /// <summary>幣別</summary>

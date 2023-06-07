@@ -56,6 +56,8 @@ namespace OA_WEB_API.Repository.BPMPro
         GeneralAcceptanceRepository generalAcceptanceRepository = new GeneralAcceptanceRepository();
         /// <summary>行政採購請款單</summary>
         GeneralInvoiceRepository generalInvoiceRepository = new GeneralInvoiceRepository();
+        /// <summary>行政採購退貨折讓單</summary>
+        GeneralOrderReturnRefundRepository generalOrderReturnRefundRepository = new GeneralOrderReturnRefundRepository();
 
         #endregion
 
@@ -85,7 +87,7 @@ namespace OA_WEB_API.Repository.BPMPro
         /// <summary>版權採購交片單</summary>
         MediaAcceptanceRepository mediaAcceptanceRepository = new MediaAcceptanceRepository();
         /// <summary>版權採購請款單</summary>
-        MediaInvoiceRepository mediaInvoiceRepository =new MediaInvoiceRepository();
+        MediaInvoiceRepository mediaInvoiceRepository = new MediaInvoiceRepository();
         /// <summary>版權採購退貨折讓單</summary>
         MediaOrderReturnRefundRepository mediaOrderReturnRefundRepository = new MediaOrderReturnRefundRepository();
 
@@ -1266,6 +1268,264 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
+        #region - 行政採購退貨折讓單(外部起單) -
+
+        /// <summary>
+        /// 行政採購退貨折讓單(外部起單)
+        /// </summary>
+        public GetExternalData PutGeneralOrderReturnRefundGetExternal(GeneralOrderReturnRefundERPInfo model)
+        {
+            try
+            {
+                #region - 初始化宣告 -
+
+                //表單ID
+                IDENTIFY = "GeneralOrderReturnRefund";
+
+                strFormNo = model.TITLE.ERP_FORM_NO;
+                var request = new GTVInApproveProgress()
+                {
+                    FORM_NO = strFormNo,
+                    IDENTIFY = IDENTIFY
+                };
+
+                //BPM 系統編號
+                if (model.TITLE.BPM_REQ_ID == null)
+                {
+                    strREQ = Guid.NewGuid().ToString();
+
+                }
+                else
+                {
+                    strREQ = model.TITLE.BPM_REQ_ID;
+                }
+
+                #endregion
+
+                #region 確認是否已起單且簽核中
+
+                var ApproveProgress = commonRepository.PostGTVInApproveProgress(request);
+
+                //確認是否已起單且簽核中或草稿中
+                if (!ApproveProgress.vResult)
+                {
+                    #region - 起單 -
+
+                    #region - 申請人資訊:ApplicantInfo -
+
+                    //表單資訊
+                    var applicantInfo = new ApplicantInfo()
+                    {
+                        REQUISITION_ID = strREQ,
+                        DIAGRAM_ID = IDENTIFY + "_P1",
+                        PRIORITY = 2,
+                        DRAFT_FLAG = 0,
+                        FLOW_ACTIVATED = 1
+                    };
+
+                    //申請人資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.TITLE.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.APPLICANT_DEPT = item.DEPT_ID;
+                        applicantInfo.APPLICANT_DEPT_NAME = item.DEPT_NAME;
+                        applicantInfo.APPLICANT_ID = item.USER_ID;
+                        applicantInfo.APPLICANT_NAME = item.USER_NAME;
+                        applicantInfo.APPLICANT_PHONE = item.MOBILE;
+                    }
+
+                    //(填單人/代填單人)資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.TITLE.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.FILLER_ID = item.USER_ID;
+                        applicantInfo.FILLER_NAME = item.USER_NAME;
+                    }
+
+                    #endregion
+
+                    #region - 行政採購退貨折讓單(表頭內容):GeneralOrderReturnRefundInfoTitle -
+
+                    strJson = jsonFunction.ObjectToJSON(model.TITLE);
+                    var generalOrderReturnRefundTitle = jsonFunction.JsonToObject<GeneralOrderReturnRefundTitle>(strJson);
+                    generalOrderReturnRefundTitle.FORM_NO = strFormNo;
+
+                    #endregion
+
+                    #region - 行政採購退貨折讓單(表單內容):GeneralOrderReturnRefundInfoConfig -
+
+                    strJson = jsonFunction.ObjectToJSON(model.INFO);
+                    var generalOrderReturnRefundConfig = jsonFunction.JsonToObject<GeneralOrderReturnRefundConfig>(strJson);
+
+                    #region - 行政採購請款單(查詢) 資訊 -
+
+                    var generalInvoiceQueryModel = new GeneralInvoiceQueryModel()
+                    {
+                        REQUISITION_ID = generalOrderReturnRefundConfig.GENERAL_INVOICE_REQUISITION_ID
+                    };
+                    var generalInvoiceInfo = generalInvoiceRepository.PostGeneralInvoiceSingle(generalInvoiceQueryModel);
+
+                    #endregion
+
+                    generalOrderReturnRefundConfig.FINANC_AUDIT_ID_1 = generalInvoiceInfo.GENERAL_INVOICE_CONFIG.FINANC_AUDIT_ID_1;
+                    generalOrderReturnRefundConfig.FINANC_AUDIT_NAME_1 = generalInvoiceInfo.GENERAL_INVOICE_CONFIG.FINANC_AUDIT_NAME_1;
+                    generalOrderReturnRefundConfig.FINANC_AUDIT_ID_2 = generalInvoiceInfo.GENERAL_INVOICE_CONFIG.FINANC_AUDIT_ID_2;
+                    generalOrderReturnRefundConfig.FINANC_AUDIT_NAME_2 = generalInvoiceInfo.GENERAL_INVOICE_CONFIG.FINANC_AUDIT_NAME_2;
+
+                    #endregion
+
+                    #region - 行種採購退貨折讓單 憑證退款明細：GeneralOrderReturnRefundInvoicesConfig -
+
+                    strJson = jsonFunction.ObjectToJSON(generalInvoiceInfo.GENERAL_INVOICE_INVS_CONFIG);
+                    var generalOrderReturnRefundInvoicesConfig = jsonFunction.JsonToObject<List<GeneralOrderReturnRefundInvoicesConfig>>(strJson);
+                    generalOrderReturnRefundInvoicesConfig.ForEach(INV =>
+                    {
+                        INV.EXCL = 0;
+                        INV.EXCL_TWD = 0;
+                        INV.TAX = 0;
+                        INV.TAX_TWD = 0;
+                        INV.NET = 0;
+                        INV.NET_TWD = 0;
+                        INV.GROSS = 0;
+                        INV.GROSS_TWD = 0;
+                        INV.AMOUNT = 0;
+                        INV.AMOUNT_TWD = 0;
+                    });
+
+                    #endregion
+
+                    #region - 送單 -
+
+                    //送單
+                    var generalOrderReturnRefundViewModel = new GeneralOrderReturnRefundViewModel()
+                    {
+                        APPLICANT_INFO = applicantInfo,
+                        GENERAL_ORDER_RETURN_REFUND_TITLE = generalOrderReturnRefundTitle,
+                        GENERAL_ORDER_RETURN_REFUND_CONFIG = generalOrderReturnRefundConfig,
+                        GENERAL_ORDER_RETURN_REFUND_INVS_CONFIG = generalOrderReturnRefundInvoicesConfig,
+                    };
+
+                    if (generalOrderReturnRefundRepository.PutGeneralOrderReturnRefundSingle(generalOrderReturnRefundViewModel))
+                    {
+                        //起單成功
+                        State = BPMStatusCode.PROGRESS;
+
+                        if (model.ALDY_RF_COMM != null)
+                        {
+                            #region - 行政採購退貨折讓單 已退貨商品明細: GeneralOrderReturnRefund_ALDY_RF_COMM -
+
+                            var parameterAlreadyRefundCommoditys = new List<SqlParameter>()
+                            {
+                                //行政採購退貨折讓單 已退貨商品明細
+                                new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                                new SqlParameter("@ORDER_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object) DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@MODEL", SqlDbType.NVarChar) { Size = 100, Value = (object) DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@SPECIFICATIONS", SqlDbType.NVarChar) { Size = 500, Value = (object) DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@QUANTITY", SqlDbType.Int) { Value = (object) DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@UNIT", SqlDbType.Int) { Value = (object) DBNull.Value ?? DBNull.Value },
+                            };
+
+                            var CommonALDY_RF_COMM = new BPMCommonModel<GeneralCommodityConfig>()
+                            {
+                                EXT = "ALDY_RF_COMM",
+                                IDENTIFY = IDENTIFY,
+                                parameter = parameterAlreadyRefundCommoditys,
+                                Model = model.ALDY_RF_COMM
+                            };
+                            commonRepository.PutGeneralCommodityFunction(CommonALDY_RF_COMM);
+
+                            #endregion
+                        }
+
+                        if (model.ALDY_INV_DTL != null)
+                        {
+
+                            #region - 行政採購退貨折讓單 憑證已退款細項：GeneralOrderReturnRefund_ALDY_INV_DTL -
+
+                            var parameterInvoiceDetails = new List<SqlParameter>()
+                            {
+                                //行政採購退貨折讓單 憑證明細
+                                new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                                new SqlParameter("@GENERAL_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)generalInvoiceInfo.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_REQUISITION_ID ?? DBNull.Value },
+                                new SqlParameter("@GENERAL_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)generalInvoiceInfo.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_BPM_FORM_NO ?? DBNull.Value },
+                                new SqlParameter("@GENERAL_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)generalInvoiceInfo.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_ERP_FORM_NO ?? DBNull.Value },
+                                new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@R_QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@R_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@R_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5 , Value = (object)DBNull.Value ?? DBNull.Value },
+                            };
+
+                            var CommonALDY_INV_DTL = new BPMCommonModel<GeneralOrderReturnRefundAlreadyInvoiceDetailsConfig>()
+                            {
+                                EXT = "ALDY_INV_DTL",
+                                IDENTIFY = IDENTIFY,
+                                parameter = parameterInvoiceDetails,
+                                Model = model.ALDY_INV_DTL
+                            };
+                            commonRepository.PutInvoiceDetailFunction(CommonALDY_INV_DTL);
+
+                            #endregion
+                        }
+
+                    }
+                    else
+                    {
+                        //起單失敗
+                        State = BPMStatusCode.FAIL;
+                    }
+
+                    #endregion
+
+                    #endregion
+                }
+                else
+                {
+                    strREQ = ApproveProgress.REQUISITION_ID;
+                    State = ApproveProgress.BPMStatus;
+                }
+
+                #endregion
+
+                #region - 回傳狀態資訊 -
+
+                var getExternalData = new GetExternalData()
+                {
+                    BPM_REQ_ID = strREQ,
+                    ERP_FORM_NO = strFormNo,
+                    STATE = State
+                };
+
+                return getExternalData;
+
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("行政採購退貨折讓單(外部起單)失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region - 內容評估表(外部起單) -
@@ -1567,7 +1827,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         EVALUATE_CONTENT_REPLENISH_TITLE = evaluateContentReplenishTitle,
                         EVALUATE_CONTENT_REPLENISH_CONFIG = evaluateContentReplenishConfig,
                         ATTACHMENT_CONFIG = attachmentConfig,
-                        ASSOCIATED_FORM_CONFIG= associatedFormConfig,
+                        ASSOCIATED_FORM_CONFIG = associatedFormConfig,
                     };
 
                     if (evaluateContentReplenishRepository.PutEvaluateContentReplenishSingle(evaluateContentReplenishViewModel))
@@ -1717,7 +1977,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     var mediaOrderViewModel = new MediaOrderViewModel()
                     {
                         APPLICANT_INFO = applicantInfo,
-                        MEDIA_ORDER_TITLE= mediaOrderTitle,
+                        MEDIA_ORDER_TITLE = mediaOrderTitle,
                     };
 
                     if (mediaOrderRepository.PutMediaOrderSingle(mediaOrderViewModel))
@@ -2059,7 +2319,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     #endregion
 
                     #endregion
-                                       
+
                     #region - 送單 -
 
                     //送單
@@ -2077,7 +2337,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         State = BPMStatusCode.PROGRESS;
 
 
-                        if(model.ALDY_RF_COMM != null)
+                        if (model.ALDY_RF_COMM != null)
                         {
                             #region - 版權採購交片單 已退貨商品明細: MediaAcceptance_ALDY_RF_COMM -
 
@@ -2097,14 +2357,14 @@ namespace OA_WEB_API.Repository.BPMPro
                                 new SqlParameter("@EPISODE_TIME", SqlDbType.Int) { Value = (object) DBNull.Value ?? DBNull.Value },
                             };
 
-                            var CommonALDY_COMM = new BPMCommonModel<MediaCommodityConfig>()
+                            var CommonALDY_RF_COMM = new BPMCommonModel<MediaCommodityConfig>()
                             {
-                                IsALDY = true,
+                                EXT = "ALDY_RF_COMM",
                                 IDENTIFY = IDENTIFY,
                                 parameter = parameterAlreadyRefundCommoditys,
                                 Model = model.ALDY_RF_COMM
                             };
-                            commonRepository.PutMediaCommodityFunction(CommonALDY_COMM);
+                            commonRepository.PutMediaCommodityFunction(CommonALDY_RF_COMM);
 
                             #endregion
                         }
@@ -2448,15 +2708,15 @@ namespace OA_WEB_API.Repository.BPMPro
                     var mediaOrderReturnRefundViewModel = new MediaOrderReturnRefundViewModel()
                     {
                         APPLICANT_INFO = applicantInfo,
-                        MEDIA_ORDER_RETURN_REFUND_TITLE= mediaOrderReturnRefundTitle,
-                        MEDIA_ORDER_RETURN_REFUND_CONFIG= mediaOrderReturnRefundConfig,
-                        MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG= mediaOrderReturnRefundInvoicesConfig,
+                        MEDIA_ORDER_RETURN_REFUND_TITLE = mediaOrderReturnRefundTitle,
+                        MEDIA_ORDER_RETURN_REFUND_CONFIG = mediaOrderReturnRefundConfig,
+                        MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG = mediaOrderReturnRefundInvoicesConfig,
                     };
 
                     if (mediaOrderReturnRefundRepository.PutMediaOrderReturnRefundSingle(mediaOrderReturnRefundViewModel))
                     {
                         //起單成功
-                        State = BPMStatusCode.PROGRESS;                        
+                        State = BPMStatusCode.PROGRESS;
 
                         if (model.ALDY_RF_COMM != null)
                         {
@@ -2478,20 +2738,20 @@ namespace OA_WEB_API.Repository.BPMPro
                                 new SqlParameter("@EPISODE_TIME", SqlDbType.Int) { Value = (object) DBNull.Value ?? DBNull.Value },
                             };
 
-                            var CommonALDY_COMM = new BPMCommonModel<MediaCommodityConfig>()
+                            var CommonALDY_RF_COMM = new BPMCommonModel<MediaCommodityConfig>()
                             {
-                                IsALDY = true,
+                                EXT = "ALDY_RF_COMM",
                                 IDENTIFY = IDENTIFY,
                                 parameter = parameterAlreadyRefundCommoditys,
                                 Model = model.ALDY_RF_COMM
                             };
-                            commonRepository.PutMediaCommodityFunction(CommonALDY_COMM);
+                            commonRepository.PutMediaCommodityFunction(CommonALDY_RF_COMM);
 
                             #endregion
                         }
 
-                        if(model.ALDY_INV_DTL != null)
-                        {                           
+                        if (model.ALDY_INV_DTL != null)
+                        {
 
                             #region - 版權採購退貨折讓單 憑證已退款細項：MediaOrderReturnRefund_ALDY_INV_DTL -
 
@@ -2516,9 +2776,9 @@ namespace OA_WEB_API.Repository.BPMPro
                                 new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5 , Value = (object)DBNull.Value ?? DBNull.Value },
                             };
 
-                            var CommonALDY_INV_DTL = new BPMCommonModel<InvoiceDetailConfig>()
+                            var CommonALDY_INV_DTL = new BPMCommonModel<MediaOrderReturnRefundAlreadyInvoiceDetailsConfig>()
                             {
-                                IsALDY = true,
+                                EXT = "ALDY_INV_DTL",
                                 IDENTIFY = IDENTIFY,
                                 parameter = parameterInvoiceDetails,
                                 Model = model.ALDY_INV_DTL
@@ -2566,7 +2826,6 @@ namespace OA_WEB_API.Repository.BPMPro
                 throw;
             }
         }
-
 
         #endregion
 

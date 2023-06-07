@@ -125,6 +125,20 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #endregion
 
+        #region - 行政採購退貨折讓單(外部起單) -
+
+        /// <summary>
+        /// 行政採購退貨折讓單(外部起單)
+        /// </summary>
+        [Route("api/PutGeneralOrderReturnRefundGetExternal")]
+        [HttpPost]
+        public GetExternalData PutGeneralOrderReturnRefundGetExternal(GeneralOrderReturnRefundERPInfo model)
+        {
+            return getExternalRepository.PutGeneralOrderReturnRefundGetExternal(model);
+        }
+
+        #endregion
+
         #endregion
 
         #region - 內容評估表(外部起單) -

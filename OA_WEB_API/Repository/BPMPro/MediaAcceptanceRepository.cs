@@ -175,10 +175,11 @@ namespace OA_WEB_API.Repository.BPMPro
             List<MediaAcceptanceAuthorizesConfig> mediaAcceptanceAuthorizesConfig = new List<MediaAcceptanceAuthorizesConfig>();
             foreach (var item in mediaAcceptanceDetailsConfig)
             {
-                strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_AUTHS_CONFIG.Where(AUTH => AUTH.ORDER_ROW_NO == item.ORDER_ROW_NO).Select(AUTH => AUTH));
+                //strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_AUTHS_CONFIG.Where(AUTH => AUTH.ORDER_ROW_NO == item.ORDER_ROW_NO).Select(AUTH => AUTH));
+                strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_AUTHS_CONFIG.Where(AUTH => AUTH.SUP_PROD_A_NO == item.SUP_PROD_A_NO).Select(AUTH => AUTH));
                 mediaAcceptanceAuthorizesConfig.AddRange(JsonConvert.DeserializeObject<List<MediaAcceptanceAuthorizesConfig>>(strJson));
             }
-            mediaAcceptanceAuthorizesConfig = mediaAcceptanceAuthorizesConfig.GroupBy(AUTH=> new {AUTH.ORDER_ROW_NO, AUTH.PLAY_PLATFORM}).Select(g => g.First()).ToList();
+            mediaAcceptanceAuthorizesConfig = mediaAcceptanceAuthorizesConfig.GroupBy(AUTH => new { AUTH.SUP_PROD_A_NO, AUTH.PLAY_PLATFORM }).Select(g => g.First()).ToList();
 
             #endregion
 
@@ -186,7 +187,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             var CommonALDY_COMM = new BPMCommonModel<MediaCommodityConfig>()
             {
-                IsALDY = true,
+                EXT = "ALDY_RF_COMM",
                 IDENTIFY = IDENTIFY,
                 parameter = parameter
             };
@@ -476,7 +477,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 //版權採購申請單 授權權利(MediaOrder_AUTHS) 內容。
 
                 #endregion
-                                
+
                 #region - 版權採購交片單 表單關聯：AssociatedForm -
 
                 //關聯表:匯入【版權採購交片單】的「關聯表單」

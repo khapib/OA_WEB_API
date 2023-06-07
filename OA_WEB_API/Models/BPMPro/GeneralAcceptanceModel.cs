@@ -92,34 +92,13 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 行政採購點驗收單 驗收明細 設定
     /// </summary>
-    public class GeneralAcceptanceDetailsConfig
+    public class GeneralAcceptanceDetailsConfig : GeneralCommodityConfig
     {
-        /// <summary>商品代碼</summary>
-        public string SUP_PROD_A_NO { get; set; }
+        /// <summary>期別</summary>
+        public int PERIOD { get; set; }
 
         /// <summary>行數編號</summary>
         public int ROW_NO { get; set; }
-
-        /// <summary>訂單行數編號</summary>
-        public int ORDER_ROW_NO { get; set; }
-
-        /// <summary>商品名稱</summary>
-        public string ITEM_NAME { get; set; }
-
-        /// <summary>型號</summary>
-        public string MODEL { get; set; }
-
-        /// <summary>規格</summary>
-        public string SPECIFICATIONS { get; set; }
-
-        /// <summary>驗收量</summary>
-        public int ACPT_QUANTITY { get; set; }
-
-        /// <summary>總採購量</summary>
-        public int QUANTITY { get; set; }
-
-        /// <summary>單位</summary>
-        public string UNIT { get; set; }
 
         /// <summary>驗收負責人主要部門</summary>
         public string OWNER_DEPT_MAIN_ID { get; set; }

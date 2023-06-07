@@ -41,7 +41,7 @@ namespace OA_WEB_API.Models.BPMPro
         public IList<GeneralInvoiceBudgetsConfig> GENERAL_INVOICE_BUDGETS_CONFIG { get; set; }
 
         /// <summary>行政採購申請 憑證明細 設定</summary>
-        public List<GeneralInvoiceInvoicsConfig> GENERAL_INVOICE_INVS_CONFIG { get; set; }
+        public List<GeneralInvoiceInvoicesConfig> GENERAL_INVOICE_INVS_CONFIG { get; set; }
 
         /// <summary>行政採購申請 憑證細項 設定</summary>
         public List<GeneralInvoiceInvoiceDetailsConfig> GENERAL_INVOICE_INV_DTLS_CONFIG { get; set; }
@@ -229,14 +229,26 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 行政採購請款單 憑證明細 設定
     /// </summary>
-    public class GeneralInvoiceInvoicsConfig : InvoiceConfig
+    public class GeneralInvoiceInvoicesConfig : InvoiceConfig
     {
+        /// <summary>期別</summary>
+        public int PERIOD { get; set; }
 
+        /// <summary>憑證行數編號</summary>
+        public int INV_ROW_NO { get; set; }
+
+        /// <summary>備註</summary>
+        public string NOTE { get; set; }
     }
 
 
     public class GeneralInvoiceInvoiceDetailsConfig : InvoiceDetailConfig
     {
+        /// <summary>期別</summary>
+        public int PERIOD { get; set; }
+
+        /// <summary>憑證行數編號</summary>
+        public int INV_ROW_NO { get; set; }
 
     }
 }

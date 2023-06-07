@@ -41,7 +41,7 @@ namespace OA_WEB_API.Models.BPMPro
         public IList<MediaOrderPaymentsConfig> MEDIA_ORDER_PYMTS_CONFIG { get; set; }
 
         /// <summary>版權採購申請單 使用預算 設定</summary>
-        public IList<MediaOrderBudgetsConfig> MEDIA_ORDER_BUDGS_CONFIG { get; set; }
+        public List<MediaOrderBudgetsConfig> MEDIA_ORDER_BUDGS_CONFIG { get; set; }
 
         /// <summary>版權採購申請單 驗收項目 設定</summary>
         public IList<MediaOrderAcceptancesConfig> MEDIA_ORDER_ACPTS_CONFIG { get; set; }
@@ -442,31 +442,10 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 版權採購申請單 使用預算 設定
     /// </summary>
-    public class MediaOrderBudgetsConfig
+    public class MediaOrderBudgetsConfig : BudgetConfig
     {
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
-
-        /// <summary>預算 ERP唯一碼</summary>        
-        public string FORM_NO { get; set; }
-
-        /// <summary>預算編列年度</summary>
-        public string CREATE_YEAR { get; set; }
-
-        /// <summary>預算名稱</summary>
-        public string NAME { get; set; }
-
-        /// <summary>所屬部門</summary>
-        public string OWNER_DEPT { get; set; }
-
-        /// <summary>預算總額</summary>
-        public int TOTAL { get; set; }
-
-        /// <summary>可用預算金額</summary>
-        public int AVAILABLE_BUDGET_AMOUNT { get; set; }
-
-        /// <summary>使用預算金額</summary>
-        public int USE_BUDGET_AMOUNT { get; set; }
     }
 
     /// <summary>

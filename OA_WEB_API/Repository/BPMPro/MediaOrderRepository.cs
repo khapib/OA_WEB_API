@@ -269,22 +269,14 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #region - 版權採購申請單 使用預算 -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [FormNo] AS [FORM_NO], ";
-            strSQL += "     [CreateYear] AS [CREATE_YEAR], ";
-            strSQL += "     [Name] AS [NAME], ";
-            strSQL += "     [OwnerDept] AS [OWNER_DEPT], ";
-            strSQL += "     [Total] AS [TOTAL], ";
-            strSQL += "     [AvailableBudgetAmount] AS [AVAILABLE_BUDGET_AMOUNT], ";
-            strSQL += "     [UseBudgetAmount] AS [USE_BUDGET_AMOUNT] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_BUDG] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "ORDER BY [AutoCounter] ";
-
-            var mediaOrderBudgetsConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderBudgetsConfig>();
+            var CommonBUDG = new BPMCommonModel<MediaOrderBudgetsConfig>()
+            {
+                EXT = "BUDG",
+                IDENTIFY = IDENTIFY,
+                parameter = parameter
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostBudgetFunction(CommonBUDG));
+            var mediaOrderBudgetsConfig = jsonFunction.JsonToObject<List<MediaOrderBudgetsConfig>>(strJson);
 
             #endregion
 
@@ -293,8 +285,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [OrderRowNo] AS [ORDER_ROW_NO], ";
             strSQL += "     [Period] AS [PERIOD], ";
+            strSQL += "     [OrderRowNo] AS [ORDER_ROW_NO], ";
             strSQL += "     [SupProdANo] AS [SUP_PROD_A_NO], ";
             strSQL += "     [ItemName] AS [ITEM_NAME], ";
             strSQL += "     [MediaType] AS [MEDIA_TYPE], ";
@@ -872,7 +864,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@ORDER_SUM_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@USE_BUDGET", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                 };
-                 
+
                 #region 先刪除舊資料
 
                 strSQL = "";
@@ -931,36 +923,16 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@USE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
-                #region 先刪除舊資料
-
-                strSQL = "";
-                strSQL += "DELETE ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_BUDG] ";
-                strSQL += "WHERE 1=1 ";
-                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
-
-                dbFun.DoQuery(strSQL, parameterBudgets);
-
-                #endregion
-
                 if (model.MEDIA_ORDER_BUDGS_CONFIG != null && model.MEDIA_ORDER_BUDGS_CONFIG.Count > 0)
                 {
-                    #region 再新增資料
-
-                    foreach (var item in model.MEDIA_ORDER_BUDGS_CONFIG)
+                    var CommonBUDG = new BPMCommonModel<MediaOrderBudgetsConfig>()
                     {
-                        //寫入：版權採購申請單 使用預算parameter
-                        strJson = jsonFunction.ObjectToJSON(item);
-                        GlobalParameters.Infoparameter(strJson, parameterBudgets);
-
-                        strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_BUDG]([RequisitionID],[Period],[FormNo],[CreateYear],[Name],[OwnerDept],[Total],[AvailableBudgetAmount],[UseBudgetAmount]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@FORM_NO,@CREATE_YEAR,@NAME,@OWNER_DEPT,@TOTAL,@AVAILABLE_BUDGET_AMOUNT,@USE_BUDGET_AMOUNT) ";
-
-                        dbFun.DoTran(strSQL, parameterBudgets);
-                    }
-
-                    #endregion
+                        EXT = "BUDG",
+                        IDENTIFY = IDENTIFY,
+                        parameter = parameterBudgets,
+                        Model = model.MEDIA_ORDER_BUDGS_CONFIG
+                    };
+                    commonRepository.PutBudgetFunction(CommonBUDG);
                 }
 
                 #endregion

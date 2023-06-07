@@ -123,8 +123,8 @@ namespace OA_WEB_API.Models.BPMPro
     /// <typeparam name="T">Model</typeparam>
     public class BPMCommonModel<T>
     {
-        /// <summary>是否為已退</summary>
-        public bool IsALDY { get; set; }
+        /// <summary>D表名稱</summary>
+        public string EXT { get; set; }
 
         /// <summary>表單代號</summary>
         public string IDENTIFY { get; set; }
@@ -145,12 +145,6 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class InvoiceConfig
     {
-        /// <summary>期別</summary>
-        public int PERIOD { get; set; }
-
-        /// <summary>憑證行數編號</summary>
-        public int INV_ROW_NO { get; set; }
-
         /// <summary>憑證號碼</summary>
         public string NUM { get; set; }
 
@@ -186,9 +180,6 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>憑證金額</summary>
         public int AMOUNT_TWD { get; set; }
-
-        /// <summary>備註</summary>
-        public string NOTE { get; set; }
     }
 
     #endregion
@@ -200,12 +191,6 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class InvoiceDetailConfig
     {
-        /// <summary>期別</summary>
-        public int PERIOD { get; set; }
-
-        /// <summary>憑證行數編號</summary>
-        public int INV_ROW_NO { get; set; }
-
         /// <summary>行數編號</summary>
         public int ROW_NO { get; set; }
 
@@ -241,12 +226,43 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    #region - 商品 -
+    #region - (已退貨/退貨)商品 -
 
-    #region - 版權商品 -
+    #region - (已退貨/退貨)行政商品 -
 
     /// <summary>
-    /// 版權商品
+    /// (已退貨/退貨)行政商品
+    /// </summary>
+    public class GeneralCommodityConfig
+    {
+        /// <summary>訂單行數編號</summary>
+        public int ORDER_ROW_NO { get; set; }
+
+        /// <summary>商品代碼</summary>
+        public string SUP_PROD_A_NO { get; set; }
+
+        /// <summary>商品名稱</summary>
+        public string ITEM_NAME { get; set; }
+
+        /// <summary>型號</summary>
+        public string MODEL { get; set; }
+
+        /// <summary>規格</summary>
+        public string SPECIFICATIONS { get; set; }
+
+        /// <summary>數量</summary>
+        public int QUANTITY { get; set; }
+
+        /// <summary>單位</summary>
+        public string UNIT { get; set; }
+    }
+
+    #endregion
+
+    #region - (已退貨/退貨)版權商品 -
+
+    /// <summary>
+    /// (已退貨/退貨)版權商品
     /// </summary>
     public class MediaCommodityConfig
     {
@@ -282,6 +298,37 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     #endregion
+
+    #endregion
+
+    #region - 預算 -
+
+    /// <summary>
+    /// 預算
+    /// </summary>
+    public class BudgetConfig
+    {
+        /// <summary>預算 ERP唯一碼</summary>        
+        public string FORM_NO { get; set; }
+
+        /// <summary>預算編列年度</summary>
+        public string CREATE_YEAR { get; set; }
+
+        /// <summary>預算名稱</summary>
+        public string NAME { get; set; }
+
+        /// <summary>所屬部門</summary>
+        public string OWNER_DEPT { get; set; }
+
+        /// <summary>預算總額</summary>
+        public int TOTAL { get; set; }
+
+        /// <summary>可用預算金額</summary>
+        public int AVAILABLE_BUDGET_AMOUNT { get; set; }
+
+        /// <summary>使用預算金額</summary>
+        public int USE_BUDGET_AMOUNT { get; set; }
+    }
 
     #endregion
 

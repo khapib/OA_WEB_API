@@ -35,7 +35,7 @@ namespace OA_WEB_API.Models.BPMPro
         public List<ExpensesReimburseInvoiceDetailsConfig> EXPENSES_REIMBURSE_INV_DTLS_CONFIG { get; set; }
 
         /// <summary>費用申請單 使用預算 設定</summary>
-        public IList<ExpensesReimburseBudgetsConfig> EXPENSES_REIMBURSE_BUDGS_CONFIG { get; set; }
+        public List<ExpensesReimburseBudgetsConfig> EXPENSES_REIMBURSE_BUDGS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
@@ -110,6 +110,12 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>行數編號</summary>
         public int ROW_NO { get; set; }
 
+        /// <summary>項目名稱</summary>
+        public string NAME { get; set; }
+
+        /// <summary>項目類別</summary>
+        public string TYPE { get; set; }
+
         /// <summary>
         /// 憑證類型：
         /// INV_TW.統一發票、
@@ -117,12 +123,6 @@ namespace OA_WEB_API.Models.BPMPro
         /// RECPT.收據
         /// </summary>
         public string INV_TYPE { get; set; }
-
-        /// <summary>項目名稱</summary>
-        public string NAME { get; set; }
-
-        /// <summary>項目類別</summary>
-        public string TYPE { get; set; }
 
         /// <summary>匯率</summary>
         public double EXCH_RATE { get; set; }
@@ -160,31 +160,10 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 費用申請單 使用預算 設定
     /// </summary>
-    public class ExpensesReimburseBudgetsConfig
+    public class ExpensesReimburseBudgetsConfig: BudgetConfig
     {
         /// <summary>行數編號</summary>
         public int ROW_NO { get; set; }
-
-        /// <summary>預算 ERP唯一碼</summary>        
-        public string FORM_NO { get; set; }
-
-        /// <summary>預算編列年度</summary>
-        public string CREATE_YEAR { get; set; }
-
-        /// <summary>預算名稱</summary>
-        public string NAME { get; set; }
-
-        /// <summary>所屬部門</summary>
-        public string OWNER_DEPT { get; set; }
-
-        /// <summary>預算總額</summary>
-        public int TOTAL { get; set; }
-
-        /// <summary>可用預算金額</summary>
-        public int AVAILABLE_BUDGET_AMOUNT { get; set; }
-
-        /// <summary>使用預算金額</summary>
-        public int USE_BUDGET_AMOUNT { get; set; }
     }
 
 }

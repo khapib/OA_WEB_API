@@ -189,6 +189,17 @@ namespace OA_WEB_API.Repository.BPMPro
                 new SqlParameter("@PERIOD", SqlDbType.Int) { Value = mediaInvoiceConfig.PERIOD }
             };
 
+            #region - 版權採購單 資訊 -
+
+            var mediaOrderQueryModel = new MediaOrderQueryModel
+            {
+                REQUISITION_ID = mediaInvoiceConfig.MEDIA_ORDER_REQUISITION_ID
+            };
+
+            var mediaOrderContent = mediaOrderRepository.PostMediaOrderSingle(mediaOrderQueryModel);
+
+            #endregion
+
             #region - 版權採購請款單 驗收明細 -
 
             //View的「驗收明細」是 版權採購申請單 的「驗收明細」加上 「採購明細」的所屬專案、金額及備註。
@@ -234,17 +245,6 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 版權採購單 資訊 -
-
-            var mediaOrderQueryModel = new MediaOrderQueryModel
-            {
-                REQUISITION_ID = mediaInvoiceConfig.MEDIA_ORDER_REQUISITION_ID
-            };
-
-            var mediaOrderContent = mediaOrderRepository.PostMediaOrderSingle(mediaOrderQueryModel);
-
-            #endregion
-
             #region - 版權採購請款單 授權權利 -
             //View的「授權權利」是 版權採購申請單 的「授權權利」
 
@@ -281,10 +281,10 @@ namespace OA_WEB_API.Repository.BPMPro
             List<MediaInvoiceAuthorizesConfig> mediaInvoiceAuthorizesConfig = new List<MediaInvoiceAuthorizesConfig>();
             foreach (var item in mediaInvoiceAcceptancesConfig)
             {
-                strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_AUTHS_CONFIG.Where(AUTH => AUTH.ORDER_ROW_NO == item.ORDER_ROW_NO && item.PERIOD == mediaInvoiceConfig.PERIOD).Select(AUTH => AUTH));
+                strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_AUTHS_CONFIG.Where(AUTH => AUTH.SUP_PROD_A_NO == item.SUP_PROD_A_NO && item.PERIOD == mediaInvoiceConfig.PERIOD).Select(AUTH => AUTH));
                 mediaInvoiceAuthorizesConfig.AddRange(JsonConvert.DeserializeObject<List<MediaInvoiceAuthorizesConfig>>(strJson));
             }
-            mediaInvoiceAuthorizesConfig = mediaInvoiceAuthorizesConfig.GroupBy(AUTH => new { AUTH.ORDER_ROW_NO, AUTH.PLAY_PLATFORM }).Select(g => g.First()).ToList();
+            mediaInvoiceAuthorizesConfig = mediaInvoiceAuthorizesConfig.GroupBy(AUTH => new { AUTH.SUP_PROD_A_NO, AUTH.PLAY_PLATFORM }).Select(g => g.First()).ToList();
 
 
             #endregion
@@ -312,16 +312,15 @@ namespace OA_WEB_API.Repository.BPMPro
             strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_BUDGS_CONFIG.Where(BUDG => BUDG.PERIOD == mediaInvoiceConfig.PERIOD).Select(BUDG => BUDG));
             var mediaInvoiceBudgetsConfig = JsonConvert.DeserializeObject<List<MediaInvoiceBudgetsConfig>>(strJson);
 
-
             #endregion
 
             parameter.Add(new SqlParameter("@PERIOD", SqlDbType.Int) { Value = mediaInvoiceConfig.PERIOD });
 
             #region - 版權採購請款單 憑證明細 -
 
-            var CommonINV = new BPMCommonModel<InvoiceConfig>()
+            var CommonINV = new BPMCommonModel<MediaInvoiceInvoicesConfig>()
             {
-                IsALDY = false,
+                EXT = "INV",
                 IDENTIFY = IDENTIFY,
                 parameter = parameter
             };
@@ -332,9 +331,9 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #region - 版權採購請款單 憑證細項 -
 
-            var CommonINV_DTL = new BPMCommonModel<InvoiceDetailConfig>()
+            var CommonINV_DTL = new BPMCommonModel<MediaInvoiceInvoiceDetailsConfig>()
             {
-                IsALDY = false,
+                EXT = "INV_DTL",
                 IDENTIFY = IDENTIFY,
                 parameter = parameter
             };
@@ -566,7 +565,7 @@ namespace OA_WEB_API.Repository.BPMPro
                             ACPT
                         })
                         .OrderBy(ACPT_DTL => ACPT_DTL.ORDER_ROW_NO)
-                        .Where(ACPT_DTL=> ACPT_DTL.ACPT.PERIOD== model.MEDIA_INVOICE_CONFIG.PERIOD));
+                        .Where(ACPT_DTL => ACPT_DTL.ACPT.PERIOD == model.MEDIA_INVOICE_CONFIG.PERIOD));
                     var mediaOrderDetailsConfig = JsonConvert.DeserializeObject<List<MediaOrderDetailsConfig>>(strJson);
                     if (mediaOrderDetailsConfig != null)
                     {
@@ -886,7 +885,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     var CommonINV = new BPMCommonModel<MediaInvoiceInvoicesConfig>()
                     {
-                        IsALDY = false,
+                        EXT = "INV",
                         IDENTIFY = IDENTIFY,
                         parameter = parameterInvoices,
                         Model = model.MEDIA_INVOICE_INVS_CONFIG
@@ -900,7 +899,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 var parameterInvoiceDetails = new List<SqlParameter>()
                 {
-                    //版權採購請款單 憑證明細
+                    //版權採購請款單 憑證細項
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
                     new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)model.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_REQUISITION_ID ?? DBNull.Value },
                     new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_BPM_FORM_NO ?? DBNull.Value },
@@ -920,7 +919,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     var CommonINV_DTL = new BPMCommonModel<MediaInvoiceInvoiceDetailsConfig>()
                     {
-                        IsALDY = false,
+                        EXT = "INV_DTL",
                         IDENTIFY = IDENTIFY,
                         parameter = parameterInvoiceDetails,
                         Model = model.MEDIA_INVOICE_INV_DTLS_CONFIG

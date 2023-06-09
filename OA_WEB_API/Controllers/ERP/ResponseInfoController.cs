@@ -143,6 +143,29 @@ namespace OA_WEB_API.Controllers.ERP
 
         #endregion
 
+        #region - 行政採購退貨折讓單 審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 行政採購退貨折讓單 審核資訊_回傳ERP
+        /// </summary>    
+        [Route("api/PostGeneralOrderReturnRefundInfoSingle")]
+        [HttpPost]
+        public GeneralOrderReturnRefundInfoRequest PostGeneralOrderReturnRefundInfoSingle()
+        {
+            HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
+            HttpRequestBase request = context.Request;
+
+            var query = new RequestQueryModel()
+            {
+                REQUISITION_ID = request["RequisitionID"],
+                REQUEST_FLG = bool.Parse(request["RequestFlg"])
+            };
+
+            return responseInfoRepository.PostGeneralOrderReturnRefundInfoSingle(query);
+        }
+
+        #endregion
+
         #endregion
 
         #region -內容評估表_回傳ERP資訊-
@@ -272,9 +295,9 @@ namespace OA_WEB_API.Controllers.ERP
         /// <summary>
         /// 版權採購退貨折讓單 審核資訊_回傳ERP
         /// </summary>    
-        [Route("api/PostMediaOrderReturnRefundSingle")]
+        [Route("api/PostMediaOrderReturnRefundInfoSingle")]
         [HttpPost]
-        public MediaOrderReturnRefundInfoRequest PostMediaOrderReturnRefundSingle()
+        public MediaOrderReturnRefundInfoRequest PostMediaOrderReturnRefundInfoSingle()
         {
             HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
             HttpRequestBase request = context.Request;
@@ -285,7 +308,7 @@ namespace OA_WEB_API.Controllers.ERP
                 REQUEST_FLG = bool.Parse(request["RequestFlg"])
             };
 
-            return responseInfoRepository.PostMediaOrderReturnRefundSingle(query);
+            return responseInfoRepository.PostMediaOrderReturnRefundInfoSingle(query);
         }
 
         #endregion

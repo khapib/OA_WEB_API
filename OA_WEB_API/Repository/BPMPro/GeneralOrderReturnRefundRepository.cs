@@ -5,16 +5,13 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Linq;
 using System.Web;
-using Microsoft.SqlServer.Server;
-using Newtonsoft.Json;
-using System.Collections;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
     /// <summary>
-    /// 會簽管理系統 - 版權採購退貨折讓單
+    /// 會簽管理系統 - 行政採購退貨折讓單
     /// </summary>
-    public class MediaOrderReturnRefundRepository
+    public class GeneralOrderReturnRefundRepository
     {
         #region - 宣告 -
 
@@ -31,8 +28,8 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #region FormRepsitory
 
-        /// <summary>版權採購請款單</summary>
-        MediaInvoiceRepository mediaInvoiceRepository = new MediaInvoiceRepository();
+        /// <summary>行政採購請款單</summary>
+        GeneralInvoiceRepository generalInvoiceRepository = new GeneralInvoiceRepository();
 
         #endregion
 
@@ -41,9 +38,9 @@ namespace OA_WEB_API.Repository.BPMPro
         #region - 方法 -
 
         /// <summary>
-        /// 版權採購退貨折讓單(查詢)
+        /// 行政採購退貨折讓單(查詢)
         /// </summary>
-        public MediaOrderReturnRefundViewModel PostMediaOrderReturnRefundSingle(MediaOrderReturnRefundQueryModel query)
+        public GeneralOrderReturnRefundViewModel PostGeneralOrderReturnRefundSingle(GeneralOrderReturnRefundQueryModel query)
         {
             var parameter = new List<SqlParameter>()
             {
@@ -68,7 +65,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [Priority] AS [PRIORITY], ";
             strSQL += "     [DraftFlag] AS [DRAFT_FLAG], ";
             strSQL += "     [FlowActivated] AS [FLOW_ACTIVATED] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralOrderReturnRefund_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
             var applicantInfo = dbFun.DoQuery(strSQL, parameter).ToList<ApplicantInfo>().FirstOrDefault();
@@ -87,7 +84,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 版權採購退貨折讓單 表頭資訊 -
+            #region - 行政採購退貨折讓單 表頭資訊 -
 
             strSQL = "";
             strSQL += "SELECT ";
@@ -95,24 +92,24 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [FormNo] AS [FORM_NO], ";
             strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
             strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralOrderReturnRefund_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-            var mediaOrderReturnRefundTitle = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderReturnRefundTitle>().FirstOrDefault();
+            var generalOrderReturnRefundTitle = dbFun.DoQuery(strSQL, parameter).ToList<GeneralOrderReturnRefundTitle>().FirstOrDefault();
 
             #endregion
 
-            #region - 版權採購退貨折讓單 表單內容 -
+            #region - 行政採購退貨折讓單 表單內容 -
 
             strSQL = "";
             strSQL += "SELECT ";
-            strSQL += "     [MediaInvoiceRequisitionID] AS [MEDIA_INVOICE_REQUISITION_ID], ";
-            strSQL += "     [MediaInvoiceSubject] AS [MEDIA_INVOICE_SUBJECT], ";
-            strSQL += "     [MediaInvoiceBPMFormNo] AS [MEDIA_INVOICE_BPM_FORM_NO], ";
-            strSQL += "     [MediaInvoiceERPFormNo] AS [MEDIA_INVOICE_ERP_FORM_NO], ";
-            strSQL += "     [MediaInvoicePath] AS [MEDIA_INVOICE_PATH], ";
-            strSQL += "     [MediaOrderPYMT_OrderTotal] AS [MEDIA_ORDER_PYMT_ORDER_TOTAL], ";
-            strSQL += "     [MediaOrderPYMT_OrderTotal_CONV] AS [MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV], ";
+            strSQL += "     [GeneralInvoiceRequisitionID] AS [GENERAL_INVOICE_REQUISITION_ID], ";
+            strSQL += "     [GeneralInvoiceSubject] AS [GENERAL_INVOICE_SUBJECT], ";
+            strSQL += "     [GeneralInvoiceBPMFormNo] AS [GENERAL_INVOICE_BPM_FORM_NO], ";
+            strSQL += "     [GeneralInvoiceERPFormNo] AS [GENERAL_INVOICE_ERP_FORM_NO], ";
+            strSQL += "     [GeneralInvoicePath] AS [GENERAL_INVOICE_PATH], ";
+            strSQL += "     [GeneralOrderPYMT_GrossTotal] AS [GENERAL_ORDER_PYMT_GROSS_TOTAL], ";
+            strSQL += "     [GeneralOrderPYMT_GrossTotal_CONV] AS [GENERAL_ORDER_PYMT_GROSS_TOTAL_CONV], ";
             strSQL += "     [FinancAuditID_1] AS [FINANC_AUDIT_ID_1], ";
             strSQL += "     [FinancAuditName_1] AS [FINANC_AUDIT_NAME_1], ";
             strSQL += "     [FinancAuditID_2] AS [FINANC_AUDIT_ID_2], ";
@@ -131,81 +128,81 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [RF_AmountTotal_TWD] AS [RF_AMOUNT_TOTAL_TWD], ";
             strSQL += "     [ProcessMethod] AS [PROCESS_METHOD], ";
             strSQL += "     [FinancNote] AS [FINANC_NOTE] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralOrderReturnRefund_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-            var mediaOrderReturnRefundConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderReturnRefundConfig>().FirstOrDefault();
+            var generalOrderReturnRefundConfig = dbFun.DoQuery(strSQL, parameter).ToList<GeneralOrderReturnRefundConfig>().FirstOrDefault();
 
             #endregion
 
-            #region - 版權採購退貨折讓單 已退貨商品明細 -
+            #region - 行政採購退貨折讓單 已退貨商品明細 -
 
-            var CommonALDY_RF_COMM = new BPMCommonModel<MediaCommodityConfig>()
+            var CommonALDY_RF_COMM = new BPMCommonModel<GeneralCommodityConfig>()
             {
                 EXT = "ALDY_RF_COMM",
                 IDENTIFY = IDENTIFY,
                 parameter = parameter
             };
-            strJson = jsonFunction.ObjectToJSON(commonRepository.PostMediaCommodityFunction(CommonALDY_RF_COMM));
-            var mediaOrderReturnRefundAlreadyRefundCommoditysConfig = jsonFunction.JsonToObject<List<MediaOrderReturnRefundAlreadyRefundCommoditysConfig>>(strJson);
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostGeneralCommodityFunction(CommonALDY_RF_COMM));
+            var generalOrderReturnRefundAlreadyRefundCommoditysConfig = jsonFunction.JsonToObject<List<GeneralOrderReturnRefundAlreadyRefundCommoditysConfig>>(strJson);
 
             #endregion
 
-            parameter.Add(new SqlParameter("@PERIOD", SqlDbType.Int) { Value = mediaOrderReturnRefundConfig.PERIOD });
+            parameter.Add(new SqlParameter("@PERIOD", SqlDbType.Int) { Value = generalOrderReturnRefundConfig.PERIOD });
 
-            #region - 版權採購退貨折讓單 退貨商品明細 -
+            #region - 行政採購退貨折讓單 退貨商品明細 -
 
-            var CommonRF_COMM = new BPMCommonModel<MediaCommodityConfig>()
+            var CommonRF_COMM = new BPMCommonModel<GeneralCommodityConfig>()
             {
-                EXT="RF_COMM",
+                EXT = "RF_COMM",
                 IDENTIFY = IDENTIFY,
                 parameter = parameter
             };
-            strJson = jsonFunction.ObjectToJSON(commonRepository.PostMediaCommodityFunction(CommonRF_COMM));
-            var mediaOrderReturnRefundRefundCommoditysConfig = jsonFunction.JsonToObject<List<MediaOrderReturnRefundRefundCommoditysConfig>>(strJson);
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostGeneralCommodityFunction(CommonRF_COMM));
+            var generalOrderReturnRefundRefundCommoditysConfig = jsonFunction.JsonToObject<List<GeneralOrderReturnRefundRefundCommoditysConfig>>(strJson);
 
             #endregion
 
-            #region - 版權採購退貨折讓單 憑證退款明細 -
+            #region - 行政採購退貨折讓單 憑證退款明細 -
 
-            var CommonINV = new BPMCommonModel<MediaInvoiceInvoicesConfig>()
+            var CommonINV = new BPMCommonModel<GeneralInvoiceInvoicesConfig>()
             {
                 EXT = "INV",
                 IDENTIFY = IDENTIFY,
                 parameter = parameter
             };
             strJson = jsonFunction.ObjectToJSON(commonRepository.PostInvoiceFunction(CommonINV));
-            var mediaOrderReturnRefundInvoicesConfig = jsonFunction.JsonToObject<List<MediaOrderReturnRefundInvoicesConfig>>(strJson);
+            var generalOrderReturnRefundInvoicesConfig = jsonFunction.JsonToObject<List<GeneralOrderReturnRefundInvoicesConfig>>(strJson);
 
             #endregion
 
-            #region - 版權採購退貨折讓單 憑證已退款細項 -
+            #region - 行政採購退貨折讓單 憑證已退款細項 -
 
-            var CommonALDY_INV_DTL = new BPMCommonModel<MediaInvoiceInvoiceDetailsConfig>()
+            var CommonALDY_INV_DTL = new BPMCommonModel<GeneralInvoiceInvoiceDetailsConfig>()
             {
                 EXT = "ALDY_INV_DTL",
                 IDENTIFY = IDENTIFY,
                 parameter = parameter
             };
             strJson = jsonFunction.ObjectToJSON(commonRepository.PostInvoiceDetailFunction(CommonALDY_INV_DTL));
-            var mediaOrderReturnRefundAlreadyInvoiceDetailsConfig = jsonFunction.JsonToObject<List<MediaOrderReturnRefundAlreadyInvoiceDetailsConfig>>(strJson);
+            var generalOrderReturnRefundAlreadyInvoiceDetailsConfig = jsonFunction.JsonToObject<List<GeneralOrderReturnRefundAlreadyInvoiceDetailsConfig>>(strJson);
 
-            #endregion            
+            #endregion
 
-            #region - 版權採購退貨折讓單 憑證退款細項 -
+            #region - 行政採購退貨折讓單 憑證退款細項 -
 
-            var CommonINV_DTL = new BPMCommonModel<MediaInvoiceInvoiceDetailsConfig>()
+            var CommonINV_DTL = new BPMCommonModel<GeneralInvoiceInvoiceDetailsConfig>()
             {
                 EXT = "INV_DTL",
                 IDENTIFY = IDENTIFY,
                 parameter = parameter
             };
             strJson = jsonFunction.ObjectToJSON(commonRepository.PostInvoiceDetailFunction(CommonINV_DTL));
-            var mediaOrderReturnRefundInvoiceDetailsConfig = jsonFunction.JsonToObject<List<MediaOrderReturnRefundInvoiceDetailsConfig>>(strJson);
+            var generalOrderReturnRefundInvoiceDetailsConfig = jsonFunction.JsonToObject<List<GeneralOrderReturnRefundInvoiceDetailsConfig>>(strJson);
 
-            #endregion            
+            #endregion
 
-            #region - 版權採購退貨折讓單 表單關聯 -
+            #region - 行政採購退貨折讓單 表單關聯 -
 
             var formQueryModel = new FormQueryModel()
             {
@@ -215,20 +212,20 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            var mediaOrderReturnRefundViewModel = new MediaOrderReturnRefundViewModel()
+            var generalOrderReturnRefundViewModel = new GeneralOrderReturnRefundViewModel()
             {
                 APPLICANT_INFO = applicantInfo,
-                MEDIA_ORDER_RETURN_REFUND_TITLE = mediaOrderReturnRefundTitle,
-                MEDIA_ORDER_RETURN_REFUND_CONFIG = mediaOrderReturnRefundConfig,
-                MEDIA_ORDER_RETURN_REFUND_ALDY_RF_COMMS_CONFIG = mediaOrderReturnRefundAlreadyRefundCommoditysConfig,
-                MEDIA_ORDER_RETURN_REFUND_RF_COMMS_CONFIG = mediaOrderReturnRefundRefundCommoditysConfig,
-                MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG = mediaOrderReturnRefundInvoicesConfig,
-                MEDIA_ORDER_RETURN_REFUND_ALDY_INV_DTLS_CONFIG = mediaOrderReturnRefundAlreadyInvoiceDetailsConfig,
-                MEDIA_ORDER_RETURN_REFUND_INV_DTLS_CONFIG = mediaOrderReturnRefundInvoiceDetailsConfig,
+                GENERAL_ORDER_RETURN_REFUND_TITLE = generalOrderReturnRefundTitle,
+                GENERAL_ORDER_RETURN_REFUND_CONFIG = generalOrderReturnRefundConfig,
+                GENERAL_ORDER_RETURN_REFUND_ALDY_RF_COMMS_CONFIG = generalOrderReturnRefundAlreadyRefundCommoditysConfig,
+                GENERAL_ORDER_RETURN_REFUND_RF_COMMS_CONFIG = generalOrderReturnRefundRefundCommoditysConfig,
+                GENERAL_ORDER_RETURN_REFUND_INVS_CONFIG = generalOrderReturnRefundInvoicesConfig,
+                GENERAL_ORDER_RETURN_REFUND_ALDY_INV_DTLS_CONFIG = generalOrderReturnRefundAlreadyInvoiceDetailsConfig,
+                GENERAL_ORDER_RETURN_REFUND_INV_DTLS_CONFIG = generalOrderReturnRefundInvoiceDetailsConfig,
                 ASSOCIATED_FORM_CONFIG = associatedForm
             };
 
-            return mediaOrderReturnRefundViewModel;
+            return generalOrderReturnRefundViewModel;
         }
 
         #region - 依此單內容重送 -
@@ -236,7 +233,7 @@ namespace OA_WEB_API.Repository.BPMPro
         ///// <summary>
         ///// 版權採購退貨折讓單(依此單內容重送)(僅外部起單使用)
         ///// </summary>        
-        //public bool PutMediaOrderReturnRefundRefill(MediaOrderReturnRefundQueryModel query)
+        //public bool PutGeneralOrderReturnRefundRefill(GeneralOrderReturnRefundQueryModel query)
         //{
         //    bool vResult = false;
         //    try
@@ -248,7 +245,7 @@ namespace OA_WEB_API.Repository.BPMPro
         //    catch (Exception ex)
         //    {
         //        vResult = false;
-        //        CommLib.Logger.Error("版權採購退貨折讓單(依此單內容重送)失敗，原因" + ex.Message);
+        //        CommLib.Logger.Error("行政採購退貨折讓單(依此單內容重送)失敗，原因" + ex.Message);
         //    }
         //    return vResult;
         //}
@@ -256,35 +253,35 @@ namespace OA_WEB_API.Repository.BPMPro
         #endregion
 
         /// <summary>
-        /// 版權採購退貨折讓單(新增/修改/草稿)
+        /// 行政採購退貨折讓單(新增/修改/草稿)
         /// </summary>
-        public bool PutMediaOrderReturnRefundSingle(MediaOrderReturnRefundViewModel model)
+        public bool PutGeneralOrderReturnRefundSingle(GeneralOrderReturnRefundViewModel model)
         {
             bool vResult = false;
             try
             {
-                var mediaInvoiceformQueryModel = new FormQueryModel()
+                var generalInvoiceformQueryModel = new FormQueryModel()
                 {
-                    REQUISITION_ID = model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_REQUISITION_ID
+                    REQUISITION_ID = model.GENERAL_ORDER_RETURN_REFUND_CONFIG.GENERAL_INVOICE_REQUISITION_ID
                 };
-                var mediaInvoiceformData = formRepository.PostFormData(mediaInvoiceformQueryModel);
+                var generalInvoiceformData = formRepository.PostFormData(generalInvoiceformQueryModel);
 
-                #region - 【版權採購請款單】資訊 -
+                #region - 【行政採購請款單】資訊 -
 
-                var mediaInvoiceQueryModel = new MediaInvoiceQueryModel()
+                var generalInvoiceQueryModel = new GeneralInvoiceQueryModel()
                 {
-                    REQUISITION_ID = model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_REQUISITION_ID
+                    REQUISITION_ID = model.GENERAL_ORDER_RETURN_REFUND_CONFIG.GENERAL_INVOICE_REQUISITION_ID
                 };
 
-                var strmediaInvoiceQuery = mediaInvoiceRepository.PostMediaInvoiceSingle(mediaInvoiceQueryModel);
+                var strgeneralInvoiceQuery = generalInvoiceRepository.PostGeneralInvoiceSingle(generalInvoiceQueryModel);
 
-                model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_REQUISITION_ID = mediaInvoiceformData.REQUISITION_ID;
-                model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_BPM_FORM_NO = strmediaInvoiceQuery.MEDIA_INVOICE_TITLE.BPM_FORM_NO;
-                model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_ERP_FORM_NO = strmediaInvoiceQuery.MEDIA_INVOICE_TITLE.FORM_NO;
-                model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_SUBJECT = mediaInvoiceformData.FORM_SUBJECT;
-                model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_ORDER_PYMT_ORDER_TOTAL = strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_PYMT_ORDER_TOTAL;
-                model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV = strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV;
-                model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_PATH = GlobalParameters.FormContentPath(model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_REQUISITION_ID, mediaInvoiceformData.IDENTIFY, mediaInvoiceformData.DIAGRAM_NAME);
+                model.GENERAL_ORDER_RETURN_REFUND_CONFIG.GENERAL_INVOICE_REQUISITION_ID = generalInvoiceformData.REQUISITION_ID;
+                model.GENERAL_ORDER_RETURN_REFUND_CONFIG.GENERAL_INVOICE_BPM_FORM_NO = strgeneralInvoiceQuery.GENERAL_INVOICE_TITLE.BPM_FORM_NO;
+                model.GENERAL_ORDER_RETURN_REFUND_CONFIG.GENERAL_INVOICE_ERP_FORM_NO = strgeneralInvoiceQuery.GENERAL_INVOICE_TITLE.FORM_NO;
+                model.GENERAL_ORDER_RETURN_REFUND_CONFIG.GENERAL_INVOICE_SUBJECT = generalInvoiceformData.FORM_SUBJECT;
+                model.GENERAL_ORDER_RETURN_REFUND_CONFIG.GENERAL_ORDER_PYMT_GROSS_TOTAL = strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_PYMT_GROSS_TOTAL;
+                model.GENERAL_ORDER_RETURN_REFUND_CONFIG.GENERAL_ORDER_PYMT_GROSS_TOTAL_CONV = strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_PYMT_GROSS_TOTAL_CONV;
+                model.GENERAL_ORDER_RETURN_REFUND_CONFIG.GENERAL_INVOICE_PATH = GlobalParameters.FormContentPath(model.GENERAL_ORDER_RETURN_REFUND_CONFIG.GENERAL_INVOICE_REQUISITION_ID, generalInvoiceformData.IDENTIFY, generalInvoiceformData.DIAGRAM_NAME);
 
                 #endregion
 
@@ -292,18 +289,18 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region - 主旨 -
 
-                FM7Subject = model.MEDIA_ORDER_RETURN_REFUND_TITLE.FM7_SUBJECT;
+                FM7Subject = model.GENERAL_ORDER_RETURN_REFUND_TITLE.FM7_SUBJECT;
 
                 if (FM7Subject == null)
                 {
-                    FM7Subject = "【退貨折讓】第" + model.MEDIA_ORDER_RETURN_REFUND_CONFIG.PERIOD + "期-" + strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_SUBJECT;
+                    FM7Subject = "【退貨折讓】第" + model.GENERAL_ORDER_RETURN_REFUND_CONFIG.PERIOD + "期-" + strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_SUBJECT;
                 }
 
                 #endregion
 
                 #endregion
 
-                #region - 版權採購退貨折讓單 表頭資訊：MediaOrderReturnRefund_M -
+                #region - 行政採購退貨折讓單 表頭資訊：GeneralOrderReturnRefund_M -
 
                 var parameterTitle = new List<SqlParameter>()
                 {
@@ -323,16 +320,16 @@ namespace OA_WEB_API.Repository.BPMPro
                     //(填單人/代填單人)資訊
                     new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_ID },
                     new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
-                    //版權採購退貨折讓單 表頭
-                    new SqlParameter("@FLOW_NAME", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_ORDER_RETURN_REFUND_TITLE.FLOW_NAME ?? DBNull.Value },
-                    new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_ORDER_RETURN_REFUND_TITLE.FORM_NO ?? DBNull.Value },
+                    //行政採購退貨折讓單 表頭
+                    new SqlParameter("@FLOW_NAME", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_ORDER_RETURN_REFUND_TITLE.FLOW_NAME ?? DBNull.Value },
+                    new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_ORDER_RETURN_REFUND_TITLE.FORM_NO ?? DBNull.Value },
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
                 };
 
                 strSQL = "";
                 strSQL += "SELECT ";
                 strSQL += "      [RequisitionID] ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralOrderReturnRefund_M] ";
                 strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                 var dtA = dbFun.DoQuery(strSQL, parameterTitle);
@@ -342,7 +339,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region - 修改 -
 
                     strSQL = "";
-                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_GeneralOrderReturnRefund_M] ";
                     strSQL += "SET [DiagramID] =@DIAGRAM_ID, ";
                     strSQL += "     [ApplicantDept]=@APPLICANT_DEPT, ";
                     strSQL += "     [ApplicantDeptName]=@APPLICANT_DEPT_NAME, ";
@@ -369,7 +366,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region - 新增 -
 
                     strSQL = "";
-                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FlowName],[FormNo],[FM7Subject]) ";
+                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralOrderReturnRefund_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FlowName],[FormNo],[FM7Subject]) ";
                     strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FLOW_NAME,@FORM_NO,@FM7_SUBJECT) ";
 
                     dbFun.DoTran(strSQL, parameterTitle);
@@ -377,24 +374,24 @@ namespace OA_WEB_API.Repository.BPMPro
                     #endregion
                 }
 
-                #endregion             
+                #endregion
 
-                #region - 版權採購退貨折讓單 表單內容：MediaOrderReturnRefund_M -
+                #region - 行政採購退貨折讓單 表單內容：GeneralOrderReturnRefund_M -
 
-                if (model.MEDIA_ORDER_RETURN_REFUND_CONFIG != null)
+                if (model.GENERAL_ORDER_RETURN_REFUND_CONFIG != null)
                 {
                     var parameterInfo = new List<SqlParameter>()
                     {
-                        //版權採購退貨折讓單 表單內容
+                        //行政採購退貨折讓單 表單內容
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                        new SqlParameter("@MEDIA_INVOICE_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@MEDIA_INVOICE_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@MEDIA_INVOICE_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@MEDIA_INVOICE_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@MEDIA_INVOICE_PATH", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@MEDIA_ORDER_PYMT_ORDER_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PERIOD", SqlDbType.Int) { Value = model.MEDIA_ORDER_RETURN_REFUND_CONFIG.PERIOD },
+                        new SqlParameter("@GENERAL_INVOICE_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@GENERAL_INVOICE_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@GENERAL_INVOICE_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@GENERAL_INVOICE_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@GENERAL_INVOICE_PATH", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@GENERAL_ORDER_PYMT_GROSS_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@GENERAL_ORDER_PYMT_GROSS_TOTAL_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PERIOD", SqlDbType.Int) { Value = model.GENERAL_ORDER_RETURN_REFUND_CONFIG.PERIOD },
                         new SqlParameter("@FINANC_AUDIT_ID_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@FINANC_AUDIT_NAME_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@FINANC_AUDIT_ID_2", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -414,7 +411,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@FINANC_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                     };
 
-                    strJson = jsonFunction.ObjectToJSON(model.MEDIA_ORDER_RETURN_REFUND_CONFIG);
+                    strJson = jsonFunction.ObjectToJSON(model.GENERAL_ORDER_RETURN_REFUND_CONFIG);
 
                     #region - 確認小數點後第二位 -
 
@@ -425,14 +422,14 @@ namespace OA_WEB_API.Repository.BPMPro
                     GlobalParameters.Infoparameter(strJson, parameterInfo);
 
                     strSQL = "";
-                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
-                    strSQL += "SET [MediaInvoiceRequisitionID]=@MEDIA_INVOICE_REQUISITION_ID, ";
-                    strSQL += "     [MediaInvoiceSubject]=@MEDIA_INVOICE_SUBJECT, ";
-                    strSQL += "     [MediaInvoiceBPMFormNo]=@MEDIA_INVOICE_BPM_FORM_NO, ";
-                    strSQL += "     [MediaInvoiceERPFormNo]=@MEDIA_INVOICE_ERP_FORM_NO, ";
-                    strSQL += "     [MediaInvoicePath]=@MEDIA_INVOICE_PATH, ";
-                    strSQL += "     [MediaOrderPYMT_OrderTotal]=@MEDIA_ORDER_PYMT_ORDER_TOTAL, ";
-                    strSQL += "     [MediaOrderPYMT_OrderTotal_CONV]=@MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV, ";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_GeneralOrderReturnRefund_M] ";
+                    strSQL += "SET [GeneralInvoiceRequisitionID]=@GENERAL_INVOICE_REQUISITION_ID, ";
+                    strSQL += "     [GeneralInvoiceSubject]=@GENERAL_INVOICE_SUBJECT, ";
+                    strSQL += "     [GeneralInvoiceBPMFormNo]=@GENERAL_INVOICE_BPM_FORM_NO, ";
+                    strSQL += "     [GeneralInvoiceERPFormNo]=@GENERAL_INVOICE_ERP_FORM_NO, ";
+                    strSQL += "     [GeneralInvoicePath]=@GENERAL_INVOICE_PATH, ";
+                    strSQL += "     [GeneralOrderPYMT_GrossTotal]=@GENERAL_ORDER_PYMT_GROSS_TOTAL, ";
+                    strSQL += "     [GeneralOrderPYMT_GrossTotal_CONV]=@GENERAL_ORDER_PYMT_GROSS_TOTAL_CONV, ";
                     strSQL += "     [Period]=@PERIOD, ";
                     strSQL += "     [FinancAuditID_1]=@FINANC_AUDIT_ID_1, ";
                     strSQL += "     [FinancAuditName_1]=@FINANC_AUDIT_NAME_1, ";
@@ -460,48 +457,45 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 版權採購退貨折讓單 退貨商品明細: MediaOrderReturnRefund_RF_COMM -
+                #region - 行政採購退貨折讓單 退貨商品明細: GeneralOrderReturnRefund_RF_COMM -
 
                 var parameterRefundCommoditys = new List<SqlParameter>()
                 {
-                    //版權採購退貨折讓單 退貨商品明細
+                    //行政採購退貨折讓單 退貨商品明細
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
                     new SqlParameter("@ORDER_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@MEDIA_SPEC", SqlDbType.NVarChar) { Size = 5, Value = (object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = (object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@START_EPISODE", SqlDbType.Int) { Value = (object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@END_EPISODE", SqlDbType.Int) { Value = (object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@ORDER_EPISODE", SqlDbType.Int) { Value = (object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@ACPT_EPISODE", SqlDbType.Int) { Value = (object) DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@EPISODE_TIME", SqlDbType.Int) { Value = (object) DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MODEL", SqlDbType.NVarChar) { Size = 100, Value = (object) DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@SPECIFICATIONS", SqlDbType.NVarChar) { Size = 500, Value = (object) DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@QUANTITY", SqlDbType.Int) { Value = (object) DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@UNIT", SqlDbType.Int) { Value = (object) DBNull.Value ?? DBNull.Value },
                 };
 
-                if (model.MEDIA_ORDER_RETURN_REFUND_RF_COMMS_CONFIG != null && model.MEDIA_ORDER_RETURN_REFUND_RF_COMMS_CONFIG.Count > 0)
+                if (model.GENERAL_ORDER_RETURN_REFUND_RF_COMMS_CONFIG != null && model.GENERAL_ORDER_RETURN_REFUND_RF_COMMS_CONFIG.Count > 0)
                 {
-                    var CommonRF_COMM = new BPMCommonModel<MediaOrderReturnRefundRefundCommoditysConfig>()
+                    var CommonRF_COMM = new BPMCommonModel<GeneralOrderReturnRefundRefundCommoditysConfig>()
                     {
                         EXT = "RF_COMM",
                         IDENTIFY = IDENTIFY,
                         parameter = parameterRefundCommoditys,
-                        Model = model.MEDIA_ORDER_RETURN_REFUND_RF_COMMS_CONFIG
+                        Model = model.GENERAL_ORDER_RETURN_REFUND_RF_COMMS_CONFIG
                     };
-                    commonRepository.PutMediaCommodityFunction(CommonRF_COMM);
+                    commonRepository.PutGeneralCommodityFunction(CommonRF_COMM);
                 }
 
                 #endregion
 
-                #region - 版權採購退貨折讓單 憑證退款明細：MediaOrderReturnRefund_INV -
+                #region - 行政採購退貨折讓單 憑證退款明細：GeneralOrderReturnRefund_INV -
 
                 var parameterInvoices = new List<SqlParameter>()
                 {
-                    //版權採購退貨折讓單 憑證
+                    //行政採購退貨折讓單 憑證
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_REQUISITION_ID ?? DBNull.Value },
-                    new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_BPM_FORM_NO ?? DBNull.Value },
-                    new SqlParameter("@MEDIA_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_ERP_FORM_NO ?? DBNull.Value },
-                    new SqlParameter("@PERIOD", SqlDbType.Int) { Value = model.MEDIA_ORDER_RETURN_REFUND_CONFIG.PERIOD },
+                    new SqlParameter("@GENERAL_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_REQUISITION_ID ?? DBNull.Value },
+                    new SqlParameter("@GENERAL_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_BPM_FORM_NO ?? DBNull.Value },
+                    new SqlParameter("@GENERAL_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_ERP_FORM_NO ?? DBNull.Value },
+                    new SqlParameter("@PERIOD", SqlDbType.Int) { Value = model.GENERAL_ORDER_RETURN_REFUND_CONFIG.PERIOD },
                     new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DATE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -519,29 +513,30 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
-                if (model.MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG != null && model.MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG.Count > 0)
+                if (model.GENERAL_ORDER_RETURN_REFUND_INVS_CONFIG != null && model.GENERAL_ORDER_RETURN_REFUND_INVS_CONFIG.Count > 0)
                 {
-                    var CommonINV = new BPMCommonModel<MediaOrderReturnRefundInvoicesConfig>()
+                    var CommonINV = new BPMCommonModel<GeneralOrderReturnRefundInvoicesConfig>()
                     {
                         EXT = "INV",
                         IDENTIFY = IDENTIFY,
                         parameter = parameterInvoices,
-                        Model = model.MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG
+                        Model = model.GENERAL_ORDER_RETURN_REFUND_INVS_CONFIG
                     };
                     commonRepository.PutInvoiceFunction(CommonINV);
                 }
 
                 #endregion
 
-                #region - 版權採購退貨折讓單 憑證退款細項：MediaOrderReturnRefund_INV_DTL -
+                #region - 行政採購退貨折讓單 憑證退款細項：GeneralOrderReturnRefund_INV_DTL -
 
                 var parameterInvoiceDetails = new List<SqlParameter>()
                 {
                     //版權採購退貨折讓單 憑證明細
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
-                    new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_REQUISITION_ID ?? DBNull.Value },
-                    new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_BPM_FORM_NO ?? DBNull.Value },
-                    new SqlParameter("@MEDIA_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_ERP_FORM_NO ?? DBNull.Value },                    new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GENERAL_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_REQUISITION_ID ?? DBNull.Value },
+                    new SqlParameter("@GENERAL_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_BPM_FORM_NO ?? DBNull.Value },
+                    new SqlParameter("@GENERAL_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_ERP_FORM_NO ?? DBNull.Value },
+                    new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
@@ -555,25 +550,24 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5 , Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
-                if (model.MEDIA_ORDER_RETURN_REFUND_INV_DTLS_CONFIG != null && model.MEDIA_ORDER_RETURN_REFUND_INV_DTLS_CONFIG.Count > 0)
+                if (model.GENERAL_ORDER_RETURN_REFUND_INV_DTLS_CONFIG != null && model.GENERAL_ORDER_RETURN_REFUND_INV_DTLS_CONFIG.Count > 0)
                 {
-                    var CommonINV_DTL = new BPMCommonModel<MediaOrderReturnRefundInvoiceDetailsConfig>()
+                    var CommonINV_DTL = new BPMCommonModel<GeneralOrderReturnRefundInvoiceDetailsConfig>()
                     {
                         EXT = "INV_DTL",
                         IDENTIFY = IDENTIFY,
                         parameter = parameterInvoiceDetails,
-                        Model = model.MEDIA_ORDER_RETURN_REFUND_INV_DTLS_CONFIG
+                        Model = model.GENERAL_ORDER_RETURN_REFUND_INV_DTLS_CONFIG
                     };
                     commonRepository.PutInvoiceDetailFunction(CommonINV_DTL);
                 }
 
-
                 #endregion
 
-                #region - 版權採購退貨折讓單 表單關聯：AssociatedForm -
-                //關聯表:匯入【版權採購請款單】的「關聯表單」
+                #region - 行政採購退貨折讓單 表單關聯：AssociatedForm -
+                //關聯表:匯入【行政採購請款單】的「關聯表單」
 
-                var importAssociatedForm = commonRepository.PostAssociatedForm(mediaInvoiceformQueryModel);
+                var importAssociatedForm = commonRepository.PostAssociatedForm(generalInvoiceformQueryModel);
 
                 var associatedFormConfig = model.ASSOCIATED_FORM_CONFIG;
                 if (associatedFormConfig == null || associatedFormConfig.Count <= 0)
@@ -661,10 +655,9 @@ namespace OA_WEB_API.Repository.BPMPro
             catch (Exception ex)
             {
                 vResult = false;
-                CommLib.Logger.Error("版權採購退貨折讓單 (新增/修改/草稿)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("行政採購退貨折讓單 (新增/修改/草稿)失敗，原因：" + ex.Message);
             }
             return vResult;
-
         }
 
         #endregion
@@ -679,7 +672,7 @@ namespace OA_WEB_API.Repository.BPMPro
         /// <summary>
         /// 表單代號
         /// </summary>
-        private string IDENTIFY = "MediaOrderReturnRefund";
+        private string IDENTIFY = "GeneralOrderReturnRefund";
 
         /// <summary>
         /// 表單主旨

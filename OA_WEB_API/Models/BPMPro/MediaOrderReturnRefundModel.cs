@@ -43,7 +43,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>版權採購退貨折讓單 憑證退款明細 設定</summary>
         public List<MediaOrderReturnRefundInvoicesConfig> MEDIA_ORDER_RETURN_REFUND_INVS_CONFIG { get; set; }
 
-        /// <summary>版權採購退貨折讓單 憑證退款細項 設定</summary>
+        /// <summary>版權採購退貨折讓單 憑證已退款細項 設定</summary>
         public List<MediaOrderReturnRefundAlreadyInvoiceDetailsConfig> MEDIA_ORDER_RETURN_REFUND_ALDY_INV_DTLS_CONFIG { get; set; }
 
         /// <summary>版權採購退貨折讓單 憑證退款細項 設定</summary>
@@ -68,19 +68,19 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaOrderReturnRefundConfig
     {
-        /// <summary>版權請款 系統編號</summary>
+        /// <summary>版權採購請款 系統編號</summary>
         public string MEDIA_INVOICE_REQUISITION_ID { get; set; }
 
-        /// <summary>版權請款 主旨</summary>
+        /// <summary>版權採購請款 主旨</summary>
         public string MEDIA_INVOICE_SUBJECT { get; set; }
 
-        /// <summary>版權請款 BPM 表單單號</summary>
+        /// <summary>版權採購請款 BPM 表單單號</summary>
         public string MEDIA_INVOICE_BPM_FORM_NO { get; set; }
 
-        /// <summary>版權請款 ERP 表單唯一碼</summary>
+        /// <summary>版權採購請款 ERP 表單唯一碼</summary>
         public string MEDIA_INVOICE_ERP_FORM_NO { get; set; }
 
-        /// <summary>版權請款 路徑</summary>
+        /// <summary>版權採購請款 路徑</summary>
         public string MEDIA_INVOICE_PATH { get; set; }
 
         /// <summary>版權採購 採購單 付款辦法總額</summary>
@@ -147,7 +147,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 版權採購退貨折讓單 已退貨商品明細 設定
     /// </summary>
-    public class MediaOrderReturnRefundAlreadyRefundCommoditysConfig : MediaOrderReturnRefundRefundCommoditysConfig
+    public class MediaOrderReturnRefundAlreadyRefundCommoditysConfig : MediaCommodityConfig
     {
 
     }
@@ -165,7 +165,14 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaOrderReturnRefundInvoicesConfig : InvoiceConfig
     {
+        /// <summary>期別</summary>
+        public int PERIOD { get; set; }
 
+        /// <summary>憑證行數編號</summary>
+        public int INV_ROW_NO { get; set; }
+
+        /// <summary>備註</summary>
+        public string NOTE { get; set; }
     }
 
     /// <summary>
@@ -173,6 +180,11 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaOrderReturnRefundAlreadyInvoiceDetailsConfig : InvoiceDetailConfig
     {
+        /// <summary>期別</summary>
+        public int PERIOD { get; set; }
+
+        /// <summary>憑證行數編號</summary>
+        public int INV_ROW_NO { get; set; }
 
     }
 
@@ -181,6 +193,11 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaOrderReturnRefundInvoiceDetailsConfig : InvoiceDetailConfig
     {
+        /// <summary>期別</summary>
+        public int PERIOD { get; set; }
+
+        /// <summary>憑證行數編號</summary>
+        public int INV_ROW_NO { get; set; }
 
     }
 

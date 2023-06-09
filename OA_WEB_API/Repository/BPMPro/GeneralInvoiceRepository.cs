@@ -229,22 +229,22 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #region - 行政採購請款單 憑證明細 -
 
-            var CommonINV = new BPMCommonModel<InvoiceConfig>()
+            var CommonINV = new BPMCommonModel<GeneralInvoiceInvoicesConfig>()
             {
-                IsALDY = false,
+                EXT = "INV",
                 IDENTIFY = IDENTIFY,
                 parameter = parameter
             };
-            strJson = jsonFunction.ObjectToJSON(commonRepository.PostInvoiceFunction(CommonINV));            
-            var generalInvoiceInvoicsConfig = jsonFunction.JsonToObject<List<GeneralInvoiceInvoicsConfig>>(strJson);
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostInvoiceFunction(CommonINV));
+            var generalInvoiceInvoicsConfig = jsonFunction.JsonToObject<List<GeneralInvoiceInvoicesConfig>>(strJson);
 
             #endregion
 
             #region - 行政採購請款單 憑證細項 -
 
-            var CommonINV_DTL = new BPMCommonModel<InvoiceDetailConfig>()
+            var CommonINV_DTL = new BPMCommonModel<GeneralInvoiceInvoiceDetailsConfig>()
             {
-                IsALDY = false,
+                EXT = "INV_DTL",
                 IDENTIFY = IDENTIFY,
                 parameter = parameter
             };
@@ -527,7 +527,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [BFCY_TEL]=@BFCY_TEL, ";
                     strSQL += "     [BFCY_Email]=@BFCY_EMAIL, ";
                     strSQL += "     [InvoiceType]=@INVOICE_TYPE, ";
-                    strSQL += "     [Note]=@NOTE, ";                    
+                    strSQL += "     [Note]=@NOTE, ";
                     strSQL += "     [PYMT_CurrentTotal]=@PYMT_CURRENT_TOTAL, ";
                     strSQL += "     [PYMT_CurrentTotal_TWD]=@PYMT_CURRENT_TOTAL_TWD, ";
                     strSQL += "     [INV_TaxTotal]=@INV_TAX_TOTAL, ";
@@ -647,15 +647,15 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                     };
 
-                    var CommonINV = new BPMCommonModel<GeneralInvoiceInvoicsConfig>()
+                    var CommonINV = new BPMCommonModel<GeneralInvoiceInvoicesConfig>()
                     {
-                        IsALDY = false,
+                        EXT = "INV",
                         IDENTIFY = IDENTIFY,
                         parameter = parameterInvoices,
                         Model = model.GENERAL_INVOICE_INVS_CONFIG
                     };
                     commonRepository.PutInvoiceFunction(CommonINV);
-                }   
+                }
 
                 #endregion
 
@@ -683,7 +683,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     var CommonINV_DTL = new BPMCommonModel<GeneralInvoiceInvoiceDetailsConfig>()
                     {
-                        IsALDY = false,
+                        EXT="INV_DTL",
                         IDENTIFY = IDENTIFY,
                         parameter = parameterInvoiceDetails,
                         Model = model.GENERAL_INVOICE_INV_DTLS_CONFIG
@@ -717,7 +717,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region 關聯表:加上【行政採購點驗收單】
 
-                if(!String.IsNullOrEmpty(model.GENERAL_INVOICE_CONFIG.GENERAL_ACCEPTANCE_REQUISITION_ID) || !String.IsNullOrWhiteSpace(model.GENERAL_INVOICE_CONFIG.GENERAL_ACCEPTANCE_REQUISITION_ID))
+                if (!String.IsNullOrEmpty(model.GENERAL_INVOICE_CONFIG.GENERAL_ACCEPTANCE_REQUISITION_ID) || !String.IsNullOrWhiteSpace(model.GENERAL_INVOICE_CONFIG.GENERAL_ACCEPTANCE_REQUISITION_ID))
                 {
                     var GeneralAcceptanceformQueryModel = new FormQueryModel()
                     {
@@ -742,7 +742,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 #endregion
 
                 var associatedFormConfig = model.ASSOCIATED_FORM_CONFIG;
-                if (associatedFormConfig == null || associatedFormConfig.Count <= 0)                
+                if (associatedFormConfig == null || associatedFormConfig.Count <= 0)
                 {
                     associatedFormConfig = importAssociatedForm;
                 }

@@ -193,6 +193,7 @@
     <Compile Include="Controllers\BPMPro\GeneralAcceptanceController.cs" />
     <Compile Include="Controllers\BPMPro\GeneralInvoiceController.cs" />
     <Compile Include="Controllers\BPMPro\GeneralOrderChangeController.cs" />
+    <Compile Include="Controllers\BPMPro\GeneralOrderReturnRefundController.cs" />
     <Compile Include="Controllers\BPMPro\GetExternalController.cs" />
     <Compile Include="Controllers\BPMPro\GPI_CountersignController.cs" />
     <Compile Include="Controllers\BPMPro\GPI_EvaluateContentController.cs" />
@@ -249,6 +250,7 @@
     <Compile Include="Models\BPMPro\GeneralInvoiceModel.cs" />
     <Compile Include="Models\BPMPro\GeneralOrderChangeModel.cs" />
     <Compile Include="Models\BPMPro\GeneralOrderModel.cs" />
+    <Compile Include="Models\BPMPro\GeneralOrderReturnRefundModel.cs" />
     <Compile Include="Models\BPMPro\GetExternalModel.cs" />
     <Compile Include="Models\BPMPro\GPI_CountersignModel.cs" />
     <Compile Include="Models\BPMPro\GPI_EvaluateContentModel.cs" />
@@ -286,6 +288,7 @@
     <Compile Include="Repository\BPMPro\GeneralInvoiceRepository.cs" />
     <Compile Include="Repository\BPMPro\GeneralOrderChangeRepository.cs" />
     <Compile Include="Repository\BPMPro\GeneralOrderRepository.cs" />
+    <Compile Include="Repository\BPMPro\GeneralOrderReturnRefundRepository.cs" />
     <Compile Include="Repository\BPMPro\GetExternalRepository.cs" />
     <Compile Include="Repository\BPMPro\GPI_CountersignRepository.cs" />
     <Compile Include="Repository\BPMPro\GPI_EvaluateContentReplenishRepository.cs" />

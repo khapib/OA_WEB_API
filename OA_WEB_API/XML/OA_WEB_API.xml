@@ -1321,6 +1321,11 @@
             行政採購請款單 審核資訊_回傳ERP
             </summary>    
         </member>
+        <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostGeneralOrderReturnRefundInfoSingle">
+            <summary>
+            行政採購退貨折讓單 審核資訊_回傳ERP
+            </summary>    
+        </member>
         <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostEvaluateContentInfoSingle">
             <summary>
             內容評估表 審核資訊_回傳ERP
@@ -1346,7 +1351,7 @@
             版權採購請款單 審核資訊_回傳ERP
             </summary>    
         </member>
-        <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostMediaOrderReturnRefundSingle">
+        <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostMediaOrderReturnRefundInfoSingle">
             <summary>
             版權採購退貨折讓單 審核資訊_回傳ERP
             </summary>    
@@ -2818,6 +2823,9 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceDetailsConfig.ROW_NO">
             <summary>行數編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceDetailsConfig.ACPT_QUANTITY">
+            <summary>驗收量</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralAcceptanceDetailsConfig.OWNER_DEPT_MAIN_ID">
             <summary>驗收負責人主要部門</summary>
@@ -4487,38 +4495,11 @@
             版權採購交片單 驗收明細 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.SUP_PROD_A_NO">
-            <summary>商品代碼</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.ROW_NO">
             <summary>行數編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.ITEM_NAME">
-            <summary>商品名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.MEDIA_SPEC">
-            <summary>影帶規格</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.MEDIA_TYPE">
-            <summary>影片類型</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.START_EPISODE">
-            <summary>開始集數</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.END_EPISODE">
-            <summary>結束集數</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.ORDER_EPISODE">
-            <summary>總採購集數</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.ACPT_EPISODE">
-            <summary>驗收集數</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.DISMANTLE_EPISODE">
             <summary>拆分集數</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.EPISODE_TIME">
-            <summary>每集長度</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.GET_MASTERING_DATE">
             <summary>母帶受領日期</summary>
@@ -4546,9 +4527,6 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.IS_ORIGINAL">
             <summary>是否為原始列</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.ORDER_ROW_NO">
-            <summary>訂單行數編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.IS_RETURN">
             <summary>是否為退貨商品[標記]</summary>
@@ -5174,42 +5152,8 @@
             版權採購申請單 採購明細 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.ORDER_ROW_NO">
-            <summary>訂單行數編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.SUP_PROD_A_NO">
-            <summary>商品代碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.ITEM_NAME">
-            <summary>商品名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.MEDIA_SPEC">
-            <summary>影帶規格：
-            SD.
-            HD.
-            4K.
-            </summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.AUTH_ALL">
             <summary>全部權利</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.MEDIA_TYPE">
-            <summary>影片類型</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.START_EPISODE">
-            <summary>開始集數</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.END_EPISODE">
-            <summary>結束集數</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.ORDER_EPISODE">
-            <summary>總採購集數</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.ACPT_EPISODE">
-            <summary>驗收集數</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.EPISODE_TIME">
-            <summary>每集長度</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.NET">
             <summary>未稅單價/NET單價</summary>
@@ -7145,7 +7089,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GeneralCommodityConfig">
             <summary>
-            (已退貨/退貨)行政商品
+            行政商品
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralCommodityConfig.ORDER_ROW_NO">
@@ -7171,7 +7115,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaCommodityConfig">
             <summary>
-            (已退貨/退貨)版權商品
+            版權商品
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.ORDER_ROW_NO">
@@ -7953,6 +7897,23 @@
         <member name="P:OA_WEB_API.Models.ERP.GeneralInvoiceInfoRequest.LoginName">
             <summary>最後簽核人姓名</summary>
         </member>
+        <member name="T:OA_WEB_API.Models.ERP.GeneralOrderReturnRefundInfoRequest">
+            <summary>
+            行政採購退貨折讓單 審核資訊_回傳ERP
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GeneralOrderReturnRefundInfoRequest.ERP_RESPONSE_STATE">
+            <summary>接收ERP回傳狀態</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GeneralOrderReturnRefundInfoRequest.GENERAL_ORDER_RETURN_REFUND_VIEW">
+            <summary>行政採購退貨折讓單</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GeneralOrderReturnRefundInfoRequest.LoginId">
+            <summary>最後簽核人員工編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GeneralOrderReturnRefundInfoRequest.LoginName">
+            <summary>最後簽核人姓名</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.ERP.EvaluateContentInfoRequest.ERP_RESPONSE_STATE">
             <summary>接收ERP回傳狀態</summary>
         </member>
@@ -8135,7 +8096,7 @@
             <summary>接收ERP回傳狀態</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.MediaOrderReturnRefundInfoRequest.MEDIA_ORDER_RETURN_REFUND_VIEW">
-            <summary>版權採購退貨折讓單 test</summary>
+            <summary>版權採購退貨折讓單</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.MediaOrderReturnRefundInfoRequest.LoginId">
             <summary>最後簽核人員工編號</summary>
@@ -10351,6 +10312,9 @@
         <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.generalInvoiceRepository">
             <summary>行政採購請款單</summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.generalOrderReturnRefundRepository">
+            <summary>行政採購退貨折讓單</summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.evaluateContentRepository">
             <summary>內容評估表</summary>
         </member>
@@ -10400,6 +10364,11 @@
             行政採購請款單 審核資訊_回傳ERP
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostGeneralOrderReturnRefundInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
+            <summary>
+            行政採購退貨折讓單 審核資訊_回傳ERP
+            </summary>
+        </member>
         <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostEvaluateContentInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
             <summary>
             內容評估表 審核資訊_回傳ERP
@@ -10425,7 +10394,7 @@
             版權採購請款單 審核資訊_回傳ERP
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostMediaOrderReturnRefundSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
+        <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostMediaOrderReturnRefundInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
             <summary>
             版權採購退貨折讓單 審核資訊_回傳ERP
             </summary>

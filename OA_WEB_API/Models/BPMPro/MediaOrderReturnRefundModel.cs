@@ -147,7 +147,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 版權採購退貨折讓單 已退貨商品明細 設定
     /// </summary>
-    public class MediaOrderReturnRefundAlreadyRefundCommoditysConfig : MediaOrderReturnRefundRefundCommoditysConfig
+    public class MediaOrderReturnRefundAlreadyRefundCommoditysConfig : MediaCommodityConfig
     {
 
     }

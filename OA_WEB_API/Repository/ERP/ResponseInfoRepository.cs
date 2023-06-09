@@ -50,6 +50,8 @@ namespace OA_WEB_API.Repository.ERP
         GeneralAcceptanceRepository generalAcceptanceRepository = new GeneralAcceptanceRepository();
         /// <summary>行政採購請款單</summary>
         GeneralInvoiceRepository generalInvoiceRepository = new GeneralInvoiceRepository();
+        /// <summary>行政採購退貨折讓單</summary>
+        GeneralOrderReturnRefundRepository generalOrderReturnRefundRepository = new GeneralOrderReturnRefundRepository();
 
         #endregion
 
@@ -430,7 +432,7 @@ namespace OA_WEB_API.Repository.ERP
             {
                 #region - 查詢及執行 -
 
-                #region - 行政採購點驗收單 財務審核資訊 -
+                #region - 行政採購請款單 財務審核資訊 -
 
                 #region 回傳表單內容
 
@@ -494,6 +496,83 @@ namespace OA_WEB_API.Repository.ERP
             catch (Exception ex)
             {
                 CommLib.Logger.Error("行政採購請款單:" + query.REQUISITION_ID + " 財務簽核資訊回傳ERP 失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region - 行政採購退貨折讓單 審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 行政採購退貨折讓單 審核資訊_回傳ERP
+        /// </summary>
+        public GeneralOrderReturnRefundInfoRequest PostGeneralOrderReturnRefundInfoSingle(RequestQueryModel query)
+        {
+            try
+            {
+                #region - 查詢及執行 -
+
+                #region - 行政採購退貨折讓單 財務審核資訊 -
+
+                #region 回傳表單內容
+
+                GeneralOrderReturnRefundQueryModel generalOrderReturnRefundQueryModel = new GeneralOrderReturnRefundQueryModel
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+
+                GeneralOrderReturnRefundInfoRequest generalOrderReturnRefundInfoRequest = new GeneralOrderReturnRefundInfoRequest();
+                var generalOrderReturnRefundContent = generalOrderReturnRefundRepository.PostGeneralOrderReturnRefundSingle(generalOrderReturnRefundQueryModel);
+                generalOrderReturnRefundInfoRequest.GENERAL_ORDER_RETURN_REFUND_VIEW = generalOrderReturnRefundContent;
+
+                #endregion
+
+                #region 表單簽核狀態
+
+                var parameter = new List<SqlParameter>()
+                {
+                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID },
+                };
+                //表單資料
+                var formQueryModel = new FormQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+                var formData = formRepository.PostFormData(formQueryModel);
+                var stepFlowConfig = stepFlowRepository.StepFlowInfo(formData, parameter);
+
+                #endregion
+
+                #endregion
+
+                #region - 回傳ERP - 
+
+                generalOrderReturnRefundInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                generalOrderReturnRefundInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+
+                if (query.REQUEST_FLG)
+                {
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/";
+                    Method = "POST";
+                    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, generalOrderReturnRefundInfoRequest);
+
+                    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                    CommLib.Logger.Debug("行政採購退貨折讓單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                    generalOrderReturnRefundInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                }
+
+                #endregion
+
+                #endregion
+
+                strJson = jsonFunction.ObjectToJSON(generalOrderReturnRefundInfoRequest);
+                CommLib.Logger.Debug("行政採購請款單:" + query.REQUISITION_ID + " BPM回傳內容：" + strJson);
+                return generalOrderReturnRefundInfoRequest;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("行政採購退貨折讓單:" + query.REQUISITION_ID + " 財務簽核資訊回傳ERP 失敗，原因：" + ex.Message);
                 throw;
             }
         }
@@ -920,7 +999,7 @@ namespace OA_WEB_API.Repository.ERP
         /// <summary>
         /// 版權採購退貨折讓單 審核資訊_回傳ERP
         /// </summary>
-        public MediaOrderReturnRefundInfoRequest PostMediaOrderReturnRefundSingle(RequestQueryModel query)
+        public MediaOrderReturnRefundInfoRequest PostMediaOrderReturnRefundInfoSingle(RequestQueryModel query)
         {
             try
             {

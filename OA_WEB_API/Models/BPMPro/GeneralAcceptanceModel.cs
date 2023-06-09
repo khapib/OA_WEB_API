@@ -100,6 +100,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>行數編號</summary>
         public int ROW_NO { get; set; }
 
+        /// <summary>驗收量</summary>
+        public int ACPT_QUANTITY { get; set; }
+
         /// <summary>驗收負責人主要部門</summary>
         public string OWNER_DEPT_MAIN_ID { get; set; }
 

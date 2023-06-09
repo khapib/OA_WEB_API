@@ -198,6 +198,28 @@ namespace OA_WEB_API.Models.ERP
 
     #endregion
 
+    #region - 行政採購退貨折讓單 審核資訊_回傳ERP -
+
+    /// <summary>
+    /// 行政採購退貨折讓單 審核資訊_回傳ERP
+    /// </summary>
+    public class GeneralOrderReturnRefundInfoRequest
+    {
+        /// <summary>接收ERP回傳狀態</summary>
+        public ErpResponseState ERP_RESPONSE_STATE { get; set; }
+
+        /// <summary>行政採購退貨折讓單</summary>
+        public GeneralOrderReturnRefundViewModel GENERAL_ORDER_RETURN_REFUND_VIEW { get; set; }
+
+        /// <summary>最後簽核人員工編號</summary>
+        public string LoginId { get; set; }
+
+        /// <summary>最後簽核人姓名</summary>
+        public string LoginName { get; set; }
+    }
+
+    #endregion
+
     #endregion
 
     #region - 內容評估表_回傳ERP資訊 -
@@ -418,7 +440,7 @@ namespace OA_WEB_API.Models.ERP
         /// <summary>接收ERP回傳狀態</summary>
         public ErpResponseState ERP_RESPONSE_STATE { get; set; }
 
-        /// <summary>版權採購退貨折讓單 test</summary>
+        /// <summary>版權採購退貨折讓單</summary>
         public MediaOrderReturnRefundViewModel MEDIA_ORDER_RETURN_REFUND_VIEW { get; set; }
 
         /// <summary>最後簽核人員工編號</summary>

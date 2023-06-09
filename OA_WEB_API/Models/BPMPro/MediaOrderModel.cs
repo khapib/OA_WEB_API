@@ -184,7 +184,7 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>合計未稅金額(付款辦法)/NET總額(付款辦法)</summary>
         public double PYMT_NET_TOTAL { get; set; }
-  
+
         /// <summary>合計含稅總額(付款辦法)/GROSS總額(付款辦法)</summary>
         public double PYMT_GROSS_TOTAL { get; set; }
 
@@ -204,44 +204,10 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 版權採購申請單 採購明細 設定
     /// </summary>
-    public class MediaOrderDetailsConfig
+    public class MediaOrderDetailsConfig : MediaCommodityConfig
     {
-        /// <summary>訂單行數編號</summary>
-        public int ORDER_ROW_NO { get; set; }
-
-        /// <summary>商品代碼</summary>
-        public string SUP_PROD_A_NO { get; set; }
-
-        /// <summary>商品名稱</summary>
-        public string ITEM_NAME { get; set; }
-
-        /// <summary>影帶規格：
-        /// SD.
-        /// HD.
-        /// 4K.
-        /// </summary>
-        public string MEDIA_SPEC { get; set; }
-
         /// <summary>全部權利</summary>
         public string AUTH_ALL { get; set; }
-
-        /// <summary>影片類型</summary>
-        public string MEDIA_TYPE { get; set; }
-
-        /// <summary>開始集數</summary>
-        public int START_EPISODE { get; set; }
-
-        /// <summary>結束集數</summary>
-        public int END_EPISODE { get; set; }
-
-        /// <summary>總採購集數</summary>
-        public int ORDER_EPISODE { get; set; }
-
-        /// <summary>驗收集數</summary>
-        public int ACPT_EPISODE { get; set; }
-
-        /// <summary>每集長度</summary>
-        public int EPISODE_TIME { get; set; }
 
         /// <summary>未稅單價/NET單價</summary>
         public double NET { get; set; }

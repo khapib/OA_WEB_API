@@ -226,12 +226,12 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    #region - (已退貨/退貨)商品 -
+    #region - 商品 -
 
-    #region - (已退貨/退貨)行政商品 -
+    #region - 行政商品 -
 
     /// <summary>
-    /// (已退貨/退貨)行政商品
+    /// 行政商品
     /// </summary>
     public class GeneralCommodityConfig
     {
@@ -259,10 +259,10 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    #region - (已退貨/退貨)版權商品 -
+    #region - 版權商品 -
 
     /// <summary>
-    /// (已退貨/退貨)版權商品
+    /// 版權商品
     /// </summary>
     public class MediaCommodityConfig
     {

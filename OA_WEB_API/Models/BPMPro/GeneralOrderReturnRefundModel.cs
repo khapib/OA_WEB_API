@@ -142,7 +142,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 行政採購退貨折讓單 已退貨商品明細 設定
     /// </summary>
-    public class GeneralOrderReturnRefundAlreadyRefundCommoditysConfig : GeneralOrderReturnRefundRefundCommoditysConfig
+    public class GeneralOrderReturnRefundAlreadyRefundCommoditysConfig : GeneralCommodityConfig
     {
 
     }

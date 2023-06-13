@@ -339,6 +339,14 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaInvoiceInvoicesConfig : InvoiceConfig
     {
+        /// <summary>期別</summary>
+        public int PERIOD { get; set; }
+
+        /// <summary>憑證行數編號</summary>
+        public int INV_ROW_NO { get; set; }
+
+        /// <summary>備註</summary>
+        public string NOTE { get; set; }
 
     }
 
@@ -347,6 +355,11 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaInvoiceInvoiceDetailsConfig : InvoiceDetailConfig
     {
+        /// <summary>期別</summary>
+        public int PERIOD { get; set; }
+
+        /// <summary>憑證行數編號</summary>
+        public int INV_ROW_NO { get; set; }
 
     }
 }

@@ -101,40 +101,13 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 版權採購交片單 驗收明細 設定
     /// </summary>
-    public class MediaAcceptanceDetailsConfig
+    public class MediaAcceptanceDetailsConfig : MediaCommodityConfig
     {
-        /// <summary>商品代碼</summary>
-        public string SUP_PROD_A_NO { get; set; }
-
         /// <summary>行數編號</summary>
         public int ROW_NO { get; set; }
 
-        /// <summary>商品名稱</summary>
-        public string ITEM_NAME { get; set; }
-
-        /// <summary>影帶規格</summary>
-        public string MEDIA_SPEC { get; set; }
-
-        /// <summary>影片類型</summary>
-        public string MEDIA_TYPE { get; set; }
-
-        /// <summary>開始集數</summary>
-        public int START_EPISODE { get; set; }
-
-        /// <summary>結束集數</summary>
-        public int END_EPISODE { get; set; }
-
-        /// <summary>總採購集數</summary>
-        public int ORDER_EPISODE { get; set; }
-
-        /// <summary>驗收集數</summary>
-        public int ACPT_EPISODE { get; set; }
-
         /// <summary>拆分集數</summary>
         public int DISMANTLE_EPISODE { get; set; }
-
-        /// <summary>每集長度</summary>
-        public int EPISODE_TIME { get; set; }
 
         /// <summary>母帶受領日期</summary>
         public Nullable<DateTime> GET_MASTERING_DATE { get; set; }
@@ -162,9 +135,6 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>是否為原始列</summary>
         public string IS_ORIGINAL { get; set; }
-
-        /// <summary>訂單行數編號</summary>
-        public int ORDER_ROW_NO { get; set; }
 
         /// <summary>是否為退貨商品[標記]</summary>
         public string IS_RETURN { get; set; }

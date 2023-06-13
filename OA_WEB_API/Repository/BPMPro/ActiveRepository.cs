@@ -482,9 +482,9 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "     FROM [FM7T_" + formData.IDENTIFY + "_S] AS S ";
                 strSQL += "     WHERE S.[RequisitionID]=@REQUISITION_ID ";
                 strSQL += "     UNION ALL ";
-                strSQL += "     SELECT '0',[RequisitionID],NULL,[ApplicantDept],[ApplicantID],[ApplicantName],[ApplicantDateTime],'提交申請',NULL ";
-                strSQL += "     FROM [FM7T_" + formData.IDENTIFY + "_M] ";
-                strSQL += "     WHERE [RequisitionID]=@REQUISITION_ID ";
+                strSQL += "     SELECT '0',[REQUISITION_ID],NULL,[APPLICANT_DEPT_ID],[APPLICANT_ID],[APPLICANT_NAME],[APPLICANT_DATETIME],'提交申請',NULL ";
+                strSQL += "     FROM [BPMPro].[dbo].[GTV_View_FormData] ";
+                strSQL += "     WHERE [REQUISITION_ID]=@REQUISITION_ID ";
                 strSQL += ") ";
                 strSQL += "SELECT S.[REQUISITION_ID],ISNULL(P.[DisplayName],'申請人') AS [PROCESS_NAME],A.[DEPT_NAME],A.[TITLE_NAME],S.[APPROVER_NAME],S.[APPROVER_TIME],S.[RESULT_PROMPT],S.[COMMENT] ";
                 strSQL += "FROM [CTE_SIGNATURE] AS S ";

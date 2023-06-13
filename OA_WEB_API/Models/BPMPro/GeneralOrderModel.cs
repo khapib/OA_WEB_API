@@ -38,7 +38,7 @@ namespace OA_WEB_API.Models.BPMPro
         public IList<GeneralOrderPaymentsConfig> GENERAL_ORDER_PAYMENTS_CONFIG { get; set; }
 
         /// <summary>行政採購申請 使用預算 設定</summary>
-        public IList<GeneralOrderBudgetsConfig> GENERAL_ORDER_BUDGETS_CONFIG { get; set; }
+        public List<GeneralOrderBudgetsConfig> GENERAL_ORDER_BUDGETS_CONFIG { get; set; }
 
         /// <summary>行政採購申請 驗收項目 設定</summary>
         public IList<GeneralOrderAcceptancesConfig> GENERAL_ORDER_ACPT_CONFIG { get; set; }
@@ -68,10 +68,10 @@ namespace OA_WEB_API.Models.BPMPro
         public string PARENT_ID { get; set; }
 
         /// <summary>母表單BPM 表單單號</summary>
-        public string PARENT_BPM_FORM_NO { get; set; } 
-        
+        public string PARENT_BPM_FORM_NO { get; set; }
+
         /// <summary>表單操作</summary>
-        public string FORM_ACTION { get; set; }    
+        public string FORM_ACTION { get; set; }
 
         /// <summary>ERP 工作流程標題名稱</summary>
         public string FLOW_NAME { get; set; }
@@ -170,29 +170,8 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 行政採購申請 採購明細 設定
     /// </summary>
-    public class GeneralOrderDetailsConfig
+    public class GeneralOrderDetailsConfig : GeneralCommodityConfig
     {
-        /// <summary>商品代碼</summary>
-        public string SUP_PROD_A_NO { get; set; }
-
-        /// <summary>訂單行數編號</summary>
-        public int ORDER_ROW_NO { get; set; }
-
-        /// <summary>商品名稱</summary>
-        public string ITEM_NAME { get; set; }
-
-        /// <summary>型號</summary>
-        public string MODEL { get; set; }
-
-        /// <summary>規格</summary>
-        public string SPECIFICATIONS { get; set; }
-
-        /// <summary>數量</summary>
-        public int QUANTITY { get; set; }
-
-        /// <summary>單位</summary>
-        public string UNIT { get; set; }
-
         /// <summary>未稅單價/NET單價</summary>
         public double NET { get; set; }
 
@@ -277,63 +256,21 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 行政採購申請 使用預算 設定
     /// </summary>
-    public class GeneralOrderBudgetsConfig
-    {        
+    public class GeneralOrderBudgetsConfig : BudgetConfig
+    {
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
-
-        /// <summary>預算 ERP唯一碼</summary>        
-        public string FORM_NO { get; set; }
-
-        /// <summary>預算編列年度</summary>
-        public string CREATE_YEAR { get; set; }
-
-        /// <summary>預算名稱</summary>
-        public string NAME { get; set; }
-
-        /// <summary>所屬部門</summary>
-        public string OWNER_DEPT { get; set; }
-
-        /// <summary>預算總額</summary>
-        public int TOTAL { get; set; }
-
-        /// <summary>可用預算金額</summary>
-        public int AVAILABLE_BUDGET_AMOUNT { get; set; }
-
-        /// <summary>使用預算金額</summary>
-        public int USE_BUDGET_AMOUNT { get; set; }
     }
 
     /// <summary>
     /// 行政採購申請 驗收項目 設定
     /// </summary>
-    public class GeneralOrderAcceptancesConfig
+    public class GeneralOrderAcceptancesConfig : GeneralCommodityConfig
     {
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
-                
-        /// <summary>商品代碼</summary>
-        public string SUP_PROD_A_NO { get; set; }
-
-        /// <summary>訂單行數編號</summary>
-        public int ORDER_ROW_NO { get; set; }
-
-        /// <summary>商品名稱</summary>
-        public string ITEM_NAME { get; set; }
-
-        /// <summary>型號</summary>
-        public string MODEL { get; set; }
-
-        /// <summary>規格</summary>
-        public string SPECIFICATIONS { get; set; }
-
-        /// <summary>數量</summary>
-        public int QUANTITY { get; set; }
-
-        /// <summary>單位</summary>
-        public string UNIT { get; set; }
 
         /// <summary>商品備註</summary>
-        public string NOTE { get; set;}
+        public string NOTE { get; set; }
     }
 }

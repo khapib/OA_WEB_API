@@ -269,22 +269,14 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #region - 版權採購申請單 使用預算 -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [FormNo] AS [FORM_NO], ";
-            strSQL += "     [CreateYear] AS [CREATE_YEAR], ";
-            strSQL += "     [Name] AS [NAME], ";
-            strSQL += "     [OwnerDept] AS [OWNER_DEPT], ";
-            strSQL += "     [Total] AS [TOTAL], ";
-            strSQL += "     [AvailableBudgetAmount] AS [AVAILABLE_BUDGET_AMOUNT], ";
-            strSQL += "     [UseBudgetAmount] AS [USE_BUDGET_AMOUNT] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_BUDG] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "ORDER BY [AutoCounter] ";
-
-            var mediaOrderBudgetsConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaOrderBudgetsConfig>();
+            var CommonBUDG = new BPMCommonModel<MediaOrderBudgetsConfig>()
+            {
+                EXT = "BUDG",
+                IDENTIFY = IDENTIFY,
+                parameter = parameter
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostBudgetFunction(CommonBUDG));
+            var mediaOrderBudgetsConfig = jsonFunction.JsonToObject<List<MediaOrderBudgetsConfig>>(strJson);
 
             #endregion
 
@@ -293,8 +285,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [OrderRowNo] AS [ORDER_ROW_NO], ";
             strSQL += "     [Period] AS [PERIOD], ";
+            strSQL += "     [OrderRowNo] AS [ORDER_ROW_NO], ";
             strSQL += "     [SupProdANo] AS [SUP_PROD_A_NO], ";
             strSQL += "     [ItemName] AS [ITEM_NAME], ";
             strSQL += "     [MediaType] AS [MEDIA_TYPE], ";
@@ -464,7 +456,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@APPLICANT_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_ID },
                     new SqlParameter("@APPLICANT_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_NAME },
                     new SqlParameter("@APPLICANT_PHONE", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.APPLICANT_PHONE ?? String.Empty },
-                    new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) },
                     //(填單人/代填單人)資訊
                     new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_ID },
                     new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
@@ -480,6 +471,28 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_ORDER_TITLE.FORM_NO ?? DBNull.Value },
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
                 };
+
+                #region - 正常起單後 申請時間(APPLICANT_DATETIME) 不可覆蓋 -
+
+                if (model.APPLICANT_INFO.DRAFT_FLAG == 0)
+                {
+                    strSQL = "";
+                    strSQL += "SELECT ";
+                    strSQL += "      [RequisitionID] ";
+                    strSQL += "FROM [BPMPro].[dbo].[FSe7en_Sys_Requisition] ";
+                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+                    var dtReq = dbFun.DoQuery(strSQL, parameterTitle);
+                    if (dtReq.Rows.Count <= 0)
+                    {
+                        parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+                        IsADD = true;
+                    }
+
+                }
+                else parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+
+                #endregion
 
                 strSQL = "";
                 strSQL += "SELECT ";
@@ -501,7 +514,9 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [ApplicantID]=@APPLICANT_ID, ";
                     strSQL += "     [ApplicantName]=@APPLICANT_NAME, ";
                     strSQL += "     [ApplicantPhone]=@APPLICANT_PHONE, ";
-                    strSQL += "     [ApplicantDateTime]=@APPLICANT_DATETIME, ";
+
+                    if (IsADD) strSQL += "     [ApplicantDateTime]=@APPLICANT_DATETIME, ";
+
                     strSQL += "     [FillerID]=@FILLER_ID, ";
                     strSQL += "     [FillerName]=@FILLER_NAME, ";
                     strSQL += "     [Priority]=@PRIORITY, ";
@@ -872,7 +887,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@ORDER_SUM_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@USE_BUDGET", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                 };
-                 
+
                 #region 先刪除舊資料
 
                 strSQL = "";
@@ -931,36 +946,16 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@USE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
-                #region 先刪除舊資料
-
-                strSQL = "";
-                strSQL += "DELETE ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_BUDG] ";
-                strSQL += "WHERE 1=1 ";
-                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
-
-                dbFun.DoQuery(strSQL, parameterBudgets);
-
-                #endregion
-
                 if (model.MEDIA_ORDER_BUDGS_CONFIG != null && model.MEDIA_ORDER_BUDGS_CONFIG.Count > 0)
                 {
-                    #region 再新增資料
-
-                    foreach (var item in model.MEDIA_ORDER_BUDGS_CONFIG)
+                    var CommonBUDG = new BPMCommonModel<MediaOrderBudgetsConfig>()
                     {
-                        //寫入：版權採購申請單 使用預算parameter
-                        strJson = jsonFunction.ObjectToJSON(item);
-                        GlobalParameters.Infoparameter(strJson, parameterBudgets);
-
-                        strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_BUDG]([RequisitionID],[Period],[FormNo],[CreateYear],[Name],[OwnerDept],[Total],[AvailableBudgetAmount],[UseBudgetAmount]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@FORM_NO,@CREATE_YEAR,@NAME,@OWNER_DEPT,@TOTAL,@AVAILABLE_BUDGET_AMOUNT,@USE_BUDGET_AMOUNT) ";
-
-                        dbFun.DoTran(strSQL, parameterBudgets);
-                    }
-
-                    #endregion
+                        EXT = "BUDG",
+                        IDENTIFY = IDENTIFY,
+                        parameter = parameterBudgets,
+                        Model = model.MEDIA_ORDER_BUDGS_CONFIG
+                    };
+                    commonRepository.PutBudgetFunction(CommonBUDG);
                 }
 
                 #endregion
@@ -1191,6 +1186,11 @@ namespace OA_WEB_API.Repository.BPMPro
         /// T-SQL
         /// </summary>
         private string strSQL;
+
+        /// <summary>
+        /// 確認是否為新建的表單
+        /// </summary>
+        private bool IsADD = false;
 
         /// <summary>
         /// 表單代號

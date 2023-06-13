@@ -241,6 +241,51 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
+    #region - 行政採購退貨折讓單(外部起單) -
+
+    /// <summary>
+    /// 行政採購退貨折讓單(外部起單)
+    /// </summary>
+    public class GeneralOrderReturnRefundERPInfo
+    {
+        /// <summary>行政採購退貨折讓單(抬頭)</summary>
+        public GeneralOrderReturnRefundInfoTitle TITLE { get; set; }
+
+        /// <summary>行政採購退貨折讓單(表單內容)</summary>
+        public GeneralOrderReturnRefundInfoConfig INFO { get; set; }
+
+        /// <summary>行政採購退貨折讓單(已退貨商品明細)</summary>
+        public List<GeneralCommodityConfig> ALDY_RF_COMM { get; set; }
+
+        /// <summary>行政採購退貨折讓單(憑證退款細項)</summary>
+        public List<GeneralOrderReturnRefundAlreadyInvoiceDetailsConfig> ALDY_INV_DTL { get; set; }
+
+    }
+
+    /// <summary>
+    /// 行政採購退貨折讓單(抬頭)
+    /// </summary>
+    public class GeneralOrderReturnRefundInfoTitle : InfoTitle
+    {
+        /// <summary>ERP 工作流程名稱</summary>
+        public string FLOW_NAME { get; set; }
+    }
+
+    /// <summary>
+    /// 行政採購退貨折讓單(表單內容)
+    /// </summary>
+    public class GeneralOrderReturnRefundInfoConfig
+    {
+        /// <summary>行政請款 系統編號</summary>
+        public string GENERAL_INVOICE_REQUISITION_ID { get; set; }
+
+        /// <summary>期別</summary>
+        public int PERIOD { get; set; }
+
+    }
+
+    #endregion
+
     #endregion
 
     #region - 內容評估表(外部起單) -
@@ -450,7 +495,7 @@ namespace OA_WEB_API.Models.BPMPro
         public List<MediaCommodityConfig> ALDY_RF_COMM { get; set; }
 
         /// <summary>版權採購退貨折讓單(憑證退款細項)</summary>
-        public List<InvoiceDetailConfig> ALDY_INV_DTL { get; set; }
+        public List<MediaOrderReturnRefundAlreadyInvoiceDetailsConfig> ALDY_INV_DTL { get; set; }
 
     }
 

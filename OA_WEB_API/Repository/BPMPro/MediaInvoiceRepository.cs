@@ -189,6 +189,17 @@ namespace OA_WEB_API.Repository.BPMPro
                 new SqlParameter("@PERIOD", SqlDbType.Int) { Value = mediaInvoiceConfig.PERIOD }
             };
 
+            #region - 版權採購單 資訊 -
+
+            var mediaOrderQueryModel = new MediaOrderQueryModel
+            {
+                REQUISITION_ID = mediaInvoiceConfig.MEDIA_ORDER_REQUISITION_ID
+            };
+
+            var mediaOrderContent = mediaOrderRepository.PostMediaOrderSingle(mediaOrderQueryModel);
+
+            #endregion
+
             #region - 版權採購請款單 驗收明細 -
 
             //View的「驗收明細」是 版權採購申請單 的「驗收明細」加上 「採購明細」的所屬專案、金額及備註。
@@ -234,17 +245,6 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 版權採購單 資訊 -
-
-            var mediaOrderQueryModel = new MediaOrderQueryModel
-            {
-                REQUISITION_ID = mediaInvoiceConfig.MEDIA_ORDER_REQUISITION_ID
-            };
-
-            var mediaOrderContent = mediaOrderRepository.PostMediaOrderSingle(mediaOrderQueryModel);
-
-            #endregion
-
             #region - 版權採購請款單 授權權利 -
             //View的「授權權利」是 版權採購申請單 的「授權權利」
 
@@ -281,10 +281,10 @@ namespace OA_WEB_API.Repository.BPMPro
             List<MediaInvoiceAuthorizesConfig> mediaInvoiceAuthorizesConfig = new List<MediaInvoiceAuthorizesConfig>();
             foreach (var item in mediaInvoiceAcceptancesConfig)
             {
-                strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_AUTHS_CONFIG.Where(AUTH => AUTH.ORDER_ROW_NO == item.ORDER_ROW_NO && item.PERIOD == mediaInvoiceConfig.PERIOD).Select(AUTH => AUTH));
+                strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_AUTHS_CONFIG.Where(AUTH => AUTH.SUP_PROD_A_NO == item.SUP_PROD_A_NO && item.PERIOD == mediaInvoiceConfig.PERIOD).Select(AUTH => AUTH));
                 mediaInvoiceAuthorizesConfig.AddRange(JsonConvert.DeserializeObject<List<MediaInvoiceAuthorizesConfig>>(strJson));
             }
-            mediaInvoiceAuthorizesConfig = mediaInvoiceAuthorizesConfig.GroupBy(AUTH => new { AUTH.ORDER_ROW_NO, AUTH.PLAY_PLATFORM }).Select(g => g.First()).ToList();
+            mediaInvoiceAuthorizesConfig = mediaInvoiceAuthorizesConfig.GroupBy(AUTH => new { AUTH.SUP_PROD_A_NO, AUTH.PLAY_PLATFORM }).Select(g => g.First()).ToList();
 
 
             #endregion
@@ -312,16 +312,15 @@ namespace OA_WEB_API.Repository.BPMPro
             strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_BUDGS_CONFIG.Where(BUDG => BUDG.PERIOD == mediaInvoiceConfig.PERIOD).Select(BUDG => BUDG));
             var mediaInvoiceBudgetsConfig = JsonConvert.DeserializeObject<List<MediaInvoiceBudgetsConfig>>(strJson);
 
-
             #endregion
 
             parameter.Add(new SqlParameter("@PERIOD", SqlDbType.Int) { Value = mediaInvoiceConfig.PERIOD });
 
             #region - 版權採購請款單 憑證明細 -
 
-            var CommonINV = new BPMCommonModel<InvoiceConfig>()
+            var CommonINV = new BPMCommonModel<MediaInvoiceInvoicesConfig>()
             {
-                IsALDY = false,
+                EXT = "INV",
                 IDENTIFY = IDENTIFY,
                 parameter = parameter
             };
@@ -332,9 +331,9 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #region - 版權採購請款單 憑證細項 -
 
-            var CommonINV_DTL = new BPMCommonModel<InvoiceDetailConfig>()
+            var CommonINV_DTL = new BPMCommonModel<MediaInvoiceInvoiceDetailsConfig>()
             {
-                IsALDY = false,
+                EXT = "INV_DTL",
                 IDENTIFY = IDENTIFY,
                 parameter = parameter
             };
@@ -452,7 +451,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@APPLICANT_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_ID },
                     new SqlParameter("@APPLICANT_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_NAME },
                     new SqlParameter("@APPLICANT_PHONE", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.APPLICANT_PHONE ?? String.Empty },
-                    new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) },
                     //(填單人/代填單人)資訊
                     new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_ID },
                     new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
@@ -461,6 +459,28 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_INVOICE_TITLE.FORM_NO ?? DBNull.Value },
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
                 };
+
+                #region - 正常起單後 申請時間(APPLICANT_DATETIME) 不可覆蓋 -
+
+                if (model.APPLICANT_INFO.DRAFT_FLAG == 0)
+                {
+                    strSQL = "";
+                    strSQL += "SELECT ";
+                    strSQL += "      [RequisitionID] ";
+                    strSQL += "FROM [BPMPro].[dbo].[FSe7en_Sys_Requisition] ";
+                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+                    var dtReq = dbFun.DoQuery(strSQL, parameterTitle);
+                    if (dtReq.Rows.Count <= 0)
+                    {
+                        parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+                        IsADD = true;
+                    }
+
+                }
+                else parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+
+                #endregion
 
                 strSQL = "";
                 strSQL += "SELECT ";
@@ -482,7 +502,9 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [ApplicantID]=@APPLICANT_ID, ";
                     strSQL += "     [ApplicantName]=@APPLICANT_NAME, ";
                     strSQL += "     [ApplicantPhone]=@APPLICANT_PHONE, ";
-                    strSQL += "     [ApplicantDateTime]=@APPLICANT_DATETIME, ";
+
+                    if (IsADD) strSQL += "     [ApplicantDateTime]=@APPLICANT_DATETIME, ";
+
                     strSQL += "     [FillerID]=@FILLER_ID, ";
                     strSQL += "     [FillerName]=@FILLER_NAME, ";
                     strSQL += "     [Priority]=@PRIORITY, ";
@@ -566,7 +588,7 @@ namespace OA_WEB_API.Repository.BPMPro
                             ACPT
                         })
                         .OrderBy(ACPT_DTL => ACPT_DTL.ORDER_ROW_NO)
-                        .Where(ACPT_DTL=> ACPT_DTL.ACPT.PERIOD== model.MEDIA_INVOICE_CONFIG.PERIOD));
+                        .Where(ACPT_DTL => ACPT_DTL.ACPT.PERIOD == model.MEDIA_INVOICE_CONFIG.PERIOD));
                     var mediaOrderDetailsConfig = JsonConvert.DeserializeObject<List<MediaOrderDetailsConfig>>(strJson);
                     if (mediaOrderDetailsConfig != null)
                     {
@@ -886,7 +908,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     var CommonINV = new BPMCommonModel<MediaInvoiceInvoicesConfig>()
                     {
-                        IsALDY = false,
+                        EXT = "INV",
                         IDENTIFY = IDENTIFY,
                         parameter = parameterInvoices,
                         Model = model.MEDIA_INVOICE_INVS_CONFIG
@@ -900,7 +922,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 var parameterInvoiceDetails = new List<SqlParameter>()
                 {
-                    //版權採購請款單 憑證明細
+                    //版權採購請款單 憑證細項
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
                     new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)model.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_REQUISITION_ID ?? DBNull.Value },
                     new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_BPM_FORM_NO ?? DBNull.Value },
@@ -920,7 +942,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     var CommonINV_DTL = new BPMCommonModel<MediaInvoiceInvoiceDetailsConfig>()
                     {
-                        IsALDY = false,
+                        EXT = "INV_DTL",
                         IDENTIFY = IDENTIFY,
                         parameter = parameterInvoiceDetails,
                         Model = model.MEDIA_INVOICE_INV_DTLS_CONFIG
@@ -953,36 +975,39 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region 關聯表:加上【版權採購點驗收單】
-
-                if (!String.IsNullOrEmpty(model.MEDIA_INVOICE_CONFIG.MEDIA_ACCEPTANCE_REQUISITION_ID) || !String.IsNullOrWhiteSpace(model.MEDIA_INVOICE_CONFIG.MEDIA_ACCEPTANCE_REQUISITION_ID))
-                {
-                    var medialAcceptanceformQueryModel = new FormQueryModel()
-                    {
-                        REQUISITION_ID = model.MEDIA_INVOICE_CONFIG.MEDIA_ACCEPTANCE_REQUISITION_ID
-                    };
-                    var medialAcceptanceformData = formRepository.PostFormData(medialAcceptanceformQueryModel);
-
-                    importAssociatedForm.Add(new AssociatedFormConfig()
-                    {
-                        IDENTIFY = medialAcceptanceformData.IDENTIFY,
-                        ASSOCIATED_REQUISITION_ID = model.MEDIA_INVOICE_CONFIG.MEDIA_ACCEPTANCE_REQUISITION_ID,
-                        BPM_FORM_NO = medialAcceptanceformData.SERIAL_ID,
-                        FM7_SUBJECT = medialAcceptanceformData.FORM_SUBJECT,
-                        APPLICANT_DEPT_NAME = medialAcceptanceformData.APPLICANT_DEPT_NAME,
-                        APPLICANT_NAME = medialAcceptanceformData.APPLICANT_NAME,
-                        APPLICANT_DATE_TIME = medialAcceptanceformData.APPLICANT_DATETIME.ToString("yyyy/MM/dd HH:mm:ss"),
-                        FORM_PATH = GlobalParameters.FormContentPath(model.MEDIA_INVOICE_CONFIG.MEDIA_ACCEPTANCE_REQUISITION_ID, medialAcceptanceformData.IDENTIFY, medialAcceptanceformData.DIAGRAM_NAME),
-                        STATE = BPMStatusCode.CLOSE
-                    });
-                }
-
-                #endregion
-
                 var associatedFormConfig = model.ASSOCIATED_FORM_CONFIG;
                 if (associatedFormConfig == null || associatedFormConfig.Count <= 0)
                 {
                     associatedFormConfig = importAssociatedForm;
+                }
+
+                if (!String.IsNullOrEmpty(model.MEDIA_INVOICE_CONFIG.MEDIA_ACCEPTANCE_REQUISITION_ID) || !String.IsNullOrWhiteSpace(model.MEDIA_INVOICE_CONFIG.MEDIA_ACCEPTANCE_REQUISITION_ID))
+                {
+                    #region 關聯表:加上【版權採購點驗收單】
+
+                    if (!associatedFormConfig.Where(AF => AF.ASSOCIATED_REQUISITION_ID.Contains(model.MEDIA_INVOICE_CONFIG.MEDIA_ACCEPTANCE_REQUISITION_ID)).Any())
+                    {
+                        var medialAcceptanceformQueryModel = new FormQueryModel()
+                        {
+                            REQUISITION_ID = model.MEDIA_INVOICE_CONFIG.MEDIA_ACCEPTANCE_REQUISITION_ID
+                        };
+                        var medialAcceptanceformData = formRepository.PostFormData(medialAcceptanceformQueryModel);
+
+                        associatedFormConfig.Add(new AssociatedFormConfig()
+                        {
+                            IDENTIFY = medialAcceptanceformData.IDENTIFY,
+                            ASSOCIATED_REQUISITION_ID = model.MEDIA_INVOICE_CONFIG.MEDIA_ACCEPTANCE_REQUISITION_ID,
+                            BPM_FORM_NO = medialAcceptanceformData.SERIAL_ID,
+                            FM7_SUBJECT = medialAcceptanceformData.FORM_SUBJECT,
+                            APPLICANT_DEPT_NAME = medialAcceptanceformData.APPLICANT_DEPT_NAME,
+                            APPLICANT_NAME = medialAcceptanceformData.APPLICANT_NAME,
+                            APPLICANT_DATE_TIME = medialAcceptanceformData.APPLICANT_DATETIME.ToString("yyyy/MM/dd HH:mm:ss"),
+                            FORM_PATH = GlobalParameters.FormContentPath(model.MEDIA_INVOICE_CONFIG.MEDIA_ACCEPTANCE_REQUISITION_ID, medialAcceptanceformData.IDENTIFY, medialAcceptanceformData.DIAGRAM_NAME),
+                            STATE = BPMStatusCode.CLOSE
+                        });
+                    }
+
+                    #endregion
                 }
 
                 var associatedFormModel = new AssociatedFormModel()
@@ -1168,6 +1193,11 @@ namespace OA_WEB_API.Repository.BPMPro
         /// T-SQL
         /// </summary>
         private string strSQL;
+
+        /// <summary>
+        /// 確認是否為新建的表單
+        /// </summary>
+        private bool IsADD = false;
 
         /// <summary>
         /// 表單代號

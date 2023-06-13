@@ -91,7 +91,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [GroupBPMFormNo] AS [GROUP_BPM_FORM_NO], ";
             strSQL += "     [GroupPath] AS [GROUP_PATH], ";
             strSQL += "     [ParentID] AS [PARENT_ID], ";
-            strSQL += "     [ParentBPMFormNo] AS [PARENT_BPM_FORM_NO], ";            
+            strSQL += "     [ParentBPMFormNo] AS [PARENT_BPM_FORM_NO], ";
             strSQL += "     [FormAction] AS [FORM_ACTION], ";
             strSQL += "     [FlowName] AS [FLOW_NAME], ";
             strSQL += "     [FormNo] AS [FORM_NO], ";
@@ -201,22 +201,15 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #region - 行政採購申請單 使用預算 -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [FormNo] AS [FORM_NO], ";
-            strSQL += "     [CreateYear] AS [CREATE_YEAR], ";
-            strSQL += "     [Name] AS [NAME], ";
-            strSQL += "     [OwnerDept] AS [OWNER_DEPT], ";
-            strSQL += "     [Total] AS [TOTAL], ";
-            strSQL += "     [AvailableBudgetAmount] AS [AVAILABLE_BUDGET_AMOUNT], ";
-            strSQL += "     [UseBudgetAmount] AS [USE_BUDGET_AMOUNT] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralOrder_BUDG] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "ORDER BY [AutoCounter] ";
+            var CommonBUDG = new BPMCommonModel<GeneralOrderBudgetsConfig>()
+            {
+                EXT = "BUDG",
+                IDENTIFY = IDENTIFY,
+                parameter = parameter
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostBudgetFunction(CommonBUDG));
+            var generalOrderBudgetsConfig = jsonFunction.JsonToObject<List<GeneralOrderBudgetsConfig>>(strJson);
 
-            var generalOrderBudgetsConfig = dbFun.DoQuery(strSQL, parameter).ToList<GeneralOrderBudgetsConfig>();
 
             #endregion
 
@@ -337,9 +330,9 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (String.IsNullOrEmpty(model.GENERAL_ORDER_TITLE.GROUP_ID) || String.IsNullOrWhiteSpace(model.GENERAL_ORDER_TITLE.GROUP_ID))
                 {
-                    model.GENERAL_ORDER_TITLE.FORM_ACTION = "申請";                    
+                    model.GENERAL_ORDER_TITLE.FORM_ACTION = "申請";
                 }
-                
+
                 #region - 主旨 -
 
                 if (String.IsNullOrEmpty(model.GENERAL_ORDER_TITLE.FM7_SUBJECT) || String.IsNullOrWhiteSpace(model.GENERAL_ORDER_TITLE.FM7_SUBJECT))
@@ -353,7 +346,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     if (!String.IsNullOrEmpty(model.GENERAL_ORDER_TITLE.GROUP_ID) || !String.IsNullOrWhiteSpace(model.GENERAL_ORDER_TITLE.GROUP_ID))
                     {
-                        if(FM7Subject.Substring(1, 2) != "異動")
+                        if (FM7Subject.Substring(1, 2) != "異動")
                         {
                             FM7Subject = "【異動】" + FM7Subject;
                         }
@@ -395,7 +388,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@APPLICANT_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_ID },
                     new SqlParameter("@APPLICANT_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_NAME },
                     new SqlParameter("@APPLICANT_PHONE", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.APPLICANT_PHONE ?? String.Empty },
-                    new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) },
                     //(填單人/代填單人)資訊
                     new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_ID },
                     new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
@@ -411,6 +403,28 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_ORDER_TITLE.FORM_NO ?? DBNull.Value },
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
                 };
+
+                #region - 正常起單後 申請時間(APPLICANT_DATETIME) 不可覆蓋 -
+
+                if (model.APPLICANT_INFO.DRAFT_FLAG == 0)
+                {
+                    strSQL = "";
+                    strSQL += "SELECT ";
+                    strSQL += "      [RequisitionID] ";
+                    strSQL += "FROM [BPMPro].[dbo].[FSe7en_Sys_Requisition] ";
+                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+                    var dtReq = dbFun.DoQuery(strSQL, parameterTitle);
+                    if (dtReq.Rows.Count <= 0)
+                    {
+                        parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+                        IsADD = true;
+                    }
+
+                }
+                else parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+
+                #endregion
 
                 strSQL = "";
                 strSQL += "SELECT ";
@@ -432,12 +446,14 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [ApplicantID]=@APPLICANT_ID, ";
                     strSQL += "     [ApplicantName]=@APPLICANT_NAME, ";
                     strSQL += "     [ApplicantPhone]=@APPLICANT_PHONE, ";
-                    strSQL += "     [ApplicantDateTime]=@APPLICANT_DATETIME, ";
+
+                    if (IsADD) strSQL += "     [ApplicantDateTime]=@APPLICANT_DATETIME, ";
+
                     strSQL += "     [FillerID]=@FILLER_ID, ";
                     strSQL += "     [FillerName]=@FILLER_NAME, ";
                     strSQL += "     [Priority]=@PRIORITY, ";
                     strSQL += "     [DraftFlag]=@DRAFT_FLAG, ";
-                    strSQL += "     [FlowActivated]=@FLOW_ACTIVATED, ";                    
+                    strSQL += "     [FlowActivated]=@FLOW_ACTIVATED, ";
                     strSQL += "     [EditFlag]=@EDIT_FLAG, ";
                     strSQL += "     [GroupID]=@GROUP_ID, ";
                     strSQL += "     [GroupBPMFormNo]=@GROUP_BPM_FORM_NO, ";
@@ -477,11 +493,11 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     model.GENERAL_ORDER_CONFIG.PRE_RATE = Math.Round(model.GENERAL_ORDER_CONFIG.PRE_RATE, 2);
                     model.GENERAL_ORDER_CONFIG.TAX_RATE = Math.Round(model.GENERAL_ORDER_CONFIG.TAX_RATE, 2);
-                    model.GENERAL_ORDER_CONFIG.DTL_NET_TOTAL=Math.Round(model.GENERAL_ORDER_CONFIG.DTL_NET_TOTAL,2);
+                    model.GENERAL_ORDER_CONFIG.DTL_NET_TOTAL = Math.Round(model.GENERAL_ORDER_CONFIG.DTL_NET_TOTAL, 2);
                     model.GENERAL_ORDER_CONFIG.DTL_GROSS_TOTAL = Math.Round(model.GENERAL_ORDER_CONFIG.DTL_GROSS_TOTAL, 2);
-                    model.GENERAL_ORDER_CONFIG.PYMT_TAX_TOTAL=Math.Round(model.GENERAL_ORDER_CONFIG.PYMT_TAX_TOTAL,2);
+                    model.GENERAL_ORDER_CONFIG.PYMT_TAX_TOTAL = Math.Round(model.GENERAL_ORDER_CONFIG.PYMT_TAX_TOTAL, 2);
                     model.GENERAL_ORDER_CONFIG.PYMT_NET_TOTAL = Math.Round(model.GENERAL_ORDER_CONFIG.PYMT_NET_TOTAL, 2);
-                    model.GENERAL_ORDER_CONFIG.PYMT_GROSS_TOTAL=Math.Round(model.GENERAL_ORDER_CONFIG.PYMT_GROSS_TOTAL,2);
+                    model.GENERAL_ORDER_CONFIG.PYMT_GROSS_TOTAL = Math.Round(model.GENERAL_ORDER_CONFIG.PYMT_GROSS_TOTAL, 2);
 
                     #endregion
 
@@ -507,7 +523,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@DTL_NET_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_NET_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_GROSS_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@DTL_GROSS_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },                        
+                        new SqlParameter("@DTL_GROSS_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DISCOUNT_PRICE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_ORDER_TOTAL", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DTL_ORDER_TOTAL_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -602,7 +618,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 #endregion
 
                 if (model.GENERAL_ORDER_DETAILS_CONFIG != null && model.GENERAL_ORDER_DETAILS_CONFIG.Count > 0)
-                {                    
+                {
                     #region 再新增資料
 
                     foreach (var item in model.GENERAL_ORDER_DETAILS_CONFIG)
@@ -664,7 +680,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 if (model.GENERAL_ORDER_PAYMENTS_CONFIG != null && model.GENERAL_ORDER_PAYMENTS_CONFIG.Count > 0)
                 {
                     #region 再新增資料
-                    
+
                     foreach (var item in model.GENERAL_ORDER_PAYMENTS_CONFIG)
                     {
                         strJson = jsonFunction.ObjectToJSON(item);
@@ -707,36 +723,16 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@USE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
-                #region 先刪除舊資料
-
-                strSQL = "";
-                strSQL += "DELETE ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralOrder_BUDG] ";
-                strSQL += "WHERE 1=1 ";
-                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
-
-                dbFun.DoQuery(strSQL, parameterBudgets);
-
-                #endregion
-
                 if (model.GENERAL_ORDER_BUDGETS_CONFIG != null && model.GENERAL_ORDER_BUDGETS_CONFIG.Count > 0)
                 {
-                    #region 再新增資料
-
-                    foreach (var item in model.GENERAL_ORDER_BUDGETS_CONFIG)
+                    var CommonBUDG = new BPMCommonModel<GeneralOrderBudgetsConfig>()
                     {
-                        //寫入：行政採購申請 使用預算parameter
-                        strJson = jsonFunction.ObjectToJSON(item);
-                        GlobalParameters.Infoparameter(strJson, parameterBudgets);
-
-                        strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralOrder_BUDG]([RequisitionID],[Period],[FormNo],[CreateYear],[Name],[OwnerDept],[Total],[AvailableBudgetAmount],[UseBudgetAmount]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@PERIOD,@FORM_NO,@CREATE_YEAR,@NAME,@OWNER_DEPT,@TOTAL,@AVAILABLE_BUDGET_AMOUNT,@USE_BUDGET_AMOUNT) ";
-
-                        dbFun.DoTran(strSQL, parameterBudgets);
-                    }
-
-                    #endregion
+                        EXT = "BUDG",
+                        IDENTIFY = IDENTIFY,
+                        parameter = parameterBudgets,
+                        Model = model.GENERAL_ORDER_BUDGETS_CONFIG
+                    };
+                    commonRepository.PutBudgetFunction(CommonBUDG);
                 }
 
                 #endregion
@@ -849,7 +845,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     autoStart.DIAGRAM_ID = model.APPLICANT_INFO.DIAGRAM_ID;
                     autoStart.APPLICANT_ID = model.APPLICANT_INFO.APPLICANT_ID;
                     autoStart.APPLICANT_DEPT = model.APPLICANT_INFO.APPLICANT_DEPT;
-                    
+
                     formRepository.PutFormAutoStart(autoStart);
                 }
 
@@ -902,12 +898,12 @@ namespace OA_WEB_API.Repository.BPMPro
                 #region 保留【子表單】所需欄位
 
                 var ChildFormAction = model.GENERAL_ORDER_TITLE.FORM_ACTION;
-                var ChildPYMT_LockPeriod = model.GENERAL_ORDER_CONFIG.PYMT_LOCK_PERIOD;                
+                var ChildPYMT_LockPeriod = model.GENERAL_ORDER_CONFIG.PYMT_LOCK_PERIOD;
 
                 #endregion
 
                 //行政採購申請 表頭資訊:ERP 工作流程標題名稱
-                model.GENERAL_ORDER_TITLE.FLOW_NAME = postGeneralOrderGroupSingle.GENERAL_ORDER_TITLE.FLOW_NAME;                
+                model.GENERAL_ORDER_TITLE.FLOW_NAME = postGeneralOrderGroupSingle.GENERAL_ORDER_TITLE.FLOW_NAME;
                 //行政採購申請 設定
                 model.GENERAL_ORDER_CONFIG = postGeneralOrderGroupSingle.GENERAL_ORDER_CONFIG;
                 //行政採購申請 採購明細 設定
@@ -948,10 +944,10 @@ namespace OA_WEB_API.Repository.BPMPro
                 return model;
             }
             catch (Exception ex)
-            {                
+            {
                 CommLib.Logger.Error("行政採購申請單(原表單匯入子表單)失敗，原因：" + ex.Message);
                 throw;
-            }            
+            }
         }
 
 
@@ -963,6 +959,11 @@ namespace OA_WEB_API.Repository.BPMPro
         /// T-SQL
         /// </summary>
         private string strSQL;
+
+        /// <summary>
+        /// 確認是否為新建的表單
+        /// </summary>
+        private bool IsADD = false;
 
         /// <summary>
         /// 表單代號
@@ -978,7 +979,7 @@ namespace OA_WEB_API.Repository.BPMPro
         /// Json字串
         /// </summary>
         private string strJson;
-        
+
         #endregion
     }
 }

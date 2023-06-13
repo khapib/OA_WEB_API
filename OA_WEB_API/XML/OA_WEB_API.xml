@@ -8770,6 +8770,11 @@
             T-SQL
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.AdvanceExpenseRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.AdvanceExpenseRepository.IDENTIFY">
             <summary>
             表單代號
@@ -8813,6 +8818,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContentReplenishRepository.strSQL">
             <summary>
             T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContentReplenishRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContentReplenishRepository.IDENTIFY">
@@ -8865,6 +8875,11 @@
             T-SQL
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContentRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContentRepository.IDENTIFY">
             <summary>
             表單代號
@@ -8905,6 +8920,11 @@
             T-SQL
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateDemandRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateDemandRepository.IDENTIFY">
             <summary>
             表單代號
@@ -8933,6 +8953,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.ExpensesReimburseRepository.strSQL">
             <summary>
             T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.ExpensesReimburseRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.ExpensesReimburseRepository.IDENTIFY">
@@ -8975,6 +9000,11 @@
             T-SQL
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GeneralAcceptanceRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GeneralAcceptanceRepository.IDENTIFY">
             <summary>
             表單代號
@@ -9013,6 +9043,11 @@
             T-SQL
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GeneralInvoiceRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GeneralInvoiceRepository.IDENTIFY">
             <summary>
             表單代號
@@ -9046,6 +9081,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.GeneralOrderChangeRepository.strSQL">
             <summary>
             T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GeneralOrderChangeRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GeneralOrderChangeRepository.IDENTIFY">
@@ -9088,6 +9128,11 @@
             T-SQL
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GeneralOrderRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GeneralOrderRepository.IDENTIFY">
             <summary>
             表單代號
@@ -9124,6 +9169,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.GeneralOrderReturnRefundRepository.strSQL">
             <summary>
             T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GeneralOrderReturnRefundRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GeneralOrderReturnRefundRepository.IDENTIFY">
@@ -9337,6 +9387,11 @@
             T-SQL
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GPI_CountersignRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GPI_CountersignRepository.IDENTIFY">
             <summary>
             表單代號
@@ -9380,6 +9435,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.GPI_EvaluateContentReplenishRepository.strSQL">
             <summary>
             T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GPI_EvaluateContentReplenishRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GPI_EvaluateContentReplenishRepository.IDENTIFY">
@@ -9432,6 +9492,11 @@
             T-SQL
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GPI_EvaluateContentRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GPI_EvaluateContentRepository.IDENTIFY">
             <summary>
             表單代號
@@ -9473,6 +9538,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaAcceptanceRepository.strSQL">
             <summary>
             T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaAcceptanceRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaAcceptanceRepository.IDENTIFY">
@@ -9521,6 +9591,11 @@
             T-SQL
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaInvoiceRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaInvoiceRepository.IDENTIFY">
             <summary>
             表單代號
@@ -9554,6 +9629,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaOrderChangeRepository.strSQL">
             <summary>
             T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaOrderChangeRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaOrderChangeRepository.IDENTIFY">
@@ -9596,6 +9676,11 @@
             T-SQL
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaOrderRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaOrderRepository.IDENTIFY">
             <summary>
             表單代號
@@ -9632,6 +9717,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaOrderReturnRefundRepository.strSQL">
             <summary>
             T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaOrderReturnRefundRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaOrderReturnRefundRepository.IDENTIFY">
@@ -9674,6 +9764,11 @@
             T-SQL
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaSaleRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaSaleRepository.IDENTIFY">
             <summary>
             表單代號
@@ -9714,6 +9809,11 @@
             T-SQL
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaWarehouseCopyRepository.IsADD">
+            <summary>
+            確認是否為新表單
+            </summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaWarehouseCopyRepository.IDENTIFY">
             <summary>
             表單代號
@@ -9752,6 +9852,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaWarehouseNotAiredCopyRepository.strSQL">
             <summary>
             T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaWarehouseNotAiredCopyRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaWarehouseNotAiredCopyRepository.IDENTIFY">
@@ -9944,6 +10049,11 @@
             T-SQL
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.ProjectReviewRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.ProjectReviewRepository.IDENTIFY">
             <summary>
             表單代號
@@ -9972,6 +10082,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.SupplierReviewRepository.strSQL">
             <summary>
             T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.SupplierReviewRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.SupplierReviewRepository.IDENTIFY">
@@ -10248,6 +10363,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.RollCardRepository.strSQL">
             <summary>
             T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.RollCardRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.RollCardRepository.IDENTIFY">

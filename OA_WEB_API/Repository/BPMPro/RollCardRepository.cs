@@ -267,7 +267,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@APPLICANT_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_ID },
                     new SqlParameter("@APPLICANT_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_NAME },
                     new SqlParameter("@APPLICANT_PHONE", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.APPLICANT_PHONE ?? String.Empty },
-                    new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) },
                     new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_ID },
                     new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
                     //跑馬設定
@@ -297,6 +296,28 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@REMARK", SqlDbType.NVarChar) { Size = 100, Value = model.ROLLCARD_CONFIG.REMARK ?? String.Empty }
                 };
 
+                #region - 正常起單後 申請時間(APPLICANT_DATETIME) 不可覆蓋 -
+
+                if (model.APPLICANT_INFO.DRAFT_FLAG == 0)
+                {
+                    strSQL = "";
+                    strSQL += "SELECT ";
+                    strSQL += "      [RequisitionID] ";
+                    strSQL += "FROM [BPMPro].[dbo].[FSe7en_Sys_Requisition] ";
+                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+                    var dtReq = dbFun.DoQuery(strSQL, parameterA);
+                    if (dtReq.Rows.Count <= 0)
+                    {
+                        parameterA.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+                        IsADD = true;
+                    }
+
+                }
+                else parameterA.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+
+                #endregion
+
                 strSQL = "";
                 strSQL += "SELECT [RequisitionID] ";
                 strSQL += "FROM [BPMPro].[dbo].[FM7T_RollCard_M] ";
@@ -316,7 +337,9 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "      [ApplicantID]=@APPLICANT_ID, ";
                     strSQL += "      [ApplicantName]=@APPLICANT_NAME, ";
                     strSQL += "      [ApplicantPhone]=@APPLICANT_PHONE, ";
-                    strSQL += "      [ApplicantDateTime]=@APPLICANT_DATETIME, ";
+
+                    if (IsADD) strSQL += "     [ApplicantDateTime]=@APPLICANT_DATETIME, ";
+
                     strSQL += "      [FillerID]=@FILLER_ID, ";
                     strSQL += "      [FillerName]=@FILLER_NAME, ";
                     strSQL += "      [Priority]=@PRIORITY, ";
@@ -550,6 +573,11 @@ namespace OA_WEB_API.Repository.BPMPro
         /// T-SQL
         /// </summary>
         private string strSQL;
+
+        /// <summary>
+        /// 確認是否為新建的表單
+        /// </summary>
+        private bool IsADD = false;
 
         /// <summary>
         /// 表單代號

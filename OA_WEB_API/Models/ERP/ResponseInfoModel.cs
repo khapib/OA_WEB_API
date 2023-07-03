@@ -226,13 +226,16 @@ namespace OA_WEB_API.Models.ERP
 
     #region - 內容評估表 審核資訊_回傳ERP -
 
-    public class EvaluateContentInfoRequest: EvaluateContentQueryModel
+    /// <summary>
+    /// 內容評估表 審核資訊_回傳ERP
+    /// </summary>
+    public class EvaluateContentInfoRequest : EvaluateContentQueryModel
     {
         /// <summary>接收ERP回傳狀態</summary>
         public ErpResponseState ERP_RESPONSE_STATE { get; set; }
 
         /// <summary>內容評估表 表頭資訊</summary>
-        public EvaluateContentTitle EVALUATE_CONTENT_TITLE { get; set; }
+        public EvaluateContentInfoTitle EVALUATE_CONTENT_TITLE { get; set; }
 
         /// <summary>內容評估表 表單內容 設定</summary>
         public EvaluateContentConfig EVALUATE_CONTENT_CONFIG { get; set; }
@@ -259,6 +262,15 @@ namespace OA_WEB_API.Models.ERP
         public string LoginName { get; set; }
     }
 
+    /// <summary>
+    /// 內容評估表 表頭資訊
+    /// </summary>
+    public class EvaluateContentInfoTitle: EvaluateContentTitle
+    {
+        /// <summary>最終建議</summary>
+        public string FINAL_ADVISE { get; set; }
+    }
+
     #endregion
 
     #region - 內容評估表_補充意見 審核資訊_回傳ERP -
@@ -266,13 +278,13 @@ namespace OA_WEB_API.Models.ERP
     /// <summary>
     /// 內容評估表_補充意見 審核資訊_回傳ERP
     /// </summary>
-    public class EvaluateContentReplenishInfoRequest: EvaluateContentReplenishQueryModel
+    public class EvaluateContentReplenishInfoRequest : EvaluateContentReplenishQueryModel
     {
         /// <summary>接收ERP回傳狀態</summary>
         public ErpResponseState ERP_RESPONSE_STATE { get; set; }
 
         /// <summary>內容評估表_補充意見 表頭資訊</summary>
-        public EvaluateContentReplenishTitle EVALUATE_CONTENT_REPLENISH_TITLE { get; set; }
+        public EvaluateContentReplenishInfoTitle EVALUATE_CONTENT_REPLENISH_TITLE { get; set; }
 
         /// <summary>內容評估表_補充意見 表單內容 設定</summary>
         public EvaluateContentReplenishConfig EVALUATE_CONTENT_REPLENISH_CONFIG { get; set; }
@@ -295,6 +307,15 @@ namespace OA_WEB_API.Models.ERP
         /// <summary>最後簽核人姓名</summary>
         public string LoginName { get; set; }
 
+    }
+
+    /// <summary>
+    /// 內容評估表_補充意見 表頭資訊
+    /// </summary>
+    public class EvaluateContentReplenishInfoTitle : EvaluateContentReplenishTitle
+    {
+        /// <summary>最終建議</summary>
+        public string FINAL_ADVISE { get; set; }
     }
 
     #endregion
@@ -464,7 +485,7 @@ namespace OA_WEB_API.Models.ERP
         public ErpResponseState ERP_RESPONSE_STATE { get; set; }
 
         /// <summary>四方四隅_內容評估表 表頭資訊</summary>
-        public GPI_EvaluateContentTitle GPI_EVALUATE_CONTENT_TITLE { get; set; }
+        public GPI_EvaluateContentInfoTitle GPI_EVALUATE_CONTENT_TITLE { get; set; }
 
         /// <summary>四方四隅_內容評估表 表單內容 設定</summary>
         public GPI_EvaluateContentConfig GPI_EVALUATE_CONTENT_CONFIG { get; set; }
@@ -491,6 +512,15 @@ namespace OA_WEB_API.Models.ERP
         public string LoginName { get; set; }
     }
 
+    /// <summary>
+    /// 四方四隅_內容評估表 表頭資訊
+    /// </summary>
+    public class GPI_EvaluateContentInfoTitle : GPI_EvaluateContentTitle
+    {
+        /// <summary>最終建議</summary>
+        public string FINAL_ADVISE { get; set; }
+    }
+
     #endregion
 
     #region - 四方四隅_內容評估表_補充意見 審核資訊_回傳ERP -
@@ -504,7 +534,7 @@ namespace OA_WEB_API.Models.ERP
         public ErpResponseState ERP_RESPONSE_STATE { get; set; }
 
         /// <summary>四方四隅_內容評估表_補充意見 表頭資訊</summary>
-        public GPI_EvaluateContentReplenishTitle GPI_EVALUATE_CONTENT_REPLENISH_TITLE { get; set; }
+        public GPI_EvaluateContentReplenishInfoTitle GPI_EVALUATE_CONTENT_REPLENISH_TITLE { get; set; }
 
         /// <summary>四方四隅_內容評估表_補充意見 表單內容 設定</summary>
         public GPI_EvaluateContentReplenishConfig GPI_EVALUATE_CONTENT_REPLENISH_CONFIG { get; set; }
@@ -527,6 +557,15 @@ namespace OA_WEB_API.Models.ERP
         /// <summary>最後簽核人姓名</summary>
         public string LoginName { get; set; }
 
+    }
+
+    /// <summary>
+    /// 四方四隅_內容評估表 表頭資訊
+    /// </summary>
+    public class GPI_EvaluateContentReplenishInfoTitle : GPI_EvaluateContentReplenishTitle
+    {
+        /// <summary>最終建議</summary>
+        public string FINAL_ADVISE { get; set; }
     }
 
     #endregion

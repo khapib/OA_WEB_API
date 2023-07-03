@@ -12,6 +12,8 @@ using OA_WEB_API.Repository.ERP;
 
 using Newtonsoft.Json;
 using System.Drawing;
+using Microsoft.Ajax.Utilities;
+using OA_WEB_API.Models;
 
 namespace OA_WEB_API.Repository.ERP
 {
@@ -34,6 +36,7 @@ namespace OA_WEB_API.Repository.ERP
 
         FormRepository formRepository = new FormRepository();
         StepFlowRepository stepFlowRepository = new StepFlowRepository();
+        UserRepository userRepository = new UserRepository();
 
         #endregion
 
@@ -119,7 +122,7 @@ namespace OA_WEB_API.Repository.ERP
                 strSQL += "WHERE 1=1 ";
                 strSQL += "         AND [M].[RequisitionID]=@REQUISITION_ID ";
                 strSQL += "ORDER BY [S].[ApproveTime] DESC ";
-                                
+
                 var projectReviewFinanceConfig = dbFun.DoQuery(strSQL, parameter).ToList<ProjectReviewFinanceConfig>().FirstOrDefault();
 
                 #endregion
@@ -339,7 +342,7 @@ namespace OA_WEB_API.Repository.ERP
         }
 
         #endregion
-        
+
         #region - 行政採購點驗收單 審核資訊_回傳ERP -
 
         /// <summary>
@@ -553,7 +556,7 @@ namespace OA_WEB_API.Repository.ERP
 
                 if (query.REQUEST_FLG)
                 {
-                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/";
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/UpdateDN_A_DetailContent";
                     Method = "POST";
                     strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, generalOrderReturnRefundInfoRequest);
 
@@ -609,7 +612,7 @@ namespace OA_WEB_API.Repository.ERP
                 strJson = jsonFunction.ObjectToJSON(evaluateContentContent);
                 //給予需要回傳ERP的資訊
                 evaluateContentInfoRequest = jsonFunction.JsonToObject<EvaluateContentInfoRequest>(strJson);
-                evaluateContentInfoRequest.REQUISITION_ID = evaluateContentContent.APPLICANT_INFO.REQUISITION_ID;
+                evaluateContentInfoRequest.REQUISITION_ID = evaluateContentContent.APPLICANT_INFO.REQUISITION_ID;               
 
                 #endregion
 
@@ -636,9 +639,18 @@ namespace OA_WEB_API.Repository.ERP
                 evaluateContentInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
                 evaluateContentInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
 
+                if(!String.IsNullOrEmpty(evaluateContentInfoRequest.LoginId) || !String.IsNullOrWhiteSpace(evaluateContentInfoRequest.LoginId))
+                {
+                    evaluateContentInfoRequest.EVALUATE_CONTENT_TITLE.FINAL_ADVISE = evaluateContentInfoRequest.EVALUATE_CONTENT_DECS_CONFIG.Where(D => D.USER_ID == evaluateContentInfoRequest.LoginId).Select(D => D.ADVISE_TYPE).LastOrDefault();
+                    if (String.IsNullOrEmpty(evaluateContentInfoRequest.EVALUATE_CONTENT_TITLE.FINAL_ADVISE) || String.IsNullOrWhiteSpace(evaluateContentInfoRequest.EVALUATE_CONTENT_TITLE.FINAL_ADVISE))
+                    {
+                        evaluateContentInfoRequest.EVALUATE_CONTENT_TITLE.FINAL_ADVISE = evaluateContentInfoRequest.EVALUATE_CONTENT_EVAS_CONFIG.Where(E => E.USER_ID == evaluateContentInfoRequest.LoginId).Select(E => E.ADVISE_TYPE).LastOrDefault();
+                    }
+                }
+
                 if (query.REQUEST_FLG)
                 {
-                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/";
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/UpdateEval_M_DetailContent";
                     Method = "POST";
                     strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, evaluateContentInfoRequest);
 
@@ -690,7 +702,7 @@ namespace OA_WEB_API.Repository.ERP
                 strJson = jsonFunction.ObjectToJSON(evaluateContentReplenishContent);
                 //給予需要回傳ERP的資訊
                 evaluateContentReplenishInfoRequest = jsonFunction.JsonToObject<EvaluateContentReplenishInfoRequest>(strJson);
-                evaluateContentReplenishInfoRequest.REQUISITION_ID = evaluateContentReplenishContent.APPLICANT_INFO.REQUISITION_ID;
+                evaluateContentReplenishInfoRequest.REQUISITION_ID = evaluateContentReplenishContent.APPLICANT_INFO.REQUISITION_ID;                
 
                 #endregion
 
@@ -717,9 +729,14 @@ namespace OA_WEB_API.Repository.ERP
                 evaluateContentReplenishInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
                 evaluateContentReplenishInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
 
+                if (!String.IsNullOrEmpty(evaluateContentReplenishInfoRequest.LoginId) || !String.IsNullOrWhiteSpace(evaluateContentReplenishInfoRequest.LoginId))
+                {
+                    evaluateContentReplenishInfoRequest.EVALUATE_CONTENT_REPLENISH_TITLE.FINAL_ADVISE = evaluateContentReplenishInfoRequest.EVALUATE_CONTENT_REPLENISH_DECS_CONFIG.Where(D => D.USER_ID == evaluateContentReplenishInfoRequest.LoginId).Select(D => D.ADVISE_TYPE).LastOrDefault();
+                }
+                
                 if (query.REQUEST_FLG)
                 {
-                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/";
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/UpdateEval_M_DetailContent";
                     Method = "POST";
                     strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, evaluateContentReplenishInfoRequest);
 
@@ -1045,7 +1062,7 @@ namespace OA_WEB_API.Repository.ERP
 
                 if (query.REQUEST_FLG)
                 {
-                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/UpdatednDN_M_DetailContent";
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/UpdateDN_M_DetailContent";
                     Method = "POST";
                     strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, mediaOrderReturnRefundInfoRequest);
 
@@ -1128,6 +1145,15 @@ namespace OA_WEB_API.Repository.ERP
                 GPI_evaluateContentInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
                 GPI_evaluateContentInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
 
+                if (!String.IsNullOrEmpty(GPI_evaluateContentInfoRequest.LoginId) || !String.IsNullOrWhiteSpace(GPI_evaluateContentInfoRequest.LoginId))
+                {
+                    GPI_evaluateContentInfoRequest.GPI_EVALUATE_CONTENT_TITLE.FINAL_ADVISE = GPI_evaluateContentInfoRequest.GPI_EVALUATE_CONTENT_DECS_CONFIG.Where(D => D.USER_ID == GPI_evaluateContentInfoRequest.LoginId).Select(D => D.ADVISE_TYPE).LastOrDefault();
+                    if (String.IsNullOrEmpty(GPI_evaluateContentInfoRequest.GPI_EVALUATE_CONTENT_TITLE.FINAL_ADVISE) || String.IsNullOrWhiteSpace(GPI_evaluateContentInfoRequest.GPI_EVALUATE_CONTENT_TITLE.FINAL_ADVISE))
+                    {
+                        GPI_evaluateContentInfoRequest.GPI_EVALUATE_CONTENT_TITLE.FINAL_ADVISE = GPI_evaluateContentInfoRequest.GPI_EVALUATE_CONTENT_EVAS_CONFIG.Where(E => E.USER_ID == GPI_evaluateContentInfoRequest.LoginId).Select(E => E.ADVISE_TYPE).LastOrDefault();
+                    }
+                }
+
                 if (query.REQUEST_FLG)
                 {
                     ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/";
@@ -1208,6 +1234,11 @@ namespace OA_WEB_API.Repository.ERP
 
                 GPI_evaluateContentReplenishInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
                 GPI_evaluateContentReplenishInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+
+                if (!String.IsNullOrEmpty(GPI_evaluateContentReplenishInfoRequest.LoginId) || !String.IsNullOrWhiteSpace(GPI_evaluateContentReplenishInfoRequest.LoginId))
+                {
+                    GPI_evaluateContentReplenishInfoRequest.GPI_EVALUATE_CONTENT_REPLENISH_TITLE.FINAL_ADVISE = GPI_evaluateContentReplenishInfoRequest.GPI_EVALUATE_CONTENT_REPLENISH_DECS_CONFIG.Where(D => D.USER_ID == GPI_evaluateContentReplenishInfoRequest.LoginId).Select(D => D.ADVISE_TYPE).LastOrDefault();
+                }
 
                 if (query.REQUEST_FLG)
                 {

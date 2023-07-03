@@ -10,6 +10,7 @@ using OA_WEB_API.Models;
 using OA_WEB_API.Models.BPMPro;
 using OA_WEB_API.Models.ERP;
 using OA_WEB_API.Repository.ERP;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -1375,6 +1376,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     #endregion
 
+                    generalOrderReturnRefundConfig.PERIOD = generalInvoiceInfo.GENERAL_INVOICE_CONFIG.PERIOD;
                     generalOrderReturnRefundConfig.FINANC_AUDIT_ID_1 = generalInvoiceInfo.GENERAL_INVOICE_CONFIG.FINANC_AUDIT_ID_1;
                     generalOrderReturnRefundConfig.FINANC_AUDIT_NAME_1 = generalInvoiceInfo.GENERAL_INVOICE_CONFIG.FINANC_AUDIT_NAME_1;
                     generalOrderReturnRefundConfig.FINANC_AUDIT_ID_2 = generalInvoiceInfo.GENERAL_INVOICE_CONFIG.FINANC_AUDIT_ID_2;
@@ -1447,43 +1449,46 @@ namespace OA_WEB_API.Repository.BPMPro
                             #endregion
                         }
 
-                        if (model.ALDY_INV_DTL != null)
+                        #region - 行政採購退貨折讓單 憑證已退款細項：GeneralOrderReturnRefund_ALDY_INV_DTL -
+
+                        var parameterInvoiceDetails = new List<SqlParameter>()
                         {
+                            //行政採購退貨折讓單 憑證細項
+                            new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                            new SqlParameter("@GENERAL_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)generalInvoiceInfo.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_REQUISITION_ID ?? DBNull.Value },
+                            new SqlParameter("@GENERAL_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)generalInvoiceInfo.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_BPM_FORM_NO ?? DBNull.Value },
+                            new SqlParameter("@GENERAL_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)generalInvoiceInfo.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_ERP_FORM_NO ?? DBNull.Value },
+                            new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                            new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                            new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                            new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
+                            new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
+                            new SqlParameter("@QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                            new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                            new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                            new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5 , Value = (object)DBNull.Value ?? DBNull.Value },
+                        };
 
-                            #region - 行政採購退貨折讓單 憑證已退款細項：GeneralOrderReturnRefund_ALDY_INV_DTL -
+                        var CommonALDY_INV_DTL = new BPMCommonModel<GeneralOrderReturnRefundAlreadyInvoiceDetailsConfig>
+                        {
+                            EXT = "ALDY_INV_DTL",
+                            IDENTIFY = IDENTIFY,
+                            parameter = parameterInvoiceDetails
+                        };
 
-                            var parameterInvoiceDetails = new List<SqlParameter>()
-                            {
-                                //行政採購退貨折讓單 憑證明細
-                                new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
-                                new SqlParameter("@GENERAL_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)generalInvoiceInfo.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_REQUISITION_ID ?? DBNull.Value },
-                                new SqlParameter("@GENERAL_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)generalInvoiceInfo.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_BPM_FORM_NO ?? DBNull.Value },
-                                new SqlParameter("@GENERAL_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)generalInvoiceInfo.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_ERP_FORM_NO ?? DBNull.Value },
-                                new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@R_QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@R_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@R_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5 , Value = (object)DBNull.Value ?? DBNull.Value },
-                            };
-
-                            var CommonALDY_INV_DTL = new BPMCommonModel<GeneralOrderReturnRefundAlreadyInvoiceDetailsConfig>()
-                            {
-                                EXT = "ALDY_INV_DTL",
-                                IDENTIFY = IDENTIFY,
-                                parameter = parameterInvoiceDetails,
-                                Model = model.ALDY_INV_DTL
-                            };
-                            commonRepository.PutInvoiceDetailFunction(CommonALDY_INV_DTL);
-
-                            #endregion
+                        if (model.ALDY_INV_DTL != null && model.ALDY_INV_DTL.Count > 0)
+                        {
+                            CommonALDY_INV_DTL.Model = model.ALDY_INV_DTL;
                         }
+                        else
+                        {
+                            //如果沒有傳ALDY_INV_DTL就代表第一次起退貨折讓單，ALDY_INV_DTL就會抓請款單的INV_DTL。
+                            CommonALDY_INV_DTL.Model = jsonFunction.JsonToObject<List<GeneralOrderReturnRefundAlreadyInvoiceDetailsConfig>>(jsonFunction.ObjectToJSON(generalInvoiceInfo.GENERAL_INVOICE_INV_DTLS_CONFIG));
+                        }
+
+                        commonRepository.PutInvoiceDetailFunction(CommonALDY_INV_DTL);
+
+                        #endregion
 
                     }
                     else
@@ -2675,6 +2680,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     #endregion
 
+                    mediaOrderReturnRefundConfig.PERIOD = mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.PERIOD;
                     mediaOrderReturnRefundConfig.FINANC_AUDIT_ID_1 = mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.FINANC_AUDIT_ID_1;
                     mediaOrderReturnRefundConfig.FINANC_AUDIT_NAME_1 = mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.FINANC_AUDIT_NAME_1;
                     mediaOrderReturnRefundConfig.FINANC_AUDIT_ID_2 = mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.FINANC_AUDIT_ID_2;
@@ -2750,43 +2756,45 @@ namespace OA_WEB_API.Repository.BPMPro
                             #endregion
                         }
 
-                        if (model.ALDY_INV_DTL != null)
+                        #region - 版權採購退貨折讓單 憑證已退款細項：MediaOrderReturnRefund_ALDY_INV_DTL -
+
+                        var parameterInvoiceDetails = new List<SqlParameter>()
                         {
+                            //版權採購退貨折讓單 憑證明細
+                            new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                            new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_REQUISITION_ID ?? DBNull.Value },
+                            new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_BPM_FORM_NO ?? DBNull.Value },
+                            new SqlParameter("@MEDIA_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_ERP_FORM_NO ?? DBNull.Value },
+                            new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                            new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                            new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                            new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
+                            new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
+                            new SqlParameter("@QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                            new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                            new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                            new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5 , Value = (object)DBNull.Value ?? DBNull.Value },
+                        };
 
-                            #region - 版權採購退貨折讓單 憑證已退款細項：MediaOrderReturnRefund_ALDY_INV_DTL -
+                        var CommonALDY_INV_DTL = new BPMCommonModel<MediaOrderReturnRefundAlreadyInvoiceDetailsConfig>
+                        {
+                            EXT = "ALDY_INV_DTL",
+                            IDENTIFY = IDENTIFY,
+                            parameter = parameterInvoiceDetails
+                        };
 
-                            var parameterInvoiceDetails = new List<SqlParameter>()
-                            {
-                                //版權採購退貨折讓單 憑證明細
-                                new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
-                                new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_REQUISITION_ID ?? DBNull.Value },
-                                new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_BPM_FORM_NO ?? DBNull.Value },
-                                new SqlParameter("@MEDIA_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)mediaInvoiceInfo.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_ERP_FORM_NO ?? DBNull.Value },
-                                new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@R_QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@R_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@R_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                                new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5 , Value = (object)DBNull.Value ?? DBNull.Value },
-                            };
-
-                            var CommonALDY_INV_DTL = new BPMCommonModel<MediaOrderReturnRefundAlreadyInvoiceDetailsConfig>()
-                            {
-                                EXT = "ALDY_INV_DTL",
-                                IDENTIFY = IDENTIFY,
-                                parameter = parameterInvoiceDetails,
-                                Model = model.ALDY_INV_DTL
-                            };
-                            commonRepository.PutInvoiceDetailFunction(CommonALDY_INV_DTL);
-
-                            #endregion
+                        if (model.ALDY_INV_DTL != null && model.ALDY_INV_DTL.Count > 0)
+                        {
+                            CommonALDY_INV_DTL.Model = model.ALDY_INV_DTL;
                         }
+                        else
+                        {
+                            //如果沒有傳ALDY_INV_DTL就代表第一次起退貨折讓單，ALDY_INV_DTL就會抓請款單的INV_DTL。
+                            CommonALDY_INV_DTL.Model = jsonFunction.JsonToObject<List<MediaOrderReturnRefundAlreadyInvoiceDetailsConfig>>(jsonFunction.ObjectToJSON(mediaInvoiceInfo.MEDIA_INVOICE_INV_DTLS_CONFIG));
+                        }
+                        commonRepository.PutInvoiceDetailFunction(CommonALDY_INV_DTL);
+
+                        #endregion
 
                     }
                     else

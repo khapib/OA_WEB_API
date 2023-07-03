@@ -198,6 +198,7 @@
     <Compile Include="Controllers\BPMPro\GPI_CountersignController.cs" />
     <Compile Include="Controllers\BPMPro\GPI_EvaluateContentController.cs" />
     <Compile Include="Controllers\BPMPro\GPI_EvaluateContentReplenishController.cs" />
+    <Compile Include="Controllers\BPMPro\LabourAndCapitalMemberController.cs" />
     <Compile Include="Controllers\BPMPro\MediaAcceptanceController.cs" />
     <Compile Include="Controllers\BPMPro\MediaInvoiceController.cs" />
     <Compile Include="Controllers\BPMPro\MediaOrderChangeController.cs" />
@@ -255,6 +256,7 @@
     <Compile Include="Models\BPMPro\GPI_CountersignModel.cs" />
     <Compile Include="Models\BPMPro\GPI_EvaluateContentModel.cs" />
     <Compile Include="Models\BPMPro\GPI_EvaluateContentReplenishModel.cs" />
+    <Compile Include="Models\BPMPro\LabourAndCapitalMember_Model.cs" />
     <Compile Include="Models\BPMPro\MediaAcceptanceModel.cs" />
     <Compile Include="Models\BPMPro\MediaInvoiceModel.cs" />
     <Compile Include="Models\BPMPro\MediaOrderChangeModel.cs" />
@@ -293,6 +295,7 @@
     <Compile Include="Repository\BPMPro\GPI_CountersignRepository.cs" />
     <Compile Include="Repository\BPMPro\GPI_EvaluateContentReplenishRepository.cs" />
     <Compile Include="Repository\BPMPro\GPI_EvaluateContentRepository.cs" />
+    <Compile Include="Repository\BPMPro\LabourAndCapitalMemberRepository.cs" />
     <Compile Include="Repository\BPMPro\MediaAcceptanceRepository.cs" />
     <Compile Include="Repository\BPMPro\MediaInvoiceRepository.cs" />
     <Compile Include="Repository\BPMPro\MediaOrderChangeRepository.cs" />

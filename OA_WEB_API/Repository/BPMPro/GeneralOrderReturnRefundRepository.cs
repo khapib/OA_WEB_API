@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Linq;
 using System.Web;
+using System.Collections;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -293,7 +294,23 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (FM7Subject == null)
                 {
-                    FM7Subject = "【退貨折讓】第" + model.GENERAL_ORDER_RETURN_REFUND_CONFIG.PERIOD + "期-" + strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_SUBJECT;
+                    //    FM7Subject = "【退貨折讓】第" + model.GENERAL_ORDER_RETURN_REFUND_CONFIG.PERIOD + "期-" + strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_SUBJECT;
+
+                    var parameter = new List<SqlParameter>()
+                    {
+                        new SqlParameter("@GENERAL_INVOICE_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.GENERAL_ORDER_RETURN_REFUND_CONFIG.GENERAL_INVOICE_REQUISITION_ID }
+                    };
+
+                    strSQL = "";
+                    strSQL += "SELECT ";
+                    strSQL += "      [RequisitionID] ";
+                    strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralOrderReturnRefund_M] AS M ";
+                    strSQL += "LEFT JOIN [BPMPro].[dbo].[FSe7en_Sys_Requisition] AS R ON R.RequisitionID=M.RequisitionID ";
+                    strSQL += "WHERE [GeneralInvoiceRequisitionID]=@GENERAL_INVOICE_REQUISITION_ID ";
+
+                    var frequency = int.Parse((dbFun.DoQuery(strSQL, parameter).Rows.Count).ToString()) + 1;
+
+                    FM7Subject = "【退貨折讓_第"+ frequency + "次】第" + model.GENERAL_ORDER_RETURN_REFUND_CONFIG.PERIOD + "期-" + strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_SUBJECT;
                 }
 
                 #endregion
@@ -567,14 +584,38 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@R_QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@R_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@R_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5 , Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 if (model.GENERAL_ORDER_RETURN_REFUND_INV_DTLS_CONFIG != null && model.GENERAL_ORDER_RETURN_REFUND_INV_DTLS_CONFIG.Count > 0)
                 {
+                    #region - 計算剩餘數量及金額 -
+
+                    if (model.GENERAL_ORDER_RETURN_REFUND_ALDY_INV_DTLS_CONFIG != null && model.GENERAL_ORDER_RETURN_REFUND_ALDY_INV_DTLS_CONFIG.Count > 0)
+                    {
+                        model.GENERAL_ORDER_RETURN_REFUND_INV_DTLS_CONFIG.ForEach(INV_DTL =>
+                        {
+                            if (model.GENERAL_ORDER_RETURN_REFUND_ALDY_INV_DTLS_CONFIG.Any(ALDY_INV_DTL => ALDY_INV_DTL.ROW_NO == INV_DTL.ROW_NO))
+                            {
+                                INV_DTL.R_QUANTITY = model.GENERAL_ORDER_RETURN_REFUND_ALDY_INV_DTLS_CONFIG.Where(ALDY_INV_DTL => ALDY_INV_DTL.ROW_NO == INV_DTL.ROW_NO).FirstOrDefault().R_QUANTITY - INV_DTL.QUANTITY;
+                                
+                                if(model.GENERAL_ORDER_RETURN_REFUND_ALDY_INV_DTLS_CONFIG.Any(ALDY_INV_DTL => ALDY_INV_DTL.R_QUANTITY== INV_DTL.QUANTITY))
+                                {
+                                    INV_DTL.R_AMOUNT = 0;
+                                    INV_DTL.R_AMOUNT_TWD = 0;
+
+                                }
+                                else
+                                {
+                                    INV_DTL.R_AMOUNT = model.GENERAL_ORDER_RETURN_REFUND_ALDY_INV_DTLS_CONFIG.Where(ALDY_INV_DTL => ALDY_INV_DTL.ROW_NO == INV_DTL.ROW_NO).FirstOrDefault().R_AMOUNT - INV_DTL.AMOUNT;
+                                    INV_DTL.R_AMOUNT_TWD = model.GENERAL_ORDER_RETURN_REFUND_ALDY_INV_DTLS_CONFIG.Where(ALDY_INV_DTL => ALDY_INV_DTL.ROW_NO == INV_DTL.ROW_NO).FirstOrDefault().R_AMOUNT_TWD - INV_DTL.AMOUNT_TWD;
+                                }
+                            }
+                        });
+                    }
+
+                    #endregion
+
                     var CommonINV_DTL = new BPMCommonModel<GeneralOrderReturnRefundInvoiceDetailsConfig>()
                     {
                         EXT = "INV_DTL",

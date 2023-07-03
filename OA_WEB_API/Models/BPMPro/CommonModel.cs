@@ -505,10 +505,55 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    #region - 附件上傳 -
+
+
+    #region - BPM附件 -
+
+    /// <summary>BPM附件</summary>
+    public class FilesConfig
+    {
+        /// <summary>上傳者員工編號</summary>
+        public string ACCOUNT_ID { get; set; }
+
+        /// <summary>上傳者名字</summary>
+        public string MEMBER_NAME { get; set; }
+
+        /// <summary>系統編號</summary>
+        public string REQUISITION_ID { get; set; }
+
+        /// <summary>流程圖編號</summary>
+        public string DIAGRAM_ID { get; set; }
+
+        /// <summary>流程圖：關卡編號</summary>
+        public string PROCESS_ID { get; set; }
+
+        /// <summary>流程圖：關卡名稱</summary>
+        public string PROCESS_NAME { get; set; }
+
+        /// <summary>專案資料夾/附件編碼名稱</summary>
+        public string N_FILE_NAME { get; set; }
+
+        /// <summary>附件原本名稱</summary>
+        public string O_FILE_NAME { get; set; }
+
+        /// <summary>檔案大小</summary>
+        public int FILE_SIZE { get; set; }
+
+        /// <summary>正式：0；草稿：1</summary>
+        public int? DRAFT_FLAG { get; set; }
+
+        /// <summary>備註</summary>
+        public string REMARK { get; set; }
+
+        
+    }
+
+    #endregion
+
+    #region - ERP附件 -
 
     /// <summary>
-    /// 附件上傳內容
+    /// ERP附件內容
     /// </summary>
     public class AttachmentMain
     {
@@ -518,11 +563,12 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>表單代號</summary>
         public string IDENTIFY { get; set; }
 
+        /// <summary>ERP附件</summary>
         public IList<AttachmentConfig> ATTACHMENT { get; set; }
     }
 
     /// <summary>
-    /// 附件
+    /// ERP附件
     /// </summary>
     public class AttachmentConfig
     {

@@ -1317,6 +1317,18 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     foreach (var item in Common.Model)
                     {
+                        switch (Common.IDENTIFY)
+                        {
+                            case "GeneralOrderReturnRefund":
+                            case "MediaOrderReturnRefund":
+                                Common.parameter.Add(new SqlParameter("@R_QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value });
+                                Common.parameter.Add(new SqlParameter("@R_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value });
+                                Common.parameter.Add(new SqlParameter("@R_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value });
+                                break;
+                            default:
+                                break;
+                        }
+
                         strJson = jsonFunction.ObjectToJSON(item);
 
                         #region - 確認小數點後第二位 -
@@ -1351,7 +1363,9 @@ namespace OA_WEB_API.Repository.BPMPro
                         switch (Common.IDENTIFY)
                         {
                             case "GeneralInvoice":
+                            case "GeneralOrderReturnRefund":
                             case "MediaInvoice":
+                            case "MediaOrderReturnRefund":
                             case "ExpensesReimburse":
                                 Common.parameter.Remove(Common.parameter.Where(SP => SP.ParameterName.Contains("@R_QUANTITY")).FirstOrDefault());
                                 Common.parameter.Remove(Common.parameter.Where(SP => SP.ParameterName.Contains("@R_AMOUNT")).FirstOrDefault());

@@ -52,6 +52,42 @@ namespace OA_WEB_API.Models
 
     #endregion
 
+    #region - 主要部門及使用者資料 -
+
+    /// <summary>
+    /// 主要部門及使用者資料(查詢)
+    /// </summary>
+    public class UserInfoMainDeptModel
+    {
+        /// <summary>使用者員工編號</summary>
+        public string USER_ID { get; set; }
+
+        /// <summary>使用者部門編號</summary>
+        public string DEPT_ID { get; set; }
+
+        /// <summary>公司別</summary>
+        public string COMPANY_ID { get; set; }
+    }
+
+    /// <summary>
+    /// 主要部門及使用者資料
+    /// </summary>
+    public class UserInfoMainDeptViewModel
+    {
+        /// <summary>主要部門</summary>
+        public DeptTree MAIN_DEPT { get; set; }
+
+        /// <summary>使用者資料</summary>
+        public UserInfoConfig USER_MODEL { get; set; }
+    }
+
+    public class UserInfoConfig : UserModel
+    {
+        public bool? IS_MAIN_JOB { get; set; }
+    }
+
+    #endregion
+
     #region - BPM表單狀態(查詢條件) -
 
     /// <summary>

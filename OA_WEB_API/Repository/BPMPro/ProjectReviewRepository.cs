@@ -158,10 +158,25 @@ namespace OA_WEB_API.Repository.BPMPro
             bool vResult = false;
             try
             {
-                #region - 宣告主旨 -
+                #region - 宣告 -
+
+                #region - 系統編號 -
+
+                strREQ = model.APPLICANT_INFO.REQUISITION_ID;
+                if (String.IsNullOrEmpty(strREQ) || String.IsNullOrWhiteSpace(strREQ))
+                {
+                    strREQ = Guid.NewGuid().ToString();
+                }
+
+                #endregion
+
+                #region - 主旨 -
 
                 FM7Subject = model.PROJECT_REVIEW_ERP_CONFIG.PROJECT_NAME + "-" + model.PROJECT_REVIEW_ERP_CONFIG.PROJECT_NICKNAME;
-                
+
+                #endregion
+
+
                 #endregion
 
                 #region - 專案建立審核主表：ProjectReview_M -
@@ -169,7 +184,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 var parameterA = new List<SqlParameter>()
                 {
                     //表單資訊
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  model.APPLICANT_INFO.REQUISITION_ID},
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  strREQ},
                     new SqlParameter("@DIAGRAM_ID", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.DIAGRAM_ID },
                     new SqlParameter("@PRIORITY", SqlDbType.Int) { Value =  model.APPLICANT_INFO.PRIORITY},
                     new SqlParameter("@DRAFT_FLAG", SqlDbType.Int) { Value =  model.APPLICANT_INFO.DRAFT_FLAG},
@@ -284,7 +299,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 FormHeader header = new FormHeader
                 {
-                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    REQUISITION_ID = strREQ,
                     ITEM_NAME = "Subject",
                     ITEM_VALUE = FM7Subject
                 };
@@ -299,7 +314,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     FormDraftList draftList = new FormDraftList()
                     {
-                        REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                        REQUISITION_ID = strREQ,
                         IDENTIFY = IDENTIFY,
                         FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID
                     };
@@ -318,7 +333,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     //刪除草稿清單
                     FormDraftList draftList = new FormDraftList()
                     {
-                        REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                        REQUISITION_ID = strREQ,
                         IDENTIFY = IDENTIFY,
                         FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID
                     };
@@ -329,7 +344,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     //送出表單
                     FormAutoStart autoStart = new FormAutoStart()
                     {
-                        REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                        REQUISITION_ID = strREQ,
                         DIAGRAM_ID = model.APPLICANT_INFO.DIAGRAM_ID,
                         APPLICANT_ID = model.APPLICANT_INFO.APPLICANT_ID,
                         APPLICANT_DEPT = model.APPLICANT_INFO.APPLICANT_DEPT
@@ -344,7 +359,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 var BPM_FormFunction = new BPMFormFunction()
                 {
-                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    REQUISITION_ID = strREQ,
                     IDENTIFY = IDENTIFY,
                     DRAFT_FLAG = 0
                 };
@@ -386,6 +401,12 @@ namespace OA_WEB_API.Repository.BPMPro
         /// 表單主旨
         /// </summary>
         private string FM7Subject;
+
+        /// <summary>
+        /// 系統編號
+        /// </summary>
+        private string strREQ;
+
 
         #endregion
     }

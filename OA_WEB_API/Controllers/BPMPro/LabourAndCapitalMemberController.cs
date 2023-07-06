@@ -88,12 +88,14 @@ namespace OA_WEB_API.Controllers.BPMPro
         }
 
         /// <summary>
-        /// 勞資委員投票(附件)
+        /// 勞資委員投票(附件:新增F表)
         /// </summary>      
         [Route("PutLabourAndCapitalMemberFilesSingle")]
         [HttpPost]
-        public bool PutLabourAndCapitalMemberFilesSingle()
+        public List<LabourAndCapitalMemberFilesConfig> PutLabourAndCapitalMemberFilesSingle()
         {
+            #region - 檔案上傳接收 -
+
             HttpRequest request = HttpContext.Current.Request;
 
             var model = new LabourAndCapitalMemberFilesConfig()
@@ -102,6 +104,8 @@ namespace OA_WEB_API.Controllers.BPMPro
                 ACCOUNT_ID = request.Form.Get("ACCOUNT_ID"),
                 REMARK = request.Form.Get("REMARK")
             };
+
+            #endregion
 
             return labourAndCapitalMemberRepository.PutLabourAndCapitalMemberFilesSingle(model);
         }

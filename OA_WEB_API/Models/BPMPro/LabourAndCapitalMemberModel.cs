@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Web;
 
+/// <summary>
+/// 勞資委員投票
+/// </summary>
 namespace OA_WEB_API.Models.BPMPro
 {
     /// <summary>
@@ -70,7 +72,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 勞資委員投票 抬頭資訊
     /// </summary>
-    public class TitleInfo: ApplicantInfo
+    public class TitleInfo : ApplicantInfo
     {
         /// <summary>異動或調整過時間紀錄</summary>
         public Nullable<DateTime> MODIFY_DATETIME { get; set; }
@@ -128,6 +130,9 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>得票數</summary>
         public int? VOTE_NUM { get; set; }
+
+        /// <summary>備註</summary>
+        public string NOTE { get; set; }
     }
 
     /// <summary>
@@ -191,10 +196,11 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 勞資委員投票 當選註記 設定
     /// </summary>
-    public class LabourAndCapitalMemberMarkConfig: LabourAndCapitalMemberLaboursConfig
+    public class LabourAndCapitalMemberMarkConfig : LabourAndCapitalMemberLaboursConfig
     {
         /// <summary>投票年度</summary>
         public string VOTE_YEAR { get; set; }
     }
+
 
 }

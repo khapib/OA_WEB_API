@@ -873,7 +873,7 @@
         </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.LabourAndCapitalMemberController.PutLabourAndCapitalMemberFilesSingle">
             <summary>
-            勞資委員投票(附件)
+            勞資委員投票(附件:新增F表)
             </summary>      
         </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.LabourAndCapitalMemberController.PutLabourAndCapitalMemberMarkSingle(OA_WEB_API.Models.BPMPro.LabourAndCapitalMemberMarkConfig)">
@@ -1024,6 +1024,16 @@
         <member name="M:OA_WEB_API.Controllers.BPMPro.MediaWarehouseNotAiredCopyController.PutMediaWarehouseNotAiredCopySingle(OA_WEB_API.Models.BPMPro.MediaWarehouseNotAiredCopyViewModel)">
             <summary>
             版權採購申請單(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Controllers.BPMPro.OfficialStampController">
+            <summary>
+            會簽管理系統 - 用印申請單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.OfficialStampController.PutOfficialStampSingle(OA_WEB_API.Models.BPMPro.OfficialStampViewModel)">
+            <summary>
+            用印申請單(新增/修改/草稿)
             </summary>
         </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.ProjectReviewController">
@@ -4153,21 +4163,6 @@
             四方四隅_會簽單 會簽簽核人員 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GPI_CountersignApproversConfig.APPROVER_COMPANY_ID">
-            <summary>簽核人員公司別編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GPI_CountersignApproversConfig.APPROVER_DEPT_MAIN_ID">
-            <summary>簽核人員主要部門</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GPI_CountersignApproversConfig.APPROVER_DEPT_ID">
-            <summary>簽核人員部門</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GPI_CountersignApproversConfig.APPROVER_ID">
-            <summary>簽核人員編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GPI_CountersignApproversConfig.APPROVER_NAME">
-            <summary>簽核人員姓名</summary>
-        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GPI_EvaluateContentQueryModel">
             <summary>
             四方四隅_內容評估表(查詢條件)
@@ -4569,6 +4564,9 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.LabourAndCapitalMemberLaboursConfig.VOTE_NUM">
             <summary>得票數</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.LabourAndCapitalMemberLaboursConfig.NOTE">
+            <summary>備註</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.LabourAndCapitalMemberVoteConfig">
             <summary>
@@ -6674,6 +6672,87 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MessageModel.CONTENT">
             <summary>訊息內容</summary>
         </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.OfficialStampModel">
+            <summary>
+            用印申請單(查詢條件)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.OfficialStampModel.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.OfficialStampViewModel">
+            <summary>
+            用印申請單
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.OfficialStampViewModel.APPLICANT_INFO">
+            <summary>申請人資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.OfficialStampViewModel.OFFICIAL_STAMP_TITLE">
+            <summary>用印申請單 表頭資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.OfficialStampViewModel.OFFICIAL_STAMP_CONFIG">
+            <summary>用印申請單 表單內容 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.OfficialStampViewModel.OFFICIAL_STAMP_DOCS_CONFIG">
+            <summary>用印申請單 用印項目明細 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.OfficialStampViewModel.OFFICIAL_STAMP_APPROVERS_CONFIG">
+            <summary>用印申請單 會簽簽核人員 設定</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.OfficialStampTitle">
+            <summary>
+            用印申請單 表頭資訊
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.OfficialStampTitle.LEVEL_TYPE">
+            <summary>
+            級別：
+            調整 ApplicantInfo(申請人資訊)的，表單PRIORITY(重要性)
+            特急件:3
+            急件:2
+            普通件:1
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.OfficialStampConfig">
+            <summary>
+            用印申請單 表單內容 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.OfficialStampConfig.REASON">
+            <summary>申請源由</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.OfficialStampConfig.NOTE">
+            <summary>備註</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.OfficialStampConfig.CONTACT">
+            <summary>往來對象</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.OfficialStampConfig.APPROVAL_NO">
+            <summary>公文字號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.OfficialStampDocumentsConfig">
+            <summary>
+            用印申請單 用印項目明細 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.OfficialStampDocumentsConfig.ITEM_NAME">
+            <summary>文件名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.OfficialStampDocumentsConfig.SERVINGS">
+            <summary>份數</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.OfficialStampDocumentsConfig.APPLY_STAMP_TYPE">
+            <summary>請印種類</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.OfficialStampDocumentsConfig.APPLY_STAMP_TYPE_OTHERS">
+            <summary>請印種類_其他</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.OfficialStampApproversConfig">
+            <summary>
+            用印申請單 會簽簽核人員 設定
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ProjectReviewQueryModel">
             <summary>
             專案建立審核單(查詢條件)
@@ -7139,6 +7218,24 @@
         <member name="P:OA_WEB_API.Models.BPMPro.Test05List.NARRATIVE">
             <summary>描述</summary>
         </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.BPMCommonModel`1">
+            <summary>
+            BPM_表單共用模組
+            </summary>
+            <typeparam name="T">Model</typeparam>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.EXT">
+            <summary>表單資料表子名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.IDENTIFY">
+            <summary>表單代號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.PARAMETER">
+            <summary>SqlParameter</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.MODEL">
+            <summary>Models</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ImplementHeader">
             <summary>
             (BPM API共用)_ERP起單共用抬頭
@@ -7157,6 +7254,26 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.HeaderTitle.BPM_FORM_NO">
             <summary>BPM 表單單號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.ApproversConfig">
+            <summary>
+            會簽簽核人員
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ApproversConfig.APPROVER_COMPANY_ID">
+            <summary>簽核人員公司別編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ApproversConfig.APPROVER_DEPT_MAIN_ID">
+            <summary>簽核人員主要部門</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ApproversConfig.APPROVER_DEPT_ID">
+            <summary>簽核人員部門</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ApproversConfig.APPROVER_ID">
+            <summary>簽核人員編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ApproversConfig.APPROVER_NAME">
+            <summary>簽核人員姓名</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.COMM_Bank">
             <summary>
@@ -7220,24 +7337,6 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.BFCY_EMAIL">
             <summary>聯絡Email</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.BPMCommonModel`1">
-            <summary>
-            BPM表單共用模組
-            </summary>
-            <typeparam name="T">Model</typeparam>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.EXT">
-            <summary>D表名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.IDENTIFY">
-            <summary>表單代號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.parameter">
-            <summary>SqlParameter</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.Model">
-            <summary>Models</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.InvoiceConfig">
             <summary>
@@ -9119,6 +9218,11 @@
             Json字串
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.AdvanceExpenseRepository.strREQ">
+            <summary>
+            系統編號
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.EvaluateContentReplenishRepository">
             <summary>
             會簽管理系統 - 內容評估表_補充意見
@@ -9167,6 +9271,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContentReplenishRepository.strJson">
             <summary>
             Json字串
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContentReplenishRepository.strREQ">
+            <summary>
+            系統編號
             </summary>
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.EvaluateContentRepository">
@@ -9224,6 +9333,11 @@
             Json字串
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateContentRepository.strREQ">
+            <summary>
+            系統編號
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.EvaluateDemandRepository">
             <summary>
             會簽管理系統 - 需求評估單
@@ -9264,6 +9378,11 @@
             表單主旨
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateDemandRepository.strREQ">
+            <summary>
+            系統編號
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.ExpensesReimburseRepository">
             <summary>
             會簽管理系統 - 費用申請單
@@ -9302,6 +9421,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.ExpensesReimburseRepository.strJson">
             <summary>
             Json字串
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.ExpensesReimburseRepository.strREQ">
+            <summary>
+            系統編號
             </summary>
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.GeneralAcceptanceRepository">
@@ -9349,6 +9473,11 @@
             Json字串
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GeneralAcceptanceRepository.strREQ">
+            <summary>
+            系統編號
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.GeneralInvoiceRepository">
             <summary>
             會簽管理系統 - 行政採購請款單
@@ -9392,6 +9521,11 @@
             Json字串
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GeneralInvoiceRepository.strREQ">
+            <summary>
+            系統編號
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.GeneralOrderChangeRepository">
             <summary>
             會簽管理系統 - 行政採購異動申請單
@@ -9430,6 +9564,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.GeneralOrderChangeRepository.strJson">
             <summary>
             Json字串
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GeneralOrderChangeRepository.strREQ">
+            <summary>
+            系統編號
             </summary>
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.GeneralOrderRepository">
@@ -9477,6 +9616,11 @@
             Json字串
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GeneralOrderRepository.strREQ">
+            <summary>
+            系統編號
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.GeneralOrderReturnRefundRepository">
             <summary>
             會簽管理系統 - 行政採購退貨折讓單
@@ -9518,6 +9662,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.GeneralOrderReturnRefundRepository.strJson">
             <summary>
             Json字串
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GeneralOrderReturnRefundRepository.strREQ">
+            <summary>
+            系統編號
             </summary>
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.GetExternalRepository">
@@ -9736,6 +9885,11 @@
             Json字串
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GPI_CountersignRepository.strREQ">
+            <summary>
+            系統編號
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.GPI_EvaluateContentReplenishRepository">
             <summary>
             會簽管理系統 - 四方四隅_內容評估表_補充意見
@@ -9784,6 +9938,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.GPI_EvaluateContentReplenishRepository.strJson">
             <summary>
             Json字串
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GPI_EvaluateContentReplenishRepository.strREQ">
+            <summary>
+            系統編號
             </summary>
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.GPI_EvaluateContentRepository">
@@ -9841,6 +10000,11 @@
             Json字串
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GPI_EvaluateContentRepository.strREQ">
+            <summary>
+            系統編號
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.LabourAndCapitalMemberRepository">
             <summary>
             會簽管理系統 - 勞資委員投票
@@ -9878,7 +10042,8 @@
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.LabourAndCapitalMemberRepository.PutLabourAndCapitalMemberFilesSingle(OA_WEB_API.Models.BPMPro.LabourAndCapitalMemberFilesConfig)">
             <summary>
-            勞資委員投票(附件)
+            勞資委員投票(附件:新增F表)
+            檔案手動上傳到(C/D):\\NTWEB\\AutoWeb3\\Database\\Project\\BPM\\BPMPro\\object路徑
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.LabourAndCapitalMemberRepository.PutLabourAndCapitalMemberMarkSingle(OA_WEB_API.Models.BPMPro.LabourAndCapitalMemberMarkConfig)">
@@ -9916,14 +10081,9 @@
             系統編號
             </summary>
         </member>
-        <member name="F:OA_WEB_API.Repository.BPMPro.LabourAndCapitalMemberRepository.filePath">
+        <member name="F:OA_WEB_API.Repository.BPMPro.LabourAndCapitalMemberRepository.AttachfilePath">
             <summary>
-            佈版檔案路徑
-            </summary>
-        </member>
-        <member name="F:OA_WEB_API.Repository.BPMPro.LabourAndCapitalMemberRepository.localfilePath">
-            <summary>
-            本機測試檔案路徑
+            佈版檔案路徑：IIS須設定Attach虛擬目錄
             </summary>
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.MediaAcceptanceRepository">
@@ -9972,6 +10132,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaAcceptanceRepository.strJson">
             <summary>
             Json字串
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaAcceptanceRepository.strREQ">
+            <summary>
+            系統編號
             </summary>
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.MediaInvoiceRepository">
@@ -10025,6 +10190,11 @@
             Json字串
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaInvoiceRepository.strREQ">
+            <summary>
+            系統編號
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.MediaOrderChangeRepository">
             <summary>
             會簽管理系統 - 版權採購異動申請單
@@ -10063,6 +10233,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaOrderChangeRepository.strJson">
             <summary>
             Json字串
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaOrderChangeRepository.strREQ">
+            <summary>
+            系統編號
             </summary>
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.MediaOrderRepository">
@@ -10110,6 +10285,11 @@
             Json字串
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaOrderRepository.strREQ">
+            <summary>
+            系統編號
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.MediaOrderReturnRefundRepository">
             <summary>
             會簽管理系統 - 版權採購退貨折讓單
@@ -10151,6 +10331,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaOrderReturnRefundRepository.strJson">
             <summary>
             Json字串
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaOrderReturnRefundRepository.strREQ">
+            <summary>
+            系統編號
             </summary>
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.MediaSaleRepository">
@@ -10198,6 +10383,11 @@
             Json字串
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaSaleRepository.strREQ">
+            <summary>
+            系統編號
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.MediaWarehouseCopyRepository">
             <summary>
             會簽管理系統 - 拷貝申請單
@@ -10243,6 +10433,11 @@
             Json字串
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaWarehouseCopyRepository.strREQ">
+            <summary>
+            系統編號
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.MediaWarehouseNotAiredCopyRepository">
             <summary>
             會簽管理系統 - 尚未播出檔拷貝申請單
@@ -10286,6 +10481,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.MediaWarehouseNotAiredCopyRepository.strJson">
             <summary>
             Json字串
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.MediaWarehouseNotAiredCopyRepository.strREQ">
+            <summary>
+            系統編號
             </summary>
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.NotifyRepository">
@@ -10443,6 +10643,46 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.NotifyRepository.enumProcess.DISAGREE_CLOSE">
             <summary>駁回結束</summary>
         </member>
+        <member name="T:OA_WEB_API.Repository.BPMPro.OfficialStampRepository">
+            <summary>
+            會簽管理系統 - 用印申請單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.OfficialStampRepository.PutOfficialStampSingle(OA_WEB_API.Models.BPMPro.OfficialStampViewModel)">
+            <summary>
+            用印申請單(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.OfficialStampRepository.strSQL">
+            <summary>
+            T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.OfficialStampRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.OfficialStampRepository.IDENTIFY">
+            <summary>
+            表單代號
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.OfficialStampRepository.FM7Subject">
+            <summary>
+            表單主旨
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.OfficialStampRepository.strJson">
+            <summary>
+            Json字串
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.OfficialStampRepository.strREQ">
+            <summary>
+            系統編號
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.ProjectReviewRepository">
             <summary>
             會簽管理系統 - 專案建立審核單
@@ -10476,6 +10716,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.ProjectReviewRepository.FM7Subject">
             <summary>
             表單主旨
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.ProjectReviewRepository.strREQ">
+            <summary>
+            系統編號
             </summary>
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.SupplierReviewRepository">
@@ -10516,6 +10761,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.SupplierReviewRepository.strJson">
             <summary>
             Json字串
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.SupplierReviewRepository.strREQ">
+            <summary>
+            系統編號
             </summary>
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.CommonRepository">
@@ -10592,6 +10842,16 @@
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.FormDistinguish(System.String)">
             <summary>
             (擴充方法)_共同表單區分
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostApproverFunction``1(OA_WEB_API.Models.BPMPro.BPMCommonModel{``0})">
+            <summary>
+            會簽簽核人員_共用模組(查詢)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PutApproverFunction``1(OA_WEB_API.Models.BPMPro.BPMCommonModel{``0})">
+            <summary>
+            會簽簽核人員_共用模組(新增/修改/草稿)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostInvoiceFunction``1(OA_WEB_API.Models.BPMPro.BPMCommonModel{``0})">

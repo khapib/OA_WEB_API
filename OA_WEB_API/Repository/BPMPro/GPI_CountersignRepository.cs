@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
+using OA_WEB_API.Models;
 using OA_WEB_API.Models.BPMPro;
 
 namespace OA_WEB_API.Repository.BPMPro
@@ -23,6 +24,8 @@ namespace OA_WEB_API.Repository.BPMPro
         FormRepository formRepository = new FormRepository();
         CommonRepository commonRepository = new CommonRepository();
         NotifyRepository notifyRepository = new NotifyRepository();
+        UserRepository userRepository = new UserRepository();
+        SysCommonRepository sysCommonRepository = new SysCommonRepository();
 
         #endregion
 
@@ -107,19 +110,14 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #region - 四方四隅_會簽單 會簽簽核人員 -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [ApproverCompanyID] AS [APPROVER_COMPANY_ID], ";
-            strSQL += "     [ApproverDeptMainID] AS [APPROVER_DEPT_MAIN_ID], ";
-            strSQL += "     [ApproverDeptID] AS [APPROVER_DEPT_ID], ";
-            strSQL += "     [ApproverID] AS [APPROVER_ID], ";
-            strSQL += "     [ApproverName] AS [APPROVER_NAME] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_Countersign_D] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "ORDER BY [AutoCounter] ";
-
-            var GPI_countersignApproversConfig = dbFun.DoQuery(strSQL, parameter).ToList<GPI_CountersignApproversConfig>();
+            var CommonApprovers = new BPMCommonModel<GPI_CountersignApproversConfig>()
+            {
+                EXT = "D",
+                IDENTIFY = IDENTIFY,
+                PARAMETER = parameter
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostApproverFunction(CommonApprovers));
+            var GPI_countersignApproversConfig = jsonFunction.JsonToObject<List<GPI_CountersignApproversConfig>>(strJson);
 
             #endregion
 
@@ -206,8 +204,18 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 #region - 宣告 -
 
+                #region - 系統編號 -
+
+                strREQ = model.APPLICANT_INFO.REQUISITION_ID;
+                if (String.IsNullOrEmpty(strREQ) || String.IsNullOrWhiteSpace(strREQ))
+                {
+                    strREQ = Guid.NewGuid().ToString();
+                }
+
+                #endregion
+
                 //表單重要性
-                var PRIORITY = model.APPLICANT_INFO.PRIORITY;                
+                var PRIORITY = model.APPLICANT_INFO.PRIORITY;
 
                 switch (model.GPI_COUNTERSIGN_TITLE.LEVEL_TYPE)
                 {
@@ -236,7 +244,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 var parameterTitle = new List<SqlParameter>()
                 {
                     //表單資訊
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  model.APPLICANT_INFO.REQUISITION_ID},
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  strREQ},
                     new SqlParameter("@DIAGRAM_ID", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.DIAGRAM_ID },
                     new SqlParameter("@PRIORITY", SqlDbType.Int) { Value =  PRIORITY},
                     new SqlParameter("@DRAFT_FLAG", SqlDbType.Int) { Value =  model.APPLICANT_INFO.DRAFT_FLAG},
@@ -334,8 +342,8 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     var parameterInfo = new List<SqlParameter>()
                     {
-                        //行政採購申請 表單內容
-                        new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                        //四方四隅_會簽單 表單內容
+                        new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                         new SqlParameter("@DESCRIPTION", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@IS_VICE_PRESIDENT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value }
@@ -349,7 +357,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "UPDATE [BPMPro].[dbo].[FM7T_GPI_Countersign_M] ";
                     strSQL += "SET [Description]=@DESCRIPTION, ";
                     strSQL += "     [Note]=@NOTE, ";
-                    strSQL += "     [IsVicePresident]=@IS_VICE_PRESIDENT ";                    
+                    strSQL += "     [IsVicePresident]=@IS_VICE_PRESIDENT ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                     dbFun.DoTran(strSQL, parameterInfo);
@@ -363,7 +371,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 var parameterApprovers = new List<SqlParameter>()
                 {
                     //四方四隅_會簽單 會簽簽核人員
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                     new SqlParameter("@APPROVER_COMPANY_ID", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@APPROVER_DEPT_MAIN_ID", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@APPROVER_DEPT_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -371,38 +379,33 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@APPROVER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value }
                 };
 
-                #region 先刪除舊資料
-
-                strSQL = "";
-                strSQL += "DELETE ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_Countersign_D] ";
-                strSQL += "WHERE 1=1 ";
-                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
-
-                dbFun.DoTran(strSQL, parameterApprovers);
-
-                #endregion
-
-
                 if (model.GPI_COUNTERSIGN_APPROVERS_CONFIG != null && model.GPI_COUNTERSIGN_APPROVERS_CONFIG.Count > 0)
                 {
-                    #region 再新增資料
-
-                    foreach (var item in model.GPI_COUNTERSIGN_APPROVERS_CONFIG)
+                    model.GPI_COUNTERSIGN_APPROVERS_CONFIG.ForEach(A =>
                     {
-                        //寫入：四方四隅_會簽單 會簽簽核人員parameter
+                        var logonModel = new LogonModel()
+                        {
+                            USER_ID = A.APPROVER_ID
+                        };
+                        var UserModel = userRepository.PostUserSingle(logonModel).USER_MODEL;
 
-                        strJson = jsonFunction.ObjectToJSON(item);
-                        GlobalParameters.Infoparameter(strJson, parameterApprovers);
+                        var userInfoMainDeptModel = new UserInfoMainDeptModel()
+                        {
+                            USER_ID = A.APPROVER_ID,
+                            DEPT_ID = A.APPROVER_DEPT_ID,
+                            COMPANY_ID = UserModel.Where(U => U.DEPT_ID == A.APPROVER_DEPT_ID).Select(U => U.COMPANY_ID).FirstOrDefault(),
+                        };
+                        A.APPROVER_DEPT_MAIN_ID = sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel).MAIN_DEPT.DEPT_ID;
+                    });
 
-                        strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GPI_Countersign_D]([RequisitionID],[ApproverCompanyID],[ApproverDeptMainID],[ApproverDeptID],[ApproverID],[ApproverName]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@APPROVER_COMPANY_ID,@APPROVER_DEPT_MAIN_ID,@APPROVER_DEPT_ID,@APPROVER_ID,@APPROVER_NAME) ";
-
-                        dbFun.DoTran(strSQL, parameterApprovers);
-                    }
-
-                    #endregion
+                    var CommonApprovers = new BPMCommonModel<GPI_CountersignApproversConfig>()
+                    {
+                        EXT = "D",
+                        IDENTIFY = IDENTIFY,
+                        PARAMETER = parameterApprovers,
+                        MODEL = model.GPI_COUNTERSIGN_APPROVERS_CONFIG
+                    };
+                    commonRepository.PutApproverFunction(CommonApprovers);
                 }
 
                 #endregion
@@ -411,7 +414,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 var associatedFormModel = new AssociatedFormModel()
                 {
-                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    REQUISITION_ID = strREQ,
                     ASSOCIATED_FORM_CONFIG = model.ASSOCIATED_FORM_CONFIG
                 };
 
@@ -422,7 +425,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 #region - 表單主旨：FormHeader -
 
                 FormHeader header = new FormHeader();
-                header.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                header.REQUISITION_ID = strREQ;
                 header.ITEM_NAME = "Subject";
                 header.ITEM_VALUE = FM7Subject;
 
@@ -435,7 +438,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 if (model.APPLICANT_INFO.DRAFT_FLAG.Equals(1))
                 {
                     FormDraftList draftList = new FormDraftList();
-                    draftList.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                    draftList.REQUISITION_ID = strREQ;
                     draftList.IDENTIFY = IDENTIFY;
                     draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
 
@@ -451,7 +454,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region 送出表單前，先刪除草稿清單
 
                     FormDraftList draftList = new FormDraftList();
-                    draftList.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                    draftList.REQUISITION_ID = strREQ;
                     draftList.IDENTIFY = IDENTIFY;
                     draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
 
@@ -460,7 +463,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     #endregion
 
                     FormAutoStart autoStart = new FormAutoStart();
-                    autoStart.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                    autoStart.REQUISITION_ID = strREQ;
                     autoStart.DIAGRAM_ID = model.APPLICANT_INFO.DIAGRAM_ID;
                     autoStart.APPLICANT_ID = model.APPLICANT_INFO.APPLICANT_ID;
                     autoStart.APPLICANT_DEPT = model.APPLICANT_INFO.APPLICANT_DEPT;
@@ -474,7 +477,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 var BPM_FormFunction = new BPMFormFunction()
                 {
-                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    REQUISITION_ID = strREQ,
                     IDENTIFY = IDENTIFY,
                     DRAFT_FLAG = 0
                 };
@@ -521,6 +524,11 @@ namespace OA_WEB_API.Repository.BPMPro
         /// Json字串
         /// </summary>
         private string strJson;
+
+        /// <summary>
+        /// 系統編號
+        /// </summary>
+        private string strREQ;
 
         #endregion
     }

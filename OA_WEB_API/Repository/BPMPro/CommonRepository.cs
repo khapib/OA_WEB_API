@@ -9,19 +9,16 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web;
-
-
-using OA_WEB_API.Models.BPMPro;
-using OA_WEB_API.Models.ERP;
-using OA_WEB_API.Repository.ERP;
-using OA_WEB_API.Models;
-
-using Dapper;
-using Microsoft.Ajax.Utilities;
 using System.Reflection;
 using System.Web.Http.Results;
 using System.Runtime.InteropServices;
-using Docker.DotNet.Models;
+
+using OA_WEB_API.Models;
+using OA_WEB_API.Models.BPMPro;
+using OA_WEB_API.Repository.ERP;
+
+using Dapper;
+using Microsoft.Ajax.Utilities;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -45,7 +42,7 @@ namespace OA_WEB_API.Repository.BPMPro
         FormRepository formRepository = new FormRepository();
         UserRepository userRepository = new UserRepository();
         NotifyRepository notifyRepository = new NotifyRepository();
-        StepFlowRepository stepFlowRepository = new StepFlowRepository();
+        StepFlowRepository stepFlowRepository = new StepFlowRepository();        
 
         #endregion
 
@@ -1025,7 +1022,96 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
-        #region - BPM表單共用模組 -
+        #region - 表單共用模組 -
+
+        #region - 會簽簽核人員 -
+
+        /// <summary>
+        /// 會簽簽核人員_共用模組(查詢)
+        /// </summary>
+        public List<T> PostApproverFunction<T>(BPMCommonModel<T> Common)
+        {
+            #region - 宣告 -
+
+            strTable = Common.IDENTIFY + "_" + Common.EXT;
+
+            #endregion
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
+            strSQL += "     [ApproverCompanyID] AS [APPROVER_COMPANY_ID], ";
+            strSQL += "     [ApproverDeptMainID] AS [APPROVER_DEPT_MAIN_ID], ";
+            strSQL += "     [ApproverDeptID] AS [APPROVER_DEPT_ID], ";
+            strSQL += "     [ApproverID] AS [APPROVER_ID], ";
+            strSQL += "     [ApproverName] AS [APPROVER_NAME] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + strTable + "] ";
+            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+            strSQL += "ORDER BY [AutoCounter] ";
+
+            return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<GPI_CountersignApproversConfig>();
+        }
+
+
+        /// <summary>
+        /// 會簽簽核人員_共用模組(新增/修改/草稿)
+        /// </summary>
+        public bool PutApproverFunction<T>(BPMCommonModel<T> Common)
+        {
+            bool vResult = false;
+            try
+            {
+                #region - 宣告 -
+
+                strTable = Common.IDENTIFY + "_" + Common.EXT;
+
+                #endregion
+
+                #region 先刪除舊資料
+
+                strSQL = "";
+                strSQL += "DELETE ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + strTable + "] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoTran(strSQL, Common.PARAMETER);
+
+                #endregion
+
+                if (Common.MODEL != null && Common.MODEL.Count > 0)
+                {
+                    #region 再新增資料
+
+                    Common.MODEL.ForEach(item =>
+                    {
+                        //寫入：會簽簽核人員parameter
+                        strJson = jsonFunction.ObjectToJSON(item);
+                        GlobalParameters.Infoparameter(strJson, Common.PARAMETER);
+
+                        strSQL = "";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "]([RequisitionID],[ApproverCompanyID],[ApproverDeptMainID],[ApproverDeptID],[ApproverID],[ApproverName]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@APPROVER_COMPANY_ID,@APPROVER_DEPT_MAIN_ID,@APPROVER_DEPT_ID,@APPROVER_ID,@APPROVER_NAME) ";
+
+                        dbFun.DoTran(strSQL, Common.PARAMETER);
+
+                    });
+
+                    #endregion
+
+                    vResult = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("【會簽簽核人員_共用模組】執行失敗，原因：" + ex.Message);
+                throw;
+            }
+
+            return vResult;
+        }
+
+        #endregion
 
         #region - 憑證明細 -
 
@@ -1096,12 +1182,12 @@ namespace OA_WEB_API.Repository.BPMPro
 
             switch (Common.IDENTIFY)
             {
-                case "GeneralInvoice": return (List<T>)dbFun.DoQuery(strSQL, Common.parameter).ToList<GeneralInvoiceInvoicesConfig>();
-                case "GeneralOrderReturnRefund": return (List<T>)dbFun.DoQuery(strSQL, Common.parameter).ToList<GeneralInvoiceInvoicesConfig>();
-                case "MediaInvoice": return (List<T>)dbFun.DoQuery(strSQL, Common.parameter).ToList<MediaInvoiceInvoicesConfig>();
-                case "MediaOrderReturnRefund": return (List<T>)dbFun.DoQuery(strSQL, Common.parameter).ToList<MediaInvoiceInvoicesConfig>();
-                case "ExpensesReimburse": return (List<T>)dbFun.DoQuery(strSQL, Common.parameter).ToList<ExpensesReimburseDetailsConfig>();
-                default: return (List<T>)dbFun.DoQuery(strSQL, Common.parameter).ToList<InvoiceConfig>();
+                case "GeneralInvoice": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<GeneralInvoiceInvoicesConfig>();
+                case "GeneralOrderReturnRefund": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<GeneralInvoiceInvoicesConfig>();
+                case "MediaInvoice": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<MediaInvoiceInvoicesConfig>();
+                case "MediaOrderReturnRefund": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<MediaInvoiceInvoicesConfig>();
+                case "ExpensesReimburse": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<ExpensesReimburseDetailsConfig>();
+                default: return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<InvoiceConfig>();
             }
         }
 
@@ -1150,15 +1236,15 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "WHERE 1=1 ";
                 strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
 
-                dbFun.DoTran(strSQL, Common.parameter);
+                dbFun.DoTran(strSQL, Common.PARAMETER);
 
                 #endregion
 
-                if (Common.Model != null && Common.Model.Count > 0)
+                if (Common.MODEL != null && Common.MODEL.Count > 0)
                 {
                     #region 再新增資料
 
-                    foreach (var item in Common.Model)
+                    Common.MODEL.ForEach(item =>
                     {
                         strJson = jsonFunction.ObjectToJSON(item);
 
@@ -1170,14 +1256,15 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         //寫入：版權採購請款 憑證明細parameter
                         strJson = jsonFunction.ObjectToJSON(item);
-                        GlobalParameters.Infoparameter(strJson, Common.parameter);
+                        GlobalParameters.Infoparameter(strJson, Common.PARAMETER);
 
                         strSQL = "";
                         strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "]([RequisitionID]," + strField_F + "[Num],[Date],[Excl],[Excl_TWD],[Tax],[Tax_TWD],[Net],[Net_TWD],[Gross],[Gross_TWD],[Amount],[Amount_TWD]) ";
                         strSQL += "VALUES(@REQUISITION_ID," + strField_V + "@NUM,@DATE,@EXCL,@EXCL_TWD,@TAX,@TAX_TWD,@NET,@NET_TWD,@GROSS,@GROSS_TWD,@AMOUNT,@AMOUNT_TWD) ";
 
-                        dbFun.DoTran(strSQL, Common.parameter);
-                    }
+                        dbFun.DoTran(strSQL, Common.PARAMETER);
+
+                    });
 
                     #endregion
                 }
@@ -1250,16 +1337,13 @@ namespace OA_WEB_API.Repository.BPMPro
 
             switch (Common.IDENTIFY)
             {
-                case "GeneralInvoice": return (List<T>)dbFun.DoQuery(strSQL, Common.parameter).ToList<GeneralInvoiceInvoiceDetailsConfig>();
-                case "GeneralOrderReturnRefund": return (List<T>)dbFun.DoQuery(strSQL, Common.parameter).ToList<GeneralInvoiceInvoiceDetailsConfig>();
-                case "MediaInvoice": return (List<T>)dbFun.DoQuery(strSQL, Common.parameter).ToList<MediaInvoiceInvoiceDetailsConfig>();
-                case "MediaOrderReturnRefund": return (List<T>)dbFun.DoQuery(strSQL, Common.parameter).ToList<MediaInvoiceInvoiceDetailsConfig>();
-                case "ExpensesReimburse": return (List<T>)dbFun.DoQuery(strSQL, Common.parameter).ToList<InvoiceDetailConfig>();
-                default: return (List<T>)dbFun.DoQuery(strSQL, Common.parameter).ToList<InvoiceDetailConfig>();
+                case "GeneralInvoice": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<GeneralInvoiceInvoiceDetailsConfig>();
+                case "GeneralOrderReturnRefund": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<GeneralInvoiceInvoiceDetailsConfig>();
+                case "MediaInvoice": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<MediaInvoiceInvoiceDetailsConfig>();
+                case "MediaOrderReturnRefund": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<MediaInvoiceInvoiceDetailsConfig>();
+                case "ExpensesReimburse": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<InvoiceDetailConfig>();
+                default: return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<InvoiceDetailConfig>();
             }
-
-
-
         }
 
         /// <summary>
@@ -1307,23 +1391,23 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "WHERE 1=1 ";
                 strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
 
-                dbFun.DoTran(strSQL, Common.parameter);
+                dbFun.DoTran(strSQL, Common.PARAMETER);
 
                 #endregion
 
-                if (Common.Model != null && Common.Model.Count > 0)
+                if (Common.MODEL != null && Common.MODEL.Count > 0)
                 {
                     #region 再新增資料
 
-                    foreach (var item in Common.Model)
+                    Common.MODEL.ForEach(item =>
                     {
                         switch (Common.IDENTIFY)
                         {
                             case "GeneralOrderReturnRefund":
                             case "MediaOrderReturnRefund":
-                                Common.parameter.Add(new SqlParameter("@R_QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value });
-                                Common.parameter.Add(new SqlParameter("@R_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value });
-                                Common.parameter.Add(new SqlParameter("@R_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value });
+                                Common.PARAMETER.Add(new SqlParameter("@R_QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value });
+                                Common.PARAMETER.Add(new SqlParameter("@R_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value });
+                                Common.PARAMETER.Add(new SqlParameter("@R_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value });
                                 break;
                             default:
                                 break;
@@ -1339,16 +1423,16 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         //寫入：憑證細項parameter
                         strJson = jsonFunction.ObjectToJSON(item);
-                        GlobalParameters.Infoparameter(strJson, Common.parameter);
+                        GlobalParameters.Infoparameter(strJson, Common.PARAMETER);
 
                         switch (Common.IDENTIFY)
                         {
                             case "GeneralInvoice":
                             case "MediaInvoice":
                             case "ExpensesReimburse":
-                                Common.parameter.Add(new SqlParameter("@R_QUANTITY", SqlDbType.Int) { Value = Common.parameter.Where(SP => SP.ParameterName.Contains("@QUANTITY")).FirstOrDefault().Value });
-                                Common.parameter.Add(new SqlParameter("@R_AMOUNT", SqlDbType.Int) { Value = Common.parameter.Where(SP => SP.ParameterName.Contains("@AMOUNT")).FirstOrDefault().Value });
-                                Common.parameter.Add(new SqlParameter("@R_AMOUNT_TWD", SqlDbType.Int) { Value = Common.parameter.Where(SP => SP.ParameterName.Contains("@AMOUNT_TWD")).FirstOrDefault().Value });
+                                Common.PARAMETER.Add(new SqlParameter("@R_QUANTITY", SqlDbType.Int) { Value = Common.PARAMETER.Where(SP => SP.ParameterName.Contains("@QUANTITY")).FirstOrDefault().Value });
+                                Common.PARAMETER.Add(new SqlParameter("@R_AMOUNT", SqlDbType.Int) { Value = Common.PARAMETER.Where(SP => SP.ParameterName.Contains("@AMOUNT")).FirstOrDefault().Value });
+                                Common.PARAMETER.Add(new SqlParameter("@R_AMOUNT_TWD", SqlDbType.Int) { Value = Common.PARAMETER.Where(SP => SP.ParameterName.Contains("@AMOUNT_TWD")).FirstOrDefault().Value });
                                 break;
                             default:
                                 break;
@@ -1358,7 +1442,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "]([RequisitionID]," + strField_F + "[RowNo],[Num],[Name],[Quantity],[Amount],[Amount_TWD],[RemainingQuantity],[RemainingAmount],[RemainingAmount_TWD],[IsExcl]) ";
                         strSQL += "VALUES(@REQUISITION_ID," + strField_V + "@ROW_NO,@NUM,@NAME,@QUANTITY,@AMOUNT,@AMOUNT_TWD,@R_QUANTITY,@R_AMOUNT,@R_AMOUNT_TWD,@IS_EXCL) ";
 
-                        dbFun.DoTran(strSQL, Common.parameter);
+                        dbFun.DoTran(strSQL, Common.PARAMETER);
 
                         switch (Common.IDENTIFY)
                         {
@@ -1367,15 +1451,14 @@ namespace OA_WEB_API.Repository.BPMPro
                             case "MediaInvoice":
                             case "MediaOrderReturnRefund":
                             case "ExpensesReimburse":
-                                Common.parameter.Remove(Common.parameter.Where(SP => SP.ParameterName.Contains("@R_QUANTITY")).FirstOrDefault());
-                                Common.parameter.Remove(Common.parameter.Where(SP => SP.ParameterName.Contains("@R_AMOUNT")).FirstOrDefault());
-                                Common.parameter.Remove(Common.parameter.Where(SP => SP.ParameterName.Contains("@R_AMOUNT_TWD")).FirstOrDefault());
+                                Common.PARAMETER.Remove(Common.PARAMETER.Where(SP => SP.ParameterName.Contains("@R_QUANTITY")).FirstOrDefault());
+                                Common.PARAMETER.Remove(Common.PARAMETER.Where(SP => SP.ParameterName.Contains("@R_AMOUNT")).FirstOrDefault());
+                                Common.PARAMETER.Remove(Common.PARAMETER.Where(SP => SP.ParameterName.Contains("@R_AMOUNT_TWD")).FirstOrDefault());
                                 break;
                             default:
                                 break;
                         }
-
-                    }
+                    });
 
                     #endregion
                 }
@@ -1444,10 +1527,10 @@ namespace OA_WEB_API.Repository.BPMPro
 
             switch (Common.IDENTIFY)
             {
-                case "GeneralOrder": return (List<T>)dbFun.DoQuery(strSQL, Common.parameter).ToList<GeneralOrderBudgetsConfig>();
-                case "MediaOrder": return (List<T>)dbFun.DoQuery(strSQL, Common.parameter).ToList<MediaOrderBudgetsConfig>();
-                case "ExpensesReimburse": return (List<T>)dbFun.DoQuery(strSQL, Common.parameter).ToList<ExpensesReimburseBudgetsConfig>();
-                default: return (List<T>)dbFun.DoQuery(strSQL, Common.parameter).ToList<BudgetConfig>();
+                case "GeneralOrder": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<GeneralOrderBudgetsConfig>();
+                case "MediaOrder": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<MediaOrderBudgetsConfig>();
+                case "ExpensesReimburse": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<ExpensesReimburseBudgetsConfig>();
+                default: return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<BudgetConfig>();
             }
 
         }
@@ -1492,15 +1575,15 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "WHERE 1=1 ";
                 strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
 
-                dbFun.DoTran(strSQL, Common.parameter);
+                dbFun.DoTran(strSQL, Common.PARAMETER);
 
                 #endregion
 
-                if (Common.Model != null && Common.Model.Count > 0)
+                if (Common.MODEL != null && Common.MODEL.Count > 0)
                 {
                     #region 再新增資料
 
-                    foreach (var item in Common.Model)
+                    foreach (var item in Common.MODEL)
                     {
                         strJson = jsonFunction.ObjectToJSON(item);
 
@@ -1512,13 +1595,13 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         //寫入：預算parameter
                         strJson = jsonFunction.ObjectToJSON(item);
-                        GlobalParameters.Infoparameter(strJson, Common.parameter);
+                        GlobalParameters.Infoparameter(strJson, Common.PARAMETER);
 
                         strSQL = "";
                         strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "]([RequisitionID]," + strField_F + "[FormNo],[CreateYear],[Name],[OwnerDept],[Total],[AvailableBudgetAmount],[UseBudgetAmount]) ";
                         strSQL += "VALUES(@REQUISITION_ID," + strField_V + "@FORM_NO,@CREATE_YEAR,@NAME,@OWNER_DEPT,@TOTAL,@AVAILABLE_BUDGET_AMOUNT,@USE_BUDGET_AMOUNT) ";
 
-                        dbFun.DoTran(strSQL, Common.parameter);
+                        dbFun.DoTran(strSQL, Common.PARAMETER);
 
                     }
 
@@ -1564,7 +1647,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "FROM [BPMPro].[dbo].[FM7T_" + strTable + "] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-            return (List<T>)dbFun.DoQuery(strSQL, Common.parameter).ToList<GeneralCommodityConfig>();
+            return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<GeneralCommodityConfig>();
 
         }
 
@@ -1590,25 +1673,25 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "WHERE 1=1 ";
                 strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
 
-                dbFun.DoTran(strSQL, Common.parameter);
+                dbFun.DoTran(strSQL, Common.PARAMETER);
 
                 #endregion
 
-                if (Common.Model != null && Common.Model.Count > 0)
+                if (Common.MODEL != null && Common.MODEL.Count > 0)
                 {
                     #region 再新增資料
 
-                    foreach (var item in Common.Model)
+                    foreach (var item in Common.MODEL)
                     {
                         //寫入：商品parameter
                         strJson = jsonFunction.ObjectToJSON(item);
-                        GlobalParameters.Infoparameter(strJson, Common.parameter);
+                        GlobalParameters.Infoparameter(strJson, Common.PARAMETER);
 
                         strSQL = "";
                         strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "]([RequisitionID],[OrderRowNo],[SupProdANo],[ItemName],[Model],[Specifications],[Quantity],[Unit]) ";
                         strSQL += "VALUES(@REQUISITION_ID,@ORDER_ROW_NO,@SUP_PROD_A_NO,@ITEM_NAME,@MODEL,@SPECIFICATIONS,@QUANTITY,@UNIT) ";
 
-                        dbFun.DoTran(strSQL, Common.parameter);
+                        dbFun.DoTran(strSQL, Common.PARAMETER);
                     }
 
                     #endregion
@@ -1657,7 +1740,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "ORDER BY [AutoCounter] ";
 
 
-            return (List<T>)dbFun.DoQuery(strSQL, Common.parameter).ToList<MediaCommodityConfig>();
+            return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<MediaCommodityConfig>();
         }
 
         /// <summary>
@@ -1682,25 +1765,25 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "WHERE 1=1 ";
                 strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
 
-                dbFun.DoTran(strSQL, Common.parameter);
+                dbFun.DoTran(strSQL, Common.PARAMETER);
 
                 #endregion
 
-                if (Common.Model != null && Common.Model.Count > 0)
+                if (Common.MODEL != null && Common.MODEL.Count > 0)
                 {
                     #region 再新增資料
 
-                    foreach (var item in Common.Model)
+                    foreach (var item in Common.MODEL)
                     {
                         //寫入：商品parameter
                         strJson = jsonFunction.ObjectToJSON(item);
-                        GlobalParameters.Infoparameter(strJson, Common.parameter);
+                        GlobalParameters.Infoparameter(strJson, Common.PARAMETER);
 
                         strSQL = "";
                         strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "]([RequisitionID],[OrderRowNo],[SupProdANo],[ItemName],[MediaSpec],[MediaType],[StartEpisode],[EndEpisode],[OrderEpisode],[ACPT_Episode],[EpisodeTime]) ";
                         strSQL += "VALUES(@REQUISITION_ID,@ORDER_ROW_NO,@SUP_PROD_A_NO,@ITEM_NAME,@MEDIA_SPEC,@MEDIA_TYPE,@START_EPISODE,@END_EPISODE,@ORDER_EPISODE,@ACPT_EPISODE,@EPISODE_TIME) ";
 
-                        dbFun.DoTran(strSQL, Common.parameter);
+                        dbFun.DoTran(strSQL, Common.PARAMETER);
                     }
 
                     #endregion

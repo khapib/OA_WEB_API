@@ -8,9 +8,7 @@ using System.Web;
 
 using OA_WEB_API.Models;
 using OA_WEB_API.Models.BPMPro;
-using OA_WEB_API.Models.ERP;
 using OA_WEB_API.Repository.ERP;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -1441,8 +1439,8 @@ namespace OA_WEB_API.Repository.BPMPro
                             {
                                 EXT = "ALDY_RF_COMM",
                                 IDENTIFY = IDENTIFY,
-                                parameter = parameterAlreadyRefundCommoditys,
-                                Model = model.ALDY_RF_COMM
+                                PARAMETER = parameterAlreadyRefundCommoditys,
+                                MODEL = model.ALDY_RF_COMM
                             };
                             commonRepository.PutGeneralCommodityFunction(CommonALDY_RF_COMM);
 
@@ -1473,17 +1471,17 @@ namespace OA_WEB_API.Repository.BPMPro
                         {
                             EXT = "ALDY_INV_DTL",
                             IDENTIFY = IDENTIFY,
-                            parameter = parameterInvoiceDetails
+                            PARAMETER = parameterInvoiceDetails
                         };
 
                         if (model.ALDY_INV_DTL != null && model.ALDY_INV_DTL.Count > 0)
                         {
-                            CommonALDY_INV_DTL.Model = model.ALDY_INV_DTL;
+                            CommonALDY_INV_DTL.MODEL = model.ALDY_INV_DTL;
                         }
                         else
                         {
                             //如果沒有傳ALDY_INV_DTL就代表第一次起退貨折讓單，ALDY_INV_DTL就會抓請款單的INV_DTL。
-                            CommonALDY_INV_DTL.Model = jsonFunction.JsonToObject<List<GeneralOrderReturnRefundAlreadyInvoiceDetailsConfig>>(jsonFunction.ObjectToJSON(generalInvoiceInfo.GENERAL_INVOICE_INV_DTLS_CONFIG));
+                            CommonALDY_INV_DTL.MODEL = jsonFunction.JsonToObject<List<GeneralOrderReturnRefundAlreadyInvoiceDetailsConfig>>(jsonFunction.ObjectToJSON(generalInvoiceInfo.GENERAL_INVOICE_INV_DTLS_CONFIG));
                         }
 
                         commonRepository.PutInvoiceDetailFunction(CommonALDY_INV_DTL);
@@ -2366,8 +2364,8 @@ namespace OA_WEB_API.Repository.BPMPro
                             {
                                 EXT = "ALDY_RF_COMM",
                                 IDENTIFY = IDENTIFY,
-                                parameter = parameterAlreadyRefundCommoditys,
-                                Model = model.ALDY_RF_COMM
+                                PARAMETER = parameterAlreadyRefundCommoditys,
+                                MODEL = model.ALDY_RF_COMM
                             };
                             commonRepository.PutMediaCommodityFunction(CommonALDY_RF_COMM);
 
@@ -2748,8 +2746,8 @@ namespace OA_WEB_API.Repository.BPMPro
                             {
                                 EXT = "ALDY_RF_COMM",
                                 IDENTIFY = IDENTIFY,
-                                parameter = parameterAlreadyRefundCommoditys,
-                                Model = model.ALDY_RF_COMM
+                                PARAMETER = parameterAlreadyRefundCommoditys,
+                                MODEL = model.ALDY_RF_COMM
                             };
                             commonRepository.PutMediaCommodityFunction(CommonALDY_RF_COMM);
 
@@ -2780,17 +2778,17 @@ namespace OA_WEB_API.Repository.BPMPro
                         {
                             EXT = "ALDY_INV_DTL",
                             IDENTIFY = IDENTIFY,
-                            parameter = parameterInvoiceDetails
+                            PARAMETER = parameterInvoiceDetails
                         };
 
                         if (model.ALDY_INV_DTL != null && model.ALDY_INV_DTL.Count > 0)
                         {
-                            CommonALDY_INV_DTL.Model = model.ALDY_INV_DTL;
+                            CommonALDY_INV_DTL.MODEL = model.ALDY_INV_DTL;
                         }
                         else
                         {
                             //如果沒有傳ALDY_INV_DTL就代表第一次起退貨折讓單，ALDY_INV_DTL就會抓請款單的INV_DTL。
-                            CommonALDY_INV_DTL.Model = jsonFunction.JsonToObject<List<MediaOrderReturnRefundAlreadyInvoiceDetailsConfig>>(jsonFunction.ObjectToJSON(mediaInvoiceInfo.MEDIA_INVOICE_INV_DTLS_CONFIG));
+                            CommonALDY_INV_DTL.MODEL = jsonFunction.JsonToObject<List<MediaOrderReturnRefundAlreadyInvoiceDetailsConfig>>(jsonFunction.ObjectToJSON(mediaInvoiceInfo.MEDIA_INVOICE_INV_DTLS_CONFIG));
                         }
                         commonRepository.PutInvoiceDetailFunction(CommonALDY_INV_DTL);
 

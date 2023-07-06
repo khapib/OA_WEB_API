@@ -6,7 +6,6 @@ using System.Linq;
 using System.Web;
 using Docker.DotNet.Models;
 using System.Reflection;
-using Microsoft.Ajax.Utilities;
 using System.Collections.Specialized;
 using System.Net.Http;
 using System.Net;
@@ -17,10 +16,8 @@ using System.IO;
 
 using OA_WEB_API.Models;
 using OA_WEB_API.Models.BPMPro;
-using System.Web.Mvc;
-using System.Collections;
-using System.Web.Http.Results;
 
+using Microsoft.Ajax.Utilities;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -315,7 +312,8 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "     [MemberDeptName] AS [MEMBER_DEPT_NAME], ";
                 strSQL += "     [MemberID] AS [MEMBER_ID], ";
                 strSQL += "     [MemberName] [MEMBER_NAME], ";
-                strSQL += "     [VoteNum] AS [VOTE_NUM] ";
+                strSQL += "     [VoteNum] AS [VOTE_NUM], ";
+                strSQL += "     [Note] AS [NOTE] ";
                 strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR] ";
                 strSQL += "WHERE 1=1 ";
                 strSQL += "         AND [VoteYear]=@VOTE_YEAR ";
@@ -347,13 +345,13 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "     [FileSize] AS [FILE_SIZE], ";
                 strSQL += "     [DraftFlag] AS [DRAFT_FLAG], ";
                 strSQL += "     [Remark] AS [REMARK] ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_"+ IDENTIFY + "_F] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_F] ";
                 strSQL += "WHERE 1=1 ";
                 strSQL += "         AND [VoteYear]=@VOTE_YEAR ";
                 var labourAndCapitalMemberFilesConfig = dbFun.DoQuery(strSQL, parameter).ToList<LabourAndCapitalMemberFilesConfig>();
                 labourAndCapitalMemberFilesConfig.ForEach(F =>
                 {
-                    F.FILE_PATH = localfilePath + "\\" + F.N_FILE_NAME;
+                    F.FILE_PATH = AttachfilePath + "\\" + F.N_FILE_NAME;
                 });
 
                 #endregion
@@ -363,7 +361,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     TITLE_INFO = TitleInfo,
                     LABOUR_AND_CAPITAL_MEMBER_CONFIG = labourAndCapitalMemberConfig,
                     LABOUR_AND_CAPITAL_MEMBER_LABOURS_CONFIG = labourAndCapitalMemberLaboursConfig,
-                    LABOUR_AND_CAPITAL_MEMBER_FILES_CONFIG= labourAndCapitalMemberFilesConfig,
+                    LABOUR_AND_CAPITAL_MEMBER_FILES_CONFIG = labourAndCapitalMemberFilesConfig,
                 };
 
                 return labourAndCapitalMemberViewModel;
@@ -537,8 +535,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         #region 新增參選人資料
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR]([RequisitionID],[VoteYear],[MainDeptActualVoteNum],[IsLabour],[MainDeptID],[MainDeptName],[MemberDeptID],[MemberDeptName],[MemberID],[MemberName],[VoteNum]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@VOTE_YEAR,null,@IS_LABOUR,@MAIN_DEPT_ID,@MAIN_DEPT_NAME,@MEMBER_DEPT_ID,@MEMBER_DEPT_NAME,@MEMBER_ID,@MEMBER_NAME,null) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR]([RequisitionID],[VoteYear],[MainDeptActualVoteNum],[IsLabour],[MainDeptID],[MainDeptName],[MemberDeptID],[MemberDeptName],[MemberID],[MemberName],[VoteNum],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@VOTE_YEAR,null,@IS_LABOUR,@MAIN_DEPT_ID,@MAIN_DEPT_NAME,@MEMBER_DEPT_ID,@MEMBER_DEPT_NAME,@MEMBER_ID,@MEMBER_NAME,null,null) ";
 
                         dbFun.DoTran(strSQL, parameterLabour);
 
@@ -818,41 +816,153 @@ namespace OA_WEB_API.Repository.BPMPro
         }
 
         /// <summary>
-        /// 勞資委員投票(附件)
+        /// 勞資委員投票(附件:新增F表)
+        /// 檔案手動上傳到(C/D):\\NTWEB\\AutoWeb3\\Database\\Project\\BPM\\BPMPro\\object路徑
         /// </summary>
-        public bool PutLabourAndCapitalMemberFilesSingle(LabourAndCapitalMemberFilesConfig model)
+        public List<LabourAndCapitalMemberFilesConfig> PutLabourAndCapitalMemberFilesSingle(LabourAndCapitalMemberFilesConfig model)
         {
             bool vResult = false;
             try
             {
-                var path = localfilePath + "\\" + IDENTIFY;
+                #region - 檔案上傳:BPM與API會有跨機器、跨域問題，因此改由手動上傳檔案 -
 
-                #region - 確認複製路徑 -
+                //var path = AttachfilePath + "\\" + IDENTIFY;
 
-                if (!Directory.Exists(path))
-                {
-                    //確認是否有資料夾沒有的話就自動新增
-                    //新增資料夾
-                    Directory.CreateDirectory(path);
-                }
+                //#region - 確認複製路徑 -
+
+                //if (!Directory.Exists(path))
+                //{
+                //    //確認是否有資料夾沒有的話就自動新增
+                //    //新增資料夾
+                //    Directory.CreateDirectory(path);
+                //}
+
+                //#endregion
+
+                //if (HttpContext.Current.Request.Files.Count > 0)
+                //{
+                //    var parameter = new List<SqlParameter>()
+                //    {
+                //        new SqlParameter("@VOTE_YEAR", SqlDbType.NVarChar) { Size = 10, Value = model.VOTE_YEAR },
+                //        new SqlParameter("@UPLOD_TIME", SqlDbType.DateTime) { Value = DateTime.Now },
+                //        new SqlParameter("@IDENTIFY", SqlDbType.NVarChar) { Size = 100, Value = IDENTIFY },
+                //        new SqlParameter("@ACCOUNT_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)model.ACCOUNT_ID ?? "BPMSysteam" },
+                //        new SqlParameter("@DIAGRAM_ID", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                //        new SqlParameter("@PROCESS_ID", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                //        new SqlParameter("@PROCESS_NAME", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                //        new SqlParameter("@DRAFT_FLAG", SqlDbType.Int) { Value = 0 },
+                //        new SqlParameter("@REMARK", SqlDbType.NVarChar) { Size=255, Value= (object)model.REMARK ?? DBNull.Value },
+                //    };
+
+                //    strSQL = "";
+                //    strSQL += "SELECT ";
+                //    strSQL += "      [RequisitionID] ";
+                //    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                //    strSQL += "WHERE [VoteYear]=@VOTE_YEAR ";
+
+                //    var dt = dbFun.DoQuery(strSQL, parameter);
+
+                //    if (dt.Rows.Count > 0)
+                //    {
+                //        var MemberName = String.Empty;
+                //        if (!String.IsNullOrEmpty(model.ACCOUNT_ID) || !String.IsNullOrWhiteSpace(model.ACCOUNT_ID))
+                //        {
+                //            var logonModel = new LogonModel()
+                //            {
+                //                USER_ID = model.ACCOUNT_ID
+                //            };
+                //            var userModel = userRepository.PostUserSingle(logonModel);
+
+                //            MemberName = userModel.USER_MODEL.Where(U => U.USER_ID == model.ACCOUNT_ID).Select(U => U.USER_NAME).FirstOrDefault();
+
+                //        }
+                //        else MemberName = "BPMSysteam";
+                //        parameter.Add(new SqlParameter("@MEMBER_NAME", SqlDbType.NVarChar) { Size = 40, Value = MemberName });
+                //        parameter.Add(new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = dt.Rows[0][0].ToString() });
+
+                //        int i = 0;
+                //        while (i <= (HttpContext.Current.Request.Files.Count - 1))
+                //        {
+                //            var fileResult = false;
+                //            var File = HttpContext.Current.Request.Files[i];
+
+                //            #region - 檔案大小不可大於 : 3MB -
+
+                //            if (File.ContentLength > 0 || File.ContentLength <= 3145728)
+                //            {
+                //                fileResult = true;
+                //            }
+
+                //            #endregion
+
+                //            #region - 限制上傳檔案種類 -
+
+                //            switch (File.ContentType)
+                //            {
+                //                case "application/pdf":
+                //                case "application/msword":
+                //                case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                //                    fileResult = true;
+                //                    break;
+                //                default: break;
+                //            }
+
+                //            #endregion
+
+                //            if (fileResult)
+                //            {
+                //                var fileName = Guid.NewGuid() + Path.GetExtension(File.FileName);
+                //                //如果檔案大小、檔案種類都對才會儲存檔案    
+
+                //                parameter.Add(new SqlParameter("@N_FILE_NAME", SqlDbType.NVarChar) { Size = 200, Value = IDENTIFY + "\\" + fileName });
+                //                parameter.Add(new SqlParameter("@O_FILE_NAME", SqlDbType.NVarChar) { Size = 200, Value = File.FileName });
+                //                parameter.Add(new SqlParameter("@FILE_SIZE", SqlDbType.Int) { Value = File.ContentLength });
+
+                //                #region - 寫入附件F表 -
+
+                //                strSQL = "";
+                //                strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_LabourAndCapitalMember_F]([VoteYear],[UplodTime],[Identify],[AccountID],[MemberName],[RequisitionID],[DiagramID],[ProcessID],[ProcessName],[NFileName],[OFileName],[FileSize],[DraftFlag],[Remark]) ";
+                //                strSQL += "VALUES(@VOTE_YEAR,@UPLOD_TIME,@IDENTIFY,@ACCOUNT_ID,@MEMBER_NAME,@REQUISITION_ID,@DIAGRAM_ID,@PROCESS_ID,@PROCESS_NAME,@N_FILE_NAME,@O_FILE_NAME,@FILE_SIZE,@DRAFT_FLAG,@REMARK) ";
+                //                dbFun.DoTran(strSQL, parameter);
+
+                //                #endregion
+
+                //                #region - 儲存檔案 -
+
+                //                File.SaveAs(path + "\\" + fileName);
+
+                //                #endregion
+
+                //                parameter.Remove(parameter.Where(SP => SP.ParameterName.Contains("@N_FILE_NAME")).FirstOrDefault());
+                //                parameter.Remove(parameter.Where(SP => SP.ParameterName.Contains("@O_FILE_NAME")).FirstOrDefault());
+                //                parameter.Remove(parameter.Where(SP => SP.ParameterName.Contains("@FILE_SIZE")).FirstOrDefault());
+                //            }
+
+                //            i++;
+                //        }
+                //        vResult = true;
+                //    }
+                //}
 
                 #endregion
 
+                var labourAndCapitalMemberFilesConfig = new List<LabourAndCapitalMemberFilesConfig>();
+
+                var parameter = new List<SqlParameter>()
+                {
+                    new SqlParameter("@VOTE_YEAR", SqlDbType.NVarChar) { Size = 10, Value = model.VOTE_YEAR },
+                    new SqlParameter("@UPLOD_TIME", SqlDbType.DateTime) { Value = DateTime.Now },
+                    new SqlParameter("@IDENTIFY", SqlDbType.NVarChar) { Size = 100, Value = IDENTIFY },
+                    new SqlParameter("@ACCOUNT_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)model.ACCOUNT_ID ?? "BPMSysteam" },
+                    new SqlParameter("@DIAGRAM_ID", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROCESS_ID", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PROCESS_NAME", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DRAFT_FLAG", SqlDbType.Int) { Value = 0 },
+                    new SqlParameter("@REMARK", SqlDbType.NVarChar) { Size=255, Value= (object)model.REMARK ?? DBNull.Value },
+                };
+
                 if (HttpContext.Current.Request.Files.Count > 0)
                 {
-                    var parameter = new List<SqlParameter>()
-                    {
-                        new SqlParameter("@VOTE_YEAR", SqlDbType.NVarChar) { Size = 10, Value = model.VOTE_YEAR },
-                        new SqlParameter("@UPLOD_TIME", SqlDbType.DateTime) { Value = DateTime.Now },
-                        new SqlParameter("@IDENTIFY", SqlDbType.NVarChar) { Size = 100, Value = IDENTIFY },
-                        new SqlParameter("@ACCOUNT_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)model.ACCOUNT_ID ?? "BPMSysteam" },
-                        new SqlParameter("@DIAGRAM_ID", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PROCESS_ID", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PROCESS_NAME", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@DRAFT_FLAG", SqlDbType.Int) { Value = 0 },
-                        new SqlParameter("@REMARK", SqlDbType.NVarChar) { Size=255, Value= (object)model.REMARK ?? DBNull.Value },
-                    };
-
                     strSQL = "";
                     strSQL += "SELECT ";
                     strSQL += "      [RequisitionID] ";
@@ -881,32 +991,9 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         int i = 0;
                         while (i <= (HttpContext.Current.Request.Files.Count - 1))
-                        {
-                            var fileResult = false;
+                        {                            
+                            var fileResult = true;
                             var File = HttpContext.Current.Request.Files[i];
-
-                            #region - 檔案大小不可大於 : 3MB -
-
-                            if (File.ContentLength > 0 || File.ContentLength <= 3145728)
-                            {
-                                fileResult = true;
-                            }
-
-                            #endregion
-
-                            #region - 限制上傳檔案種類 -
-
-                            switch (File.ContentType)
-                            {
-                                case "application/pdf":
-                                case "application/msword":
-                                case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                                    fileResult = true;
-                                    break;
-                                default: break;
-                            }
-
-                            #endregion
 
                             if (fileResult)
                             {
@@ -926,12 +1013,6 @@ namespace OA_WEB_API.Repository.BPMPro
 
                                 #endregion
 
-                                #region - 儲存檔案 -
-
-                                File.SaveAs(path + "\\" + fileName);
-
-                                #endregion
-
                                 parameter.Remove(parameter.Where(SP => SP.ParameterName.Contains("@N_FILE_NAME")).FirstOrDefault());
                                 parameter.Remove(parameter.Where(SP => SP.ParameterName.Contains("@O_FILE_NAME")).FirstOrDefault());
                                 parameter.Remove(parameter.Where(SP => SP.ParameterName.Contains("@FILE_SIZE")).FirstOrDefault());
@@ -942,13 +1023,48 @@ namespace OA_WEB_API.Repository.BPMPro
                         vResult = true;
                     }
                 }
+
+                #region - 檢視上傳資訊 -
+
+                if (vResult)
+                {
+                    //方便更改要上傳的檔案檔名
+                    strSQL = "";
+                    strSQL += "SELECT ";
+                    strSQL += "     null AS [FILE_PATH], ";
+                    strSQL += "     [VoteYear] AS [VOTE_YEAR], ";
+                    strSQL += "     [UplodTime] AS [UPLOD_TIME], ";
+                    strSQL += "     [Identify] AS [IDENTIFY], ";
+                    strSQL += "     [AccountID] AS [ACCOUNT_ID], ";
+                    strSQL += "     [MemberName] AS [MEMBER_NAME], ";
+                    strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
+                    strSQL += "     [DiagramID] AS [DIAGRAM_ID], ";
+                    strSQL += "     [ProcessID] AS [PROCESS_ID], ";
+                    strSQL += "     [ProcessName] AS [PROCESS_NAME], ";
+                    strSQL += "     [NFileName] AS [N_FILE_NAME], ";
+                    strSQL += "     [OFileName] AS [O_FILE_NAME], ";
+                    strSQL += "     [FileSize] AS [FILE_SIZE], ";
+                    strSQL += "     [DraftFlag] AS [DRAFT_FLAG], ";
+                    strSQL += "     [Remark] AS [REMARK] ";
+                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_F] ";
+                    strSQL += "WHERE 1=1 ";
+                    strSQL += "         AND [VoteYear]=@VOTE_YEAR ";
+                    labourAndCapitalMemberFilesConfig = dbFun.DoQuery(strSQL, parameter).ToList<LabourAndCapitalMemberFilesConfig>().ToList();
+                    labourAndCapitalMemberFilesConfig.ForEach(F =>
+                    {
+                        F.FILE_PATH = AttachfilePath + "\\" + F.N_FILE_NAME;
+                    });
+                }
+
+                #endregion
+
+                return labourAndCapitalMemberFilesConfig;
             }
             catch (Exception ex)
             {
                 CommLib.Logger.Error("勞資委員投票(附件上傳)失敗，原因：" + ex.Message);
                 throw;
-            }
-            return vResult;
+            }            
         }
 
         /// <summary>
@@ -982,7 +1098,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 var dt = dbFun.DoQuery(strSQL, parameter);
                 if (dt.Rows.Count > 0)
                 {
-                    
+
                     strDmarkSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR] ";
                     strDmarkSQL += "SET [IsLabour]=null ";
                     strDmarkSQL += "WHERE 1=1 ";
@@ -991,7 +1107,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     if (String.IsNullOrEmpty(model.MEMBER_ID) || String.IsNullOrWhiteSpace(model.MEMBER_ID))
                     {
                         #region - 註記當選人與備取 -
-                        
+
                         #region 常用的WHERE
 
                         strWhereSQL += "AND [VoteYear]=@VOTE_YEAR ";
@@ -1063,7 +1179,7 @@ namespace OA_WEB_API.Repository.BPMPro
                             PostLabourAndCapitalMemberVoterDeptsSingle(labourAndCapitalMemberQueryModel).ForEach(D =>
                             {
                                 parameter.Add(new SqlParameter("@MAIN_DEPT_ID", SqlDbType.NVarChar) { Size = 40, Value = D.MAIN_DEPT_ID });
-                                            
+
                                 //清除註記資料
                                 dbFun.DoTran(strDmarkSQL, parameter);
                                 //進行新的註記
@@ -1094,7 +1210,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     }
                     else
                     {
-                        
+
                         #region - 勞方代表的主要部門 -
 
                         var logonModel = new LogonModel()
@@ -1124,15 +1240,15 @@ namespace OA_WEB_API.Repository.BPMPro
                         }
 
                         #endregion
-                        
-                        parameter.Add(new SqlParameter("@MAIN_DEPT_ID", SqlDbType.NVarChar) { Size = 40, Value = model.MAIN_DEPT_ID });                        
-                        parameter.Add(new SqlParameter("@MEMBER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.MEMBER_ID });
-                        parameter.Add(new SqlParameter("@IS_LABOUR", SqlDbType.NVarChar) { Size = 5, Value = (object)model.IS_LABOUR??DBNull.Value });
 
-                        if (model.IS_LABOUR=="A")
+                        parameter.Add(new SqlParameter("@MAIN_DEPT_ID", SqlDbType.NVarChar) { Size = 40, Value = model.MAIN_DEPT_ID });
+                        parameter.Add(new SqlParameter("@MEMBER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.MEMBER_ID });
+                        parameter.Add(new SqlParameter("@IS_LABOUR", SqlDbType.NVarChar) { Size = 5, Value = (object)model.IS_LABOUR ?? DBNull.Value });
+
+                        if (model.IS_LABOUR == "A")
                         {
                             //IS_LABOUR是A表示，勞資委員異動須先清空部門的勞資委員註記再，手動新增；備取人員。
-                            
+
                             //對部門：
                             //清除註記資料
                             dbFun.DoTran(strDmarkSQL, parameter);
@@ -1153,7 +1269,7 @@ namespace OA_WEB_API.Repository.BPMPro
                             var dtB = dbFun.DoQuery(strSQL, parameter);
                             if (dtB.Rows.Count > 0) MemberResult = true;
                         }
-                        else if(String.IsNullOrEmpty(model.IS_LABOUR) || String.IsNullOrWhiteSpace(model.IS_LABOUR)) MemberResult = true;
+                        else if (String.IsNullOrEmpty(model.IS_LABOUR) || String.IsNullOrWhiteSpace(model.IS_LABOUR)) MemberResult = true;
                         else MemberResult = false;
 
                         strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR] ";
@@ -1161,7 +1277,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         strSQL += "WHERE 1=1 ";
                         strSQL += "        AND [VoteYear]=@VOTE_YEAR ";
                         strSQL += "        AND [MainDeptID]=@MAIN_DEPT_ID ";
-                        strSQL += "        AND [MemberID]=@MEMBER_ID ";                        
+                        strSQL += "        AND [MemberID]=@MEMBER_ID ";
 
                         //進行新的註記
                         if (MemberResult)
@@ -1215,14 +1331,14 @@ namespace OA_WEB_API.Repository.BPMPro
         private string strREQ;
 
         /// <summary>
-        /// 佈版檔案路徑
+        /// 佈版檔案路徑：IIS須設定Attach虛擬目錄
         /// </summary>
-        private string filePath = "C:\\NTWEB\\AutoWeb3\\Database\\Project\\BPM\\BPMPro\\object";
+        private string AttachfilePath = GlobalParameters.attachFilePathBPMProDev + "Attach";
 
         /// <summary>
         /// 本機測試檔案路徑
         /// </summary>
-        private string localfilePath = "D:\\NTWEB\\AutoWeb3\\Database\\Project\\BPM\\BPMPro\\object";
+        //private string localfilePath = "D:\\NTWEB\\AutoWeb3\\Database\\Project\\BPM\\BPMPro\\object";
 
         #endregion
     }

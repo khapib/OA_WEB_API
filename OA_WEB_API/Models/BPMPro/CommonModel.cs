@@ -22,26 +22,6 @@ namespace OA_WEB_API.Models.BPMPro
 
     #region - 共用Model -
 
-    /// <summary>
-    /// BPM_表單共用模組
-    /// </summary>
-    /// <typeparam name="T">Model</typeparam>
-    public class BPMCommonModel<T>
-    {
-        /// <summary>表單資料表子名稱</summary>
-        public string EXT { get; set; }
-
-        /// <summary>表單代號</summary>
-        public string IDENTIFY { get; set; }
-
-        /// <summary>SqlParameter</summary>
-        public List<SqlParameter> PARAMETER { get; set; }
-
-        /// <summary>Models</summary>
-        public List<T> MODEL { get; set; }
-    }
-
-
     #region (BPM API共用)_ERP起單共用抬頭
 
     /// <summary>
@@ -66,6 +46,25 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     #endregion
+
+    /// <summary>
+    /// BPM_表單共用模組
+    /// </summary>
+    /// <typeparam name="T">Model</typeparam>
+    public class BPMCommonModel<T>
+    {
+        /// <summary>表單資料表子名稱</summary>
+        public string EXT { get; set; }
+
+        /// <summary>表單代號</summary>
+        public string IDENTIFY { get; set; }
+
+        /// <summary>SqlParameter</summary>
+        public List<SqlParameter> PARAMETER { get; set; }
+
+        /// <summary>Models</summary>
+        public List<T> MODEL { get; set; }
+    }  
 
     #region - 會簽簽核人員 -
 
@@ -598,10 +597,13 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class AttachmentConfig
     {
+        /// <summary>附件檔名</summary>
+        public string FILE_RENAME { get; set; }
+
         /// <summary>連結網址</summary>
         public string FILE_PATH { get; set; }
 
-        /// <summary>附件檔名</summary>
+        /// <summary>附件原檔名</summary>
         public string FILE_NAME { get; set; }
 
         /// <summary>副檔名</summary>

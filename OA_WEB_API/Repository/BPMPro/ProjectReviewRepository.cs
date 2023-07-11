@@ -37,34 +37,22 @@ namespace OA_WEB_API.Repository.BPMPro
         {
             #region  - 查詢 - 
 
-            #region  - 申請人資訊 - 
             var parameterA = new List<SqlParameter>()
             {
-                 new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID }           
+                 new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID }
             };
+                        
+            #region - 申請人資訊 -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     A.[RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     A.[DiagramID] AS [DIAGRAM_ID], ";
-            strSQL += "     B.[Value] AS [FM7_SUBJECT], ";
-            strSQL += "     A.[ApplicantDept] AS [APPLICANT_DEPT], ";
-            strSQL += "     A.[ApplicantDeptName] AS [APPLICANT_DEPT_NAME], ";
-            strSQL += "     A.[ApplicantID] AS [APPLICANT_ID], ";
-            strSQL += "     A.[ApplicantName] AS [APPLICANT_NAME], ";
-            strSQL += "     A.[ApplicantID] AS [APPLICANT_ID], ";
-            strSQL += "     NULL AS [APPLICANT_PHONE], ";
-            strSQL += "     A.[ApplicantDateTime] AS [APPLICANT_DATETIME], ";
-            strSQL += "     A.[FillerID] AS [FILLER_ID], ";
-            strSQL += "     A.[FillerName] AS [FILLER_NAME], ";
-            strSQL += "     A.[Priority] AS [PRIORITY], ";
-            strSQL += "     A.[DraftFlag] AS [DRAFT_FLAG], ";
-            strSQL += "     A.[FlowActivated] AS [FLOW_ACTIVATED] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_ProjectReview_M] A";
-            strSQL += "         INNER JOIN [BPMPro].[dbo].[FSe7en_Tep_FormHeader] B ON A.[RequisitionID]=B.[RequisitionID]";
-            strSQL += "WHERE A.[RequisitionID]=@REQUISITION_ID ";
+            var CommonApplicantInfo = new BPMCommonModel<ApplicantInfo>()
+            {
+                EXT = "M",
+                IDENTIFY = IDENTIFY,
+                PARAMETER = parameterA,
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostApplicantInfoFunction(CommonApplicantInfo));
+            var applicantInfo = jsonFunction.JsonToObject<ApplicantInfo>(strJson);
 
-            var applicantInfo = dbFun.DoQuery(strSQL, parameterA).ToList<ApplicantInfo>().FirstOrDefault();
             #endregion
 
             #region - M表寫入BPM表單單號 -
@@ -407,6 +395,10 @@ namespace OA_WEB_API.Repository.BPMPro
         /// </summary>
         private string strREQ;
 
+        /// <summary>
+        /// Json字串
+        /// </summary>
+        private string strJson;
 
         #endregion
     }

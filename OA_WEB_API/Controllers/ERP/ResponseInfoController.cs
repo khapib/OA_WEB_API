@@ -200,7 +200,7 @@ namespace OA_WEB_API.Controllers.ERP
         /// </summary>    
         [Route("api/PostEvaluateContentReplenishInfoSingle")]
         [HttpPost]
-        public EvaluateContentReplenishInfoRequest PostEvaluateContentReplenishInfoSingle()
+        public EvaluateContentInfoRequest PostEvaluateContentReplenishInfoSingle()
         {
             HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
             HttpRequestBase request = context.Request;
@@ -324,7 +324,7 @@ namespace OA_WEB_API.Controllers.ERP
         /// </summary>    
         [Route("api/PostGPI_EvaluateContentInfoSingle")]
         [HttpPost]
-        public GPI_EvaluateContentInfoRequest PostGPI_EvaluateContentInfoSingle()
+        public EvaluateContentInfoRequest PostGPI_EvaluateContentInfoSingle()
         {
             HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
             HttpRequestBase request = context.Request;
@@ -347,7 +347,7 @@ namespace OA_WEB_API.Controllers.ERP
         /// </summary>    
         [Route("api/PostGPI_EvaluateContentReplenishInfoSingle")]
         [HttpPost]
-        public GPI_EvaluateContentReplenishInfoRequest PostGPI_EvaluateContentReplenishInfoSingle()
+        public EvaluateContentInfoRequest PostGPI_EvaluateContentReplenishInfoSingle()
         {
             HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
             HttpRequestBase request = context.Request;

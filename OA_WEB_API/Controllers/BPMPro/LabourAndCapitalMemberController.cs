@@ -115,11 +115,20 @@ namespace OA_WEB_API.Controllers.BPMPro
         /// </summary>
         [Route("PutLabourAndCapitalMemberMarkSingle")]
         [HttpPost]
-        public bool PutLabourAndCapitalMemberMarkSingle(LabourAndCapitalMemberMarkConfig model)
+        public bool PutLabourAndCapitalMemberMarkSingle(LabourAndCapitalMemberStaffConfig model)
         {
             return labourAndCapitalMemberRepository.PutLabourAndCapitalMemberMarkSingle(model);
         }
 
+        /// <summary>
+        /// 勞資委員投票(新增人員)
+        /// </summary>
+        [Route("PutLabourAndCapitalMemberAddStaffSingle")]
+        [HttpPost]
+        public bool PutLabourAndCapitalMemberAddStaffSingle(LabourAndCapitalMemberStaffConfig model)
+        {
+            return labourAndCapitalMemberRepository.PutLabourAndCapitalMemberAddStaffSingle(model);
+        }
 
         #endregion
     }

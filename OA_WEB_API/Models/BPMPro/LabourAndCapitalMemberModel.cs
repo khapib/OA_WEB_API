@@ -105,6 +105,9 @@ namespace OA_WEB_API.Models.BPMPro
     public class LabourAndCapitalMemberLaboursConfig
     {
         /// <summary>勞方代表部門實際投票人數</summary>
+        public int? MAIN_DEPT_ACTUAL_VOTE_TURNOUT { get; set; }
+
+        /// <summary>勞方代表部門實際投票人數</summary>
         public int? MAIN_DEPT_ACTUAL_VOTE_NUM { get; set; }
 
         /// <summary>是否為勞方代表當選人</summary>
@@ -195,8 +198,9 @@ namespace OA_WEB_API.Models.BPMPro
 
     /// <summary>
     /// 勞資委員投票 當選註記 設定
+    /// 勞資委員投票 新增人員 設定
     /// </summary>
-    public class LabourAndCapitalMemberMarkConfig : LabourAndCapitalMemberLaboursConfig
+    public class LabourAndCapitalMemberStaffConfig : LabourAndCapitalMemberLaboursConfig
     {
         /// <summary>投票年度</summary>
         public string VOTE_YEAR { get; set; }

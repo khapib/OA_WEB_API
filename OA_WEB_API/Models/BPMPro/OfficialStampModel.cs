@@ -11,7 +11,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 用印申請單(查詢條件)
     /// </summary>
-    public class OfficialStampModel
+    public class OfficialStampQueryModel
     {
         /// <summary>系統編號</summary>
         public string REQUISITION_ID { get; set; }

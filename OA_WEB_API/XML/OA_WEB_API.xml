@@ -876,9 +876,14 @@
             勞資委員投票(附件:新增F表)
             </summary>      
         </member>
-        <member name="M:OA_WEB_API.Controllers.BPMPro.LabourAndCapitalMemberController.PutLabourAndCapitalMemberMarkSingle(OA_WEB_API.Models.BPMPro.LabourAndCapitalMemberMarkConfig)">
+        <member name="M:OA_WEB_API.Controllers.BPMPro.LabourAndCapitalMemberController.PutLabourAndCapitalMemberMarkSingle(OA_WEB_API.Models.BPMPro.LabourAndCapitalMemberStaffConfig)">
             <summary>
             勞資委員投票(當選註記)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.LabourAndCapitalMemberController.PutLabourAndCapitalMemberAddStaffSingle(OA_WEB_API.Models.BPMPro.LabourAndCapitalMemberStaffConfig)">
+            <summary>
+            勞資委員投票(新增人員)
             </summary>
         </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.MediaAcceptanceController">
@@ -1029,6 +1034,16 @@
         <member name="T:OA_WEB_API.Controllers.BPMPro.OfficialStampController">
             <summary>
             會簽管理系統 - 用印申請單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.OfficialStampController.PostOfficialStampSingle(OA_WEB_API.Models.BPMPro.OfficialStampQueryModel)">
+            <summary>
+            用印申請單(查詢)
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.OfficialStampController.PutOfficialStampRefill(OA_WEB_API.Models.BPMPro.OfficialStampQueryModel)">
+            <summary>
+            用印申請單(依此單內容重送)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.OfficialStampController.PutOfficialStampSingle(OA_WEB_API.Models.BPMPro.OfficialStampViewModel)">
@@ -4538,6 +4553,9 @@
             勞資委員投票 勞方代表 設定
             </summary> 
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.LabourAndCapitalMemberLaboursConfig.MAIN_DEPT_ACTUAL_VOTE_TURNOUT">
+            <summary>勞方代表部門實際投票人數</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.LabourAndCapitalMemberLaboursConfig.MAIN_DEPT_ACTUAL_VOTE_NUM">
             <summary>勞方代表部門實際投票人數</summary>
         </member>
@@ -4622,12 +4640,13 @@
         <member name="P:OA_WEB_API.Models.BPMPro.LabourAndCapitalMemberFilesConfig.IDENTIFY">
             <summary>表單代號</summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.LabourAndCapitalMemberMarkConfig">
+        <member name="T:OA_WEB_API.Models.BPMPro.LabourAndCapitalMemberStaffConfig">
             <summary>
             勞資委員投票 當選註記 設定
+            勞資委員投票 新增人員 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.LabourAndCapitalMemberMarkConfig.VOTE_YEAR">
+        <member name="P:OA_WEB_API.Models.BPMPro.LabourAndCapitalMemberStaffConfig.VOTE_YEAR">
             <summary>投票年度</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaAcceptanceQueryModel">
@@ -6672,12 +6691,12 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MessageModel.CONTENT">
             <summary>訊息內容</summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.OfficialStampModel">
+        <member name="T:OA_WEB_API.Models.BPMPro.OfficialStampQueryModel">
             <summary>
             用印申請單(查詢條件)
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.OfficialStampModel.REQUISITION_ID">
+        <member name="P:OA_WEB_API.Models.BPMPro.OfficialStampQueryModel.REQUISITION_ID">
             <summary>系統編號</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.OfficialStampViewModel">
@@ -7218,24 +7237,6 @@
         <member name="P:OA_WEB_API.Models.BPMPro.Test05List.NARRATIVE">
             <summary>描述</summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.BPMCommonModel`1">
-            <summary>
-            BPM_表單共用模組
-            </summary>
-            <typeparam name="T">Model</typeparam>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.EXT">
-            <summary>表單資料表子名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.IDENTIFY">
-            <summary>表單代號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.PARAMETER">
-            <summary>SqlParameter</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.MODEL">
-            <summary>Models</summary>
-        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ImplementHeader">
             <summary>
             (BPM API共用)_ERP起單共用抬頭
@@ -7254,6 +7255,24 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.HeaderTitle.BPM_FORM_NO">
             <summary>BPM 表單單號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.BPMCommonModel`1">
+            <summary>
+            BPM_表單共用模組
+            </summary>
+            <typeparam name="T">Model</typeparam>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.EXT">
+            <summary>表單資料表子名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.IDENTIFY">
+            <summary>表單代號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.PARAMETER">
+            <summary>SqlParameter</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.MODEL">
+            <summary>Models</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ApproversConfig">
             <summary>
@@ -7698,11 +7717,14 @@
             ERP附件
             </summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AttachmentConfig.FILE_RENAME">
+            <summary>附件檔名</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AttachmentConfig.FILE_PATH">
             <summary>連結網址</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AttachmentConfig.FILE_NAME">
-            <summary>附件檔名</summary>
+            <summary>附件原檔名</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AttachmentConfig.FILE_EXTENSION">
             <summary>副檔名</summary>
@@ -8283,6 +8305,9 @@
         <member name="T:OA_WEB_API.Models.ERP.EvaluateContentInfoRequest">
             <summary>
             內容評估表 審核資訊_回傳ERP
+            內容評估表_補充意見 審核資訊_回傳ERP
+            四方四隅_內容評估表 審核資訊_回傳ERP
+            四方四隅_內容評估表_補充意見 審核資訊_回傳ERP
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.EvaluateContentInfoRequest.ERP_RESPONSE_STATE">
@@ -8321,46 +8346,6 @@
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.EvaluateContentInfoTitle.FINAL_ADVISE">
-            <summary>最終建議</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest">
-            <summary>
-            內容評估表_補充意見 審核資訊_回傳ERP
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest.ERP_RESPONSE_STATE">
-            <summary>接收ERP回傳狀態</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest.EVALUATE_CONTENT_REPLENISH_TITLE">
-            <summary>內容評估表_補充意見 表頭資訊</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest.EVALUATE_CONTENT_REPLENISH_CONFIG">
-            <summary>內容評估表_補充意見 表單內容 設定</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest.EVALUATE_CONTENT_REPLENISH_EVAS_CONFIG">
-            <summary>內容評估表_補充意見 評估意見彙整 設定</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest.EVALUATE_CONTENT_REPLENISH_DECS_CONFIG">
-            <summary>內容評估表_補充意見 決策意見彙整 設定</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest.ATTACHMENT_CONFIG">
-            <summary>附件</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest.ASSOCIATED_FORM_CONFIG">
-            <summary>表單關聯</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest.LoginId">
-            <summary>最後簽核人員工編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoRequest.LoginName">
-            <summary>最後簽核人姓名</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoTitle">
-            <summary>
-            內容評估表_補充意見 表頭資訊
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.EvaluateContentReplenishInfoTitle.FINAL_ADVISE">
             <summary>最終建議</summary>
         </member>
         <member name="T:OA_WEB_API.Models.ERP.MediaOrderInfoRequest">
@@ -8490,84 +8475,6 @@
         </member>
         <member name="P:OA_WEB_API.Models.ERP.MediaOrderReturnRefundInfoRequest.LoginName">
             <summary>最後簽核人姓名</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.ERP_RESPONSE_STATE">
-            <summary>接收ERP回傳狀態</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.GPI_EVALUATE_CONTENT_TITLE">
-            <summary>四方四隅_內容評估表 表頭資訊</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.GPI_EVALUATE_CONTENT_CONFIG">
-            <summary>四方四隅_內容評估表 表單內容 設定</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.GPI_EVALUATE_CONTENT_USERS_CONFIG">
-            <summary>四方四隅_內容評估表 評估人員 設定</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.GPI_EVALUATE_CONTENT_EVAS_CONFIG">
-            <summary>四方四隅_內容評估表 評估意見彙整 設定</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.GPI_EVALUATE_CONTENT_DECS_CONFIG">
-            <summary>四方四隅_內容評估表 決策意見彙整 設定</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.ATTACHMENT_CONFIG">
-            <summary>附件</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.ASSOCIATED_FORM_CONFIG">
-            <summary>表單關聯</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.LoginId">
-            <summary>最後簽核人員工編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoRequest.LoginName">
-            <summary>最後簽核人姓名</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoTitle">
-            <summary>
-            四方四隅_內容評估表 表頭資訊
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentInfoTitle.FINAL_ADVISE">
-            <summary>最終建議</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest">
-            <summary>
-            四方四隅_內容評估表_補充意見 審核資訊_回傳ERP
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest.ERP_RESPONSE_STATE">
-            <summary>接收ERP回傳狀態</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest.GPI_EVALUATE_CONTENT_REPLENISH_TITLE">
-            <summary>四方四隅_內容評估表_補充意見 表頭資訊</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest.GPI_EVALUATE_CONTENT_REPLENISH_CONFIG">
-            <summary>四方四隅_內容評估表_補充意見 表單內容 設定</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest.GPI_EVALUATE_CONTENT_REPLENISH_EVAS_CONFIG">
-            <summary>四方四隅_內容評估表_補充意見 評估意見彙整 設定</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest.GPI_EVALUATE_CONTENT_REPLENISH_DECS_CONFIG">
-            <summary>四方四隅_內容評估表_補充意見 決策意見彙整 設定</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest.ATTACHMENT_CONFIG">
-            <summary>附件</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest.ASSOCIATED_FORM_CONFIG">
-            <summary>表單關聯</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest.LoginId">
-            <summary>最後簽核人員工編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoRequest.LoginName">
-            <summary>最後簽核人姓名</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoTitle">
-            <summary>
-            四方四隅_內容評估表 表頭資訊
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GPI_EvaluateContentReplenishInfoTitle.FINAL_ADVISE">
-            <summary>最終建議</summary>
         </member>
         <member name="T:OA_WEB_API.Models.ERP.StepFlowConfig">
             <summary>
@@ -9378,6 +9285,11 @@
             表單主旨
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateDemandRepository.strJson">
+            <summary>
+            Json字串
+            </summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.EvaluateDemandRepository.strREQ">
             <summary>
             系統編號
@@ -10046,10 +9958,15 @@
             檔案手動上傳到(C/D):\\NTWEB\\AutoWeb3\\Database\\Project\\BPM\\BPMPro\\object路徑
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Repository.BPMPro.LabourAndCapitalMemberRepository.PutLabourAndCapitalMemberMarkSingle(OA_WEB_API.Models.BPMPro.LabourAndCapitalMemberMarkConfig)">
+        <member name="M:OA_WEB_API.Repository.BPMPro.LabourAndCapitalMemberRepository.PutLabourAndCapitalMemberMarkSingle(OA_WEB_API.Models.BPMPro.LabourAndCapitalMemberStaffConfig)">
             <summary>
             勞資委員投票(當選註記)
             </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.LabourAndCapitalMemberRepository.PutLabourAndCapitalMemberAddStaffSingle(OA_WEB_API.Models.BPMPro.LabourAndCapitalMemberStaffConfig)">
+            <summary>
+            勞資委員投票(新增人員)
+            </summary>        
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.LabourAndCapitalMemberRepository.strSQL">
             <summary>
@@ -10648,6 +10565,16 @@
             會簽管理系統 - 用印申請單
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.OfficialStampRepository.PostOfficialStampSingle(OA_WEB_API.Models.BPMPro.OfficialStampQueryModel)">
+            <summary>
+            用印申請單(查詢)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.OfficialStampRepository.PutOfficialStampRefill(OA_WEB_API.Models.BPMPro.OfficialStampQueryModel)">
+            <summary>
+            用印申請單(依此單內容重送)(僅外部起單使用)
+            </summary>
+        </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.OfficialStampRepository.PutOfficialStampSingle(OA_WEB_API.Models.BPMPro.OfficialStampViewModel)">
             <summary>
             用印申請單(新增/修改/草稿)
@@ -10721,6 +10648,11 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.ProjectReviewRepository.strREQ">
             <summary>
             系統編號
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.ProjectReviewRepository.strJson">
+            <summary>
+            Json字串
             </summary>
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.SupplierReviewRepository">
@@ -10800,12 +10732,12 @@
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostAttachment(OA_WEB_API.Models.BPMPro.FormQueryModel)">
             <summary>
-            附件上傳(查詢)
+            ERP附件(查詢)
             </summary>  
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PutAttachment(OA_WEB_API.Models.BPMPro.AttachmentMain)">
             <summary>
-            附件上傳(新增)
+            ERP附件(新增)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostAssociatedFormSearch(OA_WEB_API.Models.BPMPro.AssociatedFormQuery)">
@@ -10842,6 +10774,11 @@
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.FormDistinguish(System.String)">
             <summary>
             (擴充方法)_共同表單區分
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostApplicantInfoFunction``1(OA_WEB_API.Models.BPMPro.BPMCommonModel{``0})">
+            <summary>
+            申請人資訊(查詢)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostApproverFunction``1(OA_WEB_API.Models.BPMPro.BPMCommonModel{``0})">

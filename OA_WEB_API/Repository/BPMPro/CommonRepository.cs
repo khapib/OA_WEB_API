@@ -19,6 +19,7 @@ using OA_WEB_API.Repository.ERP;
 
 using Dapper;
 using Microsoft.Ajax.Utilities;
+using Docker.DotNet.Models;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -432,10 +433,10 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
-        #region - 附件上傳 -
+        #region - ERP附件 -
 
         /// <summary>
-        /// 附件上傳(查詢)
+        /// ERP附件(查詢)
         /// </summary>  
         public IList<AttachmentConfig> PostAttachment(FormQueryModel query)
         {
@@ -451,6 +452,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
                 strSQL += "     [FilePath] AS [FILE_PATH], ";
                 strSQL += "     [Identify] AS [IDENTIFY], ";
+                strSQL += "     [FileRename] AS [FILE_RENAME], ";
                 strSQL += "     [FileName] AS [FILE_NAME], ";
                 strSQL += "     [FileExtension] AS [FILE_EXTENSION], ";
                 strSQL += "     [FileSize] AS [FILE_SIZE], ";
@@ -471,7 +473,7 @@ namespace OA_WEB_API.Repository.BPMPro
         }
 
         /// <summary>
-        /// 附件上傳(新增)
+        /// ERP附件(新增)
         /// </summary>
         public bool PutAttachment(AttachmentMain model)
         {
@@ -482,6 +484,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },
                     new SqlParameter("@IDENTIFY", SqlDbType.VarChar) { Size = 100, Value = model.IDENTIFY },
+                    new SqlParameter("@FILE_RENAME", SqlDbType.VarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@FILE_PATH", SqlDbType.VarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@FILE_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@FILE_EXTENSION", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -512,8 +515,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     GlobalParameters.Infoparameter(strJson, parameter);
 
                     strSQL = "";
-                    strSQL += "INSERT INTO [dbo].[GTV_Attachment]([RequisitionID],[Identify],[FilePath],[FileName],[FileExtension],[FileSize],[CreateBy],[CreateDate],[Description]) ";
-                    strSQL += "VALUES(@REQUISITION_ID,@IDENTIFY,@FILE_PATH,@FILE_NAME,@FILE_EXTENSION,@FILE_SIZE,@CREATE_BY,@CREATE_DATE,@DESCRIPTION)";
+                    strSQL += "INSERT INTO [dbo].[GTV_Attachment]([RequisitionID],[Identify],[FileRename],[FilePath],[FileName],[FileExtension],[FileSize],[CreateBy],[CreateDate],[Description]) ";
+                    strSQL += "VALUES(@REQUISITION_ID,@IDENTIFY,@FILE_RENAME,@FILE_PATH,@FILE_NAME,@FILE_EXTENSION,@FILE_SIZE,@CREATE_BY,@CREATE_DATE,@DESCRIPTION)";
 
                     dbFun.DoTran(strSQL, parameter);
 
@@ -1024,6 +1027,43 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #region - 表單共用模組 -
 
+        #region - 申請人資訊(查詢) -
+
+        /// <summary>
+        /// 申請人資訊(查詢)
+        /// </summary>
+        public T PostApplicantInfoFunction<T>(BPMCommonModel<T> Common)
+        {
+            #region - 宣告 -
+
+            strTable = Common.IDENTIFY + "_" + Common.EXT;
+
+            #endregion
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
+            strSQL += "     [DiagramID] AS [DIAGRAM_ID], ";
+            strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
+            strSQL += "     [ApplicantDept] AS [APPLICANT_DEPT], ";
+            strSQL += "     [ApplicantDeptName] AS [APPLICANT_DEPT_NAME], ";
+            strSQL += "     [ApplicantID] AS [APPLICANT_ID], ";
+            strSQL += "     [ApplicantName] AS [APPLICANT_NAME], ";
+            strSQL += "     [ApplicantPhone] AS [APPLICANT_PHONE], ";
+            strSQL += "     [ApplicantDateTime] AS [APPLICANT_DATETIME], ";
+            strSQL += "     [FillerID] AS [FILLER_ID], ";
+            strSQL += "     [FillerName] AS [FILLER_NAME], ";
+            strSQL += "     [Priority] AS [PRIORITY], ";
+            strSQL += "     [DraftFlag] AS [DRAFT_FLAG], ";
+            strSQL += "     [FlowActivated] AS [FLOW_ACTIVATED] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + strTable + "] ";
+            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+            return (T)(Object)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<ApplicantInfo>().FirstOrDefault();
+        }
+
+        #endregion
+
         #region - 會簽簽核人員 -
 
         /// <summary>
@@ -1048,8 +1088,12 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "FROM [BPMPro].[dbo].[FM7T_" + strTable + "] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
-
-            return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<GPI_CountersignApproversConfig>();
+            switch (Common.IDENTIFY)
+            {
+                case "GPI_Countersign": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<GPI_CountersignApproversConfig>();
+                case "OfficialStamp": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<OfficialStampApproversConfig>();
+                default: return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<ApproversConfig>();
+            }
         }
 
 

@@ -18,6 +18,7 @@ using OA_WEB_API.Models;
 using OA_WEB_API.Models.BPMPro;
 
 using Microsoft.Ajax.Utilities;
+using System.Collections;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -188,6 +189,7 @@ namespace OA_WEB_API.Repository.BPMPro
         {
             try
             {
+                var VoteResultDateTime = String.Empty;
                 #region - 查詢 -
 
                 var parameter = new List<SqlParameter>()
@@ -236,7 +238,8 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     if (!String.IsNullOrEmpty(dt.Rows[0][0].ToString()) || !String.IsNullOrWhiteSpace(dt.Rows[0][0].ToString()))
                     {
-                        if (DateTime.Now >= DateTime.Parse(dt.Rows[0][0].ToString()))
+                        VoteResultDateTime = dt.Rows[0][0].ToString();
+                        if (DateTime.Now >= DateTime.Parse(VoteResultDateTime))
                         {
                             #region - 計算總投票數 -
 
@@ -304,6 +307,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 strSQL = "";
                 strSQL += "SELECT ";
+                strSQL += "     [MainDeptActualVoteTurnout] AS [MAIN_DEPT_ACTUAL_VOTE_TURNOUT], ";
                 strSQL += "     [MainDeptActualVoteNum] AS [MAIN_DEPT_ACTUAL_VOTE_NUM], ";
                 strSQL += "     [IsLabour] AS [IS_LABOUR], ";
                 strSQL += "     [MainDeptID] AS [MAIN_DEPT_ID], ";
@@ -322,7 +326,72 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "         AND [MainDeptID]=@MAIN_DEPT_ID ";
                 }
 
-                var labourAndCapitalMemberLaboursConfig = dbFun.DoQuery(strSQL, parameter).ToList<LabourAndCapitalMemberLaboursConfig>();
+                var labourAndCapitalMemberLaboursConfig = dbFun.DoQuery(strSQL, parameter).ToList<LabourAndCapitalMemberLaboursConfig>().OrderBy(L => L.MAIN_DEPT_ID).ToList();
+
+                #region - 投票公布日 -
+
+                if (!String.IsNullOrEmpty(VoteResultDateTime) || !String.IsNullOrWhiteSpace(VoteResultDateTime))
+                {
+                    if (DateTime.Now >= DateTime.Parse(VoteResultDateTime))
+                    {
+                        labourAndCapitalMemberLaboursConfig.ForEach(L =>
+                        {
+
+                            #region - 計算主要部門投票票數 -
+
+                            strSQL = "";
+                            strSQL += "DECLARE @VoteNum INT ";
+                            strSQL += "WITH [MainDeptActualVoteNumCTE]([CountMainDeptActualVoteNum]) AS ";
+                            strSQL += "( ";
+                            strSQL += "     SELECT ";
+                            strSQL += "         COUNT([MemberID1]) AS [CountMainDeptActualVoteNum] ";
+                            strSQL += "     FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_VOTE] ";
+                            strSQL += "     WHERE 1=1 ";
+                            strSQL += "             AND [VoteYear]=@VOTE_YEAR ";
+                            strSQL += "             AND [MainDeptID]=@MAIN_DEPT_ID ";
+                            strSQL += "             AND [MemberID1] IS NOT NULL ";
+                            strSQL += "             AND [MemberID1] <>'' ";
+                            strSQL += "     UNION ALL ";
+                            strSQL += "     SELECT ";
+                            strSQL += "         COUNT([MemberID2]) AS [CountMainDeptActualVoteNum] ";
+                            strSQL += "     FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_VOTE] ";
+                            strSQL += "     WHERE 1=1 ";
+                            strSQL += "             AND [VoteYear]=@VOTE_YEAR ";
+                            strSQL += "             AND [MainDeptID]=@MAIN_DEPT_ID ";
+                            strSQL += "             AND [MemberID2] IS NOT NULL ";
+                            strSQL += "             AND [MemberID2] <>'' ";
+                            strSQL += ") ";
+                            strSQL += "SELECT ";
+                            strSQL += "     @VoteNum=SUM([CountMainDeptActualVoteNum]) ";
+                            strSQL += "FROM [MainDeptActualVoteNumCTE] AS CTE; ";
+                            strSQL += " ";
+                            strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR] ";
+                            strSQL += "SET [MainDeptActualVoteNum]=@VoteNum ";
+                            strSQL += "WHERE 1=1 ";
+                            strSQL += "         AND [VoteYear]=@VOTE_YEAR ";
+                            strSQL += "         AND [MainDeptID]=@MAIN_DEPT_ID ";
+                            dbFun.DoTran(strSQL, parameter);
+
+                            #endregion
+
+                            #region - 部門實際投票人數 -
+
+                            strSQL = "";
+                            strSQL += "UPDATE LABOUR ";
+                            strSQL += "SET [MainDeptActualVoteTurnout]=(SELECT COUNT(LoginID) FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_VOTE] AS VOTE WHERE LABOUR.[VoteYear]=VOTE.[VoteYear] AND LABOUR.[MainDeptID]=VOTE.[MainDeptID]) ";
+                            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR] AS LABOUR ";
+                            strSQL += "WHERE 1=1 ";
+                            strSQL += "         AND LABOUR.[VoteYear]=@VOTE_YEAR ";
+                            strSQL += "         AND LABOUR.[MainDeptID]=@MAIN_DEPT_ID ";
+                            dbFun.DoTran(strSQL, parameter);
+
+                            #endregion
+
+                        });
+                    }
+                }
+
+                #endregion
 
                 #endregion
 
@@ -481,18 +550,8 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     var parameterLabour = new List<SqlParameter>()
                     {
-                        //勞資委員投票 勞方代表
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64 , Value = strREQ },
                         new SqlParameter("@VOTE_YEAR", SqlDbType.NVarChar) { Size = 10, Value = model.TITLE_INFO.VOTE_YEAR },
-                        new SqlParameter("@MAIN_DEPT_ACTUAL_VOTE_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@IS_LABOUR", SqlDbType.NVarChar) { Size = 5 , Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@MAIN_DEPT_ID", SqlDbType.NVarChar) { Size = 40 , Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@MAIN_DEPT_NAME", SqlDbType.NVarChar) { Size = 40 , Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@MEMBER_DEPT_ID", SqlDbType.NVarChar) { Size = 40 , Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@MEMBER_DEPT_NAME", SqlDbType.NVarChar) { Size = 40 , Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@MEMBER_ID", SqlDbType.NVarChar) { Size = 40 , Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@MEMBER_NAME", SqlDbType.NVarChar) { Size = 40 , Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@VOTE_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     };
 
                     #region 先刪除今年的參選人
@@ -509,38 +568,13 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     foreach (var item in model.LABOUR_AND_CAPITAL_MEMBER_LABOURS_CONFIG)
                     {
-                        var logonModel = new LogonModel()
+                        var labourAndCapitalMemberStaffConfig = new LabourAndCapitalMemberStaffConfig()
                         {
-                            USER_ID = item.MEMBER_ID
+                            VOTE_YEAR = model.TITLE_INFO.VOTE_YEAR,
+                            MEMBER_DEPT_ID = item.MEMBER_DEPT_ID,
+                            MEMBER_ID = item.MEMBER_ID,
                         };
-
-                        var userInfoMainDeptModel = new UserInfoMainDeptModel()
-                        {
-                            USER_ID = item.MEMBER_ID,
-                            DEPT_ID = item.MEMBER_DEPT_ID,
-                            COMPANY_ID = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.DEPT_ID == item.MEMBER_DEPT_ID).Select(U => U.COMPANY_ID).FirstOrDefault(),
-                        };
-
-                        var UserInfoMainDept = sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel);
-
-                        item.MAIN_DEPT_ID = UserInfoMainDept.MAIN_DEPT.DEPT_ID;
-                        item.MAIN_DEPT_NAME = UserInfoMainDept.MAIN_DEPT.DEPT_NAME;
-                        item.MEMBER_DEPT_NAME = UserInfoMainDept.USER_MODEL.DEPT_NAME;
-                        item.MEMBER_NAME = UserInfoMainDept.USER_MODEL.USER_NAME;
-
-                        //寫入：勞資委員投票 勞方代表parameter
-                        strJson = jsonFunction.ObjectToJSON(item);
-                        GlobalParameters.Infoparameter(strJson, parameterLabour);
-
-                        #region 新增參選人資料
-
-                        strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR]([RequisitionID],[VoteYear],[MainDeptActualVoteNum],[IsLabour],[MainDeptID],[MainDeptName],[MemberDeptID],[MemberDeptName],[MemberID],[MemberName],[VoteNum],[Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@VOTE_YEAR,null,@IS_LABOUR,@MAIN_DEPT_ID,@MAIN_DEPT_NAME,@MEMBER_DEPT_ID,@MEMBER_DEPT_NAME,@MEMBER_ID,@MEMBER_NAME,null,null) ";
-
-                        dbFun.DoTran(strSQL, parameterLabour);
-
-                        #endregion
+                        PutLabourAndCapitalMemberAddStaffSingle(labourAndCapitalMemberStaffConfig);
                     }
                 }
 
@@ -579,182 +613,201 @@ namespace OA_WEB_API.Repository.BPMPro
                     };
                     var userModel = userRepository.PostUserSingle(logonModel);
 
-                    #region - 當前登入人員的主要職責部門編號 -
-
-                    var LoginDeptIDs = new List<string>();
-                    LoginDeptIDs = userModel.USER_MODEL.Where(U => U.USER_ID == model.LOGIN_ID).Select(U => U.DEPT_ID).ToList();
-                    LoginDeptIDs.ForEach(L =>
+                    if (userModel != null && userModel.USER_MODEL.Count > 0)
                     {
-                        var userInfoMainDeptModel = new UserInfoMainDeptModel()
+                        #region - 當前登入人員的主要職責部門編號 -
+
+                        var LoginDeptIDs = new List<string>();
+                        LoginDeptIDs = userModel.USER_MODEL.Where(U => U.USER_ID == model.LOGIN_ID).Select(U => U.DEPT_ID).ToList();
+                        LoginDeptIDs.ForEach(L =>
                         {
-                            USER_ID = model.LOGIN_ID,
-                            DEPT_ID = L,
-                            COMPANY_ID = userModel.USER_MODEL.Where(U => U.DEPT_ID == L).Select(U => U.COMPANY_ID).FirstOrDefault(),
-                        };
-                        var userInfoMainDept = sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel);
-                        if (userInfoMainDept.USER_MODEL.IS_MAIN_JOB != null)
-                        {
-                            if (bool.Parse(userInfoMainDept.USER_MODEL.IS_MAIN_JOB.ToString()))
+                            var userInfoMainDeptModel = new UserInfoMainDeptModel()
                             {
-                                model.DEPT_ID = userInfoMainDept.USER_MODEL.DEPT_ID;
+                                USER_ID = model.LOGIN_ID,
+                                DEPT_ID = L,
+                                COMPANY_ID = userModel.USER_MODEL.Where(U => U.DEPT_ID == L).Select(U => U.COMPANY_ID).FirstOrDefault(),
+                            };
+                            var userInfoMainDept = sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel);
+                            if (userInfoMainDept.USER_MODEL.IS_MAIN_JOB != null)
+                            {
+                                if (bool.Parse(userInfoMainDept.USER_MODEL.IS_MAIN_JOB.ToString()))
+                                {
+                                    model.DEPT_ID = userInfoMainDept.USER_MODEL.DEPT_ID;
+                                }
                             }
-                        }
-                    });
+                        });
 
-                    #endregion                  
+                        #endregion
 
-                    var parameter = new List<SqlParameter>()
-                    {
-                        new SqlParameter("@VOTE_YEAR", SqlDbType.NVarChar) { Size = 10, Value = model.VOTE_YEAR },
-                        new SqlParameter("@DEPT_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@LOGIN_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@MEMBER_ID_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@MEMBER_ID_2", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                    };
+                        var parameter = new List<SqlParameter>()
+                        {
+                            new SqlParameter("@VOTE_YEAR", SqlDbType.NVarChar) { Size = 10, Value = model.VOTE_YEAR },
+                            new SqlParameter("@DEPT_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                            new SqlParameter("@LOGIN_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                            new SqlParameter("@MEMBER_ID_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                            new SqlParameter("@MEMBER_ID_2", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                        };
 
-                    strJson = jsonFunction.ObjectToJSON(model);
-                    GlobalParameters.Infoparameter(strJson, parameter);
+                        strJson = jsonFunction.ObjectToJSON(model);
+                        GlobalParameters.Infoparameter(strJson, parameter);
 
-                    strSQL = "";
-                    strSQL += "SELECT ";
-                    strSQL += "      [RequisitionID] ";
-                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_VOTE] ";
-                    strSQL += "WHERE 1=1 ";
-                    strSQL += "         AND [VoteYear]=@VOTE_YEAR ";
-                    strSQL += "         AND [LoginID]=@LOGIN_ID ";
-
-                    var dt = dbFun.DoQuery(strSQL, parameter);
-
-                    if (dt.Rows.Count <= 0)
-                    {
                         strSQL = "";
                         strSQL += "SELECT ";
                         strSQL += "      [RequisitionID] ";
-                        strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
-                        strSQL += "WHERE [VoteYear]=@VOTE_YEAR ";
+                        strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_VOTE] ";
+                        strSQL += "WHERE 1=1 ";
+                        strSQL += "         AND [VoteYear]=@VOTE_YEAR ";
+                        strSQL += "         AND [LoginID]=@LOGIN_ID ";
 
-                        var dtA = dbFun.DoQuery(strSQL, parameter);
-                        if (dtA.Rows.Count > 0)
+                        var dt = dbFun.DoQuery(strSQL, parameter);
+
+                        if (dt.Rows.Count <= 0)
                         {
-                            strREQ = dtA.Rows[0][0].ToString();
-
-                            parameter.Add(new SqlParameter("@VOTE_DATE", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
-                            parameter.Add(new SqlParameter("@MAIN_DEPT_ID", SqlDbType.NVarChar) { Size = 40, Value = VoterInfo.MAIN_DEPT_ID });
-                            parameter.Add(new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ });
-
-                            #region - 投票 -
-
                             strSQL = "";
-                            strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_VOTE]([RequisitionID],[VoteYear],[MainDeptID],[DeptID],[LoginID],[MemberID1],[MemberID2],[VoteDate]) ";
-                            strSQL += "VALUES(@REQUISITION_ID,@VOTE_YEAR,@MAIN_DEPT_ID,@DEPT_ID,@LOGIN_ID,@MEMBER_ID_1,@MEMBER_ID_2,@VOTE_DATE) ";
-
-                            dbFun.DoTran(strSQL, parameter);
-
-                            #endregion
-
-                            #region - 計算主要部門投票數 -
-
-                            strSQL = "";
-                            strSQL += "DECLARE @VoteNum INT ";
-                            strSQL += "WITH [MainDeptActualVoteNumCTE]([CountMainDeptActualVoteNum]) AS ";
-                            strSQL += "( ";
-                            strSQL += "     SELECT ";
-                            strSQL += "         COUNT([MemberID1]) AS [CountMainDeptActualVoteNum] ";
-                            strSQL += "     FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_VOTE] ";
-                            strSQL += "     WHERE 1=1 ";
-                            strSQL += "             AND [VoteYear]=@VOTE_YEAR ";
-                            strSQL += "             AND [MainDeptID]=@MAIN_DEPT_ID ";
-                            strSQL += "             AND [MemberID1] IS NOT NULL ";
-                            strSQL += "     UNION ALL ";
-                            strSQL += "     SELECT ";
-                            strSQL += "         COUNT([MemberID2]) AS [CountMainDeptActualVoteNum] ";
-                            strSQL += "     FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_VOTE] ";
-                            strSQL += "     WHERE 1=1 ";
-                            strSQL += "             AND [VoteYear]=@VOTE_YEAR ";
-                            strSQL += "             AND [MainDeptID]=@MAIN_DEPT_ID ";
-                            strSQL += "             AND [MemberID2] IS NOT NULL ";
-                            strSQL += ") ";
                             strSQL += "SELECT ";
-                            strSQL += "     @VoteNum=SUM([CountMainDeptActualVoteNum]) ";
-                            strSQL += "FROM [MainDeptActualVoteNumCTE] AS CTE; ";
-                            strSQL += " ";
-                            strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR] ";
-                            strSQL += "SET [MainDeptActualVoteNum]=@VoteNum ";
-                            strSQL += "WHERE 1=1 ";
-                            strSQL += "         AND [VoteYear]=@VOTE_YEAR ";
-                            strSQL += "         AND [MainDeptID]=@MAIN_DEPT_ID ";
-                            dbFun.DoTran(strSQL, parameter);
+                            strSQL += "      [RequisitionID] ";
+                            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                            strSQL += "WHERE [VoteYear]=@VOTE_YEAR ";
 
-                            #endregion
+                            var dtA = dbFun.DoQuery(strSQL, parameter);
+                            if (dtA.Rows.Count > 0)
+                            {
+                                strREQ = dtA.Rows[0][0].ToString();
 
-                            #region - 候選人票數計算 -
+                                parameter.Add(new SqlParameter("@VOTE_DATE", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+                                parameter.Add(new SqlParameter("@MAIN_DEPT_ID", SqlDbType.NVarChar) { Size = 40, Value = VoterInfo.MAIN_DEPT_ID });
+                                parameter.Add(new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ });
 
-                            var parameterMember = new List<SqlParameter>()
+                                #region - 投票 -
+
+                                strSQL = "";
+                                strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_VOTE]([RequisitionID],[VoteYear],[MainDeptID],[DeptID],[LoginID],[MemberID1],[MemberID2],[VoteDate]) ";
+                                strSQL += "VALUES(@REQUISITION_ID,@VOTE_YEAR,@MAIN_DEPT_ID,@DEPT_ID,@LOGIN_ID,@MEMBER_ID_1,@MEMBER_ID_2,@VOTE_DATE) ";
+
+                                dbFun.DoTran(strSQL, parameter);
+
+                                #endregion
+
+                                #region - 計算主要部門投票票數 -
+
+                                strSQL = "";
+                                strSQL += "DECLARE @VoteNum INT ";
+                                strSQL += "WITH [MainDeptActualVoteNumCTE]([CountMainDeptActualVoteNum]) AS ";
+                                strSQL += "( ";
+                                strSQL += "     SELECT ";
+                                strSQL += "         COUNT([MemberID1]) AS [CountMainDeptActualVoteNum] ";
+                                strSQL += "     FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_VOTE] ";
+                                strSQL += "     WHERE 1=1 ";
+                                strSQL += "             AND [VoteYear]=@VOTE_YEAR ";
+                                strSQL += "             AND [MainDeptID]=@MAIN_DEPT_ID ";
+                                strSQL += "             AND [MemberID1] IS NOT NULL ";
+                                strSQL += "             AND [MemberID1] <>'' ";
+                                strSQL += "     UNION ALL ";
+                                strSQL += "     SELECT ";
+                                strSQL += "         COUNT([MemberID2]) AS [CountMainDeptActualVoteNum] ";
+                                strSQL += "     FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_VOTE] ";
+                                strSQL += "     WHERE 1=1 ";
+                                strSQL += "             AND [VoteYear]=@VOTE_YEAR ";
+                                strSQL += "             AND [MainDeptID]=@MAIN_DEPT_ID ";
+                                strSQL += "             AND [MemberID2] IS NOT NULL ";
+                                strSQL += "             AND [MemberID2] <>'' ";
+                                strSQL += ") ";
+                                strSQL += "SELECT ";
+                                strSQL += "     @VoteNum=SUM([CountMainDeptActualVoteNum]) ";
+                                strSQL += "FROM [MainDeptActualVoteNumCTE] AS CTE; ";
+                                strSQL += " ";
+                                strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR] ";
+                                strSQL += "SET [MainDeptActualVoteNum]=@VoteNum ";
+                                strSQL += "WHERE 1=1 ";
+                                strSQL += "         AND [VoteYear]=@VOTE_YEAR ";
+                                strSQL += "         AND [MainDeptID]=@MAIN_DEPT_ID ";
+                                dbFun.DoTran(strSQL, parameter);
+
+                                #endregion
+
+                                #region - 候選人票數計算 -
+
+                                var parameterMember = new List<SqlParameter>()
                             {
                                 new SqlParameter("@VOTE_YEAR", SqlDbType.NVarChar) { Size = 10, Value = model.VOTE_YEAR },
                             };
 
-                            var Members = new List<string>()
+                                var Members = new List<string>()
                             {
                                 model.MEMBER_ID_1,
                                 model.MEMBER_ID_2,
                             };
 
-                            Members.ForEach(M =>
-                            {
-                                if (!String.IsNullOrEmpty(M) || !String.IsNullOrWhiteSpace(M))
+                                Members.ForEach(M =>
                                 {
-                                    parameterMember.Add(new SqlParameter("@MEMBER_ID", SqlDbType.NVarChar) { Size = 40, Value = M });
-
-                                    strSQL = "";
-                                    strSQL = "";
-                                    strSQL += "SELECT ";
-                                    strSQL += "      [RequisitionID] ";
-                                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR] ";
-                                    strSQL += "WHERE 1=1 ";
-                                    strSQL += "         AND [VoteYear]=@VOTE_YEAR ";
-                                    strSQL += "         AND [MemberID]=@MEMBER_ID ";
-
-                                    var dtL = dbFun.DoQuery(strSQL, parameterMember);
-                                    if (dtL.Rows.Count > 0)
+                                    if (!String.IsNullOrEmpty(M) || !String.IsNullOrWhiteSpace(M))
                                     {
+                                        parameterMember.Add(new SqlParameter("@MEMBER_ID", SqlDbType.NVarChar) { Size = 40, Value = M });
+
                                         strSQL = "";
-                                        strSQL += "DECLARE @VoteNum INT ";
-                                        strSQL += "WITH [CountVoteNumCTE]([CountVoteNum]) AS ";
-                                        strSQL += "( ";
-                                        strSQL += "     SELECT ";
-                                        strSQL += "         COUNT([MemberID1]) AS [CountVoteNum] ";
-                                        strSQL += "     FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_VOTE] ";
-                                        strSQL += "     WHERE 1=1 ";
-                                        strSQL += "             AND [VoteYear]=@VOTE_YEAR ";
-                                        strSQL += "             AND [MemberID1]=@MEMBER_ID ";
-                                        strSQL += "     UNION ALL ";
-                                        strSQL += "     SELECT ";
-                                        strSQL += "         COUNT([MemberID2]) AS [CountVoteNum] ";
-                                        strSQL += "     FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_VOTE] ";
-                                        strSQL += "     WHERE 1=1 ";
-                                        strSQL += "             AND [VoteYear]=@VOTE_YEAR ";
-                                        strSQL += "             AND [MemberID2]=@MEMBER_ID ";
-                                        strSQL += ") ";
+                                        strSQL = "";
                                         strSQL += "SELECT ";
-                                        strSQL += "     @VoteNum=SUM([CountVoteNum]) ";
-                                        strSQL += "FROM [CountVoteNumCTE] AS CTE; ";
-                                        strSQL += " ";
-                                        strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR] ";
-                                        strSQL += "SET [VoteNum]=@VoteNum ";
+                                        strSQL += "      [RequisitionID] ";
+                                        strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR] ";
                                         strSQL += "WHERE 1=1 ";
                                         strSQL += "         AND [VoteYear]=@VOTE_YEAR ";
                                         strSQL += "         AND [MemberID]=@MEMBER_ID ";
-                                        dbFun.DoTran(strSQL, parameterMember);
+
+                                        var dtL = dbFun.DoQuery(strSQL, parameterMember);
+                                        if (dtL.Rows.Count > 0)
+                                        {
+                                            strSQL = "";
+                                            strSQL += "DECLARE @VoteNum INT ";
+                                            strSQL += "WITH [CountVoteNumCTE]([CountVoteNum]) AS ";
+                                            strSQL += "( ";
+                                            strSQL += "     SELECT ";
+                                            strSQL += "         COUNT([MemberID1]) AS [CountVoteNum] ";
+                                            strSQL += "     FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_VOTE] ";
+                                            strSQL += "     WHERE 1=1 ";
+                                            strSQL += "             AND [VoteYear]=@VOTE_YEAR ";
+                                            strSQL += "             AND [MemberID1]=@MEMBER_ID ";
+                                            strSQL += "     UNION ALL ";
+                                            strSQL += "     SELECT ";
+                                            strSQL += "         COUNT([MemberID2]) AS [CountVoteNum] ";
+                                            strSQL += "     FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_VOTE] ";
+                                            strSQL += "     WHERE 1=1 ";
+                                            strSQL += "             AND [VoteYear]=@VOTE_YEAR ";
+                                            strSQL += "             AND [MemberID2]=@MEMBER_ID ";
+                                            strSQL += ") ";
+                                            strSQL += "SELECT ";
+                                            strSQL += "     @VoteNum=SUM([CountVoteNum]) ";
+                                            strSQL += "FROM [CountVoteNumCTE] AS CTE; ";
+                                            strSQL += " ";
+                                            strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR] ";
+                                            strSQL += "SET [VoteNum]=@VoteNum ";
+                                            strSQL += "WHERE 1=1 ";
+                                            strSQL += "         AND [VoteYear]=@VOTE_YEAR ";
+                                            strSQL += "         AND [MemberID]=@MEMBER_ID ";
+                                            dbFun.DoTran(strSQL, parameterMember);
+                                        }
+                                        parameterMember.Remove(parameterMember.Where(SP => SP.ParameterName.Contains("@MEMBER_ID")).FirstOrDefault());
                                     }
-                                    parameterMember.Remove(parameterMember.Where(SP => SP.ParameterName.Contains("@MEMBER_ID")).FirstOrDefault());
-                                }
-                            });
+                                });
 
-                            #endregion
+                                #endregion
 
-                            vResult = true;
+                                #region - 部門實際投票人數 -
+
+                                strSQL = "";
+                                strSQL += "UPDATE LABOUR ";
+                                strSQL += "SET [MainDeptActualVoteTurnout]=(SELECT COUNT(LoginID) FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_VOTE] AS VOTE WHERE LABOUR.[VoteYear]=VOTE.[VoteYear] AND LABOUR.[MainDeptID]=VOTE.[MainDeptID]) ";
+                                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR] AS LABOUR ";
+                                strSQL += "WHERE 1=1 ";
+                                strSQL += "         AND LABOUR.[VoteYear]=@VOTE_YEAR ";
+                                strSQL += "         AND LABOUR.[MainDeptID]=@MAIN_DEPT_ID ";
+                                dbFun.DoTran(strSQL, parameter);
+
+                                #endregion
+
+                                vResult = true;
+                            }
                         }
+
                     }
                 }
             }
@@ -991,7 +1044,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         int i = 0;
                         while (i <= (HttpContext.Current.Request.Files.Count - 1))
-                        {                            
+                        {
                             var fileResult = true;
                             var File = HttpContext.Current.Request.Files[i];
 
@@ -1064,13 +1117,13 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 CommLib.Logger.Error("勞資委員投票(附件上傳)失敗，原因：" + ex.Message);
                 throw;
-            }            
+            }
         }
 
         /// <summary>
         /// 勞資委員投票(當選註記)
         /// </summary>
-        public bool PutLabourAndCapitalMemberMarkSingle(LabourAndCapitalMemberMarkConfig model)
+        public bool PutLabourAndCapitalMemberMarkSingle(LabourAndCapitalMemberStaffConfig model)
         {
             bool vResult = false;
 
@@ -1079,6 +1132,7 @@ namespace OA_WEB_API.Repository.BPMPro
             var strDmarkSQL = "";
             var strWhereSQL = "";
             var strSecondSQL = "";
+            var strMarkSQL = "";
             var MemberResult = false;
 
             #endregion
@@ -1166,6 +1220,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         strSQL += strSecondSQL;
                         strSQL += "             END ";
                         strSQL += "     END ";
+                        strMarkSQL = strSQL;
 
                         #endregion
 
@@ -1183,7 +1238,7 @@ namespace OA_WEB_API.Repository.BPMPro
                                 //清除註記資料
                                 dbFun.DoTran(strDmarkSQL, parameter);
                                 //進行新的註記
-                                dbFun.DoTran(strSQL, parameter);
+                                dbFun.DoTran(strMarkSQL, parameter);
 
                                 parameter.Remove(parameter.Where(SP => SP.ParameterName.Contains("@MAIN_DEPT_ID")).FirstOrDefault());
                             });
@@ -1199,7 +1254,7 @@ namespace OA_WEB_API.Repository.BPMPro
                             //清除註記資料
                             dbFun.DoTran(strDmarkSQL, parameter);
                             //進行新的註記
-                            dbFun.DoTran(strSQL, parameter);
+                            dbFun.DoTran(strMarkSQL, parameter);
 
                             parameter.Remove(parameter.Where(SP => SP.ParameterName.Contains("@MAIN_DEPT_ID")).FirstOrDefault());
 
@@ -1290,10 +1345,139 @@ namespace OA_WEB_API.Repository.BPMPro
             }
             catch (Exception ex)
             {
-                CommLib.Logger.Error("勞資委員投票(新建/調整)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("勞資委員投票(當選註記)失敗，原因：" + ex.Message);
                 throw;
             }
             return vResult;
+        }
+
+        /// <summary>
+        /// 勞資委員投票(新增人員)
+        /// </summary>        
+        public bool PutLabourAndCapitalMemberAddStaffSingle(LabourAndCapitalMemberStaffConfig model)
+        {
+            bool vResult = false;
+            try
+            {
+                var parameter = new List<SqlParameter>()
+                {
+                    //勞資委員投票 勞方代表                    
+                    new SqlParameter("@VOTE_YEAR", SqlDbType.NVarChar) { Size = 10, Value = model.VOTE_YEAR },
+                    new SqlParameter("@MAIN_DEPT_ACTUAL_VOTE_TURNOUT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MAIN_DEPT_ACTUAL_VOTE_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@IS_LABOUR", SqlDbType.NVarChar) { Size = 5 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MAIN_DEPT_ID", SqlDbType.NVarChar) { Size = 40 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MAIN_DEPT_NAME", SqlDbType.NVarChar) { Size = 40 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEMBER_DEPT_ID", SqlDbType.NVarChar) { Size = 40 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEMBER_DEPT_NAME", SqlDbType.NVarChar) { Size = 40 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEMBER_ID", SqlDbType.NVarChar) { Size = 40 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEMBER_NAME", SqlDbType.NVarChar) { Size = 40 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@VOTE_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NOTE", SqlDbType.NVarChar) { Value = (object)DBNull.Value ?? DBNull.Value },
+                };
+
+                var logonModel = new LogonModel()
+                {
+                    USER_ID = model.MEMBER_ID
+                };
+
+                var userInfoMainDeptModel = new UserInfoMainDeptModel()
+                {
+                    USER_ID = model.MEMBER_ID,
+                    DEPT_ID = model.MEMBER_DEPT_ID,
+                    COMPANY_ID = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.DEPT_ID == model.MEMBER_DEPT_ID).Select(U => U.COMPANY_ID).FirstOrDefault(),
+                };
+
+                var UserInfoMainDept = sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel);
+
+                model.MAIN_DEPT_ID = UserInfoMainDept.MAIN_DEPT.DEPT_ID;
+                model.MAIN_DEPT_NAME = UserInfoMainDept.MAIN_DEPT.DEPT_NAME;
+                model.MEMBER_DEPT_NAME = UserInfoMainDept.USER_MODEL.DEPT_NAME;
+                model.MEMBER_NAME = UserInfoMainDept.USER_MODEL.USER_NAME;
+
+                //寫入：勞資委員投票 勞方代表parameter
+                strJson = jsonFunction.ObjectToJSON(model);
+                GlobalParameters.Infoparameter(strJson, parameter);
+
+                strSQL = "";
+                strSQL += "SELECT ";
+                strSQL += "      [RequisitionID] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                strSQL += "WHERE [VoteYear]=@VOTE_YEAR ";
+
+                var dt = dbFun.DoQuery(strSQL, parameter);
+
+                if (dt.Rows.Count > 0)
+                {
+                    parameter.Add(new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)dt.Rows[0][0].ToString() ?? DBNull.Value });
+
+                    var labourAndCapitalMemberQueryModel = new LabourAndCapitalMemberQueryModel()
+                    {
+                        VOTE_YEAR = model.VOTE_YEAR,
+                    };
+
+                    var strMainDeptActualVoteSQL = "";
+                    strMainDeptActualVoteSQL += "DECLARE ";
+                    strMainDeptActualVoteSQL += "     @MainDeptActualVoteTurnout Int, ";
+                    strMainDeptActualVoteSQL += "     @MainDeptActualVoteNum Int; ";
+                    strMainDeptActualVoteSQL += "SELECT ";
+                    strMainDeptActualVoteSQL += "     @MainDeptActualVoteTurnout=MainDeptActualVoteTurnout ";
+                    strMainDeptActualVoteSQL += "FROM BPMPro.dbo.FM7T_" + IDENTIFY + "_LABOUR ";
+                    strMainDeptActualVoteSQL += "WHERE 1=1 ";
+                    strMainDeptActualVoteSQL += "         AND [VoteYear]=@VOTE_YEAR ";
+                    strMainDeptActualVoteSQL += "         AND [MainDeptID]=@MAIN_DEPT_ID ";
+                    strMainDeptActualVoteSQL += "GROUP BY MainDeptActualVoteTurnout ";
+                    strMainDeptActualVoteSQL += "SELECT ";
+                    strMainDeptActualVoteSQL += "     @MainDeptActualVoteNum=MainDeptActualVoteNum ";
+                    strMainDeptActualVoteSQL += "FROM BPMPro.dbo.FM7T_" + IDENTIFY + "_LABOUR ";
+                    strMainDeptActualVoteSQL += "WHERE 1=1 ";
+                    strMainDeptActualVoteSQL += "         AND [VoteYear]=@VOTE_YEAR ";
+                    strMainDeptActualVoteSQL += "         AND [MainDeptID]=@MAIN_DEPT_ID ";
+                    strMainDeptActualVoteSQL += "GROUP BY MainDeptActualVoteNum ";
+
+                    if (!PostLabourAndCapitalMemberSingle(labourAndCapitalMemberQueryModel).LABOUR_AND_CAPITAL_MEMBER_LABOURS_CONFIG.Any(L => L.MEMBER_ID.Contains(model.MEMBER_ID) && L.MEMBER_DEPT_ID.Contains(model.MEMBER_DEPT_ID)))
+                    {
+                        #region 新增參選人資料
+
+                        strSQL = "";
+                        strSQL += strMainDeptActualVoteSQL;
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR]([RequisitionID],[VoteYear],[MainDeptActualVoteTurnout],[MainDeptActualVoteNum],[IsLabour],[MainDeptID],[MainDeptName],[MemberDeptID],[MemberDeptName],[MemberID],[MemberName],[VoteNum],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@VOTE_YEAR,@MainDeptActualVoteTurnout,@MainDeptActualVoteNum,@IS_LABOUR,@MAIN_DEPT_ID,@MAIN_DEPT_NAME,@MEMBER_DEPT_ID,@MEMBER_DEPT_NAME,@MEMBER_ID,@MEMBER_NAME,null,@NOTE) ";
+
+                        dbFun.DoTran(strSQL, parameter);
+
+                        #endregion
+                    }
+                    else
+                    {
+                        #region 更新參選人備註
+
+                        strSQL = "";
+                        strSQL += strMainDeptActualVoteSQL;
+                        strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR] ";
+                        strSQL += "SET [Note]=@NOTE ";
+                        strSQL += "WHERE 1=1 ";
+                        strSQL += "         AND [VoteYear]=@VOTE_YEAR ";
+                        strSQL += "         AND [MemberID]=@MEMBER_ID ";
+                        strSQL += "         AND [MemberDeptID]=@MEMBER_DEPT_ID ";
+
+                        dbFun.DoTran(strSQL, parameter);
+
+                        #endregion
+                    }
+
+                    parameter.Remove(parameter.Where(SP => SP.ParameterName.Contains("@REQUISITION_ID")).FirstOrDefault());
+
+                    vResult = true;
+                }
+
+                return vResult;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("勞資委員投票(新增人員)失敗，原因：" + ex.Message);
+                throw;
+            }
         }
 
         #endregion

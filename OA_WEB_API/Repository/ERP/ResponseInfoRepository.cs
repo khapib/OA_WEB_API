@@ -679,7 +679,7 @@ namespace OA_WEB_API.Repository.ERP
         /// <summary>
         /// 內容評估表_補充意見 審核資訊_回傳ERP
         /// </summary>
-        public EvaluateContentReplenishInfoRequest PostEvaluateContentReplenishInfoSingle(RequestQueryModel query)
+        public EvaluateContentInfoRequest PostEvaluateContentReplenishInfoSingle(RequestQueryModel query)
         {
             try
             {
@@ -694,13 +694,19 @@ namespace OA_WEB_API.Repository.ERP
                     REQUISITION_ID = query.REQUISITION_ID
                 };
 
-                EvaluateContentReplenishInfoRequest evaluateContentReplenishInfoRequest = new EvaluateContentReplenishInfoRequest();
+                EvaluateContentInfoRequest evaluateContentReplenishInfoRequest = new EvaluateContentInfoRequest();
                 var evaluateContentReplenishContent = evaluateContentReplenishRepository.PostEvaluateContentReplenishSingle(evaluateContentReplenishQueryModel);
                 //Join 內容評估表_補充意見(查詢)Function
                 strJson = jsonFunction.ObjectToJSON(evaluateContentReplenishContent);
+                strJson = strJson.Replace("EVALUATE_CONTENT_REPLENISH_TITLE", "EVALUATE_CONTENT_TITLE");
+                strJson = strJson.Replace("EVALUATE_CONTENT_REPLENISH_CONFIG", "EVALUATE_CONTENT_CONFIG");
+                //strJson = strJson.Replace("", "EVALUATE_CONTENT_USERS_CONFIG");
+                strJson = strJson.Replace("EVALUATE_CONTENT_REPLENISH_EVAS_CONFIG", "EVALUATE_CONTENT_EVAS_CONFIG");
+                strJson = strJson.Replace("EVALUATE_CONTENT_REPLENISH_DECS_CONFIG", "EVALUATE_CONTENT_DECS_CONFIG");
                 //給予需要回傳ERP的資訊
-                evaluateContentReplenishInfoRequest = jsonFunction.JsonToObject<EvaluateContentReplenishInfoRequest>(strJson);
-                evaluateContentReplenishInfoRequest.REQUISITION_ID = evaluateContentReplenishContent.APPLICANT_INFO.REQUISITION_ID;                
+                evaluateContentReplenishInfoRequest = jsonFunction.JsonToObject<EvaluateContentInfoRequest>(strJson);
+                evaluateContentReplenishInfoRequest.REQUISITION_ID = evaluateContentReplenishContent.APPLICANT_INFO.REQUISITION_ID;
+                evaluateContentReplenishInfoRequest.EVALUATE_CONTENT_USERS_CONFIG = new List<EvaluateContentUsersConfig>();
 
                 #endregion
 
@@ -729,7 +735,7 @@ namespace OA_WEB_API.Repository.ERP
 
                 if (!String.IsNullOrEmpty(evaluateContentReplenishInfoRequest.LoginId) || !String.IsNullOrWhiteSpace(evaluateContentReplenishInfoRequest.LoginId))
                 {
-                    evaluateContentReplenishInfoRequest.EVALUATE_CONTENT_REPLENISH_TITLE.FINAL_ADVISE = evaluateContentReplenishInfoRequest.EVALUATE_CONTENT_REPLENISH_DECS_CONFIG.Where(D => D.USER_ID == evaluateContentReplenishInfoRequest.LoginId).Select(D => D.ADVISE_TYPE).LastOrDefault();
+                    evaluateContentReplenishInfoRequest.EVALUATE_CONTENT_TITLE.FINAL_ADVISE = evaluateContentReplenishInfoRequest.EVALUATE_CONTENT_DECS_CONFIG.Where(D => D.USER_ID == evaluateContentReplenishInfoRequest.LoginId).Select(D => D.ADVISE_TYPE).LastOrDefault();
                 }
                 
                 if (query.REQUEST_FLG)
@@ -1095,7 +1101,7 @@ namespace OA_WEB_API.Repository.ERP
         /// <summary>
         /// 四方四隅_內容評估表 審核資訊_回傳ERP
         /// </summary>
-        public GPI_EvaluateContentInfoRequest PostGPI_EvaluateContentInfoSingle(RequestQueryModel query)
+        public EvaluateContentInfoRequest PostGPI_EvaluateContentInfoSingle(RequestQueryModel query)
         {
             try
             {
@@ -1110,12 +1116,18 @@ namespace OA_WEB_API.Repository.ERP
                     REQUISITION_ID = query.REQUISITION_ID
                 };
 
-                GPI_EvaluateContentInfoRequest GPI_evaluateContentInfoRequest = new GPI_EvaluateContentInfoRequest();
+                EvaluateContentInfoRequest GPI_evaluateContentInfoRequest = new EvaluateContentInfoRequest();
                 var GPI_evaluateContentContent = GPI_evaluateContentRepository.PostGPI_EvaluateContentSingle(GPI_evaluateContentQueryModel);
                 //Join 內容評估表(查詢)Function
                 strJson = jsonFunction.ObjectToJSON(GPI_evaluateContentContent);
+                strJson = strJson.Replace("GPI_EVALUATE_CONTENT_TITLE", "EVALUATE_CONTENT_TITLE");
+                strJson = strJson.Replace("GPI_EVALUATE_CONTENT_CONFIG", "EVALUATE_CONTENT_CONFIG");
+                strJson = strJson.Replace("GPI_EVALUATE_CONTENT_USERS_CONFIG", "EVALUATE_CONTENT_USERS_CONFIG");
+                strJson = strJson.Replace("GPI_EVALUATE_CONTENT_EVAS_CONFIG", "EVALUATE_CONTENT_EVAS_CONFIG");
+                strJson = strJson.Replace("GPI_EVALUATE_CONTENT_DECS_CONFIG", "EVALUATE_CONTENT_DECS_CONFIG");
+
                 //給予需要回傳ERP的資訊
-                GPI_evaluateContentInfoRequest = jsonFunction.JsonToObject<GPI_EvaluateContentInfoRequest>(strJson);
+                GPI_evaluateContentInfoRequest = jsonFunction.JsonToObject<EvaluateContentInfoRequest>(strJson);
                 GPI_evaluateContentInfoRequest.REQUISITION_ID = GPI_evaluateContentContent.APPLICANT_INFO.REQUISITION_ID;
 
                 #endregion
@@ -1145,16 +1157,16 @@ namespace OA_WEB_API.Repository.ERP
 
                 if (!String.IsNullOrEmpty(GPI_evaluateContentInfoRequest.LoginId) || !String.IsNullOrWhiteSpace(GPI_evaluateContentInfoRequest.LoginId))
                 {
-                    GPI_evaluateContentInfoRequest.GPI_EVALUATE_CONTENT_TITLE.FINAL_ADVISE = GPI_evaluateContentInfoRequest.GPI_EVALUATE_CONTENT_DECS_CONFIG.Where(D => D.USER_ID == GPI_evaluateContentInfoRequest.LoginId).Select(D => D.ADVISE_TYPE).LastOrDefault();
-                    if (String.IsNullOrEmpty(GPI_evaluateContentInfoRequest.GPI_EVALUATE_CONTENT_TITLE.FINAL_ADVISE) || String.IsNullOrWhiteSpace(GPI_evaluateContentInfoRequest.GPI_EVALUATE_CONTENT_TITLE.FINAL_ADVISE))
+                    GPI_evaluateContentInfoRequest.EVALUATE_CONTENT_TITLE.FINAL_ADVISE = GPI_evaluateContentInfoRequest.EVALUATE_CONTENT_DECS_CONFIG.Where(D => D.USER_ID == GPI_evaluateContentInfoRequest.LoginId).Select(D => D.ADVISE_TYPE).LastOrDefault();
+                    if (String.IsNullOrEmpty(GPI_evaluateContentInfoRequest.EVALUATE_CONTENT_TITLE.FINAL_ADVISE) || String.IsNullOrWhiteSpace(GPI_evaluateContentInfoRequest.EVALUATE_CONTENT_TITLE.FINAL_ADVISE))
                     {
-                        GPI_evaluateContentInfoRequest.GPI_EVALUATE_CONTENT_TITLE.FINAL_ADVISE = GPI_evaluateContentInfoRequest.GPI_EVALUATE_CONTENT_EVAS_CONFIG.Where(E => E.USER_ID == GPI_evaluateContentInfoRequest.LoginId).Select(E => E.ADVISE_TYPE).LastOrDefault();
+                        GPI_evaluateContentInfoRequest.EVALUATE_CONTENT_TITLE.FINAL_ADVISE = GPI_evaluateContentInfoRequest.EVALUATE_CONTENT_EVAS_CONFIG.Where(E => E.USER_ID == GPI_evaluateContentInfoRequest.LoginId).Select(E => E.ADVISE_TYPE).LastOrDefault();
                     }
                 }
 
                 if (query.REQUEST_FLG)
                 {
-                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/";
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/UpdateEval_M_DetailContent";
                     Method = "POST";
                     strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, GPI_evaluateContentInfoRequest);
 
@@ -1185,7 +1197,7 @@ namespace OA_WEB_API.Repository.ERP
         /// <summary>
         /// 四方四隅_內容評估表_補充意見 審核資訊_回傳ERP
         /// </summary>
-        public GPI_EvaluateContentReplenishInfoRequest PostGPI_EvaluateContentReplenishInfoSingle(RequestQueryModel query)
+        public EvaluateContentInfoRequest PostGPI_EvaluateContentReplenishInfoSingle(RequestQueryModel query)
         {
             try
             {
@@ -1200,13 +1212,20 @@ namespace OA_WEB_API.Repository.ERP
                     REQUISITION_ID = query.REQUISITION_ID
                 };
 
-                GPI_EvaluateContentReplenishInfoRequest GPI_evaluateContentReplenishInfoRequest = new GPI_EvaluateContentReplenishInfoRequest();
+                EvaluateContentInfoRequest GPI_evaluateContentReplenishInfoRequest = new EvaluateContentInfoRequest();
                 var GPI_evaluateContentReplenishContent = GPI_evaluateContentReplenishRepository.PostGPI_EvaluateContentReplenishSingle(GPI_evaluateContentReplenishQueryModel);
                 //Join 四方四隅_內容評估表_補充意見(查詢)Function
                 strJson = jsonFunction.ObjectToJSON(GPI_evaluateContentReplenishContent);
+                strJson = strJson.Replace("GPI_EVALUATE_CONTENT_REPLENISH_TITLE", "EVALUATE_CONTENT_TITLE");
+                strJson = strJson.Replace("GPI_EVALUATE_CONTENT_REPLENISH_CONFIG", "EVALUATE_CONTENT_CONFIG");
+                //strJson = strJson.Replace("", "EVALUATE_CONTENT_USERS_CONFIG");
+                strJson = strJson.Replace("GPI_EVALUATE_CONTENT_REPLENISH_EVAS_CONFIG", "EVALUATE_CONTENT_EVAS_CONFIG");
+                strJson = strJson.Replace("GPI_EVALUATE_CONTENT_REPLENISH_DECS_CONFIG", "EVALUATE_CONTENT_DECS_CONFIG");
+
                 //給予需要回傳ERP的資訊
-                GPI_evaluateContentReplenishInfoRequest = jsonFunction.JsonToObject<GPI_EvaluateContentReplenishInfoRequest>(strJson);
+                GPI_evaluateContentReplenishInfoRequest = jsonFunction.JsonToObject<EvaluateContentInfoRequest>(strJson);
                 GPI_evaluateContentReplenishInfoRequest.REQUISITION_ID = GPI_evaluateContentReplenishContent.APPLICANT_INFO.REQUISITION_ID;
+                GPI_evaluateContentReplenishInfoRequest.EVALUATE_CONTENT_USERS_CONFIG = new List<EvaluateContentUsersConfig>();
 
                 #endregion
 
@@ -1235,12 +1254,12 @@ namespace OA_WEB_API.Repository.ERP
 
                 if (!String.IsNullOrEmpty(GPI_evaluateContentReplenishInfoRequest.LoginId) || !String.IsNullOrWhiteSpace(GPI_evaluateContentReplenishInfoRequest.LoginId))
                 {
-                    GPI_evaluateContentReplenishInfoRequest.GPI_EVALUATE_CONTENT_REPLENISH_TITLE.FINAL_ADVISE = GPI_evaluateContentReplenishInfoRequest.GPI_EVALUATE_CONTENT_REPLENISH_DECS_CONFIG.Where(D => D.USER_ID == GPI_evaluateContentReplenishInfoRequest.LoginId).Select(D => D.ADVISE_TYPE).LastOrDefault();
+                    GPI_evaluateContentReplenishInfoRequest.EVALUATE_CONTENT_TITLE.FINAL_ADVISE = GPI_evaluateContentReplenishInfoRequest.EVALUATE_CONTENT_DECS_CONFIG.Where(D => D.USER_ID == GPI_evaluateContentReplenishInfoRequest.LoginId).Select(D => D.ADVISE_TYPE).LastOrDefault();
                 }
 
                 if (query.REQUEST_FLG)
                 {
-                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/";
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/UpdateEval_M_DetailContent";
                     Method = "POST";
                     strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, GPI_evaluateContentReplenishInfoRequest);
 

@@ -54,26 +54,14 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #region - 申請人資訊 -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [DiagramID] AS [DIAGRAM_ID], ";
-            strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
-            strSQL += "     [ApplicantDept] AS [APPLICANT_DEPT], ";
-            strSQL += "     [ApplicantDeptName] AS [APPLICANT_DEPT_NAME], ";
-            strSQL += "     [ApplicantID] AS [APPLICANT_ID], ";
-            strSQL += "     [ApplicantName] AS [APPLICANT_NAME], ";
-            strSQL += "     [ApplicantPhone] AS [APPLICANT_PHONE], ";
-            strSQL += "     [ApplicantDateTime] AS [APPLICANT_DATETIME], ";
-            strSQL += "     [FillerID] AS [FILLER_ID], ";
-            strSQL += "     [FillerName] AS [FILLER_NAME], ";
-            strSQL += "     [Priority] AS [PRIORITY], ";
-            strSQL += "     [DraftFlag] AS [DRAFT_FLAG], ";
-            strSQL += "     [FlowActivated] AS [FLOW_ACTIVATED] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-
-            var applicantInfo = dbFun.DoQuery(strSQL, parameter).ToList<ApplicantInfo>().FirstOrDefault();
+            var CommonApplicantInfo = new BPMCommonModel<ApplicantInfo>()
+            {
+                EXT = "M",
+                IDENTIFY = IDENTIFY,
+                PARAMETER = parameter,
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostApplicantInfoFunction(CommonApplicantInfo));
+            var applicantInfo = jsonFunction.JsonToObject<ApplicantInfo>(strJson);
 
             #endregion
 
@@ -308,23 +296,23 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (FM7Subject == null)
                 {
-                    //FM7Subject = "【退貨折讓】第" + model.MEDIA_ORDER_RETURN_REFUND_CONFIG.PERIOD + "期-" + strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_SUBJECT;
+                    FM7Subject = "【退貨折讓】第" + model.MEDIA_ORDER_RETURN_REFUND_CONFIG.PERIOD + "期-" + strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_SUBJECT;
 
-                    var parameter = new List<SqlParameter>()
-                    {
-                        new SqlParameter("@MEDIA_INVOICE_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_REQUISITION_ID }
-                    };
+                    //var parameter = new List<SqlParameter>()
+                    //{
+                    //    new SqlParameter("@MEDIA_INVOICE_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.MEDIA_ORDER_RETURN_REFUND_CONFIG.MEDIA_INVOICE_REQUISITION_ID }
+                    //};
 
-                    strSQL = "";
-                    strSQL += "SELECT ";
-                    strSQL += "      [RequisitionID] ";
-                    strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] AS M ";
-                    strSQL += "LEFT JOIN [BPMPro].[dbo].[FSe7en_Sys_Requisition] AS R ON R.RequisitionID=M.RequisitionID ";
-                    strSQL += "WHERE [MediaInvoiceRequisitionID]=@MEDIA_INVOICE_REQUISITION_ID ";
+                    //strSQL = "";
+                    //strSQL += "SELECT ";
+                    //strSQL += "      R.[RequisitionID] ";
+                    //strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrderReturnRefund_M] AS M ";
+                    //strSQL += "LEFT JOIN [BPMPro].[dbo].[FSe7en_Sys_Requisition] AS R ON R.RequisitionID=M.RequisitionID ";
+                    //strSQL += "WHERE [MediaInvoiceRequisitionID]=@MEDIA_INVOICE_REQUISITION_ID ";
 
-                    var frequency = int.Parse((dbFun.DoQuery(strSQL, parameter).Rows.Count).ToString()) + 1;
+                    //var frequency = int.Parse((dbFun.DoQuery(strSQL, parameter).Rows.Count).ToString()) + 1;
 
-                    FM7Subject = "【退貨折讓_第" + frequency + "次】第" + model.MEDIA_ORDER_RETURN_REFUND_CONFIG.PERIOD + "期-" + strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_SUBJECT;
+                    //FM7Subject = "【退貨折讓_第" + frequency + "次】第" + model.MEDIA_ORDER_RETURN_REFUND_CONFIG.PERIOD + "期-" + strmediaInvoiceQuery.MEDIA_INVOICE_CONFIG.MEDIA_ORDER_SUBJECT;
 
                 }
 

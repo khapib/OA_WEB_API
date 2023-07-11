@@ -26,24 +26,24 @@ namespace OA_WEB_API.Controllers.BPMPro
         /// <summary>
         /// 用印申請單(查詢)
         /// </summary>    
-        //[Route("PostOfficialStampSingle")]
-        //[HttpPost]
-        //public OfficialStampViewModel PostOfficialStampSingle([FromBody] OfficialStampQueryModel query)
-        //{
-        //    return officialStampRepository.PostOfficialStampSingle(query);
-        //}
+        [Route("PostOfficialStampSingle")]
+        [HttpPost]
+        public OfficialStampViewModel PostOfficialStampSingle([FromBody] OfficialStampQueryModel query)
+        {
+            return officialStampRepository.PostOfficialStampSingle(query);
+        }
 
         #region - 依此單內容重送 -
 
         /// <summary>
         /// 用印申請單(依此單內容重送)
         /// </summary>
-        //[Route("PutOfficialStampRefill")]
-        //[HttpPost]
-        //public bool PutOfficialStampRefill([FromBody] OfficialStampQueryModel query)
-        //{
-        //    return officialStampRepository.PutOfficialStampRefill(query);
-        //}
+        [Route("PutOfficialStampRefill")]
+        [HttpPost]
+        public bool PutOfficialStampRefill([FromBody] OfficialStampQueryModel query)
+        {
+            return officialStampRepository.PutOfficialStampRefill(query);
+        }
 
         #endregion
 

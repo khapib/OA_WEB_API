@@ -56,19 +56,6 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-
-            #region - M表寫入BPM表單單號 -
-
-            //避免儲存後送出表單BPM表單單號沒寫入的情形
-            var formQuery = new FormQueryModel()
-            {
-                REQUISITION_ID = query.REQUISITION_ID
-            };
-
-            if (applicantInfo.DRAFT_FLAG == 0) notifyRepository.ByInsertBPMFormNo(formQuery);
-
-            #endregion
-
             #region - 四方四隅_會簽單 表頭資訊 -
 
             strSQL = "";
@@ -128,6 +115,53 @@ namespace OA_WEB_API.Repository.BPMPro
                 GPI_COUNTERSIGN_APPROVERS_CONFIG = GPI_countersignApproversConfig,
                 ASSOCIATED_FORM_CONFIG = associatedForm
             };
+
+            #region - 確認BPM表單是否正常起單到系統中 -
+
+            //保留原有資料
+            strJson = jsonFunction.ObjectToJSON(GPI_countersignViewModel);
+
+            var BpmSystemOrder = new BPMSystemOrder()
+            {
+                REQUISITION_ID = query.REQUISITION_ID,
+                IDENTIFY = IDENTIFY,
+                EXTS = new List<string>()
+                {
+                    "M",
+                    "D"
+                },
+            };
+            if (GPI_countersignViewModel.ASSOCIATED_FORM_CONFIG != null && GPI_countersignViewModel.ASSOCIATED_FORM_CONFIG.Count > 0) BpmSystemOrder.IS_ASSOCIATED_FORM = true;
+            else BpmSystemOrder.IS_ASSOCIATED_FORM = false;
+            //確認是否有正常到系統起單；清除失敗表單資料並重新送單值行
+            if (commonRepository.PostBPMSystemOrder(BpmSystemOrder)) PutGPI_CountersignSingle(jsonFunction.JsonToObject<GPI_CountersignViewModel>(strJson));
+
+            #endregion
+
+            #region - 確認M表BPM表單單號 -
+
+            //避免儲存後送出表單BPM表單單號沒寫入的情形
+            var formQuery = new FormQueryModel()
+            {
+                REQUISITION_ID = query.REQUISITION_ID
+            };
+            if (GPI_countersignViewModel.APPLICANT_INFO.DRAFT_FLAG == 0)
+            {
+                notifyRepository.ByInsertBPMFormNo(formQuery);
+
+                if (String.IsNullOrEmpty(GPI_countersignViewModel.GPI_COUNTERSIGN_TITLE.BPM_FORM_NO) || String.IsNullOrWhiteSpace(GPI_countersignViewModel.GPI_COUNTERSIGN_TITLE.BPM_FORM_NO))
+                {
+                    strSQL = "";
+                    strSQL += "SELECT ";
+                    strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
+                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+                    var dtBpmFormNo = dbFun.DoQuery(strSQL, parameter);
+                    if (dtBpmFormNo.Rows.Count > 0) GPI_countersignViewModel.GPI_COUNTERSIGN_TITLE.BPM_FORM_NO = dtBpmFormNo.Rows[0][0].ToString();
+                }
+            }
+
+            #endregion
 
             return GPI_countersignViewModel;
         }
@@ -376,15 +410,18 @@ namespace OA_WEB_API.Repository.BPMPro
                         {
                             USER_ID = A.APPROVER_ID
                         };
-                        var UserModel = userRepository.PostUserSingle(logonModel).USER_MODEL;
-
-                        var userInfoMainDeptModel = new UserInfoMainDeptModel()
+                        var userModel = userRepository.PostUserSingle(logonModel).USER_MODEL;
+                                                
+                        if (userModel != null && userModel.Count > 0 && userModel.Any(U => U.JOB_STATUS != 0))
                         {
-                            USER_ID = A.APPROVER_ID,
-                            DEPT_ID = A.APPROVER_DEPT_ID,
-                            COMPANY_ID = UserModel.Where(U => U.DEPT_ID == A.APPROVER_DEPT_ID).Select(U => U.COMPANY_ID).FirstOrDefault(),
-                        };
-                        A.APPROVER_DEPT_MAIN_ID = sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel).MAIN_DEPT.DEPT_ID;
+                            var userInfoMainDeptModel = new UserInfoMainDeptModel()
+                            {
+                                USER_ID = A.APPROVER_ID,
+                                DEPT_ID = A.APPROVER_DEPT_ID,
+                                COMPANY_ID = userModel.Where(U => U.DEPT_ID == A.APPROVER_DEPT_ID).Select(U => U.COMPANY_ID).FirstOrDefault(),
+                            };
+                            A.APPROVER_DEPT_MAIN_ID = sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel).MAIN_DEPT.DEPT_ID;
+                        }                        
                     });
 
                     var CommonApprovers = new BPMCommonModel<GPI_CountersignApproversConfig>()

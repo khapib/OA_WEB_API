@@ -211,6 +211,7 @@
     <Compile Include="Controllers\BPMPro\CommonController.cs" />
     <Compile Include="Controllers\BPMPro\OfficialStampController.cs" />
     <Compile Include="Controllers\BPMPro\ProjectReviewController.cs" />
+    <Compile Include="Controllers\BPMPro\ResignUnpaidLeaveAgendaController.cs" />
     <Compile Include="Controllers\BPMPro\SupplierReviewController.cs" />
     <Compile Include="Controllers\BPMPro\TestController.cs" />
     <Compile Include="Controllers\BPMPro\RollCardController.cs" />
@@ -269,6 +270,7 @@
     <Compile Include="Models\BPMPro\NotifyModel.cs" />
     <Compile Include="Models\BPMPro\OfficialStampModel.cs" />
     <Compile Include="Models\BPMPro\ProjectReviewModel.cs" />
+    <Compile Include="Models\BPMPro\ResignUnpaidLeaveAgendaModel.cs" />
     <Compile Include="Models\BPMPro\SupplierReviewModel.cs" />
     <Compile Include="Models\BPMPro\TestModel.cs" />
     <Compile Include="Models\BPMPro\CommonModel.cs" />
@@ -309,6 +311,7 @@
     <Compile Include="Repository\BPMPro\NotifyRepository.cs" />
     <Compile Include="Repository\BPMPro\OfficialStampRepository.cs" />
     <Compile Include="Repository\BPMPro\ProjectReviewRepository.cs" />
+    <Compile Include="Repository\BPMPro\ResignUnpaidLeaveAgendRepository.cs" />
     <Compile Include="Repository\BPMPro\SupplierReviewRepository.cs" />
     <Compile Include="Repository\BPMPro\UserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -43,6 +43,9 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class OfficialStampTitle : HeaderTitle
     {
+        /// <summary>公司名稱</summary>
+        public string COMPANY_NAME { get; set; }
+
         /// <summary>
         /// 級別：
         /// 調整 ApplicantInfo(申請人資訊)的，表單PRIORITY(重要性)

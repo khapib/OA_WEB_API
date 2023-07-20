@@ -54,19 +54,7 @@ namespace OA_WEB_API.Repository.BPMPro
             var applicantInfo = jsonFunction.JsonToObject<ApplicantInfo>(strJson);
 
             #endregion
-
-            #region - M表寫入BPM表單單號 -
-
-            //避免儲存後送出表單BPM表單單號沒寫入的情形
-            var formQuery = new FormQueryModel()
-            {
-                REQUISITION_ID = query.REQUISITION_ID
-            };
-
-            if (applicantInfo.DRAFT_FLAG == 0) notifyRepository.ByInsertBPMFormNo(formQuery);
-
-            #endregion
-
+            
             #region - 專案建立審核設定及內容 -
 
             var parameterB = new List<SqlParameter>()
@@ -111,6 +99,38 @@ namespace OA_WEB_API.Repository.BPMPro
                 PROJECT_REVIEW_ERP_CONFIG = projectReviewERPConfig,
                 PROJECT_REVIEW_BPM_CONFIG = projectReviewBPMConfig
             };
+
+            #region - 確認BPM表單是否正常起單到系統中 -
+
+            //保留原有資料
+            strJson = jsonFunction.ObjectToJSON(projectReview);
+
+            var BpmSystemOrder = new BPMSystemOrder()
+            {
+                REQUISITION_ID = query.REQUISITION_ID,
+                IDENTIFY = IDENTIFY,
+                EXTS = new List<string>()
+                {
+                    "M"
+                },
+                IS_ASSOCIATED_FORM = false
+            };
+            //確認是否有正常到系統起單；清除失敗表單資料並重新送單值行
+            if (commonRepository.PostBPMSystemOrder(BpmSystemOrder)) PutProjectReviewSingle(jsonFunction.JsonToObject<ProjectReviewViewModel>(strJson));
+
+            #endregion
+
+            #region - 確認M表BPM表單單號 -
+
+            //避免儲存後送出表單BPM表單單號沒寫入的情形
+            var formQuery = new FormQueryModel()
+            {
+                REQUISITION_ID = query.REQUISITION_ID
+            };
+            if (projectReview.APPLICANT_INFO.DRAFT_FLAG == 0) notifyRepository.ByInsertBPMFormNo(formQuery);
+
+            #endregion
+
             return projectReview;
         }
 

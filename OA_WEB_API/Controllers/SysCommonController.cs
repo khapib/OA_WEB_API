@@ -41,6 +41,20 @@ namespace OA_WEB_API.Controllers
 
         #endregion
 
+        #region - 公司列表 -
+
+        /// <summary>
+        /// 八大電視_部門列表
+        /// </summary>
+        [Route("api/GetCompanyList")]
+        [HttpGet]
+        public IList<CompanyViewModel> GetCompanyList()
+        {
+            return sysCommonRepository.GetCompanyList();
+        }
+
+        #endregion
+
         #region - 部門列表 -
 
         /// <summary>

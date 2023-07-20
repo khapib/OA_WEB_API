@@ -53,19 +53,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strJson = jsonFunction.ObjectToJSON(commonRepository.PostApplicantInfoFunction(CommonApplicantInfo));
             var applicantInfo = jsonFunction.JsonToObject<ApplicantInfo>(strJson);
 
-            #endregion
-
-            #region - M表寫入BPM表單單號 -
-
-            //避免儲存後送出表單BPM表單單號沒寫入的情形
-            var formQuery = new FormQueryModel()
-            {
-                REQUISITION_ID = query.REQUISITION_ID
-            };
-
-            if (applicantInfo.DRAFT_FLAG == 0) notifyRepository.ByInsertBPMFormNo(formQuery);
-
-            #endregion
+            #endregion                       
 
             #region - 需求評估設定及內容 -
 
@@ -104,6 +92,52 @@ namespace OA_WEB_API.Repository.BPMPro
                 EVALUATE_DEMAND_CONFIG = evaluateDemandConfig,
                 ASSOCIATED_FORM_CONFIG = associatedForm
             };
+
+            #region - 確認BPM表單是否正常起單到系統中 -
+
+            //保留原有資料
+            strJson = jsonFunction.ObjectToJSON(evaluateDemand);
+
+            var BpmSystemOrder = new BPMSystemOrder()
+            {
+                REQUISITION_ID = query.REQUISITION_ID,
+                IDENTIFY = IDENTIFY,
+                EXTS = new List<string>()
+                {
+                    "M"
+                },
+            };
+            if(evaluateDemand.ASSOCIATED_FORM_CONFIG!=null && evaluateDemand.ASSOCIATED_FORM_CONFIG.Count > 0) BpmSystemOrder.IS_ASSOCIATED_FORM = true;
+            else BpmSystemOrder.IS_ASSOCIATED_FORM = false;
+            //確認是否有正常到系統起單；清除失敗表單資料並重新送單值行
+            if (commonRepository.PostBPMSystemOrder(BpmSystemOrder)) PutEvaluateDemandSingle(jsonFunction.JsonToObject<EvaluateDemandViewModel>(strJson));
+
+            #endregion
+
+            #region - 確認M表BPM表單單號 -
+
+            //避免儲存後送出表單BPM表單單號沒寫入的情形
+            var formQuery = new FormQueryModel()
+            {
+                REQUISITION_ID = query.REQUISITION_ID
+            };
+            if (evaluateDemand.APPLICANT_INFO.DRAFT_FLAG == 0)
+            {
+                notifyRepository.ByInsertBPMFormNo(formQuery);
+
+                if (String.IsNullOrEmpty(evaluateDemand.EVALUATE_DEMAND_CONFIG.BPM_FORM_NO) || String.IsNullOrWhiteSpace(evaluateDemand.EVALUATE_DEMAND_CONFIG.BPM_FORM_NO))
+                {
+                    strSQL = "";
+                    strSQL += "SELECT ";
+                    strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
+                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+                    var dtBpmFormNo = dbFun.DoQuery(strSQL, parameterA);
+                    if (dtBpmFormNo.Rows.Count > 0) evaluateDemand.EVALUATE_DEMAND_CONFIG.BPM_FORM_NO = dtBpmFormNo.Rows[0][0].ToString();
+                }
+            }
+
+            #endregion
 
             return evaluateDemand;
         }

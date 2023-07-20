@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Diagnostics;
 using System.IO;
+using System.Collections;
 
 using OA_WEB_API.Models;
 using OA_WEB_API.Models.BPMPro;
 
 using Microsoft.Ajax.Utilities;
-using System.Collections;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -85,20 +85,20 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     USER_ID = query.LOGIN_ID
                 };
-                var UserModel = userRepository.PostUserSingle(logonModel).USER_MODEL;
+                var userModel = userRepository.PostUserSingle(logonModel).USER_MODEL;
 
-                if (UserModel != null && UserModel.Count > 0)
+                if (userModel != null && userModel.Count > 0 && userModel.Any(U => U.JOB_STATUS != 0))
                 {
-                    UserModel.ForEach(U =>
+                    userModel.ForEach(U =>
                     {
                         var userInfoMainDeptModel = new UserInfoMainDeptModel()
                         {
                             USER_ID = query.LOGIN_ID,
                             DEPT_ID = U.DEPT_ID,
-                            COMPANY_ID = UserModel.Where(U2 => U2.DEPT_ID == U.DEPT_ID).Select(U2 => U2.COMPANY_ID).FirstOrDefault(),
+                            COMPANY_ID = userModel.Where(U2 => U2.DEPT_ID == U.DEPT_ID).Select(U2 => U2.COMPANY_ID).FirstOrDefault(),
                         };
                         if (sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel).USER_MODEL.IS_MAIN_JOB != null)
-                        {
+                        {                            
                             if (bool.Parse(sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel).USER_MODEL.IS_MAIN_JOB.ToString()))
                             {
                                 labourAndCapitalMemberVoterInfoConfig.MAIN_DEPT_ID = sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel).MAIN_DEPT.DEPT_ID;
@@ -106,6 +106,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         }
                     });
                 }
+                else labourAndCapitalMemberVoterInfoConfig.IS_VOTE = false;
 
                 #endregion
 
@@ -336,6 +337,9 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         labourAndCapitalMemberLaboursConfig.ForEach(L =>
                         {
+                            if (parameter.Any(SP => SP.ParameterName.Contains("@MAIN_DEPT_ID"))) parameter.Remove(parameter.Where(SP => SP.ParameterName.Contains("@MAIN_DEPT_ID")).FirstOrDefault());
+
+                            parameter.Add(new SqlParameter("@MAIN_DEPT_ID", SqlDbType.NVarChar) { Size = 40, Value = L.MAIN_DEPT_ID });
 
                             #region - 計算主要部門投票票數 -
 
@@ -1152,6 +1156,12 @@ namespace OA_WEB_API.Repository.BPMPro
                 var dt = dbFun.DoQuery(strSQL, parameter);
                 if (dt.Rows.Count > 0)
                 {
+                    #region 常用的WHERE
+
+                    strWhereSQL += "AND [VoteYear]=@VOTE_YEAR ";
+                    strWhereSQL += "AND MainDeptID=@MAIN_DEPT_ID ";
+
+                    #endregion
 
                     strDmarkSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR] ";
                     strDmarkSQL += "SET [IsLabour]=null ";
@@ -1161,14 +1171,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     if (String.IsNullOrEmpty(model.MEMBER_ID) || String.IsNullOrWhiteSpace(model.MEMBER_ID))
                     {
                         #region - 註記當選人與備取 -
-
-                        #region 常用的WHERE
-
-                        strWhereSQL += "AND [VoteYear]=@VOTE_YEAR ";
-                        strWhereSQL += "AND MainDeptID=@MAIN_DEPT_ID ";
-
-                        #endregion
-
+                        
                         #region 註記B.備取人員
 
                         strSecondSQL += "UPDATE BPMPro.dbo.FM7T_" + IDENTIFY + "_LABOUR ";
@@ -1303,7 +1306,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         if (model.IS_LABOUR == "A")
                         {
                             //IS_LABOUR是A表示，勞資委員異動須先清空部門的勞資委員註記再，手動新增；備取人員。
-
+                            strDmarkSQL += "        AND [MainDeptID]=@MAIN_DEPT_ID ";
                             //對部門：
                             //清除註記資料
                             dbFun.DoTran(strDmarkSQL, parameter);
@@ -1328,7 +1331,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         else MemberResult = false;
 
                         strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR] ";
-                        strSQL += "SET [IsLabour]=@IS_LABOUR ";
+                        strSQL += "SET [IsLabour]=@IS_LABOUR, ";
+                        strSQL += "     [Note]=@NOTE ";
                         strSQL += "WHERE 1=1 ";
                         strSQL += "        AND [VoteYear]=@VOTE_YEAR ";
                         strSQL += "        AND [MainDeptID]=@MAIN_DEPT_ID ";
@@ -1337,6 +1341,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         //進行新的註記
                         if (MemberResult)
                         {
+                            parameter.Add(new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 255, Value = (object)model.NOTE ?? DBNull.Value });
                             dbFun.DoTran(strSQL, parameter);
                             vResult = true;
                         }

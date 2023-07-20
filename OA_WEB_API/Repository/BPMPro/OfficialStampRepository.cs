@@ -55,23 +55,12 @@ namespace OA_WEB_API.Repository.BPMPro
             var applicantInfo = jsonFunction.JsonToObject<ApplicantInfo>(strJson);
 
             #endregion
-
-            #region - M表寫入BPM表單單號 -
-
-            //避免儲存後送出表單BPM表單單號沒寫入的情形
-            var formQuery = new FormQueryModel()
-            {
-                REQUISITION_ID = query.REQUISITION_ID
-            };
-
-            if (applicantInfo.DRAFT_FLAG == 0) notifyRepository.ByInsertBPMFormNo(formQuery);
-
-            #endregion
-
+            
             #region - 用印申請單 表頭資訊 -
 
             strSQL = "";
             strSQL += "SELECT ";
+            strSQL += "     [CompanyName] AS [COMPANY_NAME], ";
             strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
             strSQL += "     [BPMFormNo] AS [BPM_FORM_NO], ";
             strSQL += "     [LevelType] AS [LEVEL_TYPE] ";
@@ -135,6 +124,54 @@ namespace OA_WEB_API.Repository.BPMPro
                 OFFICIAL_STAMP_DOCS_CONFIG=officialStampDocumentsConfig,
                 OFFICIAL_STAMP_APPROVERS_CONFIG= officialStampApproversConfig,
             };
+
+            #region - 確認BPM表單是否正常起單到系統中 -
+
+            //保留原有資料
+            strJson = jsonFunction.ObjectToJSON(officialStampViewModel);
+
+            var BpmSystemOrder = new BPMSystemOrder()
+            {
+                REQUISITION_ID = query.REQUISITION_ID,
+                IDENTIFY = IDENTIFY,
+                EXTS = new List<string>()
+                {
+                    "M",
+                    "D",
+                    "DOC"
+                },
+                IS_ASSOCIATED_FORM = false
+            };
+            //確認是否有正常到系統起單；清除失敗表單資料並重新送單值行
+            if (commonRepository.PostBPMSystemOrder(BpmSystemOrder)) PutOfficialStampSingle(jsonFunction.JsonToObject<OfficialStampViewModel>(strJson));
+
+            #endregion
+
+            #region - 確認M表BPM表單單號 -
+
+            //避免儲存後送出表單BPM表單單號沒寫入的情形
+            var formQuery = new FormQueryModel()
+            {
+                REQUISITION_ID = query.REQUISITION_ID
+            };
+            if (officialStampViewModel.APPLICANT_INFO.DRAFT_FLAG == 0)
+            {
+                notifyRepository.ByInsertBPMFormNo(formQuery);
+
+                if (String.IsNullOrEmpty(officialStampViewModel.OFFICIAL_STAMP_TITLE.BPM_FORM_NO) || String.IsNullOrWhiteSpace(officialStampViewModel.OFFICIAL_STAMP_TITLE.BPM_FORM_NO))
+                {
+                    strSQL = "";
+                    strSQL += "SELECT ";
+                    strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
+                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+                    var dtBpmFormNo = dbFun.DoQuery(strSQL, parameter);
+                    if (dtBpmFormNo.Rows.Count > 0) officialStampViewModel.OFFICIAL_STAMP_TITLE.BPM_FORM_NO = dtBpmFormNo.Rows[0][0].ToString();
+                }
+            }
+
+            #endregion
+
 
             return officialStampViewModel;
         }
@@ -265,6 +302,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_ID },
                     new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
                     //用印申請單 表頭
+                    new SqlParameter("@COMPANY_NAME", SqlDbType.NVarChar) { Size = 40, Value = (object)model.OFFICIAL_STAMP_TITLE.COMPANY_NAME ?? String.Empty },
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
                     new SqlParameter("@LEVEL_TYPE", SqlDbType.NVarChar) { Size = 10, Value = (object)model.OFFICIAL_STAMP_TITLE.LEVEL_TYPE ?? DBNull.Value },
                 };
@@ -319,6 +357,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [Priority]=@PRIORITY, ";
                     strSQL += "     [DraftFlag]=@DRAFT_FLAG, ";
                     strSQL += "     [FlowActivated]=@FLOW_ACTIVATED, ";
+                    strSQL += "     [CompanyName]=@COMPANY_NAME, ";
                     strSQL += "     [FM7Subject]=@FM7_SUBJECT, ";
                     strSQL += "     [LevelType]=@LEVEL_TYPE ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
@@ -332,8 +371,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region - 新增 -
 
                     strSQL = "";
-                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FM7Subject],[LevelType]) ";
-                    strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FM7_SUBJECT,@LEVEL_TYPE) ";
+                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[CompanyName],[FM7Subject],[LevelType]) ";
+                    strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@COMPANY_NAME,@FM7_SUBJECT,@LEVEL_TYPE) ";
 
                     dbFun.DoTran(strSQL, parameterTitle);
 
@@ -380,7 +419,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     //用印申請單 用印項目明細
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
-                    new SqlParameter("@ITEM_NAME", SqlDbType.Int) { Size = 255, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 255, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@SERVINGS", SqlDbType.Int) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@APPLY_STAMP_TYPE", SqlDbType.Int) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@APPLY_STAMP_TYPE_OTHERS", SqlDbType.Int) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },

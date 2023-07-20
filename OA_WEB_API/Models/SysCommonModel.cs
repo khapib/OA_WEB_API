@@ -29,6 +29,22 @@ namespace OA_WEB_API.Models
 
     #endregion
 
+    #region - 公司列表 -
+
+    /// <summary>
+    /// 公司列表
+    /// </summary>
+    public class CompanyViewModel
+    {
+        /// <summary>公司編號</summary>
+        public string COMPANY_ID { get; set; }
+
+        /// <summary>公司名稱</summary>
+        public string COMPANY_NAME { get; set; }
+    }
+
+    #endregion
+
     #region - 部門列表 -
 
     /// <summary>

@@ -22,6 +22,26 @@ namespace OA_WEB_API.Models.BPMPro
 
     #region - 共用Model -
 
+    /// <summary>
+    /// 確認是否有正常到系統起單；
+    /// 清除失敗表單資料
+    /// </summary>
+    public class BPMSystemOrder
+    {
+        /// <summary>系統編號</summary>
+        public string REQUISITION_ID { get; set; }
+
+        /// <summary>表單代號</summary>
+        public string IDENTIFY { get; set; }
+
+        /// <summary>表單資料表子名稱</summary>
+        public List<String> EXTS { get; set; }
+
+        /// <summary>是否有關聯表單</summary>
+        public bool IS_ASSOCIATED_FORM { get; set; }
+
+    }
+
     #region (BPM API共用)_ERP起單共用抬頭
 
     /// <summary>

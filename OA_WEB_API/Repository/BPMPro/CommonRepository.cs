@@ -872,6 +872,68 @@ namespace OA_WEB_API.Repository.BPMPro
         #region - BPM表單機能 -
 
         /// <summary>
+        /// 確認是否有正常到系統起單；
+        /// 清除失敗表單資料
+        /// </summary>
+        public bool PostBPMSystemOrder(BPMSystemOrder model)
+        {
+            bool rResult = false;
+
+            var parameter = new List<SqlParameter>()
+            {
+                 new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID }
+            };
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     R.[RequisitionID] AS [REQUISITION_ID], ";
+            strSQL += "     R.[SerialID] AS [SERIAL_ID], ";
+            strSQL += "     D.[Identify] AS [IDENTIFY], ";
+            strSQL += "     R.[Status] AS [STATUS] ";
+            strSQL += "FROM [BPMPro].[dbo].[FSe7en_Sys_Requisition] AS R ";
+            strSQL += "INNER JOIN [BPMPro].[dbo].[FSe7en_Sys_DiagramList] AS D ON R.[DiagramID]=D.[DiagramID] ";
+            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+            var dtS = dbFun.DoQuery(strSQL, parameter);
+
+            if (dtS.Rows.Count <= 0)
+            {
+                #region 先刪除送單沒成功的資料
+
+                model.EXTS.ForEach(E =>
+                {
+                    #region - 宣告 -
+
+                    strTable = model.IDENTIFY + "_" + E;
+
+                    #endregion
+
+                    strSQL = "";
+                    strSQL += "DELETE ";
+                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + strTable + "] ";
+                    strSQL += "WHERE 1=1 ";
+                    strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+                    dbFun.DoTran(strSQL, parameter);
+                });
+
+                if (model.IS_ASSOCIATED_FORM)
+                {
+                    strSQL = "";
+                    strSQL += "DELETE ";
+                    strSQL += "FROM [BPMPro].[dbo].[GTV_AssociatedForm] ";
+                    strSQL += "WHERE 1=1 ";
+                    strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+                    dbFun.DoTran(strSQL, parameter);
+                }
+
+                #endregion
+
+                rResult = true;
+            }
+
+            return rResult;
+        }
+
+        /// <summary>
         /// BPM表單機能
         /// </summary>
         public bool PostBPMFormFunction(BPMFormFunction model)

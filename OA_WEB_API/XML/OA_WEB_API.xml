@@ -1081,6 +1081,11 @@
             離職、留職停薪_手續表(新增/修改/草稿)
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.ResignUnpaidLeaveAgendaController.PutResignUnpaidLeaveAgendHandoverSingle(OA_WEB_API.Models.BPMPro.ResignUnpaidLeaveAgendHandoverSingle)">
+            <summary>
+            離職、留職停薪_手續表(事項交接)
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.SupplierReviewController">
             <summary>
             會簽管理系統 - 合作夥伴審核單
@@ -6961,6 +6966,32 @@
         <member name="P:OA_WEB_API.Models.BPMPro.ResignUnpaidLeaveAgendaAffairsConfig.SIGN_DATE">
             <summary>畫押日期</summary>
         </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.ResignUnpaidLeaveAgendHandoverSingle">
+            <summary>
+            離職、留職停薪_手續表 事項交接 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ResignUnpaidLeaveAgendHandoverSingle.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ResignUnpaidLeaveAgendHandoverSingle.C01B_DATE">
+            <summary>勞健團保轉出日期</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ResignUnpaidLeaveAgendHandoverSingle.C01C_STR_DATE_TIME">
+            <summary>特休假尚餘的天數與時數</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ResignUnpaidLeaveAgendHandoverSingle.C01F_STR_DATE_TIME">
+            <summary>補休假尚餘的天數與時數</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ResignUnpaidLeaveAgendHandoverSingle.C01H_STR_DATE_TIME">
+            <summary>是否預借特休的天數與時數</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ResignUnpaidLeaveAgendHandoverSingle.C02_OTHERS">
+            <summary>薪資發放狀況其他</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ResignUnpaidLeaveAgendHandoverSingle.C03_OTHERS">
+            <summary>後續資訊作業其他</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.NewAffairsConfig">
             <summary>
             離職、留職停薪_手續表 建立新的事務清單
@@ -10822,57 +10853,62 @@
             Json字串
             </summary>
         </member>
-        <member name="T:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendRepository">
+        <member name="T:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendaRepository">
             <summary>
             會簽管理系統 - 離職、留職停薪_手續表
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendRepository.PostResignUnpaidLeaveAgendaSingle(OA_WEB_API.Models.BPMPro.ResignUnpaidLeaveAgendaQueryModel)">
+        <member name="M:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendaRepository.PostResignUnpaidLeaveAgendaSingle(OA_WEB_API.Models.BPMPro.ResignUnpaidLeaveAgendaQueryModel)">
             <summary>
             離職、留職停薪_手續表(查詢)
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendRepository.PutResignUnpaidLeaveAgendaSingle(OA_WEB_API.Models.BPMPro.ResignUnpaidLeaveAgendaViewModel)">
+        <member name="M:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendaRepository.PutResignUnpaidLeaveAgendaSingle(OA_WEB_API.Models.BPMPro.ResignUnpaidLeaveAgendaViewModel)">
             <summary>
             離職、留職停薪_手續表(新增/修改/草稿)
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendRepository.PutNewAffairsFunction(OA_WEB_API.Models.BPMPro.NewAffairsConfig)">
+        <member name="M:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendaRepository.PutResignUnpaidLeaveAgendHandoverSingle(OA_WEB_API.Models.BPMPro.ResignUnpaidLeaveAgendHandoverSingle)">
+            <summary>
+            離職、留職停薪_手續表(事項交接)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendaRepository.PutNewAffairsFunction(OA_WEB_API.Models.BPMPro.NewAffairsConfig)">
             <summary>
             建立新的事務清單
             </summary>
         </member>
-        <member name="F:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendRepository.strSQL">
+        <member name="F:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendaRepository.strSQL">
             <summary>
             T-SQL
             </summary>
         </member>
-        <member name="F:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendRepository.IsADD">
+        <member name="F:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendaRepository.IsADD">
             <summary>
             確認是否為新建的表單
             </summary>
         </member>
-        <member name="F:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendRepository.IDENTIFY">
+        <member name="F:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendaRepository.IDENTIFY">
             <summary>
             表單代號
             </summary>
         </member>
-        <member name="F:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendRepository.FM7Subject">
+        <member name="F:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendaRepository.FM7Subject">
             <summary>
             表單主旨
             </summary>
         </member>
-        <member name="F:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendRepository.strJson">
+        <member name="F:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendaRepository.strJson">
             <summary>
             Json字串
             </summary>
         </member>
-        <member name="F:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendRepository.strREQ">
+        <member name="F:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendaRepository.strREQ">
             <summary>
             系統編號
             </summary>
         </member>
-        <member name="F:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendRepository.ItemNameDic">
+        <member name="F:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendaRepository.ItemNameDic">
             <summary>
             承辦事項
             </summary>

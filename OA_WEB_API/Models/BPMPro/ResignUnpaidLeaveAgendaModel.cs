@@ -118,6 +118,34 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
+    /// 離職、留職停薪_手續表 事項交接 設定
+    /// </summary>
+    public class ResignUnpaidLeaveAgendHandoverSingle: ResignUnpaidLeaveAgendaAffairsConfig
+    {
+        /// <summary>系統編號</summary>
+        public string REQUISITION_ID { get; set; }
+
+        /// <summary>勞健團保轉出日期</summary>
+        public Nullable<DateTime> C01B_DATE { get; set; }
+
+        /// <summary>特休假尚餘的天數與時數</summary>
+        public string C01C_STR_DATE_TIME { get; set; }
+
+        /// <summary>補休假尚餘的天數與時數</summary>
+        public string C01F_STR_DATE_TIME { get; set; }
+
+        /// <summary>是否預借特休的天數與時數</summary>
+        public string C01H_STR_DATE_TIME { get; set; }
+
+        /// <summary>薪資發放狀況其他</summary>
+        public string C02_OTHERS { get; set; }
+
+        /// <summary>後續資訊作業其他</summary>
+        public string C03_OTHERS { get; set; }
+
+    }
+
+    /// <summary>
     /// 離職、留職停薪_手續表 建立新的事務清單
     /// </summary>
     public class NewAffairsConfig

@@ -311,7 +311,7 @@
     <Compile Include="Repository\BPMPro\NotifyRepository.cs" />
     <Compile Include="Repository\BPMPro\OfficialStampRepository.cs" />
     <Compile Include="Repository\BPMPro\ProjectReviewRepository.cs" />
-    <Compile Include="Repository\BPMPro\ResignUnpaidLeaveAgendRepository.cs" />
+    <Compile Include="Repository\BPMPro\ResignUnpaidLeaveAgendaRepository.cs" />
     <Compile Include="Repository\BPMPro\SupplierReviewRepository.cs" />
     <Compile Include="Repository\BPMPro\UserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

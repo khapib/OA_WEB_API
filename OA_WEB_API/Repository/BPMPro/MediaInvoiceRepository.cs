@@ -345,38 +345,40 @@ namespace OA_WEB_API.Repository.BPMPro
                 ASSOCIATED_FORM_CONFIG = associatedForm
             };
 
-            #region - 確認BPM表單是否正常起單到系統中 -
+            #region - 確認表單 -
 
-            //保留原有資料
-            strJson = jsonFunction.ObjectToJSON(mediaInvoiceViewModel);
-
-            var BpmSystemOrder = new BPMSystemOrder()
-            {
-                REQUISITION_ID = query.REQUISITION_ID,
-                IDENTIFY = IDENTIFY,
-                EXTS = new List<string>()
-                {
-                    "M",
-                    "INV",
-                    "INV_DTL"
-                },
-            };
-            if (mediaInvoiceViewModel.ASSOCIATED_FORM_CONFIG != null && mediaInvoiceViewModel.ASSOCIATED_FORM_CONFIG.Count > 0) BpmSystemOrder.IS_ASSOCIATED_FORM = true;
-            else BpmSystemOrder.IS_ASSOCIATED_FORM = false;
-            //確認是否有正常到系統起單；清除失敗表單資料並重新送單值行
-            if (commonRepository.PostBPMSystemOrder(BpmSystemOrder)) PutMediaInvoiceSingle(jsonFunction.JsonToObject<MediaInvoiceViewModel>(strJson));
-
-            #endregion
-
-            #region - 確認M表BPM表單單號 -
-
-            //避免儲存後送出表單BPM表單單號沒寫入的情形
-            var formQuery = new FormQueryModel()
-            {
-                REQUISITION_ID = query.REQUISITION_ID
-            };
             if (mediaInvoiceViewModel.APPLICANT_INFO.DRAFT_FLAG == 0)
             {
+                #region - 確認BPM表單是否正常起單到系統中 -
+
+                //保留原有資料
+                strJson = jsonFunction.ObjectToJSON(mediaInvoiceViewModel);
+
+                var BpmSystemOrder = new BPMSystemOrder()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID,
+                    IDENTIFY = IDENTIFY,
+                    EXTS = new List<string>()
+                    {
+                        "M",
+                        "INV",
+                        "INV_DTL"
+                    },
+                };
+                if (mediaInvoiceViewModel.ASSOCIATED_FORM_CONFIG != null && mediaInvoiceViewModel.ASSOCIATED_FORM_CONFIG.Count > 0) BpmSystemOrder.IS_ASSOCIATED_FORM = true;
+                else BpmSystemOrder.IS_ASSOCIATED_FORM = false;
+                //確認是否有正常到系統起單；清除失敗表單資料並重新送單值行
+                if (commonRepository.PostBPMSystemOrder(BpmSystemOrder)) PutMediaInvoiceSingle(jsonFunction.JsonToObject<MediaInvoiceViewModel>(strJson));
+
+                #endregion
+
+                #region - 確認M表BPM表單單號 -
+
+                //避免儲存後送出表單BPM表單單號沒寫入的情形
+                var formQuery = new FormQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
                 notifyRepository.ByInsertBPMFormNo(formQuery);
 
                 if (String.IsNullOrEmpty(mediaInvoiceViewModel.MEDIA_INVOICE_TITLE.BPM_FORM_NO) || String.IsNullOrWhiteSpace(mediaInvoiceViewModel.MEDIA_INVOICE_TITLE.BPM_FORM_NO))
@@ -389,10 +391,11 @@ namespace OA_WEB_API.Repository.BPMPro
                     var dtBpmFormNo = dbFun.DoQuery(strSQL, parameter);
                     if (dtBpmFormNo.Rows.Count > 0) mediaInvoiceViewModel.MEDIA_INVOICE_TITLE.BPM_FORM_NO = dtBpmFormNo.Rows[0][0].ToString();
                 }
+
+                #endregion
             }
 
             #endregion
-
 
             return mediaInvoiceViewModel;
         }

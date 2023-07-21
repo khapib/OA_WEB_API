@@ -17,7 +17,7 @@ namespace OA_WEB_API.Controllers.BPMPro
     {
         #region - 宣告 -
 
-        ResignUnpaidLeaveAgendRepository resignUnpaidLeaveAgendRepository = new ResignUnpaidLeaveAgendRepository();
+        ResignUnpaidLeaveAgendaRepository resignUnpaidLeaveAgendaRepository = new ResignUnpaidLeaveAgendaRepository();
 
         #endregion
 
@@ -30,7 +30,7 @@ namespace OA_WEB_API.Controllers.BPMPro
         [HttpPost]
         public ResignUnpaidLeaveAgendaViewModel PostResignUnpaidLeaveAgendaSingle([FromBody] ResignUnpaidLeaveAgendaQueryModel query)
         {
-            return resignUnpaidLeaveAgendRepository.PostResignUnpaidLeaveAgendaSingle(query);
+            return resignUnpaidLeaveAgendaRepository.PostResignUnpaidLeaveAgendaSingle(query);
         }
 
         /// <summary>
@@ -40,8 +40,19 @@ namespace OA_WEB_API.Controllers.BPMPro
         [HttpPost]
         public bool PutResignUnpaidLeaveAgendaSingle([FromBody] ResignUnpaidLeaveAgendaViewModel model)
         {
-            return resignUnpaidLeaveAgendRepository.PutResignUnpaidLeaveAgendaSingle(model);
+            return resignUnpaidLeaveAgendaRepository.PutResignUnpaidLeaveAgendaSingle(model);
         }
+
+        /// <summary>
+        /// 離職、留職停薪_手續表(事項交接)
+        /// </summary>
+        [Route("ResignUnpaidLeaveAgendHandoverSingle")]
+        [HttpPost]
+        public bool PutResignUnpaidLeaveAgendHandoverSingle([FromBody] ResignUnpaidLeaveAgendHandoverSingle model)
+        {
+            return resignUnpaidLeaveAgendaRepository.PutResignUnpaidLeaveAgendHandoverSingle(model);
+        }
+
 
         #endregion
     }

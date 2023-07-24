@@ -41,16 +41,54 @@ namespace OA_WEB_API.Controllers
 
         #endregion
 
+        #region - 公司列表 -
+
+        /// <summary>
+        /// 八大電視_部門列表
+        /// </summary>
+        [Route("api/GetCompanyList")]
+        [HttpGet]
+        public IList<CompanyViewModel> GetCompanyList()
+        {
+            return sysCommonRepository.GetCompanyList();
+        }
+
+        #endregion
+
         #region - 部門列表 -
 
         /// <summary>
-        /// 部門列表
+        /// 八大電視_部門列表
         /// </summary>
         [Route("api/GetGTVDeptTree")]
         [HttpGet]
         public IList<DeptTree> GetGTVDeptTree()
         {
             return sysCommonRepository.GetGTVDeptTree();
+        }
+
+        /// <summary>
+        /// 四方四隅_部門列表
+        /// </summary>
+        [Route("api/GetGPIDeptTree")]
+        [HttpGet]
+        public IList<DeptTree> GetGPIDeptTree()
+        {
+            return sysCommonRepository.GetGPIDeptTree();
+        }
+
+        #endregion
+
+        #region - 主要部門及使用者資訊 -
+
+        /// <summary>
+        /// 主要部門及使用者資訊
+        /// </summary>
+        [Route("api/PostUserInfoMainDept")]
+        [HttpPost]
+        public UserInfoMainDeptViewModel PostUserInfoMainDept(UserInfoMainDeptModel model)
+        {
+            return sysCommonRepository.PostUserInfoMainDept(model);
         }
 
         #endregion

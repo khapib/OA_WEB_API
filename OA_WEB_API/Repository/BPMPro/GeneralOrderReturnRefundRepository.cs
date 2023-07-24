@@ -1,10 +1,12 @@
-﻿using OA_WEB_API.Models.BPMPro;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data;
 using System.Linq;
 using System.Web;
+using System.Collections;
+
+using OA_WEB_API.Models.BPMPro;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -49,38 +51,14 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #region - 申請人資訊 -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [DiagramID] AS [DIAGRAM_ID], ";
-            strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
-            strSQL += "     [ApplicantDept] AS [APPLICANT_DEPT], ";
-            strSQL += "     [ApplicantDeptName] AS [APPLICANT_DEPT_NAME], ";
-            strSQL += "     [ApplicantID] AS [APPLICANT_ID], ";
-            strSQL += "     [ApplicantName] AS [APPLICANT_NAME], ";
-            strSQL += "     [ApplicantPhone] AS [APPLICANT_PHONE], ";
-            strSQL += "     [ApplicantDateTime] AS [APPLICANT_DATETIME], ";
-            strSQL += "     [FillerID] AS [FILLER_ID], ";
-            strSQL += "     [FillerName] AS [FILLER_NAME], ";
-            strSQL += "     [Priority] AS [PRIORITY], ";
-            strSQL += "     [DraftFlag] AS [DRAFT_FLAG], ";
-            strSQL += "     [FlowActivated] AS [FLOW_ACTIVATED] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralOrderReturnRefund_M] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-
-            var applicantInfo = dbFun.DoQuery(strSQL, parameter).ToList<ApplicantInfo>().FirstOrDefault();
-
-            #endregion
-
-            #region - M表寫入BPM表單單號 -
-
-            //避免儲存後送出表單BPM表單單號沒寫入的情形
-            var formQuery = new FormQueryModel()
+            var CommonApplicantInfo = new BPMCommonModel<ApplicantInfo>()
             {
-                REQUISITION_ID = query.REQUISITION_ID
+                EXT = "M",
+                IDENTIFY = IDENTIFY,
+                PARAMETER = parameter,
             };
-
-            if (applicantInfo.DRAFT_FLAG == 0) notifyRepository.ByInsertBPMFormNo(formQuery);
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostApplicantInfoFunction(CommonApplicantInfo));
+            var applicantInfo = jsonFunction.JsonToObject<ApplicantInfo>(strJson);
 
             #endregion
 
@@ -141,7 +119,7 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 EXT = "ALDY_RF_COMM",
                 IDENTIFY = IDENTIFY,
-                parameter = parameter
+                PARAMETER = parameter
             };
             strJson = jsonFunction.ObjectToJSON(commonRepository.PostGeneralCommodityFunction(CommonALDY_RF_COMM));
             var generalOrderReturnRefundAlreadyRefundCommoditysConfig = jsonFunction.JsonToObject<List<GeneralOrderReturnRefundAlreadyRefundCommoditysConfig>>(strJson);
@@ -156,7 +134,7 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 EXT = "RF_COMM",
                 IDENTIFY = IDENTIFY,
-                parameter = parameter
+                PARAMETER = parameter
             };
             strJson = jsonFunction.ObjectToJSON(commonRepository.PostGeneralCommodityFunction(CommonRF_COMM));
             var generalOrderReturnRefundRefundCommoditysConfig = jsonFunction.JsonToObject<List<GeneralOrderReturnRefundRefundCommoditysConfig>>(strJson);
@@ -169,7 +147,7 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 EXT = "INV",
                 IDENTIFY = IDENTIFY,
-                parameter = parameter
+                PARAMETER = parameter
             };
             strJson = jsonFunction.ObjectToJSON(commonRepository.PostInvoiceFunction(CommonINV));
             var generalOrderReturnRefundInvoicesConfig = jsonFunction.JsonToObject<List<GeneralOrderReturnRefundInvoicesConfig>>(strJson);
@@ -182,7 +160,7 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 EXT = "ALDY_INV_DTL",
                 IDENTIFY = IDENTIFY,
-                parameter = parameter
+                PARAMETER = parameter
             };
             strJson = jsonFunction.ObjectToJSON(commonRepository.PostInvoiceDetailFunction(CommonALDY_INV_DTL));
             var generalOrderReturnRefundAlreadyInvoiceDetailsConfig = jsonFunction.JsonToObject<List<GeneralOrderReturnRefundAlreadyInvoiceDetailsConfig>>(strJson);
@@ -195,7 +173,7 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 EXT = "INV_DTL",
                 IDENTIFY = IDENTIFY,
-                parameter = parameter
+                PARAMETER = parameter
             };
             strJson = jsonFunction.ObjectToJSON(commonRepository.PostInvoiceDetailFunction(CommonINV_DTL));
             var generalOrderReturnRefundInvoiceDetailsConfig = jsonFunction.JsonToObject<List<GeneralOrderReturnRefundInvoiceDetailsConfig>>(strJson);
@@ -224,6 +202,61 @@ namespace OA_WEB_API.Repository.BPMPro
                 GENERAL_ORDER_RETURN_REFUND_INV_DTLS_CONFIG = generalOrderReturnRefundInvoiceDetailsConfig,
                 ASSOCIATED_FORM_CONFIG = associatedForm
             };
+            
+            #region - 確認表單 -
+
+            if (generalOrderReturnRefundViewModel.APPLICANT_INFO.DRAFT_FLAG == 0)
+            {
+                #region - 確認BPM表單是否正常起單到系統中 -
+
+                //保留原有資料
+                strJson = jsonFunction.ObjectToJSON(generalOrderReturnRefundViewModel);
+
+                var BpmSystemOrder = new BPMSystemOrder()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID,
+                    IDENTIFY = IDENTIFY,
+                    EXTS = new List<string>()
+                    {
+                        "M",
+                        "ALDY_RF_COMM",
+                        "RF_COMM",
+                        "INV",
+                        "INV_DTL",
+                        "ALDY_INV_DTL"
+                    },
+                };
+                if (generalOrderReturnRefundViewModel.ASSOCIATED_FORM_CONFIG != null && generalOrderReturnRefundViewModel.ASSOCIATED_FORM_CONFIG.Count > 0) BpmSystemOrder.IS_ASSOCIATED_FORM = true;
+                else BpmSystemOrder.IS_ASSOCIATED_FORM = false;
+                //確認是否有正常到系統起單；清除失敗表單資料並重新送單值行
+                if (commonRepository.PostBPMSystemOrder(BpmSystemOrder)) PutGeneralOrderReturnRefundSingle(jsonFunction.JsonToObject<GeneralOrderReturnRefundViewModel>(strJson));
+
+                #endregion
+
+                #region - 確認M表BPM表單單號 -
+
+                //避免儲存後送出表單BPM表單單號沒寫入的情形
+                var formQuery = new FormQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+                notifyRepository.ByInsertBPMFormNo(formQuery);
+
+                if (String.IsNullOrEmpty(generalOrderReturnRefundViewModel.GENERAL_ORDER_RETURN_REFUND_TITLE.BPM_FORM_NO) || String.IsNullOrWhiteSpace(generalOrderReturnRefundViewModel.GENERAL_ORDER_RETURN_REFUND_TITLE.BPM_FORM_NO))
+                {
+                    strSQL = "";
+                    strSQL += "SELECT ";
+                    strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
+                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+                    var dtBpmFormNo = dbFun.DoQuery(strSQL, parameter);
+                    if (dtBpmFormNo.Rows.Count > 0) generalOrderReturnRefundViewModel.GENERAL_ORDER_RETURN_REFUND_TITLE.BPM_FORM_NO = dtBpmFormNo.Rows[0][0].ToString();
+                }
+
+                #endregion
+            }
+
+            #endregion
 
             return generalOrderReturnRefundViewModel;
         }
@@ -287,13 +320,39 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region - 宣告 -
 
+                #region - 系統編號 -
+
+                strREQ = model.APPLICANT_INFO.REQUISITION_ID;
+                if (String.IsNullOrEmpty(strREQ) || String.IsNullOrWhiteSpace(strREQ))
+                {
+                    strREQ = Guid.NewGuid().ToString();
+                }
+
+                #endregion
+
                 #region - 主旨 -
 
                 FM7Subject = model.GENERAL_ORDER_RETURN_REFUND_TITLE.FM7_SUBJECT;
 
                 if (FM7Subject == null)
                 {
-                    FM7Subject = "【退貨折讓】第" + model.GENERAL_ORDER_RETURN_REFUND_CONFIG.PERIOD + "期-" + strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_SUBJECT;
+                        FM7Subject = "【退貨折讓】第" + model.GENERAL_ORDER_RETURN_REFUND_CONFIG.PERIOD + "期-" + strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_SUBJECT;
+
+                    //var parameter = new List<SqlParameter>()
+                    //{
+                    //    new SqlParameter("@GENERAL_INVOICE_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.GENERAL_ORDER_RETURN_REFUND_CONFIG.GENERAL_INVOICE_REQUISITION_ID }
+                    //};
+
+                    //strSQL = "";
+                    //strSQL += "SELECT ";
+                    //strSQL += "      [RequisitionID] ";
+                    //strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralOrderReturnRefund_M] AS M ";
+                    //strSQL += "LEFT JOIN [BPMPro].[dbo].[FSe7en_Sys_Requisition] AS R ON R.RequisitionID=M.RequisitionID ";
+                    //strSQL += "WHERE [GeneralInvoiceRequisitionID]=@GENERAL_INVOICE_REQUISITION_ID ";
+
+                    //var frequency = int.Parse((dbFun.DoQuery(strSQL, parameter).Rows.Count).ToString()) + 1;
+
+                    //FM7Subject = "【退貨折讓_第"+ frequency + "次】第" + model.GENERAL_ORDER_RETURN_REFUND_CONFIG.PERIOD + "期-" + strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_SUBJECT;
                 }
 
                 #endregion
@@ -305,7 +364,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 var parameterTitle = new List<SqlParameter>()
                 {
                     //表單資訊
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  model.APPLICANT_INFO.REQUISITION_ID},
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  strREQ},
                     new SqlParameter("@DIAGRAM_ID", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.DIAGRAM_ID },
                     new SqlParameter("@PRIORITY", SqlDbType.Int) { Value =  model.APPLICANT_INFO.PRIORITY},
                     new SqlParameter("@DRAFT_FLAG", SqlDbType.Int) { Value =  model.APPLICANT_INFO.DRAFT_FLAG},
@@ -406,7 +465,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     var parameterInfo = new List<SqlParameter>()
                     {
                         //行政採購退貨折讓單 表單內容
-                        new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                        new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                         new SqlParameter("@GENERAL_INVOICE_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@GENERAL_INVOICE_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@GENERAL_INVOICE_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -485,7 +544,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 var parameterRefundCommoditys = new List<SqlParameter>()
                 {
                     //行政採購退貨折讓單 退貨商品明細
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                     new SqlParameter("@ORDER_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object) DBNull.Value ?? DBNull.Value },
@@ -501,8 +560,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         EXT = "RF_COMM",
                         IDENTIFY = IDENTIFY,
-                        parameter = parameterRefundCommoditys,
-                        Model = model.GENERAL_ORDER_RETURN_REFUND_RF_COMMS_CONFIG
+                        PARAMETER = parameterRefundCommoditys,
+                        MODEL = model.GENERAL_ORDER_RETURN_REFUND_RF_COMMS_CONFIG
                     };
                     commonRepository.PutGeneralCommodityFunction(CommonRF_COMM);
                 }
@@ -514,7 +573,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 var parameterInvoices = new List<SqlParameter>()
                 {
                     //行政採購退貨折讓單 憑證
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                     new SqlParameter("@GENERAL_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_REQUISITION_ID ?? DBNull.Value },
                     new SqlParameter("@GENERAL_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_BPM_FORM_NO ?? DBNull.Value },
                     new SqlParameter("@GENERAL_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_ERP_FORM_NO ?? DBNull.Value },
@@ -542,8 +601,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         EXT = "INV",
                         IDENTIFY = IDENTIFY,
-                        parameter = parameterInvoices,
-                        Model = model.GENERAL_ORDER_RETURN_REFUND_INVS_CONFIG
+                        PARAMETER = parameterInvoices,
+                        MODEL = model.GENERAL_ORDER_RETURN_REFUND_INVS_CONFIG
                     };
                     commonRepository.PutInvoiceFunction(CommonINV);
                 }
@@ -555,7 +614,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 var parameterInvoiceDetails = new List<SqlParameter>()
                 {
                     //版權採購退貨折讓單 憑證明細
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                     new SqlParameter("@GENERAL_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_REQUISITION_ID ?? DBNull.Value },
                     new SqlParameter("@GENERAL_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_BPM_FORM_NO ?? DBNull.Value },
                     new SqlParameter("@GENERAL_ORDER_ERP_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)strgeneralInvoiceQuery.GENERAL_INVOICE_CONFIG.GENERAL_ORDER_ERP_FORM_NO ?? DBNull.Value },
@@ -567,20 +626,44 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@R_QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@R_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@R_AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5 , Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 if (model.GENERAL_ORDER_RETURN_REFUND_INV_DTLS_CONFIG != null && model.GENERAL_ORDER_RETURN_REFUND_INV_DTLS_CONFIG.Count > 0)
                 {
+                    #region - 計算剩餘數量及金額 -
+
+                    if (model.GENERAL_ORDER_RETURN_REFUND_ALDY_INV_DTLS_CONFIG != null && model.GENERAL_ORDER_RETURN_REFUND_ALDY_INV_DTLS_CONFIG.Count > 0)
+                    {
+                        model.GENERAL_ORDER_RETURN_REFUND_INV_DTLS_CONFIG.ForEach(INV_DTL =>
+                        {
+                            if (model.GENERAL_ORDER_RETURN_REFUND_ALDY_INV_DTLS_CONFIG.Any(ALDY_INV_DTL => ALDY_INV_DTL.ROW_NO == INV_DTL.ROW_NO))
+                            {
+                                INV_DTL.R_QUANTITY = model.GENERAL_ORDER_RETURN_REFUND_ALDY_INV_DTLS_CONFIG.Where(ALDY_INV_DTL => ALDY_INV_DTL.ROW_NO == INV_DTL.ROW_NO).FirstOrDefault().R_QUANTITY - INV_DTL.QUANTITY;
+                                
+                                if(model.GENERAL_ORDER_RETURN_REFUND_ALDY_INV_DTLS_CONFIG.Any(ALDY_INV_DTL => ALDY_INV_DTL.R_QUANTITY== INV_DTL.QUANTITY))
+                                {
+                                    INV_DTL.R_AMOUNT = 0;
+                                    INV_DTL.R_AMOUNT_TWD = 0;
+
+                                }
+                                else
+                                {
+                                    INV_DTL.R_AMOUNT = model.GENERAL_ORDER_RETURN_REFUND_ALDY_INV_DTLS_CONFIG.Where(ALDY_INV_DTL => ALDY_INV_DTL.ROW_NO == INV_DTL.ROW_NO).FirstOrDefault().R_AMOUNT - INV_DTL.AMOUNT;
+                                    INV_DTL.R_AMOUNT_TWD = model.GENERAL_ORDER_RETURN_REFUND_ALDY_INV_DTLS_CONFIG.Where(ALDY_INV_DTL => ALDY_INV_DTL.ROW_NO == INV_DTL.ROW_NO).FirstOrDefault().R_AMOUNT_TWD - INV_DTL.AMOUNT_TWD;
+                                }
+                            }
+                        });
+                    }
+
+                    #endregion
+
                     var CommonINV_DTL = new BPMCommonModel<GeneralOrderReturnRefundInvoiceDetailsConfig>()
                     {
                         EXT = "INV_DTL",
                         IDENTIFY = IDENTIFY,
-                        parameter = parameterInvoiceDetails,
-                        Model = model.GENERAL_ORDER_RETURN_REFUND_INV_DTLS_CONFIG
+                        PARAMETER = parameterInvoiceDetails,
+                        MODEL = model.GENERAL_ORDER_RETURN_REFUND_INV_DTLS_CONFIG
                     };
                     commonRepository.PutInvoiceDetailFunction(CommonINV_DTL);
                 }
@@ -629,7 +712,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 var associatedFormModel = new AssociatedFormModel()
                 {
-                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    REQUISITION_ID = strREQ,
                     ASSOCIATED_FORM_CONFIG = associatedFormConfig
                 };
 
@@ -641,7 +724,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 #region - 表單主旨：FormHeader -
 
                 FormHeader header = new FormHeader();
-                header.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                header.REQUISITION_ID = strREQ;
                 header.ITEM_NAME = "Subject";
                 header.ITEM_VALUE = FM7Subject;
 
@@ -654,7 +737,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 if (model.APPLICANT_INFO.DRAFT_FLAG.Equals(1))
                 {
                     FormDraftList draftList = new FormDraftList();
-                    draftList.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                    draftList.REQUISITION_ID = strREQ;
                     draftList.IDENTIFY = IDENTIFY;
                     draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
 
@@ -670,7 +753,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region 送出表單前，先刪除草稿清單
 
                     FormDraftList draftList = new FormDraftList();
-                    draftList.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                    draftList.REQUISITION_ID = strREQ;
                     draftList.IDENTIFY = IDENTIFY;
                     draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
 
@@ -679,7 +762,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     #endregion
 
                     FormAutoStart autoStart = new FormAutoStart();
-                    autoStart.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                    autoStart.REQUISITION_ID = strREQ;
                     autoStart.DIAGRAM_ID = model.APPLICANT_INFO.DIAGRAM_ID;
                     autoStart.APPLICANT_ID = model.APPLICANT_INFO.APPLICANT_ID;
                     autoStart.APPLICANT_DEPT = model.APPLICANT_INFO.APPLICANT_DEPT;
@@ -693,7 +776,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 var BPM_FormFunction = new BPMFormFunction()
                 {
-                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    REQUISITION_ID = strREQ,
                     IDENTIFY = IDENTIFY,
                     DRAFT_FLAG = 0
                 };
@@ -740,6 +823,11 @@ namespace OA_WEB_API.Repository.BPMPro
         /// Json字串
         /// </summary>
         private string strJson;
+
+        /// <summary>
+        /// 系統編號
+        /// </summary>
+        private string strREQ;
 
         #endregion
     }

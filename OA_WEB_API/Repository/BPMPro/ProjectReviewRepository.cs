@@ -37,48 +37,24 @@ namespace OA_WEB_API.Repository.BPMPro
         {
             #region  - 查詢 - 
 
-            #region  - 申請人資訊 - 
             var parameterA = new List<SqlParameter>()
             {
-                 new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID }           
+                 new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID }
             };
+                        
+            #region - 申請人資訊 -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     A.[RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     A.[DiagramID] AS [DIAGRAM_ID], ";
-            strSQL += "     B.[Value] AS [FM7_SUBJECT], ";
-            strSQL += "     A.[ApplicantDept] AS [APPLICANT_DEPT], ";
-            strSQL += "     A.[ApplicantDeptName] AS [APPLICANT_DEPT_NAME], ";
-            strSQL += "     A.[ApplicantID] AS [APPLICANT_ID], ";
-            strSQL += "     A.[ApplicantName] AS [APPLICANT_NAME], ";
-            strSQL += "     A.[ApplicantID] AS [APPLICANT_ID], ";
-            strSQL += "     NULL AS [APPLICANT_PHONE], ";
-            strSQL += "     A.[ApplicantDateTime] AS [APPLICANT_DATETIME], ";
-            strSQL += "     A.[FillerID] AS [FILLER_ID], ";
-            strSQL += "     A.[FillerName] AS [FILLER_NAME], ";
-            strSQL += "     A.[Priority] AS [PRIORITY], ";
-            strSQL += "     A.[DraftFlag] AS [DRAFT_FLAG], ";
-            strSQL += "     A.[FlowActivated] AS [FLOW_ACTIVATED] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_ProjectReview_M] A";
-            strSQL += "         INNER JOIN [BPMPro].[dbo].[FSe7en_Tep_FormHeader] B ON A.[RequisitionID]=B.[RequisitionID]";
-            strSQL += "WHERE A.[RequisitionID]=@REQUISITION_ID ";
-
-            var applicantInfo = dbFun.DoQuery(strSQL, parameterA).ToList<ApplicantInfo>().FirstOrDefault();
-            #endregion
-
-            #region - M表寫入BPM表單單號 -
-
-            //避免儲存後送出表單BPM表單單號沒寫入的情形
-            var formQuery = new FormQueryModel()
+            var CommonApplicantInfo = new BPMCommonModel<ApplicantInfo>()
             {
-                REQUISITION_ID = query.REQUISITION_ID
+                EXT = "M",
+                IDENTIFY = IDENTIFY,
+                PARAMETER = parameterA,
             };
-
-            if (applicantInfo.DRAFT_FLAG == 0) notifyRepository.ByInsertBPMFormNo(formQuery);
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostApplicantInfoFunction(CommonApplicantInfo));
+            var applicantInfo = jsonFunction.JsonToObject<ApplicantInfo>(strJson);
 
             #endregion
-
+            
             #region - 專案建立審核設定及內容 -
 
             var parameterB = new List<SqlParameter>()
@@ -123,6 +99,45 @@ namespace OA_WEB_API.Repository.BPMPro
                 PROJECT_REVIEW_ERP_CONFIG = projectReviewERPConfig,
                 PROJECT_REVIEW_BPM_CONFIG = projectReviewBPMConfig
             };
+
+            #region - 確認表單 -
+
+            if (projectReview.APPLICANT_INFO.DRAFT_FLAG == 0)
+            {
+                #region - 確認BPM表單是否正常起單到系統中 -
+
+                //保留原有資料
+                strJson = jsonFunction.ObjectToJSON(projectReview);
+
+                var BpmSystemOrder = new BPMSystemOrder()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID,
+                    IDENTIFY = IDENTIFY,
+                    EXTS = new List<string>()
+                    {
+                        "M"
+                    },
+                    IS_ASSOCIATED_FORM = false
+                };
+                //確認是否有正常到系統起單；清除失敗表單資料並重新送單值行
+                if (commonRepository.PostBPMSystemOrder(BpmSystemOrder)) PutProjectReviewSingle(jsonFunction.JsonToObject<ProjectReviewViewModel>(strJson));
+
+                #endregion
+
+                #region - 確認M表BPM表單單號 -
+
+                //避免儲存後送出表單BPM表單單號沒寫入的情形
+                var formQuery = new FormQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+                notifyRepository.ByInsertBPMFormNo(formQuery);
+
+                #endregion
+            }
+
+            #endregion
+
             return projectReview;
         }
 
@@ -158,10 +173,25 @@ namespace OA_WEB_API.Repository.BPMPro
             bool vResult = false;
             try
             {
-                #region - 宣告主旨 -
+                #region - 宣告 -
+
+                #region - 系統編號 -
+
+                strREQ = model.APPLICANT_INFO.REQUISITION_ID;
+                if (String.IsNullOrEmpty(strREQ) || String.IsNullOrWhiteSpace(strREQ))
+                {
+                    strREQ = Guid.NewGuid().ToString();
+                }
+
+                #endregion
+
+                #region - 主旨 -
 
                 FM7Subject = model.PROJECT_REVIEW_ERP_CONFIG.PROJECT_NAME + "-" + model.PROJECT_REVIEW_ERP_CONFIG.PROJECT_NICKNAME;
-                
+
+                #endregion
+
+
                 #endregion
 
                 #region - 專案建立審核主表：ProjectReview_M -
@@ -169,7 +199,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 var parameterA = new List<SqlParameter>()
                 {
                     //表單資訊
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  model.APPLICANT_INFO.REQUISITION_ID},
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  strREQ},
                     new SqlParameter("@DIAGRAM_ID", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.DIAGRAM_ID },
                     new SqlParameter("@PRIORITY", SqlDbType.Int) { Value =  model.APPLICANT_INFO.PRIORITY},
                     new SqlParameter("@DRAFT_FLAG", SqlDbType.Int) { Value =  model.APPLICANT_INFO.DRAFT_FLAG},
@@ -284,7 +314,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 FormHeader header = new FormHeader
                 {
-                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    REQUISITION_ID = strREQ,
                     ITEM_NAME = "Subject",
                     ITEM_VALUE = FM7Subject
                 };
@@ -299,7 +329,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     FormDraftList draftList = new FormDraftList()
                     {
-                        REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                        REQUISITION_ID = strREQ,
                         IDENTIFY = IDENTIFY,
                         FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID
                     };
@@ -318,7 +348,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     //刪除草稿清單
                     FormDraftList draftList = new FormDraftList()
                     {
-                        REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                        REQUISITION_ID = strREQ,
                         IDENTIFY = IDENTIFY,
                         FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID
                     };
@@ -329,7 +359,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     //送出表單
                     FormAutoStart autoStart = new FormAutoStart()
                     {
-                        REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                        REQUISITION_ID = strREQ,
                         DIAGRAM_ID = model.APPLICANT_INFO.DIAGRAM_ID,
                         APPLICANT_ID = model.APPLICANT_INFO.APPLICANT_ID,
                         APPLICANT_DEPT = model.APPLICANT_INFO.APPLICANT_DEPT
@@ -344,7 +374,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 var BPM_FormFunction = new BPMFormFunction()
                 {
-                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    REQUISITION_ID = strREQ,
                     IDENTIFY = IDENTIFY,
                     DRAFT_FLAG = 0
                 };
@@ -386,6 +416,16 @@ namespace OA_WEB_API.Repository.BPMPro
         /// 表單主旨
         /// </summary>
         private string FM7Subject;
+
+        /// <summary>
+        /// 系統編號
+        /// </summary>
+        private string strREQ;
+
+        /// <summary>
+        /// Json字串
+        /// </summary>
+        private string strJson;
 
         #endregion
     }

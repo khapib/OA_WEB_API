@@ -32,7 +32,7 @@ namespace OA_WEB_API.Models.BPMPro
         public GPI_CountersignConfig GPI_COUNTERSIGN_CONFIG { get; set; }
 
         /// <summary>四方四隅_會簽單 會簽簽核人員 設定</summary>
-        public IList<GPI_CountersignApproversConfig> GPI_COUNTERSIGN_APPROVERS_CONFIG { get; set; }
+        public List<GPI_CountersignApproversConfig> GPI_COUNTERSIGN_APPROVERS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
@@ -72,21 +72,8 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 四方四隅_會簽單 會簽簽核人員 設定
     /// </summary>
-    public class GPI_CountersignApproversConfig
+    public class GPI_CountersignApproversConfig : ApproversConfig
     {
-        /// <summary>簽核人員公司別編號</summary>
-        public string APPROVER_COMPANY_ID { get; set; }
 
-        /// <summary>簽核人員主要部門</summary>
-        public string APPROVER_DEPT_MAIN_ID { get; set; }
-
-        /// <summary>簽核人員部門</summary>
-        public string APPROVER_DEPT_ID { get; set; }
-
-        /// <summary>簽核人員編號</summary>
-        public string APPROVER_ID { get; set; }
-
-        /// <summary>簽核人員姓名</summary>
-        public string APPROVER_NAME { get; set; }
     }
 }

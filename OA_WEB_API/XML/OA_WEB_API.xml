@@ -1051,6 +1051,26 @@
             用印申請單(新增/修改/草稿)
             </summary>
         </member>
+        <member name="T:OA_WEB_API.Controllers.BPMPro.PersonnelSupplementController">
+            <summary>
+            會簽管理系統 - 人員增補單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.PersonnelSupplementController.PostPersonnelSupplementSingle(OA_WEB_API.Models.BPMPro.PersonnelSupplementQueryModel)">
+            <summary>
+            離職、人員增補單(查詢)
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.PersonnelSupplementController.PutPersonnelSupplementRefill(OA_WEB_API.Models.BPMPro.PersonnelSupplementQueryModel)">
+            <summary>
+            人員增補單(依此單內容重送)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.PersonnelSupplementController.PutPersonnelSupplementSingle(OA_WEB_API.Models.BPMPro.PersonnelSupplementViewModel)">
+            <summary>
+            人員增補單(新增/修改/草稿)
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.ProjectReviewController">
             <summary>
             會簽管理系統 - 專案建立審核單
@@ -1068,7 +1088,7 @@
         </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.ResignUnpaidLeaveAgendaController">
             <summary>
-            離職、留職停薪_手續表
+            會簽管理系統 - 離職、留職停薪_手續表
             </summary>
         </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.ResignUnpaidLeaveAgendaController.PostResignUnpaidLeaveAgendaSingle(OA_WEB_API.Models.BPMPro.ResignUnpaidLeaveAgendaQueryModel)">
@@ -6800,6 +6820,92 @@
             用印申請單 會簽簽核人員 設定
             </summary>
         </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.PersonnelSupplementQueryModel">
+            <summary>
+            人員增補單(查詢條件)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementQueryModel.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.PersonnelSupplementViewModel">
+            <summary>
+            人員增補單
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementViewModel.APPLICANT_INFO">
+            <summary>申請人資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementViewModel.PERSONNEL_SUPPLEMENT_TITLE">
+            <summary>人員增補單 表頭資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG">
+            <summary>人員增補單 表單內容 設定</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.PersonnelSupplementTitle">
+            <summary>
+            人員增補單 表頭資訊
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig">
+            <summary>
+            人員增補單 表單內容 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.OCCUPATION">
+            <summary>增補職別</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.REASON">
+            <summary>增補原因</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.REASON_NOTE">
+            <summary>增補原因_備註</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.BRAID_NUM">
+            <summary>編制人數</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.NOW_NUM">
+            <summary>現有人數</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.DEMAND_NUM">
+            <summary>需求人數</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.SALARY_MIN">
+            <summary>薪資(起)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.SALARY_MAX">
+            <summary>薪資(迄)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.EDUCATION_REQUIREMENT">
+            <summary>學歷要求</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.DESCRIPTION">
+            <summary>工作內容說明</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.APPLICATION_METHOD">
+            <summary>應徵方式</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.CONTACT_EMAIL">
+            <summary>聯絡人Email</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.COMPUTER_SKILLS">
+            <summary>本職所需電腦技能</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.JOB_SKILL">
+            <summary>其他工作條件限制</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.APPROVAL_NO">
+            <summary>文件編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.IMPLEMENT_DATE">
+            <summary>執行日期</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.PERSONNEL">
+            <summary>增補人員</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.CLOSE_DATE">
+            <summary>關閉日期</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ProjectReviewQueryModel">
             <summary>
             專案建立審核單(查詢條件)
@@ -10804,6 +10910,56 @@
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.OfficialStampRepository.strREQ">
+            <summary>
+            系統編號
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Repository.BPMPro.PersonnelSupplementRepository">
+            <summary>
+            會簽管理系統 - 人員增補單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.PersonnelSupplementRepository.PostPersonnelSupplementSingle(OA_WEB_API.Models.BPMPro.PersonnelSupplementQueryModel)">
+            <summary>
+            人員增補單(查詢)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.PersonnelSupplementRepository.PutPersonnelSupplementRefill(OA_WEB_API.Models.BPMPro.PersonnelSupplementQueryModel)">
+            <summary>
+            人員增補單(依此單內容重送)(僅外部起單使用)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.PersonnelSupplementRepository.PutPersonnelSupplementSingle(OA_WEB_API.Models.BPMPro.PersonnelSupplementViewModel)">
+            <summary>
+            人員增補單(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.PersonnelSupplementRepository.strSQL">
+            <summary>
+            T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.PersonnelSupplementRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.PersonnelSupplementRepository.IDENTIFY">
+            <summary>
+            表單代號
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.PersonnelSupplementRepository.FM7Subject">
+            <summary>
+            表單主旨
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.PersonnelSupplementRepository.strJson">
+            <summary>
+            Json字串
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.PersonnelSupplementRepository.strREQ">
             <summary>
             系統編號
             </summary>

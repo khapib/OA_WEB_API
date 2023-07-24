@@ -10,7 +10,7 @@ using System.Web.Http;
 namespace OA_WEB_API.Controllers.BPMPro
 {
     /// <summary>
-    /// 離職、留職停薪_手續表
+    /// 會簽管理系統 - 離職、留職停薪_手續表
     /// </summary>
     [RoutePrefix("api/BPMPro/ResignUnpaidLeaveAgenda")]
     public class ResignUnpaidLeaveAgendaController : ApiController

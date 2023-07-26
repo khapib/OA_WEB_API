@@ -114,7 +114,7 @@ namespace OA_WEB_API.Models.BPMPro
         public string CONTACTER_NAME { get; set; }
 
         /// <summary>畫押日期</summary>
-        public Nullable<DateTime> SIGN_DATE { get; set; }
+        public string SIGN_DATE { get; set; }
     }
 
     /// <summary>

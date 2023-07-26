@@ -175,18 +175,19 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            if (resignUnpaidLeaveAgendaAffairsConfig.Count == 0)
+            if (resignUnpaidLeaveAgendaViewModel.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG.Count == 0)
             {
-                resignUnpaidLeaveAgendaAffairsConfig = new List<ResignUnpaidLeaveAgendaAffairsConfig>();
                 ItemNameDic.ForEach(D =>
                 {
-                    resignUnpaidLeaveAgendaAffairsConfig.Add(new ResignUnpaidLeaveAgendaAffairsConfig()
+                    resignUnpaidLeaveAgendaViewModel.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG.Add(new ResignUnpaidLeaveAgendaAffairsConfig()
                     {
                         ITEM_ID = D.Key,
                         ITEM_NAME = D.Value,
                         IS_CONSUMMATION = false,
                     });
                 });
+
+
             }
 
             return resignUnpaidLeaveAgendaViewModel;
@@ -382,18 +383,19 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region - 離職、留職停薪_手續表 事務清單：ResignUnpaidLeaveAgenda_D -                              
 
+                //IS_CONSUMMATION初始值都會是False
                 var parameterAffairs = new List<SqlParameter>()
                 {
                     //離職、留職停薪_手續表 事務清單
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                     new SqlParameter("@ITEM_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@IS_CONSUMMATION", SqlDbType.NVarChar) { Size = 10, Value = (object)"false" ?? DBNull.Value },
+                    new SqlParameter("@IS_CONSUMMATION", SqlDbType.NVarChar) { Size = 10, Value = (object)false.ToString() ?? DBNull.Value },
                     new SqlParameter("@DESCRIPTION", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@CONTACTER_DEPT_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@CONTACTER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@CONTACTER_NAME", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@SIGN_DATE", SqlDbType.DateTime) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@SIGN_DATE", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 var strInsertSQL = "";
@@ -402,7 +404,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG != null && model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG.Count > 0)
                 {
-                    if(model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG.Where(AFF=>!String.IsNullOrEmpty(AFF.CONTACTER_ID) || !String.IsNullOrWhiteSpace(AFF.CONTACTER_ID)).Count() > 0)
+                    if (model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG.Where(AFF => !String.IsNullOrEmpty(AFF.CONTACTER_ID) || !String.IsNullOrWhiteSpace(AFF.CONTACTER_ID)).Count() > 0)
                     {
                         #region 先刪除舊資料
 
@@ -416,7 +418,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         #endregion
 
-                        model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG.Where(AFF=>AFF.ITEM_ID.Contains("A")).ToList().ForEach(item =>
+                        model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG.Where(AFF => AFF.ITEM_ID.Contains("A")).ToList().ForEach(item =>
                         {
                             if (ItemNameDic.Keys.Contains(item.ITEM_ID))
                             {
@@ -549,6 +551,8 @@ namespace OA_WEB_API.Repository.BPMPro
             try
             {
                 if (model.IS_CONSUMMATION == null) model.IS_CONSUMMATION = false;
+                //開放C區通行
+                if (model.ITEM_ID.Contains("C")) model.IS_CONSUMMATION = true;
 
                 if (Boolean.Parse(model.IS_CONSUMMATION.ToString()))
                 {
@@ -576,11 +580,13 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "SELECT ";
                     strSQL += "     [RequisitionID],";
                     strSQL += "     [ContacterID], ";
-                    strSQL += "     [IsConsummation] ";
+                    strSQL += "     [ContacterDeptID], ";
+                    strSQL += "     [ContacterName], ";
+                    strSQL += "     [SignDate] ";
                     strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_D] ";
                     strSQL += "WHERE 1=1 ";
                     strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
-                    strSQL += "         AND [ItemID]=@ITEM_ID ";                    
+                    strSQL += "         AND [ItemID]=@ITEM_ID ";
 
                     var dt = dbFun.DoQuery(strSQL, parameter);
 
@@ -593,15 +599,10 @@ namespace OA_WEB_API.Repository.BPMPro
                             //如果是A區塊(所屬單位：工作交接)的要比對交接人
                             if (dt.AsEnumerable().Any(R => R.Field<string>("ContacterID").Contains(model.CONTACTER_ID)))
                             {
-                                //確認交接人是否已點過交接
-                                if (dt.AsEnumerable().Any(R => R.Field<string>("ContacterID").Contains(model.CONTACTER_ID) && Boolean.Parse(R.Field<string>("IsConsummation")) == false)) HandoverToken = true;
+                                HandoverToken = true;
                             }
                         }
-                        else
-                        {
-                            //確認交接單位是否已點過交接
-                            if (dt.AsEnumerable().Any(R => Boolean.Parse(R.Field<string>("IsConsummation")) == false)) HandoverToken = true;
-                        }
+                        else HandoverToken = true;
 
                         #endregion                        
 
@@ -612,7 +613,41 @@ namespace OA_WEB_API.Repository.BPMPro
                                 USER_ID = model.CONTACTER_ID
                             };
                             model.CONTACTER_NAME = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.DEPT_ID.Contains(model.CONTACTER_DEPT_ID)).Select(U => U.USER_NAME).FirstOrDefault();
-                            model.SIGN_DATE = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
+                            model.SIGN_DATE = DateTime.Now.ToString("yyyy/MM/dd");
+
+                            if (model.ITEM_ID.Contains("B05") || model.ITEM_ID.Contains("B06"))
+                            {
+                                if (!dt.AsEnumerable().Any(R => String.IsNullOrEmpty(R.Field<string>("ContacterID")) || String.IsNullOrWhiteSpace(R.Field<string>("ContacterID"))))
+                                {
+                                    var dtContacterID = dt.AsEnumerable().Select(R => R.Field<string>("ContacterID")).FirstOrDefault();
+                                    var dtContacterName = dt.AsEnumerable().Select(R => R.Field<string>("ContacterName")).FirstOrDefault();
+                                    var dtContacterDeptID = dt.AsEnumerable().Select(R => R.Field<string>("ContacterDeptID")).FirstOrDefault();
+                                    var dtSignDate = dt.AsEnumerable().Select(R => R.Field<string>("SignDate")).FirstOrDefault();
+
+                                    if (dt.AsEnumerable().Any(R => R.Field<string>("ContacterID").Contains(model.CONTACTER_ID) && dt.AsEnumerable().Any(R2 => R2.Field<string>("ContacterDeptID").Contains(model.CONTACTER_DEPT_ID))))
+                                    {
+                                        var ArrayContacterID = dtContacterID.Split(';');
+                                        var ArraySignDate = dtSignDate.Split(';');
+                                        var i = 0;
+                                        while (ArrayContacterID.Count() > i)
+                                        {
+                                            if (ArrayContacterID[i].Contains(model.CONTACTER_ID)) break;
+                                            i++;
+                                        }
+                                        dtContacterName = dtContacterName.Replace(model.CONTACTER_NAME, string.Empty).Replace(";", string.Empty);
+                                        dtContacterDeptID = dtContacterDeptID.Replace(model.CONTACTER_DEPT_ID, string.Empty).Replace(";", string.Empty);
+                                        dtContacterID = dtContacterID.Replace(model.CONTACTER_ID,string.Empty).Replace(";", string.Empty);
+                                        dtSignDate = dtSignDate.Replace(ArraySignDate[i], string.Empty).Replace(";", string.Empty);
+                                        //如果畫押日期是空的代表日期都一樣就把原本的日期寫回畫押日期
+                                        if (String.IsNullOrEmpty(dtSignDate) || String.IsNullOrWhiteSpace(dtSignDate)) dtSignDate = ArraySignDate[i];
+                                    }
+
+                                    model.CONTACTER_NAME = dtContacterName + ";" + model.CONTACTER_NAME;
+                                    model.CONTACTER_DEPT_ID = dtContacterDeptID + ";" + model.CONTACTER_DEPT_ID;
+                                    model.CONTACTER_ID = dtContacterID + ";" + model.CONTACTER_ID;
+                                    model.SIGN_DATE = dtSignDate + ";" + model.SIGN_DATE;
+                                }
+                            }
 
                             //寫入：離職、留職停薪_流程表 事項交接parameter                        
                             strJson = jsonFunction.ObjectToJSON(model);

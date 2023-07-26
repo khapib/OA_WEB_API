@@ -1166,7 +1166,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strDmarkSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_LABOUR] ";
                     strDmarkSQL += "SET [IsLabour]=null ";
                     strDmarkSQL += "WHERE 1=1 ";
-                    strDmarkSQL += "        AND [VoteYear]=@VOTE_YEAR ";
+                    strDmarkSQL += strWhereSQL;
 
                     if (String.IsNullOrEmpty(model.MEMBER_ID) || String.IsNullOrWhiteSpace(model.MEMBER_ID))
                     {
@@ -1252,7 +1252,6 @@ namespace OA_WEB_API.Repository.BPMPro
                         {
                             parameter.Add(new SqlParameter("@MAIN_DEPT_ID", SqlDbType.NVarChar) { Size = 40, Value = model.MAIN_DEPT_ID });
 
-                            strDmarkSQL += "        AND [MainDeptID]=@MAIN_DEPT_ID ";
                             //對部門：
                             //清除註記資料
                             dbFun.DoTran(strDmarkSQL, parameter);

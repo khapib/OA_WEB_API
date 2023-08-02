@@ -22,6 +22,26 @@ namespace OA_WEB_API.Models.BPMPro
 
     #region - 共用Model -
 
+    /// <summary>
+    /// 確認是否有正常到系統起單；
+    /// 清除失敗表單資料
+    /// </summary>
+    public class BPMSystemOrder
+    {
+        /// <summary>系統編號</summary>
+        public string REQUISITION_ID { get; set; }
+
+        /// <summary>表單代號</summary>
+        public string IDENTIFY { get; set; }
+
+        /// <summary>表單資料表子名稱</summary>
+        public List<String> EXTS { get; set; }
+
+        /// <summary>是否有關聯表單</summary>
+        public bool IS_ASSOCIATED_FORM { get; set; }
+
+    }
+
     #region (BPM API共用)_ERP起單共用抬頭
 
     /// <summary>
@@ -43,6 +63,51 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>BPM 表單單號</summary>
         public string BPM_FORM_NO { get; set; }
+    }
+
+    #endregion
+
+    /// <summary>
+    /// BPM_表單共用模組
+    /// </summary>
+    /// <typeparam name="T">Model</typeparam>
+    public class BPMCommonModel<T>
+    {
+        /// <summary>表單資料表子名稱</summary>
+        public string EXT { get; set; }
+
+        /// <summary>表單代號</summary>
+        public string IDENTIFY { get; set; }
+
+        /// <summary>SqlParameter</summary>
+        public List<SqlParameter> PARAMETER { get; set; }
+
+        /// <summary>Models</summary>
+        public List<T> MODEL { get; set; }
+    }  
+
+    #region - 會簽簽核人員 -
+
+    /// <summary>
+    /// 會簽簽核人員
+    /// </summary>
+    public class ApproversConfig
+    {
+        /// <summary>簽核人員公司別編號</summary>
+        public string APPROVER_COMPANY_ID { get; set; }
+
+        /// <summary>簽核人員主要部門</summary>
+        public string APPROVER_DEPT_MAIN_ID { get; set; }
+
+        /// <summary>簽核人員部門</summary>
+        public string APPROVER_DEPT_ID { get; set; }
+
+        /// <summary>簽核人員編號</summary>
+        public string APPROVER_ID { get; set; }
+
+        /// <summary>簽核人員姓名</summary>
+        public string APPROVER_NAME { get; set; }
+
     }
 
     #endregion
@@ -116,25 +181,6 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     #endregion
-
-    /// <summary>
-    /// BPM表單共用模組
-    /// </summary>
-    /// <typeparam name="T">Model</typeparam>
-    public class BPMCommonModel<T>
-    {
-        /// <summary>D表名稱</summary>
-        public string EXT { get; set; }
-
-        /// <summary>表單代號</summary>
-        public string IDENTIFY { get; set; }
-
-        /// <summary>SqlParameter</summary>
-        public List<SqlParameter> parameter { get; set; }
-
-        /// <summary>Models</summary>
-        public List<T> Model { get; set; }
-    }
 
     #region - 憑證 -
 
@@ -336,7 +382,6 @@ namespace OA_WEB_API.Models.BPMPro
 
 
 
-
     #region - 確認是否已起單且簽核中或草稿中 -
 
     /// <summary>
@@ -505,10 +550,55 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
-    #region - 附件上傳 -
+
+
+    #region - BPM附件 -
+
+    /// <summary>BPM附件</summary>
+    public class FilesConfig
+    {
+        /// <summary>上傳者員工編號</summary>
+        public string ACCOUNT_ID { get; set; }
+
+        /// <summary>上傳者名字</summary>
+        public string MEMBER_NAME { get; set; }
+
+        /// <summary>系統編號</summary>
+        public string REQUISITION_ID { get; set; }
+
+        /// <summary>流程圖編號</summary>
+        public string DIAGRAM_ID { get; set; }
+
+        /// <summary>流程圖：關卡編號</summary>
+        public string PROCESS_ID { get; set; }
+
+        /// <summary>流程圖：關卡名稱</summary>
+        public string PROCESS_NAME { get; set; }
+
+        /// <summary>專案資料夾/附件編碼名稱</summary>
+        public string N_FILE_NAME { get; set; }
+
+        /// <summary>附件原本名稱</summary>
+        public string O_FILE_NAME { get; set; }
+
+        /// <summary>檔案大小</summary>
+        public int FILE_SIZE { get; set; }
+
+        /// <summary>正式：0；草稿：1</summary>
+        public int? DRAFT_FLAG { get; set; }
+
+        /// <summary>備註</summary>
+        public string REMARK { get; set; }
+
+        
+    }
+
+    #endregion
+
+    #region - ERP附件 -
 
     /// <summary>
-    /// 附件上傳內容
+    /// ERP附件內容
     /// </summary>
     public class AttachmentMain
     {
@@ -518,18 +608,22 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>表單代號</summary>
         public string IDENTIFY { get; set; }
 
+        /// <summary>ERP附件</summary>
         public IList<AttachmentConfig> ATTACHMENT { get; set; }
     }
 
     /// <summary>
-    /// 附件
+    /// ERP附件
     /// </summary>
     public class AttachmentConfig
     {
+        /// <summary>附件檔名</summary>
+        public string FILE_RENAME { get; set; }
+
         /// <summary>連結網址</summary>
         public string FILE_PATH { get; set; }
 
-        /// <summary>附件檔名</summary>
+        /// <summary>附件原檔名</summary>
         public string FILE_NAME { get; set; }
 
         /// <summary>副檔名</summary>

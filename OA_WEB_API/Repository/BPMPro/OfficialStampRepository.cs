@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
+using System.Data;
 using System.Linq;
 using System.Web;
 
@@ -11,9 +11,9 @@ using OA_WEB_API.Models.BPMPro;
 namespace OA_WEB_API.Repository.BPMPro
 {
     /// <summary>
-    /// 會簽管理系統 - 四方四隅_會簽單
+    /// 會簽管理系統 - 用印申請單
     /// </summary>
-    public class GPI_CountersignRepository
+    public class OfficialStampRepository
     {
         #region - 宣告 -
 
@@ -34,9 +34,9 @@ namespace OA_WEB_API.Repository.BPMPro
         #region - 方法 -
 
         /// <summary>
-        /// 四方四隅_會簽單(查詢)
+        /// 用印申請單(查詢)
         /// </summary>
-        public GPI_CountersignViewModel PostGPI_CountersignSingle(GPI_CountersignQueryModel query)
+        public OfficialStampViewModel PostOfficialStampSingle(OfficialStampQueryModel query)
         {
             var parameter = new List<SqlParameter>()
             {
@@ -47,7 +47,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             var CommonApplicantInfo = new BPMCommonModel<ApplicantInfo>()
             {
-                EXT = "M",
+                EXT="M",
                 IDENTIFY = IDENTIFY,
                 PARAMETER = parameter,
             };
@@ -55,75 +55,84 @@ namespace OA_WEB_API.Repository.BPMPro
             var applicantInfo = jsonFunction.JsonToObject<ApplicantInfo>(strJson);
 
             #endregion
-
-            #region - 四方四隅_會簽單 表頭資訊 -
+            
+            #region - 用印申請單 表頭資訊 -
 
             strSQL = "";
             strSQL += "SELECT ";
+            strSQL += "     [CompanyName] AS [COMPANY_NAME], ";
             strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
             strSQL += "     [BPMFormNo] AS [BPM_FORM_NO], ";
             strSQL += "     [LevelType] AS [LEVEL_TYPE] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_Countersign_M] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-            var GPI_countersignTitle = dbFun.DoQuery(strSQL, parameter).ToList<GPI_CountersignTitle>().FirstOrDefault();
+            var officialStampTitle = dbFun.DoQuery(strSQL, parameter).ToList<OfficialStampTitle>().FirstOrDefault();
 
             #endregion
 
-            #region - 四方四隅_會簽單 表單內容 -
+            #region - 用印申請單 表單內容 -
 
             strSQL = "";
             strSQL += "SELECT ";
-            strSQL += "     [Description] AS [DESCRIPTION], ";
+            strSQL += "     [Reason] AS [REASON], ";
             strSQL += "     [Note] AS [NOTE], ";
-            strSQL += "     [IsVicePresident] AS [IS_VICE_PRESIDENT] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_Countersign_M] ";
+            strSQL += "     [Contact] AS [CONTACT], ";
+            strSQL += "     [ApprovalNo] AS [APPROVAL_NO] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-            var GPI_countersignConfig = dbFun.DoQuery(strSQL, parameter).ToList<GPI_CountersignConfig>().FirstOrDefault();
+            var officialStampConfig = dbFun.DoQuery(strSQL, parameter).ToList<OfficialStampConfig>().FirstOrDefault();
 
             #endregion
 
-            #region - 四方四隅_會簽單 會簽簽核人員 -
+            #region - 用印申請單 用印項目明細 -
 
-            var CommonApprovers = new BPMCommonModel<GPI_CountersignApproversConfig>()
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
+            strSQL += "     [ItemName] AS [ITEM_NAME], ";
+            strSQL += "     [Servings] AS [SERVINGS], ";
+            strSQL += "     [ApplyStampType] AS [APPLY_STAMP_TYPE], ";
+            strSQL += "     [ApplyStampTypeOthers] AS [APPLY_STAMP_TYPE_OTHERS] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_DOC] ";
+            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+            strSQL += "ORDER BY [AutoCounter] ";
+
+            var officialStampDocumentsConfig = dbFun.DoQuery(strSQL, parameter).ToList<OfficialStampDocumentsConfig>();
+
+            #endregion
+
+            #region - 用印申請單 會簽簽核人員 -
+
+            var CommonApprovers = new BPMCommonModel<OfficialStampApproversConfig>()
             {
                 EXT = "D",
                 IDENTIFY = IDENTIFY,
                 PARAMETER = parameter
             };
             strJson = jsonFunction.ObjectToJSON(commonRepository.PostApproverFunction(CommonApprovers));
-            var GPI_countersignApproversConfig = jsonFunction.JsonToObject<List<GPI_CountersignApproversConfig>>(strJson);
+            var officialStampApproversConfig = jsonFunction.JsonToObject<List<OfficialStampApproversConfig>>(strJson);
 
             #endregion
 
-            #region - 四方四隅_會簽單 表單關聯 -
-
-            var formQueryModel = new FormQueryModel()
-            {
-                REQUISITION_ID = query.REQUISITION_ID
-            };
-            var associatedForm = commonRepository.PostAssociatedForm(formQueryModel);
-
-            #endregion
-
-            var GPI_countersignViewModel = new GPI_CountersignViewModel()
+            var officialStampViewModel = new OfficialStampViewModel()
             {
                 APPLICANT_INFO = applicantInfo,
-                GPI_COUNTERSIGN_TITLE = GPI_countersignTitle,
-                GPI_COUNTERSIGN_CONFIG = GPI_countersignConfig,
-                GPI_COUNTERSIGN_APPROVERS_CONFIG = GPI_countersignApproversConfig,
-                ASSOCIATED_FORM_CONFIG = associatedForm
-            };            
+                OFFICIAL_STAMP_TITLE= officialStampTitle,
+                OFFICIAL_STAMP_CONFIG= officialStampConfig,
+                OFFICIAL_STAMP_DOCS_CONFIG=officialStampDocumentsConfig,
+                OFFICIAL_STAMP_APPROVERS_CONFIG= officialStampApproversConfig,
+            };
 
             #region - 確認表單 -
 
-            if (GPI_countersignViewModel.APPLICANT_INFO.DRAFT_FLAG == 0)
+            if (officialStampViewModel.APPLICANT_INFO.DRAFT_FLAG == 0)
             {
                 #region - 確認BPM表單是否正常起單到系統中 -
 
                 //保留原有資料
-                strJson = jsonFunction.ObjectToJSON(GPI_countersignViewModel);
+                strJson = jsonFunction.ObjectToJSON(officialStampViewModel);
 
                 var BpmSystemOrder = new BPMSystemOrder()
                 {
@@ -132,13 +141,13 @@ namespace OA_WEB_API.Repository.BPMPro
                     EXTS = new List<string>()
                     {
                         "M",
-                        "D"
+                        "D",
+                        "DOC"
                     },
+                    IS_ASSOCIATED_FORM = false
                 };
-                if (GPI_countersignViewModel.ASSOCIATED_FORM_CONFIG != null && GPI_countersignViewModel.ASSOCIATED_FORM_CONFIG.Count > 0) BpmSystemOrder.IS_ASSOCIATED_FORM = true;
-                else BpmSystemOrder.IS_ASSOCIATED_FORM = false;
                 //確認是否有正常到系統起單；清除失敗表單資料並重新送單值行
-                if (commonRepository.PostBPMSystemOrder(BpmSystemOrder)) PutGPI_CountersignSingle(jsonFunction.JsonToObject<GPI_CountersignViewModel>(strJson));
+                if (commonRepository.PostBPMSystemOrder(BpmSystemOrder)) PutOfficialStampSingle(jsonFunction.JsonToObject<OfficialStampViewModel>(strJson));
 
                 #endregion
 
@@ -151,7 +160,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 };
                 notifyRepository.ByInsertBPMFormNo(formQuery);
 
-                if (String.IsNullOrEmpty(GPI_countersignViewModel.GPI_COUNTERSIGN_TITLE.BPM_FORM_NO) || String.IsNullOrWhiteSpace(GPI_countersignViewModel.GPI_COUNTERSIGN_TITLE.BPM_FORM_NO))
+                if (String.IsNullOrEmpty(officialStampViewModel.OFFICIAL_STAMP_TITLE.BPM_FORM_NO) || String.IsNullOrWhiteSpace(officialStampViewModel.OFFICIAL_STAMP_TITLE.BPM_FORM_NO))
                 {
                     strSQL = "";
                     strSQL += "SELECT ";
@@ -159,21 +168,23 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
                     var dtBpmFormNo = dbFun.DoQuery(strSQL, parameter);
-                    if (dtBpmFormNo.Rows.Count > 0) GPI_countersignViewModel.GPI_COUNTERSIGN_TITLE.BPM_FORM_NO = dtBpmFormNo.Rows[0][0].ToString();
+                    if (dtBpmFormNo.Rows.Count > 0) officialStampViewModel.OFFICIAL_STAMP_TITLE.BPM_FORM_NO = dtBpmFormNo.Rows[0][0].ToString();
                 }
 
-                #endregion
+                #endregion                
             }
 
             #endregion
 
-            return GPI_countersignViewModel;
+            return officialStampViewModel;
         }
 
+        #region - 依此單內容重送 -
+
         /// <summary>
-        /// 四方四隅_會簽單(依此單內容重送)(僅外部起單使用)
-        /// </summary>        
-        public bool PutGPI_CountersignRefill(GPI_CountersignQueryModel query)
+        /// 用印申請單(依此單內容重送)(僅外部起單使用)
+        /// </summary>
+        public bool PutOfficialStampRefill(OfficialStampQueryModel query)
         {
             bool vResult = false;
 
@@ -181,10 +192,10 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 #region - 宣告 -
 
-                var original = PostGPI_CountersignSingle(query);
+                var original = PostOfficialStampSingle(query);
                 strJson = jsonFunction.ObjectToJSON(original);
 
-                var GPI_countersignViewModel = new GPI_CountersignViewModel();
+                var officialStampViewModel = new OfficialStampViewModel();
 
                 var requisitionID = Guid.NewGuid().ToString();
 
@@ -192,13 +203,13 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region - 重送內容 -
 
-                GPI_countersignViewModel = jsonFunction.JsonToObject<GPI_CountersignViewModel>(strJson);
+                officialStampViewModel = jsonFunction.JsonToObject<OfficialStampViewModel>(strJson);
 
                 #region - 申請人資訊 調整 -
 
-                GPI_countersignViewModel.APPLICANT_INFO.REQUISITION_ID = requisitionID;
-                GPI_countersignViewModel.APPLICANT_INFO.DRAFT_FLAG = 1;
-                GPI_countersignViewModel.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Now;
+                officialStampViewModel.APPLICANT_INFO.REQUISITION_ID = requisitionID;
+                officialStampViewModel.APPLICANT_INFO.DRAFT_FLAG = 1;
+                officialStampViewModel.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Now;
 
                 #endregion
 
@@ -206,25 +217,27 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region - 送出 執行(新增/修改/草稿) -
 
-                PutGPI_CountersignSingle(GPI_countersignViewModel);
+                PutOfficialStampSingle(officialStampViewModel);
 
                 #endregion
-            
+
                 vResult = true;
             }
             catch (Exception ex)
             {
                 vResult = false;
-                CommLib.Logger.Error("四方四隅_會簽單(依此單內容重送)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("拷貝申請單(依此單內容重送)失敗，原因：" + ex.Message);
             }
 
             return vResult;
         }
 
+        #endregion
+
         /// <summary>
-        /// 四方四隅_會簽單(新增/修改/草稿)
+        /// 用印申請單(新增/修改/草稿)
         /// </summary>
-        public bool PutGPI_CountersignSingle(GPI_CountersignViewModel model)
+        public bool PutOfficialStampSingle(OfficialStampViewModel model)
         {
             bool vResult = false;
             try
@@ -244,7 +257,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 //表單重要性
                 var PRIORITY = model.APPLICANT_INFO.PRIORITY;
 
-                switch (model.GPI_COUNTERSIGN_TITLE.LEVEL_TYPE)
+                switch (model.OFFICIAL_STAMP_TITLE.LEVEL_TYPE)
                 {
                     case "特急件":
                         PRIORITY = 3;
@@ -260,13 +273,19 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region - 主旨 -
 
-                FM7Subject = model.GPI_COUNTERSIGN_TITLE.FM7_SUBJECT;
+                FM7Subject = model.OFFICIAL_STAMP_TITLE.FM7_SUBJECT;
+
+                if(String.IsNullOrEmpty(FM7Subject) || String.IsNullOrWhiteSpace(FM7Subject))
+                {
+                    FM7Subject = "用印申請單_" + model.OFFICIAL_STAMP_DOCS_CONFIG.Select(D => D.ITEM_NAME).FirstOrDefault() + "_" + model.OFFICIAL_STAMP_CONFIG.CONTACT + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
+
+                }
 
                 #endregion
 
                 #endregion
 
-                #region - 四方四隅_會簽單 表頭資訊：GPI_Countersign_M -
+                #region - 用印申請單 表頭資訊：OfficialStamp_M -
 
                 var parameterTitle = new List<SqlParameter>()
                 {
@@ -285,9 +304,10 @@ namespace OA_WEB_API.Repository.BPMPro
                     //(填單人/代填單人)資訊
                     new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_ID },
                     new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
-                    //四方四隅_會簽單 表頭
+                    //用印申請單 表頭
+                    new SqlParameter("@COMPANY_NAME", SqlDbType.NVarChar) { Size = 40, Value = (object)model.OFFICIAL_STAMP_TITLE.COMPANY_NAME ?? String.Empty },
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
-                    new SqlParameter("@LEVEL_TYPE", SqlDbType.NVarChar) { Size = 10, Value = (object)model.GPI_COUNTERSIGN_TITLE.LEVEL_TYPE ?? DBNull.Value },
+                    new SqlParameter("@LEVEL_TYPE", SqlDbType.NVarChar) { Size = 10, Value = (object)model.OFFICIAL_STAMP_TITLE.LEVEL_TYPE ?? DBNull.Value },
                 };
 
                 #region - 正常起單後 申請時間(APPLICANT_DATETIME) 不可覆蓋 -
@@ -315,7 +335,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL = "";
                 strSQL += "SELECT ";
                 strSQL += "      [RequisitionID] ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_Countersign_M] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
                 strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                 var dtA = dbFun.DoQuery(strSQL, parameterTitle);
@@ -325,7 +345,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region - 修改 -
 
                     strSQL = "";
-                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_GPI_Countersign_M] ";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
                     strSQL += "SET [DiagramID] =@DIAGRAM_ID, ";
                     strSQL += "     [ApplicantDept]=@APPLICANT_DEPT, ";
                     strSQL += "     [ApplicantDeptName]=@APPLICANT_DEPT_NAME, ";
@@ -340,6 +360,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [Priority]=@PRIORITY, ";
                     strSQL += "     [DraftFlag]=@DRAFT_FLAG, ";
                     strSQL += "     [FlowActivated]=@FLOW_ACTIVATED, ";
+                    strSQL += "     [CompanyName]=@COMPANY_NAME, ";
                     strSQL += "     [FM7Subject]=@FM7_SUBJECT, ";
                     strSQL += "     [LevelType]=@LEVEL_TYPE ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
@@ -353,8 +374,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region - 新增 -
 
                     strSQL = "";
-                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GPI_Countersign_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FM7Subject],[LevelType]) ";
-                    strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FM7_SUBJECT,@LEVEL_TYPE) ";
+                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[CompanyName],[FM7Subject],[LevelType]) ";
+                    strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@COMPANY_NAME,@FM7_SUBJECT,@LEVEL_TYPE) ";
 
                     dbFun.DoTran(strSQL, parameterTitle);
 
@@ -363,28 +384,30 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 四方四隅_會簽單 表單內容：GPI_Countersign_M -
+                #region - 用印申請單 表單內容：OfficialStamp_M -
 
-                if (model.GPI_COUNTERSIGN_CONFIG != null)
+                if (model.OFFICIAL_STAMP_CONFIG != null)
                 {
                     var parameterInfo = new List<SqlParameter>()
                     {
-                        //四方四隅_會簽單 表單內容
+                        //用印申請單 表單內容
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
-                        new SqlParameter("@DESCRIPTION", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@IS_VICE_PRESIDENT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value }
+                        new SqlParameter("@REASON", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@CONTACT", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@APPROVAL_NO", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value }
                     };
 
-                    //寫入：四方四隅_會簽單 表單內容parameter                        
-                    strJson = jsonFunction.ObjectToJSON(model.GPI_COUNTERSIGN_CONFIG);
+                    //寫入：用印申請單 表單內容parameter                        
+                    strJson = jsonFunction.ObjectToJSON(model.OFFICIAL_STAMP_CONFIG);
                     GlobalParameters.Infoparameter(strJson, parameterInfo);
 
                     strSQL = "";
-                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_GPI_Countersign_M] ";
-                    strSQL += "SET [Description]=@DESCRIPTION, ";
-                    strSQL += "     [Note]=@NOTE, ";
-                    strSQL += "     [IsVicePresident]=@IS_VICE_PRESIDENT ";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                    strSQL += "SET [Reason] = @REASON, ";
+                    strSQL += "     [Note] = @NOTE, ";
+                    strSQL += "     [Contact] = @CONTACT, ";
+                    strSQL += "     [ApprovalNo] = @APPROVAL_NO ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                     dbFun.DoTran(strSQL, parameterInfo);
@@ -393,11 +416,57 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 四方四隅_會簽單 會簽簽核人員：GPI_Countersign_D -
+                #region - 用印申請單 用印項目明細：OfficialStamp_DOC -
+
+                var parameterDocuments = new List<SqlParameter>()
+                {
+                    //用印申請單 用印項目明細
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                    new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 255, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@SERVINGS", SqlDbType.Int) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@APPLY_STAMP_TYPE", SqlDbType.Int) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@APPLY_STAMP_TYPE_OTHERS", SqlDbType.Int) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                };
+
+                #region 先刪除舊資料
+
+                strSQL = "";
+                strSQL += "DELETE ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_DOC] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoTran(strSQL, parameterDocuments);
+
+                #endregion
+
+                if (model.OFFICIAL_STAMP_DOCS_CONFIG != null && model.OFFICIAL_STAMP_DOCS_CONFIG.Count > 0)
+                {
+                    #region 再新增資料
+
+                    foreach (var item in model.OFFICIAL_STAMP_DOCS_CONFIG)
+                    {
+                        //寫入：用印申請單 用印項目明細parameter
+                        strJson = jsonFunction.ObjectToJSON(item);
+                        GlobalParameters.Infoparameter(strJson, parameterDocuments);
+
+                        strSQL = "";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_OfficialStamp_DOC]([RequisitionID],[ItemName],[Servings],[ApplyStampType],[ApplyStampTypeOthers]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@ITEM_NAME,@SERVINGS,@APPLY_STAMP_TYPE,@APPLY_STAMP_TYPE_OTHERS) ";
+
+                        dbFun.DoTran(strSQL, parameterDocuments);
+                    }
+
+                    #endregion
+                }
+
+                #endregion
+
+                #region - 用印申請單 會簽簽核人員：OfficialStamp_D -
 
                 var parameterApprovers = new List<SqlParameter>()
                 {
-                    //四方四隅_會簽單 會簽簽核人員
+                    //用印申請單 會簽簽核人員
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                     new SqlParameter("@APPROVER_COMPANY_ID", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@APPROVER_DEPT_MAIN_ID", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -406,49 +475,37 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@APPROVER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value }
                 };
 
-                if (model.GPI_COUNTERSIGN_APPROVERS_CONFIG != null && model.GPI_COUNTERSIGN_APPROVERS_CONFIG.Count > 0)
+                if (model.OFFICIAL_STAMP_APPROVERS_CONFIG != null && model.OFFICIAL_STAMP_APPROVERS_CONFIG.Count > 0)
                 {
-                    model.GPI_COUNTERSIGN_APPROVERS_CONFIG.ForEach(A =>
+                    model.OFFICIAL_STAMP_APPROVERS_CONFIG.ForEach(A =>
                     {
                         var logonModel = new LogonModel()
                         {
                             USER_ID = A.APPROVER_ID
                         };
-                        var userModel = userRepository.PostUserSingle(logonModel).USER_MODEL;
-                                                
-                        if (userModel != null && userModel.Count > 0 && userModel.Any(U => U.JOB_STATUS != 0))
+                        var UserModel = userRepository.PostUserSingle(logonModel).USER_MODEL;
+
+                        A.APPROVER_COMPANY_ID = UserModel.Where(U => U.DEPT_ID == A.APPROVER_DEPT_ID).Select(U => U.COMPANY_ID).FirstOrDefault();
+                        A.APPROVER_NAME = UserModel.Where(U => U.USER_ID == A.APPROVER_ID).Select(U => U.USER_NAME).FirstOrDefault();
+
+                        var userInfoMainDeptModel = new UserInfoMainDeptModel()
                         {
-                            var userInfoMainDeptModel = new UserInfoMainDeptModel()
-                            {
-                                USER_ID = A.APPROVER_ID,
-                                DEPT_ID = A.APPROVER_DEPT_ID,
-                                COMPANY_ID = userModel.Where(U => U.DEPT_ID == A.APPROVER_DEPT_ID).Select(U => U.COMPANY_ID).FirstOrDefault(),
-                            };
-                            A.APPROVER_DEPT_MAIN_ID = sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel).MAIN_DEPT.DEPT_ID;
-                        }                        
+                            USER_ID = A.APPROVER_ID,
+                            DEPT_ID = A.APPROVER_DEPT_ID,
+                            COMPANY_ID = A.APPROVER_COMPANY_ID,
+                        };
+                        A.APPROVER_DEPT_MAIN_ID = sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel).MAIN_DEPT.DEPT_ID;
                     });
 
-                    var CommonApprovers = new BPMCommonModel<GPI_CountersignApproversConfig>()
+                    var CommonApprovers = new BPMCommonModel<OfficialStampApproversConfig>()
                     {
                         EXT = "D",
                         IDENTIFY = IDENTIFY,
                         PARAMETER = parameterApprovers,
-                        MODEL = model.GPI_COUNTERSIGN_APPROVERS_CONFIG
+                        MODEL = model.OFFICIAL_STAMP_APPROVERS_CONFIG
                     };
                     commonRepository.PutApproverFunction(CommonApprovers);
                 }
-
-                #endregion
-
-                #region - 四方四隅_會簽單 表單關聯：AssociatedForm -
-
-                var associatedFormModel = new AssociatedFormModel()
-                {
-                    REQUISITION_ID = strREQ,
-                    ASSOCIATED_FORM_CONFIG = model.ASSOCIATED_FORM_CONFIG
-                };
-
-                commonRepository.PutAssociatedForm(associatedFormModel);
 
                 #endregion
 
@@ -520,7 +577,7 @@ namespace OA_WEB_API.Repository.BPMPro
             catch (Exception ex)
             {
                 vResult = false;
-                CommLib.Logger.Error("四方四隅_會簽單(新增/修改/草稿)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("用印申請單(新增/修改/草稿)失敗，原因：" + ex.Message);
             }
 
             return vResult;
@@ -543,7 +600,7 @@ namespace OA_WEB_API.Repository.BPMPro
         /// <summary>
         /// 表單代號
         /// </summary>
-        private string IDENTIFY = "GPI_Countersign";
+        private string IDENTIFY = "OfficialStamp";
 
         /// <summary>
         /// 表單主旨

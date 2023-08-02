@@ -198,6 +198,7 @@
     <Compile Include="Controllers\BPMPro\GPI_CountersignController.cs" />
     <Compile Include="Controllers\BPMPro\GPI_EvaluateContentController.cs" />
     <Compile Include="Controllers\BPMPro\GPI_EvaluateContentReplenishController.cs" />
+    <Compile Include="Controllers\BPMPro\LabourAndCapitalMemberController.cs" />
     <Compile Include="Controllers\BPMPro\MediaAcceptanceController.cs" />
     <Compile Include="Controllers\BPMPro\MediaInvoiceController.cs" />
     <Compile Include="Controllers\BPMPro\MediaOrderChangeController.cs" />
@@ -208,7 +209,10 @@
     <Compile Include="Controllers\BPMPro\MediaWarehouseNotAiredCopyController.cs" />
     <Compile Include="Controllers\BPMPro\NotifyController.cs" />
     <Compile Include="Controllers\BPMPro\CommonController.cs" />
+    <Compile Include="Controllers\BPMPro\OfficialStampController.cs" />
+    <Compile Include="Controllers\BPMPro\PersonnelSupplementController.cs" />
     <Compile Include="Controllers\BPMPro\ProjectReviewController.cs" />
+    <Compile Include="Controllers\BPMPro\ResignUnpaidLeaveAgendaController.cs" />
     <Compile Include="Controllers\BPMPro\SupplierReviewController.cs" />
     <Compile Include="Controllers\BPMPro\TestController.cs" />
     <Compile Include="Controllers\BPMPro\RollCardController.cs" />
@@ -255,6 +259,7 @@
     <Compile Include="Models\BPMPro\GPI_CountersignModel.cs" />
     <Compile Include="Models\BPMPro\GPI_EvaluateContentModel.cs" />
     <Compile Include="Models\BPMPro\GPI_EvaluateContentReplenishModel.cs" />
+    <Compile Include="Models\BPMPro\LabourAndCapitalMemberModel.cs" />
     <Compile Include="Models\BPMPro\MediaAcceptanceModel.cs" />
     <Compile Include="Models\BPMPro\MediaInvoiceModel.cs" />
     <Compile Include="Models\BPMPro\MediaOrderChangeModel.cs" />
@@ -264,7 +269,10 @@
     <Compile Include="Models\BPMPro\MediaWarehouseCopyModel.cs" />
     <Compile Include="Models\BPMPro\MediaWarehouseNotAiredCopyModel.cs" />
     <Compile Include="Models\BPMPro\NotifyModel.cs" />
+    <Compile Include="Models\BPMPro\OfficialStampModel.cs" />
+    <Compile Include="Models\BPMPro\PersonnelSupplementModel.cs" />
     <Compile Include="Models\BPMPro\ProjectReviewModel.cs" />
+    <Compile Include="Models\BPMPro\ResignUnpaidLeaveAgendaModel.cs" />
     <Compile Include="Models\BPMPro\SupplierReviewModel.cs" />
     <Compile Include="Models\BPMPro\TestModel.cs" />
     <Compile Include="Models\BPMPro\CommonModel.cs" />
@@ -293,6 +301,7 @@
     <Compile Include="Repository\BPMPro\GPI_CountersignRepository.cs" />
     <Compile Include="Repository\BPMPro\GPI_EvaluateContentReplenishRepository.cs" />
     <Compile Include="Repository\BPMPro\GPI_EvaluateContentRepository.cs" />
+    <Compile Include="Repository\BPMPro\LabourAndCapitalMemberRepository.cs" />
     <Compile Include="Repository\BPMPro\MediaAcceptanceRepository.cs" />
     <Compile Include="Repository\BPMPro\MediaInvoiceRepository.cs" />
     <Compile Include="Repository\BPMPro\MediaOrderChangeRepository.cs" />
@@ -302,7 +311,10 @@
     <Compile Include="Repository\BPMPro\MediaWarehouseCopyRepository.cs" />
     <Compile Include="Repository\BPMPro\MediaWarehouseNotAiredCopyRepository.cs" />
     <Compile Include="Repository\BPMPro\NotifyRepository.cs" />
+    <Compile Include="Repository\BPMPro\OfficialStampRepository.cs" />
+    <Compile Include="Repository\BPMPro\PersonnelSupplementRepository.cs" />
     <Compile Include="Repository\BPMPro\ProjectReviewRepository.cs" />
+    <Compile Include="Repository\BPMPro\ResignUnpaidLeaveAgendaRepository.cs" />
     <Compile Include="Repository\BPMPro\SupplierReviewRepository.cs" />
     <Compile Include="Repository\BPMPro\UserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

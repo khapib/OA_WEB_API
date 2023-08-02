@@ -278,10 +278,6 @@ namespace OA_WEB_API.Models.BPMPro
     {
         /// <summary>行政請款 系統編號</summary>
         public string GENERAL_INVOICE_REQUISITION_ID { get; set; }
-
-        /// <summary>期別</summary>
-        public int PERIOD { get; set; }
-
     }
 
     #endregion
@@ -515,10 +511,6 @@ namespace OA_WEB_API.Models.BPMPro
     {
         /// <summary>版權請款 系統編號</summary>
         public string MEDIA_INVOICE_REQUISITION_ID { get; set; }
-
-        /// <summary>期別</summary>
-        public int PERIOD { get; set; }
-
     }
 
     #endregion

@@ -224,14 +224,12 @@ namespace OA_WEB_API.Repository.BPMPro
                     default: break;
                 }
 
-                #region - 主旨 -
+                #region - 主旨 -                              
 
-                FM7Subject = model.RESIGN_UNPAID_LEAVE_AGENDA_TITLE.FM7_SUBJECT;
+                var ParentDeptName = sysCommonRepository.GetGTVDeptTree().Where(GTV => GTV.DEPT_ID.Contains(model.APPLICANT_INFO.APPLICANT_DEPT)).Select(GTV => GTV.PARENT_DEPT_NAME).FirstOrDefault();
+                if (String.IsNullOrEmpty(ParentDeptName) || String.IsNullOrWhiteSpace(ParentDeptName)) sysCommonRepository.GetGPIDeptTree().Where(GPI => GPI.DEPT_ID.Contains(model.APPLICANT_INFO.APPLICANT_DEPT)).Select(GPI => GPI.PARENT_DEPT_NAME).FirstOrDefault();
 
-                if (String.IsNullOrEmpty(FM7Subject) || String.IsNullOrWhiteSpace(FM7Subject))
-                {
-                    FM7Subject = model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_ID + "_" + model.APPLICANT_INFO.APPLICANT_NAME + "_" + DateTime.Parse(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.RESIGN_DATE.ToString()).ToString("yyyy/MM/dd") + "_" + FormAction;
-                }
+                FM7Subject = ParentDeptName + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_ID + "_" + model.APPLICANT_INFO.APPLICANT_NAME + "_" + DateTime.Parse(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.RESIGN_DATE.ToString()).ToString("yyyy/MM/dd") + "_" + FormAction;
 
                 #endregion
 
@@ -636,7 +634,7 @@ namespace OA_WEB_API.Repository.BPMPro
                                         }
                                         dtContacterName = dtContacterName.Replace(model.CONTACTER_NAME, string.Empty).Replace(";", string.Empty);
                                         dtContacterDeptID = dtContacterDeptID.Replace(model.CONTACTER_DEPT_ID, string.Empty).Replace(";", string.Empty);
-                                        dtContacterID = dtContacterID.Replace(model.CONTACTER_ID,string.Empty).Replace(";", string.Empty);
+                                        dtContacterID = dtContacterID.Replace(model.CONTACTER_ID, string.Empty).Replace(";", string.Empty);
                                         dtSignDate = dtSignDate.Replace(ArraySignDate[i], string.Empty).Replace(";", string.Empty);
                                         //如果畫押日期是空的代表日期都一樣就把原本的日期寫回畫押日期
                                         if (String.IsNullOrEmpty(dtSignDate) || String.IsNullOrWhiteSpace(dtSignDate)) dtSignDate = ArraySignDate[i];

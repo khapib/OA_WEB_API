@@ -61,7 +61,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
-            strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";            
+            strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
@@ -166,7 +166,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             try
             {
-                if(!String.IsNullOrEmpty(query.REQUISITION_ID) || !String.IsNullOrWhiteSpace(query.REQUISITION_ID))
+                if (!String.IsNullOrEmpty(query.REQUISITION_ID) || !String.IsNullOrWhiteSpace(query.REQUISITION_ID))
                 {
                     #region - 宣告 -
 
@@ -235,12 +235,14 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 FM7Subject = model.PERSONNEL_SUPPLEMENT_TITLE.FM7_SUBJECT;
 
+                var ParentDeptName = sysCommonRepository.GetGTVDeptTree().Where(GTV => GTV.DEPT_ID.Contains(model.APPLICANT_INFO.APPLICANT_DEPT)).Select(GTV => GTV.PARENT_DEPT_NAME).FirstOrDefault();
+                if (String.IsNullOrEmpty(ParentDeptName) || String.IsNullOrWhiteSpace(ParentDeptName)) sysCommonRepository.GetGPIDeptTree().Where(GPI => GPI.DEPT_ID.Contains(model.APPLICANT_INFO.APPLICANT_DEPT)).Select(GPI => GPI.PARENT_DEPT_NAME).FirstOrDefault();
+                var DeptName = sysCommonRepository.GetGTVDeptTree().Where(GTV => GTV.DEPT_ID.Contains(model.APPLICANT_INFO.APPLICANT_DEPT)).Select(GTV => GTV.DEPT_NAME).FirstOrDefault();
+                if (String.IsNullOrEmpty(DeptName) || String.IsNullOrWhiteSpace(DeptName)) sysCommonRepository.GetGPIDeptTree().Where(GPI => GPI.DEPT_ID.Contains(model.APPLICANT_INFO.APPLICANT_DEPT)).Select(GPI => GPI.DEPT_NAME).FirstOrDefault();
+
                 if (String.IsNullOrEmpty(FM7Subject) || String.IsNullOrWhiteSpace(FM7Subject))
                 {
-                    FM7Subject = sysCommonRepository.GetGTVDeptTree().Where(GTV => GTV.DEPT_ID.Contains(model.APPLICANT_INFO.APPLICANT_DEPT)).Select(GTV => GTV.PARENT_DEPT_NAME).FirstOrDefault()
-                                + "_" +
-                                sysCommonRepository.GetGTVDeptTree().Where(GTV => GTV.DEPT_ID.Contains(model.APPLICANT_INFO.APPLICANT_DEPT)).Select(GTV => GTV.DEPT_NAME).FirstOrDefault()
-                                + "_人員增補_職別：" + model.PERSONNEL_SUPPLEMENT_CONFIG.OCCUPATION + "，需求人數為：" + model.PERSONNEL_SUPPLEMENT_CONFIG.DEMAND_NUM + "人";
+                    FM7Subject = ParentDeptName + "_" + DeptName + "_人員增補_職別：" + model.PERSONNEL_SUPPLEMENT_CONFIG.OCCUPATION + "，需求人數為：" + model.PERSONNEL_SUPPLEMENT_CONFIG.DEMAND_NUM + "人";
                 }
 
                 #endregion

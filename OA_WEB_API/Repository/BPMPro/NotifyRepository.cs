@@ -620,9 +620,9 @@ namespace OA_WEB_API.Repository.BPMPro
             bool vResult = false;
             try
             {
-                if(model.NOTIFY_BY == null)
+                if (model.NOTIFY_BY == null)
                 {
-                    model.NOTIFY_BY= new List<string>();
+                    model.NOTIFY_BY = new List<string>();
                 }
 
                 ReceiverID = "";
@@ -651,7 +651,7 @@ namespace OA_WEB_API.Repository.BPMPro
                                     });
                                 }
                             }
-                        }                        
+                        }
 
                         #endregion
 
@@ -1153,6 +1153,71 @@ namespace OA_WEB_API.Repository.BPMPro
         public void SendEmail(EmailModel model)
         {
             var maxSerialNo = GetMaxSerialNo();
+
+            #region - 原發信通知 -
+
+            //var parameter = new List<SqlParameter>
+            //{
+            //    new SqlParameter("@AUTO_COUNTER", SqlDbType.BigInt) { Value = maxSerialNo.AUTO_COUNTER },
+            //    new SqlParameter("@SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = model.SUBJECT },
+            //    new SqlParameter("@CONTENT", SqlDbType.NVarChar) { Size = -1, Value = model.CONTENT },
+            //    new SqlParameter("@FROM_LIST", SqlDbType.NVarChar) { Size = 50, Value = model.FROM_LIST },
+            //    new SqlParameter("@TO_LIST", SqlDbType.NVarChar) { Size = 500, Value = model.TO_LIST },
+            //    new SqlParameter("@CC_LIST", SqlDbType.NVarChar) { Size = 500, Value = model.CC_LIST },
+            //    //new SqlParameter("@BCC_LIST", SqlDbType.NVarChar) { Size = 500, Value = model.BCC_LIST },
+            //    new SqlParameter("@BCC_LIST", SqlDbType.NVarChar) { Size = 500, Value = _BCC_LIST },
+            //    new SqlParameter("@MAIL_TIME", SqlDbType.DateTime) { Size = 200, Value = DateTime.Now},
+            //    new SqlParameter("@HASH_CODE", SqlDbType.Int) { Value = maxSerialNo.HASH_CODE },
+            //    //new SqlParameter("@FW3_TO_LIST", SqlDbType.NVarChar) { Value = DBNull.Value },
+            //    new SqlParameter("@FW3_TO_NAME", SqlDbType.NVarChar) { Value = model.FW3_TO_NAME },
+            //    new SqlParameter("@PRIORITY", SqlDbType.SmallInt) { Value = 3 }
+            //};
+
+            //strSQL = "";
+            //strSQL += "INSERT INTO [BPMPro].[dbo].[FSe7en_EMail_Bank]([AutoCounter],[Subject],[Content],[FromList],[ToList],[CcList],[BccList],[MailTime],[HashCode],[FW3ToName],[Priority]) ";
+            //strSQL += "VALUES(@AUTO_COUNTER,@SUBJECT,@CONTENT,@FROM_LIST,@TO_LIST,@CC_LIST,@BCC_LIST,GETDATE(),@HASH_CODE,@FW3_TO_NAME,@PRIORITY)";
+
+            //dbFun.DoTran(strSQL, parameter);
+
+            #endregion
+
+            #region - 資深副總不收信件 -
+            //資深副總不收信件；所以需要將TO_LIST、FW3_TO_NAME把有副總名字的給移除
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [AtomID] ";
+            strSQL += "FROM [BPMPro].[dbo].[FSe7en_Org_RoleStruct] ";
+            strSQL += "WHERE 1=1 ";
+            strSQL += "         AND [RoleID] ='DGM' ";
+            var dt = dbFun.DoQuery(strSQL);
+            var logonModel = new LogonModel()
+            {
+                USER_ID = dt.AsEnumerable().Select(R => R.Field<string>("AtomID")).FirstOrDefault()
+            };
+            var DGM_Name = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.COMPANY_ID == "RootCompany").Select(U => U.USER_NAME).FirstOrDefault();
+            if (model.FW3_TO_NAME.Contains(DGM_Name + ";")) model.FW3_TO_NAME = model.FW3_TO_NAME.Replace(DGM_Name + ";", string.Empty);
+            else model.FW3_TO_NAME = model.FW3_TO_NAME.Replace(DGM_Name, string.Empty);
+
+            #region - 發送列表移除副總信箱 -
+
+            var DGM_Email = DGM_Name + "< >";
+            var i = 0;
+            while (i <= 1)
+            {
+                //BPM系統的資料發信
+                if (model.TO_LIST.Contains(DGM_Email + ";")) model.TO_LIST = model.TO_LIST.Replace(DGM_Email + ";", string.Empty);
+                else model.TO_LIST = model.TO_LIST.Replace(DGM_Email, string.Empty);
+                //[NUP].[dbo].[GTV_Org_Relation_Member]的資料發信
+                if(i!=1) DGM_Email = DGM_Name + "<" + userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.COMPANY_ID == "RootCompany").Select(U => U.EMAIL).FirstOrDefault() + ">";
+
+                i++;
+            }
+
+            #endregion
+
+            #endregion
+
             var parameter = new List<SqlParameter>
             {
                 new SqlParameter("@AUTO_COUNTER", SqlDbType.BigInt) { Value = maxSerialNo.AUTO_COUNTER },
@@ -1174,7 +1239,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "INSERT INTO [BPMPro].[dbo].[FSe7en_EMail_Bank]([AutoCounter],[Subject],[Content],[FromList],[ToList],[CcList],[BccList],[MailTime],[HashCode],[FW3ToName],[Priority]) ";
             strSQL += "VALUES(@AUTO_COUNTER,@SUBJECT,@CONTENT,@FROM_LIST,@TO_LIST,@CC_LIST,@BCC_LIST,GETDATE(),@HASH_CODE,@FW3_TO_NAME,@PRIORITY)";
 
-            dbFun.DoTran(strSQL, parameter);
+            if (!String.IsNullOrEmpty(model.FW3_TO_NAME) || !String.IsNullOrWhiteSpace(model.FW3_TO_NAME)) dbFun.DoTran(strSQL, parameter);
         }
 
         /// <summary>

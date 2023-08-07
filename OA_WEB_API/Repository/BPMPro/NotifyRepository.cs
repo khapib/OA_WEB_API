@@ -7,9 +7,9 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Web;
-
 using Dapper;
 
 using OA_WEB_API.Models;
@@ -582,6 +582,153 @@ namespace OA_WEB_API.Repository.BPMPro
                 }
             }
         }
+
+        #region - 2023/08/07 Leon: 接收流程引擎(特定人員/角色結案通知)通知觸發事件 -
+
+        /// <summary>
+        /// (特定人員/角色結案通知)通知觸發事件
+        /// </summary>
+        public void ByCloseNotify(InformNotifyModel inform)
+        {
+            try
+            {
+                var emailList = new List<string>();
+                var nameList =new List<string>();
+                var receiverList = new List<ReceiverModel>();
+
+                #region STEP1：通知名單
+
+                var GroupPerson = new GroupInformNotifyModel
+                {
+                    REQUISITION_ID = new List<string>
+                    {
+                    inform.REQUISITION_ID
+                    },
+                    NOTIFY_BY = new List<string>
+                    {
+                    inform.NOTIFY_BY
+                    },
+                    ROLE_ID = new List<string>
+                    {
+                    inform.ROLE_ID
+                    }
+                };
+
+                #region - 被知會特定人員 -
+
+                if ((GroupPerson.NOTIFY_BY != null && GroupPerson.NOTIFY_BY.Count > 0) || (GroupPerson.ROLE_ID != null && GroupPerson.ROLE_ID.Count > 0))
+                {
+
+                    #region - 被知會特定角色 -
+
+                    if (GroupPerson.ROLE_ID != null)
+                    {
+                        foreach (var role in GroupPerson.ROLE_ID)
+                        {
+                            if (role != null)
+                            {
+                                var RolesUserID = CommonRepository.GetRoles()
+                                                            .Where(R => R.ROLE_ID.Contains(role))
+                                                            .Select(R => R).ToList();
+                                RolesUserID.ForEach(roleuser =>
+                                {
+                                    GroupPerson.NOTIFY_BY.Add(roleuser.USER_ID);
+                                });
+                            }
+                        }
+                    }
+
+                    #endregion
+
+                    #region - 排除重複人員 -
+
+                    GroupPerson.NOTIFY_BY = GroupPerson.NOTIFY_BY.GroupBy(N => N)
+                                                    .Select(g => g.First()).ToList();
+
+                    #endregion
+
+                    #region - 排除 NOTIFY_BY List Value 是 null -
+
+                    GroupPerson.NOTIFY_BY = GroupPerson.NOTIFY_BY.Where(N => N != null)
+                                                        .Select(R => R)
+                                                        .ToList();
+
+                    #endregion
+
+                    foreach (var notify in GroupPerson.NOTIFY_BY)
+                    {
+                        var UserIDmodel = new LogonModel()
+                        {
+                            USER_ID = notify
+                        };
+
+                        foreach (var userInfo in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                        {
+                            emailList.Add(userInfo.USER_NAME + "<" + userInfo.EMAIL + ">");
+                            nameList.Add(userInfo.USER_NAME);
+                            receiverList.Add(new ReceiverModel() { USER_ID = userInfo.USER_ID, USER_NAME = userInfo.USER_NAME });
+                        }
+                    }
+                    
+                }
+
+                #endregion
+
+                #endregion
+
+                #region STEP3：發送(處理完畢)信件
+
+                var query = new FormQueryModel()
+                {
+                    REQUISITION_ID = inform.REQUISITION_ID
+                };
+
+                var model = new EmailModel()
+                {
+                    FROM_LIST = _FORM,
+                    TO_LIST = String.Join(";", emailList),
+                    CC_LIST = String.Empty,
+                    BCC_LIST = String.Empty,
+                    SUBJECT = String.Format(formRepository.GetFormSubject(query), "處理完畢特定通知"),
+                    CONTENT = GetEmailBody(query, String.Join("、", nameList), enumProcess.CLOSE),
+                    FW3_TO_NAME = String.Join(";", nameList)
+                };
+
+                SendEmail(model);
+
+                #endregion
+
+                #region STEP5：新增(知會通知)
+
+                foreach (var item in receiverList)
+                {
+                    var notice = new NoticeMode()
+                    {
+                        REQUISITION_ID = query.REQUISITION_ID,
+                        RECEIVER_ID = item.USER_ID,
+                        RECEIVER_NAME = item.USER_NAME,
+                        SUBJECT = String.Format(formRepository.GetFormSubject(query), "處理完畢特定通知")
+                    };
+
+                    SetNotice(notice);
+                }
+
+                #endregion
+
+                #region STEP4：發送記錄：刪除該表單的發送記錄
+
+                flowRepository.PutFormClose(query);
+
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("(特定人員/角色結案通知)通知觸發事件 通知失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
 
         #region - 2022/11/08 Leon: 接收流程引擎(特定知會通知)通知觸發事件 -
 
@@ -1209,7 +1356,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 if (model.TO_LIST.Contains(DGM_Email + ";")) model.TO_LIST = model.TO_LIST.Replace(DGM_Email + ";", string.Empty);
                 else model.TO_LIST = model.TO_LIST.Replace(DGM_Email, string.Empty);
                 //[NUP].[dbo].[GTV_Org_Relation_Member]的資料發信
-                if(i!=1) DGM_Email = DGM_Name + "<" + userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.COMPANY_ID == "RootCompany").Select(U => U.EMAIL).FirstOrDefault() + ">";
+                if (i != 1) DGM_Email = DGM_Name + "<" + userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.COMPANY_ID == "RootCompany").Select(U => U.EMAIL).FirstOrDefault() + ">";
 
                 i++;
             }

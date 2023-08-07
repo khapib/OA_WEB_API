@@ -790,7 +790,7 @@ namespace OA_WEB_API.Repository.BPMPro
                                 if (role != null)
                                 {
                                     var RolesUserID = CommonRepository.GetRoles()
-                                                                .Where(R => R.ROLE_ID.Contains(role))
+                                                                .Where(R => R.ROLE_ID == role)
                                                                 .Select(R => R).ToList();
                                     RolesUserID.ForEach(roleuser =>
                                     {

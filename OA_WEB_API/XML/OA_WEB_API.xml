@@ -1171,6 +1171,11 @@
             接收流程引擎(特定人員)通知
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Controllers.NotifyController.ByCloseNotify">
+            <summary>
+            (特定人員/角色 結案通知)通知觸發事件
+            </summary>
+        </member>
         <member name="M:OA_WEB_API.Controllers.NotifyController.ByInformNotify">
             <summary>
             接收流程引擎(特定知會通知)通知
@@ -10747,6 +10752,11 @@
         <member name="M:OA_WEB_API.Repository.BPMPro.NotifyRepository.ByNotice(OA_WEB_API.Models.BPMPro.FormQueryModel)">
             <summary>
             (特定人員)事件
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.NotifyRepository.ByCloseNotify(OA_WEB_API.Models.BPMPro.InformNotifyModel)">
+            <summary>
+            (特定人員/角色結案通知)通知觸發事件
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.NotifyRepository.ByInformNotify(OA_WEB_API.Models.BPMPro.InformNotifyModel)">

@@ -272,13 +272,14 @@ namespace OA_WEB_API.Repository.BPMPro
                 }
 
                 #region - 主旨 -
-
-                FM7Subject = model.OFFICIAL_STAMP_TITLE.FM7_SUBJECT;
-
-                if(String.IsNullOrEmpty(FM7Subject) || String.IsNullOrWhiteSpace(FM7Subject))
+                
+                if(String.IsNullOrEmpty(model.OFFICIAL_STAMP_CONFIG.CONTACT) || String.IsNullOrWhiteSpace(model.OFFICIAL_STAMP_CONFIG.CONTACT))
+                {
+                    FM7Subject = "用印申請單_" + model.OFFICIAL_STAMP_DOCS_CONFIG.Select(D => D.ITEM_NAME).FirstOrDefault() + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
+                }
+                else
                 {
                     FM7Subject = "用印申請單_" + model.OFFICIAL_STAMP_DOCS_CONFIG.Select(D => D.ITEM_NAME).FirstOrDefault() + "_" + model.OFFICIAL_STAMP_CONFIG.CONTACT + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
-
                 }
 
                 #endregion

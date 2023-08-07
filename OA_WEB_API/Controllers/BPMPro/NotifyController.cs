@@ -203,6 +203,30 @@ namespace OA_WEB_API.Controllers
             notifyRepository.ByNotice(query);
         }
 
+        #region - 2023/08/07 Leon: 接收流程引擎(特定人員/角色 結案通知)通知觸發事件 -
+
+        /// <summary>
+        /// (特定人員/角色 結案通知)通知觸發事件
+        /// </summary>
+        [Route("ByCloseNotify")]
+        [HttpPost]
+        public void ByCloseNotify()
+        {
+            HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
+            HttpRequestBase request = context.Request;
+
+            var inform = new InformNotifyModel()
+            {
+                REQUISITION_ID = request["RequisitionID"],
+                NOTIFY_BY = request["NotifyBy"],
+                ROLE_ID = request["RoleID"]
+            };
+
+            notifyRepository.ByCloseNotify(inform);
+        }
+
+        #endregion
+
         #region - 2022/11/08 Leon: 接收流程引擎(特定知會通知)通知觸發事件 -
 
         /// <summary>
@@ -227,7 +251,7 @@ namespace OA_WEB_API.Controllers
 
         #endregion
 
-        #region - (群體知會通知)通知觸發事件 -
+        #region - 2022/11/08 Leon: (群體知會通知)通知觸發事件 -
 
         /// <summary>
         /// (群體知會通知)通知觸發事件
@@ -241,7 +265,7 @@ namespace OA_WEB_API.Controllers
 
         #endregion
 
-        #region - (欄位確認後知會通知)通知觸發事件 -
+        #region - 2022/12/19 Leon: (欄位確認後知會通知)通知觸發事件 -
 
         /// <summary>
         /// (欄位確認後知會通知)通知觸發事件

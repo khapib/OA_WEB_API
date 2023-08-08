@@ -191,6 +191,15 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     #endregion
 
+                    #region - 人員增補單 表單內容 調整 -
+
+                    personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG.APPROVAL_NO = null;
+                    personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG.PERSONNEL = null;
+                    personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG.IMPLEMENT_DATE = null;
+                    personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG.CLOSE_DATE = null;
+
+                    #endregion
+
                     #endregion
 
                     #region - 送出 執行(新增/修改/草稿) -
@@ -371,6 +380,25 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@PERSONNEL", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@CLOSE_DATE", SqlDbType.DateTime) { Value = (object)DBNull.Value ?? DBNull.Value },
                     };
+
+                    #region - 確認新單人資主管填的值就要清空 -
+
+                    strSQL = "";
+                    strSQL += "SELECT ";
+                    strSQL += "      [RequisitionID] ";
+                    strSQL += "FROM [BPMPro].[dbo].[FSe7en_Sys_Requisition] ";
+                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+                    var dtReq = dbFun.DoQuery(strSQL, parameterInfo);
+                    if (dtReq.Rows.Count <= 0)
+                    {
+                        model.PERSONNEL_SUPPLEMENT_CONFIG.APPROVAL_NO = null;
+                        model.PERSONNEL_SUPPLEMENT_CONFIG.PERSONNEL = null;
+                        model.PERSONNEL_SUPPLEMENT_CONFIG.IMPLEMENT_DATE = null;
+                        model.PERSONNEL_SUPPLEMENT_CONFIG.CLOSE_DATE = null;
+                    }
+
+                    #endregion
 
                     //寫入：人員增補單 表單內容parameter                        
                     strJson = jsonFunction.ObjectToJSON(model.PERSONNEL_SUPPLEMENT_CONFIG);

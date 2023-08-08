@@ -10756,7 +10756,7 @@
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.NotifyRepository.ByCloseNotify(OA_WEB_API.Models.BPMPro.InformNotifyModel)">
             <summary>
-            (特定人員/角色結案通知)通知觸發事件
+            (特定人員/角色 結案通知)通知觸發事件
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.NotifyRepository.ByInformNotify(OA_WEB_API.Models.BPMPro.InformNotifyModel)">

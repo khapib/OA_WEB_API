@@ -355,6 +355,26 @@ namespace OA_WEB_API.Repository.BPMPro
                 emailList = emailListTemp.Distinct().ToList();
                 nameList = nameListTemp.Distinct().ToList();
 
+                #region - 總經理不收(結案)信件 -
+                //總經理不收(結案)信件；所以需要將finalApprover把有總經理名字的給移除
+
+                strSQL = "";
+                strSQL += "SELECT ";
+                strSQL += "     [AtomID] ";
+                strSQL += "FROM [BPMPro].[dbo].[FSe7en_Org_RoleStruct] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "         AND [RoleID] ='GM' ";
+                var dt = dbFun.DoQuery(strSQL);
+                var logonModel = new LogonModel()
+                {
+                    USER_ID = dt.AsEnumerable().Select(R => R.Field<string>("AtomID")).FirstOrDefault()
+                };
+                var GM_Name = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.COMPANY_ID == "RootCompany").Select(U => U.USER_NAME).FirstOrDefault();
+                emailList.Remove(emailList.Where(e => e.Contains(GM_Name)).FirstOrDefault());
+
+                #endregion
+
+
                 #endregion
 
                 #region STEP3：發送(處理完畢)信件
@@ -583,10 +603,10 @@ namespace OA_WEB_API.Repository.BPMPro
             }
         }
 
-        #region - 2023/08/07 Leon: 接收流程引擎(特定人員/角色結案通知)通知觸發事件 -
+        #region - 2023/08/07 Leon: 接收流程引擎(特定人員/角色 結案通知)通知觸發事件 -
 
         /// <summary>
-        /// (特定人員/角色結案通知)通知觸發事件
+        /// (特定人員/角色 結案通知)通知觸發事件
         /// </summary>
         public void ByCloseNotify(InformNotifyModel inform)
         {
@@ -790,7 +810,7 @@ namespace OA_WEB_API.Repository.BPMPro
                                 if (role != null)
                                 {
                                     var RolesUserID = CommonRepository.GetRoles()
-                                                                .Where(R => R.ROLE_ID== role)
+                                                                .Where(R => R.ROLE_ID == role)
                                                                 .Select(R => R).ToList();
                                     RolesUserID.ForEach(roleuser =>
                                     {

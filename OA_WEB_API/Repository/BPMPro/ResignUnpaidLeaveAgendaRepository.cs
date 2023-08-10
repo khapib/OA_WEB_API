@@ -199,50 +199,43 @@ namespace OA_WEB_API.Repository.BPMPro
             bool vResult = false;
             try
             {
-                if(model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG.Any(AFF => AFF.ITEM_ID.Contains("A") && AFF.CONTACTER_ID == model.APPLICANT_INFO.APPLICANT_ID))
+                #region - 宣告 -
+
+                var logonModel = new LogonModel();
+                var ConstructionItemNameDic = new Dictionary<string, string>();
+
+                #region - 系統編號 -
+
+                strREQ = model.APPLICANT_INFO.REQUISITION_ID;
+                if (String.IsNullOrEmpty(strREQ) || String.IsNullOrWhiteSpace(strREQ))
                 {
-                    vResult = false;
-                    CommLib.Logger.Error("離職、留職停薪_流程表(新增/修改/草稿)失敗，原因：所屬部門交接人不能是申請人。");
+                    strREQ = Guid.NewGuid().ToString();
                 }
-                else
+
+                #endregion
+
+                var FormAction = String.Empty;
+                switch (model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.FORM_ACTION)
                 {
-                    #region - 宣告 -
+                    case "A": FormAction = "離職"; break;
+                    case "B": FormAction = "留職停薪"; break;
+                    default: break;
+                }
 
-                    var logonModel = new LogonModel();
-                    var ConstructionItemNameDic = new Dictionary<string, string>();
+                #region - 主旨 -                              
 
-                    #region - 系統編號 -
+                var ParentDeptName = sysCommonRepository.GetGTVDeptTree().Where(GTV => GTV.DEPT_ID.Contains(model.APPLICANT_INFO.APPLICANT_DEPT)).Select(GTV => GTV.PARENT_DEPT_NAME).FirstOrDefault();
+                if (String.IsNullOrEmpty(ParentDeptName) || String.IsNullOrWhiteSpace(ParentDeptName)) sysCommonRepository.GetGPIDeptTree().Where(GPI => GPI.DEPT_ID.Contains(model.APPLICANT_INFO.APPLICANT_DEPT)).Select(GPI => GPI.PARENT_DEPT_NAME).FirstOrDefault();
 
-                    strREQ = model.APPLICANT_INFO.REQUISITION_ID;
-                    if (String.IsNullOrEmpty(strREQ) || String.IsNullOrWhiteSpace(strREQ))
-                    {
-                        strREQ = Guid.NewGuid().ToString();
-                    }
+                FM7Subject = ParentDeptName + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_ID + "_" + model.APPLICANT_INFO.APPLICANT_NAME + "_" + DateTime.Parse(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.RESIGN_DATE.ToString()).ToString("yyyy/MM/dd") + "_" + FormAction;
 
-                    #endregion
+                #endregion
 
-                    var FormAction = String.Empty;
-                    switch (model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.FORM_ACTION)
-                    {
-                        case "A": FormAction = "離職"; break;
-                        case "B": FormAction = "留職停薪"; break;
-                        default: break;
-                    }
+                #endregion
 
-                    #region - 主旨 -                              
+                #region - 離職、留職停薪_手續表 表頭資訊：ResignUnpaidLeaveAgenda_M -
 
-                    var ParentDeptName = sysCommonRepository.GetGTVDeptTree().Where(GTV => GTV.DEPT_ID.Contains(model.APPLICANT_INFO.APPLICANT_DEPT)).Select(GTV => GTV.PARENT_DEPT_NAME).FirstOrDefault();
-                    if (String.IsNullOrEmpty(ParentDeptName) || String.IsNullOrWhiteSpace(ParentDeptName)) sysCommonRepository.GetGPIDeptTree().Where(GPI => GPI.DEPT_ID.Contains(model.APPLICANT_INFO.APPLICANT_DEPT)).Select(GPI => GPI.PARENT_DEPT_NAME).FirstOrDefault();
-
-                    FM7Subject = ParentDeptName + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_ID + "_" + model.APPLICANT_INFO.APPLICANT_NAME + "_" + DateTime.Parse(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.RESIGN_DATE.ToString()).ToString("yyyy/MM/dd") + "_" + FormAction;
-
-                    #endregion
-
-                    #endregion
-
-                    #region - 離職、留職停薪_手續表 表頭資訊：ResignUnpaidLeaveAgenda_M -
-
-                    var parameterTitle = new List<SqlParameter>()
+                var parameterTitle = new List<SqlParameter>()
                     {
                         //表單資訊
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  strREQ},
@@ -263,82 +256,82 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
                     };
 
-                    #region - 正常起單後 申請時間(APPLICANT_DATETIME) 不可覆蓋 -
+                #region - 正常起單後 申請時間(APPLICANT_DATETIME) 不可覆蓋 -
 
-                    if (model.APPLICANT_INFO.DRAFT_FLAG == 0)
-                    {
-                        strSQL = "";
-                        strSQL += "SELECT ";
-                        strSQL += "      [RequisitionID] ";
-                        strSQL += "FROM [BPMPro].[dbo].[FSe7en_Sys_Requisition] ";
-                        strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-
-                        var dtReq = dbFun.DoQuery(strSQL, parameterTitle);
-                        if (dtReq.Rows.Count <= 0)
-                        {
-                            parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
-                            IsADD = true;
-                        }
-                    }
-                    else parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
-
-                    #endregion
-
+                if (model.APPLICANT_INFO.DRAFT_FLAG == 0)
+                {
                     strSQL = "";
                     strSQL += "SELECT ";
                     strSQL += "      [RequisitionID] ";
-                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                    strSQL += "FROM [BPMPro].[dbo].[FSe7en_Sys_Requisition] ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-                    var dtA = dbFun.DoQuery(strSQL, parameterTitle);
-
-                    if (dtA.Rows.Count > 0)
+                    var dtReq = dbFun.DoQuery(strSQL, parameterTitle);
+                    if (dtReq.Rows.Count <= 0)
                     {
-                        #region - 修改 -
-
-                        strSQL = "";
-                        strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
-                        strSQL += "SET [DiagramID] =@DIAGRAM_ID, ";
-                        strSQL += "     [ApplicantDept]=@APPLICANT_DEPT, ";
-                        strSQL += "     [ApplicantDeptName]=@APPLICANT_DEPT_NAME, ";
-                        strSQL += "     [ApplicantID]=@APPLICANT_ID, ";
-                        strSQL += "     [ApplicantName]=@APPLICANT_NAME, ";
-                        strSQL += "     [ApplicantPhone]=@APPLICANT_PHONE, ";
-
-                        if (IsADD) strSQL += "     [ApplicantDateTime]=@APPLICANT_DATETIME, ";
-
-                        strSQL += "     [FillerID]=@FILLER_ID, ";
-                        strSQL += "     [FillerName]=@FILLER_NAME, ";
-                        strSQL += "     [Priority]=@PRIORITY, ";
-                        strSQL += "     [DraftFlag]=@DRAFT_FLAG, ";
-                        strSQL += "     [FlowActivated]=@FLOW_ACTIVATED, ";
-                        strSQL += "     [FM7Subject]=@FM7_SUBJECT ";
-                        strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-
-                        dbFun.DoTran(strSQL, parameterTitle);
-
-                        #endregion
+                        parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+                        IsADD = true;
                     }
-                    else
-                    {
-                        #region - 新增 -
+                }
+                else parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
 
-                        strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FM7Subject]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FM7_SUBJECT) ";
+                #endregion
 
-                        dbFun.DoTran(strSQL, parameterTitle);
+                strSQL = "";
+                strSQL += "SELECT ";
+                strSQL += "      [RequisitionID] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-                        #endregion
-                    }
+                var dtA = dbFun.DoQuery(strSQL, parameterTitle);
+
+                if (dtA.Rows.Count > 0)
+                {
+                    #region - 修改 -
+
+                    strSQL = "";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                    strSQL += "SET [DiagramID] =@DIAGRAM_ID, ";
+                    strSQL += "     [ApplicantDept]=@APPLICANT_DEPT, ";
+                    strSQL += "     [ApplicantDeptName]=@APPLICANT_DEPT_NAME, ";
+                    strSQL += "     [ApplicantID]=@APPLICANT_ID, ";
+                    strSQL += "     [ApplicantName]=@APPLICANT_NAME, ";
+                    strSQL += "     [ApplicantPhone]=@APPLICANT_PHONE, ";
+
+                    if (IsADD) strSQL += "     [ApplicantDateTime]=@APPLICANT_DATETIME, ";
+
+                    strSQL += "     [FillerID]=@FILLER_ID, ";
+                    strSQL += "     [FillerName]=@FILLER_NAME, ";
+                    strSQL += "     [Priority]=@PRIORITY, ";
+                    strSQL += "     [DraftFlag]=@DRAFT_FLAG, ";
+                    strSQL += "     [FlowActivated]=@FLOW_ACTIVATED, ";
+                    strSQL += "     [FM7Subject]=@FM7_SUBJECT ";
+                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+                    dbFun.DoTran(strSQL, parameterTitle);
 
                     #endregion
+                }
+                else
+                {
+                    #region - 新增 -
 
-                    #region - 離職、留職停薪_手續表 表單內容：ResignUnpaidLeaveAgenda_M -
+                    strSQL = "";
+                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FM7Subject]) ";
+                    strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FM7_SUBJECT) ";
 
-                    if (model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG != null)
-                    {
-                        var parameterInfo = new List<SqlParameter>()
+                    dbFun.DoTran(strSQL, parameterTitle);
+
+                    #endregion
+                }
+
+                #endregion
+
+                #region - 離職、留職停薪_手續表 表單內容：ResignUnpaidLeaveAgenda_M -
+
+                if (model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG != null)
+                {
+                    var parameterInfo = new List<SqlParameter>()
                         {
                             //離職、留職停薪_手續表 表單內容
                             new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
@@ -355,38 +348,38 @@ namespace OA_WEB_API.Repository.BPMPro
                             new SqlParameter("@C03_OTHERS", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                         };
 
-                        logonModel.USER_ID = model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.HANDOVER_SUPERVISOR_ID;
-                        model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.HANDOVER_SUPERVISOR_NAME = userRepository.PostUserSingle(logonModel).USER_MODEL.Select(U => U.USER_NAME).FirstOrDefault();
+                    logonModel.USER_ID = model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.HANDOVER_SUPERVISOR_ID;
+                    model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.HANDOVER_SUPERVISOR_NAME = userRepository.PostUserSingle(logonModel).USER_MODEL.Select(U => U.USER_NAME).FirstOrDefault();
 
-                        //寫入：離職、留職停薪_流程表 表單內容parameter                        
-                        strJson = jsonFunction.ObjectToJSON(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG);
-                        GlobalParameters.Infoparameter(strJson, parameterInfo);
+                    //寫入：離職、留職停薪_流程表 表單內容parameter                        
+                    strJson = jsonFunction.ObjectToJSON(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG);
+                    GlobalParameters.Infoparameter(strJson, parameterInfo);
 
-                        strSQL = "";
-                        strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
-                        strSQL += "SET [FormAction]=@FORM_ACTION, ";
-                        strSQL += "     [ResignDate]=@RESIGN_DATE, ";
-                        strSQL += "     [HandoverSupervisorDeptID]=@HANDOVER_SUPERVISOR_DEPT_ID, ";
-                        strSQL += "     [HandoverSupervisorID]=@HANDOVER_SUPERVISOR_ID, ";
-                        strSQL += "     [HandoverSupervisorName]=@HANDOVER_SUPERVISOR_NAME, ";
-                        strSQL += "     [C01B_Date]=@C01B_DATE, ";
-                        strSQL += "     [C01C_StrDateTime]=@C01C_STR_DATE_TIME, ";
-                        strSQL += "     [C01F_StrDateTime]=@C01F_STR_DATE_TIME, ";
-                        strSQL += "     [C01H_StrDateTime]=@C01H_STR_DATE_TIME, ";
-                        strSQL += "     [C02_Others]=@C02_OTHERS, ";
-                        strSQL += "     [C03_Others]=@C03_OTHERS ";
-                        strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+                    strSQL = "";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                    strSQL += "SET [FormAction]=@FORM_ACTION, ";
+                    strSQL += "     [ResignDate]=@RESIGN_DATE, ";
+                    strSQL += "     [HandoverSupervisorDeptID]=@HANDOVER_SUPERVISOR_DEPT_ID, ";
+                    strSQL += "     [HandoverSupervisorID]=@HANDOVER_SUPERVISOR_ID, ";
+                    strSQL += "     [HandoverSupervisorName]=@HANDOVER_SUPERVISOR_NAME, ";
+                    strSQL += "     [C01B_Date]=@C01B_DATE, ";
+                    strSQL += "     [C01C_StrDateTime]=@C01C_STR_DATE_TIME, ";
+                    strSQL += "     [C01F_StrDateTime]=@C01F_STR_DATE_TIME, ";
+                    strSQL += "     [C01H_StrDateTime]=@C01H_STR_DATE_TIME, ";
+                    strSQL += "     [C02_Others]=@C02_OTHERS, ";
+                    strSQL += "     [C03_Others]=@C03_OTHERS ";
+                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-                        dbFun.DoTran(strSQL, parameterInfo);
+                    dbFun.DoTran(strSQL, parameterInfo);
 
-                    }
+                }
 
-                    #endregion
+                #endregion
 
-                    #region - 離職、留職停薪_手續表 事務清單：ResignUnpaidLeaveAgenda_D -                              
+                #region - 離職、留職停薪_手續表 事務清單：ResignUnpaidLeaveAgenda_D -                              
 
-                    //IS_CONSUMMATION初始值都會是False
-                    var parameterAffairs = new List<SqlParameter>()
+                //IS_CONSUMMATION初始值都會是False
+                var parameterAffairs = new List<SqlParameter>()
                     {
                         //離職、留職停薪_手續表 事務清單
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
@@ -400,139 +393,144 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@SIGN_DATE", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
                     };
 
-                    var strInsertSQL = "";
-                    strInsertSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_D]([RequisitionID],[ItemID],[ItemName],[IsConsummation],[Description],[ContacterDeptID],[ContacterID],[ContacterName],[SignDate]) ";
-                    strInsertSQL += "VALUES(@REQUISITION_ID,@ITEM_ID,@ITEM_NAME,@IS_CONSUMMATION,@DESCRIPTION,@CONTACTER_DEPT_ID,@CONTACTER_ID,@CONTACTER_NAME,@SIGN_DATE) ";
+                var strInsertSQL = "";
+                strInsertSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_D]([RequisitionID],[ItemID],[ItemName],[IsConsummation],[Description],[ContacterDeptID],[ContacterID],[ContacterName],[SignDate]) ";
+                strInsertSQL += "VALUES(@REQUISITION_ID,@ITEM_ID,@ITEM_NAME,@IS_CONSUMMATION,@DESCRIPTION,@CONTACTER_DEPT_ID,@CONTACTER_ID,@CONTACTER_NAME,@SIGN_DATE) ";
 
-                    if (model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG != null && model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG.Count > 0)
+                if (model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG != null && model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG.Count > 0)
+                {
+                    if (model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG.Any(AFF => AFF.ITEM_ID.Contains("A") && AFF.CONTACTER_ID == model.APPLICANT_INFO.APPLICANT_ID))
                     {
-                        if (model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG.Where(AFF => !String.IsNullOrEmpty(AFF.CONTACTER_ID) || !String.IsNullOrWhiteSpace(AFF.CONTACTER_ID)).Count() > 0)
-                        {
-                            #region 先刪除舊資料
-
-                            strSQL = "";
-                            strSQL += "DELETE ";
-                            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_D] ";
-                            strSQL += "WHERE 1=1 ";
-                            strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
-
-                            dbFun.DoTran(strSQL, parameterAffairs);
-
-                            #endregion
-
-                            model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG.Where(AFF => AFF.ITEM_ID.Contains("A")).ToList().ForEach(item =>
-                            {
-                                if (ItemNameDic.Keys.Contains(item.ITEM_ID))
-                                {
-                                    logonModel.USER_ID = item.CONTACTER_ID;
-                                    item.ITEM_NAME = ItemNameDic.Where(Dic => Dic.Key.Contains(item.ITEM_ID)).Select(Dic => Dic.Value).FirstOrDefault();
-                                    item.CONTACTER_NAME = userRepository.PostUserSingle(logonModel).USER_MODEL.Select(U => U.USER_NAME).FirstOrDefault();
-                                    item.IS_CONSUMMATION = false;
-
-                                    //寫入：離職、留職停薪_手續表 事務清單parameter
-                                    strJson = jsonFunction.ObjectToJSON(item);
-                                    GlobalParameters.Infoparameter(strJson, parameterAffairs);
-
-                                    strSQL = "";
-                                    strSQL += strInsertSQL;
-
-                                    dbFun.DoTran(strSQL, parameterAffairs);
-
-                                    if (!ConstructionItemNameDic.Any(D => D.Key == item.ITEM_ID)) ConstructionItemNameDic.Add(item.ITEM_ID, item.ITEM_NAME);
-                                }
-                            });
-
-                            #region - 清掉已新增的承辦事項 -
-
-                            ConstructionItemNameDic.ForEach(DEL =>
-                            {
-                                ItemNameDic.Remove(DEL.Key);
-                            });
-
-                            #endregion
-
-                            #region - 建立剩餘的事務清單 -
-
-                            var newAffairsConfig = new NewAffairsConfig()
-                            {
-                                STR_SQL = strInsertSQL,
-                                DICTIONARY = ItemNameDic,
-                                PARAMETER = parameterAffairs
-                            };
-                            PutNewAffairsFunction(newAffairsConfig);
-
-                            #endregion
-
-                        }
+                        CommLib.Logger.Error("離職、留職停薪_流程表(新增/修改/草稿)失敗，原因：所屬部門交接人不能是申請人。");
+                        return false;                        
                     }
-
-                    #endregion
-
-                    #region - 表單主旨：FormHeader -
-
-                    FormHeader header = new FormHeader();
-                    header.REQUISITION_ID = strREQ;
-                    header.ITEM_NAME = "Subject";
-                    header.ITEM_VALUE = FM7Subject;
-
-                    formRepository.PutFormHeader(header);
-
-                    #endregion
-
-                    #region - 儲存草稿：FormDraftList -
-
-                    if (model.APPLICANT_INFO.DRAFT_FLAG.Equals(1))
+                    else if (model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG.Where(AFF => !String.IsNullOrEmpty(AFF.CONTACTER_ID) || !String.IsNullOrWhiteSpace(AFF.CONTACTER_ID)).Count() > 0)
                     {
-                        FormDraftList draftList = new FormDraftList();
-                        draftList.REQUISITION_ID = strREQ;
-                        draftList.IDENTIFY = IDENTIFY;
-                        draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
+                        #region 先刪除舊資料
 
-                        formRepository.PutFormDraftList(draftList, true);
-                    }
+                        strSQL = "";
+                        strSQL += "DELETE ";
+                        strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_D] ";
+                        strSQL += "WHERE 1=1 ";
+                        strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
 
-                    #endregion
-
-                    #region - 送出表單：FormAutoStart -
-
-                    if (model.APPLICANT_INFO.DRAFT_FLAG.Equals(0))
-                    {
-                        #region 送出表單前，先刪除草稿清單
-
-                        FormDraftList draftList = new FormDraftList();
-                        draftList.REQUISITION_ID = strREQ;
-                        draftList.IDENTIFY = IDENTIFY;
-                        draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
-
-                        formRepository.PutFormDraftList(draftList, false);
+                        dbFun.DoTran(strSQL, parameterAffairs);
 
                         #endregion
 
-                        FormAutoStart autoStart = new FormAutoStart();
-                        autoStart.REQUISITION_ID = strREQ;
-                        autoStart.DIAGRAM_ID = model.APPLICANT_INFO.DIAGRAM_ID;
-                        autoStart.APPLICANT_ID = model.APPLICANT_INFO.APPLICANT_ID;
-                        autoStart.APPLICANT_DEPT = model.APPLICANT_INFO.APPLICANT_DEPT;
+                        model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG.Where(AFF => AFF.ITEM_ID.Contains("A")).ToList().ForEach(item =>
+                        {
+                            if (ItemNameDic.Keys.Contains(item.ITEM_ID))
+                            {
+                                logonModel.USER_ID = item.CONTACTER_ID;
+                                item.ITEM_NAME = ItemNameDic.Where(Dic => Dic.Key.Contains(item.ITEM_ID)).Select(Dic => Dic.Value).FirstOrDefault();
+                                item.CONTACTER_NAME = userRepository.PostUserSingle(logonModel).USER_MODEL.Select(U => U.USER_NAME).FirstOrDefault();
+                                item.IS_CONSUMMATION = false;
 
-                        formRepository.PutFormAutoStart(autoStart);
+                                //寫入：離職、留職停薪_手續表 事務清單parameter
+                                strJson = jsonFunction.ObjectToJSON(item);
+                                GlobalParameters.Infoparameter(strJson, parameterAffairs);
+
+                                strSQL = "";
+                                strSQL += strInsertSQL;
+
+                                dbFun.DoTran(strSQL, parameterAffairs);
+
+                                if (!ConstructionItemNameDic.Any(D => D.Key == item.ITEM_ID)) ConstructionItemNameDic.Add(item.ITEM_ID, item.ITEM_NAME);
+                            }
+                        });
+
+                        #region - 清掉已新增的承辦事項 -
+
+                        ConstructionItemNameDic.ForEach(DEL =>
+                        {
+                            ItemNameDic.Remove(DEL.Key);
+                        });
+
+                        #endregion
+
+                        #region - 建立剩餘的事務清單 -
+
+                        var newAffairsConfig = new NewAffairsConfig()
+                        {
+                            STR_SQL = strInsertSQL,
+                            DICTIONARY = ItemNameDic,
+                            PARAMETER = parameterAffairs
+                        };
+                        PutNewAffairsFunction(newAffairsConfig);
+
+                        #endregion
+
                     }
-
-                    #endregion
-
-                    #region - 表單機能啟用：BPMFormFunction -
-
-                    var BPM_FormFunction = new BPMFormFunction()
-                    {
-                        REQUISITION_ID = strREQ,
-                        IDENTIFY = IDENTIFY,
-                        DRAFT_FLAG = 0
-                    };
-                    commonRepository.PostBPMFormFunction(BPM_FormFunction);
-
-                    #endregion
-
-                    vResult = true;
                 }
+
+                #endregion
+
+                #region - 表單主旨：FormHeader -
+
+                FormHeader header = new FormHeader();
+                header.REQUISITION_ID = strREQ;
+                header.ITEM_NAME = "Subject";
+                header.ITEM_VALUE = FM7Subject;
+
+                formRepository.PutFormHeader(header);
+
+                #endregion
+
+                #region - 儲存草稿：FormDraftList -
+
+                if (model.APPLICANT_INFO.DRAFT_FLAG.Equals(1))
+                {
+                    FormDraftList draftList = new FormDraftList();
+                    draftList.REQUISITION_ID = strREQ;
+                    draftList.IDENTIFY = IDENTIFY;
+                    draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
+
+                    formRepository.PutFormDraftList(draftList, true);
+                }
+
+                #endregion
+
+                #region - 送出表單：FormAutoStart -
+
+                if (model.APPLICANT_INFO.DRAFT_FLAG.Equals(0))
+                {
+                    #region 送出表單前，先刪除草稿清單
+
+                    FormDraftList draftList = new FormDraftList();
+                    draftList.REQUISITION_ID = strREQ;
+                    draftList.IDENTIFY = IDENTIFY;
+                    draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
+
+                    formRepository.PutFormDraftList(draftList, false);
+
+                    #endregion
+
+                    FormAutoStart autoStart = new FormAutoStart();
+                    autoStart.REQUISITION_ID = strREQ;
+                    autoStart.DIAGRAM_ID = model.APPLICANT_INFO.DIAGRAM_ID;
+                    autoStart.APPLICANT_ID = model.APPLICANT_INFO.APPLICANT_ID;
+                    autoStart.APPLICANT_DEPT = model.APPLICANT_INFO.APPLICANT_DEPT;
+
+                    formRepository.PutFormAutoStart(autoStart);
+                }
+
+                #endregion
+
+                #region - 表單機能啟用：BPMFormFunction -
+
+                var BPM_FormFunction = new BPMFormFunction()
+                {
+                    REQUISITION_ID = strREQ,
+                    IDENTIFY = IDENTIFY,
+                    DRAFT_FLAG = 0
+                };
+                commonRepository.PostBPMFormFunction(BPM_FormFunction);
+
+                #endregion
+
+                vResult = true;
+
             }
             catch (Exception ex)
             {

@@ -66,7 +66,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL = "";
                 strSQL += "Select ";
                 strSQL += "      [RequisitionID] ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_LabourAndCapitalMember_VOTE] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_VOTE] ";
                 strSQL += "WHERE 1=1 ";
                 strSQL += "         AND [VoteYear]=@VOTE_YEAR ";
                 strSQL += "         AND [LoginID]=@LOGIN_ID ";
@@ -75,7 +75,6 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (dtA.Rows.Count > 0) labourAndCapitalMemberVoterInfoConfig.IS_VOTE = false;
                 else labourAndCapitalMemberVoterInfoConfig.IS_VOTE = true;
-
 
                 #endregion
 
@@ -98,7 +97,7 @@ namespace OA_WEB_API.Repository.BPMPro
                             COMPANY_ID = userModel.Where(U2 => U2.DEPT_ID == U.DEPT_ID).Select(U2 => U2.COMPANY_ID).FirstOrDefault(),
                         };
                         if (sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel).USER_MODEL.IS_MAIN_JOB != null)
-                        {                            
+                        {
                             if (bool.Parse(sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel).USER_MODEL.IS_MAIN_JOB.ToString()))
                             {
                                 labourAndCapitalMemberVoterInfoConfig.MAIN_DEPT_ID = sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel).MAIN_DEPT.DEPT_ID;
@@ -732,15 +731,15 @@ namespace OA_WEB_API.Repository.BPMPro
                                 #region - 候選人票數計算 -
 
                                 var parameterMember = new List<SqlParameter>()
-                            {
-                                new SqlParameter("@VOTE_YEAR", SqlDbType.NVarChar) { Size = 10, Value = model.VOTE_YEAR },
-                            };
+                                {
+                                    new SqlParameter("@VOTE_YEAR", SqlDbType.NVarChar) { Size = 10, Value = model.VOTE_YEAR },
+                                };
 
                                 var Members = new List<string>()
-                            {
-                                model.MEMBER_ID_1,
-                                model.MEMBER_ID_2,
-                            };
+                                {
+                                    model.MEMBER_ID_1,
+                                    model.MEMBER_ID_2,
+                                };
 
                                 Members.ForEach(M =>
                                 {
@@ -811,7 +810,6 @@ namespace OA_WEB_API.Repository.BPMPro
                                 vResult = true;
                             }
                         }
-
                     }
                 }
             }
@@ -1064,7 +1062,7 @@ namespace OA_WEB_API.Repository.BPMPro
                                 #region - 寫入附件F表 -
 
                                 strSQL = "";
-                                strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_LabourAndCapitalMember_F]([VoteYear],[UplodTime],[Identify],[AccountID],[MemberName],[RequisitionID],[DiagramID],[ProcessID],[ProcessName],[NFileName],[OFileName],[FileSize],[DraftFlag],[Remark]) ";
+                                strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_F]([VoteYear],[UplodTime],[Identify],[AccountID],[MemberName],[RequisitionID],[DiagramID],[ProcessID],[ProcessName],[NFileName],[OFileName],[FileSize],[DraftFlag],[Remark]) ";
                                 strSQL += "VALUES(@VOTE_YEAR,@UPLOD_TIME,@IDENTIFY,@ACCOUNT_ID,@MEMBER_NAME,@REQUISITION_ID,@DIAGRAM_ID,@PROCESS_ID,@PROCESS_NAME,@N_FILE_NAME,@O_FILE_NAME,@FILE_SIZE,@DRAFT_FLAG,@REMARK) ";
                                 dbFun.DoTran(strSQL, parameter);
 
@@ -1171,7 +1169,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     if (String.IsNullOrEmpty(model.MEMBER_ID) || String.IsNullOrWhiteSpace(model.MEMBER_ID))
                     {
                         #region - 註記當選人與備取 -
-                        
+
                         #region 註記B.備取人員
 
                         strSecondSQL += "UPDATE BPMPro.dbo.FM7T_" + IDENTIFY + "_LABOUR ";
@@ -1365,7 +1363,7 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 var parameter = new List<SqlParameter>()
                 {
-                    //勞資委員投票 勞方代表                    
+                    //勞資委員投票 勞方代表
                     new SqlParameter("@VOTE_YEAR", SqlDbType.NVarChar) { Size = 10, Value = model.VOTE_YEAR },
                     new SqlParameter("@MAIN_DEPT_ACTUAL_VOTE_TURNOUT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@MAIN_DEPT_ACTUAL_VOTE_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },

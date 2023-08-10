@@ -35,15 +35,15 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #region - 依此單內容重送 -
 
-        /// <summary>
-        /// 用印申請單(依此單內容重送)
-        /// </summary>
-        [Route("PutOfficialStampRefill")]
-        [HttpPost]
-        public bool PutOfficialStampRefill([FromBody] OfficialStampQueryModel query)
-        {
-            return officialStampRepository.PutOfficialStampRefill(query);
-        }
+        ///// <summary>
+        ///// 用印申請單(依此單內容重送)
+        ///// </summary>
+        //[Route("PutOfficialStampRefill")]
+        //[HttpPost]
+        //public bool PutOfficialStampRefill([FromBody] OfficialStampQueryModel query)
+        //{
+        //    return officialStampRepository.PutOfficialStampRefill(query);
+        //}
 
         #endregion
 

@@ -1041,11 +1041,6 @@
             用印申請單(查詢)
             </summary>    
         </member>
-        <member name="M:OA_WEB_API.Controllers.BPMPro.OfficialStampController.PutOfficialStampRefill(OA_WEB_API.Models.BPMPro.OfficialStampQueryModel)">
-            <summary>
-            用印申請單(依此單內容重送)
-            </summary>
-        </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.OfficialStampController.PutOfficialStampSingle(OA_WEB_API.Models.BPMPro.OfficialStampViewModel)">
             <summary>
             用印申請單(新增/修改/草稿)
@@ -10882,11 +10877,6 @@
         <member name="M:OA_WEB_API.Repository.BPMPro.OfficialStampRepository.PostOfficialStampSingle(OA_WEB_API.Models.BPMPro.OfficialStampQueryModel)">
             <summary>
             用印申請單(查詢)
-            </summary>
-        </member>
-        <member name="M:OA_WEB_API.Repository.BPMPro.OfficialStampRepository.PutOfficialStampRefill(OA_WEB_API.Models.BPMPro.OfficialStampQueryModel)">
-            <summary>
-            用印申請單(依此單內容重送)(僅外部起單使用)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.OfficialStampRepository.PutOfficialStampSingle(OA_WEB_API.Models.BPMPro.OfficialStampViewModel)">

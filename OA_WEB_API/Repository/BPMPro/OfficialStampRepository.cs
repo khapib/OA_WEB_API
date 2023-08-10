@@ -47,7 +47,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             var CommonApplicantInfo = new BPMCommonModel<ApplicantInfo>()
             {
-                EXT="M",
+                EXT = "M",
                 IDENTIFY = IDENTIFY,
                 PARAMETER = parameter,
             };
@@ -55,7 +55,7 @@ namespace OA_WEB_API.Repository.BPMPro
             var applicantInfo = jsonFunction.JsonToObject<ApplicantInfo>(strJson);
 
             #endregion
-            
+
             #region - 用印申請單 表頭資訊 -
 
             strSQL = "";
@@ -119,10 +119,10 @@ namespace OA_WEB_API.Repository.BPMPro
             var officialStampViewModel = new OfficialStampViewModel()
             {
                 APPLICANT_INFO = applicantInfo,
-                OFFICIAL_STAMP_TITLE= officialStampTitle,
-                OFFICIAL_STAMP_CONFIG= officialStampConfig,
-                OFFICIAL_STAMP_DOCS_CONFIG=officialStampDocumentsConfig,
-                OFFICIAL_STAMP_APPROVERS_CONFIG= officialStampApproversConfig,
+                OFFICIAL_STAMP_TITLE = officialStampTitle,
+                OFFICIAL_STAMP_CONFIG = officialStampConfig,
+                OFFICIAL_STAMP_DOCS_CONFIG = officialStampDocumentsConfig,
+                OFFICIAL_STAMP_APPROVERS_CONFIG = officialStampApproversConfig,
             };
 
             #region - 確認表單 -
@@ -181,56 +181,56 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #region - 依此單內容重送 -
 
-        /// <summary>
-        /// 用印申請單(依此單內容重送)(僅外部起單使用)
-        /// </summary>
-        public bool PutOfficialStampRefill(OfficialStampQueryModel query)
-        {
-            bool vResult = false;
+        ///// <summary>
+        ///// 用印申請單(依此單內容重送)(僅外部起單使用)
+        ///// </summary>
+        //public bool PutOfficialStampRefill(OfficialStampQueryModel query)
+        //{
+        //    bool vResult = false;
 
-            try
-            {
-                #region - 宣告 -
+        //    try
+        //    {
+        //        #region - 宣告 -
 
-                var original = PostOfficialStampSingle(query);
-                strJson = jsonFunction.ObjectToJSON(original);
+        //        var original = PostOfficialStampSingle(query);
+        //        strJson = jsonFunction.ObjectToJSON(original);
 
-                var officialStampViewModel = new OfficialStampViewModel();
+        //        var officialStampViewModel = new OfficialStampViewModel();
 
-                var requisitionID = Guid.NewGuid().ToString();
+        //        var requisitionID = Guid.NewGuid().ToString();
 
-                #endregion
+        //        #endregion
 
-                #region - 重送內容 -
+        //        #region - 重送內容 -
 
-                officialStampViewModel = jsonFunction.JsonToObject<OfficialStampViewModel>(strJson);
+        //        officialStampViewModel = jsonFunction.JsonToObject<OfficialStampViewModel>(strJson);
 
-                #region - 申請人資訊 調整 -
+        //        #region - 申請人資訊 調整 -
 
-                officialStampViewModel.APPLICANT_INFO.REQUISITION_ID = requisitionID;
-                officialStampViewModel.APPLICANT_INFO.DRAFT_FLAG = 1;
-                officialStampViewModel.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Now;
+        //        officialStampViewModel.APPLICANT_INFO.REQUISITION_ID = requisitionID;
+        //        officialStampViewModel.APPLICANT_INFO.DRAFT_FLAG = 1;
+        //        officialStampViewModel.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Now;
 
-                #endregion
+        //        #endregion
 
-                #endregion
+        //        #endregion
 
-                #region - 送出 執行(新增/修改/草稿) -
+        //        #region - 送出 執行(新增/修改/草稿) -
 
-                PutOfficialStampSingle(officialStampViewModel);
+        //        PutOfficialStampSingle(officialStampViewModel);
 
-                #endregion
+        //        #endregion
 
-                vResult = true;
-            }
-            catch (Exception ex)
-            {
-                vResult = false;
-                CommLib.Logger.Error("拷貝申請單(依此單內容重送)失敗，原因：" + ex.Message);
-            }
+        //        vResult = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        vResult = false;
+        //        CommLib.Logger.Error("拷貝申請單(依此單內容重送)失敗，原因：" + ex.Message);
+        //    }
 
-            return vResult;
-        }
+        //    return vResult;
+        //}
 
         #endregion
 
@@ -272,8 +272,8 @@ namespace OA_WEB_API.Repository.BPMPro
                 }
 
                 #region - 主旨 -
-                
-                if(String.IsNullOrEmpty(model.OFFICIAL_STAMP_CONFIG.CONTACT) || String.IsNullOrWhiteSpace(model.OFFICIAL_STAMP_CONFIG.CONTACT))
+
+                if (String.IsNullOrEmpty(model.OFFICIAL_STAMP_CONFIG.CONTACT) || String.IsNullOrWhiteSpace(model.OFFICIAL_STAMP_CONFIG.CONTACT))
                 {
                     FM7Subject = "用印申請單_" + model.OFFICIAL_STAMP_DOCS_CONFIG.Select(D => D.ITEM_NAME).FirstOrDefault() + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
                 }
@@ -452,7 +452,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterDocuments);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_OfficialStamp_DOC]([RequisitionID],[ItemName],[Servings],[ApplyStampType],[ApplyStampTypeOthers]) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_DOC]([RequisitionID],[ItemName],[Servings],[ApplyStampType],[ApplyStampTypeOthers]) ";
                         strSQL += "VALUES(@REQUISITION_ID,@ITEM_NAME,@SERVINGS,@APPLY_STAMP_TYPE,@APPLY_STAMP_TYPE_OTHERS) ";
 
                         dbFun.DoTran(strSQL, parameterDocuments);

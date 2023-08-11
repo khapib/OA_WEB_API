@@ -170,6 +170,8 @@ namespace OA_WEB_API.Repository.BPMPro
             return GPI_countersignViewModel;
         }
 
+        #region - 依此單內容重送 -
+
         /// <summary>
         /// 四方四隅_會簽單(依此單內容重送)(僅外部起單使用)
         /// </summary>        
@@ -179,37 +181,46 @@ namespace OA_WEB_API.Repository.BPMPro
 
             try
             {
-                #region - 宣告 -
+                if (!String.IsNullOrEmpty(query.REQUISITION_ID) || !String.IsNullOrWhiteSpace(query.REQUISITION_ID))
+                {
+                    #region - 宣告 -
 
-                var original = PostGPI_CountersignSingle(query);
-                strJson = jsonFunction.ObjectToJSON(original);
+                    var original = PostGPI_CountersignSingle(query);
+                    strJson = jsonFunction.ObjectToJSON(original);
 
-                var GPI_countersignViewModel = new GPI_CountersignViewModel();
+                    var GPI_countersignViewModel = new GPI_CountersignViewModel();
 
-                var requisitionID = Guid.NewGuid().ToString();
+                    var requisitionID = Guid.NewGuid().ToString();
 
-                #endregion
+                    #endregion
 
-                #region - 重送內容 -
+                    #region - 重送內容 -
 
-                GPI_countersignViewModel = jsonFunction.JsonToObject<GPI_CountersignViewModel>(strJson);
+                    GPI_countersignViewModel = jsonFunction.JsonToObject<GPI_CountersignViewModel>(strJson);
 
-                #region - 申請人資訊 調整 -
+                    #region - 申請人資訊 調整 -
 
-                GPI_countersignViewModel.APPLICANT_INFO.REQUISITION_ID = requisitionID;
-                GPI_countersignViewModel.APPLICANT_INFO.DRAFT_FLAG = 1;
-                GPI_countersignViewModel.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Now;
+                    GPI_countersignViewModel.APPLICANT_INFO.REQUISITION_ID = requisitionID;
+                    GPI_countersignViewModel.APPLICANT_INFO.DRAFT_FLAG = 1;
+                    GPI_countersignViewModel.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Now;
 
-                #endregion
+                    #endregion
 
-                #endregion
+                    #region - 四方四隅_會簽單 表頭資訊 調整 -
 
-                #region - 送出 執行(新增/修改/草稿) -
+                    GPI_countersignViewModel.GPI_COUNTERSIGN_TITLE.FM7_SUBJECT = "(依此單內容重上)" + GPI_countersignViewModel.GPI_COUNTERSIGN_TITLE.FM7_SUBJECT;
 
-                PutGPI_CountersignSingle(GPI_countersignViewModel);
+                    #endregion
 
-                #endregion
-            
+                    #endregion
+
+                    #region - 送出 執行(新增/修改/草稿) -
+
+                    PutGPI_CountersignSingle(GPI_countersignViewModel);
+
+                    #endregion
+                }
+
                 vResult = true;
             }
             catch (Exception ex)
@@ -220,6 +231,9 @@ namespace OA_WEB_API.Repository.BPMPro
 
             return vResult;
         }
+
+
+        #endregion
 
         /// <summary>
         /// 四方四隅_會簽單(新增/修改/草稿)

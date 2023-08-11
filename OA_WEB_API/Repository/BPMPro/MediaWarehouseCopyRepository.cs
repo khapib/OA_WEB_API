@@ -213,8 +213,6 @@ namespace OA_WEB_API.Repository.BPMPro
             return mediaWarehouseCopyViewModel;
         }
 
-        #region - 依此單內容重送 -
-
         /// <summary>
         /// 拷貝申請單(依此單內容重送)(僅外部起單使用)
         /// </summary>
@@ -224,36 +222,39 @@ namespace OA_WEB_API.Repository.BPMPro
 
             try
             {
-                #region - 宣告 -
+                if (!String.IsNullOrEmpty(query.REQUISITION_ID) || !String.IsNullOrWhiteSpace(query.REQUISITION_ID))
+                {
+                    #region - 宣告 -
 
-                var original = PostMediaWarehouseCopySingle(query);
-                strJson = jsonFunction.ObjectToJSON(original);
+                    var original = PostMediaWarehouseCopySingle(query);
+                    strJson = jsonFunction.ObjectToJSON(original);
 
-                var MediaWarehouseCopyViewModel = new MediaWarehouseCopyViewModel();
+                    var MediaWarehouseCopyViewModel = new MediaWarehouseCopyViewModel();
 
-                var requisitionID = Guid.NewGuid().ToString();
+                    var requisitionID = Guid.NewGuid().ToString();
 
-                #endregion
+                    #endregion
 
-                #region - 重送內容 -
+                    #region - 重送內容 -
 
-                MediaWarehouseCopyViewModel = jsonFunction.JsonToObject<MediaWarehouseCopyViewModel>(strJson);
+                    MediaWarehouseCopyViewModel = jsonFunction.JsonToObject<MediaWarehouseCopyViewModel>(strJson);
 
-                #region - 申請人資訊 調整 -
+                    #region - 申請人資訊 調整 -
 
-                MediaWarehouseCopyViewModel.APPLICANT_INFO.REQUISITION_ID = requisitionID;
-                MediaWarehouseCopyViewModel.APPLICANT_INFO.DRAFT_FLAG = 1;
-                MediaWarehouseCopyViewModel.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Now;
+                    MediaWarehouseCopyViewModel.APPLICANT_INFO.REQUISITION_ID = requisitionID;
+                    MediaWarehouseCopyViewModel.APPLICANT_INFO.DRAFT_FLAG = 1;
+                    MediaWarehouseCopyViewModel.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Now;
 
-                #endregion
+                    #endregion
 
-                #endregion
+                    #endregion
 
-                #region - 送出 執行(新增/修改/草稿) -
+                    #region - 送出 執行(新增/修改/草稿) -
 
-                PutMediaWarehouseCopySingle(MediaWarehouseCopyViewModel);
+                    PutMediaWarehouseCopySingle(MediaWarehouseCopyViewModel);
 
-                #endregion
+                    #endregion
+                }
 
                 vResult = true;
             }
@@ -265,8 +266,6 @@ namespace OA_WEB_API.Repository.BPMPro
 
             return vResult;
         }
-
-        #endregion
 
         /// <summary>
         /// 拷貝申請單(新增/修改/草稿)

@@ -190,7 +190,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     personnelSupplementViewModel.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Now;
 
                     #endregion
-
+                    
                     #region - 人員增補單 表單內容 調整 -
 
                     personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG.APPROVAL_NO = null;

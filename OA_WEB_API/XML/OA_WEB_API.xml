@@ -9256,14 +9256,6 @@
         <member name="P:OA_WEB_API.Models.UserModel.DEPT_FLOW">
             <summary>部門流程</summary>
         </member>
-        <member name="T:OA_WEB_API.Models.UserRole">
-            <summary>
-            使用者角色
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.UserRole.PROJECT_REVIEW_ROLE">
-            <summary>專案建立申審核單角色</summary>
-        </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.FormRepository">
             <summary>
             表單共用

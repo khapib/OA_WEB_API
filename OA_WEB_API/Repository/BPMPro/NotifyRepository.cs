@@ -358,16 +358,9 @@ namespace OA_WEB_API.Repository.BPMPro
                 #region - 總經理不收(結案)信件 -
                 //總經理不收(結案)信件；所以需要將finalApprover把有總經理名字的給移除
 
-                strSQL = "";
-                strSQL += "SELECT ";
-                strSQL += "     [AtomID] ";
-                strSQL += "FROM [BPMPro].[dbo].[FSe7en_Org_RoleStruct] ";
-                strSQL += "WHERE 1=1 ";
-                strSQL += "         AND [RoleID] ='GM' ";
-                var dt = dbFun.DoQuery(strSQL);
                 var logonModel = new LogonModel()
                 {
-                    USER_ID = dt.AsEnumerable().Select(R => R.Field<string>("AtomID")).FirstOrDefault()
+                    USER_ID = CommonRepository.GetRoles().Where(R=>R.ROLE_ID=="GM").Select(R=>R.USER_ID).First(),
                 };
                 var GM_Name = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.COMPANY_ID == "RootCompany").Select(U => U.USER_NAME).FirstOrDefault();
                 emailList.Remove(emailList.Where(e => e.Contains(GM_Name)).FirstOrDefault());
@@ -1351,16 +1344,9 @@ namespace OA_WEB_API.Repository.BPMPro
             #region - 資深副總不收信件 -
             //資深副總不收信件；所以需要將TO_LIST、FW3_TO_NAME把有副總名字的給移除
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [AtomID] ";
-            strSQL += "FROM [BPMPro].[dbo].[FSe7en_Org_RoleStruct] ";
-            strSQL += "WHERE 1=1 ";
-            strSQL += "         AND [RoleID] ='DGM' ";
-            var dt = dbFun.DoQuery(strSQL);
             var logonModel = new LogonModel()
             {
-                USER_ID = dt.AsEnumerable().Select(R => R.Field<string>("AtomID")).FirstOrDefault()
+                USER_ID = CommonRepository.GetRoles().Where(R=>R.ROLE_ID=="DGM").Select(R=>R.USER_ID).First(),
             };
             var DGM_Name = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.COMPANY_ID == "RootCompany").Select(U => U.USER_NAME).FirstOrDefault();
             if (model.FW3_TO_NAME.Contains(DGM_Name + ";")) model.FW3_TO_NAME = model.FW3_TO_NAME.Replace(DGM_Name + ";", string.Empty);

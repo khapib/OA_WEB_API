@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Web;
 using Dapper;
-
+using Microsoft.Ajax.Utilities;
 using OA_WEB_API.Models;
 using OA_WEB_API.Models.BPMPro;
 
@@ -382,6 +382,24 @@ namespace OA_WEB_API.Repository.BPMPro
                     CONTENT = GetEmailBody(query, String.Join("、", nameList), enumProcess.CLOSE),
                     FW3_TO_NAME = String.Join(";", nameList)
                 };
+
+                #region - OfficialStamp【用印申請單】結案需要密件發送人資人員 -
+
+                if (model.SUBJECT.Contains("用印申請單"))
+                {
+                    CommonRepository.GetRoles().Where(R => R.ROLE_ID == "GTV_HR" || R.ROLE_ID == "GTV_HR_Supervisor").ForEach(R =>
+                    {
+                        logonModel = new LogonModel()
+                        {
+                            USER_ID = R.USER_ID
+                        };
+                        var UserModel = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.COMPANY_ID == "RootCompany").FirstOrDefault();
+                        _BCC_LIST += UserModel.USER_NAME + "<" + UserModel.EMAIL + ">;";
+                    });
+                    _BCC_LIST = _BCC_LIST.Substring(0, _BCC_LIST.Length - 1);
+                }
+
+                #endregion
 
                 SendEmail(model);
 

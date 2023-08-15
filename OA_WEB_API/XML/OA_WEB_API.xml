@@ -1266,11 +1266,6 @@
             關聯表單(知會)
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Controllers.CommonController.PostBPMFormFunction(OA_WEB_API.Models.BPMPro.BPMFormFunction)">
-            <summary>
-            BPM表單機能
-            </summary>
-        </member>
         <member name="T:OA_WEB_API.Controllers.TestController">
             <summary>
             會簽管理系統 - 測試申請單
@@ -8202,45 +8197,45 @@
         <member name="P:OA_WEB_API.Models.BPMPro.RolesModel.USER_ID">
             <summary>員工編號</summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD">
+        <member name="T:OA_WEB_API.Models.BPMPro.FSe7enSysRequisitionField">
             <summary>
             (擴充方法)_BPM系統申請單總表
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.AUTO_COUNTER">
+        <member name="P:OA_WEB_API.Models.BPMPro.FSe7enSysRequisitionField.AUTO_COUNTER">
             <summary>流水號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.PARENT_REQUISITION">
+        <member name="P:OA_WEB_API.Models.BPMPro.FSe7enSysRequisitionField.PARENT_REQUISITION">
             <summary>母表單系統編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.REQUISITION_ID">
+        <member name="P:OA_WEB_API.Models.BPMPro.FSe7enSysRequisitionField.REQUISITION_ID">
             <summary>系統編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.BPM_FORM_NO">
+        <member name="P:OA_WEB_API.Models.BPMPro.FSe7enSysRequisitionField.BPM_FORM_NO">
             <summary>BPM 表單單號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.IDENTIFY">
+        <member name="P:OA_WEB_API.Models.BPMPro.FSe7enSysRequisitionField.IDENTIFY">
             <summary>表單代號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.DIAGRAM_ID">
+        <member name="P:OA_WEB_API.Models.BPMPro.FSe7enSysRequisitionField.DIAGRAM_ID">
             <summary>流程圖編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.APPLICANT_DEPT">
+        <member name="P:OA_WEB_API.Models.BPMPro.FSe7enSysRequisitionField.APPLICANT_DEPT">
             <summary>申請部門編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.APPLICANT_ID">
+        <member name="P:OA_WEB_API.Models.BPMPro.FSe7enSysRequisitionField.APPLICANT_ID">
             <summary>申請人編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.STATUS">
+        <member name="P:OA_WEB_API.Models.BPMPro.FSe7enSysRequisitionField.STATUS">
             <summary>表單狀態編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.STATUS_NAME">
+        <member name="P:OA_WEB_API.Models.BPMPro.FSe7enSysRequisitionField.STATUS_NAME">
             <summary>表單狀態</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.TIME_START">
+        <member name="P:OA_WEB_API.Models.BPMPro.FSe7enSysRequisitionField.TIME_START">
             <summary>開始時間</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.TIME_LAST_ACTION">
+        <member name="P:OA_WEB_API.Models.BPMPro.FSe7enSysRequisitionField.TIME_LAST_ACTION">
             <summary>最後執行時間</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.FormDistinguishResponse">
@@ -11287,6 +11282,11 @@
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.GetRoles">
             <summary>
             (擴充方法)_角色列表
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.GetFSe7enSysRequisition">
+            <summary>
+            (擴充方法)_BPM系統申請單總表
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostDataHaveForm(OA_WEB_API.Models.BPMPro.FormQueryModel)">

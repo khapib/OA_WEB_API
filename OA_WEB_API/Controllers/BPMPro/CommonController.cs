@@ -95,7 +95,7 @@ namespace OA_WEB_API.Controllers
         }
 
         #endregion
-
+        
         #region - 表單列表 -
 
         /// <summary>
@@ -192,18 +192,36 @@ namespace OA_WEB_API.Controllers
 
         #endregion
 
+        #region - 測試用Controller -
+
         #region - BPM表單機能 -
 
-        /// <summary>
-        /// BPM表單機能
-        /// </summary>
-        [Route("api/PostBPMFormFunction")]
-        [HttpPost]
-        public bool PostBPMFormFunction([FromBody] BPMFormFunction model)
-        {
-            return commonRepository.PostBPMFormFunction(model);
-        }
+        ///// <summary>
+        ///// BPM表單機能
+        ///// </summary>
+        //[Route("api/PostBPMFormFunction")]
+        //[HttpPost]
+        //public bool PostBPMFormFunction([FromBody] BPMFormFunction model)
+        //{
+        //    return commonRepository.PostBPMFormFunction(model);
+        //}
 
+
+        #endregion
+
+        #region - BPM系統申請單總表 -
+
+        ///// <summary>
+        ///// BPM系統申請單總表
+        ///// </summary>
+        //[Route("api/GetFSe7enSysRequisition")]
+        //[HttpGet]
+        //public IList<FSe7enSysRequisitionField> GetFSe7enSysRequisition()
+        //{
+        //    return CommonRepository.GetFSe7enSysRequisition();
+        //}
+
+        #endregion
 
         #endregion
 

@@ -839,10 +839,10 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// (擴充方法)_BPM系統申請單總表
     /// </summary>
-    public class FSE7EN_SYS_REQUISITION_FIELD
+    public class FSe7enSysRequisitionField
     {
         /// <summary>流水號</summary>
-        public string AUTO_COUNTER { get; set; }
+        public Int64 AUTO_COUNTER { get; set; }
 
         /// <summary>母表單系統編號</summary>
         public string PARENT_REQUISITION { get; set; }
@@ -866,7 +866,7 @@ namespace OA_WEB_API.Models.BPMPro
         public string APPLICANT_ID { get; set; }
 
         /// <summary>表單狀態編號</summary>
-        public int? STATUS { get; set; }
+        public Int16 STATUS { get; set; }
 
         /// <summary>表單狀態</summary>
         public string STATUS_NAME { get; set; }

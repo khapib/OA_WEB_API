@@ -1848,13 +1848,51 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #region - (擴充方法)_BPM系統申請單總表 -
 
-        ///// <summary>
-        ///// (擴充方法)_BPM系統申請單總表
-        ///// </summary>
-        //public static IList<FSE7EN_SYS_REQUISITION_FIELD> GetFSe7en_Sys_Requisition()
-        //{
+        /// <summary>
+        /// (擴充方法)_BPM系統申請單總表
+        /// </summary>
+        public static IList<FSe7enSysRequisitionField> GetFSe7enSysRequisition()
+        {
+            //擴充方法使用dbFunction需要參考物件
+            CommonRepository commonRepository = new CommonRepository();
+            try
+            {
+                var strSQL = "";
+                strSQL += "SELECT ";
+                strSQL += "     R.[AutoCounter] AS [AUTO_COUNTER], ";
+                strSQL += "     R.[ParentRequisition] AS [PARENT_REQUISITION], ";
+                strSQL += "     R.[RequisitionID] AS [REQUISITION_ID], ";
+                strSQL += "     R.[SerialID] AS [BPM_FORM_NO], ";
+                strSQL += "     D.[Identify] AS [IDENTIFY], ";
+                strSQL += "     R.[DiagramID] AS [DIAGRAM_ID], ";
+                strSQL += "     R.[DeptID] AS [APPLICANT_DEPT], ";
+                strSQL += "     R.[ApplicantID] AS [APPLICANT_ID], ";
+                strSQL += "     R.[Status] AS [STATUS], ";
+                strSQL += "     ( ";
+                strSQL += "             CASE ";
+                strSQL += "                 WHEN R.[Status] = 0 THEN '進行中' ";
+                strSQL += "                 WHEN R.[Status] = 1 THEN '同意結束' ";
+                strSQL += "                 WHEN R.[Status] = 2 THEN '駁回結束' ";
+                strSQL += "                 WHEN R.[Status] = 3 THEN '逾期結束' ";
+                strSQL += "                 WHEN R.[Status] = 4 THEN '表單撤回' ";
+                strSQL += "                 WHEN R.[Status] = 5 THEN '異常表單' ";
+                strSQL += "             END ";
+                strSQL += "     ) AS [STATUS_NAME], ";
+                strSQL += "     R.[TimeStart] AS [TIME_START], ";
+                strSQL += "     R.[TimeLastAction] AS [TIME_LAST_ACTION] ";
+                strSQL += "FROM [BPMPro].[dbo].[FSe7en_Sys_Requisition] AS R ";
+                strSQL += "     INNER JOIN [BPMPro].[dbo].[FSe7en_Sys_DiagramList] AS D on D.[DiagramID]=R.[DiagramID] ";
+                strSQL += "ORDER BY R.[AutoCounter] DESC ";
+                var fSe7enSysRequisition = commonRepository.dbFun.DoQuery(strSQL).ToList<FSe7enSysRequisitionField>();
 
-        //}
+                return fSe7enSysRequisition;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("BPM系統申請單總表呈現失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
 
         #endregion
 

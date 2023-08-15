@@ -987,106 +987,6 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
-
-
-        #region - 角色列表 -
-
-        public static IList<RolesModel> GetRoles()
-        {
-            //擴充方法使用dbFunction需要參考物件
-            CommonRepository commonRepository = new CommonRepository();
-
-            try
-            {
-                var strSQL = "";
-                strSQL += "SELECT ";
-                strSQL += "     S.[RoleID] AS [ROLE_ID], ";
-                strSQL += "     I.[DisplayName] AS [ROLE_NAME], ";
-                strSQL += "     S.[AtomID] AS [USER_ID] ";
-                strSQL += "FROM [BPMPro].[dbo].[FSe7en_Org_RoleStruct] AS S ";
-                strSQL += "INNER JOIN [BPMPro].[dbo].[FSe7en_Org_RoleInfo] AS I on S.RoleID=I.RoleID ";
-                var RolesData = commonRepository.dbFun.DoQuery(strSQL).ToList<RolesModel>();
-
-                return RolesData;
-            }
-            catch (Exception ex)
-            {
-                CommLib.Logger.Error("角色列表呈現失敗，原因：" + ex.Message);
-                throw;
-            }
-        }
-
-        #endregion
-
-        #region - (擴充方法)_確認BPM表單(FormData)是否存在 -
-
-        /// <summary>
-        /// (擴充方法)_確認BPM表單是否存在
-        /// </summary>
-        public static bool PostDataHaveForm(FormQueryModel query)
-        {
-            //擴充方法使用dbFunction需要參考物件
-            CommonRepository commonRepository = new CommonRepository();
-
-            bool vResult = false;
-
-            var parameter = new List<SqlParameter>();
-
-            var strSQL = "";
-            strSQL += "SELECT * ";
-            strSQL += "FROM [BPMPro].[dbo].[GTV_View_FormData] ";
-            strSQL += "WHERE 1=1 ";
-
-            if (!String.IsNullOrEmpty(query.REQUISITION_ID))
-            {
-                strSQL += "AND [REQUISITION_ID]=@REQUISITION_ID ";
-                parameter.Add(new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID });
-            }
-            var dt = commonRepository.dbFun.DoQuery(strSQL, parameter);
-
-            if (dt.Rows.Count > 0)
-            {
-                vResult = true;
-            }
-            else
-            {
-                vResult = false;
-            }
-            return vResult;
-        }
-
-        #endregion
-
-        #region - (擴充方法)_共同表單區分 -
-
-        /// <summary>
-        /// (擴充方法)_共同表單區分
-        /// </summary>
-        public static FormDistinguishResponse FormDistinguish(string IDENTIFY)
-        {
-            //擴充方法使用dbFunction需要參考物件
-            CommonRepository commonRepository = new CommonRepository();
-
-            var parameter = new List<SqlParameter>()
-            {
-                new SqlParameter("@IDENTIFY", SqlDbType.NVarChar) { Size = 64, Value = IDENTIFY }
-            };
-
-            var strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [IDENTIFY], ";
-            strSQL += "     [FormName] AS [FORM_NAME], ";
-            strSQL += "     [EndProcessID] AS [END_PROCESS_ID], ";
-            strSQL += "     [Note] AS [NOTE] ";
-            strSQL += "FROM [BPMPro].[dbo].[GTV_FormDistinguish] ";
-            strSQL += "WHERE [IDENTIFY]=@IDENTIFY ";
-            var response = commonRepository.dbFun.DoQuery(strSQL, parameter).ToList<FormDistinguishResponse>().FirstOrDefault();
-
-            return response;
-        }
-
-        #endregion
-
         #region - 表單共用模組 -
 
         #region - 申請人資訊(查詢) -
@@ -1907,6 +1807,123 @@ namespace OA_WEB_API.Repository.BPMPro
         }
 
         #endregion
+
+        #endregion
+
+        #endregion
+
+        #region - 擴充方法 -
+
+        #region - (擴充方法)_角色列表 -
+
+        /// <summary>
+        /// (擴充方法)_角色列表
+        /// </summary>
+        public static IList<RolesModel> GetRoles()
+        {
+            //擴充方法使用dbFunction需要參考物件
+            CommonRepository commonRepository = new CommonRepository();
+
+            try
+            {
+                var strSQL = "";
+                strSQL += "SELECT ";
+                strSQL += "     S.[RoleID] AS [ROLE_ID], ";
+                strSQL += "     I.[DisplayName] AS [ROLE_NAME], ";
+                strSQL += "     S.[AtomID] AS [USER_ID] ";
+                strSQL += "FROM [BPMPro].[dbo].[FSe7en_Org_RoleStruct] AS S ";
+                strSQL += "INNER JOIN [BPMPro].[dbo].[FSe7en_Org_RoleInfo] AS I on S.RoleID=I.RoleID ";
+                var RolesData = commonRepository.dbFun.DoQuery(strSQL).ToList<RolesModel>();
+
+                return RolesData;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("角色列表呈現失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region - (擴充方法)_BPM系統申請單總表 -
+
+        ///// <summary>
+        ///// (擴充方法)_BPM系統申請單總表
+        ///// </summary>
+        //public static IList<FSE7EN_SYS_REQUISITION_FIELD> GetFSe7en_Sys_Requisition()
+        //{
+
+        //}
+
+        #endregion
+
+        #region - (擴充方法)_確認BPM表單(FormData)是否存在 -
+
+        /// <summary>
+        /// (擴充方法)_確認BPM表單是否存在
+        /// </summary>
+        public static bool PostDataHaveForm(FormQueryModel query)
+        {
+            //擴充方法使用dbFunction需要參考物件
+            CommonRepository commonRepository = new CommonRepository();
+
+            bool vResult = false;
+
+            var parameter = new List<SqlParameter>();
+
+            var strSQL = "";
+            strSQL += "SELECT * ";
+            strSQL += "FROM [BPMPro].[dbo].[GTV_View_FormData] ";
+            strSQL += "WHERE 1=1 ";
+
+            if (!String.IsNullOrEmpty(query.REQUISITION_ID))
+            {
+                strSQL += "AND [REQUISITION_ID]=@REQUISITION_ID ";
+                parameter.Add(new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID });
+            }
+            var dt = commonRepository.dbFun.DoQuery(strSQL, parameter);
+
+            if (dt.Rows.Count > 0)
+            {
+                vResult = true;
+            }
+            else
+            {
+                vResult = false;
+            }
+            return vResult;
+        }
+
+        #endregion
+
+        #region - (擴充方法)_共同表單區分 -
+
+        /// <summary>
+        /// (擴充方法)_共同表單區分
+        /// </summary>
+        public static FormDistinguishResponse FormDistinguish(string IDENTIFY)
+        {
+            //擴充方法使用dbFunction需要參考物件
+            CommonRepository commonRepository = new CommonRepository();
+
+            var parameter = new List<SqlParameter>()
+            {
+                new SqlParameter("@IDENTIFY", SqlDbType.NVarChar) { Size = 64, Value = IDENTIFY }
+            };
+
+            var strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [IDENTIFY], ";
+            strSQL += "     [FormName] AS [FORM_NAME], ";
+            strSQL += "     [EndProcessID] AS [END_PROCESS_ID], ";
+            strSQL += "     [Note] AS [NOTE] ";
+            strSQL += "FROM [BPMPro].[dbo].[GTV_FormDistinguish] ";
+            strSQL += "WHERE [IDENTIFY]=@IDENTIFY ";
+            var response = commonRepository.dbFun.DoQuery(strSQL, parameter).ToList<FormDistinguishResponse>().FirstOrDefault();
+
+            return response;
+        }
 
         #endregion
 

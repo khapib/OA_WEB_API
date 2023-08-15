@@ -477,21 +477,88 @@ namespace OA_WEB_API.Repository.BPMPro
                 //strSQL += "ORDER BY S.[AUTO_COUNTER] DESC ";
 
                 #endregion
-                strSQL += "WITH [CTE_SIGNATURE]([AUTO_COUNTER],[REQUISITION_ID],[PROCESS_ID],[APPROVER_DEPT],[APPROVER_ID],[APPROVER_NAME],[APPROVER_TIME],[RESULT_PROMPT],[COMMENT]) AS ";
-                strSQL += "( ";
-                strSQL += "     SELECT S.[AutoCounter],S.[RequisitionID],S.[ProcessID],S.[ApproverDept],S.[ApproverID],S.[ApproverName],S.[ApproveTime],S.[ResultPrompt],S.[Comment] ";
-                strSQL += "     FROM [FM7T_" + formData.IDENTIFY + "_S] AS S ";
+
+                #region /**代理簽核會不顯示問題 20230814 Leon**/ 
+
+                //strSQL += "WITH [CTE_SIGNATURE]([AUTO_COUNTER],[REQUISITION_ID],[PROCESS_ID],[APPROVER_DEPT],[APPROVER_ID],[APPROVER_NAME],[APPROVER_TIME],[RESULT_PROMPT],[COMMENT]) AS ";
+                //strSQL += "( ";
+                //strSQL += "     SELECT S.[AutoCounter],S.[RequisitionID],S.[ProcessID],S.[ApproverDept],S.[ApproverID],S.[ApproverName],S.[ApproveTime],S.[ResultPrompt],S.[Comment] ";
+                //strSQL += "     FROM [FM7T_" + formData.IDENTIFY + "_S] AS S ";
+                //strSQL += "     WHERE S.[RequisitionID]=@REQUISITION_ID ";
+                //strSQL += "     UNION ALL ";
+                //strSQL += "     SELECT '0',[REQUISITION_ID],NULL,[APPLICANT_DEPT_ID],[APPLICANT_ID],[APPLICANT_NAME],[APPLICANT_DATETIME],'提交申請',NULL ";
+                //strSQL += "     FROM [BPMPro].[dbo].[GTV_View_FormData] ";
+                //strSQL += "     WHERE [REQUISITION_ID]=@REQUISITION_ID ";
+                //strSQL += ") ";
+                //strSQL += "SELECT S.[REQUISITION_ID],ISNULL(P.[DisplayName],'申請人') AS [PROCESS_NAME],A.[DEPT_NAME],A.[TITLE_NAME],S.[APPROVER_NAME],S.[APPROVER_TIME],S.[RESULT_PROMPT],S.[COMMENT] ";
+                //strSQL += "FROM [CTE_SIGNATURE] AS S ";
+                //strSQL += "         INNER JOIN [NUP].[dbo].[GTV_View_OrgRelationMember] AS A ON A.[COMPANY_ID]=@COMPANY_ID AND A.[USER_ID]=S.[APPROVER_ID] AND A.[DEPT_ID]=S.[APPROVER_DEPT] ";
+                //strSQL += "         LEFT JOIN [FSe7en_Sys_ProcessName] AS P ON P.[DiagramID]=@DIAGRAM_ID AND P.[ProcessID]=S.[PROCESS_ID] ";
+                //strSQL += "WHERE S.[APPROVER_NAME] IS NOT NULL ";
+                //strSQL += "ORDER BY S.[AUTO_COUNTER] DESC ";
+
+                #endregion
+
+                strSQL += "WITH [CTE_SIGNATURE]([AUTO_COUNTER],[REQUISITION_ID],[PROCESS_ID],[APPROVER_DEPT],[DEPT_NAME],[TITLE_NAME],[APPROVER_ID],[APPROVER_NAME],[APPROVER_TIME],[RESULT_PROMPT],[COMMENT]) AS ";
+                strSQL += "(";
+                strSQL += "     SELECT ";
+                strSQL += "         S.[AutoCounter] AS [AUTO_COUNTER], ";
+                strSQL += "         S.[RequisitionID] AS [REQUISITION_ID], ";
+                strSQL += "         S.[ProcessID] AS [PROCESS_ID], ";
+                strSQL += "         S.[ApproverDept] AS [APPROVER_DEPT], ";
+                strSQL += "         ( ";
+                strSQL += "                 SELECT ";
+                strSQL += "                     [DEPT_NAME] ";
+                strSQL += "                 FROM [NUP].[dbo].[GTV_Org_Relation_Member] ";
+                strSQL += "                 WHERE [DEPT_ID]=S.[ApproverDept] ";
+                strSQL += "                 GROUP BY [DEPT_NAME] ";
+                strSQL += "         ) AS [DEPT_NAME], ";
+                strSQL += "         ( ";
+                strSQL += "                 SELECT ";
+                strSQL += "                     [TITLE_NAME] ";
+                strSQL += "                 FROM [NUP].[dbo].[GTV_Org_Relation_Member] ";
+                strSQL += "                 WHERE  [USER_ID]=S.[ApproverID] AND [COMPANY_ID]=@COMPANY_ID ";
+                strSQL += "                 GROUP BY [TITLE_NAME] ";
+                strSQL += "         )AS [TITLE_NAME], ";
+                strSQL += "         S.[ApproverID] AS [APPROVER_ID], ";
+                strSQL += "         ( ";
+                strSQL += "                 SELECT ";
+                strSQL += "                     [USER_NAME] ";
+                strSQL += "                 FROM [NUP].[dbo].[GTV_Org_Relation_Member] ";
+                strSQL += "                 WHERE [USER_ID]=S.[ApproverID] ";
+                strSQL += "                 GROUP BY [USER_NAME] ";
+                strSQL += "         )AS [APPROVER_NAME], ";
+                strSQL += "         S.[ApproveTime] AS [APPROVE_TIME], ";
+                strSQL += "         S.[ResultPrompt] AS [RESULT_PROMPT], ";
+                strSQL += "         S.[Comment] AS [COMMENT] ";
+                strSQL += "     FROM [BPMPro].[dbo].[FM7T_" + formData.IDENTIFY + "_S] AS S ";
                 strSQL += "     WHERE S.[RequisitionID]=@REQUISITION_ID ";
                 strSQL += "     UNION ALL ";
-                strSQL += "     SELECT '0',[REQUISITION_ID],NULL,[APPLICANT_DEPT_ID],[APPLICANT_ID],[APPLICANT_NAME],[APPLICANT_DATETIME],'提交申請',NULL ";
+                strSQL += "     SELECT ";
+                strSQL += "         '0', ";
+                strSQL += "         [REQUISITION_ID], ";
+                strSQL += "         NULL, ";
+                strSQL += "         [APPLICANT_DEPT_ID], ";
+                strSQL += "         [APPLICANT_DEPT_NAME], ";
+                strSQL += "         ( ";
+                strSQL += "                 SELECT ";
+                strSQL += "                     [TITLE_NAME] ";
+                strSQL += "                 FROM [NUP].[dbo].[GTV_Org_Relation_Member] ";
+                strSQL += "                 WHERE  [USER_ID]=[APPLICANT_ID] AND [COMPANY_ID]=@COMPANY_ID ";
+                strSQL += "                 GROUP BY [TITLE_NAME] ";
+                strSQL += "         )AS [TITLE_NAME], ";
+                strSQL += "     [APPLICANT_ID], ";
+                strSQL += "     [APPLICANT_NAME], ";
+                strSQL += "     [APPLICANT_DATETIME], ";
+                strSQL += "     '提交申請', ";
+                strSQL += "     NULL ";
                 strSQL += "     FROM [BPMPro].[dbo].[GTV_View_FormData] ";
                 strSQL += "     WHERE [REQUISITION_ID]=@REQUISITION_ID ";
-                strSQL += ") ";
-                strSQL += "SELECT S.[REQUISITION_ID],ISNULL(P.[DisplayName],'申請人') AS [PROCESS_NAME],A.[DEPT_NAME],A.[TITLE_NAME],S.[APPROVER_NAME],S.[APPROVER_TIME],S.[RESULT_PROMPT],S.[COMMENT] ";
+                strSQL += ")";
+                strSQL += "SELECT S.[REQUISITION_ID],ISNULL(P.[DisplayName],'申請人') AS [PROCESS_NAME],S.[DEPT_NAME],S.[TITLE_NAME],S.[APPROVER_NAME],S.[APPROVER_TIME],S.[RESULT_PROMPT],S.[COMMENT] ";
                 strSQL += "FROM [CTE_SIGNATURE] AS S ";
-                strSQL += "         INNER JOIN [NUP].[dbo].[GTV_View_OrgRelationMember] AS A ON A.[COMPANY_ID]=@COMPANY_ID AND A.[USER_ID]=S.[APPROVER_ID] AND A.[DEPT_ID]=S.[APPROVER_DEPT] ";
-                strSQL += "         LEFT JOIN [FSe7en_Sys_ProcessName] AS P ON P.[DiagramID]=@DIAGRAM_ID AND P.[ProcessID]=S.[PROCESS_ID] ";
-                strSQL += "WHERE S.[APPROVER_NAME] IS NOT NULL ";
+                strSQL += "     LEFT JOIN [NUP].[dbo].[GTV_View_OrgRelationMember] AS A ON A.[COMPANY_ID]=@COMPANY_ID AND A.[USER_ID]=S.[APPROVER_ID] AND A.[DEPT_ID]=S.[APPROVER_DEPT] ";
+                strSQL += "     LEFT JOIN [BPMPro].[dbo].[FSe7en_Sys_ProcessName] AS P ON P.[DiagramID]=@DIAGRAM_ID AND P.[ProcessID]=S.[PROCESS_ID] ";
                 strSQL += "ORDER BY S.[AUTO_COUNTER] DESC ";
 
                 #endregion

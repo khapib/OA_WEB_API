@@ -70,7 +70,6 @@ namespace OA_WEB_API.Repository.OA
                 var mediaWarehouseCopyResponseOA = new MediaWarehouseCopyResponseOA();
                 var Priority = String.Empty;
                 var ContactPerson = String.Empty;
-                var AtomID = String.Empty;                
 
                 #endregion
 
@@ -167,19 +166,7 @@ namespace OA_WEB_API.Repository.OA
                             break;
                     }
 
-                    var parameterA = new List<SqlParameter>()
-                    {
-                         new SqlParameter("@ROLE_ID", SqlDbType.NVarChar) { Size = 64, Value = ContactPerson },
-                    };
-
-                    strSQL = "";
-                    strSQL += "SELECT ";
-                    strSQL += "     [AtomID] ";
-                    strSQL += "FROM [BPMPro].[dbo].[FSe7en_Org_RoleStruct] ";
-                    strSQL += "WHERE [RoleID]=@ROLE_ID ";
-
-                    dt = dbFun.DoQuery(strSQL, parameterA);
-                    if (dt.Rows.Count > 0) AtomID = dt.Rows[0][0].ToString();
+                    var AtomID=BPMPro.CommonRepository.GetRoles().Where(R=>R.ROLE_ID== ContactPerson).Select(R=>R.USER_ID).First();
 
                     var parameterB = new List<SqlParameter>()
                     {

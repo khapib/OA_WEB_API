@@ -157,8 +157,6 @@ namespace OA_WEB_API.Repository.BPMPro
             return mediaWarehouseNotAiredCopyViewModel;
         }
 
-        #region - 依此單內容重送 -
-
         /// <summary>
         /// 尚未播出檔拷貝申請單(依此單內容重送)(僅外部起單使用)
         /// </summary>
@@ -210,7 +208,6 @@ namespace OA_WEB_API.Repository.BPMPro
             return vResult;
         }
 
-        #endregion
 
         /// <summary>
         /// 尚未播出檔拷貝申請單(新增/修改/草稿)

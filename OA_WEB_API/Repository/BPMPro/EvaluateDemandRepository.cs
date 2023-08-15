@@ -155,56 +155,53 @@ namespace OA_WEB_API.Repository.BPMPro
 
             try
             {
-                #region - 宣告 -
+                if (!String.IsNullOrEmpty(query.REQUISITION_ID) || !String.IsNullOrWhiteSpace(query.REQUISITION_ID))
+                {
+                    #region - 宣告 -
 
-                var original = PostEvaluateDemandSingle(query);
+                    var original = PostEvaluateDemandSingle(query);
 
-                var evaluateDemand = new EvaluateDemandViewModel();
-                var applicantInfo = new ApplicantInfo();
-                var evaluateDemandConfig = new EvaluateDemandConfig();
+                    var evaluateDemand = new EvaluateDemandViewModel();
+                    strJson = jsonFunction.ObjectToJSON(original);
 
-                var requisitionID = Guid.NewGuid().ToString();
+                    var requisitionID = Guid.NewGuid().ToString();
 
-                #endregion
+                    #endregion
 
-                #region - 申請人資訊 -
+                    #region - 重送內容 -
 
-                applicantInfo.REQUISITION_ID = requisitionID;
-                applicantInfo.DIAGRAM_ID = original.APPLICANT_INFO.DIAGRAM_ID;
-                applicantInfo.PRIORITY = original.APPLICANT_INFO.PRIORITY;
-                applicantInfo.DRAFT_FLAG = 1;
-                applicantInfo.FLOW_ACTIVATED = original.APPLICANT_INFO.FLOW_ACTIVATED;
-                applicantInfo.APPLICANT_DEPT = original.APPLICANT_INFO.APPLICANT_DEPT;
-                applicantInfo.APPLICANT_DEPT_NAME = original.APPLICANT_INFO.APPLICANT_DEPT_NAME;
-                applicantInfo.APPLICANT_ID = original.APPLICANT_INFO.APPLICANT_ID;
-                applicantInfo.APPLICANT_NAME = original.APPLICANT_INFO.APPLICANT_NAME;
-                applicantInfo.APPLICANT_PHONE = original.APPLICANT_INFO.APPLICANT_PHONE;
-                applicantInfo.APPLICANT_DATETIME = DateTime.Now;
-                applicantInfo.FILLER_ID = original.APPLICANT_INFO.APPLICANT_ID;
-                applicantInfo.FILLER_NAME = original.APPLICANT_INFO.APPLICANT_NAME;
+                    evaluateDemand = jsonFunction.JsonToObject<EvaluateDemandViewModel>(strJson);
 
-                #endregion
+                    #region - 申請人資訊 -
 
-                #region - 需求評估單設定 -
+                    evaluateDemand.APPLICANT_INFO.REQUISITION_ID = requisitionID;
+                    evaluateDemand.APPLICANT_INFO.DRAFT_FLAG = 1;
+                    evaluateDemand.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Now;
 
-                evaluateDemandConfig.FM7_SUBJECT = "(依此單內容重上)" + original.EVALUATE_DEMAND_CONFIG.FM7_SUBJECT;
+                    #endregion
 
-                evaluateDemandConfig.COMPENDIUM = original.EVALUATE_DEMAND_CONFIG.COMPENDIUM;
-                evaluateDemandConfig.CONTACT_PERSON = original.EVALUATE_DEMAND_CONFIG.CONTACT_PERSON;
-                evaluateDemandConfig.EVALUATE = original.EVALUATE_DEMAND_CONFIG.EVALUATE;
-                evaluateDemandConfig.SCHEME = original.EVALUATE_DEMAND_CONFIG.SCHEME;
-                evaluateDemandConfig.PROCESS_RESULT = original.EVALUATE_DEMAND_CONFIG.PROCESS_RESULT;
-                evaluateDemandConfig.APPROVE_LOOP = 0;
+                    #region - 需求評估單設定 -
 
-                #endregion
+                    evaluateDemand.EVALUATE_DEMAND_CONFIG.FM7_SUBJECT = "(依此單內容重上)" + original.EVALUATE_DEMAND_CONFIG.FM7_SUBJECT;
+                    evaluateDemand.EVALUATE_DEMAND_CONFIG.CONTACT_PERSON = null;
+                    evaluateDemand.EVALUATE_DEMAND_CONFIG.EVALUATE = null;
+                    evaluateDemand.EVALUATE_DEMAND_CONFIG.SCHEME = null;
+                    evaluateDemand.EVALUATE_DEMAND_CONFIG.PROCESS_RESULT = null;
+                    evaluateDemand.EVALUATE_DEMAND_CONFIG.APPROVE_LOOP = 1;
 
-                evaluateDemand.APPLICANT_INFO = applicantInfo;
-                evaluateDemand.EVALUATE_DEMAND_CONFIG = evaluateDemandConfig;
-                evaluateDemand.ASSOCIATED_FORM_CONFIG = original.ASSOCIATED_FORM_CONFIG;
+                    #endregion
 
-                PutEvaluateDemandSingle(evaluateDemand);
+                    #endregion
 
-                vResult = true;
+                    #region - 送出 執行(新增/修改/草稿) -
+
+                    PutEvaluateDemandSingle(evaluateDemand);
+
+                    #endregion
+
+                    vResult = true;
+
+                }
             }
             catch (Exception ex)
             {

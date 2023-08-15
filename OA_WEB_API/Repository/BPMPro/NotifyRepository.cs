@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Web;
 using Dapper;
-
+using Microsoft.Ajax.Utilities;
 using OA_WEB_API.Models;
 using OA_WEB_API.Models.BPMPro;
 
@@ -358,16 +358,9 @@ namespace OA_WEB_API.Repository.BPMPro
                 #region - 總經理不收(結案)信件 -
                 //總經理不收(結案)信件；所以需要將finalApprover把有總經理名字的給移除
 
-                strSQL = "";
-                strSQL += "SELECT ";
-                strSQL += "     [AtomID] ";
-                strSQL += "FROM [BPMPro].[dbo].[FSe7en_Org_RoleStruct] ";
-                strSQL += "WHERE 1=1 ";
-                strSQL += "         AND [RoleID] ='GM' ";
-                var dt = dbFun.DoQuery(strSQL);
                 var logonModel = new LogonModel()
                 {
-                    USER_ID = dt.AsEnumerable().Select(R => R.Field<string>("AtomID")).FirstOrDefault()
+                    USER_ID = CommonRepository.GetRoles().Where(R=>R.ROLE_ID=="GM").Select(R=>R.USER_ID).First(),
                 };
                 var GM_Name = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.COMPANY_ID == "RootCompany").Select(U => U.USER_NAME).FirstOrDefault();
                 emailList.Remove(emailList.Where(e => e.Contains(GM_Name)).FirstOrDefault());
@@ -389,6 +382,24 @@ namespace OA_WEB_API.Repository.BPMPro
                     CONTENT = GetEmailBody(query, String.Join("、", nameList), enumProcess.CLOSE),
                     FW3_TO_NAME = String.Join(";", nameList)
                 };
+
+                #region - OfficialStamp【用印申請單】結案需要密件發送人資人員 -
+
+                //if (model.SUBJECT.Contains("用印申請單"))
+                //{
+                //    CommonRepository.GetRoles().Where(R => R.ROLE_ID == "GTV_HR" || R.ROLE_ID == "GTV_HR_Supervisor").ForEach(R =>
+                //    {
+                //        logonModel = new LogonModel()
+                //        {
+                //            USER_ID = R.USER_ID
+                //        };
+                //        var UserModel = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.COMPANY_ID == "RootCompany").FirstOrDefault();
+                //        _BCC_LIST += UserModel.USER_NAME + "<" + UserModel.EMAIL + ">;";
+                //    });
+                //    _BCC_LIST = _BCC_LIST.Substring(0, _BCC_LIST.Length - 1);
+                //}
+
+                #endregion
 
                 SendEmail(model);
 
@@ -1351,16 +1362,9 @@ namespace OA_WEB_API.Repository.BPMPro
             #region - 資深副總不收信件 -
             //資深副總不收信件；所以需要將TO_LIST、FW3_TO_NAME把有副總名字的給移除
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [AtomID] ";
-            strSQL += "FROM [BPMPro].[dbo].[FSe7en_Org_RoleStruct] ";
-            strSQL += "WHERE 1=1 ";
-            strSQL += "         AND [RoleID] ='DGM' ";
-            var dt = dbFun.DoQuery(strSQL);
             var logonModel = new LogonModel()
             {
-                USER_ID = dt.AsEnumerable().Select(R => R.Field<string>("AtomID")).FirstOrDefault()
+                USER_ID = CommonRepository.GetRoles().Where(R=>R.ROLE_ID=="DGM").Select(R=>R.USER_ID).First(),
             };
             var DGM_Name = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.COMPANY_ID == "RootCompany").Select(U => U.USER_NAME).FirstOrDefault();
             if (model.FW3_TO_NAME.Contains(DGM_Name + ";")) model.FW3_TO_NAME = model.FW3_TO_NAME.Replace(DGM_Name + ";", string.Empty);

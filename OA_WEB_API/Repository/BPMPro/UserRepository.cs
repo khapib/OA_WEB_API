@@ -61,46 +61,16 @@ namespace OA_WEB_API.Repository
                 if (Sysusers().Any(SU => SU.USER_ID.Contains(U.USER_ID))) U.JOB_STATUS = 0;
             });
 
-            #region - 辨別角色 -
+            #region - 角色 -
 
-            #region - 專案建立申審核單角色 -
-
-            var USER_ROLE = new UserRole();
-
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "      [RoleID], ";
-            strSQL += "      [AtomID] ";
-            strSQL += "FROM [BPMPro].[dbo].[FSe7en_Org_RoleStruct] ";
-            strSQL += "WHERE 1=1 ";
-            strSQL += "         AND [AtomID]=@USER_ID ";
-            strSQL += "         AND [RoleID] in ('GTV_Audit', 'GTV_Finance') ";
-
-            var dtProjectReviewRole = dbFun.DoQuery(strSQL, parameter);
-
-            if (dtProjectReviewRole.Rows.Count > 0)
-            {
-                USER_ROLE = new UserRole
-                {
-                    PROJECT_REVIEW_ROLE = true
-                };
-            }
-            else
-            {
-                USER_ROLE = new UserRole
-                {
-                    PROJECT_REVIEW_ROLE = false
-                };
-            }
-
-            #endregion
+            var userRole = BPMPro.CommonRepository.GetRoles().Where(R=>R.USER_ID== model.USER_ID).Select(R=>R.ROLE_ID).ToList();
 
             #endregion
 
             var userInfo = new UserInfo()
             {
                 USER_MODEL = userModel,
-                USER_ROLE = USER_ROLE
+                USER_ROLE = userRole
             };
 
             return userInfo;

@@ -445,19 +445,11 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (model.APPLICANT_INFO.DRAFT_FLAG == 0)
                 {
-                    strSQL = "";
-                    strSQL += "SELECT ";
-                    strSQL += "      [RequisitionID] ";
-                    strSQL += "FROM [BPMPro].[dbo].[FSe7en_Sys_Requisition] ";
-                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-
-                    var dtReq = dbFun.DoQuery(strSQL, parameterTitle);
-                    if (dtReq.Rows.Count <= 0)
+                    if (CommonRepository.GetFSe7enSysRequisition().Where(R => R.REQUISITION_ID == strREQ).Count() <= 0)
                     {
                         parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
                         IsADD = true;
                     }
-
                 }
                 else parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
 

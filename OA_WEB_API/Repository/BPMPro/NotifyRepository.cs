@@ -385,19 +385,19 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region - OfficialStamp【用印申請單】結案需要密件發送人資人員 -
 
-                if (model.SUBJECT.Contains("用印申請單"))
-                {
-                    CommonRepository.GetRoles().Where(R => R.ROLE_ID == "GTV_HR" || R.ROLE_ID == "GTV_HR_Supervisor").ForEach(R =>
-                    {
-                        logonModel = new LogonModel()
-                        {
-                            USER_ID = R.USER_ID
-                        };
-                        var UserModel = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.COMPANY_ID == "RootCompany").FirstOrDefault();
-                        _BCC_LIST += UserModel.USER_NAME + "<" + UserModel.EMAIL + ">;";
-                    });
-                    _BCC_LIST = _BCC_LIST.Substring(0, _BCC_LIST.Length - 1);
-                }
+                //if (model.SUBJECT.Contains("用印申請單"))
+                //{
+                //    CommonRepository.GetRoles().Where(R => R.ROLE_ID == "GTV_HR" || R.ROLE_ID == "GTV_HR_Supervisor").ForEach(R =>
+                //    {
+                //        logonModel = new LogonModel()
+                //        {
+                //            USER_ID = R.USER_ID
+                //        };
+                //        var UserModel = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.COMPANY_ID == "RootCompany").FirstOrDefault();
+                //        _BCC_LIST += UserModel.USER_NAME + "<" + UserModel.EMAIL + ">;";
+                //    });
+                //    _BCC_LIST = _BCC_LIST.Substring(0, _BCC_LIST.Length - 1);
+                //}
 
                 #endregion
 

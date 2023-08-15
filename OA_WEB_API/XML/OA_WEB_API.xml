@@ -7512,307 +7512,6 @@
         <member name="P:OA_WEB_API.Models.BPMPro.Test05List.NARRATIVE">
             <summary>描述</summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.BPMSystemOrder">
-            <summary>
-            確認是否有正常到系統起單；
-            清除失敗表單資料
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMSystemOrder.REQUISITION_ID">
-            <summary>系統編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMSystemOrder.IDENTIFY">
-            <summary>表單代號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMSystemOrder.EXTS">
-            <summary>表單資料表子名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMSystemOrder.IS_ASSOCIATED_FORM">
-            <summary>是否有關聯表單</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.ImplementHeader">
-            <summary>
-            (BPM API共用)_ERP起單共用抬頭
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ImplementHeader.FORM_NO">
-            <summary>ERP 表單唯一碼</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.HeaderTitle">
-            <summary>
-            (BPM API共用)_BPM表單抬頭
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.HeaderTitle.FM7_SUBJECT">
-            <summary>主旨</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.HeaderTitle.BPM_FORM_NO">
-            <summary>BPM 表單單號</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.BPMCommonModel`1">
-            <summary>
-            BPM_表單共用模組
-            </summary>
-            <typeparam name="T">Model</typeparam>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.EXT">
-            <summary>表單資料表子名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.IDENTIFY">
-            <summary>表單代號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.PARAMETER">
-            <summary>SqlParameter</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.MODEL">
-            <summary>Models</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.ApproversConfig">
-            <summary>
-            會簽簽核人員
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ApproversConfig.APPROVER_COMPANY_ID">
-            <summary>簽核人員公司別編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ApproversConfig.APPROVER_DEPT_MAIN_ID">
-            <summary>簽核人員主要部門</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ApproversConfig.APPROVER_DEPT_ID">
-            <summary>簽核人員部門</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ApproversConfig.APPROVER_ID">
-            <summary>簽核人員編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ApproversConfig.APPROVER_NAME">
-            <summary>簽核人員姓名</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.COMM_Bank">
-            <summary>
-            銀行(國內/國外)_台幣/外幣/開票
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.COMM_Bank.BFCY_BANK_BRANCH_NO">
-            <summary>受款分行代碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.COMM_Bank.BFCY_BANK_BRANCH_NAME">
-            <summary>受款分行名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.COMM_Bank.BFCY_BANK_SWIFT">
-            <summary>SWIFT</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.COMM_Bank.BFCY_BANK_ADDRESS">
-            <summary>受款銀行地址</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.COMM_Bank.BFCY_BANK_COUNTRY_AND_CITY">
-            <summary>受款銀行國家</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.COMM_Bank.BFCY_BANK_IBAN">
-            <summary>中間銀行</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank">
-            <summary>
-            銀行(國內)_台幣
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.TX_CATEGORY">
-            <summary>
-            匯款類型：
-            DT.國內電匯(台幣)、
-            DF.國內電匯(外幣)、
-            FF.國外電匯、
-            DD.票匯、
-            CS.現金、
-            OR.其他
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.BFCY_ACCOUNT_NO">
-            <summary>受款帳號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.BFCY_ACCOUNT_NAME">
-            <summary>受款帳號名稱/票據抬頭</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.BFCY_BANK_NO">
-            <summary>受款銀行代碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.BFCY_BANK_NAME">
-            <summary>受款銀行名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.CURRENCY_NAME">
-            <summary>幣別</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.BFCY_NAME">
-            <summary>帳款聯絡人</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.BFCY_TEL">
-            <summary>聯絡電話</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.BFCY_EMAIL">
-            <summary>聯絡Email</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.InvoiceConfig">
-            <summary>
-            憑證明細
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.NUM">
-            <summary>憑證號碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.DATE">
-            <summary>憑證日期</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.EXCL">
-            <summary>憑證免稅額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.EXCL_TWD">
-            <summary>憑證免稅額_台幣</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.TAX">
-            <summary>憑證稅額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.TAX_TWD">
-            <summary>憑證稅額_台幣</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.NET">
-            <summary>憑證未稅金額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.NET_TWD">
-            <summary>憑證未稅金額_台幣</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.GROSS">
-            <summary>憑證含稅金額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.GROSS_TWD">
-            <summary>憑證含稅金額_台幣</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.AMOUNT">
-            <summary>憑證金額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.AMOUNT_TWD">
-            <summary>憑證金額</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig">
-            <summary>
-            憑證細項
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.ROW_NO">
-            <summary>行數編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.NUM">
-            <summary>憑證號碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.NAME">
-            <summary>名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.QUANTITY">
-            <summary>數量</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.AMOUNT">
-            <summary>金額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.AMOUNT_TWD">
-            <summary>金額_台幣</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.R_QUANTITY">
-            <summary>剩餘數量</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.R_AMOUNT">
-            <summary>剩餘金額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.R_AMOUNT_TWD">
-            <summary>剩餘金額_台幣</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.IS_EXCL">
-            <summary>是否免稅[註記]</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.GeneralCommodityConfig">
-            <summary>
-            行政商品
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralCommodityConfig.ORDER_ROW_NO">
-            <summary>訂單行數編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralCommodityConfig.SUP_PROD_A_NO">
-            <summary>商品代碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralCommodityConfig.ITEM_NAME">
-            <summary>商品名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralCommodityConfig.MODEL">
-            <summary>型號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralCommodityConfig.SPECIFICATIONS">
-            <summary>規格</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralCommodityConfig.QUANTITY">
-            <summary>數量</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.GeneralCommodityConfig.UNIT">
-            <summary>單位</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.MediaCommodityConfig">
-            <summary>
-            版權商品
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.ORDER_ROW_NO">
-            <summary>訂單行數編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.SUP_PROD_A_NO">
-            <summary>商品代碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.ITEM_NAME">
-            <summary>名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.MEDIA_SPEC">
-            <summary>影帶規格</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.MEDIA_TYPE">
-            <summary>影片類型</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.START_EPISODE">
-            <summary>開始集數</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.END_EPISODE">
-            <summary>結束集數</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.ORDER_EPISODE">
-            <summary>總集數</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.ACPT_EPISODE">
-            <summary>驗收集數</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.EPISODE_TIME">
-            <summary>每集長度</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.BudgetConfig">
-            <summary>
-            預算
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BudgetConfig.FORM_NO">
-            <summary>預算 ERP唯一碼</summary>        
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BudgetConfig.CREATE_YEAR">
-            <summary>預算編列年度</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BudgetConfig.NAME">
-            <summary>預算名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BudgetConfig.OWNER_DEPT">
-            <summary>所屬部門</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BudgetConfig.TOTAL">
-            <summary>預算總額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BudgetConfig.AVAILABLE_BUDGET_AMOUNT">
-            <summary>可用預算金額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BudgetConfig.USE_BUDGET_AMOUNT">
-            <summary>使用預算金額</summary>
-        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GTVInApproveProgress">
             <summary>
             確認是否已起單且簽核中或草稿中
@@ -7837,20 +7536,6 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GTVApproveProgressResponse.BPMStatus">
             <summary>BPM表單狀態</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.RolesModel">
-            <summary>
-            角色列表
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.RolesModel.ROLE_ID">
-            <summary>角色代碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.RolesModel.ROLE_NAME">
-            <summary>角色名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.RolesModel.USER_ID">
-            <summary>員工編號</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.FormFilter">
             <summary>
@@ -8201,6 +7886,362 @@
             0.啟用
             1.草稿
             </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.BPMSystemOrder">
+            <summary>
+            確認是否有正常到系統起單；
+            清除失敗表單資料
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BPMSystemOrder.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BPMSystemOrder.IDENTIFY">
+            <summary>表單代號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BPMSystemOrder.EXTS">
+            <summary>表單資料表子名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BPMSystemOrder.IS_ASSOCIATED_FORM">
+            <summary>是否有關聯表單</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.ImplementHeader">
+            <summary>
+            (BPM API共用)_ERP起單共用抬頭
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ImplementHeader.FORM_NO">
+            <summary>ERP 表單唯一碼</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.HeaderTitle">
+            <summary>
+            (BPM API共用)_BPM表單抬頭
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.HeaderTitle.FM7_SUBJECT">
+            <summary>主旨</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.HeaderTitle.BPM_FORM_NO">
+            <summary>BPM 表單單號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.BPMCommonModel`1">
+            <summary>
+            BPM_表單共用模組
+            </summary>
+            <typeparam name="T">Model</typeparam>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.EXT">
+            <summary>表單資料表子名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.IDENTIFY">
+            <summary>表單代號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.PARAMETER">
+            <summary>SqlParameter</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.MODEL">
+            <summary>Models</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.ApproversConfig">
+            <summary>
+            會簽簽核人員
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ApproversConfig.APPROVER_COMPANY_ID">
+            <summary>簽核人員公司別編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ApproversConfig.APPROVER_DEPT_MAIN_ID">
+            <summary>簽核人員主要部門</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ApproversConfig.APPROVER_DEPT_ID">
+            <summary>簽核人員部門</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ApproversConfig.APPROVER_ID">
+            <summary>簽核人員編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ApproversConfig.APPROVER_NAME">
+            <summary>簽核人員姓名</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.COMM_Bank">
+            <summary>
+            銀行(國內/國外)_台幣/外幣/開票
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.COMM_Bank.BFCY_BANK_BRANCH_NO">
+            <summary>受款分行代碼</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.COMM_Bank.BFCY_BANK_BRANCH_NAME">
+            <summary>受款分行名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.COMM_Bank.BFCY_BANK_SWIFT">
+            <summary>SWIFT</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.COMM_Bank.BFCY_BANK_ADDRESS">
+            <summary>受款銀行地址</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.COMM_Bank.BFCY_BANK_COUNTRY_AND_CITY">
+            <summary>受款銀行國家</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.COMM_Bank.BFCY_BANK_IBAN">
+            <summary>中間銀行</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank">
+            <summary>
+            銀行(國內)_台幣
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.TX_CATEGORY">
+            <summary>
+            匯款類型：
+            DT.國內電匯(台幣)、
+            DF.國內電匯(外幣)、
+            FF.國外電匯、
+            DD.票匯、
+            CS.現金、
+            OR.其他
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.BFCY_ACCOUNT_NO">
+            <summary>受款帳號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.BFCY_ACCOUNT_NAME">
+            <summary>受款帳號名稱/票據抬頭</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.BFCY_BANK_NO">
+            <summary>受款銀行代碼</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.BFCY_BANK_NAME">
+            <summary>受款銀行名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.CURRENCY_NAME">
+            <summary>幣別</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.BFCY_NAME">
+            <summary>帳款聯絡人</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.BFCY_TEL">
+            <summary>聯絡電話</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.BFCY_EMAIL">
+            <summary>聯絡Email</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.InvoiceConfig">
+            <summary>
+            憑證明細
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.NUM">
+            <summary>憑證號碼</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.DATE">
+            <summary>憑證日期</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.EXCL">
+            <summary>憑證免稅額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.EXCL_TWD">
+            <summary>憑證免稅額_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.TAX">
+            <summary>憑證稅額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.TAX_TWD">
+            <summary>憑證稅額_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.NET">
+            <summary>憑證未稅金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.NET_TWD">
+            <summary>憑證未稅金額_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.GROSS">
+            <summary>憑證含稅金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.GROSS_TWD">
+            <summary>憑證含稅金額_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.AMOUNT">
+            <summary>憑證金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.AMOUNT_TWD">
+            <summary>憑證金額</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig">
+            <summary>
+            憑證細項
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.ROW_NO">
+            <summary>行數編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.NUM">
+            <summary>憑證號碼</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.NAME">
+            <summary>名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.QUANTITY">
+            <summary>數量</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.AMOUNT">
+            <summary>金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.AMOUNT_TWD">
+            <summary>金額_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.R_QUANTITY">
+            <summary>剩餘數量</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.R_AMOUNT">
+            <summary>剩餘金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.R_AMOUNT_TWD">
+            <summary>剩餘金額_台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig.IS_EXCL">
+            <summary>是否免稅[註記]</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.GeneralCommodityConfig">
+            <summary>
+            行政商品
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralCommodityConfig.ORDER_ROW_NO">
+            <summary>訂單行數編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralCommodityConfig.SUP_PROD_A_NO">
+            <summary>商品代碼</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralCommodityConfig.ITEM_NAME">
+            <summary>商品名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralCommodityConfig.MODEL">
+            <summary>型號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralCommodityConfig.SPECIFICATIONS">
+            <summary>規格</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralCommodityConfig.QUANTITY">
+            <summary>數量</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralCommodityConfig.UNIT">
+            <summary>單位</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.MediaCommodityConfig">
+            <summary>
+            版權商品
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.ORDER_ROW_NO">
+            <summary>訂單行數編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.SUP_PROD_A_NO">
+            <summary>商品代碼</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.ITEM_NAME">
+            <summary>名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.MEDIA_SPEC">
+            <summary>影帶規格</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.MEDIA_TYPE">
+            <summary>影片類型</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.START_EPISODE">
+            <summary>開始集數</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.END_EPISODE">
+            <summary>結束集數</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.ORDER_EPISODE">
+            <summary>總集數</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.ACPT_EPISODE">
+            <summary>驗收集數</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaCommodityConfig.EPISODE_TIME">
+            <summary>每集長度</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.BudgetConfig">
+            <summary>
+            預算
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BudgetConfig.FORM_NO">
+            <summary>預算 ERP唯一碼</summary>        
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BudgetConfig.CREATE_YEAR">
+            <summary>預算編列年度</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BudgetConfig.NAME">
+            <summary>預算名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BudgetConfig.OWNER_DEPT">
+            <summary>所屬部門</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BudgetConfig.TOTAL">
+            <summary>預算總額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BudgetConfig.AVAILABLE_BUDGET_AMOUNT">
+            <summary>可用預算金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BudgetConfig.USE_BUDGET_AMOUNT">
+            <summary>使用預算金額</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.RolesModel">
+            <summary>
+            (擴充方法)_角色列表
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.RolesModel.ROLE_ID">
+            <summary>角色代碼</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.RolesModel.ROLE_NAME">
+            <summary>角色名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.RolesModel.USER_ID">
+            <summary>員工編號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD">
+            <summary>
+            (擴充方法)_BPM系統申請單總表
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.AUTO_COUNTER">
+            <summary>流水號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.PARENT_REQUISITION">
+            <summary>母表單系統編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.BPM_FORM_NO">
+            <summary>BPM 表單單號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.IDENTIFY">
+            <summary>表單代號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.DIAGRAM_ID">
+            <summary>流程圖編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.APPLICANT_DEPT">
+            <summary>申請部門編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.APPLICANT_ID">
+            <summary>申請人編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.STATUS">
+            <summary>表單狀態編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.STATUS_NAME">
+            <summary>表單狀態</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.TIME_START">
+            <summary>開始時間</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.FSE7EN_SYS_REQUISITION_FIELD.TIME_LAST_ACTION">
+            <summary>最後執行時間</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.FormDistinguishResponse">
             <summary>
@@ -11178,16 +11219,6 @@
             BPM表單機能
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostDataHaveForm(OA_WEB_API.Models.BPMPro.FormQueryModel)">
-            <summary>
-            (擴充方法)_確認BPM表單是否存在
-            </summary>
-        </member>
-        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.FormDistinguish(System.String)">
-            <summary>
-            (擴充方法)_共同表單區分
-            </summary>
-        </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostApplicantInfoFunction``1(OA_WEB_API.Models.BPMPro.BPMCommonModel{``0})">
             <summary>
             申請人資訊(查詢)
@@ -11251,6 +11282,21 @@
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PutMediaCommodityFunction``1(OA_WEB_API.Models.BPMPro.BPMCommonModel{``0})">
             <summary>
             (已退貨/退貨)版權商品_共用模組(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.GetRoles">
+            <summary>
+            (擴充方法)_角色列表
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostDataHaveForm(OA_WEB_API.Models.BPMPro.FormQueryModel)">
+            <summary>
+            (擴充方法)_確認BPM表單是否存在
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.FormDistinguish(System.String)">
+            <summary>
+            (擴充方法)_共同表單區分
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.CommonRepository.strSQL">

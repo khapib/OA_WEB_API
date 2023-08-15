@@ -273,14 +273,17 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region - 主旨 -
 
-                if (String.IsNullOrEmpty(model.OFFICIAL_STAMP_CONFIG.CONTACT) || String.IsNullOrWhiteSpace(model.OFFICIAL_STAMP_CONFIG.CONTACT))
+                if (model.OFFICIAL_STAMP_DOCS_CONFIG != null && model.OFFICIAL_STAMP_DOCS_CONFIG.Count > 0)
                 {
-                    FM7Subject = "用印申請單_" + model.OFFICIAL_STAMP_DOCS_CONFIG.Select(D => D.ITEM_NAME).FirstOrDefault() + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
+                    if (String.IsNullOrEmpty(model.OFFICIAL_STAMP_CONFIG.CONTACT) || String.IsNullOrWhiteSpace(model.OFFICIAL_STAMP_CONFIG.CONTACT)) FM7Subject = "用印申請單_" + model.OFFICIAL_STAMP_DOCS_CONFIG.Select(D => D.ITEM_NAME).FirstOrDefault() + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
+                    else FM7Subject = "用印申請單_" + model.OFFICIAL_STAMP_DOCS_CONFIG.Select(D => D.ITEM_NAME).FirstOrDefault() + "_" + model.OFFICIAL_STAMP_CONFIG.CONTACT + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
                 }
                 else
                 {
-                    FM7Subject = "用印申請單_" + model.OFFICIAL_STAMP_DOCS_CONFIG.Select(D => D.ITEM_NAME).FirstOrDefault() + "_" + model.OFFICIAL_STAMP_CONFIG.CONTACT + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
+                    if (String.IsNullOrEmpty(model.OFFICIAL_STAMP_CONFIG.CONTACT) || String.IsNullOrWhiteSpace(model.OFFICIAL_STAMP_CONFIG.CONTACT)) FM7Subject = "用印申請單_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
+                    else FM7Subject = "用印申請單_" + model.OFFICIAL_STAMP_CONFIG.CONTACT + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
                 }
+
 
                 #endregion
 

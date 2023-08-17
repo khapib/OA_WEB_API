@@ -42,6 +42,8 @@ namespace OA_WEB_API.Repository.BPMPro
         /// </summary>
         public ResignUnpaidLeaveAgendaViewModel PostResignUnpaidLeaveAgendaSingle(ResignUnpaidLeaveAgendaQueryModel query)
         {
+            var logonModel = new LogonModel();
+
             var parameter = new List<SqlParameter>()
             {
                  new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID }
@@ -56,7 +58,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 PARAMETER = parameter,
             };
             strJson = jsonFunction.ObjectToJSON(commonRepository.PostApplicantInfoFunction(CommonApplicantInfo));
-            var applicantInfo = jsonFunction.JsonToObject<ApplicantInfo>(strJson);
+            var applicantInfo = jsonFunction.JsonToObject<ApplicantInfo>(strJson);            
 
             #endregion
 
@@ -113,6 +115,33 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "ORDER BY [ItemID],[AutoCounter] ";
 
             var resignUnpaidLeaveAgendaAffairsConfig = dbFun.DoQuery(strSQL, parameter).ToList<ResignUnpaidLeaveAgendaAffairsConfig>();
+
+            #endregion
+
+            #region - 代填單人:儲存草稿 -
+
+            if (applicantInfo.DRAFT_FLAG == 1)
+            {
+                string[] applicant = applicantInfo.FM7_SUBJECT.Split('_');
+                if (applicant.Count() == 6)
+                {
+                    applicantInfo.APPLICANT_DEPT_NAME = applicant[1];
+                    applicantInfo.APPLICANT_DEPT = sysCommonRepository.GetGTVDeptTree().Where(GTV => GTV.DEPT_NAME == applicantInfo.APPLICANT_DEPT_NAME).Select(GTV => GTV.DEPT_ID).FirstOrDefault();
+                    applicantInfo.APPLICANT_ID = applicant[2];
+                    applicantInfo.APPLICANT_NAME = applicant[3];
+                    logonModel.USER_ID = applicantInfo.APPLICANT_ID;
+                    applicantInfo.APPLICANT_PHONE = userRepository.PostUserSingle(logonModel).USER_MODEL.Select(U => U.MOBILE).FirstOrDefault();
+                }
+                else
+                {
+                    applicantInfo.APPLICANT_DEPT_NAME = applicant[0];
+                    applicantInfo.APPLICANT_DEPT = sysCommonRepository.GetGTVDeptTree().Where(GTV => GTV.DEPT_NAME == applicantInfo.APPLICANT_DEPT_NAME).Select(GTV => GTV.DEPT_ID).FirstOrDefault();
+                    applicantInfo.APPLICANT_ID = applicant[1];
+                    applicantInfo.APPLICANT_NAME = applicant[2];
+                    logonModel.USER_ID = applicantInfo.APPLICANT_ID;
+                    applicantInfo.APPLICANT_PHONE = userRepository.PostUserSingle(logonModel).USER_MODEL.Select(U => U.MOBILE).FirstOrDefault();
+                }
+            }
 
             #endregion
 
@@ -227,13 +256,31 @@ namespace OA_WEB_API.Repository.BPMPro
                 var ParentDeptName = sysCommonRepository.GetGTVDeptTree().Where(GTV => GTV.DEPT_ID.Contains(model.APPLICANT_INFO.APPLICANT_DEPT)).Select(GTV => GTV.PARENT_DEPT_NAME).FirstOrDefault();
                 if (String.IsNullOrEmpty(ParentDeptName) || String.IsNullOrWhiteSpace(ParentDeptName)) sysCommonRepository.GetGPIDeptTree().Where(GPI => GPI.DEPT_ID.Contains(model.APPLICANT_INFO.APPLICANT_DEPT)).Select(GPI => GPI.PARENT_DEPT_NAME).FirstOrDefault();
 
-                FM7Subject = ParentDeptName + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_ID + "_" + model.APPLICANT_INFO.APPLICANT_NAME + "_" + DateTime.Parse(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.RESIGN_DATE.ToString()).ToString("yyyy/MM/dd") + "_" + FormAction;
+                if(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.RESIGN_DATE !=null) FM7Subject = ParentDeptName + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_ID + "_" + model.APPLICANT_INFO.APPLICANT_NAME + "_" + DateTime.Parse(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.RESIGN_DATE.ToString()).ToString("yyyy/MM/dd") + "_" + FormAction;
+                else FM7Subject = ParentDeptName + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_ID + "_" + model.APPLICANT_INFO.APPLICANT_NAME + "_" + DateTime.Now.ToString("yyyy/MM/dd") + "_" + FormAction;
 
                 #endregion
 
                 #endregion
 
                 #region - 離職、留職停薪_手續表 表頭資訊：ResignUnpaidLeaveAgenda_M -
+
+                #region - 代填單:儲存草稿 -
+
+                if (model.APPLICANT_INFO.DRAFT_FLAG == 1)
+                {
+                    model.APPLICANT_INFO.APPLICANT_ID = model.APPLICANT_INFO.FILLER_ID;
+                    model.APPLICANT_INFO.APPLICANT_NAME = model.APPLICANT_INFO.FILLER_NAME;
+
+                    logonModel.USER_ID = model.APPLICANT_INFO.APPLICANT_ID;
+                    var userModel = userRepository.PostUserSingle(logonModel).USER_MODEL.Select(U => U).FirstOrDefault();
+                    model.APPLICANT_INFO.APPLICANT_DEPT = userModel.DEPT_ID;
+                    model.APPLICANT_INFO.APPLICANT_DEPT_NAME = userModel.DEPT_NAME;
+                    model.APPLICANT_INFO.APPLICANT_PHONE = userModel.MOBILE;
+                }
+
+                #endregion
+
 
                 var parameterTitle = new List<SqlParameter>()
                 {
@@ -341,8 +388,24 @@ namespace OA_WEB_API.Repository.BPMPro
                             new SqlParameter("@C03_OTHERS", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                         };
 
-                    logonModel.USER_ID = model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.HANDOVER_SUPERVISOR_ID;
-                    model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.HANDOVER_SUPERVISOR_NAME = userRepository.PostUserSingle(logonModel).USER_MODEL.Select(U => U.USER_NAME).FirstOrDefault();
+                    #region - 正式起單確認交接人主管 -
+
+                    if (model.APPLICANT_INFO.DRAFT_FLAG == 0)
+                    {
+                        if (String.IsNullOrEmpty(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.HANDOVER_SUPERVISOR_ID) || String.IsNullOrWhiteSpace(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.HANDOVER_SUPERVISOR_ID))
+                        {
+                            CommLib.Logger.Error("離職、留職停薪_流程表(新增/修改/草稿)失敗，原因：交接人主管不能是 空 的");
+                            return false;
+                        }
+                    }
+
+                    #endregion
+
+                    if (!String.IsNullOrEmpty(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.HANDOVER_SUPERVISOR_ID) || !String.IsNullOrWhiteSpace(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.HANDOVER_SUPERVISOR_ID))
+                    {                        
+                        logonModel.USER_ID = model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.HANDOVER_SUPERVISOR_ID;
+                        model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.HANDOVER_SUPERVISOR_NAME = userRepository.PostUserSingle(logonModel).USER_MODEL.Select(U => U.USER_NAME).FirstOrDefault();
+                    }
 
                     //寫入：離職、留職停薪_流程表 表單內容parameter                        
                     strJson = jsonFunction.ObjectToJSON(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG);

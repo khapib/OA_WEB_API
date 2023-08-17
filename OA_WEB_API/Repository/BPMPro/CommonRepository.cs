@@ -884,18 +884,7 @@ namespace OA_WEB_API.Repository.BPMPro
                  new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID }
             };
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     R.[RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     R.[SerialID] AS [SERIAL_ID], ";
-            strSQL += "     D.[Identify] AS [IDENTIFY], ";
-            strSQL += "     R.[Status] AS [STATUS] ";
-            strSQL += "FROM [BPMPro].[dbo].[FSe7en_Sys_Requisition] AS R ";
-            strSQL += "INNER JOIN [BPMPro].[dbo].[FSe7en_Sys_DiagramList] AS D ON R.[DiagramID]=D.[DiagramID] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-            var dtS = dbFun.DoQuery(strSQL, parameter);
-
-            if (dtS.Rows.Count <= 0)
+            if (CommonRepository.GetFSe7enSysRequisition().Where(R=>R.REQUISITION_ID==model.REQUISITION_ID).Count() <= 0)
             {
                 #region 先刪除送單沒成功的資料
 
@@ -1964,7 +1953,7 @@ namespace OA_WEB_API.Repository.BPMPro
         }
 
         #endregion
-
+        
         #endregion
 
         #endregion

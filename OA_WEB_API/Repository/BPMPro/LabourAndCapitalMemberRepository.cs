@@ -1047,31 +1047,25 @@ namespace OA_WEB_API.Repository.BPMPro
                         int i = 0;
                         while (i <= (HttpContext.Current.Request.Files.Count - 1))
                         {
-                            var fileResult = true;
                             var File = HttpContext.Current.Request.Files[i];
+                            var fileName = Guid.NewGuid() + Path.GetExtension(File.FileName);
 
-                            if (fileResult)
-                            {
-                                var fileName = Guid.NewGuid() + Path.GetExtension(File.FileName);
-                                //如果檔案大小、檔案種類都對才會儲存檔案    
+                            parameter.Add(new SqlParameter("@N_FILE_NAME", SqlDbType.NVarChar) { Size = 200, Value = IDENTIFY + "\\" + fileName });
+                            parameter.Add(new SqlParameter("@O_FILE_NAME", SqlDbType.NVarChar) { Size = 200, Value = File.FileName });
+                            parameter.Add(new SqlParameter("@FILE_SIZE", SqlDbType.Int) { Value = File.ContentLength });
 
-                                parameter.Add(new SqlParameter("@N_FILE_NAME", SqlDbType.NVarChar) { Size = 200, Value = IDENTIFY + "\\" + fileName });
-                                parameter.Add(new SqlParameter("@O_FILE_NAME", SqlDbType.NVarChar) { Size = 200, Value = File.FileName });
-                                parameter.Add(new SqlParameter("@FILE_SIZE", SqlDbType.Int) { Value = File.ContentLength });
+                            #region - 寫入附件F表 -
 
-                                #region - 寫入附件F表 -
+                            strSQL = "";
+                            strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_F]([VoteYear],[UplodTime],[Identify],[AccountID],[MemberName],[RequisitionID],[DiagramID],[ProcessID],[ProcessName],[NFileName],[OFileName],[FileSize],[DraftFlag],[Remark]) ";
+                            strSQL += "VALUES(@VOTE_YEAR,@UPLOD_TIME,@IDENTIFY,@ACCOUNT_ID,@MEMBER_NAME,@REQUISITION_ID,@DIAGRAM_ID,@PROCESS_ID,@PROCESS_NAME,@N_FILE_NAME,@O_FILE_NAME,@FILE_SIZE,@DRAFT_FLAG,@REMARK) ";
+                            dbFun.DoTran(strSQL, parameter);
 
-                                strSQL = "";
-                                strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_F]([VoteYear],[UplodTime],[Identify],[AccountID],[MemberName],[RequisitionID],[DiagramID],[ProcessID],[ProcessName],[NFileName],[OFileName],[FileSize],[DraftFlag],[Remark]) ";
-                                strSQL += "VALUES(@VOTE_YEAR,@UPLOD_TIME,@IDENTIFY,@ACCOUNT_ID,@MEMBER_NAME,@REQUISITION_ID,@DIAGRAM_ID,@PROCESS_ID,@PROCESS_NAME,@N_FILE_NAME,@O_FILE_NAME,@FILE_SIZE,@DRAFT_FLAG,@REMARK) ";
-                                dbFun.DoTran(strSQL, parameter);
+                            #endregion
 
-                                #endregion
-
-                                parameter.Remove(parameter.Where(SP => SP.ParameterName.Contains("@N_FILE_NAME")).FirstOrDefault());
-                                parameter.Remove(parameter.Where(SP => SP.ParameterName.Contains("@O_FILE_NAME")).FirstOrDefault());
-                                parameter.Remove(parameter.Where(SP => SP.ParameterName.Contains("@FILE_SIZE")).FirstOrDefault());
-                            }
+                            parameter.Remove(parameter.Where(SP => SP.ParameterName.Contains("@N_FILE_NAME")).FirstOrDefault());
+                            parameter.Remove(parameter.Where(SP => SP.ParameterName.Contains("@O_FILE_NAME")).FirstOrDefault());
+                            parameter.Remove(parameter.Where(SP => SP.ParameterName.Contains("@FILE_SIZE")).FirstOrDefault());
 
                             i++;
                         }

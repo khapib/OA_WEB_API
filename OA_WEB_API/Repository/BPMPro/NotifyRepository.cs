@@ -260,7 +260,7 @@ namespace OA_WEB_API.Repository.BPMPro
                             nameTemp.Add(manager.USER_NAME);
                         }
 
-                        emailCCList.Add("何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>");
+                        emailCCList.Add("何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>;尤玟茹<uwr0701@gtv.com.tw>");
                         //emailCCTemp.Add("孫慶偉<top@gtv.com.tw>"); /*測試機在加經理*/
 
                         emailCCList = emailCCTemp.Distinct().ToList();
@@ -271,7 +271,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         emailList.Clear();
                         emailCCList.Clear();
-                        emailCCList.Add("何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>");
+                        emailCCList.Add("何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>;尤玟茹<uwr0701@gtv.com.tw>");
 
                         break;
                 }
@@ -1496,7 +1496,8 @@ namespace OA_WEB_API.Repository.BPMPro
         public void SendSMS(SmsModel model)
         {
             var smsFun = new smsFunction();
-            smsFun.SendSMS(model);
+            /*正式機要加回來*/
+            //smsFun.SendSMS(model);
 
             LogToSmsBank(model);
         }
@@ -1566,7 +1567,7 @@ namespace OA_WEB_API.Repository.BPMPro
         private string _CC_LIST = String.Empty;
 
         /// <summary>密件收件人</summary>
-        private string _BCC_LIST = "何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>";
+        private string _BCC_LIST = "何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>;尤玟茹<uwr0701@gtv.com.tw>";
 
         /// <summary>特定人員</summary>
         private string ReceiverID;

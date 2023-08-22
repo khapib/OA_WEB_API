@@ -11286,7 +11286,8 @@
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.GetFSe7enSysRequisition">
             <summary>
-            (擴充方法)_BPM系統申請單總表
+            (擴充方法)_BPM系統申請單總表；
+            不可用於(查詢)。
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostDataHaveForm(OA_WEB_API.Models.BPMPro.FormQueryModel)">

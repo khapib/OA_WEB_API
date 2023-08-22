@@ -884,7 +884,15 @@ namespace OA_WEB_API.Repository.BPMPro
                  new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID }
             };
 
-            if (CommonRepository.GetFSe7enSysRequisition().Where(R=>R.REQUISITION_ID==model.REQUISITION_ID).Count() <= 0)
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [RequisitionID] AS [REQUISITION_ID]";
+            strSQL += "FROM [BPMPro].[dbo].[FSe7en_Sys_Requisition] ";
+            strSQL += "WHERE 1=1 ";
+            strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+            var dt= dbFun.DoQuery(strSQL, parameter);
+
+            if (dt.Rows.Count <= 0)
             {
                 #region 先刪除送單沒成功的資料
 
@@ -1838,7 +1846,8 @@ namespace OA_WEB_API.Repository.BPMPro
         #region - (擴充方法)_BPM系統申請單總表 -
 
         /// <summary>
-        /// (擴充方法)_BPM系統申請單總表
+        /// (擴充方法)_BPM系統申請單總表；
+        /// 不可用於(查詢)。
         /// </summary>
         public static IList<FSe7enSysRequisitionField> GetFSe7enSysRequisition()
         {

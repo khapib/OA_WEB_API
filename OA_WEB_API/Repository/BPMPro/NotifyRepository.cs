@@ -261,7 +261,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         }
 
                         emailCCList.Add("何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>;尤玟茹<uwr0701@gtv.com.tw>");
-                        //emailCCTemp.Add("孫慶偉<top@gtv.com.tw>"); /*測試機在加經理*/
+                        emailCCTemp.Add("孫慶偉<top@gtv.com.tw>"); /*測試機在加經理*/
 
                         emailCCList = emailCCTemp.Distinct().ToList();
 

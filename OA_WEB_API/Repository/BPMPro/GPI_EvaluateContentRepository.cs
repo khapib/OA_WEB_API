@@ -190,50 +190,35 @@ namespace OA_WEB_API.Repository.BPMPro
 
             if (GPI_evaluateContentViewModel.APPLICANT_INFO.DRAFT_FLAG == 0)
             {
-                #region - 確認BPM表單是否正常起單到系統中 -
-
-                //保留原有資料
-                strJson = jsonFunction.ObjectToJSON(GPI_evaluateContentViewModel);
-
-                var BpmSystemOrder = new BPMSystemOrder()
+                if (!CommonRepository.GetFSe7enSysRequisition().Any(R => R.REQUISITION_ID == query.REQUISITION_ID))
                 {
-                    REQUISITION_ID = query.REQUISITION_ID,
-                    IDENTIFY = IDENTIFY,
-                    EXTS = new List<string>()
-                    {
-                        "M",
-                        "D",
-                        "EVA",
-                        "DEC"
-                    },
-                    IS_ASSOCIATED_FORM = false
-                };
-                //確認是否有正常到系統起單；清除失敗表單資料並重新送單值行
-                if (commonRepository.PostBPMSystemOrder(BpmSystemOrder)) PutGPI_EvaluateContentSingle(jsonFunction.JsonToObject<GPI_EvaluateContentViewModel>(strJson));
-
-                #endregion
-
-                #region - 確認M表BPM表單單號 -
-
-                //避免儲存後送出表單BPM表單單號沒寫入的情形
-                var formQuery = new FormQueryModel()
-                {
-                    REQUISITION_ID = query.REQUISITION_ID
-                };
-                notifyRepository.ByInsertBPMFormNo(formQuery);
-
-                if (String.IsNullOrEmpty(GPI_evaluateContentViewModel.GPI_EVALUATE_CONTENT_TITLE.BPM_FORM_NO) || String.IsNullOrWhiteSpace(GPI_evaluateContentViewModel.GPI_EVALUATE_CONTENT_TITLE.BPM_FORM_NO))
-                {
-                    strSQL = "";
-                    strSQL += "SELECT ";
-                    strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
-                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
-                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-                    var dtBpmFormNo = dbFun.DoQuery(strSQL, parameter);
-                    if (dtBpmFormNo.Rows.Count > 0) GPI_evaluateContentViewModel.GPI_EVALUATE_CONTENT_TITLE.BPM_FORM_NO = dtBpmFormNo.Rows[0][0].ToString();
+                    GPI_evaluateContentViewModel = new GPI_EvaluateContentViewModel();
+                    CommLib.Logger.Error("四方四隅_內容評估表(查詢)失敗，原因：系統無正常起單。");
                 }
+                else
+                {
+                    #region - 確認M表BPM表單單號 -
 
-                #endregion
+                    //避免儲存後送出表單BPM表單單號沒寫入的情形
+                    var formQuery = new FormQueryModel()
+                    {
+                        REQUISITION_ID = query.REQUISITION_ID
+                    };
+                    notifyRepository.ByInsertBPMFormNo(formQuery);
+
+                    if (String.IsNullOrEmpty(GPI_evaluateContentViewModel.GPI_EVALUATE_CONTENT_TITLE.BPM_FORM_NO) || String.IsNullOrWhiteSpace(GPI_evaluateContentViewModel.GPI_EVALUATE_CONTENT_TITLE.BPM_FORM_NO))
+                    {
+                        strSQL = "";
+                        strSQL += "SELECT ";
+                        strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
+                        strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                        strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+                        var dtBpmFormNo = dbFun.DoQuery(strSQL, parameter);
+                        if (dtBpmFormNo.Rows.Count > 0) GPI_evaluateContentViewModel.GPI_EVALUATE_CONTENT_TITLE.BPM_FORM_NO = dtBpmFormNo.Rows[0][0].ToString();
+                    }
+
+                    #endregion
+                }
             }
 
             #endregion

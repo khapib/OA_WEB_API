@@ -7882,24 +7882,6 @@
             1.草稿
             </summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.BPMSystemOrder">
-            <summary>
-            確認是否有正常到系統起單；
-            清除失敗表單資料
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMSystemOrder.REQUISITION_ID">
-            <summary>系統編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMSystemOrder.IDENTIFY">
-            <summary>表單代號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMSystemOrder.EXTS">
-            <summary>表單資料表子名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.BPMSystemOrder.IS_ASSOCIATED_FORM">
-            <summary>是否有關聯表單</summary>
-        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ImplementHeader">
             <summary>
             (BPM API共用)_ERP起單共用抬頭
@@ -11203,12 +11185,6 @@
             關聯表單(知會)
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostBPMSystemOrder(OA_WEB_API.Models.BPMPro.BPMSystemOrder)">
-            <summary>
-            確認是否有正常到系統起單；
-            清除失敗表單資料
-            </summary>
-        </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostBPMFormFunction(OA_WEB_API.Models.BPMPro.BPMFormFunction)">
             <summary>
             BPM表單機能
@@ -11286,8 +11262,7 @@
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.GetFSe7enSysRequisition">
             <summary>
-            (擴充方法)_BPM系統申請單總表；
-            不可用於(查詢)。
+            (擴充方法)_BPM系統申請單總表
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostDataHaveForm(OA_WEB_API.Models.BPMPro.FormQueryModel)">

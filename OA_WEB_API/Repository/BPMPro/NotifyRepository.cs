@@ -1497,7 +1497,7 @@ namespace OA_WEB_API.Repository.BPMPro
         {
             var smsFun = new smsFunction();
             /*正式機要加回來*/
-            //smsFun.SendSMS(model);
+            smsFun.SendSMS(model);
 
             LogToSmsBank(model);
         }

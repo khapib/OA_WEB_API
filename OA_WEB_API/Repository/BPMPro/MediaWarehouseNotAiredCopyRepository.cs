@@ -108,48 +108,35 @@ namespace OA_WEB_API.Repository.BPMPro
 
             if (mediaWarehouseNotAiredCopyViewModel.APPLICANT_INFO.DRAFT_FLAG == 0)
             {
-                #region - 確認BPM表單是否正常起單到系統中 -
-
-                //保留原有資料
-                strJson = jsonFunction.ObjectToJSON(mediaWarehouseNotAiredCopyViewModel);
-
-                var BpmSystemOrder = new BPMSystemOrder()
+                if (!CommonRepository.GetFSe7enSysRequisition().Any(R => R.REQUISITION_ID == query.REQUISITION_ID))
                 {
-                    REQUISITION_ID = query.REQUISITION_ID,
-                    IDENTIFY = IDENTIFY,
-                    EXTS = new List<string>()
-                    {
-                        "M",
-                        "D"
-                    },
-                    IS_ASSOCIATED_FORM = false
-                };
-                //確認是否有正常到系統起單；清除失敗表單資料並重新送單值行
-                if (commonRepository.PostBPMSystemOrder(BpmSystemOrder)) PutMediaWarehouseNotAiredCopySingle(jsonFunction.JsonToObject<MediaWarehouseNotAiredCopyViewModel>(strJson));
-
-                #endregion
-
-                #region - 確認M表BPM表單單號 -
-
-                //避免儲存後送出表單BPM表單單號沒寫入的情形
-                var formQuery = new FormQueryModel()
-                {
-                    REQUISITION_ID = query.REQUISITION_ID
-                };
-                notifyRepository.ByInsertBPMFormNo(formQuery);
-
-                if (String.IsNullOrEmpty(mediaWarehouseNotAiredCopyViewModel.MEDIA_WAREHOUSE_NOT_AIRED_COPY_TITLE.BPM_FORM_NO) || String.IsNullOrWhiteSpace(mediaWarehouseNotAiredCopyViewModel.MEDIA_WAREHOUSE_NOT_AIRED_COPY_TITLE.BPM_FORM_NO))
-                {
-                    strSQL = "";
-                    strSQL += "SELECT ";
-                    strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
-                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
-                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-                    var dtBpmFormNo = dbFun.DoQuery(strSQL, parameter);
-                    if (dtBpmFormNo.Rows.Count > 0) mediaWarehouseNotAiredCopyViewModel.MEDIA_WAREHOUSE_NOT_AIRED_COPY_TITLE.BPM_FORM_NO = dtBpmFormNo.Rows[0][0].ToString();
+                    mediaWarehouseNotAiredCopyViewModel = new MediaWarehouseNotAiredCopyViewModel();
+                    CommLib.Logger.Error("尚未播出檔拷貝申請單(查詢)失敗，原因：系統無正常起單。");
                 }
+                else
+                {
+                    #region - 確認M表BPM表單單號 -
 
-                #endregion                
+                    //避免儲存後送出表單BPM表單單號沒寫入的情形
+                    var formQuery = new FormQueryModel()
+                    {
+                        REQUISITION_ID = query.REQUISITION_ID
+                    };
+                    notifyRepository.ByInsertBPMFormNo(formQuery);
+
+                    if (String.IsNullOrEmpty(mediaWarehouseNotAiredCopyViewModel.MEDIA_WAREHOUSE_NOT_AIRED_COPY_TITLE.BPM_FORM_NO) || String.IsNullOrWhiteSpace(mediaWarehouseNotAiredCopyViewModel.MEDIA_WAREHOUSE_NOT_AIRED_COPY_TITLE.BPM_FORM_NO))
+                    {
+                        strSQL = "";
+                        strSQL += "SELECT ";
+                        strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
+                        strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                        strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+                        var dtBpmFormNo = dbFun.DoQuery(strSQL, parameter);
+                        if (dtBpmFormNo.Rows.Count > 0) mediaWarehouseNotAiredCopyViewModel.MEDIA_WAREHOUSE_NOT_AIRED_COPY_TITLE.BPM_FORM_NO = dtBpmFormNo.Rows[0][0].ToString();
+                    }
+
+                    #endregion
+                }
             }
 
             #endregion
@@ -207,7 +194,6 @@ namespace OA_WEB_API.Repository.BPMPro
 
             return vResult;
         }
-
 
         /// <summary>
         /// 尚未播出檔拷貝申請單(新增/修改/草稿)

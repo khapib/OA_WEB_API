@@ -11260,7 +11260,7 @@
             (擴充方法)_角色列表
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.GetFSe7enSysRequisition">
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostFSe7enSysRequisition(OA_WEB_API.Models.BPMPro.FormData)">
             <summary>
             (擴充方法)_BPM系統申請單總表
             </summary>

@@ -360,7 +360,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 var logonModel = new LogonModel()
                 {
-                    USER_ID = CommonRepository.GetRoles().Where(R=>R.ROLE_ID=="GM").Select(R=>R.USER_ID).First(),
+                    USER_ID = CommonRepository.GetRoles().Where(R => R.ROLE_ID == "GM").Select(R => R.USER_ID).First(),
                 };
                 var GM_Name = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.COMPANY_ID == "RootCompany").Select(U => U.USER_NAME).FirstOrDefault();
                 emailList.Remove(emailList.Where(e => e.Contains(GM_Name)).FirstOrDefault());
@@ -385,7 +385,12 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region - OfficialStamp【用印申請單】結案需要密件發送人資人員 -
 
-                if (CommonRepository.GetFSe7enSysRequisition().Where(R => R.REQUISITION_ID == query.REQUISITION_ID).Select(R => R.IDENTIFY).FirstOrDefault() == "OfficialStamp")
+                var formData = new FormData()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+
+                if (CommonRepository.PostFSe7enSysRequisition(formData).Select(R => R.IDENTIFY).FirstOrDefault() == "OfficialStamp")
                 {
                     CommonRepository.GetRoles().Where(R => R.ROLE_ID == "GTV_HR" || R.ROLE_ID == "GTV_HR_Supervisor").ForEach(R =>
                     {
@@ -624,7 +629,7 @@ namespace OA_WEB_API.Repository.BPMPro
             try
             {
                 var emailList = new List<string>();
-                var nameList =new List<string>();
+                var nameList = new List<string>();
                 var receiverList = new List<ReceiverModel>();
 
                 #region STEP1：通知名單
@@ -700,7 +705,7 @@ namespace OA_WEB_API.Repository.BPMPro
                             receiverList.Add(new ReceiverModel() { USER_ID = userInfo.USER_ID, USER_NAME = userInfo.USER_NAME });
                         }
                     }
-                    
+
                 }
 
                 #endregion
@@ -1364,7 +1369,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             var logonModel = new LogonModel()
             {
-                USER_ID = CommonRepository.GetRoles().Where(R=>R.ROLE_ID=="DGM").Select(R=>R.USER_ID).First(),
+                USER_ID = CommonRepository.GetRoles().Where(R => R.ROLE_ID == "DGM").Select(R => R.USER_ID).First(),
             };
             var DGM_Name = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.COMPANY_ID == "RootCompany").Select(U => U.USER_NAME).FirstOrDefault();
             if (model.FW3_TO_NAME.Contains(DGM_Name + ";")) model.FW3_TO_NAME = model.FW3_TO_NAME.Replace(DGM_Name + ";", string.Empty);

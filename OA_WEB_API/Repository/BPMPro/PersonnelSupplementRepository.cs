@@ -7,6 +7,7 @@ using System.Web;
 
 using OA_WEB_API.Models.BPMPro;
 using OA_WEB_API.Models;
+using System.Collections;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -109,7 +110,12 @@ namespace OA_WEB_API.Repository.BPMPro
 
             if (personnelSupplementViewModel.APPLICANT_INFO.DRAFT_FLAG == 0)
             {
-                if (!CommonRepository.GetFSe7enSysRequisition().Any(R => R.REQUISITION_ID == query.REQUISITION_ID))
+                var formData = new FormData()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+
+                if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
                 {
                     personnelSupplementViewModel = new PersonnelSupplementViewModel();
                     CommLib.Logger.Error("人員增補單(查詢)失敗，原因：系統無正常起單。");
@@ -273,7 +279,12 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (model.APPLICANT_INFO.DRAFT_FLAG == 0)
                 {
-                    if (CommonRepository.GetFSe7enSysRequisition().Where(R => R.REQUISITION_ID == strREQ).Count() <= 0)
+                    var formData = new FormData()
+                    {
+                        REQUISITION_ID = strREQ
+                    };
+
+                    if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
                     {
                         parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
                         IsADD = true;
@@ -363,7 +374,12 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     #region - 確認新單人資主管填的值就要清空 -
 
-                    if (CommonRepository.GetFSe7enSysRequisition().Where(R => R.REQUISITION_ID == strREQ).Count() <= 0)
+                    var formData = new FormData()
+                    {
+                        REQUISITION_ID = strREQ
+                    };
+
+                    if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
                     {
                         model.PERSONNEL_SUPPLEMENT_CONFIG.APPROVAL_NO = null;
                         model.PERSONNEL_SUPPLEMENT_CONFIG.PERSONNEL = null;

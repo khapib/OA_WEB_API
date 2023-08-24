@@ -1789,10 +1789,15 @@ namespace OA_WEB_API.Repository.BPMPro
         /// <summary>
         /// (擴充方法)_BPM系統申請單總表
         /// </summary>
-        public static IList<FSe7enSysRequisitionField> GetFSe7enSysRequisition()
+        public static IList<FSe7enSysRequisitionField> PostFSe7enSysRequisition(FormData model)
         {
             //擴充方法使用dbFunction需要參考物件
             CommonRepository commonRepository = new CommonRepository();
+
+            var parameter = new List<SqlParameter>();
+
+            if (!String.IsNullOrEmpty(model.REQUISITION_ID) || !String.IsNullOrWhiteSpace(model.REQUISITION_ID)) parameter.Add(new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID });
+
             try
             {
                 var strSQL = "";
@@ -1820,10 +1825,13 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "     R.[TimeLastAction] AS [TIME_LAST_ACTION] ";
                 strSQL += "FROM [BPMPro].[dbo].[FSe7en_Sys_Requisition] AS R ";
                 strSQL += "     INNER JOIN [BPMPro].[dbo].[FSe7en_Sys_DiagramList] AS D on D.[DiagramID]=R.[DiagramID] ";
-                strSQL += "ORDER BY R.[AutoCounter] DESC ";
-                var fSe7enSysRequisition = commonRepository.dbFun.DoQuery(strSQL).ToList<FSe7enSysRequisitionField>();
 
-                return fSe7enSysRequisition;
+                if (!String.IsNullOrEmpty(model.REQUISITION_ID) || !String.IsNullOrWhiteSpace(model.REQUISITION_ID)) strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+                strSQL += "ORDER BY R.[AutoCounter] DESC ";
+
+                if (!String.IsNullOrEmpty(model.REQUISITION_ID) || !String.IsNullOrWhiteSpace(model.REQUISITION_ID)) return commonRepository.dbFun.DoQuery(strSQL, parameter).ToList<FSe7enSysRequisitionField>();
+                else return commonRepository.dbFun.DoQuery(strSQL).ToList<FSe7enSysRequisitionField>();
             }
             catch (Exception ex)
             {

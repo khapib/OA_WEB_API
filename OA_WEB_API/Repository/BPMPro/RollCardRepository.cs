@@ -300,7 +300,12 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (model.APPLICANT_INFO.DRAFT_FLAG == 0)
                 {
-                    if (CommonRepository.GetFSe7enSysRequisition().Where(R => R.REQUISITION_ID == model.APPLICANT_INFO.REQUISITION_ID).Count() <= 0)
+                    var formData = new FormData()
+                    {
+                        REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID
+                    };
+
+                    if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
                     {
                         parameterA.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
                         IsADD = true;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -120,7 +121,12 @@ namespace OA_WEB_API.Repository.BPMPro
 
             if (GPI_countersignViewModel.APPLICANT_INFO.DRAFT_FLAG == 0)
             {
-                if (!CommonRepository.GetFSe7enSysRequisition().Any(R => R.REQUISITION_ID == query.REQUISITION_ID))
+                var formData = new FormData()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+
+                if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
                 {
                     GPI_countersignViewModel = new GPI_CountersignViewModel();
                     CommLib.Logger.Error("四方四隅_會簽單(查詢)失敗，原因：系統無正常起單。");
@@ -294,7 +300,12 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (model.APPLICANT_INFO.DRAFT_FLAG == 0)
                 {
-                    if (CommonRepository.GetFSe7enSysRequisition().Where(R => R.REQUISITION_ID == strREQ).Count() <= 0)
+                    var formData = new FormData()
+                    {
+                        REQUISITION_ID = strREQ
+                    };
+
+                    if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
                     {
                         parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
                         IsADD = true;

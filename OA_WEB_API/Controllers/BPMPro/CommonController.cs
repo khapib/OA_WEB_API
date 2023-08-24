@@ -214,11 +214,11 @@ namespace OA_WEB_API.Controllers
         ///// <summary>
         ///// BPM系統申請單總表
         ///// </summary>
-        //[Route("api/GetFSe7enSysRequisition")]
+        //[Route("api/PostFSe7enSysRequisition")]
         //[HttpGet]
-        //public IList<FSe7enSysRequisitionField> GetFSe7enSysRequisition()
+        //public IList<FSe7enSysRequisitionField> PostFSe7enSysRequisition(FormData model)
         //{
-        //    return CommonRepository.GetFSe7enSysRequisition();
+        //    return CommonRepository.PostFSe7enSysRequisition(model);
         //}
 
         #endregion

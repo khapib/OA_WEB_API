@@ -353,7 +353,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 }
 
                 emailList = emailListTemp.Distinct().ToList();
-                nameList = nameListTemp.Distinct().ToList();
+                nameList = nameListTemp.Distinct().Where(T => !String.IsNullOrEmpty(T) || !String.IsNullOrWhiteSpace(T)).ToList();
 
                 #region - 總經理不收(結案)信件 -
                 //總經理不收(結案)信件；所以需要將finalApprover把有總經理名字的給移除
@@ -466,7 +466,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 }
 
                 emailList = emailListTemp.Distinct().ToList();
-                nameList = nameListTemp.Distinct().ToList();
+                nameList = nameListTemp.Distinct().Where(T=> !String.IsNullOrEmpty(T) || !String.IsNullOrWhiteSpace(T)).ToList();
 
                 #endregion
 

@@ -874,7 +874,15 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "         LEFT JOIN [NUP].[dbo].[GTV_Org_Relation_Member] B ON B.[COMPANY_ID]=@COMPANY_ID AND B.[USER_ID]=A.[ApplicantID] ";
                 strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-                return dbFun.DoQuery(strSQL, parameter).ToList<FormFinalApprover>();
+                var formFinalApprover= dbFun.DoQuery(strSQL, parameter).ToList<FormFinalApprover>();
+
+                var flowQueryModel = new FlowQueryModel()
+                {
+                    COMPANY_ID = compName
+                };
+                PutNullApproverInfo(flowQueryModel, formFinalApprover);
+
+                return formFinalApprover;
 
                 #endregion
             }
@@ -987,7 +995,15 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "         LEFT JOIN [NUP].[dbo].[GTV_Org_Relation_Member] B ON B.[COMPANY_ID]=@COMPANY_ID AND B.[USER_ID]=A.[ApplicantID] ";
                 strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-                return dbFun.DoQuery(strSQL, parameter).ToList<FormFinalApprover>();
+                var formFinalApprover = dbFun.DoQuery(strSQL, parameter).ToList<FormFinalApprover>();
+
+                var flowQueryModel = new FlowQueryModel()
+                {
+                    COMPANY_ID = compName
+                };
+                PutNullApproverInfo(flowQueryModel, formFinalApprover);
+
+                return formFinalApprover;
 
                 #endregion
             }
@@ -1075,6 +1091,45 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "      DELETE; ";
 
             dbFun.DoTran(strSQL, parameter);
+        }
+
+        public IList<FormFinalApprover> PutNullApproverInfo(FlowQueryModel model, IList<FormFinalApprover> approvers)
+        {
+            var userQueryModel = new UserQueryModel();
+            switch (model.COMPANY_ID)
+            {
+                case "GPI":
+                    userQueryModel.COMPANY_ID = "RootCompany";
+                    break;
+                case "RootCompany":
+                    userQueryModel.COMPANY_ID = "GPI";
+                    break;
+                default:break;
+            }
+            var gtvCompanyInfo = userRepository.PostUsers(userQueryModel);
+
+            approvers.ToList().ForEach(A =>
+            {
+                if (String.IsNullOrEmpty(A.APPROVER_NAME) || String.IsNullOrWhiteSpace(A.APPROVER_NAME))
+                {
+                    var userInfo = gtvCompanyInfo.Where(GTV => GTV.USER_ID == A.APPROVER_ID).FirstOrDefault();
+                    A.APPROVER_NAME = userInfo.USER_NAME;
+                    A.APPROVER_EMAIL = userInfo.EMAIL;
+                    A.APPROVER_PHONE = userInfo.MOBILE;
+                }
+                if (!String.IsNullOrEmpty(A.ORIGIN_APPROVER) || !String.IsNullOrWhiteSpace(A.ORIGIN_APPROVER))
+                {
+                    var userInfo = gtvCompanyInfo.Where(GTV => GTV.USER_ID == A.ORIGIN_APPROVER).FirstOrDefault();
+                    if (String.IsNullOrEmpty(A.APPROVER_NAME) || !String.IsNullOrWhiteSpace(A.APPROVER_NAME))
+                    {
+                        A.ORIGIN_APPROVER_NAME = userInfo.USER_NAME;
+                        A.ORIGIN_APPROVER_EMAIL = userInfo.EMAIL;
+                        A.ORIGIN_APPROVER_PHONE = userInfo.MOBILE;
+                    }
+                }
+            });
+
+            return approvers;
         }
 
         #endregion

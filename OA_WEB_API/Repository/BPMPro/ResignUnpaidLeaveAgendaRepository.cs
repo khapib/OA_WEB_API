@@ -9,9 +9,6 @@ using OA_WEB_API.Models.BPMPro;
 using OA_WEB_API.Models;
 
 using Microsoft.Ajax.Utilities;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Collections;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -59,7 +56,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 PARAMETER = parameter,
             };
             strJson = jsonFunction.ObjectToJSON(commonRepository.PostApplicantInfoFunction(CommonApplicantInfo));
-            var applicantInfo = jsonFunction.JsonToObject<ApplicantInfo>(strJson);            
+            var applicantInfo = jsonFunction.JsonToObject<ApplicantInfo>(strJson);
 
             #endregion
 
@@ -249,7 +246,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 var ParentDeptName = sysCommonRepository.GetGTVDeptTree().Where(GTV => GTV.DEPT_ID.Contains(model.APPLICANT_INFO.APPLICANT_DEPT)).Select(GTV => GTV.PARENT_DEPT_NAME).FirstOrDefault();
                 if (String.IsNullOrEmpty(ParentDeptName) || String.IsNullOrWhiteSpace(ParentDeptName)) sysCommonRepository.GetGPIDeptTree().Where(GPI => GPI.DEPT_ID.Contains(model.APPLICANT_INFO.APPLICANT_DEPT)).Select(GPI => GPI.PARENT_DEPT_NAME).FirstOrDefault();
 
-                if(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.RESIGN_DATE !=null) FM7Subject = ParentDeptName + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_ID + "_" + model.APPLICANT_INFO.APPLICANT_NAME + "_" + DateTime.Parse(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.RESIGN_DATE.ToString()).ToString("yyyy/MM/dd") + "_" + FormAction;
+                if (model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.RESIGN_DATE != null) FM7Subject = ParentDeptName + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_ID + "_" + model.APPLICANT_INFO.APPLICANT_NAME + "_" + DateTime.Parse(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.RESIGN_DATE.ToString()).ToString("yyyy/MM/dd") + "_" + FormAction;
                 else FM7Subject = ParentDeptName + "_" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_ID + "_" + model.APPLICANT_INFO.APPLICANT_NAME + "_" + DateTime.Now.ToString("yyyy/MM/dd") + "_" + FormAction;
 
                 #endregion
@@ -400,7 +397,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     #endregion
 
                     if (!String.IsNullOrEmpty(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.HANDOVER_SUPERVISOR_ID) || !String.IsNullOrWhiteSpace(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.HANDOVER_SUPERVISOR_ID))
-                    {                        
+                    {
                         logonModel.USER_ID = model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.HANDOVER_SUPERVISOR_ID;
                         model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.HANDOVER_SUPERVISOR_NAME = userRepository.PostUserSingle(logonModel).USER_MODEL.Select(U => U.USER_NAME).FirstOrDefault();
                     }
@@ -456,7 +453,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     if (model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG.Any(AFF => AFF.ITEM_ID.Contains("A") && AFF.CONTACTER_ID == model.APPLICANT_INFO.APPLICANT_ID))
                     {
                         CommLib.Logger.Error("離職、留職停薪_流程表(新增/修改/草稿)失敗，原因：所屬部門交接人不能是申請人。");
-                        return false;                        
+                        return false;
                     }
                     else if (model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG.Where(AFF => !String.IsNullOrEmpty(AFF.CONTACTER_ID) || !String.IsNullOrWhiteSpace(AFF.CONTACTER_ID)).Count() > 0)
                     {
@@ -608,9 +605,9 @@ namespace OA_WEB_API.Repository.BPMPro
                 //開放C區通行
                 if (model.ITEM_ID.Contains("C")) model.IS_CONSUMMATION = true;
 
-                if (Boolean.Parse(model.IS_CONSUMMATION.ToString()))
-                {
-                    var parameter = new List<SqlParameter>()
+                //if (Boolean.Parse(model.IS_CONSUMMATION.ToString()))
+                //{
+                var parameter = new List<SqlParameter>()
                     {
                         //離職、留職停薪_手續表 事項交接
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },
@@ -630,131 +627,131 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@C03_OTHERS", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     };
 
-                    strSQL = "";
-                    strSQL += "SELECT ";
-                    strSQL += "     [RequisitionID],";
-                    strSQL += "     [ContacterID], ";
-                    strSQL += "     [ContacterDeptID], ";
-                    strSQL += "     [ContacterName], ";
-                    strSQL += "     [SignDate] ";
-                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_D] ";
-                    strSQL += "WHERE 1=1 ";
-                    strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
-                    strSQL += "         AND [ItemID]=@ITEM_ID ";
+                strSQL = "";
+                strSQL += "SELECT ";
+                strSQL += "     [RequisitionID],";
+                strSQL += "     [ContacterID], ";
+                strSQL += "     [ContacterDeptID], ";
+                strSQL += "     [ContacterName], ";
+                strSQL += "     [SignDate] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_D] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+                strSQL += "         AND [ItemID]=@ITEM_ID ";
 
-                    var dt = dbFun.DoQuery(strSQL, parameter);
+                var dt = dbFun.DoQuery(strSQL, parameter);
 
-                    if (dt.Rows.Count > 0)
+                if (dt.Rows.Count > 0)
+                {
+                    #region - 交接確認 -
+
+                    if (model.ITEM_ID.Contains("A"))
                     {
-                        #region - 交接確認 -
-
-                        if (model.ITEM_ID.Contains("A"))
+                        //如果是A區塊(所屬單位：工作交接)的要比對交接人
+                        if (dt.AsEnumerable().Any(R => R.Field<string>("ContacterID").Contains(model.CONTACTER_ID)))
                         {
-                            //如果是A區塊(所屬單位：工作交接)的要比對交接人
-                            if (dt.AsEnumerable().Any(R => R.Field<string>("ContacterID").Contains(model.CONTACTER_ID)))
-                            {
-                                HandoverToken = true;
-                            }
-                        }
-                        else HandoverToken = true;
-
-                        #endregion                        
-
-                        if (HandoverToken)
-                        {
-                            var logonModel = new LogonModel()
-                            {
-                                USER_ID = model.CONTACTER_ID
-                            };
-                            model.CONTACTER_NAME = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.DEPT_ID.Contains(model.CONTACTER_DEPT_ID)).Select(U => U.USER_NAME).FirstOrDefault();
-                            model.SIGN_DATE = DateTime.Now.ToString("yyyy/MM/dd");
-
-                            if (model.ITEM_ID.Contains("B05") || model.ITEM_ID.Contains("B06"))
-                            {
-                                if (!dt.AsEnumerable().Any(R => String.IsNullOrEmpty(R.Field<string>("ContacterID")) || String.IsNullOrWhiteSpace(R.Field<string>("ContacterID"))))
-                                {
-                                    var dtContacterID = dt.AsEnumerable().Select(R => R.Field<string>("ContacterID")).FirstOrDefault();
-                                    var dtContacterName = dt.AsEnumerable().Select(R => R.Field<string>("ContacterName")).FirstOrDefault();
-                                    var dtContacterDeptID = dt.AsEnumerable().Select(R => R.Field<string>("ContacterDeptID")).FirstOrDefault();
-                                    var dtSignDate = dt.AsEnumerable().Select(R => R.Field<string>("SignDate")).FirstOrDefault();
-
-                                    if (dt.AsEnumerable().Any(R => R.Field<string>("ContacterID").Contains(model.CONTACTER_ID) && dt.AsEnumerable().Any(R2 => R2.Field<string>("ContacterDeptID").Contains(model.CONTACTER_DEPT_ID))))
-                                    {
-                                        var ArrayContacterID = dtContacterID.Split(';');
-                                        var ArraySignDate = dtSignDate.Split(';');
-                                        var i = 0;
-                                        while (ArrayContacterID.Count() > i)
-                                        {
-                                            if (ArrayContacterID[i].Contains(model.CONTACTER_ID)) break;
-                                            i++;
-                                        }
-                                        dtContacterName = dtContacterName.Replace(model.CONTACTER_NAME, string.Empty).Replace(";", string.Empty);
-                                        dtContacterDeptID = dtContacterDeptID.Replace(model.CONTACTER_DEPT_ID, string.Empty).Replace(";", string.Empty);
-                                        dtContacterID = dtContacterID.Replace(model.CONTACTER_ID, string.Empty).Replace(";", string.Empty);
-                                        dtSignDate = dtSignDate.Replace(ArraySignDate[i], string.Empty).Replace(";", string.Empty);
-                                        //如果畫押日期是空的代表日期都一樣就把原本的日期寫回畫押日期
-                                        if (String.IsNullOrEmpty(dtSignDate) || String.IsNullOrWhiteSpace(dtSignDate)) dtSignDate = ArraySignDate[i];
-                                    }
-
-                                    model.CONTACTER_NAME = dtContacterName + ";" + model.CONTACTER_NAME;
-                                    model.CONTACTER_DEPT_ID = dtContacterDeptID + ";" + model.CONTACTER_DEPT_ID;
-                                    model.CONTACTER_ID = dtContacterID + ";" + model.CONTACTER_ID;
-                                    model.SIGN_DATE = dtSignDate + ";" + model.SIGN_DATE;
-                                }
-                            }
-
-                            //寫入：離職、留職停薪_流程表 事項交接parameter                        
-                            strJson = jsonFunction.ObjectToJSON(model);
-                            GlobalParameters.Infoparameter(strJson, parameter);
-
-                            strSQL = "";
-                            strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_D] ";
-                            strSQL += "SET [IsConsummation]=@IS_CONSUMMATION, ";
-                            strSQL += "     [Description]=@DESCRIPTION, ";
-                            if (!model.ITEM_ID.Contains("A"))
-                            {
-                                strSQL += "     [ContacterDeptID]=@CONTACTER_DEPT_ID, ";
-                                strSQL += "     [ContacterID]=@CONTACTER_ID, ";
-                                strSQL += "     [ContacterName]=@CONTACTER_NAME, ";
-                            }
-                            strSQL += "     [SignDate]=@SIGN_DATE ";
-                            strSQL += "WHERE 1=1 ";
-                            strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
-                            strSQL += "         AND [ItemID]=@ITEM_ID ";
-                            if (model.ITEM_ID.Contains("A")) strSQL += "         AND [ContacterID]=@CONTACTER_ID ";
-
-                            if (model.ITEM_ID.Contains("C"))
-                            {
-                                strSQL += " ";
-                                strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
-                                strSQL += "SET  ";
-                                switch (model.ITEM_ID)
-                                {
-                                    case "C01":
-                                        strSQL += "     [C01B_Date]=@C01B_DATE, ";
-                                        strSQL += "     [C01C_StrDateTime]=@C01C_STR_DATE_TIME, ";
-                                        strSQL += "     [C01F_StrDateTime]=@C01F_STR_DATE_TIME, ";
-                                        strSQL += "     [C01H_StrDateTime]=@C01H_STR_DATE_TIME ";
-                                        break;
-                                    case "C02":
-                                        strSQL += "     [C02_Others]=@C02_OTHERS ";
-                                        break;
-                                    case "C03":
-                                        strSQL += "     [C03_Others]=@C03_OTHERS ";
-                                        break;
-                                    default: break;
-                                }
-                                strSQL += "WHERE 1=1 ";
-                                strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
-                            }
-
-                            dbFun.DoTran(strSQL, parameter);
-
-                            vResult = true;
-
+                            HandoverToken = true;
                         }
                     }
+                    else HandoverToken = true;
+
+                    #endregion
+
+                    if (HandoverToken)
+                    {
+                        var logonModel = new LogonModel()
+                        {
+                            USER_ID = model.CONTACTER_ID
+                        };
+                        model.CONTACTER_NAME = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.DEPT_ID.Contains(model.CONTACTER_DEPT_ID)).Select(U => U.USER_NAME).FirstOrDefault();
+                        model.SIGN_DATE = DateTime.Now.ToString("yyyy/MM/dd");
+
+                        if (model.ITEM_ID.Contains("B05") || model.ITEM_ID.Contains("B06"))
+                        {
+                            if (!dt.AsEnumerable().Any(R => String.IsNullOrEmpty(R.Field<string>("ContacterID")) || String.IsNullOrWhiteSpace(R.Field<string>("ContacterID"))))
+                            {
+                                var dtContacterID = dt.AsEnumerable().Select(R => R.Field<string>("ContacterID")).FirstOrDefault();
+                                var dtContacterName = dt.AsEnumerable().Select(R => R.Field<string>("ContacterName")).FirstOrDefault();
+                                var dtContacterDeptID = dt.AsEnumerable().Select(R => R.Field<string>("ContacterDeptID")).FirstOrDefault();
+                                var dtSignDate = dt.AsEnumerable().Select(R => R.Field<string>("SignDate")).FirstOrDefault();
+
+                                if (dt.AsEnumerable().Any(R => R.Field<string>("ContacterID").Contains(model.CONTACTER_ID) && dt.AsEnumerable().Any(R2 => R2.Field<string>("ContacterDeptID").Contains(model.CONTACTER_DEPT_ID))))
+                                {
+                                    var ArrayContacterID = dtContacterID.Split(';');
+                                    var ArraySignDate = dtSignDate.Split(';');
+                                    var i = 0;
+                                    while (ArrayContacterID.Count() > i)
+                                    {
+                                        if (ArrayContacterID[i].Contains(model.CONTACTER_ID)) break;
+                                        i++;
+                                    }
+
+                                    dtContacterName = dtContacterName.Replace(model.CONTACTER_NAME, string.Empty).Replace(";", string.Empty);
+                                    dtContacterDeptID = dtContacterDeptID.Replace(model.CONTACTER_DEPT_ID, string.Empty).Replace(";", string.Empty);
+                                    dtContacterID = dtContacterID.Replace(model.CONTACTER_ID, string.Empty).Replace(";", string.Empty);
+                                    dtSignDate = dtSignDate.Replace(ArraySignDate[i], string.Empty).Replace(";", string.Empty);
+                                    //如果畫押日期是空的代表日期都一樣就把原本的日期寫回畫押日期
+                                    if (String.IsNullOrEmpty(dtSignDate) || String.IsNullOrWhiteSpace(dtSignDate)) dtSignDate = ArraySignDate[i];
+                                }
+                                model.CONTACTER_NAME = (dtContacterName + ";" + model.CONTACTER_NAME).TrimStart(';');
+                                model.CONTACTER_DEPT_ID = (dtContacterDeptID + ";" + model.CONTACTER_DEPT_ID).TrimStart(';');
+                                model.CONTACTER_ID = (dtContacterID + ";" + model.CONTACTER_ID).TrimStart(';');
+                                if (model.CONTACTER_ID.Split(';').Count()>1) model.SIGN_DATE = dtSignDate + ";" + model.SIGN_DATE;
+                            }
+                        }
+
+                        //寫入：離職、留職停薪_流程表 事項交接parameter                        
+                        strJson = jsonFunction.ObjectToJSON(model);
+                        GlobalParameters.Infoparameter(strJson, parameter);
+
+                        strSQL = "";
+                        strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_D] ";
+                        strSQL += "SET [IsConsummation]=@IS_CONSUMMATION, ";
+                        strSQL += "     [Description]=@DESCRIPTION, ";
+                        if (!model.ITEM_ID.Contains("A"))
+                        {
+                            strSQL += "     [ContacterDeptID]=@CONTACTER_DEPT_ID, ";
+                            strSQL += "     [ContacterID]=@CONTACTER_ID, ";
+                            strSQL += "     [ContacterName]=@CONTACTER_NAME, ";
+                        }
+                        strSQL += "     [SignDate]=@SIGN_DATE ";
+                        strSQL += "WHERE 1=1 ";
+                        strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+                        strSQL += "         AND [ItemID]=@ITEM_ID ";
+                        if (model.ITEM_ID.Contains("A")) strSQL += "         AND [ContacterID]=@CONTACTER_ID ";
+
+                        if (model.ITEM_ID.Contains("C"))
+                        {
+                            strSQL += " ";
+                            strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                            strSQL += "SET  ";
+                            switch (model.ITEM_ID)
+                            {
+                                case "C01":
+                                    strSQL += "     [C01B_Date]=@C01B_DATE, ";
+                                    strSQL += "     [C01C_StrDateTime]=@C01C_STR_DATE_TIME, ";
+                                    strSQL += "     [C01F_StrDateTime]=@C01F_STR_DATE_TIME, ";
+                                    strSQL += "     [C01H_StrDateTime]=@C01H_STR_DATE_TIME ";
+                                    break;
+                                case "C02":
+                                    strSQL += "     [C02_Others]=@C02_OTHERS ";
+                                    break;
+                                case "C03":
+                                    strSQL += "     [C03_Others]=@C03_OTHERS ";
+                                    break;
+                                default: break;
+                            }
+                            strSQL += "WHERE 1=1 ";
+                            strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+                        }
+
+                        dbFun.DoTran(strSQL, parameter);
+
+                        vResult = true;
+
+                    }
                 }
+                //}
 
                 return vResult;
             }

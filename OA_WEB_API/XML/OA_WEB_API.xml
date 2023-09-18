@@ -6865,6 +6865,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.DEMAND_NUM">
             <summary>需求人數</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.IS_PART_TIME">
+            <summary>是否為工讀生</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.SALARY_MIN">
             <summary>薪資(起)</summary>
         </member>

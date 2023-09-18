@@ -80,6 +80,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [BraidNum] AS [BRAID_NUM], ";
             strSQL += "     [NowNum] AS [NOW_NUM], ";
             strSQL += "     [DemandNum] AS [DEMAND_NUM], ";
+            strSQL += "     CAST([IsPartTime] as bit) AS [IS_PART_TIME], ";
             strSQL += "     [SalaryMin] AS [SALARY_MIN], ";
             strSQL += "     [SalaryMax] AS [SALARY_MAX], ";
             strSQL += "     [EducationRequirement] AS [EDUCATION_REQUIREMENT], ";
@@ -358,13 +359,14 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@BRAID_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@NOW_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DEMAND_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@IS_PART_TIME", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@SALARY_MIN", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@SALARY_MAX", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@EDUCATION_REQUIREMENT", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DESCRIPTION", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@APPLICATION_METHOD", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@CONTACT_EMAIL", SqlDbType.NVarChar) { Size = 255, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@COMPUTER_SKILLS", SqlDbType.NVarChar) { Size = 300, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@COMPUTER_SKILLS", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@JOB_SKILL", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@APPROVAL_NO", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@IMPLEMENT_DATE", SqlDbType.DateTime) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -401,6 +403,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [BraidNum]=@BRAID_NUM, ";
                     strSQL += "     [NowNum]=@NOW_NUM, ";
                     strSQL += "     [DemandNum]=@DEMAND_NUM, ";
+                    strSQL += "     [IsPartTime]=@IS_PART_TIME, ";
                     strSQL += "     [SalaryMin]=@SALARY_MIN, ";
                     strSQL += "     [SalaryMax]=@SALARY_MAX, ";
                     strSQL += "     [EducationRequirement]=@EDUCATION_REQUIREMENT, ";

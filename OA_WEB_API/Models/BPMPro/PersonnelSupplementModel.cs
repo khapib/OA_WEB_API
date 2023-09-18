@@ -63,6 +63,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>需求人數</summary>
         public int DEMAND_NUM { get; set; }
 
+        /// <summary>是否為工讀生</summary>
+        public Nullable<Boolean> IS_PART_TIME { get; set; }
+
         /// <summary>薪資(起)</summary>
         public int SALARY_MIN { get; set; }
 

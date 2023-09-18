@@ -760,6 +760,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "                     WHERE 1=1  ";
                 strSQL += "                                AND C.[REQUISITION_ID]=@REQUISITION_ID ";
                 strSQL += "                                AND C.[PROCESS_ID]=@PROCESS_ID ";
+                // [BPMPro].[dbo].[GTV_Log_NextApprover].[HANDLE_MINUTE] >= (D.[LIMIT_HOUR]*60)才會執行
                 strSQL += "                                AND C.[HANDLE_MINUTE] >= (D.[LIMIT_HOUR]*60) ";  //換算為分鐘
                 strSQL += "	               )";
 

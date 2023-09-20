@@ -300,6 +300,9 @@
         <member name="F:BPMSysStatus.EXCEPTION">
             <summary>異常表單</summary>
         </member>
+        <member name="F:BPMSysStatus.FAIL_STOP">
+            <summary>異常表單:錯誤停止</summary>
+        </member>
         <member name="T:CommLib">
             <summary> 
             靜態參數設定(log4)

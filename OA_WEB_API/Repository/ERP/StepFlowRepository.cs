@@ -171,18 +171,29 @@ namespace OA_WEB_API.Repository.ERP
 
                             if (String.IsNullOrEmpty(StateEND) || String.IsNullOrWhiteSpace(StateEND))
                             {
-                                // 表單進行中
-                                State = BPMStatusCode.PROGRESS;
+                                // 無資料
+                                State = BPMStatusCode.FAIL;
                             }
-                            else if (bool.Parse(StateEND) == false)
+                            else
                             {
-                                // 表單不同意結束
-                                State = BPMStatusCode.DISAGREE_CLOSE;
-                            }
-                            else if (bool.Parse(StateEND) == true)
+                                switch (StateEND)
                                 {
-                                // 表單同意結束
+                                    case BPMSysStatus.PROGRESS:
+                                        State = BPMStatusCode.PROGRESS;
+                                        break;
+                                    case BPMSysStatus.CLOSE:
                                         State = BPMStatusCode.CLOSE;
+                                        break;
+                                    case BPMSysStatus.DISAGREE_CLOSE:
+                                    case BPMSysStatus.WITHDRAWAL:
+                                        State = BPMStatusCode.DISAGREE_CLOSE;
+                                        break;
+                                    case BPMSysStatus.EXCEPTION:
+                                    case BPMSysStatus.FAIL_STOP:
+                                    default:
+                                        State = BPMStatusCode.FAIL;
+                                        break;
+                                }
                             }
 
                         }

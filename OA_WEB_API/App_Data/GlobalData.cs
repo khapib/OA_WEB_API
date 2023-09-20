@@ -594,6 +594,8 @@ public class BPMSysStatus
     /// <summary>異常表單</summary>
     public const string EXCEPTION = "5";
 
+    /// <summary>異常表單:錯誤停止</summary>
+    public const string FAIL_STOP = "32";
 }
 
 /// <summary> 

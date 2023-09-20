@@ -146,27 +146,25 @@ namespace OA_WEB_API.Repository.ERP
                         {
                             #region 如果「是否表單已完結」欄位是空的；則會先查詢表單狀態
 
-                            string StateEND = null;
+                            string StateEND = false.ToString();
                             if (String.IsNullOrWhiteSpace(query.STATE_END) || String.IsNullOrEmpty(query.STATE_END))
                             {
-                                switch (formData.FORM_STATUS.ToString())
+                                StateEND = formData.FORM_STATUS.ToString();
+                            }
+                            else
+                            {
+                                switch (bool.Parse(query.STATE_END))
                                 {
-                                    case BPMSysStatus.CLOSE:
-                                        StateEND = true.ToString();
+                                    case true:
+                                        StateEND = BPMSysStatus.CLOSE;
                                         break;
-                                    case BPMSysStatus.DISAGREE_CLOSE:
-                                    case BPMSysStatus.WITHDRAWAL:
-                                    case BPMSysStatus.EXCEPTION:
-                                        StateEND = false.ToString();
+                                    case false:
+                                        StateEND = BPMSysStatus.DISAGREE_CLOSE;
                                         break;
                                     default:
                                         StateEND = null;
                                         break;
                                 }
-                            }
-                            else
-                            {
-                                StateEND = query.STATE_END;
                             }
 
                             #endregion
@@ -182,9 +180,9 @@ namespace OA_WEB_API.Repository.ERP
                                 State = BPMStatusCode.DISAGREE_CLOSE;
                             }
                             else if (bool.Parse(StateEND) == true)
-                            {
+                                {
                                 // 表單同意結束
-                                State = BPMStatusCode.CLOSE;
+                                        State = BPMStatusCode.CLOSE;
                             }
 
                         }

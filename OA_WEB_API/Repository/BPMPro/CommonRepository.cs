@@ -194,7 +194,7 @@ namespace OA_WEB_API.Repository.BPMPro
                                 REQUISITION_ID = strREQ
                             };
                             //刪除表單
-                            PostFormDelete(formRemoveQueryModel);
+                            //PostFormDelete(formRemoveQueryModel);
                         }
                     }
 

@@ -2464,7 +2464,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     var applicantInfo = new ApplicantInfo()
                     {
                         REQUISITION_ID = strREQ,
-                        DIAGRAM_ID = IDENTIFY + "_P1",
+                        DIAGRAM_ID = IDENTIFY + "_P2",
                         PRIORITY = 2,
                         DRAFT_FLAG = 0,
                         FLOW_ACTIVATED = 1
@@ -2620,7 +2620,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     var applicantInfo = new ApplicantInfo()
                     {
                         REQUISITION_ID = strREQ,
-                        DIAGRAM_ID = IDENTIFY + "_P1",
+                        DIAGRAM_ID = IDENTIFY + "_P2",
                         PRIORITY = 2,
                         DRAFT_FLAG = 0,
                         FLOW_ACTIVATED = 1

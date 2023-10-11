@@ -24,7 +24,7 @@ namespace OA_WEB_API.Repository.BPMPro
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDevHo);
 
         FormRepository formRepository = new FormRepository();
         FlowRepository flowRepository = new FlowRepository();
@@ -260,7 +260,7 @@ namespace OA_WEB_API.Repository.BPMPro
                             nameTemp.Add(manager.USER_NAME);
                         }
 
-                        emailCCList.Add("何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>;尤玟茹<uwr0701@gtv.com.tw>");
+                        emailCCList.Add("藍永利<leon@gtv.com.tw>");
                         //emailCCTemp.Add("孫慶偉<top@gtv.com.tw>"); /*測試機在加經理*/
 
                         emailCCList = emailCCTemp.Distinct().ToList();
@@ -271,7 +271,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         emailList.Clear();
                         emailCCList.Clear();
-                        emailCCList.Add("何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>;尤玟茹<uwr0701@gtv.com.tw>");
+                        emailCCList.Add("藍永利<leon@gtv.com.tw>");
 
                         break;
                 }
@@ -1033,7 +1033,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 var modelA = new EmailModel()
                 {
                     FROM_LIST = _FORM,
-                    TO_LIST = "何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>",
+                    TO_LIST = "藍永利<leon@gtv.com.tw>",
                     CC_LIST = String.Empty,
                     BCC_LIST = String.Empty,
                     SUBJECT = String.Format(formRepository.GetFormSubject(query), "處理完畢通知"),
@@ -1572,7 +1572,7 @@ namespace OA_WEB_API.Repository.BPMPro
         private string _CC_LIST = String.Empty;
 
         /// <summary>密件收件人</summary>
-        private string _BCC_LIST = "何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>;尤玟茹<uwr0701@gtv.com.tw>";
+        private string _BCC_LIST = "藍永利<leon@gtv.com.tw>";
 
         /// <summary>特定人員</summary>
         private string ReceiverID;

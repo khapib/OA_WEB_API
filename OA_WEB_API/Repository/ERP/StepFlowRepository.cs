@@ -26,7 +26,7 @@ namespace OA_WEB_API.Repository.ERP
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDevHo);
 
         #region Model
 
@@ -354,7 +354,7 @@ namespace OA_WEB_API.Repository.ERP
 
                 #region - 回傳ERP - 
 
-                ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDev) + "BPM/UpdateFormStatus";
+                ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/UpdateFormStatus";
                 Method = "POST";
                 strResponseJson = GlobalParameters.RequestInfoWebServers(ApiUrl, Method, strRequestJson);
 

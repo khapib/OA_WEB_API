@@ -46,7 +46,7 @@ public class GlobalParameters
     /// <summary>新人類簽核資料庫(個人開發機)</summary>
     public const string sqlConnBPMProDevHo = "BPMProDevHo";
     /// <summary>新人類簽核附件路徑(個人開發機)</summary>
-    public const string attachFilePathBPMProDevHo = @"http://song-vm-pc:82/";
+    public const string attachFilePathBPMProDevHo = @"http://192.168.9.65:82/";
 
     /// <summary>新人類簽核資料庫(公用開發機)</summary>
     public const string sqlConnBPMProDev = "BPMProDev";
@@ -78,7 +78,7 @@ public class GlobalParameters
                     break;
 
                 case sqlConnBPMProDevHo:
-                    response = "http://song-vm-pc:82/";
+                    response = "http://192.168.9.65:82/";
                     break;
 
                 case sqlConnBPMProDev:

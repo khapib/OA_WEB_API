@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -16,12 +17,14 @@ namespace OA_WEB_API.Repository.BPMPro
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDevHo);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
 
         #region Repository
 
         FormRepository formRepository = new FormRepository();
-        
+        CommonRepository commonRepository = new CommonRepository();
+        NotifyRepository notifyRepository = new NotifyRepository();
+
         #endregion
 
         #endregion
@@ -35,36 +38,24 @@ namespace OA_WEB_API.Repository.BPMPro
         {
             #region  - 查詢 - 
 
-            #region  - 申請人資訊 - 
             var parameterA = new List<SqlParameter>()
             {
-                 new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID }           
+                 new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID }
             };
+                        
+            #region - 申請人資訊 -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     A.[RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     A.[DiagramID] AS [DIAGRAM_ID], ";
-            strSQL += "     B.[Value] AS [FM7_SUBJECT], ";
-            strSQL += "     A.[ApplicantDept] AS [APPLICANT_DEPT], ";
-            strSQL += "     A.[ApplicantDeptName] AS [APPLICANT_DEPT_NAME], ";
-            strSQL += "     A.[ApplicantID] AS [APPLICANT_ID], ";
-            strSQL += "     A.[ApplicantName] AS [APPLICANT_NAME], ";
-            strSQL += "     A.[ApplicantID] AS [APPLICANT_ID], ";
-            strSQL += "     NULL AS [APPLICANT_PHONE], ";
-            strSQL += "     A.[ApplicantDateTime] AS [APPLICANT_DATETIME], ";
-            strSQL += "     A.[FillerID] AS [FILLER_ID], ";
-            strSQL += "     A.[FillerName] AS [FILLER_NAME], ";
-            strSQL += "     A.[Priority] AS [PRIORITY], ";
-            strSQL += "     A.[DraftFlag] AS [DRAFT_FLAG], ";
-            strSQL += "     A.[FlowActivated] AS [FLOW_ACTIVATED] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_ProjectReview_M] A";
-            strSQL += "         INNER JOIN [BPMPro].[dbo].[FSe7en_Tep_FormHeader] B ON A.[RequisitionID]=B.[RequisitionID]";
-            strSQL += "WHERE A.[RequisitionID]=@REQUISITION_ID ";
+            var CommonApplicantInfo = new BPMCommonModel<ApplicantInfo>()
+            {
+                EXT = "M",
+                IDENTIFY = IDENTIFY,
+                PARAMETER = parameterA,
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostApplicantInfoFunction(CommonApplicantInfo));
+            var applicantInfo = jsonFunction.JsonToObject<ApplicantInfo>(strJson);
 
-            var applicantInfo = dbFun.DoQuery(strSQL, parameterA).ToList<ApplicantInfo>().FirstOrDefault();
             #endregion
-
+            
             #region - 專案建立審核設定及內容 -
 
             var parameterB = new List<SqlParameter>()
@@ -109,6 +100,38 @@ namespace OA_WEB_API.Repository.BPMPro
                 PROJECT_REVIEW_ERP_CONFIG = projectReviewERPConfig,
                 PROJECT_REVIEW_BPM_CONFIG = projectReviewBPMConfig
             };
+
+            #region - 確認表單 -
+
+            if (projectReview.APPLICANT_INFO.DRAFT_FLAG == 0)
+            {
+                var formData = new FormData()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+
+                if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
+                {
+                    projectReview = new ProjectReviewViewModel();
+                    CommLib.Logger.Error("專案建立審核單(查詢)失敗，原因：系統無正常起單。");
+                }
+                else
+                {
+                    #region - 確認M表BPM表單單號 -
+
+                    //避免儲存後送出表單BPM表單單號沒寫入的情形
+                    var formQuery = new FormQueryModel()
+                    {
+                        REQUISITION_ID = query.REQUISITION_ID
+                    };
+                    notifyRepository.ByInsertBPMFormNo(formQuery);
+
+                    #endregion
+                }
+            }
+
+            #endregion
+
             return projectReview;
         }
 
@@ -144,10 +167,25 @@ namespace OA_WEB_API.Repository.BPMPro
             bool vResult = false;
             try
             {
-                #region - 宣告主旨 -
+                #region - 宣告 -
+
+                #region - 系統編號 -
+
+                strREQ = model.APPLICANT_INFO.REQUISITION_ID;
+                if (String.IsNullOrEmpty(strREQ) || String.IsNullOrWhiteSpace(strREQ))
+                {
+                    strREQ = Guid.NewGuid().ToString();
+                }
+
+                #endregion
+
+                #region - 主旨 -
 
                 FM7Subject = model.PROJECT_REVIEW_ERP_CONFIG.PROJECT_NAME + "-" + model.PROJECT_REVIEW_ERP_CONFIG.PROJECT_NICKNAME;
-                
+
+                #endregion
+
+
                 #endregion
 
                 #region - 專案建立審核主表：ProjectReview_M -
@@ -155,7 +193,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 var parameterA = new List<SqlParameter>()
                 {
                     //表單資訊
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  model.APPLICANT_INFO.REQUISITION_ID},
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  strREQ},
                     new SqlParameter("@DIAGRAM_ID", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.DIAGRAM_ID },
                     new SqlParameter("@PRIORITY", SqlDbType.Int) { Value =  model.APPLICANT_INFO.PRIORITY},
                     new SqlParameter("@DRAFT_FLAG", SqlDbType.Int) { Value =  model.APPLICANT_INFO.DRAFT_FLAG},
@@ -166,7 +204,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@APPLICANT_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_ID },
                     new SqlParameter("@APPLICANT_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_NAME },
                     new SqlParameter("@APPLICANT_PHONE", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.APPLICANT_PHONE ?? String.Empty },  
-                    new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) },
                     //(填單人/代填單人)資訊
                     new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_ID },
                     new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
@@ -184,8 +221,26 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@GAD_REVIEW", SqlDbType.NVarChar) { Size = 10, Value = (object)model.PROJECT_REVIEW_BPM_CONFIG.GAD_REVIEW ?? DBNull.Value },
                     new SqlParameter("@ACC_CATEGORY", SqlDbType.NVarChar) { Size = 50, Value = (object)model.PROJECT_REVIEW_BPM_CONFIG.ACC_CATEGORY ?? DBNull.Value },
                 };
-                
-                
+
+                #region - 正常起單後 申請時間(APPLICANT_DATETIME) 不可覆蓋 -
+
+                if (model.APPLICANT_INFO.DRAFT_FLAG == 0)
+                {
+                    var formData = new FormData()
+                    {
+                        REQUISITION_ID = strREQ
+                    };
+
+                    if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
+                    {
+                        parameterA.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+                        IsADD = true;
+                    }
+                }
+                else parameterA.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+
+                #endregion
+
                 strSQL = "";
                 strSQL += "SELECT ";
                 strSQL += "      [RequisitionID] ";
@@ -206,7 +261,9 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "      [ApplicantID]=@APPLICANT_ID, ";
                     strSQL += "      [ApplicantName]=@APPLICANT_NAME, ";
                     strSQL += "      [ApplicantPhone]=@APPLICANT_PHONE, ";
-                    strSQL += "      [ApplicantDateTime]=@APPLICANT_DATETIME, ";
+
+                    if (IsADD) strSQL += "     [ApplicantDateTime]=@APPLICANT_DATETIME, ";
+
                     strSQL += "      [FillerID]=@FILLER_ID, ";
                     strSQL += "      [FillerName]=@FILLER_NAME, ";
                     strSQL += "      [Priority]=@PRIORITY, ";
@@ -248,7 +305,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 FormHeader header = new FormHeader
                 {
-                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    REQUISITION_ID = strREQ,
                     ITEM_NAME = "Subject",
                     ITEM_VALUE = FM7Subject
                 };
@@ -263,7 +320,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     FormDraftList draftList = new FormDraftList()
                     {
-                        REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                        REQUISITION_ID = strREQ,
                         IDENTIFY = IDENTIFY,
                         FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID
                     };
@@ -282,7 +339,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     //刪除草稿清單
                     FormDraftList draftList = new FormDraftList()
                     {
-                        REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                        REQUISITION_ID = strREQ,
                         IDENTIFY = IDENTIFY,
                         FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID
                     };
@@ -293,7 +350,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     //送出表單
                     FormAutoStart autoStart = new FormAutoStart()
                     {
-                        REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                        REQUISITION_ID = strREQ,
                         DIAGRAM_ID = model.APPLICANT_INFO.DIAGRAM_ID,
                         APPLICANT_ID = model.APPLICANT_INFO.APPLICANT_ID,
                         APPLICANT_DEPT = model.APPLICANT_INFO.APPLICANT_DEPT
@@ -303,7 +360,19 @@ namespace OA_WEB_API.Repository.BPMPro
                 }
 
                 #endregion
-                
+
+                #region - 表單機能啟用：BPMFormFunction -
+
+                var BPM_FormFunction = new BPMFormFunction()
+                {
+                    REQUISITION_ID = strREQ,
+                    IDENTIFY = IDENTIFY,
+                    DRAFT_FLAG = 0
+                };
+                commonRepository.PostBPMFormFunction(BPM_FormFunction);
+
+                #endregion
+
                 vResult = true;
             }
             catch (Exception ex)
@@ -325,6 +394,11 @@ namespace OA_WEB_API.Repository.BPMPro
         private string strSQL;
 
         /// <summary>
+        /// 確認是否為新建的表單
+        /// </summary>
+        private bool IsADD = false;
+
+        /// <summary>
         /// 表單代號
         /// </summary>
         private string IDENTIFY = "ProjectReview";
@@ -333,6 +407,16 @@ namespace OA_WEB_API.Repository.BPMPro
         /// 表單主旨
         /// </summary>
         private string FM7Subject;
+
+        /// <summary>
+        /// 系統編號
+        /// </summary>
+        private string strREQ;
+
+        /// <summary>
+        /// Json字串
+        /// </summary>
+        private string strJson;
 
         #endregion
     }

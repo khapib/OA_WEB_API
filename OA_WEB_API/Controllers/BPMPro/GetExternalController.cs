@@ -125,6 +125,53 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #endregion
 
+        #region - 行政採購退貨折讓單(外部起單) -
+
+        /// <summary>
+        /// 行政採購退貨折讓單(外部起單)
+        /// </summary>
+        [Route("api/PutGeneralOrderReturnRefundGetExternal")]
+        [HttpPost]
+        public GetExternalData PutGeneralOrderReturnRefundGetExternal(GeneralOrderReturnRefundERPInfo model)
+        {
+            return getExternalRepository.PutGeneralOrderReturnRefundGetExternal(model);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region - 內容評估表(外部起單) -
+
+        #region - 內容評估表(外部起單) -
+
+        /// <summary>
+        /// 內容評估表(外部起單)
+        /// </summary>
+        [Route("api/PutEvaluateContentGetExternal")]
+        [HttpPost]
+        public GetExternalData PutEvaluateContentGetExternal(EvaluateContentERPInfo model)
+        {
+            return getExternalRepository.PutEvaluateContentGetExternal(model);
+        }
+
+
+        #endregion
+
+        #region - 內容評估表_補充意見(外部起單) -
+
+        /// <summary>
+        /// 內容評估表_補充意見(外部起單)
+        /// </summary>
+        [Route("api/PutEvaluateContentReplenishGetExternal")]
+        [HttpPost]
+        public GetExternalData PutEvaluateContentReplenishGetExternal(EvaluateContentReplenishERPInfo model)
+        {
+            return getExternalRepository.PutEvaluateContentReplenishGetExternal(model);
+        }
+
+        #endregion
+
         #endregion
 
         #region - 版權採購類_(外部起單) -
@@ -174,13 +221,60 @@ namespace OA_WEB_API.Controllers.BPMPro
         #region - 版權採購請款單(外部起單) -
 
         /// <summary>
-        /// 版權採購交片單(外部起單)
+        /// 版權採購請款單(外部起單)
         /// </summary>
         [Route("api/PutMediaInvoiceGetExternal")]
         [HttpPost]
         public GetExternalData PutMediaInvoiceGetExternal(MediaInvoiceERPInfo model)
         {
             return getExternalRepository.PutMediaInvoiceGetExternal(model);
+        }
+
+        #endregion
+
+        #region - 版權採購退貨折讓單(外部起單) -
+
+        /// <summary>
+        /// 版權採購退貨折讓單(外部起單)
+        /// </summary>
+        [Route("api/PutMediaOrderReturnRefundGetExternal")]
+        [HttpPost]
+        public GetExternalData PutMediaOrderReturnRefundGetExternal(MediaOrderReturnRefundERPInfo model)
+        {
+            return getExternalRepository.PutMediaOrderReturnRefundGetExternal(model);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region - 四方四隅_內容評估表(外部起單) -
+
+        #region - 四方四隅_內容評估表(外部起單) -
+
+        /// <summary>
+        /// 四方四隅_內容評估表(外部起單)
+        /// </summary>
+        [Route("api/PutGPI_EvaluateContentGetExternal")]
+        [HttpPost]
+        public GetExternalData PutGPI_EvaluateContentGetExternal(GPI_EvaluateContentERPInfo model)
+        {
+            return getExternalRepository.PutGPI_EvaluateContentGetExternal(model);
+        }
+
+
+        #endregion
+
+        #region - 四方四隅_內容評估表_補充意見(外部起單) -
+
+        /// <summary>
+        /// 四方四隅_內容評估表_補充意見(外部起單)
+        /// </summary>
+        [Route("api/PutGPI_EvaluateContentReplenishGetExternal")]
+        [HttpPost]
+        public GetExternalData PutGPI_EvaluateContentReplenishGetExternal(GPI_EvaluateContentReplenishERPInfo model)
+        {
+            return getExternalRepository.PutGPI_EvaluateContentReplenishGetExternal(model);
         }
 
         #endregion

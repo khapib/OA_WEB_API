@@ -1,10 +1,15 @@
-﻿using OA_WEB_API.Models.BPMPro;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data;
 using System.Linq;
 using System.Web;
+using System.Reflection;
+
+using OA_WEB_API.Models.BPMPro;
+
+using Newtonsoft.Json;
+using System.Collections;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -15,12 +20,20 @@ namespace OA_WEB_API.Repository.BPMPro
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDevHo);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
 
         #region Repository
 
         FormRepository formRepository = new FormRepository();
         CommonRepository commonRepository = new CommonRepository();
+        NotifyRepository notifyRepository = new NotifyRepository();
+
+        #endregion
+
+        #region FormRepository
+
+        /// <summary>版權採購申請單</summary>
+        MediaOrderRepository mediaOrderRepository = new MediaOrderRepository();
 
         #endregion
 
@@ -40,28 +53,16 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #region - 申請人資訊 -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [DiagramID] AS [DIAGRAM_ID], ";
-            strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
-            strSQL += "     [ApplicantDept] AS [APPLICANT_DEPT], ";
-            strSQL += "     [ApplicantDeptName] AS [APPLICANT_DEPT_NAME], ";
-            strSQL += "     [ApplicantID] AS [APPLICANT_ID], ";
-            strSQL += "     [ApplicantName] AS [APPLICANT_NAME], ";
-            strSQL += "     [ApplicantPhone] AS [APPLICANT_PHONE], ";
-            strSQL += "     [ApplicantDateTime] AS [APPLICANT_DATETIME], ";
-            strSQL += "     [FillerID] AS [FILLER_ID], ";
-            strSQL += "     [FillerName] AS [FILLER_NAME], ";
-            strSQL += "     [Priority] AS [PRIORITY], ";
-            strSQL += "     [DraftFlag] AS [DRAFT_FLAG], ";
-            strSQL += "     [FlowActivated] AS [FLOW_ACTIVATED] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaAcceptance_M] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+            var CommonApplicantInfo = new BPMCommonModel<ApplicantInfo>()
+            {
+                EXT = "M",
+                IDENTIFY = IDENTIFY,
+                PARAMETER = parameter,
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostApplicantInfoFunction(CommonApplicantInfo));
+            var applicantInfo = jsonFunction.JsonToObject<ApplicantInfo>(strJson);
 
-            var applicantInfo = dbFun.DoQuery(strSQL, parameter).ToList<ApplicantInfo>().FirstOrDefault();
-
-            #endregion
+            #endregion                      
 
             #region - 版權採購交片單 表頭資訊 -
 
@@ -107,66 +108,70 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [Period] AS [PERIOD], ";
-            strSQL += "     [DTL_SupProdANo] AS [DTL_SUP_PROD_A_NO], ";
-            strSQL += "     [DTL_RowNo] AS [DTL_ROW_NO], ";
-            strSQL += "     [DTL_ItemName] AS [DTL_ITEM_NAME], ";
-            strSQL += "     [DTL_MediaSpec] AS [DTL_MEDIA_SPEC], ";
-            strSQL += "     [DTL_MediaType] AS [DTL_MEDIA_TYPE], ";
-            strSQL += "     [DTL_StartEpisode] AS [DTL_START_EPISODE], ";
-            strSQL += "     [DTL_EndEpisode] AS [DTL_END_EPISODE], ";
-            strSQL += "     [DTL_OrderEpisode] AS [DTL_ORDER_EPISODE], ";
-            strSQL += "     [DTL_ACPT_Episode] AS [DTL_ACPT_EPISODE], ";
-            strSQL += "     [DTL_DismantleEpisode] AS [DTL_DISMANTLE_EPISODE], ";
-            strSQL += "     [DTL_EpisodeTime] AS [DTL_EPISODE_TIME], ";
-            strSQL += "     [DTL_GetMasteringDate] AS [DTL_GET_MASTERING_DATE], ";
-            strSQL += "     [DTL_OwnerDeptMainID] AS [DTL_OWNER_DEPT_MAIN_ID], ";
-            strSQL += "     [DTL_OwnerDeptID] AS [DTL_OWNER_DEPT_ID], ";
-            strSQL += "     [DTL_OwnerID] AS [DTL_OWNER_ID], ";
-            strSQL += "     [DTL_OwnerName] AS [DTL_OWNER_NAME], ";
-            strSQL += "     [DTL_AcceptanceNote] AS [DTL_ACPT_NOTE], ";
-            strSQL += "     [DTL_Status] AS [DTL_STATUS], ";
-            strSQL += "     [DTL_Note] AS [DTL_NOTE], ";
+            strSQL += "     [SupProdANo] AS [SUP_PROD_A_NO], ";
+            strSQL += "     [RowNo] AS [ROW_NO], ";
+            strSQL += "     [ItemName] AS [ITEM_NAME], ";
+            strSQL += "     [MediaSpec] AS [MEDIA_SPEC], ";
+            strSQL += "     [MediaType] AS [MEDIA_TYPE], ";
+            strSQL += "     [StartEpisode] AS [START_EPISODE], ";
+            strSQL += "     [EndEpisode] AS [END_EPISODE], ";
+            strSQL += "     [OrderEpisode] AS [ORDER_EPISODE], ";
+            strSQL += "     [ACPT_Episode] AS [ACPT_EPISODE], ";
+            strSQL += "     [DismantleEpisode] AS [DISMANTLE_EPISODE], ";
+            strSQL += "     [EpisodeTime] AS [EPISODE_TIME], ";
+            strSQL += "     [GetMasteringDate] AS [GET_MASTERING_DATE], ";
+            strSQL += "     [OwnerDeptMainID] AS [OWNER_DEPT_MAIN_ID], ";
+            strSQL += "     [OwnerDeptID] AS [OWNER_DEPT_ID], ";
+            strSQL += "     [OwnerID] AS [OWNER_ID], ";
+            strSQL += "     [OwnerName] AS [OWNER_NAME], ";
+            strSQL += "     [AcceptanceNote] AS [ACPT_NOTE], ";
+            strSQL += "     [Status] AS [STATUS], ";
+            strSQL += "     [Note] AS [NOTE], ";
             strSQL += "     [IsOriginal] AS [IS_ORIGINAL], ";
-            strSQL += "     [OriginNum] AS [ORIGIN_NUM] ";
+            strSQL += "     [OrderRowNo] AS [ORDER_ROW_NO], ";
+            strSQL += "     [IsReturn] AS [IS_RETURN] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaAcceptance_DTL] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+            strSQL += "ORDER BY [StartEpisode],[EndEpisode] ASC ";
 
             var mediaAcceptanceDetailsConfig = dbFun.DoQuery(strSQL, parameter).ToList<MediaAcceptanceDetailsConfig>();
 
+            #endregion
+
+            #region - 版權採購單 資訊 -
+
+            var mediaOrderQueryModel = new MediaOrderQueryModel
+            {
+                REQUISITION_ID = mediaAcceptanceConfig.MEDIA_ORDER_REQUISITION_ID
+            };
+
+            var mediaOrderContent = mediaOrderRepository.PostMediaOrderSingle(mediaOrderQueryModel);
 
             #endregion
 
-            var mediaOrderparameter = new List<SqlParameter>()
-            {
-                 new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = mediaAcceptanceConfig.MEDIA_ORDER_REQUISITION_ID },
-            };
-
             #region - 版權採購交片單 授權權利 -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [AUTH_RowNo] AS [AUTH_ROW_NO], ";
-            strSQL += "     [AUTH_SupProdANo] AS [AUTH_SUP_PROD_A_NO], ";
-            strSQL += "     [AUTH_ItemName] AS [AUTH_ITEM_NAME], ";
-            strSQL += "     [AUTH_Continent] AS [AUTH_CONTINENT], ";
-            strSQL += "     [AUTH_Country] AS [AUTH_COUNTRY], ";
-            strSQL += "     [AUTH_PlayPlatform] AS [AUTH_PLAY_PLATFORM],";
-            strSQL += "     [AUTH_Play] AS [AUTH_PLAY], ";
-            strSQL += "     [AUTH_Sell] AS [AUTH_SELL], ";
-            strSQL += "     [AUTH_EditToPlay] AS [AUTH_EDIT_TO_PLAY], ";
-            strSQL += "     [AUTH_EditToSell] AS [AUTH_EDIT_TO_SELL], ";
-            strSQL += "     [AUTH_AllotedTimeType] AS [AUTH_ALLOTED_TIME_TYPE], ";
-            strSQL += "     [AUTH_StartDate] AS [AUTH_START_DATE], ";
-            strSQL += "     [AUTH_EndDate] AS [AUTH_END_DATE], ";
-            strSQL += "     [AUTH_FrequencyType] AS [AUTH_FREQUENCY_TYPE], ";
-            strSQL += "     [AUTH_PlayFrequency] AS [AUTH_PLAY_FREQUENCY], ";
-            strSQL += "     [AUTH_Note] AS [AUTH_NOTE] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_AUTH] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "ORDER BY [AutoCounter] ";
+            List<MediaAcceptanceAuthorizesConfig> mediaAcceptanceAuthorizesConfig = new List<MediaAcceptanceAuthorizesConfig>();
+            foreach (var item in mediaAcceptanceDetailsConfig)
+            {
+                //strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_AUTHS_CONFIG.Where(AUTH => AUTH.ORDER_ROW_NO == item.ORDER_ROW_NO).Select(AUTH => AUTH));
+                strJson = jsonFunction.ObjectToJSON(mediaOrderContent.MEDIA_ORDER_AUTHS_CONFIG.Where(AUTH => AUTH.SUP_PROD_A_NO == item.SUP_PROD_A_NO).Select(AUTH => AUTH));
+                mediaAcceptanceAuthorizesConfig.AddRange(JsonConvert.DeserializeObject<List<MediaAcceptanceAuthorizesConfig>>(strJson));
+            }
+            mediaAcceptanceAuthorizesConfig = mediaAcceptanceAuthorizesConfig.GroupBy(AUTH => new { AUTH.SUP_PROD_A_NO, AUTH.PLAY_PLATFORM }).Select(g => g.First()).ToList();
 
-            var mediaAcceptanceAuthorizesConfig = dbFun.DoQuery(strSQL, mediaOrderparameter).ToList<MediaAcceptanceAuthorizesConfig>();
+            #endregion
+
+            #region - 版權採購交片單 已退貨商品明細 -
+
+            var CommonALDY_COMM = new BPMCommonModel<MediaCommodityConfig>()
+            {
+                EXT = "ALDY_RF_COMM",
+                IDENTIFY = IDENTIFY,
+                PARAMETER = parameter
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostMediaCommodityFunction(CommonALDY_COMM));
+            var mediaAcceptanceAlreadyRefundCommoditysConfigConfig = jsonFunction.JsonToObject<List<MediaAcceptanceAlreadyRefundCommoditysConfigConfig>>(strJson);
 
             #endregion
 
@@ -187,12 +192,54 @@ namespace OA_WEB_API.Repository.BPMPro
                 MEDIA_ACCEPTANCE_CONFIG = mediaAcceptanceConfig,
                 MEDIA_ACCEPTANCE_DTLS_CONFIG = mediaAcceptanceDetailsConfig,
                 MEDIA_ACCEPTANCE_AUTHS_CONFIG = mediaAcceptanceAuthorizesConfig,
+                MEDIA_ACCEPTANCE_ALDY_RF_COMMS_CONFIG = mediaAcceptanceAlreadyRefundCommoditysConfigConfig,
                 ASSOCIATED_FORM_CONFIG = associatedForm
             };
 
+            #region - 確認表單 -
+
+            if (mediaAcceptanceViewModel.APPLICANT_INFO.DRAFT_FLAG == 0)
+            {
+                var formData = new FormData()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+
+                if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
+                {
+                    mediaAcceptanceViewModel = new MediaAcceptanceViewModel();
+                    CommLib.Logger.Error("版權採購交片單(查詢)失敗，原因：系統無正常起單。");
+                }
+                else
+                {
+                    #region - 確認M表BPM表單單號 -
+
+                    //避免儲存後送出表單BPM表單單號沒寫入的情形
+                    var formQuery = new FormQueryModel()
+                    {
+                        REQUISITION_ID = query.REQUISITION_ID
+                    };
+                    notifyRepository.ByInsertBPMFormNo(formQuery);
+
+                    if (String.IsNullOrEmpty(mediaAcceptanceViewModel.MEDIA_ACCEPTANCE_TITLE.BPM_FORM_NO) || String.IsNullOrWhiteSpace(mediaAcceptanceViewModel.MEDIA_ACCEPTANCE_TITLE.BPM_FORM_NO))
+                    {
+                        strSQL = "";
+                        strSQL += "SELECT ";
+                        strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
+                        strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                        strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+                        var dtBpmFormNo = dbFun.DoQuery(strSQL, parameter);
+                        if (dtBpmFormNo.Rows.Count > 0) mediaAcceptanceViewModel.MEDIA_ACCEPTANCE_TITLE.BPM_FORM_NO = dtBpmFormNo.Rows[0][0].ToString();
+                    }
+
+                    #endregion
+                }
+            }
+
+            #endregion
+
             return mediaAcceptanceViewModel;
         }
-
 
         #region - 依此單內容重送 -
 
@@ -234,6 +281,16 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region - 宣告 -
 
+                #region - 系統編號 -
+
+                strREQ = model.APPLICANT_INFO.REQUISITION_ID;
+                if (String.IsNullOrEmpty(strREQ) || String.IsNullOrWhiteSpace(strREQ))
+                {
+                    strREQ = Guid.NewGuid().ToString();
+                }
+
+                #endregion
+
                 #region - 主旨 -
 
                 FM7Subject = model.MEDIA_ACCEPTANCE_TITLE.FM7_SUBJECT;
@@ -252,7 +309,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 var parameterTitle = new List<SqlParameter>()
                 {
                     //表單資訊
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  model.APPLICANT_INFO.REQUISITION_ID},
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  strREQ},
                     new SqlParameter("@DIAGRAM_ID", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.DIAGRAM_ID },
                     new SqlParameter("@PRIORITY", SqlDbType.Int) { Value =  model.APPLICANT_INFO.PRIORITY},
                     new SqlParameter("@DRAFT_FLAG", SqlDbType.Int) { Value =  model.APPLICANT_INFO.DRAFT_FLAG},
@@ -263,7 +320,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@APPLICANT_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_ID },
                     new SqlParameter("@APPLICANT_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_NAME },
                     new SqlParameter("@APPLICANT_PHONE", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.APPLICANT_PHONE ?? String.Empty },
-                    new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) },
                     //(填單人/代填單人)資訊
                     new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_ID },
                     new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
@@ -272,6 +328,25 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_ACCEPTANCE_TITLE.FORM_NO ?? DBNull.Value },
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
                 };
+
+                #region - 正常起單後 申請時間(APPLICANT_DATETIME) 不可覆蓋 -
+
+                if (model.APPLICANT_INFO.DRAFT_FLAG == 0)
+                {
+                    var formData = new FormData()
+                    {
+                        REQUISITION_ID = strREQ
+                    };
+
+                    if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
+                    {
+                        parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+                        IsADD = true;
+                    }
+                }
+                else parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+
+                #endregion
 
                 strSQL = "";
                 strSQL += "SELECT ";
@@ -293,7 +368,9 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [ApplicantID]=@APPLICANT_ID, ";
                     strSQL += "     [ApplicantName]=@APPLICANT_NAME, ";
                     strSQL += "     [ApplicantPhone]=@APPLICANT_PHONE, ";
-                    strSQL += "     [ApplicantDateTime]=@APPLICANT_DATETIME, ";
+
+                    if (IsADD) strSQL += "     [ApplicantDateTime]=@APPLICANT_DATETIME, ";
+
                     strSQL += "     [FillerID]=@FILLER_ID, ";
                     strSQL += "     [FillerName]=@FILLER_NAME, ";
                     strSQL += "     [Priority]=@PRIORITY, ";
@@ -334,7 +411,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     var parameterInfo = new List<SqlParameter>()
                     {
                         //版權採購交片單 表單內容
-                        new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                        new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                         new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@MEDIA_ORDER_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -382,31 +459,32 @@ namespace OA_WEB_API.Repository.BPMPro
                 var parameterDetails = new List<SqlParameter>()
                 {
                     //版權採購交片單 驗收明細
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                     new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = (object)model.MEDIA_ACCEPTANCE_CONFIG.MEDIA_ORDER_REQUISITION_ID ?? DBNull.Value },
                     new SqlParameter("@MEDIA_ORDER_BPM_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.MEDIA_ACCEPTANCE_CONFIG.MEDIA_ORDER_BPM_FORM_NO ?? DBNull.Value },
                     new SqlParameter("@PERIOD", SqlDbType.Int) { Value = (object)model.MEDIA_ACCEPTANCE_CONFIG.PERIOD ?? DBNull.Value },
-                    new SqlParameter("@DTL_SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_MEDIA_SPEC", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_START_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_END_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ORDER_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ACPT_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_DISMANTLE_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_EPISODE_TIME", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_GET_MASTERING_DATE", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_OWNER_DEPT_MAIN_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_OWNER_DEPT_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_OWNER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_OWNER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ACPT_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_STATUS", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@SUP_PROD_A_NO", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_SPEC", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@START_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@END_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ORDER_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ACPT_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DISMANTLE_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EPISODE_TIME", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@GET_MASTERING_DATE", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@OWNER_DEPT_MAIN_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@OWNER_DEPT_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@OWNER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@OWNER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ACPT_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@STATUS", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@IS_ORIGINAL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@ORIGIN_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ORDER_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@IS_RETURN", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -432,8 +510,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaAcceptance_DTL]([RequisitionID],[MediaOrderRequisitionID],[MediaOrderBPMFormNo],[Period],[DTL_SupProdANo],[DTL_RowNo],[DTL_ItemName],[DTL_MediaSpec],[DTL_MediaType],[DTL_StartEpisode],[DTL_EndEpisode],[DTL_OrderEpisode],[DTL_ACPT_Episode],[DTL_DismantleEpisode],[DTL_EpisodeTime],[DTL_GetMasteringDate],[DTL_OwnerDeptMainID],[DTL_OwnerDeptID],[DTL_OwnerID],[DTL_OwnerName],[DTL_AcceptanceNote],[DTL_Status],[DTL_Note],[IsOriginal],[OriginNum]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@MEDIA_ORDER_REQUISITION_ID,@MEDIA_ORDER_BPM_FORM_NO,@PERIOD,@DTL_SUP_PROD_A_NO,@DTL_ROW_NO,@DTL_ITEM_NAME,@DTL_MEDIA_SPEC,@DTL_MEDIA_TYPE,@DTL_START_EPISODE,@DTL_END_EPISODE,@DTL_ORDER_EPISODE,@DTL_ACPT_EPISODE,@DTL_DISMANTLE_EPISODE,@DTL_EPISODE_TIME,@DTL_GET_MASTERING_DATE,@DTL_OWNER_DEPT_MAIN_ID,@DTL_OWNER_DEPT_ID,@DTL_OWNER_ID,@DTL_OWNER_NAME,@DTL_ACPT_NOTE,@DTL_STATUS,@DTL_NOTE,@IS_ORIGINAL,@ORIGIN_NUM) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaAcceptance_DTL]([RequisitionID],[MediaOrderRequisitionID],[MediaOrderBPMFormNo],[Period],[SupProdANo],[RowNo],[ItemName],[MediaSpec],[MediaType],[StartEpisode],[EndEpisode],[OrderEpisode],[ACPT_Episode],[DismantleEpisode],[EpisodeTime],[GetMasteringDate],[OwnerDeptMainID],[OwnerDeptID],[OwnerID],[OwnerName],[AcceptanceNote],[Status],[Note],[IsOriginal],[OrderRowNo],[IsReturn]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@MEDIA_ORDER_REQUISITION_ID,@MEDIA_ORDER_BPM_FORM_NO,@PERIOD,@SUP_PROD_A_NO,@ROW_NO,@ITEM_NAME,@MEDIA_SPEC,@MEDIA_TYPE,@START_EPISODE,@END_EPISODE,@ORDER_EPISODE,@ACPT_EPISODE,@DISMANTLE_EPISODE,@EPISODE_TIME,@GET_MASTERING_DATE,@OWNER_DEPT_MAIN_ID,@OWNER_DEPT_ID,@OWNER_ID,@OWNER_NAME,@ACPT_NOTE,@STATUS,@NOTE,@IS_ORIGINAL,@ORDER_ROW_NO,@IS_RETURN) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }
@@ -443,10 +521,10 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 版權採購交片單 授權權利: MediaAcceptance_AUTHS -
+                #region - 版權採購交片單 授權權利: MediaAcceptance_AUTH -
 
                 //View 是執行
-                //版權採購交片單 授權權利(MediaAcceptance_AUTHS) 內容。
+                //版權採購申請單 授權權利(MediaOrder_AUTHS) 內容。
 
                 #endregion
 
@@ -455,7 +533,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 //關聯表:匯入【版權採購交片單】的「關聯表單」
                 var importAssociatedForm = commonRepository.PostAssociatedForm(mediaOrderformQueryModel);
 
-                #region 關聯表:加上【行政採購申請單】
+                #region 關聯:【版權採購申請單】
 
                 importAssociatedForm.Add(new AssociatedFormConfig()
                 {
@@ -480,7 +558,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 var associatedFormModel = new AssociatedFormModel()
                 {
-                    REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                    REQUISITION_ID = strREQ,
                     ASSOCIATED_FORM_CONFIG = associatedFormConfig
                 };
 
@@ -492,7 +570,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 #region - 表單主旨：FormHeader -
 
                 FormHeader header = new FormHeader();
-                header.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                header.REQUISITION_ID = strREQ;
                 header.ITEM_NAME = "Subject";
                 header.ITEM_VALUE = FM7Subject;
 
@@ -505,7 +583,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 if (model.APPLICANT_INFO.DRAFT_FLAG.Equals(1))
                 {
                     FormDraftList draftList = new FormDraftList();
-                    draftList.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                    draftList.REQUISITION_ID = strREQ;
                     draftList.IDENTIFY = IDENTIFY;
                     draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
 
@@ -521,7 +599,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region 送出表單前，先刪除草稿清單
 
                     FormDraftList draftList = new FormDraftList();
-                    draftList.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                    draftList.REQUISITION_ID = strREQ;
                     draftList.IDENTIFY = IDENTIFY;
                     draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
 
@@ -530,13 +608,25 @@ namespace OA_WEB_API.Repository.BPMPro
                     #endregion
 
                     FormAutoStart autoStart = new FormAutoStart();
-                    autoStart.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                    autoStart.REQUISITION_ID = strREQ;
                     autoStart.DIAGRAM_ID = model.APPLICANT_INFO.DIAGRAM_ID;
                     autoStart.APPLICANT_ID = model.APPLICANT_INFO.APPLICANT_ID;
                     autoStart.APPLICANT_DEPT = model.APPLICANT_INFO.APPLICANT_DEPT;
 
                     formRepository.PutFormAutoStart(autoStart);
                 }
+
+                #endregion
+
+                #region - 表單機能啟用：BPMFormFunction -
+
+                var BPM_FormFunction = new BPMFormFunction()
+                {
+                    REQUISITION_ID = strREQ,
+                    IDENTIFY = IDENTIFY,
+                    DRAFT_FLAG = 0
+                };
+                commonRepository.PostBPMFormFunction(BPM_FormFunction);
 
                 #endregion
 
@@ -566,9 +656,9 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     //版權採購交片單 驗收簽核
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },
-                    new SqlParameter("@DTL_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_ACPT_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DTL_STATUS", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@ACPT_NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@STATUS", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 if (!String.IsNullOrEmpty(model.REQUISITION_ID) || !String.IsNullOrWhiteSpace(model.REQUISITION_ID))
@@ -583,11 +673,11 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         strSQL = "";
                         strSQL += "UPDATE [BPMPro].[dbo].[FM7T_MediaAcceptance_DTL] ";
-                        strSQL += "SET  [DTL_AcceptanceNote]=@DTL_ACPT_NOTE, ";
-                        strSQL += "     [DTL_Status]=@DTL_STATUS ";
+                        strSQL += "SET  [AcceptanceNote]=@ACPT_NOTE, ";
+                        strSQL += "     [Status]=@STATUS ";
                         strSQL += "WHERE 1=1 ";
                         strSQL += "     AND [RequisitionID]=@REQUISITION_ID ";
-                        strSQL += "     AND [DTL_RowNo]=@DTL_ROW_NO ";
+                        strSQL += "     AND [RowNo]=@ROW_NO ";
 
                         dbFun.DoTran(strSQL, parameterApprove);
                     }
@@ -617,6 +707,11 @@ namespace OA_WEB_API.Repository.BPMPro
         private string strSQL;
 
         /// <summary>
+        /// 確認是否為新建的表單
+        /// </summary>
+        private bool IsADD = false;
+
+        /// <summary>
         /// 表單代號
         /// </summary>
         private string IDENTIFY = "MediaAcceptance";
@@ -630,6 +725,11 @@ namespace OA_WEB_API.Repository.BPMPro
         /// Json字串
         /// </summary>
         private string strJson;
+
+        /// <summary>
+        /// 系統編號
+        /// </summary>
+        private string strREQ;
 
         #endregion
     }

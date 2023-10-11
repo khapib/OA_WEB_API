@@ -7,11 +7,11 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Web;
-
 using Dapper;
-
+using Microsoft.Ajax.Utilities;
 using OA_WEB_API.Models;
 using OA_WEB_API.Models.BPMPro;
 
@@ -24,7 +24,7 @@ namespace OA_WEB_API.Repository.BPMPro
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDevHo);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
 
         FormRepository formRepository = new FormRepository();
         FlowRepository flowRepository = new FlowRepository();
@@ -260,7 +260,7 @@ namespace OA_WEB_API.Repository.BPMPro
                             nameTemp.Add(manager.USER_NAME);
                         }
 
-                        emailCCList.Add("何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>");
+                        emailCCList.Add("何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>;尤玟茹<uwr0701@gtv.com.tw>");
                         //emailCCTemp.Add("孫慶偉<top@gtv.com.tw>"); /*測試機在加經理*/
 
                         emailCCList = emailCCTemp.Distinct().ToList();
@@ -271,7 +271,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         emailList.Clear();
                         emailCCList.Clear();
-                        emailCCList.Add("何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>");
+                        emailCCList.Add("何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>;尤玟茹<uwr0701@gtv.com.tw>");
 
                         break;
                 }
@@ -353,7 +353,20 @@ namespace OA_WEB_API.Repository.BPMPro
                 }
 
                 emailList = emailListTemp.Distinct().ToList();
-                nameList = nameListTemp.Distinct().ToList();
+                nameList = nameListTemp.Distinct().Where(T => !String.IsNullOrEmpty(T) || !String.IsNullOrWhiteSpace(T)).ToList();
+
+                #region - 總經理不收(結案)信件 -
+                //總經理不收(結案)信件；所以需要將finalApprover把有總經理名字的給移除
+
+                var logonModel = new LogonModel()
+                {
+                    USER_ID = CommonRepository.GetRoles().Where(R => R.ROLE_ID == "GM").Select(R => R.USER_ID).First(),
+                };
+                var GM_Name = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.COMPANY_ID == "RootCompany").Select(U => U.USER_NAME).FirstOrDefault();
+                emailList.Remove(emailList.Where(e => e.Contains(GM_Name)).FirstOrDefault());
+
+                #endregion
+
 
                 #endregion
 
@@ -369,6 +382,29 @@ namespace OA_WEB_API.Repository.BPMPro
                     CONTENT = GetEmailBody(query, String.Join("、", nameList), enumProcess.CLOSE),
                     FW3_TO_NAME = String.Join(";", nameList)
                 };
+
+                #region - OfficialStamp【用印申請單】結案需要密件發送人資人員 -
+
+                var formData = new FormData()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+
+                if (CommonRepository.PostFSe7enSysRequisition(formData).Select(R => R.IDENTIFY).FirstOrDefault() == "OfficialStamp")
+                {
+                    CommonRepository.GetRoles().Where(R => R.ROLE_ID == "GTV_HR" || R.ROLE_ID == "GTV_HR_Supervisor").ForEach(R =>
+                    {
+                        logonModel = new LogonModel()
+                        {
+                            USER_ID = R.USER_ID
+                        };
+                        var UserModel = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.COMPANY_ID == "RootCompany").FirstOrDefault();
+                        model.CC_LIST += UserModel.USER_NAME + "<" + UserModel.EMAIL + ">;";
+                    });
+                    model.CC_LIST = model.CC_LIST.Substring(0, model.CC_LIST.Length - 1);
+                }
+
+                #endregion
 
                 SendEmail(model);
 
@@ -430,7 +466,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 }
 
                 emailList = emailListTemp.Distinct().ToList();
-                nameList = nameListTemp.Distinct().ToList();
+                nameList = nameListTemp.Distinct().Where(T=> !String.IsNullOrEmpty(T) || !String.IsNullOrWhiteSpace(T)).ToList();
 
                 #endregion
 
@@ -583,6 +619,153 @@ namespace OA_WEB_API.Repository.BPMPro
             }
         }
 
+        #region - 2023/08/07 Leon: 接收流程引擎(特定人員/角色 結案通知)通知觸發事件 -
+
+        /// <summary>
+        /// (特定人員/角色 結案通知)通知觸發事件
+        /// </summary>
+        public void ByCloseNotify(InformNotifyModel inform)
+        {
+            try
+            {
+                var emailList = new List<string>();
+                var nameList = new List<string>();
+                var receiverList = new List<ReceiverModel>();
+
+                #region STEP1：通知名單
+
+                var GroupPerson = new GroupInformNotifyModel
+                {
+                    REQUISITION_ID = new List<string>
+                    {
+                    inform.REQUISITION_ID
+                    },
+                    NOTIFY_BY = new List<string>
+                    {
+                    inform.NOTIFY_BY
+                    },
+                    ROLE_ID = new List<string>
+                    {
+                    inform.ROLE_ID
+                    }
+                };
+
+                #region - 被知會特定人員 -
+
+                if ((GroupPerson.NOTIFY_BY != null && GroupPerson.NOTIFY_BY.Count > 0) || (GroupPerson.ROLE_ID != null && GroupPerson.ROLE_ID.Count > 0))
+                {
+
+                    #region - 被知會特定角色 -
+
+                    if (GroupPerson.ROLE_ID != null)
+                    {
+                        foreach (var role in GroupPerson.ROLE_ID)
+                        {
+                            if (role != null)
+                            {
+                                var RolesUserID = CommonRepository.GetRoles()
+                                                            .Where(R => R.ROLE_ID.Contains(role))
+                                                            .Select(R => R).ToList();
+                                RolesUserID.ForEach(roleuser =>
+                                {
+                                    GroupPerson.NOTIFY_BY.Add(roleuser.USER_ID);
+                                });
+                            }
+                        }
+                    }
+
+                    #endregion
+
+                    #region - 排除重複人員 -
+
+                    GroupPerson.NOTIFY_BY = GroupPerson.NOTIFY_BY.GroupBy(N => N)
+                                                    .Select(g => g.First()).ToList();
+
+                    #endregion
+
+                    #region - 排除 NOTIFY_BY List Value 是 null -
+
+                    GroupPerson.NOTIFY_BY = GroupPerson.NOTIFY_BY.Where(N => N != null)
+                                                        .Select(R => R)
+                                                        .ToList();
+
+                    #endregion
+
+                    foreach (var notify in GroupPerson.NOTIFY_BY)
+                    {
+                        var UserIDmodel = new LogonModel()
+                        {
+                            USER_ID = notify
+                        };
+
+                        foreach (var userInfo in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                        {
+                            emailList.Add(userInfo.USER_NAME + "<" + userInfo.EMAIL + ">");
+                            nameList.Add(userInfo.USER_NAME);
+                            receiverList.Add(new ReceiverModel() { USER_ID = userInfo.USER_ID, USER_NAME = userInfo.USER_NAME });
+                        }
+                    }
+
+                }
+
+                #endregion
+
+                #endregion
+
+                #region STEP3：發送(處理完畢)信件
+
+                var query = new FormQueryModel()
+                {
+                    REQUISITION_ID = inform.REQUISITION_ID
+                };
+
+                var model = new EmailModel()
+                {
+                    FROM_LIST = _FORM,
+                    TO_LIST = String.Join(";", emailList),
+                    CC_LIST = String.Empty,
+                    BCC_LIST = String.Empty,
+                    SUBJECT = String.Format(formRepository.GetFormSubject(query), "處理完畢特定通知"),
+                    CONTENT = GetEmailBody(query, String.Join("、", nameList), enumProcess.CLOSE),
+                    FW3_TO_NAME = String.Join(";", nameList)
+                };
+
+                SendEmail(model);
+
+                #endregion
+
+                #region STEP5：新增(知會通知)
+
+                foreach (var item in receiverList)
+                {
+                    var notice = new NoticeMode()
+                    {
+                        REQUISITION_ID = query.REQUISITION_ID,
+                        RECEIVER_ID = item.USER_ID,
+                        RECEIVER_NAME = item.USER_NAME,
+                        SUBJECT = String.Format(formRepository.GetFormSubject(query), "處理完畢特定通知")
+                    };
+
+                    SetNotice(notice);
+                }
+
+                #endregion
+
+                #region STEP4：發送記錄：刪除該表單的發送記錄
+
+                flowRepository.PutFormClose(query);
+
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("(特定人員/角色結案通知)通知觸發事件 通知失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
         #region - 2022/11/08 Leon: 接收流程引擎(特定知會通知)通知觸發事件 -
 
         /// <summary>
@@ -620,6 +803,11 @@ namespace OA_WEB_API.Repository.BPMPro
             bool vResult = false;
             try
             {
+                if (model.NOTIFY_BY == null)
+                {
+                    model.NOTIFY_BY = new List<string>();
+                }
+
                 ReceiverID = "";
 
                 foreach (var requisitionID in model.REQUISITION_ID)
@@ -628,19 +816,23 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     if (String.IsNullOrWhiteSpace(ReceiverID))
                     {
+
                         #region - 被知會特定角色 -
 
-                        foreach (var role in model.ROLE_ID)
+                        if (model.ROLE_ID != null)
                         {
-                            if (role != null)
+                            foreach (var role in model.ROLE_ID)
                             {
-                                var RolesUserID = CommonRepository.GetRoles()
-                                                            .Where(R => R.ROLE_ID.Contains(role))
-                                                            .Select(R => R).ToList();
-                                RolesUserID.ForEach(roleuser =>
+                                if (role != null)
                                 {
-                                    model.NOTIFY_BY.Add(roleuser.USER_ID);
-                                });
+                                    var RolesUserID = CommonRepository.GetRoles()
+                                                                .Where(R => R.ROLE_ID == role)
+                                                                .Select(R => R).ToList();
+                                    RolesUserID.ForEach(roleuser =>
+                                    {
+                                        model.NOTIFY_BY.Add(roleuser.USER_ID);
+                                    });
+                                }
                             }
                         }
 
@@ -653,7 +845,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         #endregion
 
-                        #region - 排除 NOTIFY_BY List 是 null -
+                        #region - 排除 NOTIFY_BY List Value 是 null -
 
                         model.NOTIFY_BY = model.NOTIFY_BY.Where(N => N != null)
                                                             .Select(R => R)
@@ -1144,6 +1336,64 @@ namespace OA_WEB_API.Repository.BPMPro
         public void SendEmail(EmailModel model)
         {
             var maxSerialNo = GetMaxSerialNo();
+
+            #region - 原發信通知 -
+
+            //var parameter = new List<SqlParameter>
+            //{
+            //    new SqlParameter("@AUTO_COUNTER", SqlDbType.BigInt) { Value = maxSerialNo.AUTO_COUNTER },
+            //    new SqlParameter("@SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = model.SUBJECT },
+            //    new SqlParameter("@CONTENT", SqlDbType.NVarChar) { Size = -1, Value = model.CONTENT },
+            //    new SqlParameter("@FROM_LIST", SqlDbType.NVarChar) { Size = 50, Value = model.FROM_LIST },
+            //    new SqlParameter("@TO_LIST", SqlDbType.NVarChar) { Size = 500, Value = model.TO_LIST },
+            //    new SqlParameter("@CC_LIST", SqlDbType.NVarChar) { Size = 500, Value = model.CC_LIST },
+            //    //new SqlParameter("@BCC_LIST", SqlDbType.NVarChar) { Size = 500, Value = model.BCC_LIST },
+            //    new SqlParameter("@BCC_LIST", SqlDbType.NVarChar) { Size = 500, Value = _BCC_LIST },
+            //    new SqlParameter("@MAIL_TIME", SqlDbType.DateTime) { Size = 200, Value = DateTime.Now},
+            //    new SqlParameter("@HASH_CODE", SqlDbType.Int) { Value = maxSerialNo.HASH_CODE },
+            //    //new SqlParameter("@FW3_TO_LIST", SqlDbType.NVarChar) { Value = DBNull.Value },
+            //    new SqlParameter("@FW3_TO_NAME", SqlDbType.NVarChar) { Value = model.FW3_TO_NAME },
+            //    new SqlParameter("@PRIORITY", SqlDbType.SmallInt) { Value = 3 }
+            //};
+
+            //strSQL = "";
+            //strSQL += "INSERT INTO [BPMPro].[dbo].[FSe7en_EMail_Bank]([AutoCounter],[Subject],[Content],[FromList],[ToList],[CcList],[BccList],[MailTime],[HashCode],[FW3ToName],[Priority]) ";
+            //strSQL += "VALUES(@AUTO_COUNTER,@SUBJECT,@CONTENT,@FROM_LIST,@TO_LIST,@CC_LIST,@BCC_LIST,GETDATE(),@HASH_CODE,@FW3_TO_NAME,@PRIORITY)";
+
+            //dbFun.DoTran(strSQL, parameter);
+
+            #endregion
+
+            #region - 資深副總不收信件 -
+            //資深副總不收信件；所以需要將TO_LIST、FW3_TO_NAME把有副總名字的給移除
+
+            var logonModel = new LogonModel()
+            {
+                USER_ID = CommonRepository.GetRoles().Where(R => R.ROLE_ID == "DGM").Select(R => R.USER_ID).First(),
+            };
+            var DGM_Name = userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.COMPANY_ID == "RootCompany").Select(U => U.USER_NAME).FirstOrDefault();
+            if (model.FW3_TO_NAME.Contains(DGM_Name + ";")) model.FW3_TO_NAME = model.FW3_TO_NAME.Replace(DGM_Name + ";", string.Empty);
+            else model.FW3_TO_NAME = model.FW3_TO_NAME.Replace(DGM_Name, string.Empty);
+
+            #region - 發送列表移除副總信箱 -
+
+            var DGM_Email = DGM_Name + "< >";
+            var i = 0;
+            while (i <= 1)
+            {
+                //BPM系統的資料發信
+                if (model.TO_LIST.Contains(DGM_Email + ";")) model.TO_LIST = model.TO_LIST.Replace(DGM_Email + ";", string.Empty);
+                else model.TO_LIST = model.TO_LIST.Replace(DGM_Email, string.Empty);
+                //[NUP].[dbo].[GTV_Org_Relation_Member]的資料發信
+                if (i != 1) DGM_Email = DGM_Name + "<" + userRepository.PostUserSingle(logonModel).USER_MODEL.Where(U => U.COMPANY_ID == "RootCompany").Select(U => U.EMAIL).FirstOrDefault() + ">";
+
+                i++;
+            }
+
+            #endregion
+
+            #endregion
+
             var parameter = new List<SqlParameter>
             {
                 new SqlParameter("@AUTO_COUNTER", SqlDbType.BigInt) { Value = maxSerialNo.AUTO_COUNTER },
@@ -1165,7 +1415,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "INSERT INTO [BPMPro].[dbo].[FSe7en_EMail_Bank]([AutoCounter],[Subject],[Content],[FromList],[ToList],[CcList],[BccList],[MailTime],[HashCode],[FW3ToName],[Priority]) ";
             strSQL += "VALUES(@AUTO_COUNTER,@SUBJECT,@CONTENT,@FROM_LIST,@TO_LIST,@CC_LIST,@BCC_LIST,GETDATE(),@HASH_CODE,@FW3_TO_NAME,@PRIORITY)";
 
-            dbFun.DoTran(strSQL, parameter);
+            if (!String.IsNullOrEmpty(model.FW3_TO_NAME) || !String.IsNullOrWhiteSpace(model.FW3_TO_NAME)) dbFun.DoTran(strSQL, parameter);
         }
 
         /// <summary>
@@ -1251,7 +1501,8 @@ namespace OA_WEB_API.Repository.BPMPro
         public void SendSMS(SmsModel model)
         {
             var smsFun = new smsFunction();
-            smsFun.SendSMS(model);
+            /*正式機要加回來*/
+            //smsFun.SendSMS(model);
 
             LogToSmsBank(model);
         }
@@ -1321,7 +1572,7 @@ namespace OA_WEB_API.Repository.BPMPro
         private string _CC_LIST = String.Empty;
 
         /// <summary>密件收件人</summary>
-        private string _BCC_LIST = "何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>";
+        private string _BCC_LIST = "何聖文<james@gtv.com.tw>;藍永利<leon@gtv.com.tw>;尤玟茹<uwr0701@gtv.com.tw>";
 
         /// <summary>特定人員</summary>
         private string ReceiverID;

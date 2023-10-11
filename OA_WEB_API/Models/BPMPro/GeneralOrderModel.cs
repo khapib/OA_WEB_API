@@ -38,7 +38,7 @@ namespace OA_WEB_API.Models.BPMPro
         public IList<GeneralOrderPaymentsConfig> GENERAL_ORDER_PAYMENTS_CONFIG { get; set; }
 
         /// <summary>行政採購申請 使用預算 設定</summary>
-        public IList<GeneralOrderBudgetsConfig> GENERAL_ORDER_BUDGETS_CONFIG { get; set; }
+        public List<GeneralOrderBudgetsConfig> GENERAL_ORDER_BUDGETS_CONFIG { get; set; }
 
         /// <summary>行政採購申請 驗收項目 設定</summary>
         public IList<GeneralOrderAcceptancesConfig> GENERAL_ORDER_ACPT_CONFIG { get; set; }
@@ -68,10 +68,10 @@ namespace OA_WEB_API.Models.BPMPro
         public string PARENT_ID { get; set; }
 
         /// <summary>母表單BPM 表單單號</summary>
-        public string PARENT_BPM_FORM_NO { get; set; } 
-        
+        public string PARENT_BPM_FORM_NO { get; set; }
+
         /// <summary>表單操作</summary>
-        public string FORM_ACTION { get; set; }    
+        public string FORM_ACTION { get; set; }
 
         /// <summary>ERP 工作流程標題名稱</summary>
         public string FLOW_NAME { get; set; }
@@ -170,64 +170,46 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 行政採購申請 採購明細 設定
     /// </summary>
-    public class GeneralOrderDetailsConfig
+    public class GeneralOrderDetailsConfig : GeneralCommodityConfig
     {
-        /// <summary>商品代碼</summary>
-        public string DTL_SUP_PROD_A_NO { get; set; }
-
-        /// <summary>商品名稱</summary>
-        public string DTL_ITEM_NAME { get; set; }
-
-        /// <summary>型號</summary>
-        public string DTL_MODEL { get; set; }
-
-        /// <summary>規格</summary>
-        public string DTL_SPECIFICATIONS { get; set; }
-
-        /// <summary>數量</summary>
-        public int DTL_QUANTITY { get; set; }
-
-        /// <summary>單位</summary>
-        public string DTL_UNIT { get; set; }
-
         /// <summary>未稅單價/NET單價</summary>
-        public double DTL_NET { get; set; }
+        public double NET { get; set; }
 
         /// <summary>未稅單價_台幣/NET單價_台幣</summary>
-        public int DTL_NET_TWD { get; set; }
+        public int NET_TWD { get; set; }
 
         /// <summary>含稅單價/GROSS單價</summary>
-        public double DTL_GROSS { get; set; }
+        public double GROSS { get; set; }
 
         /// <summary>含稅單價_台幣/GROSS單價_台幣</summary>
-        public int DTL_GROSS_TWD { get; set; }
+        public int GROSS_TWD { get; set; }
 
         /// <summary>未稅小計/NET小計</summary>
-        public double DTL_NET_SUM { get; set; }
+        public double NET_SUM { get; set; }
 
         /// <summary>未稅小計_台幣/NET小計_台幣</summary>
-        public int DTL_NET_SUM_TWD { get; set; }
+        public int NET_SUM_TWD { get; set; }
 
         /// <summary>含稅小計/GROSS小計</summary>
-        public double DTL_GROSS_SUM { get; set; }
+        public double GROSS_SUM { get; set; }
 
         /// <summary>含稅小計_台幣/GROSS小計_台幣</summary>
-        public int DTL_GROSS_SUM_TWD { get; set; }
+        public int GROSS_SUM_TWD { get; set; }
 
         /// <summary>所屬專案 ERP 單號</summary>
-        public string DTL_PROJECT_FORM_NO { get; set; }
+        public string PROJECT_FORM_NO { get; set; }
 
         /// <summary>所屬專案名稱</summary>
-        public string DTL_PROJECT_NAME { get; set; }
+        public string PROJECT_NAME { get; set; }
 
         /// <summary>所屬專案描述</summary>
-        public string DTL_PROJECT_NICKNAME { get; set; }
+        public string PROJECT_NICKNAME { get; set; }
 
         /// <summary>所屬專案起案年度</summary>
-        public string DTL_PROJECT_USE_YEAR { get; set; }
+        public string PROJECT_USE_YEAR { get; set; }
 
         /// <summary>備註</summary>
-        public string DTL_NOTE { get; set; }
+        public string NOTE { get; set; }
     }
 
     /// <summary>
@@ -239,10 +221,10 @@ namespace OA_WEB_API.Models.BPMPro
         public int PERIOD { get; set; }
 
         /// <summary>付款項目</summary>
-        public string PYMT_PROJECT { get; set; }
+        public string PROJECT { get; set; }
 
         /// <summary>付款條件</summary>
-        public string PYMT_TERMS { get; set; }
+        public string TERMS { get; set; }
 
         /// <summary>
         /// 付款方式編號：
@@ -250,84 +232,45 @@ namespace OA_WEB_API.Models.BPMPro
         /// FF.電匯
         /// CS.現金
         /// </summary>
-        public string PYMT_METHOD_ID { get; set; }
+        public string METHOD_ID { get; set; }
 
         /// <summary>稅額</summary>
-        public double PYMT_TAX { get; set; }
+        public double TAX { get; set; }
 
         /// <summary>未稅金額/NET單價</summary>
-        public double PYMT_NET { get; set; }
+        public double NET { get; set; }
 
         /// <summary>含稅總額/GROSS單價</summary>
-        public double PYMT_GROSS { get; set; }
+        public double GROSS { get; set; }
 
         /// <summary>當期預計匯率</summary>
-        public double PYMT_PRE_RATE { get; set; }
+        public double PRE_RATE { get; set; }
 
         /// <summary>含稅總額(換算)/GROSS價(換算)</summary>
-        public int PYMT_GROSS_CONV { get; set; }
+        public int GROSS_CONV { get; set; }
 
         /// <summary>使用預算金額</summary>
-        public int PYMT_USE_BUDGET { get; set; }
+        public int USE_BUDGET { get; set; }
     }
 
     /// <summary>
     /// 行政採購申請 使用預算 設定
     /// </summary>
-    public class GeneralOrderBudgetsConfig
-    {        
+    public class GeneralOrderBudgetsConfig : BudgetConfig
+    {
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
-
-        /// <summary>預算 ERP唯一碼</summary>        
-        public string BUDG_FORM_NO { get; set; }
-
-        /// <summary>預算編列年度</summary>
-        public string BUDG_CREATE_YEAR { get; set; }
-
-        /// <summary>預算名稱</summary>
-        public string BUDG_NAME { get; set; }
-
-        /// <summary>所屬部門</summary>
-        public string BUDG_OWNER_DEPT { get; set; }
-
-        /// <summary>預算總額</summary>
-        public int BUDG_TOTAL { get; set; }
-
-        /// <summary>可用預算金額</summary>
-        public int BUDG_AVAILABLE_BUDGET_AMOUNT { get; set; }
-
-        /// <summary>使用預算金額</summary>
-        public int BUDG_USE_BUDGET_AMOUNT { get; set; }
     }
 
     /// <summary>
     /// 行政採購申請 驗收項目 設定
     /// </summary>
-    public class GeneralOrderAcceptancesConfig
+    public class GeneralOrderAcceptancesConfig : GeneralCommodityConfig
     {
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
-                
-        /// <summary>商品代碼</summary>
-        public string PA_SUP_PROD_A_NO { get; set; }
-
-        /// <summary>商品名稱</summary>
-        public string PA_ITEM_NAME { get; set; }
-
-        /// <summary>型號</summary>
-        public string PA_MODEL { get; set; }
-
-        /// <summary>規格</summary>
-        public string PA_SPECIFICATIONS { get; set; }
-
-        /// <summary>數量</summary>
-        public int PA_QUANTITY { get; set; }
-
-        /// <summary>單位</summary>
-        public string PA_UNIT { get; set; }
 
         /// <summary>商品備註</summary>
-        public string PA_NOTE { get; set;}
+        public string NOTE { get; set; }
     }
 }

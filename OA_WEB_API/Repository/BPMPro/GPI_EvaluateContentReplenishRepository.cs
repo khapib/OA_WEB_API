@@ -1,29 +1,32 @@
-﻿using OA_WEB_API.Models.BPMPro;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Web;
-using System.Globalization;
+
+using OA_WEB_API.Models.BPMPro;
+
 using Microsoft.International.Formatters;
 using System.Collections;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
     /// <summary>
-    /// 會簽管理系統 - 內容評估表_外購
+    /// 會簽管理系統 - 四方四隅_內容評估表_補充意見
     /// </summary>
-    public class EvaluateContent_PurchaseRepository
+    public class GPI_EvaluateContentReplenishRepository
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDevHo);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
 
         #region Repository
 
         FormRepository formRepository = new FormRepository();
         CommonRepository commonRepository = new CommonRepository();
+        NotifyRepository notifyRepository = new NotifyRepository();
 
         #endregion
 
@@ -32,9 +35,9 @@ namespace OA_WEB_API.Repository.BPMPro
         #region - 方法 -
 
         /// <summary>
-        /// 內容評估表_外購(查詢)
+        /// 四方四隅_內容評估表_補充意見(查詢)
         /// </summary>
-        public EvaluateContent_PurchaseViewModel PostEvaluateContent_PurchaseSingle(EvaluateContent_PurchaseQueryModel query)
+        public GPI_EvaluateContentReplenishViewModel PostGPI_EvaluateContentReplenishSingle(GPI_EvaluateContentReplenishQueryModel query)
         {
             var parameter = new List<SqlParameter>()
             {
@@ -43,45 +46,34 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #region - 申請人資訊 -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [DiagramID] AS [DIAGRAM_ID], ";
-            strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
-            strSQL += "     [ApplicantDept] AS [APPLICANT_DEPT], ";
-            strSQL += "     [ApplicantDeptName] AS [APPLICANT_DEPT_NAME], ";
-            strSQL += "     [ApplicantID] AS [APPLICANT_ID], ";
-            strSQL += "     [ApplicantName] AS [APPLICANT_NAME], ";
-            strSQL += "     [ApplicantPhone] AS [APPLICANT_PHONE], ";
-            strSQL += "     [ApplicantDateTime] AS [APPLICANT_DATETIME], ";
-            strSQL += "     [FillerID] AS [FILLER_ID], ";
-            strSQL += "     [FillerName] AS [FILLER_NAME], ";
-            strSQL += "     [Priority] AS [PRIORITY], ";
-            strSQL += "     [DraftFlag] AS [DRAFT_FLAG], ";
-            strSQL += "     [FlowActivated] AS [FLOW_ACTIVATED] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_M] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-
-            var applicantInfo = dbFun.DoQuery(strSQL, parameter).ToList<ApplicantInfo>().FirstOrDefault();
+            var CommonApplicantInfo = new BPMCommonModel<ApplicantInfo>()
+            {
+                EXT = "M",
+                IDENTIFY = IDENTIFY,
+                PARAMETER = parameter,
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostApplicantInfoFunction(CommonApplicantInfo));
+            var applicantInfo = jsonFunction.JsonToObject<ApplicantInfo>(strJson);
 
             #endregion
 
-            #region - 內容評估表_外購 表頭資訊 -
+            #region - 四方四隅_內容評估表_補充意見 表頭資訊 -
 
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [FormNo] AS [FORM_NO], ";
             strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
             strSQL += "     [BPMFormNo] AS [BPM_FORM_NO], ";
-            strSQL += "     [EvaluateNo] AS [EVALUATE_NO] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_M] ";
+            strSQL += "     [EvaluateCategory] AS [EVALUATE_CATEGORY], ";
+            strSQL += "     [SortNo] AS [SORT_NO] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_EvaluateContentReplenish_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-            var evaluateContent_PurchaseTitle = dbFun.DoQuery(strSQL, parameter).ToList<EvaluateContent_PurchaseTitle>().FirstOrDefault();
+            var GPI_evaluateContentReplenishTitle = dbFun.DoQuery(strSQL, parameter).ToList<GPI_EvaluateContentReplenishTitle>().FirstOrDefault();
 
             #endregion
 
-            #region - 內容評估表_外購 表單內容 -
+            #region - 四方四隅_內容評估表_補充意見 表單內容 -
 
             strSQL = "";
             strSQL += "SELECT ";
@@ -112,64 +104,44 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [Artists] AS [ARTISTS], ";
             strSQL += "     [Content] AS [CONTENT], ";
             strSQL += "     [Note] AS [NOTE], ";
-            strSQL += "     [EvaluateDate] AS [EVALUATE_DATE], ";
+            strSQL += "     [IsPresident] AS [IS_PRESIDENT], ";
             strSQL += "     [PrincipalID] AS [PRINCIPAL_ID], ";
             strSQL += "     [PrincipalName] AS [PRINCIPAL_NAME] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_M] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_EvaluateContentReplenish_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-            var evaluateContent_PurchaseConfig = dbFun.DoQuery(strSQL, parameter).ToList<EvaluateContent_PurchaseConfig>().FirstOrDefault();
+            var GPI_evaluateContentReplenishConfig = dbFun.DoQuery(strSQL, parameter).ToList<GPI_EvaluateContentReplenishConfig>().FirstOrDefault();
 
             #endregion
 
-            #region - 內容評估表_外購 評估人員 -
+            #region - 四方四隅_內容評估表_補充意見 評估意見彙整 -
 
             strSQL = "";
             strSQL += "SELECT ";
-            strSQL += "     [UserDeptMainID] AS [USER_DEPT_MAIN_ID], ";
-            strSQL += "     [UserDeptID] AS [USER_DEPT_ID], ";
             strSQL += "     [UserID] AS [USER_ID], ";
-            strSQL += "     [UserName] AS [USER_NAME] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_D] ";
+            strSQL += "     [UserName] AS [USER_NAME], ";
+            strSQL += "     [Reason] AS [REASON], ";
+            strSQL += "     [OpinionDateTime] AS [OPINION_DATE_TIME] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_EvaluateContentReplenish_EVA] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-            var evaluateContent_PurchaseUsersConfig = dbFun.DoQuery(strSQL, parameter).ToList<EvaluateContent_PurchaseUsersConfig>();
+            var GPI_evaluateContentReplenishEvaluatesConfig = dbFun.DoQuery(strSQL, parameter).ToList<GPI_EvaluateContentReplenishEvaluatesConfig>();
 
             #endregion
 
-            #region - 內容評估表_外購 評估意見彙整 -
+            #region - 四方四隅_內容評估表_補充意見 決策意見彙整 -
 
             strSQL = "";
             strSQL += "SELECT ";
-            strSQL += "     [Advantage] AS [ADVANTAGE], ";
-            strSQL += "     [Defect] AS [DEFECT], ";
-            strSQL += "     [OpinionID] AS [OPINION_ID], ";
             strSQL += "     [UserID] AS [USER_ID], ";
             strSQL += "     [UserName] AS [USER_NAME], ";
             strSQL += "     [AdviseType] AS [ADVISE_TYPE], ";
             strSQL += "     [Reason] AS [REASON], ";
             strSQL += "     [OpinionDateTime] AS [OPINION_DATE_TIME] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_EVA] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_EvaluateContentReplenish_DEC] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-            var evaluateContent_PurchaseEvaluatesConfig = dbFun.DoQuery(strSQL, parameter).ToList<EvaluateContent_PurchaseEvaluatesConfig>();
-
-            #endregion
-
-            #region - 內容評估表_外購 決策意見彙整 -
-
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [OpinionID] AS [OPINION_ID], ";
-            strSQL += "     [UserID] AS [USER_ID], ";
-            strSQL += "     [UserName] AS [USER_NAME], ";
-            strSQL += "     [AdviseType] AS [ADVISE_TYPE], ";
-            strSQL += "     [Reason] AS [REASON], ";
-            strSQL += "     [OpinionDateTime] AS [OPINION_DATE_TIME] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_DEC] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-
-            var evaluateContent_PurchaseDecisionsConfig = dbFun.DoQuery(strSQL, parameter).ToList<EvaluateContent_PurchaseDecisionsConfig>();
+            var GPI_evaluateContentReplenishDecisionsConfig = dbFun.DoQuery(strSQL, parameter).ToList<GPI_EvaluateContentReplenishDecisionsConfig>();
 
             #endregion
 
@@ -178,39 +150,80 @@ namespace OA_WEB_API.Repository.BPMPro
                 REQUISITION_ID = query.REQUISITION_ID
             };
 
-            #region - 內容評估表_外購 附件 -
+            #region - 內容評估表_補充意見 附件 -
 
             var attachment = commonRepository.PostAttachment(formQueryModel);
 
             #endregion
 
-            #region - 內容評估表_外購 表單關聯 -
+            #region - 內容評估表_補充意見 表單關聯 -
 
             var associatedForm = commonRepository.PostAssociatedForm(formQueryModel);
 
             #endregion
 
-            var evaluateContent_PurchaseViewModel = new EvaluateContent_PurchaseViewModel()
+            var GPI_evaluateContentReplenishViewModel = new GPI_EvaluateContentReplenishViewModel()
             {
                 APPLICANT_INFO = applicantInfo,
-                EVALUATECONTENT_PURCHASE_TITLE = evaluateContent_PurchaseTitle,
-                EVALUATECONTENT_PURCHASE_CONFIG = evaluateContent_PurchaseConfig,
-                EVALUATECONTENT_PURCHASE_USERS_CONFIG = evaluateContent_PurchaseUsersConfig,
-                EVALUATECONTENT_PURCHASE_EVAS_CONFIG = evaluateContent_PurchaseEvaluatesConfig,
-                EVALUATECONTENT_PURCHASE_DECS_CONFIG = evaluateContent_PurchaseDecisionsConfig,
+                GPI_EVALUATE_CONTENT_REPLENISH_TITLE = GPI_evaluateContentReplenishTitle,
+                GPI_EVALUATE_CONTENT_REPLENISH_CONFIG = GPI_evaluateContentReplenishConfig,
+                GPI_EVALUATE_CONTENT_REPLENISH_EVAS_CONFIG = GPI_evaluateContentReplenishEvaluatesConfig,
+                GPI_EVALUATE_CONTENT_REPLENISH_DECS_CONFIG = GPI_evaluateContentReplenishDecisionsConfig,
                 ATTACHMENT_CONFIG = attachment,
-                ASSOCIATED_FORM_CONFIG = associatedForm
+                ASSOCIATED_FORM_CONFIG = associatedForm,
             };
 
-            return evaluateContent_PurchaseViewModel;
+            #region - 確認表單 -
+
+            if (GPI_evaluateContentReplenishViewModel.APPLICANT_INFO.DRAFT_FLAG == 0)
+            {
+                var formData = new FormData()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+
+                if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
+                {
+                    GPI_evaluateContentReplenishViewModel = new GPI_EvaluateContentReplenishViewModel();
+                    CommLib.Logger.Error("四方四隅_內容評估表_補充意見(查詢)失敗，原因：系統無正常起單。");
+                }
+                else
+                {
+                    #region - 確認M表BPM表單單號 -
+
+                    //避免儲存後送出表單BPM表單單號沒寫入的情形
+                    var formQuery = new FormQueryModel()
+                    {
+                        REQUISITION_ID = query.REQUISITION_ID
+                    };
+                    notifyRepository.ByInsertBPMFormNo(formQuery);
+
+                    if (String.IsNullOrEmpty(GPI_evaluateContentReplenishViewModel.GPI_EVALUATE_CONTENT_REPLENISH_TITLE.BPM_FORM_NO) || String.IsNullOrWhiteSpace(GPI_evaluateContentReplenishViewModel.GPI_EVALUATE_CONTENT_REPLENISH_TITLE.BPM_FORM_NO))
+                    {
+                        strSQL = "";
+                        strSQL += "SELECT ";
+                        strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
+                        strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                        strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+                        var dtBpmFormNo = dbFun.DoQuery(strSQL, parameter);
+                        if (dtBpmFormNo.Rows.Count > 0) GPI_evaluateContentReplenishViewModel.GPI_EVALUATE_CONTENT_REPLENISH_TITLE.BPM_FORM_NO = dtBpmFormNo.Rows[0][0].ToString();
+                    }
+
+                    #endregion
+                }
+            }
+
+            #endregion
+
+            return GPI_evaluateContentReplenishViewModel;
         }
 
         #region - 依此單內容重送 -
 
         ///// <summary>
-        ///// 內容評估表_外購(依此單內容重送)(僅外部起單使用)
+        ///// 四方四隅_內容評估表_補充意見(依此單內容重送)(僅外部起單使用)
         ///// </summary>        
-        //public bool PutEvaluateContent_PurchaseRefill(EvaluateContent_PurchaseQueryModel query)
+        //public bool PutGPI_EvaluateContentReplenishRefill(GPI_EvaluateContentReplenishQueryModel query)
         //{
         //    bool vResult = false;
         //    try
@@ -222,7 +235,7 @@ namespace OA_WEB_API.Repository.BPMPro
         //    catch (Exception ex)
         //    {
         //        vResult = false;
-        //        CommLib.Logger.Error("內容評估表_外購(依此單內容重送)失敗，原因" + ex.Message);
+        //        CommLib.Logger.Error("四方四隅_內容評估表_補充意見(依此單內容重送)失敗，原因" + ex.Message);
         //    }
         //    return vResult;
         //}
@@ -230,55 +243,65 @@ namespace OA_WEB_API.Repository.BPMPro
         #endregion
 
         /// <summary>
-        /// 內容評估表_外購(新增/修改/草稿)
+        /// 四方四隅_內容評估表_補充意見(新增/修改/草稿)
         /// </summary>
-        public bool PutEvaluateContent_PurchaseSingle(EvaluateContent_PurchaseViewModel model)
+        public bool PutGPI_EvaluateContentReplenishSingle(GPI_EvaluateContentReplenishViewModel model)
         {
             bool vResult = false;
             try
             {
                 #region - 宣告 -
 
-                string strEvaluateNo = null;
-                int EvaluateNo;
+                string strSortNo = null;
+                int SortNo;
+
+                #region - 系統編號 -
+
+                strREQ = model.APPLICANT_INFO.REQUISITION_ID;
+                if (String.IsNullOrEmpty(strREQ) || String.IsNullOrWhiteSpace(strREQ))
+                {
+                    strREQ = Guid.NewGuid().ToString();
+                }
+
+                #endregion
 
                 #region - 主旨 -
 
-                FM7Subject = model.EVALUATECONTENT_PURCHASE_TITLE.FM7_SUBJECT;
+                FM7Subject = model.GPI_EVALUATE_CONTENT_REPLENISH_TITLE.FM7_SUBJECT;
 
                 if (FM7Subject == null)
                 {
-                    if (!String.IsNullOrEmpty(model.EVALUATECONTENT_PURCHASE_TITLE.EVALUATE_NO) || !String.IsNullOrWhiteSpace(model.EVALUATECONTENT_PURCHASE_TITLE.EVALUATE_NO))
+                    if (!String.IsNullOrEmpty(model.GPI_EVALUATE_CONTENT_REPLENISH_TITLE.SORT_NO) || !String.IsNullOrWhiteSpace(model.GPI_EVALUATE_CONTENT_REPLENISH_TITLE.SORT_NO))
                     {
 
-                        if(int.TryParse(model.EVALUATECONTENT_PURCHASE_TITLE.EVALUATE_NO, out EvaluateNo))
+                        if (int.TryParse(model.GPI_EVALUATE_CONTENT_REPLENISH_TITLE.SORT_NO, out SortNo))
                         {
-                            if (EvaluateNo != 0)
+                            if (SortNo != 0)
                             {
-                                strEvaluateNo = EastAsiaNumericFormatter.FormatWithCulture("Ln", EvaluateNo, null, new CultureInfo("zh-TW"));
+                                strSortNo = EastAsiaNumericFormatter.FormatWithCulture("Ln", SortNo, null, new CultureInfo("zh-TW"));
 
-                                if (EvaluateNo == 1)
-                                {
-                                    strEvaluateNo = "初";
-                                }
-                                strEvaluateNo += "評";
+                                strSortNo = "補充意見" + strSortNo;
 
-                                FM7Subject = "【" + model.EVALUATECONTENT_PURCHASE_CONFIG.ORIGINAL_TITLE + "】：" + strEvaluateNo;
+                                FM7Subject = "【" + model.GPI_EVALUATE_CONTENT_REPLENISH_CONFIG.ORIGINAL_TITLE + "】：" + strSortNo;
                             }
-                        }                        
+                        }
                     }
+                }
+                else
+                {
+                    strSortNo = model.GPI_EVALUATE_CONTENT_REPLENISH_TITLE.SORT_NO;
                 }
 
                 #endregion
 
                 #endregion
 
-                #region - 內容評估表_外購 表頭資訊：EvaluateContent_Purchase_M -
+                #region - 四方四隅_內容評估表_補充意見 表頭資訊：GPI_EvaluateContentReplenish_M -
 
                 var parameterTitle = new List<SqlParameter>()
                 {
                     //表單資訊
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  model.APPLICANT_INFO.REQUISITION_ID},
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  strREQ},
                     new SqlParameter("@DIAGRAM_ID", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.DIAGRAM_ID },
                     new SqlParameter("@PRIORITY", SqlDbType.Int) { Value =  model.APPLICANT_INFO.PRIORITY},
                     new SqlParameter("@DRAFT_FLAG", SqlDbType.Int) { Value =  model.APPLICANT_INFO.DRAFT_FLAG},
@@ -289,20 +312,39 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@APPLICANT_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_ID },
                     new SqlParameter("@APPLICANT_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.APPLICANT_NAME },
                     new SqlParameter("@APPLICANT_PHONE", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.APPLICANT_PHONE ?? String.Empty },
-                    new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) },
                     //(填單人/代填單人)資訊
                     new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_ID },
                     new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
-                    //內容評估表_外購 表頭
-                    new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.EVALUATECONTENT_PURCHASE_TITLE.FORM_NO ?? DBNull.Value },
+                    //四方四隅_內容評估表_補充意見 表頭
+                    new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GPI_EVALUATE_CONTENT_REPLENISH_TITLE.FORM_NO ?? DBNull.Value },
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
-                    new SqlParameter("@EVALUATE_NO", SqlDbType.NVarChar) { Size = 50, Value = (object)strEvaluateNo ?? DBNull.Value },
+                    new SqlParameter("@EVALUATE_CATEGORY", SqlDbType.NVarChar) { Size = 200, Value = model.GPI_EVALUATE_CONTENT_REPLENISH_TITLE.EVALUATE_CATEGORY ?? String.Empty },
+                    new SqlParameter("@SORT_NO", SqlDbType.NVarChar) { Size = 50, Value = (object)strSortNo ?? DBNull.Value },
                 };
+
+                #region - 正常起單後 申請時間(APPLICANT_DATETIME) 不可覆蓋 -
+
+                if (model.APPLICANT_INFO.DRAFT_FLAG == 0)
+                {
+                    var formData = new FormData()
+                    {
+                        REQUISITION_ID = strREQ
+                    };
+
+                    if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
+                    {
+                        parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+                        IsADD = true;
+                    }
+                }
+                else parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+
+                #endregion
 
                 strSQL = "";
                 strSQL += "SELECT ";
                 strSQL += "      [RequisitionID] ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_M] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_EvaluateContentReplenish_M] ";
                 strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                 var dtA = dbFun.DoQuery(strSQL, parameterTitle);
@@ -312,14 +354,16 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region - 修改 -
 
                     strSQL = "";
-                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_M] ";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_GPI_EvaluateContentReplenish_M] ";
                     strSQL += "SET [DiagramID] =@DIAGRAM_ID, ";
                     strSQL += "     [ApplicantDept]=@APPLICANT_DEPT, ";
                     strSQL += "     [ApplicantDeptName]=@APPLICANT_DEPT_NAME, ";
                     strSQL += "     [ApplicantID]=@APPLICANT_ID, ";
                     strSQL += "     [ApplicantName]=@APPLICANT_NAME, ";
                     strSQL += "     [ApplicantPhone]=@APPLICANT_PHONE, ";
-                    strSQL += "     [ApplicantDateTime]=@APPLICANT_DATETIME, ";
+
+                    if (IsADD) strSQL += "     [ApplicantDateTime]=@APPLICANT_DATETIME, ";
+
                     strSQL += "     [FillerID]=@FILLER_ID, ";
                     strSQL += "     [FillerName]=@FILLER_NAME, ";
                     strSQL += "     [Priority]=@PRIORITY, ";
@@ -327,7 +371,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [FlowActivated]=@FLOW_ACTIVATED, ";
                     strSQL += "     [FormNo]=@FORM_NO, ";
                     strSQL += "     [FM7Subject]=@FM7_SUBJECT, ";
-                    strSQL += "     [EvaluateNo]=@EVALUATE_NO ";
+                    strSQL += "     [EvaluateCategory]=@EVALUATE_CATEGORY, ";
+                    strSQL += "     [SortNo]=@SORT_NO ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                     dbFun.DoTran(strSQL, parameterTitle);
@@ -339,8 +384,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region - 新增 -
 
                     strSQL = "";
-                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FormNo],[FM7Subject],[EvaluateNo]) ";
-                    strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FORM_NO,@FM7_SUBJECT,@EVALUATE_NO) ";
+                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GPI_EvaluateContentReplenish_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FormNo],[FM7Subject],[EvaluateCategory],[SortNo]) ";
+                    strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FORM_NO,@FM7_SUBJECT,@EVALUATE_CATEGORY,@SORT_NO) ";
 
                     dbFun.DoTran(strSQL, parameterTitle);
 
@@ -349,14 +394,14 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 內容評估表_外購 表單內容：EvaluateContent_Purchase_M -
+                #region - 四方四隅_內容評估表_補充意見 表單內容：GPI_EvaluateContentReplenish_M -
 
-                if (model.EVALUATECONTENT_PURCHASE_CONFIG != null)
+                if (model.GPI_EVALUATE_CONTENT_REPLENISH_CONFIG != null)
                 {
                     var parameterInfo = new List<SqlParameter>()
                     {
-                        //內容評估表_外購 表單內容
-                        new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.APPLICANT_INFO.REQUISITION_ID },
+                        //四方四隅_內容評估表_補充意見 表單內容
+                        new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                         new SqlParameter("@ORIGINAL_TITLE", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@USUALLY_TITLE", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@TRANSLATE_TITLE", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -386,12 +431,12 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                     };
 
-                    //寫入：內容評估表_外購 表單內容parameter                        
-                    strJson = jsonFunction.ObjectToJSON(model.EVALUATECONTENT_PURCHASE_CONFIG);
+                    //寫入：四方四隅_內容評估表_補充意見 表單內容parameter                        
+                    strJson = jsonFunction.ObjectToJSON(model.GPI_EVALUATE_CONTENT_REPLENISH_CONFIG);
                     GlobalParameters.Infoparameter(strJson, parameterInfo);
 
                     strSQL = "";
-                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_M] ";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_GPI_EvaluateContentReplenish_M] ";
                     strSQL += "SET [OriginalTitle]=@ORIGINAL_TITLE, ";
                     strSQL += "     [UsuallyTitle]=@USUALLY_TITLE, ";
                     strSQL += "     [TranslateTitle]=@TRANSLATE_TITLE, ";
@@ -427,13 +472,13 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 內容評估表_外購 附件：Attachment -
+                #region - 四方四隅_內容評估表_補充意見 附件：Attachment -
 
                 if (model.ATTACHMENT_CONFIG != null && model.ATTACHMENT_CONFIG.Count > 0)
                 {
                     var attachmentMain = new AttachmentMain()
                     {
-                        REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID,
+                        REQUISITION_ID = strREQ,
                         IDENTIFY = IDENTIFY,
                         ATTACHMENT = model.ATTACHMENT_CONFIG
                     };
@@ -443,10 +488,22 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
+                #region - 四方四隅_內容評估表_補充意見 表單關聯：AssociatedForm -
+
+                var associatedFormModel = new AssociatedFormModel()
+                {
+                    REQUISITION_ID = strREQ,
+                    ASSOCIATED_FORM_CONFIG = model.ASSOCIATED_FORM_CONFIG
+                };
+
+                commonRepository.PutAssociatedForm(associatedFormModel);
+
+                #endregion
+
                 #region - 表單主旨：FormHeader -
 
                 FormHeader header = new FormHeader();
-                header.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                header.REQUISITION_ID = strREQ;
                 header.ITEM_NAME = "Subject";
                 header.ITEM_VALUE = FM7Subject;
 
@@ -459,7 +516,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 if (model.APPLICANT_INFO.DRAFT_FLAG.Equals(1))
                 {
                     FormDraftList draftList = new FormDraftList();
-                    draftList.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                    draftList.REQUISITION_ID = strREQ;
                     draftList.IDENTIFY = IDENTIFY;
                     draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
 
@@ -475,7 +532,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region 送出表單前，先刪除草稿清單
 
                     FormDraftList draftList = new FormDraftList();
-                    draftList.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                    draftList.REQUISITION_ID = strREQ;
                     draftList.IDENTIFY = IDENTIFY;
                     draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
 
@@ -484,7 +541,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     #endregion
 
                     FormAutoStart autoStart = new FormAutoStart();
-                    autoStart.REQUISITION_ID = model.APPLICANT_INFO.REQUISITION_ID;
+                    autoStart.REQUISITION_ID = strREQ;
                     autoStart.DIAGRAM_ID = model.APPLICANT_INFO.DIAGRAM_ID;
                     autoStart.APPLICANT_ID = model.APPLICANT_INFO.APPLICANT_ID;
                     autoStart.APPLICANT_DEPT = model.APPLICANT_INFO.APPLICANT_DEPT;
@@ -494,204 +551,163 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
+                #region - 表單機能啟用：BPMFormFunction -
+
+                var BPM_FormFunction = new BPMFormFunction()
+                {
+                    REQUISITION_ID = strREQ,
+                    IDENTIFY = IDENTIFY,
+                    DRAFT_FLAG = 0
+                };
+                commonRepository.PostBPMFormFunction(BPM_FormFunction);
+
+                #endregion
+
                 vResult = true;
             }
             catch (Exception ex)
             {
                 vResult = false;
-                CommLib.Logger.Error("內容評估表_外購(新增/修改/草稿)失敗，原因：" + ex.Message);
-
+                CommLib.Logger.Error("四方四隅_內容評估表_補充意見(新增/修改/草稿)失敗，原因：" + ex.Message);
             }
-
             return vResult;
+
         }
 
         /// <summary>
-        /// 內容評估表_外購(填寫)
+        /// 四方四隅_內容評估表_補充意見(填寫)
         /// </summary>
-        public bool PutEvaluateContent_PurchaseFillinSingle(EvaluateContent_PurchaseFillinConfig model)
+        public bool PutGPI_EvaluateContentReplenishFillinSingle(GPI_EvaluateContentReplenishFillinConfig model)
         {
             bool vResult = false;
             try
             {
-                
+                #region - 四方四隅_內容評估表_補充意見 表單內容：GPI_EvaluateContentReplenish_M -
 
-                #region - 內容評估表_外購 表單內容：EvaluateContent_Purchase_M -
-
-                if (model.EVALUATECONTENT_PURCHASE_CONFIG != null)
+                var parameterInfo = new List<SqlParameter>()
                 {
-                    var parameterInfo = new List<SqlParameter>()
-                    {
-                        //內容評估表_外購 填寫
-                        new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },
-                        new SqlParameter("@EVALUATE_DATE", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PRINCIPAL_ID", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PRINCIPAL_NAME", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    };
-
-                    //寫入：內容評估表_外購 表單內容parameter                        
-                    strJson = jsonFunction.ObjectToJSON(model.EVALUATECONTENT_PURCHASE_CONFIG);
-                    GlobalParameters.Infoparameter(strJson, parameterInfo);
-
-                    strSQL = "";
-                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_M] ";
-                    strSQL += "SET [EvaluateDate]=@EVALUATE_DATE, ";
-                    strSQL += "     [PrincipalID]=@PRINCIPAL_ID, ";
-                    strSQL += "     [PrincipalName]=@PRINCIPAL_NAME ";
-                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-
-                    dbFun.DoTran(strSQL, parameterInfo);
-
-                }
-
-                #endregion
-
-                #region - 內容評估表_外購 評估人員: EvaluateContent_Purchase_D -
-
-                var parameterUsers = new List<SqlParameter>()
-                {
-                    //內容評估表_外購 評估人員
+                    //四方四隅_內容評估表_補充意見 填寫
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },
-                    new SqlParameter("@USER_DEPT_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@USER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@USER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value }
+                    new SqlParameter("@IS_PRESIDENT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PRINCIPAL_ID", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PRINCIPAL_NAME", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
-                #region 先刪除舊資料
+                //寫入：四方四隅_內容評估表_補充意見 表單內容parameter                        
+                strJson = jsonFunction.ObjectToJSON(model);
+                GlobalParameters.Infoparameter(strJson, parameterInfo);
 
                 strSQL = "";
-                strSQL += "DELETE ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_D] ";
-                strSQL += "WHERE 1=1 ";
-                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+                strSQL += "UPDATE [BPMPro].[dbo].[FM7T_GPI_EvaluateContentReplenish_M] ";
+                strSQL += "SET [PrincipalID]=@PRINCIPAL_ID, ";
+                strSQL += "     [IsPresident]=@IS_PRESIDENT, ";
+                strSQL += "     [PrincipalName]=@PRINCIPAL_NAME ";
+                strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-                dbFun.DoTran(strSQL, parameterUsers);
-
-                #endregion
-
-                if (model.EVALUATECONTENT_PURCHASE_USERS_CONFIG != null && model.EVALUATECONTENT_PURCHASE_USERS_CONFIG.Count > 0)
-                {
-                    #region 再新增資料
-
-                    foreach (var item in model.EVALUATECONTENT_PURCHASE_USERS_CONFIG)
-                    {
-                        //寫入：版權採購交片單 評估人員parameter
-                        strJson = jsonFunction.ObjectToJSON(item);
-                        GlobalParameters.Infoparameter(strJson, parameterUsers);
-
-                        strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_D]([RequisitionID],[UserDeptID],[UserID],[UserName]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@USER_DEPT_ID,@User_ID,@USER_NAME) ";
-
-                        dbFun.DoTran(strSQL, parameterUsers);
-                    }
-
-                    #endregion
-                }
-
-                #endregion
-
-                #region - 內容評估表_外購 表單關聯：AssociatedForm -
-
-                var associatedFormModel = new AssociatedFormModel()
-                {
-                    REQUISITION_ID = model.REQUISITION_ID,
-                    ASSOCIATED_FORM_CONFIG = model.ASSOCIATED_FORM_CONFIG
-                };
-
-                commonRepository.PutAssociatedForm(associatedFormModel);
+                dbFun.DoTran(strSQL, parameterInfo);
 
                 #endregion
 
                 vResult = true;
-
             }
             catch (Exception ex)
             {
                 vResult = false;
-                CommLib.Logger.Error("內容評估表_外購(評估意見)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("四方四隅_內容評估表_補充意見(填寫)失敗，原因：" + ex.Message);
             }
-
             return vResult;
+
         }
 
         /// <summary>
-        /// 內容評估表_外購(評估意見)
+        /// 四方四隅_內容評估表_補充意見(意見)
         /// </summary>
-        public bool PutEvaluateContent_PurchaseOpinionSingle(EvaluateContent_PurchaseOpinionConfig model)
+        public bool PutGPI_EvaluateContentReplenishOpinionSingle(GPI_EvaluateContentReplenishOpinionConfig model)
         {
             bool vResult = false;
             try
             {
-                #region - 宣告 -
+                #region - 判斷是否寫入意見 -
 
-                string insertOpinionKey = null;
-                string insertOpinionValue = null;
+                bool OpinionToken = false;
+
+                if (model.OPINION_TYPE == "DEC")
+                {
+                    OpinionToken = true;
+                }
+                else
+                {
+                    if (!String.IsNullOrEmpty(model.REASON) || !String.IsNullOrWhiteSpace(model.REASON))
+                    {
+                        OpinionToken = true;
+                    }
+                    else
+                    {
+                        OpinionToken = false;
+                    }
+                }
 
                 #endregion
 
-                #region - 內容評估表_外購 評估意見:EvaluateContent_PurchaseOpinion -
-
-                var parameterOpinion = new List<SqlParameter>()
+                if (OpinionToken)
                 {
-                    //內容評估表_外購 評估意見
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },
-                    new SqlParameter("@OPINION_ID", SqlDbType.UniqueIdentifier) {  Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@USER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@USER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@ADVANTAGE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@DEFECT", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@ADVISE_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@REASON", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    //new SqlParameter("@OPINION_DATE_TIME", SqlDbType.DateTime) { Value = (object)DateTime.Now ?? DBNull.Value },
-                };
+                    #region - 宣告 -
 
-                if(!String.IsNullOrEmpty(model.REQUISITION_ID) || !String.IsNullOrWhiteSpace(model.REQUISITION_ID))
-                {
-                    //寫入：內容評估表_外購 評估意見parameter
-                    strJson = jsonFunction.ObjectToJSON(model);
-                    GlobalParameters.Infoparameter(strJson, parameterOpinion);
+                    string insertOpinionKey = null;
+                    string insertOpinionValue = null;
 
-                    #region 先刪除舊資料
+                    #endregion
 
-                    if (model.OPINION_ID != null)
+                    #region - 四方四隅_內容評估表 評估意見:GPI_EvaluateContentReplenishOpinion -
+
+                    var parameterOpinion = new List<SqlParameter>()
                     {
+                        //四方四隅_內容評估表_補充意見 評估意見
+                        new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },
+                        new SqlParameter("@USER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@USER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@ADVISE_TYPE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@REASON", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                    };
+
+                    if (!String.IsNullOrEmpty(model.REQUISITION_ID) || !String.IsNullOrWhiteSpace(model.REQUISITION_ID))
+                    {
+                        //寫入：四方四隅_內容評估表_補充意見 評估意見parameter
+                        strJson = jsonFunction.ObjectToJSON(model);
+                        GlobalParameters.Infoparameter(strJson, parameterOpinion);
+
+                        #region 先刪除舊資料
+
                         strSQL = "";
                         strSQL += "DELETE ";
-                        strSQL += "FROM [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_" + model.OPINION_TYPE + "] ";
+                        strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_EvaluateContentReplenish_" + model.OPINION_TYPE + "] ";
                         strSQL += "WHERE 1=1 ";
-                        strSQL += "          AND [OpinionID]=@OPINION_ID ";
+                        strSQL += "          AND [UserID]=@USER_ID ";
                         strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
 
                         dbFun.DoTran(strSQL, parameterOpinion);
+
+                        #endregion
+
+                        #region - 添加意見資料 -
+
+                        if (model.OPINION_TYPE == "DEC")
+                        {
+                            insertOpinionKey = "[AdviseType],";
+                            insertOpinionValue = "@ADVISE_TYPE,";
+                        }
+
+                        strSQL = "";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GPI_EvaluateContentReplenish_" + model.OPINION_TYPE + "]([RequisitionID],[UserID],[UserName]," + insertOpinionKey + "[Reason],[OpinionDateTime]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@USER_ID,@USER_NAME," + insertOpinionValue + "@REASON,GETDATE()) ";
+
+                        dbFun.DoTran(strSQL, parameterOpinion);
+
+                        #endregion
                     }
-
-                    #endregion
-
-                    #region - 給予新的意見編號 -
-
-                    parameterOpinion.Where(P => P.ParameterName == "@OPINION_ID").FirstOrDefault().Value = Guid.NewGuid();
-
-                    #endregion
-
-                    #region - 添加意見資料 -
-
-                    if (model.OPINION_TYPE == "EVA")
-                    {
-                        insertOpinionKey = "[Advantage],[Defect],";
-                        insertOpinionValue = "@ADVANTAGE,@DEFECT,";
-                    }
-
-                    strSQL = "";
-                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_EvaluateContent_Purchase_" + model.OPINION_TYPE + "]([RequisitionID],[OpinionID],[UserID],[UserName]," + insertOpinionKey + "[AdviseType],[Reason],[OpinionDateTime]) ";
-                    strSQL += "VALUES(@REQUISITION_ID,@OPINION_ID,@USER_ID,@USER_NAME," + insertOpinionValue + "@ADVISE_TYPE,@REASON,GETDATE()) ";
-
-                    dbFun.DoTran(strSQL, parameterOpinion);
 
                     #endregion
                 }
-
-                #endregion
 
                 vResult = true;
 
@@ -699,10 +715,11 @@ namespace OA_WEB_API.Repository.BPMPro
             catch (Exception ex)
             {
                 vResult = false;
-                CommLib.Logger.Error("內容評估表_外購(評估意見)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("四方四隅_內容評估表_補充意見(評估意見)失敗，原因：" + ex.Message);
             }
 
             return vResult;
+
         }
 
         #endregion
@@ -715,9 +732,14 @@ namespace OA_WEB_API.Repository.BPMPro
         private string strSQL;
 
         /// <summary>
+        /// 確認是否為新建的表單
+        /// </summary>
+        private bool IsADD = false;
+
+        /// <summary>
         /// 表單代號
         /// </summary>
-        private string IDENTIFY = "EvaluateContent_Purchase";
+        private string IDENTIFY = "GPI_EvaluateContentReplenish";
 
         /// <summary>
         /// 表單主旨
@@ -729,7 +751,11 @@ namespace OA_WEB_API.Repository.BPMPro
         /// </summary>
         private string strJson;
 
-        #endregion
+        /// <summary>
+        /// 系統編號
+        /// </summary>
+        private string strREQ;
 
+        #endregion
     }
 }

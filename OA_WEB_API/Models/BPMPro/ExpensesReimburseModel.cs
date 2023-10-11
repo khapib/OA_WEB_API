@@ -29,7 +29,13 @@ namespace OA_WEB_API.Models.BPMPro
         public ExpensesReimburseConfig EXPENSES_REIMBURSE_CONFIG { get; set; }
 
         /// <summary>費用申請單 費用明細 設定</summary>
-        public IList<ExpensesReimburseDetailsConfig> EXPENSES_REIMBURSE_DTLS_CONFIG { get; set; }
+        public List<ExpensesReimburseDetailsConfig> EXPENSES_REIMBURSE_DTLS_CONFIG { get; set; }
+
+        /// <summary>費用申請單 憑證細項 設定</summary>
+        public List<ExpensesReimburseInvoiceDetailsConfig> EXPENSES_REIMBURSE_INV_DTLS_CONFIG { get; set; }
+
+        /// <summary>費用申請單 使用預算 設定</summary>
+        public List<ExpensesReimburseBudgetsConfig> EXPENSES_REIMBURSE_BUDGS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
@@ -71,6 +77,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// </summary>
         public string PAY_METHOD { get; set; }
 
+        /// <summary>申請源由</summary>
+        public string REASON { get; set; }
+
         /// <summary>備註</summary>
         public string NOTE { get; set; }
 
@@ -89,17 +98,23 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>財務覆核人員姓名</summary>
         public string FINANC_AUDIT_NAME_2 { get; set; }
 
-        /// <summary>發票金額_換算台幣 合計</summary>
+        /// <summary>憑證金額_換算台幣 合計</summary>
         public int AMOUNT_CONV_TOTAL { get; set; }
     }
 
     /// <summary>
-    /// 費用申請單 明細 設定
+    /// 費用申請單 費用明細 設定
     /// </summary>
-    public class ExpensesReimburseDetailsConfig
+    public class ExpensesReimburseDetailsConfig: InvoiceConfig
     {
         /// <summary>行數編號</summary>
-        public int DTL_ROW_NO { get; set; }
+        public int ROW_NO { get; set; }
+
+        /// <summary>項目名稱</summary>
+        public string NAME { get; set; }
+
+        /// <summary>項目類別</summary>
+        public string TYPE { get; set; }
 
         /// <summary>
         /// 憑證類型：
@@ -109,28 +124,10 @@ namespace OA_WEB_API.Models.BPMPro
         /// </summary>
         public string INV_TYPE { get; set; }
 
-        /// <summary>憑證號碼</summary>
-        public string INV_NUM { get; set; }
-
-        /// <summary>憑證日期</summary>
-        public string INV_DATE { get; set; }
-
-        /// <summary>項目名稱</summary>
-        public string ITEM_NAME { get; set; }
-
-        /// <summary>項目類別</summary>
-        public string ITEM_TYPE { get; set; }
-
-        /// <summary>申請源由</summary>
-        public string REASON { get; set; }
-
-        /// <summary>發票金額</summary>
-        public double INV_AMOUNT { get; set; }
-
         /// <summary>匯率</summary>
         public double EXCH_RATE { get; set; }
 
-        /// <summary>發票金額_換算台幣</summary>
+        /// <summary>憑證金額_換算台幣</summary>
         public int AMOUNT_CONV { get; set; }
 
         /// <summary>幣別</summary>
@@ -151,4 +148,22 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>所屬專案年分</summary>
         public string PROJECT_USE_YEAR { get; set; }
     }
+
+    /// <summary>
+    /// 費用申請單 憑證細項 設定
+    /// </summary>
+    public class ExpensesReimburseInvoiceDetailsConfig: InvoiceDetailConfig
+    {
+
+    }
+
+    /// <summary>
+    /// 費用申請單 使用預算 設定
+    /// </summary>
+    public class ExpensesReimburseBudgetsConfig: BudgetConfig
+    {
+        /// <summary>行數編號</summary>
+        public int ROW_NO { get; set; }
+    }
+
 }

@@ -37,6 +37,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>版權採購申請單 授權權利 設定</summary>
         public IList<MediaAcceptanceAuthorizesConfig> MEDIA_ACCEPTANCE_AUTHS_CONFIG { get; set; }
 
+        /// <summary>版權採購交片單 已退貨商品明細 設定</summary>
+        public IList<MediaAcceptanceAlreadyRefundCommoditysConfigConfig> MEDIA_ACCEPTANCE_ALDY_RF_COMMS_CONFIG { get; set; }
+
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
     }
@@ -98,76 +101,57 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 版權採購交片單 驗收明細 設定
     /// </summary>
-    public class MediaAcceptanceDetailsConfig
+    public class MediaAcceptanceDetailsConfig : MediaCommodityConfig
     {
-        /// <summary>商品代碼</summary>
-        public string DTL_SUP_PROD_A_NO { get; set; }
-
         /// <summary>行數編號</summary>
-        public int DTL_ROW_NO { get; set; }
-
-        /// <summary>商品名稱</summary>
-        public string DTL_ITEM_NAME { get; set; }
-
-        /// <summary>影帶規格</summary>
-        public string DTL_MEDIA_SPEC { get; set; }
-
-        /// <summary>影片類型</summary>
-        public string DTL_MEDIA_TYPE { get; set; }
-
-        /// <summary>開始集數</summary>
-        public int DTL_START_EPISODE { get; set; }
-
-        /// <summary>結束集數</summary>
-        public int DTL_END_EPISODE { get; set; }
-
-        /// <summary>總採購集數</summary>
-        public int DTL_ORDER_EPISODE { get; set; }
-
-        /// <summary>驗收集數</summary>
-        public int DTL_ACPT_EPISODE { get; set; }
+        public int ROW_NO { get; set; }
 
         /// <summary>拆分集數</summary>
-        public int DTL_DISMANTLE_EPISODE { get; set; }
-
-        /// <summary>每集長度</summary>
-        public int DTL_EPISODE_TIME { get; set; }
+        public int DISMANTLE_EPISODE { get; set; }
 
         /// <summary>母帶受領日期</summary>
-        public Nullable<DateTime> DTL_GET_MASTERING_DATE { get; set; }
+        public Nullable<DateTime> GET_MASTERING_DATE { get; set; }
 
         /// <summary>驗收負責人主要部門</summary>
-        public string DTL_OWNER_DEPT_MAIN_ID { get; set; }
+        public string OWNER_DEPT_MAIN_ID { get; set; }
 
         /// <summary>驗收負責人部門</summary>
-        public string DTL_OWNER_DEPT_ID { get; set; }
+        public string OWNER_DEPT_ID { get; set; }
 
         /// <summary>驗收負責人編號</summary>
-        public string DTL_OWNER_ID { get; set; }
+        public string OWNER_ID { get; set; }
 
         /// <summary>驗收負責人姓名</summary>
-        public string DTL_OWNER_NAME { get; set; }
+        public string OWNER_NAME { get; set; }
 
         /// <summary>驗收備註</summary>
-        public string DTL_ACPT_NOTE { get; set; }
+        public string ACPT_NOTE { get; set; }
 
         /// <summary>驗收結果</summary>
-        public string DTL_STATUS { get; set; }
+        public string STATUS { get; set; }
 
         /// <summary>商品備註</summary>
-        public string DTL_NOTE { get; set; }
+        public string NOTE { get; set; }
 
         /// <summary>是否為原始列</summary>
         public string IS_ORIGINAL { get; set; }
 
-        /// <summary>原始列編碼</summary>
-        public int ORIGIN_NUM { get; set; }
+        /// <summary>是否為退貨商品[標記]</summary>
+        public string IS_RETURN { get; set; }
     }
 
     /// <summary>
-    /// 版權採購申請單 授權權利 設定
+    /// 版權採購交片單 授權權利 設定
     /// </summary>
     public class MediaAcceptanceAuthorizesConfig : MediaOrderAuthorizesConfig
+    {
+
+    }
+
+    /// <summary>
+    /// 版權採購交片單 已退貨商品明細 設定
+    /// </summary>
+    public class MediaAcceptanceAlreadyRefundCommoditysConfigConfig : MediaCommodityConfig
     {
 
     }
@@ -189,13 +173,13 @@ namespace OA_WEB_API.Models.BPMPro
     public class MediaAcceptanceApprovesConfig
     {
         /// <summary>行數編號</summary>
-        public int DTL_ROW_NO { get; set; }
+        public int ROW_NO { get; set; }
 
         /// <summary>驗收結果</summary>
-        public string DTL_STATUS { get; set; }
+        public string STATUS { get; set; }
 
         /// <summary>驗收備註</summary>
-        public string DTL_ACPT_NOTE { get; set; }
+        public string ACPT_NOTE { get; set; }
     }
 
     #endregion

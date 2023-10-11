@@ -37,7 +37,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>版權採購請款單 授權權利 設定</summary>
         public IList<MediaInvoiceAuthorizesConfig> MEDIA_INVOICE_AUTHS_CONFIG { get; set; }
 
-        /// <summary>版權採購申請單 額外項目 設定</summary>
+        /// <summary>版權採購請款單 額外項目 設定</summary>
         public IList<MediaInvoiceExtrasConfig> MEDIA_INVOICE_EXS_CONFIG { get; set; }
 
         /// <summary>版權採購請款單 付款辦法 設定</summary>
@@ -46,8 +46,11 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>版權採購請款單 使用預算 設定</summary>
         public IList<MediaInvoiceBudgetsConfig> MEDIA_INVOICE_BUDGS_CONFIG { get; set; }
 
-        /// <summary>版權採購請款單 發票明細 設定</summary>
-        public IList<MediaInvoiceDetailsConfig> MEDIA_INVOICE_DTLS_CONFIG { get; set; }
+        /// <summary>版權採購請款單 憑證明細 設定</summary>
+        public List<MediaInvoiceInvoicesConfig> MEDIA_INVOICE_INVS_CONFIG { get; set; }
+
+        /// <summary>版權採購請款單 憑證細項 設定</summary>
+        public List<MediaInvoiceInvoiceDetailsConfig> MEDIA_INVOICE_INV_DTLS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
@@ -85,11 +88,11 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>版權採購 交易類型</summary>
         public string MEDIA_ORDER_TXN_TYPE { get; set; }
 
-        /// <summary>版權採購 採購單 總金額</summary>
-        public double MEDIA_ORDER_DTL_ORDER_TOTAL { get; set; }
+        /// <summary>版權採購 採購單 付款辦法總額</summary>
+        public double MEDIA_ORDER_PYMT_ORDER_TOTAL { get; set; }
 
-        /// <summary>版權採購 採購單 總金額_台幣</summary>
-        public int MEDIA_ORDER_DTL_ORDER_TOTAL_TWD { get; set; }
+        /// <summary>版權採購 採購單 付款辦法總額_台幣(換算)</summary>
+        public int MEDIA_ORDER_PYMT_ORDER_TOTAL_CONV { get; set; }
 
         /// <summary>版權採購點驗收單 系統編號</summary>
         public string MEDIA_ACCEPTANCE_REQUISITION_ID { get; set; }
@@ -207,22 +210,16 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>付款辦法 本期付款總額_台幣(付款辦法)</summary>
         public int PYMT_CURRENT_TOTAL_TWD { get; set; }
 
-        /// <summary>額外採購項目 總稅額/總預估保留稅額(付款辦法)</summary>
-        public double PYMT_EX_TAX_TOTAL { get; set; }
-
-        /// <summary>額外採購項目 總稅額/總預估保留稅額_台幣(付款辦法)</summary>
-        public int PYMT_EX_TAX_TOTAL_TWD { get; set; }
-
-        /// <summary>發票明細 合計(憑證明細)</summary>
+        /// <summary>憑證明細 合計</summary>
         public double INV_AMOUNT_TOTAL { get; set; }
 
-        /// <summary>發票明細 合計_台幣(憑證明細)</summary>
+        /// <summary>憑證明細 合計_台幣</summary>
         public int INV_AMOUNT_TOTAL_TWD { get; set; }
 
-        /// <summary>發票明細 總稅額/總預估保留稅額(憑證明細)</summary>
+        /// <summary>憑證明細 總稅額/總預估保留稅額(憑證明細)</summary>
         public double INV_TAX_TOTAL { get; set; }
 
-        /// <summary>發票明細 總稅額/總預估保留稅額_台幣(憑證明細)</summary>
+        /// <summary>憑證明細 總稅額/總預估保留稅額_台幣(憑證明細)</summary>
         public int INV_TAX_TOTAL_TWD { get; set; }
 
         /// <summary>實際支付金額</summary>
@@ -234,6 +231,11 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>財務審核人員姓名</summary>
         public string FINANC_AUDIT_NAME_1 { get; set; }
 
+        /// <summary>財務覆核人員編號</summary>
+        public string FINANC_AUDIT_ID_2 { get; set; }
+
+        /// <summary>財務覆核人員姓名</summary>
+        public string FINANC_AUDIT_NAME_2 { get; set; }
     }
 
     /// <summary>
@@ -241,68 +243,62 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaInvoiceAcceptancesConfig : MediaOrderAcceptancesConfig
     {
-        /// <summary>行數編號(採購明細)</summary>
-        public int DTL_ROW_NO { get; set; }
-
         /// <summary>每集長度</summary>
-        public int DTL_EPISODE_TIME { get; set; }
+        public int EPISODE_TIME { get; set; }
 
         /// <summary>影帶規格</summary>
-        public string DTL_MEDIA_SPEC { get; set; }
+        public string MEDIA_SPEC { get; set; }
 
         /// <summary>未稅單價/NET單價</summary>
-        public double DTL_NET { get; set; }
+        public double NET { get; set; }
 
         /// <summary>未稅單價_台幣/NET單價_台幣</summary>
-        public int DTL_NET_TWD { get; set; }
+        public int NET_TWD { get; set; }
 
         /// <summary>稅額/總預估保留稅額</summary>
-        public double DTL_TAX { get; set; }
+        public double TAX { get; set; }
 
         /// <summary>稅額/總預估保留稅額_台幣</summary>
-        public int DTL_TAX_TWD { get; set; }
+        public int TAX_TWD { get; set; }
 
         /// <summary>含稅單價/GROSS單價</summary>
-        public double DTL_GROSS { get; set; }
+        public double GROSS { get; set; }
 
         /// <summary>含稅單價_台幣/GROSS單價_台幣</summary>
-        public int DTL_GROSS_TWD { get; set; }
+        public int GROSS_TWD { get; set; }
 
         /// <summary>未稅小計/NET小計</summary>
-        public double DTL_NET_SUM { get; set; }
+        public double NET_SUM { get; set; }
 
         /// <summary>未稅小計_台幣/NET小計_台幣</summary>
-        public int DTL_NET_SUM_TWD { get; set; }
+        public int NET_SUM_TWD { get; set; }
 
         /// <summary>含稅小計/GROSS小計</summary>
-        public double DTL_GROSS_SUM { get; set; }
+        public double GROSS_SUM { get; set; }
 
         /// <summary>含稅小計_台幣/GROSS小計_台幣</summary>
-        public int DTL_GROSS_SUM_TWD { get; set; }
+        public int GROSS_SUM_TWD { get; set; }
 
         /// <summary>單集材料費</summary>
-        public double DTL_MATERIAL { get; set; }
+        public double MATERIAL { get; set; }
 
         /// <summary>明細單項小記</summary>
-        public double DTL_ITEM_SUM { get; set; }
+        public double ITEM_SUM { get; set; }
 
         /// <summary>明細單項小記_台幣</summary>
-        public int DTL_ITEM_SUM_TWD { get; set; }
+        public int ITEM_SUM_TWD { get; set; }
 
         /// <summary>所屬專案 ERP 單號</summary>
-        public string DTL_PROJECT_FORM_NO { get; set; }
+        public string PROJECT_FORM_NO { get; set; }
 
         /// <summary>所屬專案名稱</summary>
-        public string DTL_PROJECT_NAME { get; set; }
+        public string PROJECT_NAME { get; set; }
 
         /// <summary>所屬專案描述</summary>
-        public string DTL_PROJECT_NICKNAME { get; set; }
+        public string PROJECT_NICKNAME { get; set; }
 
         /// <summary>所屬專案起案年度</summary>
-        public string DTL_PROJECT_USE_YEAR { get; set; }
-
-        /// <summary>備註</summary>
-        public string DTL_NOTE { get; set; }
+        public string PROJECT_USE_YEAR { get; set; }
     }
 
     /// <summary>
@@ -333,7 +329,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 版權採購請款單 使用預算 設定
     /// </summary>
-    public class MediaInvoiceBudgetsConfig : GeneralOrderBudgetsConfig
+    public class MediaInvoiceBudgetsConfig : MediaOrderBudgetsConfig
     {
 
     }
@@ -341,24 +337,29 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 版權採購請款單 憑證明細 設定
     /// </summary>
-    public class MediaInvoiceDetailsConfig
+    public class MediaInvoiceInvoicesConfig : InvoiceConfig
     {
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
 
-        /// <summary>憑證號碼</summary>
-        public string INV_NUM { get; set; }
-
-        /// <summary>憑證日期</summary>
-        public string INV_DATE { get; set; }
-
-        /// <summary>發票金額</summary>
-        public double INV_AMOUNT { get; set; }
-
-        /// <summary>發票金額</summary>
-        public int INV_AMOUNT_TWD { get; set; }
+        /// <summary>憑證行數編號</summary>
+        public int INV_ROW_NO { get; set; }
 
         /// <summary>備註</summary>
-        public string INV_NOTE { get; set; }
+        public string NOTE { get; set; }
+
+    }
+
+    /// <summary>
+    /// 版權採購請款單 憑證細項 設定
+    /// </summary>
+    public class MediaInvoiceInvoiceDetailsConfig : InvoiceDetailConfig
+    {
+        /// <summary>期別</summary>
+        public int PERIOD { get; set; }
+
+        /// <summary>憑證行數編號</summary>
+        public int INV_ROW_NO { get; set; }
+
     }
 }

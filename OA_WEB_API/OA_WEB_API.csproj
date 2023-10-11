@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.1.17.0\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.props" Condition="Exists('..\packages\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.1.17.0\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -26,6 +27,8 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
+    <DockerLaunchUrl>http://{ServiceIPAddress}</DockerLaunchUrl>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -74,9 +77,15 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO" />
+    <Reference Include="System.Runtime" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
+    <Reference Include="System.Security.Cryptography.Algorithms" />
+    <Reference Include="System.Security.Cryptography.Encoding" />
+    <Reference Include="System.Security.Cryptography.Primitives" />
+    <Reference Include="System.Security.Cryptography.X509Certificates" />
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
@@ -176,21 +185,34 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BPMPro\ActiveController.cs" />
-    <Compile Include="Controllers\BPMPro\EvaluateContent_PurchaseController.cs" />
+    <Compile Include="Controllers\BPMPro\AdvanceExpenseController.cs" />
+    <Compile Include="Controllers\BPMPro\EvaluateContentController.cs" />
+    <Compile Include="Controllers\BPMPro\EvaluateContentReplenishController.cs" />
     <Compile Include="Controllers\BPMPro\EvaluateDemandController.cs" />
     <Compile Include="Controllers\BPMPro\ExpensesReimburseController.cs" />
     <Compile Include="Controllers\BPMPro\GeneralAcceptanceController.cs" />
     <Compile Include="Controllers\BPMPro\GeneralInvoiceController.cs" />
     <Compile Include="Controllers\BPMPro\GeneralOrderChangeController.cs" />
+    <Compile Include="Controllers\BPMPro\GeneralOrderReturnRefundController.cs" />
     <Compile Include="Controllers\BPMPro\GetExternalController.cs" />
     <Compile Include="Controllers\BPMPro\GPI_CountersignController.cs" />
+    <Compile Include="Controllers\BPMPro\GPI_EvaluateContentController.cs" />
+    <Compile Include="Controllers\BPMPro\GPI_EvaluateContentReplenishController.cs" />
+    <Compile Include="Controllers\BPMPro\LabourAndCapitalMemberController.cs" />
     <Compile Include="Controllers\BPMPro\MediaAcceptanceController.cs" />
     <Compile Include="Controllers\BPMPro\MediaInvoiceController.cs" />
     <Compile Include="Controllers\BPMPro\MediaOrderChangeController.cs" />
     <Compile Include="Controllers\BPMPro\MediaOrderController.cs" />
+    <Compile Include="Controllers\BPMPro\MediaOrderReturnRefundController.cs" />
+    <Compile Include="Controllers\BPMPro\MediaSaleController.cs" />
+    <Compile Include="Controllers\BPMPro\MediaWarehouseCopyController.cs" />
+    <Compile Include="Controllers\BPMPro\MediaWarehouseNotAiredCopyController.cs" />
     <Compile Include="Controllers\BPMPro\NotifyController.cs" />
     <Compile Include="Controllers\BPMPro\CommonController.cs" />
+    <Compile Include="Controllers\BPMPro\OfficialStampController.cs" />
+    <Compile Include="Controllers\BPMPro\PersonnelSupplementController.cs" />
     <Compile Include="Controllers\BPMPro\ProjectReviewController.cs" />
+    <Compile Include="Controllers\BPMPro\ResignUnpaidLeaveAgendaController.cs" />
     <Compile Include="Controllers\BPMPro\SupplierReviewController.cs" />
     <Compile Include="Controllers\BPMPro\TestController.cs" />
     <Compile Include="Controllers\BPMPro\RollCardController.cs" />
@@ -200,6 +222,8 @@
     <Compile Include="Controllers\ERP\StepFlowController.cs" />
     <Compile Include="Controllers\Error404Controller.cs" />
     <Compile Include="Controllers\BPMPro\GeneralOrderController.cs" />
+    <Compile Include="Controllers\OA\FormStateContentController.cs" />
+    <Compile Include="Controllers\OA\ResponseOAInfoController.cs" />
     <Compile Include="Controllers\SysCommonController.cs" />
     <Compile Include="Controllers\TokenController.cs" />
     <Compile Include="Core\ApiResponse.cs" />
@@ -221,21 +245,34 @@
       <DependentUpon>Index.aspx</DependentUpon>
     </Compile>
     <Compile Include="Models\BPMPro\ActiveModel.cs" />
-    <Compile Include="Models\BPMPro\EvaluateContent_PurchaseModel.cs" />
+    <Compile Include="Models\BPMPro\AdvanceExpenseModel.cs" />
+    <Compile Include="Models\BPMPro\EvaluateContentModel.cs" />
+    <Compile Include="Models\BPMPro\EvaluateContentReplenishModel.cs" />
     <Compile Include="Models\BPMPro\EvaluateDemandModel.cs" />
     <Compile Include="Models\BPMPro\ExpensesReimburseModel.cs" />
     <Compile Include="Models\BPMPro\GeneralAcceptanceModel.cs" />
     <Compile Include="Models\BPMPro\GeneralInvoiceModel.cs" />
     <Compile Include="Models\BPMPro\GeneralOrderChangeModel.cs" />
     <Compile Include="Models\BPMPro\GeneralOrderModel.cs" />
+    <Compile Include="Models\BPMPro\GeneralOrderReturnRefundModel.cs" />
     <Compile Include="Models\BPMPro\GetExternalModel.cs" />
     <Compile Include="Models\BPMPro\GPI_CountersignModel.cs" />
+    <Compile Include="Models\BPMPro\GPI_EvaluateContentModel.cs" />
+    <Compile Include="Models\BPMPro\GPI_EvaluateContentReplenishModel.cs" />
+    <Compile Include="Models\BPMPro\LabourAndCapitalMemberModel.cs" />
     <Compile Include="Models\BPMPro\MediaAcceptanceModel.cs" />
     <Compile Include="Models\BPMPro\MediaInvoiceModel.cs" />
     <Compile Include="Models\BPMPro\MediaOrderChangeModel.cs" />
     <Compile Include="Models\BPMPro\MediaOrderModel.cs" />
+    <Compile Include="Models\BPMPro\MediaOrderReturnRefundModel.cs" />
+    <Compile Include="Models\BPMPro\MediaSaleModel.cs" />
+    <Compile Include="Models\BPMPro\MediaWarehouseCopyModel.cs" />
+    <Compile Include="Models\BPMPro\MediaWarehouseNotAiredCopyModel.cs" />
     <Compile Include="Models\BPMPro\NotifyModel.cs" />
+    <Compile Include="Models\BPMPro\OfficialStampModel.cs" />
+    <Compile Include="Models\BPMPro\PersonnelSupplementModel.cs" />
     <Compile Include="Models\BPMPro\ProjectReviewModel.cs" />
+    <Compile Include="Models\BPMPro\ResignUnpaidLeaveAgendaModel.cs" />
     <Compile Include="Models\BPMPro\SupplierReviewModel.cs" />
     <Compile Include="Models\BPMPro\TestModel.cs" />
     <Compile Include="Models\BPMPro\CommonModel.cs" />
@@ -244,25 +281,40 @@
     <Compile Include="Models\ERP\GTVStructureModel.cs" />
     <Compile Include="Models\ERP\ResponseInfoModel.cs" />
     <Compile Include="Models\ERP\StepFlowModel.cs" />
+    <Compile Include="Models\OA\CommonModel.cs" />
+    <Compile Include="Models\OA\ResponseOAInfoModel.cs" />
     <Compile Include="Models\SysCommonModel.cs" />
     <Compile Include="Models\TokenModel.cs" />
     <Compile Include="Models\BPMPro\UserModel.cs" />
     <Compile Include="Repository\BPMPro\ActiveRepository.cs" />
-    <Compile Include="Repository\BPMPro\EvaluateContent_PurchaseRepository.cs" />
+    <Compile Include="Repository\BPMPro\AdvanceExpenseRepository.cs" />
+    <Compile Include="Repository\BPMPro\EvaluateContentReplenishRepository.cs" />
+    <Compile Include="Repository\BPMPro\EvaluateContentRepository.cs" />
     <Compile Include="Repository\BPMPro\EvaluateDemandRepository.cs" />
     <Compile Include="Repository\BPMPro\ExpensesReimburseRepository.cs" />
     <Compile Include="Repository\BPMPro\GeneralAcceptanceRepository.cs" />
     <Compile Include="Repository\BPMPro\GeneralInvoiceRepository.cs" />
     <Compile Include="Repository\BPMPro\GeneralOrderChangeRepository.cs" />
     <Compile Include="Repository\BPMPro\GeneralOrderRepository.cs" />
+    <Compile Include="Repository\BPMPro\GeneralOrderReturnRefundRepository.cs" />
     <Compile Include="Repository\BPMPro\GetExternalRepository.cs" />
     <Compile Include="Repository\BPMPro\GPI_CountersignRepository.cs" />
+    <Compile Include="Repository\BPMPro\GPI_EvaluateContentReplenishRepository.cs" />
+    <Compile Include="Repository\BPMPro\GPI_EvaluateContentRepository.cs" />
+    <Compile Include="Repository\BPMPro\LabourAndCapitalMemberRepository.cs" />
     <Compile Include="Repository\BPMPro\MediaAcceptanceRepository.cs" />
     <Compile Include="Repository\BPMPro\MediaInvoiceRepository.cs" />
     <Compile Include="Repository\BPMPro\MediaOrderChangeRepository.cs" />
     <Compile Include="Repository\BPMPro\MediaOrderRepository.cs" />
+    <Compile Include="Repository\BPMPro\MediaOrderReturnRefundRepository.cs" />
+    <Compile Include="Repository\BPMPro\MediaSaleRepository.cs" />
+    <Compile Include="Repository\BPMPro\MediaWarehouseCopyRepository.cs" />
+    <Compile Include="Repository\BPMPro\MediaWarehouseNotAiredCopyRepository.cs" />
     <Compile Include="Repository\BPMPro\NotifyRepository.cs" />
+    <Compile Include="Repository\BPMPro\OfficialStampRepository.cs" />
+    <Compile Include="Repository\BPMPro\PersonnelSupplementRepository.cs" />
     <Compile Include="Repository\BPMPro\ProjectReviewRepository.cs" />
+    <Compile Include="Repository\BPMPro\ResignUnpaidLeaveAgendaRepository.cs" />
     <Compile Include="Repository\BPMPro\SupplierReviewRepository.cs" />
     <Compile Include="Repository\BPMPro\UserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -272,6 +324,9 @@
     <Compile Include="Repository\ERP\GTVStructureRepository.cs" />
     <Compile Include="Repository\ERP\ResponseInfoRepository.cs" />
     <Compile Include="Repository\ERP\StepFlowRepository.cs" />
+    <Compile Include="Repository\OA\CommonRepository.cs" />
+    <Compile Include="Repository\OA\FormStateContentRepository.cs" />
+    <Compile Include="Repository\OA\ResponseOAInfoRepository.cs" />
     <Compile Include="Repository\SysCommonRepository.cs" />
     <Compile Include="Repository\TokenRepository.cs" />
     <Compile Include="Utils\ExceptionUtils.cs" />
@@ -291,11 +346,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\Helpers\" />
+    <Folder Include="Views\AdvanceExpense\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Dockerfile" />
+    <None Include=".dockerignore">
+      <DependentUpon>Dockerfile</DependentUpon>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\OA_WEB_API_PUB.pubxml" />
   </ItemGroup>
@@ -335,7 +395,10 @@
       <ErrorText>此專案參考這部電腦上所缺少的 NuGet 套件。請啟用 NuGet 套件還原，以下載該套件。如需詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的檔案是 {0}。</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.1.17.0\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.1.17.0\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.1.17.0\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.1.17.0\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.targets'))" />
   </Target>
+  <Import Project="..\packages\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.1.17.0\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.1.17.0\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

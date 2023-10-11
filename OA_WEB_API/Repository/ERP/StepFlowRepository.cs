@@ -10,6 +10,7 @@ using System.Net;
 using System.Text;
 using System.Web;
 
+using OA_WEB_API.Models;
 using OA_WEB_API.Models.BPMPro;
 using OA_WEB_API.Models.ERP;
 using OA_WEB_API.Repository.BPMPro;
@@ -19,13 +20,13 @@ using Newtonsoft.Json;
 namespace OA_WEB_API.Repository.ERP
 {
     /// <summary>
-    /// BPM簽核狀況
+    /// BPM簽核狀況[ERP]
     /// </summary>
     public class StepFlowRepository
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDevHo);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
 
         #region Model
 
@@ -44,11 +45,14 @@ namespace OA_WEB_API.Repository.ERP
 
         #region - 方法 -
 
+        #region - BPM表單狀態細項 -
+
         /// <summary>
         /// BPM表單狀態細項
         /// </summary>
         public StepFlowConfig StepFlowInfo(FormData formData, List<SqlParameter> parameter)
         {
+
             strSQL = "";
             strSQL += " SELECT TOP 1 ";
             strSQL += "     M.[FormNo] AS [ERP_FORM_NO], ";
@@ -79,8 +83,10 @@ namespace OA_WEB_API.Repository.ERP
             return stepFlowConfig;
         }
 
+        #endregion
+
         /// <summary>
-        /// 手動同步BPM表單狀態(查詢)
+        /// [手動同步]BPM表單狀態(查詢)
         /// </summary>
         /// <param name="query"></param>
         /// <returns>
@@ -138,47 +144,56 @@ namespace OA_WEB_API.Repository.ERP
                         }
                         else
                         {
-                            #region 如果「是否表單已完結」藍衛是空的；則會先查詢表單狀態
+                            #region 如果「是否表單已完結」欄位是空的；則會先查詢表單狀態
 
-                            string StateEND = null;
+                            string StateEND = false.ToString();
                             if (String.IsNullOrWhiteSpace(query.STATE_END) || String.IsNullOrEmpty(query.STATE_END))
                             {
-                                switch (formData.FORM_STATUS.ToString())
+                                StateEND = formData.FORM_STATUS.ToString();
+                            }
+                            else
+                            {
+                                switch (bool.Parse(query.STATE_END))
                                 {
-                                    case BPMSysStatus.CLOSE:
-                                        StateEND = true.ToString();
+                                    case true:
+                                        StateEND = BPMSysStatus.CLOSE;
                                         break;
-                                    case BPMSysStatus.DISAGREE_CLOSE:
-                                    case BPMSysStatus.WITHDRAWAL:
-                                    case BPMSysStatus.EXCEPTION:
-                                        StateEND = false.ToString();
+                                    case false:
+                                        StateEND = BPMSysStatus.DISAGREE_CLOSE;
                                         break;
                                     default:
                                         StateEND = null;
                                         break;
                                 }
                             }
-                            else
-                            {
-                                StateEND = query.STATE_END;
-                            }
 
                             #endregion
 
                             if (String.IsNullOrEmpty(StateEND) || String.IsNullOrWhiteSpace(StateEND))
                             {
-                                // 表單進行中
-                                State = BPMStatusCode.PROGRESS;
+                                // 無資料
+                                State = BPMStatusCode.FAIL;
                             }
-                            else if (bool.Parse(StateEND) == false)
+                            else
                             {
-                                // 表單不同意結束
-                                State = BPMStatusCode.DISAGREE_CLOSE;
-                            }
-                            else if (bool.Parse(StateEND) == true)
-                            {
-                                // 表單同意結束
-                                State = BPMStatusCode.CLOSE;
+                                switch (StateEND)
+                                {
+                                    case BPMSysStatus.PROGRESS:
+                                        State = BPMStatusCode.PROGRESS;
+                                        break;
+                                    case BPMSysStatus.CLOSE:
+                                        State = BPMStatusCode.CLOSE;
+                                        break;
+                                    case BPMSysStatus.DISAGREE_CLOSE:
+                                    case BPMSysStatus.WITHDRAWAL:
+                                        State = BPMStatusCode.DISAGREE_CLOSE;
+                                        break;
+                                    case BPMSysStatus.EXCEPTION:
+                                    case BPMSysStatus.FAIL_STOP:
+                                    default:
+                                        State = BPMStatusCode.FAIL;
+                                        break;
+                                }
                             }
 
                         }
@@ -202,7 +217,7 @@ namespace OA_WEB_API.Repository.ERP
             }
             catch (Exception ex)
             {
-                CommLib.Logger.Error("BPM簽核狀況(查詢)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("[ERP]BPM簽核狀況(查詢)失敗，原因：" + ex.Message);
                 throw;
             }
 
@@ -274,7 +289,6 @@ namespace OA_WEB_API.Repository.ERP
                 throw;
             }
         }
-
 
         /// <summary>
         /// 更新ERP表單狀態

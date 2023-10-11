@@ -15,6 +15,11 @@ using System.Data.SqlClient;
 
 
 using log4net;
+using System.Web.WebPages;
+using Microsoft.Ajax.Utilities;
+using System.Collections;
+using Newtonsoft.Json.Linq;
+using WebGrease.Css.Extensions;
 
 /// <summary> 
 /// 共用參數設定
@@ -46,7 +51,7 @@ public class GlobalParameters
     /// <summary>新人類簽核資料庫(公用開發機)</summary>
     public const string sqlConnBPMProDev = "BPMProDev";
     /// <summary>新人類簽核附件路徑(公用開發機)</summary>
-    public const string attachFilePathBPMProDev = @"http://oa-web-dev01.gtv.com.tw:82/";
+    public const string attachFilePathBPMProDev = @"http://192.168.1.219:82/";
 
     /// <summary>新人類簽核資料庫(測試機)</summary>
     public const string sqlConnBPMProTest = "BPMProTest";
@@ -464,6 +469,35 @@ public class GlobalParameters
     }
 
     /// <summary>
+    /// 確認小數點後第二位
+    /// </summary>
+    public static string IsDouble(string strJson)
+    {
+        var jss = new JavaScriptSerializer();
+        var dictionary = jss.Deserialize<Dictionary<string, string>>(strJson);        
+        foreach (var item in dictionary)
+        {
+            if (item.Value.IsFloat())
+            {
+                strJson=JsonChangeValue(strJson, item.Key, item.Value);
+            }
+        }
+
+        return strJson;
+    }
+
+    /// <summary>
+    /// 替換Json值
+    /// </summary>
+    public static string JsonChangeValue(string strJson, string strKey, string strVal)
+    {
+        var j = JObject.Parse(strJson);
+        j[strKey] = strVal;
+        return j.ToString();
+    }
+
+
+    /// <summary>
     /// 分頁
     /// </summary>
     public static IEnumerable<T> Pagination<T>(int Page, int PageSize, IList<T> list) where T : new()
@@ -487,7 +521,7 @@ public class GlobalParameters
     {
         var Base64Code = "RequisitionID=" + RequisitionID + "&Identify=" + Identify + "&DiagramName=" + HttpUtility.UrlEncode(DiagramName).ToUpper();
 
-        return WebPathBPMPro(sqlConnBPMProDevHo) + "BPMPro/FM7_FormContent_Redirect.aspx?EinB64=" + Convert.ToBase64String(Encoding.Default.GetBytes(Base64Code));
+        return WebPathBPMPro(sqlConnBPMProDev) + "BPMPro/FM7_FormContent_Redirect.aspx?EinB64=" + Convert.ToBase64String(Encoding.Default.GetBytes(Base64Code));
     }
 
     #endregion
@@ -519,6 +553,28 @@ public class BPMStatusCode
 }
 
 /// <summary>
+/// OA狀態
+/// </summary>
+public class OAStatusCode
+{
+    /// <summary>新建</summary>
+    public const string NEW_CREATE = "Add";
+
+    /// <summary>已簽完</summary>
+    public const string CLOSE = "Close";
+
+    /// <summary>不同意結束</summary>
+    public const string DISAGREE_CLOSE = "Del";
+
+    /// <summary>簽核中</summary>
+    public const string MODIFY = "Modify";
+
+    /// <summary>失敗</summary>
+    public const string FAIL = "Fail";
+
+}
+
+/// <summary>
 /// BPM(系統)表單狀態代碼
 /// </summary>
 public class BPMSysStatus
@@ -538,6 +594,8 @@ public class BPMSysStatus
     /// <summary>異常表單</summary>
     public const string EXCEPTION = "5";
 
+    /// <summary>異常表單:錯誤停止</summary>
+    public const string FAIL_STOP = "32";
 }
 
 /// <summary> 

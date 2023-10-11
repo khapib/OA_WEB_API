@@ -69,7 +69,7 @@ namespace OA_WEB_API.Models
         public IList<UserModel> USER_MODEL { get; set; }
 
         /// <summary>使用者角色</summary>
-        public UserRole USER_ROLE { get; set; }
+        public IList<string> USER_ROLE { get; set; }
     }
 
     /// <summary>
@@ -158,18 +158,5 @@ namespace OA_WEB_API.Models
 
         #endregion
                 
-    }
-
-    /// <summary>
-    /// 使用者角色
-    /// </summary>
-    public class UserRole
-    {
-        #region 角色辨別
-
-        /// <summary>專案建立申審核單角色</summary>
-        public bool? PROJECT_REVIEW_ROLE { get; set; }
-
-        #endregion
     }
 }

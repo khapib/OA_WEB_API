@@ -10,9 +10,10 @@ using System.Net;
 using System.Text;
 using System.Web;
 
-using Dapper;
 using OA_WEB_API.Models;
 using OA_WEB_API.Models.BPMPro;
+
+using Dapper;
 
 /// <summary>
 /// 會簽管理系統 - 表單及簽核流程
@@ -26,7 +27,7 @@ namespace OA_WEB_API.Repository.BPMPro
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDevHo);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
 
         #endregion
 
@@ -126,8 +127,8 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 //HttpWebRequest request = HttpWebRequest.Create("http://192.168.1.84:81/BPMPro/AutoStart.aspx") as HttpWebRequest;        //正試機
                 //HttpWebRequest request = HttpWebRequest.Create("http://192.168.1.217:81/BPMPro/AutoStart.aspx") as HttpWebRequest;   //測試機
-                //HttpWebRequest request = HttpWebRequest.Create("http://192.168.1.219:82/BPMPro/AutoStart.aspx") as HttpWebRequest;   //共用測試機
-                HttpWebRequest request = HttpWebRequest.Create("http://song-vm-pc:82/BPMPro/AutoStart.aspx") as HttpWebRequest;     //個人測試機
+                HttpWebRequest request = HttpWebRequest.Create("http://192.168.1.219:82/BPMPro/AutoStart.aspx") as HttpWebRequest;   //共用測試機
+                //HttpWebRequest request = HttpWebRequest.Create("http://song-vm-pc:82/BPMPro/AutoStart.aspx") as HttpWebRequest;     //個人測試機
 
                 request.Method = "POST";
                 request.ContentType = "application/x-www-form-urlencoded";
@@ -301,7 +302,7 @@ namespace OA_WEB_API.Repository.BPMPro
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDevHo);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
 
         FormRepository formRepository = new FormRepository();
         UserRepository userRepository = new UserRepository();
@@ -456,21 +457,108 @@ namespace OA_WEB_API.Repository.BPMPro
                 };
 
                 strSQL = "";
-                strSQL += "WITH [CTE_SIGNATURE]([AUTO_COUNTER],[REQUISITION_ID],[PROCESS_ID],[APPROVER_DEPT],[APPROVER_ID],[APPROVER_NAME],[APPROVER_TIME],[RESULT_PROMPT],[COMMENT]) AS ";
-                strSQL += "( ";
-                strSQL += "     SELECT S.[AutoCounter],S.[RequisitionID],S.[ProcessID],S.[ApproverDept],S.[ApproverID],S.[ApproverName],S.[ApproveTime],S.[ResultPrompt],S.[Comment] ";
-                strSQL += "     FROM [FM7T_" + formData.IDENTIFY + "_S] AS S ";
+                #region Original Code /**兼職部門會有重複顯示問題 20230530 Leon**/ 
+
+                //strSQL += "WITH [CTE_SIGNATURE]([AUTO_COUNTER],[REQUISITION_ID],[PROCESS_ID],[APPROVER_DEPT],[APPROVER_ID],[APPROVER_NAME],[APPROVER_TIME],[RESULT_PROMPT],[COMMENT]) AS ";
+                //strSQL += "( ";
+                //strSQL += "     SELECT S.[AutoCounter],S.[RequisitionID],S.[ProcessID],S.[ApproverDept],S.[ApproverID],S.[ApproverName],S.[ApproveTime],S.[ResultPrompt],S.[Comment] ";
+                //strSQL += "     FROM [FM7T_" + formData.IDENTIFY + "_S] AS S ";
+                //strSQL += "     WHERE S.[RequisitionID]=@REQUISITION_ID ";
+                //strSQL += "     UNION ALL ";
+                //strSQL += "     SELECT '0',[RequisitionID],NULL,[ApplicantDept],[ApplicantID],[ApplicantName],[ApplicantDateTime],'提交申請',NULL ";
+                //strSQL += "     FROM [FM7T_" + formData.IDENTIFY + "_M] ";
+                //strSQL += "     WHERE [RequisitionID]=@REQUISITION_ID ";
+                //strSQL += ") ";
+                //strSQL += "SELECT S.[REQUISITION_ID],ISNULL(P.[DisplayName],'申請人') AS [PROCESS_NAME],A.[DEPT_NAME],A.[TITLE_NAME],S.[APPROVER_NAME],S.[APPROVER_TIME],S.[RESULT_PROMPT],S.[COMMENT] ";
+                //strSQL += "FROM [CTE_SIGNATURE] AS S ";
+                //strSQL += "         INNER JOIN [NUP].[dbo].[GTV_View_OrgRelationMember] AS A ON A.[COMPANY_ID]=@COMPANY_ID AND A.[USER_ID]=S.[APPROVER_ID] ";
+                //strSQL += "         LEFT JOIN [FSe7en_Sys_ProcessName] AS P ON P.[DiagramID]=@DIAGRAM_ID AND P.[ProcessID]=S.[PROCESS_ID] ";
+                //strSQL += "WHERE S.[APPROVER_NAME] IS NOT NULL ";
+                //strSQL += "ORDER BY S.[AUTO_COUNTER] DESC ";
+
+                #endregion
+
+                #region /**代理簽核會不顯示問題 20230814 Leon**/ 
+
+                //strSQL += "WITH [CTE_SIGNATURE]([AUTO_COUNTER],[REQUISITION_ID],[PROCESS_ID],[APPROVER_DEPT],[APPROVER_ID],[APPROVER_NAME],[APPROVER_TIME],[RESULT_PROMPT],[COMMENT]) AS ";
+                //strSQL += "( ";
+                //strSQL += "     SELECT S.[AutoCounter],S.[RequisitionID],S.[ProcessID],S.[ApproverDept],S.[ApproverID],S.[ApproverName],S.[ApproveTime],S.[ResultPrompt],S.[Comment] ";
+                //strSQL += "     FROM [FM7T_" + formData.IDENTIFY + "_S] AS S ";
+                //strSQL += "     WHERE S.[RequisitionID]=@REQUISITION_ID ";
+                //strSQL += "     UNION ALL ";
+                //strSQL += "     SELECT '0',[REQUISITION_ID],NULL,[APPLICANT_DEPT_ID],[APPLICANT_ID],[APPLICANT_NAME],[APPLICANT_DATETIME],'提交申請',NULL ";
+                //strSQL += "     FROM [BPMPro].[dbo].[GTV_View_FormData] ";
+                //strSQL += "     WHERE [REQUISITION_ID]=@REQUISITION_ID ";
+                //strSQL += ") ";
+                //strSQL += "SELECT S.[REQUISITION_ID],ISNULL(P.[DisplayName],'申請人') AS [PROCESS_NAME],A.[DEPT_NAME],A.[TITLE_NAME],S.[APPROVER_NAME],S.[APPROVER_TIME],S.[RESULT_PROMPT],S.[COMMENT] ";
+                //strSQL += "FROM [CTE_SIGNATURE] AS S ";
+                //strSQL += "         INNER JOIN [NUP].[dbo].[GTV_View_OrgRelationMember] AS A ON A.[COMPANY_ID]=@COMPANY_ID AND A.[USER_ID]=S.[APPROVER_ID] AND A.[DEPT_ID]=S.[APPROVER_DEPT] ";
+                //strSQL += "         LEFT JOIN [FSe7en_Sys_ProcessName] AS P ON P.[DiagramID]=@DIAGRAM_ID AND P.[ProcessID]=S.[PROCESS_ID] ";
+                //strSQL += "WHERE S.[APPROVER_NAME] IS NOT NULL ";
+                //strSQL += "ORDER BY S.[AUTO_COUNTER] DESC ";
+
+                #endregion
+
+                strSQL += "WITH [CTE_SIGNATURE]([AUTO_COUNTER],[REQUISITION_ID],[PROCESS_ID],[APPROVER_DEPT],[DEPT_NAME],[TITLE_NAME],[APPROVER_ID],[APPROVER_NAME],[APPROVER_TIME],[RESULT_PROMPT],[COMMENT]) AS ";
+                strSQL += "(";
+                strSQL += "     SELECT ";
+                strSQL += "         S.[AutoCounter] AS [AUTO_COUNTER], ";
+                strSQL += "         S.[RequisitionID] AS [REQUISITION_ID], ";
+                strSQL += "         S.[ProcessID] AS [PROCESS_ID], ";
+                strSQL += "         S.[ApproverDept] AS [APPROVER_DEPT], ";
+                strSQL += "         ( ";
+                strSQL += "                 SELECT ";
+                strSQL += "                     [DEPT_NAME] ";
+                strSQL += "                 FROM [NUP].[dbo].[GTV_Org_Relation_Member] ";
+                strSQL += "                 WHERE [DEPT_ID]=S.[ApproverDept] ";
+                strSQL += "                 GROUP BY [DEPT_NAME] ";
+                strSQL += "         ) AS [DEPT_NAME], ";
+                strSQL += "         ( ";
+                strSQL += "                 SELECT ";
+                strSQL += "                     [TITLE_NAME] ";
+                strSQL += "                 FROM [NUP].[dbo].[GTV_Org_Relation_Member] ";
+                strSQL += "                 WHERE  [USER_ID]=S.[ApproverID] AND [COMPANY_ID]=@COMPANY_ID ";
+                strSQL += "                 GROUP BY [TITLE_NAME] ";
+                strSQL += "         )AS [TITLE_NAME], ";
+                strSQL += "         S.[ApproverID] AS [APPROVER_ID], ";
+                strSQL += "         ( ";
+                strSQL += "                 SELECT ";
+                strSQL += "                     [USER_NAME] ";
+                strSQL += "                 FROM [NUP].[dbo].[GTV_Org_Relation_Member] ";
+                strSQL += "                 WHERE [USER_ID]=S.[ApproverID] ";
+                strSQL += "                 GROUP BY [USER_NAME] ";
+                strSQL += "         )AS [APPROVER_NAME], ";
+                strSQL += "         S.[ApproveTime] AS [APPROVE_TIME], ";
+                strSQL += "         S.[ResultPrompt] AS [RESULT_PROMPT], ";
+                strSQL += "         S.[Comment] AS [COMMENT] ";
+                strSQL += "     FROM [BPMPro].[dbo].[FM7T_" + formData.IDENTIFY + "_S] AS S ";
                 strSQL += "     WHERE S.[RequisitionID]=@REQUISITION_ID ";
                 strSQL += "     UNION ALL ";
-                strSQL += "     SELECT '0',[RequisitionID],NULL,[ApplicantDept],[ApplicantID],[ApplicantName],[ApplicantDateTime],'提交申請',NULL ";
-                strSQL += "     FROM [FM7T_" + formData.IDENTIFY + "_M] ";
-                strSQL += "     WHERE [RequisitionID]=@REQUISITION_ID ";
-                strSQL += ") ";
-                strSQL += "SELECT S.[REQUISITION_ID],ISNULL(P.[DisplayName],'申請人') AS [PROCESS_NAME],A.[DEPT_NAME],A.[TITLE_NAME],S.[APPROVER_NAME],S.[APPROVER_TIME],S.[RESULT_PROMPT],S.[COMMENT] ";
+                strSQL += "     SELECT ";
+                strSQL += "         '0', ";
+                strSQL += "         [REQUISITION_ID], ";
+                strSQL += "         NULL, ";
+                strSQL += "         [APPLICANT_DEPT_ID], ";
+                strSQL += "         [APPLICANT_DEPT_NAME], ";
+                strSQL += "         ( ";
+                strSQL += "                 SELECT ";
+                strSQL += "                     [TITLE_NAME] ";
+                strSQL += "                 FROM [NUP].[dbo].[GTV_Org_Relation_Member] ";
+                strSQL += "                 WHERE  [USER_ID]=[APPLICANT_ID] AND [COMPANY_ID]=@COMPANY_ID ";
+                strSQL += "                 GROUP BY [TITLE_NAME] ";
+                strSQL += "         )AS [TITLE_NAME], ";
+                strSQL += "     [APPLICANT_ID], ";
+                strSQL += "     [APPLICANT_NAME], ";
+                strSQL += "     [APPLICANT_DATETIME], ";
+                strSQL += "     '提交申請', ";
+                strSQL += "     NULL ";
+                strSQL += "     FROM [BPMPro].[dbo].[GTV_View_FormData] ";
+                strSQL += "     WHERE [REQUISITION_ID]=@REQUISITION_ID ";
+                strSQL += ")";
+                strSQL += "SELECT S.[REQUISITION_ID],ISNULL(P.[DisplayName],'申請人') AS [PROCESS_NAME],S.[DEPT_NAME],S.[TITLE_NAME],S.[APPROVER_NAME],S.[APPROVER_TIME],S.[RESULT_PROMPT],S.[COMMENT] ";
                 strSQL += "FROM [CTE_SIGNATURE] AS S ";
-                strSQL += "         INNER JOIN [NUP].[dbo].[GTV_View_OrgRelationMember] AS A ON A.[COMPANY_ID]=@COMPANY_ID AND A.[USER_ID]=S.[APPROVER_ID] ";
-                strSQL += "         LEFT JOIN [FSe7en_Sys_ProcessName] AS P ON P.[DiagramID]=@DIAGRAM_ID AND P.[ProcessID]=S.[PROCESS_ID] ";
-                strSQL += "WHERE S.[APPROVER_NAME] IS NOT NULL ";
+                strSQL += "     LEFT JOIN [NUP].[dbo].[GTV_View_OrgRelationMember] AS A ON A.[COMPANY_ID]=@COMPANY_ID AND A.[USER_ID]=S.[APPROVER_ID] AND A.[DEPT_ID]=S.[APPROVER_DEPT] ";
+                strSQL += "     LEFT JOIN [BPMPro].[dbo].[FSe7en_Sys_ProcessName] AS P ON P.[DiagramID]=@DIAGRAM_ID AND P.[ProcessID]=S.[PROCESS_ID] ";
                 strSQL += "ORDER BY S.[AUTO_COUNTER] DESC ";
 
                 #endregion
@@ -672,6 +760,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "                     WHERE 1=1  ";
                 strSQL += "                                AND C.[REQUISITION_ID]=@REQUISITION_ID ";
                 strSQL += "                                AND C.[PROCESS_ID]=@PROCESS_ID ";
+                // [BPMPro].[dbo].[GTV_Log_NextApprover].[HANDLE_MINUTE] >= (D.[LIMIT_HOUR]*60)才會執行
                 strSQL += "                                AND C.[HANDLE_MINUTE] >= (D.[LIMIT_HOUR]*60) ";  //換算為分鐘
                 strSQL += "	               )";
 
@@ -715,23 +804,61 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region STEP2：查詢(FM7T_{?}_S)表的簽核歷程
 
+                #region - 原查詢(FM7T_{?}_S)表的簽核歷程 -
+                //[NUP].[dbo].[NUP_View_ALL_MemberData]的View有些人原資訊會抓不到導致；收件人顯示變成：	、廖佳瑩、王克捷的問題。
+
+                //strSQL = "";
+                //strSQL += "SELECT ";
+                //strSQL += "     S.[RequisitionID] AS [REQUISITION_ID], ";
+                //strSQL += "     S.[ApproverID] AS [APPROVER_ID], ";
+                //strSQL += "     CASE ";
+                //strSQL += "        WHEN S.[OriginalApprover] IS NULL THEN M1.[MemberName] ";
+                //strSQL += "        WHEN S.[OriginalApprover] IS NOT NULL THEN M1.[MemberName] ";
+                //strSQL += "     END [APPROVER_NAME], ";
+                //strSQL += "     M1.[EMail] AS [APPROVER_EMAIL], ";
+                //strSQL += "     M1.[Mobile] AS [APPROVER_PHONE], ";
+                //strSQL += "     S.[OriginalApprover] AS [ORIGIN_APPROVER], ";
+                //strSQL += "     M2.[MemberName] AS [ORIGIN_APPROVER_NAME], ";
+                //strSQL += "     M2.[EMail] AS [ORIGIN_APPROVER_EMAIL], ";
+                //strSQL += "     M2.[Mobile] AS [ORIGIN_APPROVER_PHONE] ";
+                //strSQL += "FROM [BPMPro].[dbo].[FM7T_" + tableName + "_S] S ";
+                //strSQL += "         LEFT JOIN [NUP].[dbo].[NUP_View_ALL_MemberData] M1 ON M1.[CompanyID]=@COMPANY_ID AND M1.[AccountID]=S.[ApproverID] ";
+                //strSQL += "         LEFT JOIN [NUP].[dbo].[NUP_View_ALL_MemberData] M2 ON M2.[CompanyID]=@COMPANY_ID AND M2.[AccountID]=S.[OriginalApprover] AND S.[OriginalApprover] IS NOT NULL ";
+                //strSQL += "WHERE S.[RequisitionID]=@REQUISITION_ID ";
+                //strSQL += "UNION ALL ";
+                //strSQL += "SELECT ";
+                //strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
+                //strSQL += "     [ApplicantID] AS [APPROVER_ID], ";
+                //strSQL += "     [ApplicantName] AS [APPROVER_NAME], ";
+                //strSQL += "     B.[EMail] AS [APPROVER_EMAIL], ";
+                //strSQL += "     B.[Mobile] AS [ORIGIN_APPROVER_PHONE], ";
+                //strSQL += "     NULL AS [ORIGIN_APPROVER], ";
+                //strSQL += "     NULL AS [ORIGIN_APPROVER_NAME], ";
+                //strSQL += "     NULL AS [ORIGIN_APPROVER_EMAIL], ";
+                //strSQL += "     NULL AS [ORIGIN_APPROVER_PHONE] ";
+                //strSQL += "FROM [FM7T_" + tableName + "_M] A ";
+                //strSQL += "         LEFT JOIN [NUP].[dbo].[NUP_View_ALL_MemberData] B ON B.[CompanyID]=@COMPANY_ID AND B.[AccountID]=A.[ApplicantID] ";
+                //strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+                #endregion
+
                 strSQL = "";
                 strSQL += "SELECT ";
                 strSQL += "     S.[RequisitionID] AS [REQUISITION_ID], ";
                 strSQL += "     S.[ApproverID] AS [APPROVER_ID], ";
                 strSQL += "     CASE ";
-                strSQL += "        WHEN S.[OriginalApprover] IS NULL THEN M1.[MemberName] ";
-                strSQL += "        WHEN S.[OriginalApprover] IS NOT NULL THEN M1.[MemberName] ";
+                strSQL += "        WHEN S.[OriginalApprover] IS NULL THEN M1.[USER_NAME] ";
+                strSQL += "        WHEN S.[OriginalApprover] IS NOT NULL THEN M1.[USER_NAME] ";
                 strSQL += "     END [APPROVER_NAME], ";
                 strSQL += "     M1.[EMail] AS [APPROVER_EMAIL], ";
                 strSQL += "     M1.[Mobile] AS [APPROVER_PHONE], ";
                 strSQL += "     S.[OriginalApprover] AS [ORIGIN_APPROVER], ";
-                strSQL += "     M2.[MemberName] AS [ORIGIN_APPROVER_NAME], ";
+                strSQL += "     M2.[USER_NAME] AS [ORIGIN_APPROVER_NAME], ";
                 strSQL += "     M2.[EMail] AS [ORIGIN_APPROVER_EMAIL], ";
                 strSQL += "     M2.[Mobile] AS [ORIGIN_APPROVER_PHONE] ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_"+ tableName + "_S] S ";
-                strSQL += "         LEFT JOIN [NUP].[dbo].[NUP_View_ALL_MemberData] M1 ON M1.[CompanyID]=@COMPANY_ID AND M1.[AccountID]=S.[ApproverID] ";
-                strSQL += "         LEFT JOIN [NUP].[dbo].[NUP_View_ALL_MemberData] M2 ON M2.[CompanyID]=@COMPANY_ID AND M2.[AccountID]=S.[OriginalApprover] AND S.[OriginalApprover] IS NOT NULL ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + tableName + "_S] S ";
+                strSQL += "         LEFT JOIN [NUP].[dbo].[GTV_Org_Relation_Member] M1 ON M1.[COMPANY_ID]=@COMPANY_ID AND M1.[USER_ID]=S.[ApproverID] ";
+                strSQL += "         LEFT JOIN [NUP].[dbo].[GTV_Org_Relation_Member] M2 ON M2.[COMPANY_ID]=@COMPANY_ID AND M2.[USER_ID]=S.[OriginalApprover] AND S.[OriginalApprover] IS NOT NULL ";
                 strSQL += "WHERE S.[RequisitionID]=@REQUISITION_ID ";
                 strSQL += "UNION ALL ";
                 strSQL += "SELECT ";
@@ -745,10 +872,18 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "     NULL AS [ORIGIN_APPROVER_EMAIL], ";
                 strSQL += "     NULL AS [ORIGIN_APPROVER_PHONE] ";
                 strSQL += "FROM [FM7T_" + tableName + "_M] A ";
-                strSQL += "         LEFT JOIN [NUP].[dbo].[NUP_View_ALL_MemberData] B ON B.[CompanyID]=@COMPANY_ID AND B.[AccountID]=A.[ApplicantID] ";
+                strSQL += "         LEFT JOIN [NUP].[dbo].[GTV_Org_Relation_Member] B ON B.[COMPANY_ID]=@COMPANY_ID AND B.[USER_ID]=A.[ApplicantID] ";
                 strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-                return dbFun.DoQuery(strSQL, parameter).ToList<FormFinalApprover>();
+                var formFinalApprover= dbFun.DoQuery(strSQL, parameter).ToList<FormFinalApprover>();
+
+                var flowQueryModel = new FlowQueryModel()
+                {
+                    COMPANY_ID = compName
+                };
+                PutNullApproverInfo(flowQueryModel, formFinalApprover);
+
+                return formFinalApprover;
 
                 #endregion
             }
@@ -790,23 +925,61 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region STEP2：查詢(FM7T_{?}_S)表的簽核歷程
 
+                #region - 原查詢(FM7T_{?}_S)表的簽核歷程 -
+                //[NUP].[dbo].[NUP_View_ALL_MemberData]的View有些人原資訊會抓不到導致；收件人顯示變成：孫慶偉、薛鳳、、廖佳瑩、何聖文的問題。
+
+                //strSQL = "";
+                //strSQL += "SELECT ";
+                //strSQL += "     S.[RequisitionID] AS [REQUISITION_ID], ";
+                //strSQL += "     S.[ApproverID] AS [APPROVER_ID], ";
+                //strSQL += "     CASE ";
+                //strSQL += "        WHEN S.[OriginalApprover] IS NULL THEN M1.[MemberName] ";
+                //strSQL += "        WHEN S.[OriginalApprover] IS NOT NULL THEN M1.[MemberName] ";
+                //strSQL += "     END [APPROVER_NAME], ";
+                //strSQL += "     M1.[EMail] AS [APPROVER_EMAIL], ";
+                //strSQL += "     M1.[Mobile] AS [APPROVER_PHONE], ";
+                //strSQL += "     S.[OriginalApprover] AS [ORIGIN_APPROVER], ";
+                //strSQL += "     M2.[MemberName] AS [ORIGIN_APPROVER_NAME], ";
+                //strSQL += "     M2.[EMail] AS [ORIGIN_APPROVER_EMAIL], ";
+                //strSQL += "     M2.[Mobile] AS [ORIGIN_APPROVER_PHONE] ";
+                //strSQL += "FROM [BPMPro].[dbo].[FM7T_" + tableName + "_S] S ";
+                //strSQL += "         LEFT JOIN [NUP].[dbo].[NUP_View_ALL_MemberData] M1 ON M1.[CompanyID]=@COMPANY_ID AND M1.[AccountID]=S.[ApproverID] ";
+                //strSQL += "         LEFT JOIN [NUP].[dbo].[NUP_View_ALL_MemberData] M2 ON M2.[CompanyID]=@COMPANY_ID AND M2.[AccountID]=S.[OriginalApprover] AND S.[OriginalApprover] IS NOT NULL ";
+                //strSQL += "WHERE S.[RequisitionID]=@REQUISITION_ID ";
+                //strSQL += "UNION ALL ";
+                //strSQL += "SELECT ";
+                //strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
+                //strSQL += "     [ApplicantID] AS [APPROVER_ID], ";
+                //strSQL += "     [ApplicantName] AS [APPROVER_NAME], ";
+                //strSQL += "     B.[EMail] AS [APPROVER_EMAIL], ";
+                //strSQL += "     B.[Mobile] AS [ORIGIN_APPROVER_PHONE], ";
+                //strSQL += "     NULL AS [ORIGIN_APPROVER], ";
+                //strSQL += "     NULL AS [ORIGIN_APPROVER_NAME], ";
+                //strSQL += "     NULL AS [ORIGIN_APPROVER_EMAIL], ";
+                //strSQL += "     NULL AS [ORIGIN_APPROVER_PHONE] ";
+                //strSQL += "FROM [FM7T_" + tableName + "_M] A ";
+                //strSQL += "         LEFT JOIN [NUP].[dbo].[NUP_View_ALL_MemberData] B ON B.[CompanyID]=@COMPANY_ID AND B.[AccountID]=A.[ApplicantID] ";
+                //strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+                #endregion
+
                 strSQL = "";
                 strSQL += "SELECT ";
                 strSQL += "     S.[RequisitionID] AS [REQUISITION_ID], ";
                 strSQL += "     S.[ApproverID] AS [APPROVER_ID], ";
                 strSQL += "     CASE ";
-                strSQL += "        WHEN S.[OriginalApprover] IS NULL THEN M1.[MemberName] ";
-                strSQL += "        WHEN S.[OriginalApprover] IS NOT NULL THEN M1.[MemberName] ";
+                strSQL += "        WHEN S.[OriginalApprover] IS NULL THEN M1.[USER_NAME] ";
+                strSQL += "        WHEN S.[OriginalApprover] IS NOT NULL THEN M1.[USER_NAME] ";
                 strSQL += "     END [APPROVER_NAME], ";
                 strSQL += "     M1.[EMail] AS [APPROVER_EMAIL], ";
                 strSQL += "     M1.[Mobile] AS [APPROVER_PHONE], ";
                 strSQL += "     S.[OriginalApprover] AS [ORIGIN_APPROVER], ";
-                strSQL += "     M2.[MemberName] AS [ORIGIN_APPROVER_NAME], ";
+                strSQL += "     M2.[USER_NAME] AS [ORIGIN_APPROVER_NAME], ";
                 strSQL += "     M2.[EMail] AS [ORIGIN_APPROVER_EMAIL], ";
                 strSQL += "     M2.[Mobile] AS [ORIGIN_APPROVER_PHONE] ";
                 strSQL += "FROM [BPMPro].[dbo].[FM7T_" + tableName + "_S] S ";
-                strSQL += "         LEFT JOIN [NUP].[dbo].[NUP_View_ALL_MemberData] M1 ON M1.[CompanyID]=@COMPANY_ID AND M1.[AccountID]=S.[ApproverID] ";
-                strSQL += "         LEFT JOIN [NUP].[dbo].[NUP_View_ALL_MemberData] M2 ON M2.[CompanyID]=@COMPANY_ID AND M2.[AccountID]=S.[OriginalApprover] AND S.[OriginalApprover] IS NOT NULL ";
+                strSQL += "         LEFT JOIN [NUP].[dbo].[GTV_Org_Relation_Member] M1 ON M1.[COMPANY_ID]=@COMPANY_ID AND M1.[USER_ID]=S.[ApproverID] ";
+                strSQL += "         LEFT JOIN [NUP].[dbo].[GTV_Org_Relation_Member] M2 ON M2.[COMPANY_ID]=@COMPANY_ID AND M2.[USER_ID]=S.[OriginalApprover] AND S.[OriginalApprover] IS NOT NULL ";
                 strSQL += "WHERE S.[RequisitionID]=@REQUISITION_ID ";
                 strSQL += "UNION ALL ";
                 strSQL += "SELECT ";
@@ -820,10 +993,18 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "     NULL AS [ORIGIN_APPROVER_EMAIL], ";
                 strSQL += "     NULL AS [ORIGIN_APPROVER_PHONE] ";
                 strSQL += "FROM [FM7T_" + tableName + "_M] A ";
-                strSQL += "         LEFT JOIN [NUP].[dbo].[NUP_View_ALL_MemberData] B ON B.[CompanyID]=@COMPANY_ID AND B.[AccountID]=A.[ApplicantID] ";
+                strSQL += "         LEFT JOIN [NUP].[dbo].[GTV_Org_Relation_Member] B ON B.[COMPANY_ID]=@COMPANY_ID AND B.[USER_ID]=A.[ApplicantID] ";
                 strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-                return dbFun.DoQuery(strSQL, parameter).ToList<FormFinalApprover>();
+                var formFinalApprover = dbFun.DoQuery(strSQL, parameter).ToList<FormFinalApprover>();
+
+                var flowQueryModel = new FlowQueryModel()
+                {
+                    COMPANY_ID = compName
+                };
+                PutNullApproverInfo(flowQueryModel, formFinalApprover);
+
+                return formFinalApprover;
 
                 #endregion
             }
@@ -911,6 +1092,45 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "      DELETE; ";
 
             dbFun.DoTran(strSQL, parameter);
+        }
+
+        public IList<FormFinalApprover> PutNullApproverInfo(FlowQueryModel model, IList<FormFinalApprover> approvers)
+        {
+            var userQueryModel = new UserQueryModel();
+            switch (model.COMPANY_ID)
+            {
+                case "GPI":
+                    userQueryModel.COMPANY_ID = "RootCompany";
+                    break;
+                case "RootCompany":
+                    userQueryModel.COMPANY_ID = "GPI";
+                    break;
+                default:break;
+            }
+            var gtvCompanyInfo = userRepository.PostUsers(userQueryModel);
+
+            approvers.ToList().ForEach(A =>
+            {
+                if (String.IsNullOrEmpty(A.APPROVER_NAME) || String.IsNullOrWhiteSpace(A.APPROVER_NAME))
+                {
+                    var userInfo = gtvCompanyInfo.Where(GTV => GTV.USER_ID == A.APPROVER_ID).FirstOrDefault();
+                    A.APPROVER_NAME = userInfo.USER_NAME;
+                    A.APPROVER_EMAIL = userInfo.EMAIL;
+                    A.APPROVER_PHONE = userInfo.MOBILE;
+                }
+                if (!String.IsNullOrEmpty(A.ORIGIN_APPROVER) || !String.IsNullOrWhiteSpace(A.ORIGIN_APPROVER))
+                {
+                    var userInfo = gtvCompanyInfo.Where(GTV => GTV.USER_ID == A.ORIGIN_APPROVER).FirstOrDefault();
+                    if (String.IsNullOrEmpty(A.APPROVER_NAME) || !String.IsNullOrWhiteSpace(A.APPROVER_NAME))
+                    {
+                        A.ORIGIN_APPROVER_NAME = userInfo.USER_NAME;
+                        A.ORIGIN_APPROVER_EMAIL = userInfo.EMAIL;
+                        A.ORIGIN_APPROVER_PHONE = userInfo.MOBILE;
+                    }
+                }
+            });
+
+            return approvers;
         }
 
         #endregion

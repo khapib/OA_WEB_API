@@ -43,6 +43,7 @@ namespace OA_WEB_API.Repository.ERP
             strSQL += "     [TITLE_NAME], ";
             strSQL += "     [GRADE_NUM], ";
             strSQL += "     [SORT_ORDER], ";
+            strSQL += "     [MANAGER_DEPT_ID], ";
             strSQL += "     [MANAGER_ID], ";
             strSQL += "     [MANAGER_NAME], ";
             strSQL += "     [USER_ID], ";

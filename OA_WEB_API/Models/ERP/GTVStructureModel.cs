@@ -15,19 +15,19 @@ namespace OA_WEB_API.Models.ERP
         /// <summary>序列</summary>
         public int SEQ_ID { get; set; }
 
-        /// <summary>公司ID</summary>
+        /// <summary>公司編號</summary>
         public string COMPANY_ID { get; set; }
 
-        /// <summary>上級部門ID</summary>
+        /// <summary>上級部門編號</summary>
         public string PARENT_DEPT_ID { get; set; }
 
         /// <summary>部門ID</summary>
         public string DEPT_ID { get; set; }
 
-        /// <summary>部門層級ID</summary>
+        /// <summary>部門層級編號</summary>
         public string GRADE_ID { get; set; }
 
-        /// <summary>職位ID</summary>
+        /// <summary>職位編號</summary>
         public string TITLE_ID { get; set; }
 
         /// <summary>上級部門名稱</summary>
@@ -47,6 +47,9 @@ namespace OA_WEB_API.Models.ERP
 
         /// <summary>排序</summary>
         public short SORT_ORDER { get; set; }
+
+        /// <summary>主管部門編號</summary>
+        public string MANAGER_DEPT_ID { get; set; }
 
         /// <summary>主管員工編號</summary>
         public string MANAGER_ID { get; set; }

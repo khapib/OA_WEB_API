@@ -49,7 +49,7 @@ namespace OA_WEB_API.Repository
             };
 
             strSQL = "";
-            strSQL += "SELECT [COMPANY_ID],[PARENT_DEPT_ID],[DEPT_ID],[GRADE_ID],[TITLE_ID],[PARENT_DEPT_NAME],[DEPT_NAME],[GRADE_NAME],[TITLE_NAME],[GRADE_NUM],[SORT_ORDER],[MANAGER_ID],[MANAGER_NAME],[USER_ID],[USER_NAME],[IS_MANAGER],[EMAIL],[MOBILE],[JOB_GRADE],[JOB_STATUS],[USER_TITLE],[USER_FLOW],[DEPT_FLOW] ";
+            strSQL += "SELECT [COMPANY_ID],[PARENT_DEPT_ID],[DEPT_ID],[GRADE_ID],[TITLE_ID],[PARENT_DEPT_NAME],[DEPT_NAME],[GRADE_NAME],[TITLE_NAME],[GRADE_NUM],[SORT_ORDER],[MANAGER_DEPT_ID],[MANAGER_ID],[MANAGER_NAME],[USER_ID],[USER_NAME],[IS_MANAGER],[EMAIL],[MOBILE],[JOB_GRADE],[JOB_STATUS],[USER_TITLE],[USER_FLOW],[DEPT_FLOW] ";
             strSQL += "FROM [NUP].[dbo].[GTV_Org_Relation_Member] ";
             strSQL += "WHERE [USER_ID]=@USER_ID ";
             strSQL += "ORDER BY [COMPANY_ID],[SORT_ORDER],[JOB_GRADE] DESC ";
@@ -84,7 +84,7 @@ namespace OA_WEB_API.Repository
             var parameter = new List<SqlParameter>();
 
             strSQL = "";
-            strSQL += "SELECT [COMPANY_ID],[PARENT_DEPT_ID],[DEPT_ID],[GRADE_ID],[TITLE_ID],[PARENT_DEPT_NAME],[DEPT_NAME],[GRADE_NAME],[TITLE_NAME],[GRADE_NUM],[SORT_ORDER],[MANAGER_ID],[MANAGER_NAME],[USER_ID],[USER_NAME],[IS_MANAGER],[EMAIL],[MOBILE],[JOB_GRADE],[JOB_STATUS],[USER_TITLE],[USER_FLOW],[DEPT_FLOW] ";
+            strSQL += "SELECT [COMPANY_ID],[PARENT_DEPT_ID],[DEPT_ID],[GRADE_ID],[TITLE_ID],[PARENT_DEPT_NAME],[DEPT_NAME],[GRADE_NAME],[TITLE_NAME],[GRADE_NUM],[SORT_ORDER],[MANAGER_DEPT_ID],[MANAGER_ID],[MANAGER_NAME],[USER_ID],[USER_NAME],[IS_MANAGER],[EMAIL],[MOBILE],[JOB_GRADE],[JOB_STATUS],[USER_TITLE],[USER_FLOW],[DEPT_FLOW] ";
             strSQL += "FROM [NUP].[dbo].[GTV_Org_Relation_Member] ";
             strSQL += "WHERE 1=1 ";
 
@@ -266,6 +266,7 @@ namespace OA_WEB_API.Repository
             strSQL += "     null AS [TITLE_NAME], ";
             strSQL += "     null AS [GRADE_NUM], ";
             strSQL += "     null AS [SORT_ORDER], ";
+            strSQL += "     null AS [MANAGER_DEPT_ID], ";
             strSQL += "     null AS [MANAGER_ID], ";
             strSQL += "     null AS [MANAGER_NAME], ";
             strSQL += "     [AccountID] AS [USER_ID], ";

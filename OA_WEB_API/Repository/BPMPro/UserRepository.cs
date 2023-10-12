@@ -266,6 +266,7 @@ namespace OA_WEB_API.Repository
             strSQL += "     null AS [TITLE_NAME], ";
             strSQL += "     null AS [GRADE_NUM], ";
             strSQL += "     null AS [SORT_ORDER], ";
+            strSQL += "     null AS [MANAGER_DEPT_ID], ";
             strSQL += "     null AS [MANAGER_ID], ";
             strSQL += "     null AS [MANAGER_NAME], ";
             strSQL += "     [AccountID] AS [USER_ID], ";

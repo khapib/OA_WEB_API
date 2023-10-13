@@ -9409,6 +9409,11 @@
             同步更新簽核記錄表
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.FlowRepository.PutNullApproverInfo(OA_WEB_API.Models.BPMPro.FlowQueryModel,System.Collections.Generic.IList{OA_WEB_API.Models.BPMPro.FormFinalApprover})">
+            <summary>
+            代理簽核原簽核人資料不齊全補齊
+            </summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.FlowRepository.strSQL">
             <summary>
             T-SQL

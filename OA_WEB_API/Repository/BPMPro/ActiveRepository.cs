@@ -1094,6 +1094,9 @@ namespace OA_WEB_API.Repository.BPMPro
             dbFun.DoTran(strSQL, parameter);
         }
 
+        /// <summary>
+        /// 代理簽核原簽核人資料不齊全補齊
+        /// </summary>
         public IList<FormFinalApprover> PutNullApproverInfo(FlowQueryModel model, IList<FormFinalApprover> approvers)
         {
             var userQueryModel = new UserQueryModel();
@@ -1118,7 +1121,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     A.APPROVER_EMAIL = userInfo.EMAIL;
                     A.APPROVER_PHONE = userInfo.MOBILE;
                 }
-                if (!String.IsNullOrEmpty(A.ORIGIN_APPROVER) || !String.IsNullOrWhiteSpace(A.ORIGIN_APPROVER))
+                if (!String.IsNullOrEmpty(A.ORIGIN_APPROVER_NAME) || !String.IsNullOrWhiteSpace(A.ORIGIN_APPROVER_NAME))
                 {
                     var userInfo = gtvCompanyInfo.Where(GTV => GTV.USER_ID == A.ORIGIN_APPROVER).FirstOrDefault();
                     if (String.IsNullOrEmpty(A.APPROVER_NAME) || !String.IsNullOrWhiteSpace(A.APPROVER_NAME))

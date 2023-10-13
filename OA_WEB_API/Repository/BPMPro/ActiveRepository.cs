@@ -1124,7 +1124,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 if (!String.IsNullOrEmpty(A.ORIGIN_APPROVER_NAME) || !String.IsNullOrWhiteSpace(A.ORIGIN_APPROVER_NAME))
                 {
                     var userInfo = gtvCompanyInfo.Where(GTV => GTV.USER_ID == A.ORIGIN_APPROVER).FirstOrDefault();
-                    if (String.IsNullOrEmpty(A.APPROVER_NAME) || !String.IsNullOrWhiteSpace(A.APPROVER_NAME))
+                    if (userInfo!=null)
                     {
                         A.ORIGIN_APPROVER_NAME = userInfo.USER_NAME;
                         A.ORIGIN_APPROVER_EMAIL = userInfo.EMAIL;

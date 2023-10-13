@@ -23,6 +23,9 @@ namespace OA_WEB_API.Models
         /// <summary>部門名稱</summary>
         public string DEPT_NAME { get; set; }
 
+        /// <summary>主管部門編號</summary>
+        public string MANAGER_DEPT_ID { get; set; }
+
         /// <summary>上一級主管編號</summary>
         public string MANAGER_ID { get; set; }
 
@@ -115,6 +118,9 @@ namespace OA_WEB_API.Models
         #endregion
 
         #region 員工資料
+
+        /// <summary>主管部門編號</summary>
+        public string MANAGER_DEPT_ID { get; set; }
 
         /// <summary>上一級主管編號</summary>
         public string MANAGER_ID { get; set; }

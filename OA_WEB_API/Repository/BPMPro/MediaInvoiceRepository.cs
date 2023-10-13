@@ -321,13 +321,75 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 版權採購申請單 表單關聯 -
+            #region - 版權採購請款單 表單關聯 -
 
             var formQueryModel = new FormQueryModel()
             {
                 REQUISITION_ID = query.REQUISITION_ID
             };
             var associatedForm = commonRepository.PostAssociatedForm(formQueryModel);
+
+            #endregion
+
+            #region - 關聯表單:加上【版權採購交片單】 -
+
+            if (!associatedForm.Any(AF => AF.IDENTIFY== "MediaAcceptance"))
+            {
+                parameter.Add(new SqlParameter("@MEDIA_ORDER_REQUISITION_ID", SqlDbType.Int) { Value = mediaInvoiceConfig.MEDIA_ORDER_REQUISITION_ID });
+
+                strSQL = "";
+                strSQL += "SELECT ";
+                strSQL += "      M.[RequisitionID], ";
+                strSQL += "      M.[Period], ";
+                strSQL += "      R.[Status] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaAcceptance_M] AS M ";
+                strSQL += "INNER JOIN [BPMPro].[dbo].[FSe7en_Sys_Requisition] AS R ON M.[RequisitionID]=R.[RequisitionID] AND M.[Period]=@PERIOD AND R.[Status]='1' ";
+                strSQL += "WHERE [MediaOrderRequisitionID]=@MEDIA_ORDER_REQUISITION_ID ";
+                var dt = dbFun.DoQuery(strSQL, parameter);
+                if (dt.Rows.Count > 0)
+                {
+                    var dtMediaAcceptanceRequisitionID = dt.AsEnumerable().Select(R => R.Field<string>("RequisitionID")).FirstOrDefault();
+
+                    #region 確認 申請的【版權採購交片單】是否已簽完
+
+                    if (Int16.Parse(BPMSysStatus.CLOSE) == dt.AsEnumerable().Select(R => R.Field<Int16>("Status")).FirstOrDefault())
+                    {
+                        #region 寫入關聯表單
+
+                        var medialAcceptanceformQueryModel = new FormQueryModel()
+                        {
+                            REQUISITION_ID = dtMediaAcceptanceRequisitionID
+                        };
+                        var medialAcceptanceformData = formRepository.PostFormData(medialAcceptanceformQueryModel);
+
+                        associatedForm.Add(new AssociatedFormConfig()
+                        {
+                            IDENTIFY = medialAcceptanceformData.IDENTIFY,
+                            ASSOCIATED_REQUISITION_ID = dtMediaAcceptanceRequisitionID,
+                            BPM_FORM_NO = medialAcceptanceformData.SERIAL_ID,
+                            FM7_SUBJECT = medialAcceptanceformData.FORM_SUBJECT,
+                            APPLICANT_DEPT_NAME = medialAcceptanceformData.APPLICANT_DEPT_NAME,
+                            APPLICANT_NAME = medialAcceptanceformData.APPLICANT_NAME,
+                            APPLICANT_DATE_TIME = medialAcceptanceformData.APPLICANT_DATETIME.ToString("yyyy/MM/dd HH:mm:ss"),
+                            FORM_PATH = GlobalParameters.FormContentPath(dtMediaAcceptanceRequisitionID, medialAcceptanceformData.IDENTIFY, medialAcceptanceformData.DIAGRAM_NAME),
+                            STATE = BPMStatusCode.CLOSE
+                        });
+
+                        var associatedFormModel = new AssociatedFormModel()
+                        {
+                            REQUISITION_ID = applicantInfo.REQUISITION_ID,
+                            ASSOCIATED_FORM_CONFIG = associatedForm
+                        };
+
+                        //寫入「關聯表單」
+                        commonRepository.PutAssociatedForm(associatedFormModel);
+
+                        #endregion
+                    }
+
+                    #endregion
+                }
+            }
 
             #endregion
 
@@ -343,7 +405,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 MEDIA_INVOICE_BUDGS_CONFIG = mediaInvoiceBudgetsConfig,
                 MEDIA_INVOICE_INVS_CONFIG = mediaInvoiceInvoicesConfig,
                 MEDIA_INVOICE_INV_DTLS_CONFIG = mediaInvoiceInvoiceDetailsConfig,
-                ASSOCIATED_FORM_CONFIG = associatedForm
+                ASSOCIATED_FORM_CONFIG = commonRepository.PostAssociatedForm(formQueryModel)
             };
 
             #region - 確認表單 -
@@ -983,10 +1045,10 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region - 版權採購請款單 表單關聯：AssociatedForm -
 
-                //關聯表:匯入【版權採購申請單】的「關聯表單」
+                //關聯表單:匯入【版權採購申請單】的「關聯表單」
                 var importAssociatedForm = commonRepository.PostAssociatedForm(medialOrderformQueryModel);
 
-                #region 關聯表:加上【版權採購申請單】
+                #region 關聯表單:加上【版權採購申請單】
 
                 importAssociatedForm.Add(new AssociatedFormConfig()
                 {
@@ -1011,7 +1073,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (!String.IsNullOrEmpty(model.MEDIA_INVOICE_CONFIG.MEDIA_ACCEPTANCE_REQUISITION_ID) || !String.IsNullOrWhiteSpace(model.MEDIA_INVOICE_CONFIG.MEDIA_ACCEPTANCE_REQUISITION_ID))
                 {
-                    #region 關聯表:加上【版權採購點驗收單】
+                    #region 關聯表單:加上【版權採購點驗收單】
 
                     if (!associatedFormConfig.Where(AF => AF.ASSOCIATED_REQUISITION_ID.Contains(model.MEDIA_INVOICE_CONFIG.MEDIA_ACCEPTANCE_REQUISITION_ID)).Any())
                     {

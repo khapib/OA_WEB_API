@@ -300,6 +300,9 @@
         <member name="F:BPMSysStatus.EXCEPTION">
             <summary>異常表單</summary>
         </member>
+        <member name="F:BPMSysStatus.FAIL_STOP">
+            <summary>異常表單:錯誤停止</summary>
+        </member>
         <member name="T:CommLib">
             <summary> 
             靜態參數設定(log4)
@@ -8367,19 +8370,19 @@
             <summary>序列</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.COMPANY_ID">
-            <summary>公司ID</summary>
+            <summary>公司編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.PARENT_DEPT_ID">
-            <summary>上級部門ID</summary>
+            <summary>上級部門編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.DEPT_ID">
             <summary>部門ID</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.GRADE_ID">
-            <summary>部門層級ID</summary>
+            <summary>部門層級編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.TITLE_ID">
-            <summary>職位ID</summary>
+            <summary>職位編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.PARENT_DEPT_NAME">
             <summary>上級部門名稱</summary>
@@ -8398,6 +8401,9 @@
         </member>
         <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.SORT_ORDER">
             <summary>排序</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.MANAGER_DEPT_ID">
+            <summary>主管部門編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.MANAGER_ID">
             <summary>主管員工編號</summary>
@@ -9156,6 +9162,9 @@
         <member name="P:OA_WEB_API.Models.UserQueryModel.DEPT_NAME">
             <summary>部門名稱</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.UserQueryModel.MANAGER_DEPT_ID">
+            <summary>主管部門編號</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.UserQueryModel.MANAGER_ID">
             <summary>上一級主管編號</summary>
         </member>
@@ -9240,6 +9249,9 @@
         </member>
         <member name="P:OA_WEB_API.Models.UserModel.SORT_ORDER">
             <summary>部門排序</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UserModel.MANAGER_DEPT_ID">
+            <summary>主管部門編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.UserModel.MANAGER_ID">
             <summary>上一級主管編號</summary>
@@ -9395,6 +9407,11 @@
         <member name="M:OA_WEB_API.Repository.BPMPro.FlowRepository.SyncLogNextApprover(OA_WEB_API.Models.BPMPro.FormQueryModel)">
             <summary>
             同步更新簽核記錄表
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.FlowRepository.PutNullApproverInfo(OA_WEB_API.Models.BPMPro.FlowQueryModel,System.Collections.Generic.IList{OA_WEB_API.Models.BPMPro.FormFinalApprover})">
+            <summary>
+            代理簽核原簽核人資料不齊全補齊
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.FlowRepository.strSQL">

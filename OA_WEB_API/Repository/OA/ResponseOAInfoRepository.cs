@@ -250,34 +250,35 @@ namespace OA_WEB_API.Repository.OA
 
                 #region - 回傳OA - 
 
-                if (bool.Parse(query.REQUEST_FLG))
-                {
-                    ApiUrl = "http://oa.gtv.com.tw/OA2/FilmWareHouseCopyWork/FilmWareHouseCopyWork_BpmOaSync.ashx";
-                    Method = "POST";
-                    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, mediaWarehouseCopyResponseOA);
-                    OA_ResponseState = JsonConvert.DeserializeObject<OAResponseState>(strResponseJson);
-                    CommLib.Logger.Debug("拷貝申請單:" + query.REQUISITION_ID + " OA狀態：" + OA_ResponseState.OA_FORM_ACTION);
-                    mediaWarehouseCopyResponseOA.OA_RESPONSE_STATE = OA_ResponseState;
+                /*正式機要加回來*/
+                //if (bool.Parse(query.REQUEST_FLG))
+                //{
+                //    ApiUrl = "http://oa.gtv.com.tw/OA2/FilmWareHouseCopyWork/FilmWareHouseCopyWork_BpmOaSync.ashx";
+                //    Method = "POST";
+                //    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, mediaWarehouseCopyResponseOA);
+                //    OA_ResponseState = JsonConvert.DeserializeObject<OAResponseState>(strResponseJson);
+                //    CommLib.Logger.Debug("拷貝申請單:" + query.REQUISITION_ID + " OA狀態：" + OA_ResponseState.OA_FORM_ACTION);
+                //    mediaWarehouseCopyResponseOA.OA_RESPONSE_STATE = OA_ResponseState;
 
-                    if (!String.IsNullOrEmpty(OA_ResponseState.OA_MASTER_NO) || !String.IsNullOrWhiteSpace(OA_ResponseState.OA_MASTER_NO))
-                    {
-                        var parameterState = new List<SqlParameter>()
-                        {
-                            //OA狀態資訊
-                            new SqlParameter("@OA_MASTER_NO", SqlDbType.NVarChar) { Size = 64, Value = OA_ResponseState.OA_MASTER_NO  },
-                            new SqlParameter("@OA_FORM_NO", SqlDbType.NVarChar) { Size = 64, Value = OA_ResponseState.OA_FORM_NO },
-                            new SqlParameter("@BPM_FORM_NO", SqlDbType.NVarChar) { Size = 64, Value = mediaWarehouseCopyResponseOA.MEDIA_WAREHOUSE_COPY_RESPONSE_OA_INFO_CONFIG.BPM_FORM_NO },
-                        };
+                //    if (!String.IsNullOrEmpty(OA_ResponseState.OA_MASTER_NO) || !String.IsNullOrWhiteSpace(OA_ResponseState.OA_MASTER_NO))
+                //    {
+                //        var parameterState = new List<SqlParameter>()
+                //        {
+                //            //OA狀態資訊
+                //            new SqlParameter("@OA_MASTER_NO", SqlDbType.NVarChar) { Size = 64, Value = OA_ResponseState.OA_MASTER_NO  },
+                //            new SqlParameter("@OA_FORM_NO", SqlDbType.NVarChar) { Size = 64, Value = OA_ResponseState.OA_FORM_NO },
+                //            new SqlParameter("@BPM_FORM_NO", SqlDbType.NVarChar) { Size = 64, Value = mediaWarehouseCopyResponseOA.MEDIA_WAREHOUSE_COPY_RESPONSE_OA_INFO_CONFIG.BPM_FORM_NO },
+                //        };
 
-                        strSQL = "";
-                        strSQL += "UPDATE [BPMPro].[dbo].[FM7T_MediaWarehouseCopy_M] ";
-                        strSQL += "SET  [OA_MasterNo] =@OA_MASTER_NO, ";
-                        strSQL += "     [OA_FormNo]=@OA_FORM_NO ";
-                        strSQL += "WHERE [BPMFormNo]=@BPM_FORM_NO ";
+                //        strSQL = "";
+                //        strSQL += "UPDATE [BPMPro].[dbo].[FM7T_MediaWarehouseCopy_M] ";
+                //        strSQL += "SET  [OA_MasterNo] =@OA_MASTER_NO, ";
+                //        strSQL += "     [OA_FormNo]=@OA_FORM_NO ";
+                //        strSQL += "WHERE [BPMFormNo]=@BPM_FORM_NO ";
 
-                        dbFun.DoTran(strSQL, parameterState);
-                    }
-                }
+                //        dbFun.DoTran(strSQL, parameterState);
+                //    }
+                //}
 
                 #endregion
 

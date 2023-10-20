@@ -51,12 +51,14 @@ public class GlobalParameters
     /// <summary>新人類簽核資料庫(公用開發機)</summary>
     public const string sqlConnBPMProDev = "BPMProDev";
     /// <summary>新人類簽核附件路徑(公用開發機)</summary>
-    public const string attachFilePathBPMProDev = @"http://192.168.1.219:82/";
+    //public const string attachFilePathBPMProDev = @"http://192.168.1.219:82/";
+    public const string attachFilePathBPMProDev = @"https://oa-web-dev01.gtv.com.tw:81/";
 
     /// <summary>新人類簽核資料庫(測試機)</summary>
     public const string sqlConnBPMProTest = "BPMProTest";
     /// <summary>新人類簽核附件路徑(測試機)</summary>
-    public const string attachFilePathBPMProTest = @"http://oa-web-test02.gtv.com.tw:81/";
+    //public const string attachFilePathBPMProTest = @"http://oa-web-test02.gtv.com.tw:81/";
+    public const string attachFilePathBPMProTest = @"https://oa-web-test02.gtv.com.tw:82/";
 
     /// <summary>新人類簽核資料庫(正式機)</summary>
     public const string sqlConnBPMPro = "BPMPro";
@@ -82,11 +84,13 @@ public class GlobalParameters
                     break;
 
                 case sqlConnBPMProDev:
-                    response = "http://192.168.1.219:82/";
+                    //response = "http://192.168.1.219:82/";
+                    response = "https://oa-web-dev01.gtv.com.tw:81/";
                     break;
 
                 case sqlConnBPMProTest:
-                    response = "http://oa-web-test02.gtv.com.tw:81/";
+                    //response = "http://oa-web-test02.gtv.com.tw:81/";
+                    response = "https://oa-web-test02.gtv.com.tw:82/";
                     break;
 
                 case sqlConnBPMPro:

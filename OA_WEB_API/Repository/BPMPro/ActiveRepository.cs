@@ -134,8 +134,8 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                //HttpWebRequest request = HttpWebRequest.Create("http://192.168.1.84:81/BPMPro/AutoStart.aspx") as HttpWebRequest;        //正試機
-                HttpWebRequest request = HttpWebRequest.Create("https://oa-web-test02.gtv.com.tw:82/BPMPro/AutoStart.aspx") as HttpWebRequest;   //測試機
+                //HttpWebRequest request = HttpWebRequest.Create("https://oa-web04.gtv.com.tw:81/BPMPro/AutoStart.aspx") as HttpWebRequest;        //正試機
+                HttpWebRequest request = HttpWebRequest.Create("https://oa-web-test02.gtv.com.tw:81/BPMPro/AutoStart.aspx") as HttpWebRequest;   //測試機
                 //HttpWebRequest request = HttpWebRequest.Create("https://oa-web-dev01.gtv.com.tw:81/BPMPro/AutoStart.aspx") as HttpWebRequest;   //共用測試機
                 //HttpWebRequest request = HttpWebRequest.Create("http://192.168.9.65:82/BPMPro/AutoStart.aspx") as HttpWebRequest;     //個人測試機
 

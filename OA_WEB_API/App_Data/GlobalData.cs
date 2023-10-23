@@ -58,12 +58,13 @@ public class GlobalParameters
     public const string sqlConnBPMProTest = "BPMProTest";
     /// <summary>新人類簽核附件路徑(測試機)</summary>
     //public const string attachFilePathBPMProTest = @"http://oa-web-test02.gtv.com.tw:81/";
-    public const string attachFilePathBPMProTest = @"https://oa-web-test02.gtv.com.tw:82/";
+    public const string attachFilePathBPMProTest = @"https://oa-web-test02.gtv.com.tw:81/";
 
     /// <summary>新人類簽核資料庫(正式機)</summary>
     public const string sqlConnBPMPro = "BPMPro";
     /// <summary>新人類簽核附件路徑(正式機)</summary>
-    public const string attachFilePathBPMPro = @"http://oa-web04.gtv.com.tw:81/Attachment/";
+    //public const string attachFilePathBPMPro = @"http://oa-web04.gtv.com.tw:81/Attachment/";
+    public const string attachFilePathBPMPro = @"https://oa-web04.gtv.com.tw:81/Attachment/";
 
     /// <summary>
     /// 新人類簽核網址路徑
@@ -90,11 +91,12 @@ public class GlobalParameters
 
                 case sqlConnBPMProTest:
                     //response = "http://oa-web-test02.gtv.com.tw:81/";
-                    response = "https://oa-web-test02.gtv.com.tw:82/";
+                    response = "https://oa-web-test02.gtv.com.tw:81/";
                     break;
 
                 case sqlConnBPMPro:
-                    response = "http://oa-web04.gtv.com.tw:81/";
+                    //response = "http://oa-web04.gtv.com.tw:81/";
+                    response = "https://oa-web04.gtv.com.tw:81/";
                     break;
             }
         }

@@ -34,11 +34,15 @@ namespace OA_WEB_API.Repository.ERP
             strSQL += "     M.[SEQ_ID], ";
             strSQL += "     REPLACE(M.[COMPANY_ID],'RootCompany','GTV') AS [COMPANY_ID], ";
             strSQL += "     M.[PARENT_DEPT_ID], ";
-            strSQL += "     M.[DEPT_ID], ";
+            strSQL += "     D.[DeptID] AS [DEPT_ID], ";
+            strSQL += "     D.[OfficeID] AS [OFFICE_ID], ";
+            strSQL += "     D.[GroupID] AS [GROUP_ID], ";
             strSQL += "     M.[GRADE_ID], ";
             strSQL += "     M.[TITLE_ID], ";
             strSQL += "     M.[PARENT_DEPT_NAME],";
-            strSQL += "     M.[DEPT_NAME], ";
+            strSQL += "     D.[DeptName] AS [DEPT_NAME], ";
+            strSQL += "     D.[OfficeName] AS [OFFICE_NAME], ";
+            strSQL += "     D.[GroupName] AS [GROUP_NAME], ";
             strSQL += "     M.[GRADE_NAME], ";
             strSQL += "     M.[TITLE_NAME], ";
             strSQL += "     M.[GRADE_NUM], ";
@@ -60,8 +64,9 @@ namespace OA_WEB_API.Repository.ERP
             strSQL += "     M.[DEPT_FLOW_LEVEL], ";
             strSQL += "     M.[CREATE_DATE], ";
             strSQL += "     M.[MODIFY_DATE] ";            
-            strSQL += "from [NUP].[dbo].[GTV_Org_Relation_Member] AS M ";
-            strSQL += "INNER JOIN [NUP].[dbo].[FSe7en_Org_MemberStruct] AS S on (S.[AccountID]=M.[USER_ID] AND S.[DeptID]=M.[DEPT_ID]) and (M.[COMPANY_ID]<>'GPI' AND M.[TITLE_ID]<>'AD') and S.[IsMainJob]=1 ";
+            strSQL += "FROM [NUP].[dbo].[GTV_Org_Relation_Member] AS M ";
+            strSQL += "INNER JOIN [NUP].[dbo].[GTV_Org_DeptStruct] AS D ON M.[DEPT_ID]=D.[TheEndDeptID] ";
+            strSQL += "INNER JOIN [NUP].[dbo].[FSe7en_Org_MemberStruct] AS S on (S.[AccountID]=M.[USER_ID] AND S.[DeptID]=M.[DEPT_ID]) AND (M.[COMPANY_ID]<>'GPI' AND M.[TITLE_ID]<>'AD') AND S.[IsMainJob]=1 ";
             strSQL += "ORDER BY M.[SEQ_ID],[SORT_ORDER] ASC ";
 
             var gTVStaffModel = dbFun.DoQuery(strSQL, parameterA).ToList<GTVStaffModel>();

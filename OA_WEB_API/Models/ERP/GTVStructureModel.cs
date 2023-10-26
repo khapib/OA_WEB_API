@@ -21,8 +21,14 @@ namespace OA_WEB_API.Models.ERP
         /// <summary>上級部門編號</summary>
         public string PARENT_DEPT_ID { get; set; }
 
-        /// <summary>部門ID</summary>
+        /// <summary>部門編號</summary>
         public string DEPT_ID { get; set; }
+
+        /// <summary>局處中心編號</summary>
+        public string OFFICE_ID { get; set; }
+
+        /// <summary>組編號</summary>
+        public string GROUP_ID { get; set; }
 
         /// <summary>部門層級編號</summary>
         public string GRADE_ID { get; set; }
@@ -35,6 +41,12 @@ namespace OA_WEB_API.Models.ERP
 
         /// <summary>部門名稱</summary>
         public string DEPT_NAME { get; set; }
+
+        /// <summary>局處中心名稱</summary>
+        public string OFFICE_NAME { get; set; }
+
+        /// <summary>組名稱</summary>
+        public string GROUP_NAME { get; set; }
 
         /// <summary>部門層級名稱</summary>
         public string GRADE_NAME { get; set; }

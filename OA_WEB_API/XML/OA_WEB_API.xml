@@ -8376,7 +8376,13 @@
             <summary>上級部門編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.DEPT_ID">
-            <summary>部門ID</summary>
+            <summary>部門編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.OFFICE_ID">
+            <summary>局處中心編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.GROUP_ID">
+            <summary>組編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.GRADE_ID">
             <summary>部門層級編號</summary>
@@ -8389,6 +8395,12 @@
         </member>
         <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.DEPT_NAME">
             <summary>部門名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.OFFICE_NAME">
+            <summary>局處中心名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.GROUP_NAME">
+            <summary>組名稱</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.GRADE_NAME">
             <summary>部門層級名稱</summary>

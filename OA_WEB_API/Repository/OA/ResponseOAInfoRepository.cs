@@ -250,6 +250,7 @@ namespace OA_WEB_API.Repository.OA
 
                 #region - 回傳OA - 
 
+                /*正式機要加回來*/
                 if (bool.Parse(query.REQUEST_FLG))
                 {
                     ApiUrl = "http://oa.gtv.com.tw/OA2/FilmWareHouseCopyWork/FilmWareHouseCopyWork_BpmOaSync.ashx";

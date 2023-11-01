@@ -209,6 +209,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>全部權利</summary>
         public string AUTH_ALL { get; set; }
 
+        /// <summary>授權播放總次數</summary>
+        public int PLAY_FREQUENCY_TOTAL { get; set; }
+
         /// <summary>未稅單價/NET單價</summary>
         public double NET { get; set; }
 

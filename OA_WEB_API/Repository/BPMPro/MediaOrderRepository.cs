@@ -135,6 +135,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [ItemName] AS [ITEM_NAME], ";
             strSQL += "     [MediaSpec] AS [MEDIA_SPEC], ";
             strSQL += "     [AUTH_All] AS [AUTH_ALL], ";
+            strSQL += "     [PlayFrequencyTotal] AS [PLAY_FREQUENCY_TOTAL], ";
             strSQL += "     [MediaType] AS [MEDIA_TYPE], ";
             strSQL += "     [StartEpisode] AS [START_EPISODE], ";
             strSQL += "     [EndEpisode] AS [END_EPISODE], ";
@@ -708,6 +709,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@MEDIA_SPEC", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AUTH_ALL", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PLAY_FREQUENCY_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@MEDIA_TYPE", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@START_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@END_EPISODE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -764,8 +766,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_DTL]([RequisitionID],[OrderRowNo],[SupProdANo],[ItemName],[MediaSpec],[AUTH_All],[MediaType],[StartEpisode],[EndEpisode],[OrderEpisode],[ACPT_Episode],[EpisodeTime],[Net],[Net_TWD],[Tax],[Tax_TWD],[Gross],[Gross_TWD],[NetSum],[NetSum_TWD],[GrossSum],[GrossSum_TWD],[Material],[ItemSum],[ItemSum_TWD],[ProjectFormNo],[ProjectName],[ProjectNickname],[ProjectUseYear],[Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@ORDER_ROW_NO,@SUP_PROD_A_NO,@ITEM_NAME,@MEDIA_SPEC,@AUTH_ALL,@MEDIA_TYPE,@START_EPISODE,@END_EPISODE,@ORDER_EPISODE,@ACPT_EPISODE,@EPISODE_TIME,@NET,@NET_TWD,@TAX,@TAX_TWD,@GROSS,@GROSS_TWD,@NET_SUM,@NET_SUM_TWD,@GROSS_SUM,@GROSS_SUM_TWD,@MATERIAL,@ITEM_SUM,@ITEM_SUM_TWD,@PROJECT_FORM_NO,@PROJECT_NAME,@PROJECT_NICKNAME,@PROJECT_USE_YEAR,@NOTE) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_MediaOrder_DTL]([RequisitionID],[OrderRowNo],[SupProdANo],[ItemName],[MediaSpec],[AUTH_All],[PlayFrequencyTotal],[MediaType],[StartEpisode],[EndEpisode],[OrderEpisode],[ACPT_Episode],[EpisodeTime],[Net],[Net_TWD],[Tax],[Tax_TWD],[Gross],[Gross_TWD],[NetSum],[NetSum_TWD],[GrossSum],[GrossSum_TWD],[Material],[ItemSum],[ItemSum_TWD],[ProjectFormNo],[ProjectName],[ProjectNickname],[ProjectUseYear],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@ORDER_ROW_NO,@SUP_PROD_A_NO,@ITEM_NAME,@MEDIA_SPEC,@AUTH_ALL,@PLAY_FREQUENCY_TOTAL,@MEDIA_TYPE,@START_EPISODE,@END_EPISODE,@ORDER_EPISODE,@ACPT_EPISODE,@EPISODE_TIME,@NET,@NET_TWD,@TAX,@TAX_TWD,@GROSS,@GROSS_TWD,@NET_SUM,@NET_SUM_TWD,@GROSS_SUM,@GROSS_SUM_TWD,@MATERIAL,@ITEM_SUM,@ITEM_SUM_TWD,@PROJECT_FORM_NO,@PROJECT_NAME,@PROJECT_NICKNAME,@PROJECT_USE_YEAR,@NOTE) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }

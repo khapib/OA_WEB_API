@@ -5443,6 +5443,15 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.AUTH_ALL">
             <summary>全部權利</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.FREQUENCY_SETTING">
+            <summary>總授權設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.FREQUENCY_TYPE_TOTAL">
+            <summary>總授權方式類型</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.PLAY_FREQUENCY_TOTAL">
+            <summary>總授權播放次數</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.NET">
             <summary>未稅單價/NET單價</summary>
         </member>

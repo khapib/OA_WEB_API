@@ -138,6 +138,18 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>是否為退貨商品[標記]</summary>
         public string IS_RETURN { get; set; }
+
+        /// <summary>全部權利</summary>
+        public string AUTH_ALL { get; set; }
+
+        /// <summary>總授權設定</summary>
+        public string FREQUENCY_SETTING { get; set; }
+
+        /// <summary>總授權方式類型</summary>
+        public string FREQUENCY_TYPE_TOTAL { get; set; }
+
+        /// <summary>總授權播放次數</summary>
+        public int PLAY_FREQUENCY_TOTAL { get; set; }
     }
 
     /// <summary>

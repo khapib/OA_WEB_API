@@ -4819,6 +4819,18 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.IS_RETURN">
             <summary>是否為退貨商品[標記]</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.AUTH_ALL">
+            <summary>全部權利</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.FREQUENCY_SETTING">
+            <summary>總授權設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.FREQUENCY_TYPE_TOTAL">
+            <summary>總授權方式類型</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceDetailsConfig.PLAY_FREQUENCY_TOTAL">
+            <summary>總授權播放次數</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaAcceptanceAuthorizesConfig">
             <summary>
             版權採購交片單 授權權利 設定

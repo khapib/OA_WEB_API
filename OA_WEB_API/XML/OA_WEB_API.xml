@@ -5151,6 +5151,18 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.PROJECT_USE_YEAR">
             <summary>所屬專案起案年度</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.AUTH_ALL">
+            <summary>全部權利</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.FREQUENCY_SETTING">
+            <summary>總授權設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.FREQUENCY_TYPE_TOTAL">
+            <summary>總授權方式類型</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.PLAY_FREQUENCY_TOTAL">
+            <summary>總授權播放次數</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaInvoiceAuthorizesConfig">
             <summary>
             版權採購請款單 授權權利 設定

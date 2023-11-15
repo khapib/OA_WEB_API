@@ -1049,6 +1049,26 @@
             用印申請單(新增/修改/草稿)
             </summary>
         </member>
+        <member name="T:OA_WEB_API.Controllers.BPMPro.ParkingPermitController">
+            <summary>
+            會簽管理系統 - 停車證申請單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.ParkingPermitController.PostParkingPermitSingle(OA_WEB_API.Models.BPMPro.ParkingPermitQueryModel)">
+            <summary>
+            停車證申請單(查詢)
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.ParkingPermitController.PutParkingPermitRefill(OA_WEB_API.Models.BPMPro.ParkingPermitQueryModel)">
+            <summary>
+            停車證申請單(依此單內容重送)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.ParkingPermitController.PutParkingPermitSingle(OA_WEB_API.Models.BPMPro.ParkingPermitViewModel)">
+            <summary>
+            停車證申請單(新增/修改/草稿)
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.PersonnelSupplementController">
             <summary>
             會簽管理系統 - 人員增補單
@@ -1393,6 +1413,11 @@
             <summary>
             使用者資料列表(查詢)
             </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.UserController.GetUsersStructure">
+            <summary>
+            使用者員工結構資料(檢視)
+            </summary>    
         </member>
         <member name="M:OA_WEB_API.Controllers.ERP.GTVStructureController.PostGTVStaffSingle">
             <summary>
@@ -6851,6 +6876,153 @@
             用印申請單 會簽簽核人員 設定
             </summary>
         </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.ParkingPermitQueryModel">
+            <summary>
+            停車證申請單(查詢條件)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitQueryModel.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.ParkingPermitViewModel">
+            <summary>
+            停車證申請單(查詢)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitViewModel.APPLICANT_INFO">
+            <summary>申請人資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitViewModel.PARKING_PERMIT_TITLE">
+            <summary>停車證申請單 表頭資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitViewModel.PARKING_PERMIT_CONFIG">
+            <summary>停車證申請單 表單內容 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitViewModel.PARKING_PERMIT_IMGS_CONFIG">
+            <summary>停車證申請單 圖片上傳 設定</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.ParkingPermitTitle">
+            <summary>
+            停車證申請單 表頭資訊
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitTitle.MOBILE">
+            <summary>手機</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitTitle.COMPANY_NAME">
+            <summary>公司名稱(申請人/窗口)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitTitle.DEPT_ID">
+            <summary>部門編號(自動帶入)(申請人/窗口)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitTitle.OFFICE_ID">
+            <summary>局處中心編號(自動帶入)(申請人/窗口)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitTitle.GROUP_ID">
+            <summary>組別編號(自動帶入)(申請人/窗口)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitTitle.DEPT_NAME">
+            <summary>部門名稱(自動帶入)(申請人/窗口)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitTitle.OFFICE_NAME">
+            <summary>局處中心名稱(自動帶入)(申請人/窗口)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitTitle.GROUP_NAME">
+            <summary>組別名稱(自動帶入)(申請人/窗口)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitTitle.ROC_YEAR">
+            <summary>年度(民國年)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitTitle.APPLICATION_CATEGORY">
+            <summary>
+            申請類別：員工/非員工
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitTitle.GUEST_NAME">
+            <summary>姓名(非員工)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitTitle.GUEST_COMPANY_NAME">
+            <summary>公司名稱(非員工)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitTitle.GUEST_DEPT_NAME">
+            <summary>部門(非員工)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitTitle.GUEST_MOBILE">
+            <summary>手機(非員工)</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.ParkingPermitConfig">
+            <summary>
+            停車證申請單 表單內容 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitConfig.VEHICLE_CATEGORY">
+            <summary>
+            車種類別：汽車/機車
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitConfig.LICENSE_PLATE_NUMBER">
+            <summary>車牌號碼</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitConfig.IS_CHANGE">
+            <summary>
+            是否為異動：
+            給前端Bool，
+            存進DB記得轉String
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitConfig.CHANGE_LICENSE_PLATE_NUMBER">
+            <summary>異動的車牌</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitConfig.CAR_OWNER_RELATIONSHIP">
+            <summary>車主關係</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.ParkingPermitImagesConfig">
+            <summary>
+            停車證申請單 圖片上傳 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitImagesConfig.APPLICATION_CATEGORY">
+            <summary>
+            申請類別：員工/廠商
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitImagesConfig.VEHICLE_CATEGORY">
+            <summary>
+            車種類別：汽車/機車
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitImagesConfig.LICENSE_PLATE_NUMBER">
+            <summary>車牌號碼</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitImagesConfig.IMG_IDENTIFY">
+            <summary>圖片識別：行照/身分證</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitImagesConfig.PHOTO">
+            <summary>base64圖片</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitImagesConfig.FILE_RENAME">
+            <summary>附件編碼名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitImagesConfig.FILE_NAME">
+            <summary>附件原本名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitImagesConfig.FILE_EXTENSION">
+            <summary>附件副檔名</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitImagesConfig.FILE_SIZE">
+            <summary>檔案大小</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitImagesConfig.UPLOADER_ID">
+            <summary>上傳者員工編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitImagesConfig.UPLOAD_DATETIME">
+            <summary>上傳時間</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitImagesConfig.DRAFT_FLAG">
+            <summary>
+            正式：0；草稿：1
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.PersonnelSupplementQueryModel">
             <summary>
             人員增補單(查詢條件)
@@ -8204,6 +8376,37 @@
         <member name="P:OA_WEB_API.Models.BPMPro.BudgetConfig.USE_BUDGET_AMOUNT">
             <summary>使用預算金額</summary>
         </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.Base64ImgSingletoSingleModel">
+            <summary>
+            base64圖片上傳設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.Base64ImgSingletoSingleModel.IMG_NAME">
+            <summary>暫存名稱_[調整圖片大小]</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.Base64ImgSingletoSingleModel.PHOTO">
+            <summary>base64圖片</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.Base64ImgSingletoSingleModel.PRO_IMG_NAME">
+            <summary>輸出名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.Base64ImgSingletoSingleModel.FILE_PATH">
+            <summary>檔案路徑</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.Base64ImgSingletoSingleModel.IMG_SIZE">
+            <summary>圖片設定值(大小)_[調整圖片大小]</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.Base64ImgModel">
+            <summary>
+            base64圖片輸出設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.Base64ImgModel.FILE_PATH">
+            <summary>路徑</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.Base64ImgModel.FILE_EXTENSION">
+            <summary>附件副檔名</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.RolesModel">
             <summary>
             (擴充方法)_角色列表
@@ -8272,6 +8475,20 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.FormDistinguishResponse.END_PROCESS_ID">
             <summary>最終關卡編號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.UploadFilePathModel">
+            <summary>
+            (擴充方法)_確認檔案複製路徑
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.UploadFilePathModel.LOCATION">
+            <summary>位置</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.UploadFilePathModel.PATH">
+            <summary>路徑</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.UploadFilePathModel.IDENTIFY">
+            <summary>表單代號</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.RollCardQueryModel">
             <summary>
@@ -8393,110 +8610,6 @@
         </member>
         <member name="P:OA_WEB_API.Models.ERP.ErpResponseState.msg">
             <summary>信息</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.ERP.GTVStaffModel">
-            <summary>
-            提供外部系統(員工結構)
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.SEQ_ID">
-            <summary>序列</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.COMPANY_ID">
-            <summary>公司編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.PARENT_DEPT_ID">
-            <summary>上級部門編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.DEPT_ID">
-            <summary>部門編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.OFFICE_ID">
-            <summary>局處中心編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.GROUP_ID">
-            <summary>組編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.GRADE_ID">
-            <summary>部門層級編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.TITLE_ID">
-            <summary>職位編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.PARENT_DEPT_NAME">
-            <summary>上級部門名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.DEPT_NAME">
-            <summary>部門名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.OFFICE_NAME">
-            <summary>局處中心名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.GROUP_NAME">
-            <summary>組名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.GRADE_NAME">
-            <summary>部門層級名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.TITLE_NAME">
-            <summary>職位名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.GRADE_NUM">
-            <summary>部門層級</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.SORT_ORDER">
-            <summary>排序</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.MANAGER_DEPT_ID">
-            <summary>主管部門編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.MANAGER_ID">
-            <summary>主管員工編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.MANAGER_NAME">
-            <summary>主管姓名</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.USER_ID">
-            <summary>使用者員工編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.USER_NAME">
-            <summary>使用者姓名</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.IS_MANAGER">
-            <summary>是否為管理人員</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.EMAIL">
-            <summary>信箱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.MOBILE">
-            <summary>手機號碼</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.JOB_GRADE">
-            <summary>職級</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.JOB_STATUS">
-            <summary>工作狀態</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.USER_TITLE">
-            <summary>使用者標題</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.USER_FLOW">
-            <summary>使用者簽核流程</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.USER_FLOW_LEVEL">
-            <summary>使用者簽核流程關卡</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.DEPT_FLOW">
-            <summary>部門簽核流程</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.DEPT_FLOW_LEVEL">
-            <summary>部門簽核流程關卡</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.CREATE_DATE">
-            <summary>建立日期</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.ERP.GTVStaffModel.MODIFY_DATE">
-            <summary>修改日期</summary>
         </member>
         <member name="T:OA_WEB_API.Models.ERP.RequestQueryModel">
             <summary>
@@ -9333,6 +9446,110 @@
         </member>
         <member name="P:OA_WEB_API.Models.UserModel.DEPT_FLOW">
             <summary>部門流程</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.UsersStructure">
+            <summary>
+            使用者員工結構資料
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.SEQ_ID">
+            <summary>序列</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.COMPANY_ID">
+            <summary>公司編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.PARENT_DEPT_ID">
+            <summary>上級部門編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.DEPT_ID">
+            <summary>部門編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.OFFICE_ID">
+            <summary>局處中心編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.GROUP_ID">
+            <summary>組編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.GRADE_ID">
+            <summary>部門層級編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.TITLE_ID">
+            <summary>職位編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.PARENT_DEPT_NAME">
+            <summary>上級部門名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.DEPT_NAME">
+            <summary>部門名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.OFFICE_NAME">
+            <summary>局處中心名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.GROUP_NAME">
+            <summary>組名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.GRADE_NAME">
+            <summary>部門層級名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.TITLE_NAME">
+            <summary>職位名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.GRADE_NUM">
+            <summary>部門層級</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.SORT_ORDER">
+            <summary>排序</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.MANAGER_DEPT_ID">
+            <summary>主管部門編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.MANAGER_ID">
+            <summary>主管員工編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.MANAGER_NAME">
+            <summary>主管姓名</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.USER_ID">
+            <summary>使用者員工編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.USER_NAME">
+            <summary>使用者姓名</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.IS_MANAGER">
+            <summary>是否為管理人員</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.EMAIL">
+            <summary>信箱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.MOBILE">
+            <summary>手機號碼</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.JOB_GRADE">
+            <summary>職級</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.JOB_STATUS">
+            <summary>工作狀態</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.USER_TITLE">
+            <summary>使用者標題</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.USER_FLOW">
+            <summary>使用者簽核流程</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.USER_FLOW_LEVEL">
+            <summary>使用者簽核流程關卡</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.DEPT_FLOW">
+            <summary>部門簽核流程</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.DEPT_FLOW_LEVEL">
+            <summary>部門簽核流程關卡</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.CREATE_DATE">
+            <summary>建立日期</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.MODIFY_DATE">
+            <summary>修改日期</summary>
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.FormRepository">
             <summary>
@@ -10989,6 +11206,61 @@
             系統編號
             </summary>
         </member>
+        <member name="T:OA_WEB_API.Repository.BPMPro.ParkingPermitRepository">
+            <summary>
+            會簽管理系統 - 停車證申請單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.ParkingPermitRepository.PostParkingPermitSingle(OA_WEB_API.Models.BPMPro.ParkingPermitQueryModel)">
+            <summary>
+            停車證申請單(查詢)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.ParkingPermitRepository.PutParkingPermitRefill(OA_WEB_API.Models.BPMPro.ParkingPermitQueryModel)">
+            <summary>
+            停車證申請單(依此單內容重送)(僅外部起單使用)
+            </summary>        
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.ParkingPermitRepository.PutParkingPermitSingle(OA_WEB_API.Models.BPMPro.ParkingPermitViewModel)">
+            <summary>
+            停車證申請單(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.ParkingPermitRepository.strSQL">
+            <summary>
+            T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.ParkingPermitRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.ParkingPermitRepository.IDENTIFY">
+            <summary>
+            表單代號
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.ParkingPermitRepository.FM7Subject">
+            <summary>
+            表單主旨
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.ParkingPermitRepository.strJson">
+            <summary>
+            Json字串
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.ParkingPermitRepository.strREQ">
+            <summary>
+            系統編號
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.ParkingPermitRepository.Path">
+            <summary>
+            檔案路徑
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.PersonnelSupplementRepository">
             <summary>
             會簽管理系統 - 人員增補單
@@ -11335,9 +11607,24 @@
             (擴充方法)_確認BPM表單是否存在
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.FormDistinguish(System.String)">
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostFormDistinguish(System.String)">
             <summary>
             (擴充方法)_共同表單區分
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostUploadFilePath(OA_WEB_API.Models.BPMPro.UploadFilePathModel)">
+            <summary>
+            (擴充方法)_確認檔案複製路徑
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostBase64ImgSingletoSingle(OA_WEB_API.Models.BPMPro.Base64ImgSingletoSingleModel)">
+            <summary>
+            base64圖片上傳
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostBase64ImgOut(OA_WEB_API.Models.BPMPro.Base64ImgModel)">
+            <summary>
+            base64圖片輸出設定
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.CommonRepository.strSQL">
@@ -11503,6 +11790,11 @@
         <member name="M:OA_WEB_API.Repository.UserRepository.PostUsers(OA_WEB_API.Models.UserQueryModel)">
             <summary>
             使用者資料列表(查詢)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.UserRepository.GetUsersStructure">
+            <summary>
+            使用者員工結構資料(檢視)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.UserRepository.IsVerifyUser(OA_WEB_API.Models.LogonModel)">

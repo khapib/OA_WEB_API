@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
-using OA_WEB_API.Models.ERP;
+using OA_WEB_API.Models;
 using OA_WEB_API.Repository.ERP;
 
 namespace OA_WEB_API.Controllers.ERP
@@ -25,7 +25,7 @@ namespace OA_WEB_API.Controllers.ERP
         /// </summary>    
         [Route("api/PostGTVStaffSingle")]
         [HttpGet]
-        public IList<GTVStaffModel> PostGTVStaffSingle()
+        public IList<UsersStructure> PostGTVStaffSingle()
         {
             return gTVStructureRepository.PostGTVStaffSingle();
         }

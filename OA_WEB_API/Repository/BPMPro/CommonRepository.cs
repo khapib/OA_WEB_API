@@ -12,6 +12,8 @@ using System.Web;
 using System.Reflection;
 using System.Web.Http.Results;
 using System.Runtime.InteropServices;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 using OA_WEB_API.Models;
 using OA_WEB_API.Models.BPMPro;
@@ -43,7 +45,7 @@ namespace OA_WEB_API.Repository.BPMPro
         FormRepository formRepository = new FormRepository();
         UserRepository userRepository = new UserRepository();
         NotifyRepository notifyRepository = new NotifyRepository();
-        StepFlowRepository stepFlowRepository = new StepFlowRepository();        
+        StepFlowRepository stepFlowRepository = new StepFlowRepository();
 
         #endregion
 
@@ -126,7 +128,7 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 if (!String.IsNullOrEmpty(query.FORM_NO) || !String.IsNullOrWhiteSpace(query.FORM_NO))
                 {
-                    var formDistinguish = FormDistinguish(query.IDENTIFY);
+                    var formDistinguish = PostFormDistinguish(query.IDENTIFY);
 
                     var parameter = new List<SqlParameter>()
                     {
@@ -685,7 +687,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 associatedFormConfigList.ForEach(ConfigList =>
                 {
                     ConfigList.IDENTIFY = query.IDENTIFY;
-                    ConfigList.FORM_NAME = FormDistinguish(query.IDENTIFY).FORM_NAME;
+                    ConfigList.FORM_NAME = PostFormDistinguish(query.IDENTIFY).FORM_NAME;
                     formQueryModel.REQUISITION_ID = ConfigList.ASSOCIATED_REQUISITION_ID;
                     var formData = formRepository.PostFormData(formQueryModel);
                     ConfigList.APPLICANT_DATE_TIME = DateTime.Parse(ConfigList.APPLICANT_DATE_TIME).ToString("yyyy/MM/dd HH:mm:ss");
@@ -740,7 +742,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 var associatedForm = dbFun.DoQuery(strSQL, parameter).ToList<AssociatedFormConfig>();
                 foreach (var Form in associatedForm)
                 {
-                    Form.FORM_NAME = FormDistinguish(Form.IDENTIFY).FORM_NAME;
+                    Form.FORM_NAME = PostFormDistinguish(Form.IDENTIFY).FORM_NAME;
                 }
                 return associatedForm;
             }
@@ -1886,7 +1888,7 @@ namespace OA_WEB_API.Repository.BPMPro
         /// <summary>
         /// (擴充方法)_共同表單區分
         /// </summary>
-        public static FormDistinguishResponse FormDistinguish(string IDENTIFY)
+        public static FormDistinguishResponse PostFormDistinguish(string IDENTIFY)
         {
             //擴充方法使用dbFunction需要參考物件
             CommonRepository commonRepository = new CommonRepository();
@@ -1910,7 +1912,167 @@ namespace OA_WEB_API.Repository.BPMPro
         }
 
         #endregion
-        
+
+        #region - (擴充方法)_確認檔案複製路徑 -
+
+        /// <summary>
+        /// (擴充方法)_確認檔案複製路徑
+        /// </summary>
+        public static string PostUploadFilePath(UploadFilePathModel model)
+        {
+            var ProjectField = String.Empty;
+
+            try
+            {
+                switch (model.LOCATION)
+                {
+                    case "BPMProDev":
+                        ProjectField = "OA_WEB_API_DEV";
+                        break;
+                    case "BPMProTest":
+                        ProjectField = "OA_WEB_API_TEST";
+                        break;
+                    case "BPMPro":
+                        ProjectField = "OA_WEB_API";
+                        break;
+                    default:
+                        ProjectField = "OA_WEB_API_DEV_HO";
+                        break;
+                }
+
+                model.PATH = model.PATH + ProjectField + "\\Attach\\" + model.IDENTIFY + "\\";
+
+                if (!Directory.Exists(model.PATH))
+                {
+                    //確認是否有資料夾沒有的話就自動新增
+                    //新增資料夾
+                    Directory.CreateDirectory(model.PATH);
+                }
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("位置錯誤，原因：" + ex.Message);
+                throw new Exception("位置錯誤，原因：" + ex.Message);
+            }
+
+            return model.PATH;
+        }
+
+        #endregion
+
+        #endregion
+
+        #region - base64圖片上傳 -
+
+        #region - 單筆上傳 >>> 單筆輸出 -
+
+        /// <summary>
+        /// base64圖片上傳
+        /// </summary>
+        public bool PostBase64ImgSingletoSingle(Base64ImgSingletoSingleModel model)
+        {
+            bool vResult = false;
+
+            try
+            {
+                string imgPath = null;
+                if (model.IMG_SIZE != null) imgPath = Path.Combine(model.FILE_PATH, model.IMG_NAME);
+                else imgPath = Path.Combine(model.FILE_PATH, model.PRO_IMG_NAME);
+                byte[] imageBytes = Convert.FromBase64String(model.PHOTO);
+                File.WriteAllBytes(imgPath, imageBytes);
+
+                #region - 調整圖片大小 -
+
+                //調整大小
+                //if (model.IMG_SIZE != null)
+                //{
+                //    Image image = Image.FromFile(model.FILE_PATH + model.IMG_NAME);
+                //    //取得影像的格式
+                //    ImageFormat thisFormat = image.RawFormat;
+
+                //    int fixWidth = 0;
+                //    int fixHeight = 0;
+                //    if (image.Width > image.Height)
+                //    {
+                //        if (image.Width < model.IMG_SIZE && image.Height < model.IMG_SIZE)
+                //        {
+                //            //圖片沒有超過設定值，不執行縮圖
+                //            fixHeight = int.Parse(model.IMG_SIZE.ToString());
+                //            fixWidth = int.Parse(model.IMG_SIZE.ToString());
+
+                //        }
+                //        else
+                //        {
+                //            //設定修改後的圖寬
+                //            fixWidth = int.Parse(model.IMG_SIZE.ToString());
+                //            //設定修改後的圖高
+                //            fixHeight = Convert.ToInt32((Convert.ToDouble(fixWidth) / Convert.ToDouble(image.Width)) * Convert.ToDouble(image.Height));
+                //        }
+                //    }
+                //    else
+                //    {
+                //        if (image.Width < int.Parse(model.IMG_SIZE.ToString()) && image.Height < int.Parse(model.IMG_SIZE.ToString()))
+                //        {
+                //            //圖片沒有超過設定值，不執行縮圖
+                //            fixHeight = int.Parse(model.IMG_SIZE.ToString());
+                //            fixWidth = int.Parse(model.IMG_SIZE.ToString());
+                //        }
+                //        else
+                //        {
+                //            //設定修改後的圖高
+                //            fixHeight = int.Parse(model.IMG_SIZE.ToString());
+                //            //設定修改後的圖寬
+                //            fixWidth = Convert.ToInt32((Convert.ToDouble(fixHeight) / Convert.ToDouble(image.Height)) * Convert.ToDouble(image.Width));
+                //        }
+                //    }
+
+                //    //輸出一個新圖(就是修改過的圖)
+                //    Bitmap imageOutput = new Bitmap(image, fixWidth, fixHeight);
+                //    //將修改過的圖存於設定的位子
+                //    imageOutput.Save(string.Concat(model.FILE_PATH + model.PRO_IMG_NAME), thisFormat);
+                //    //docfiles.Add(filePath + Nfile);
+                //    //釋放記憶體
+                //    imageOutput.Dispose();
+                //    //釋放掉圖檔 
+                //    image.Dispose();
+
+                //    ///刪除原始檔案
+                //    File.Delete(model.FILE_PATH + model.IMG_NAME);
+                //}
+
+                #endregion
+
+                vResult = true;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("圖片上傳失敗，原因：" + ex.Message);
+                throw new Exception("圖片上傳失敗，原因：" + ex.Message);
+            }
+
+            return vResult;
+        }
+
+        /// <summary>
+        /// base64圖片輸出設定
+        /// </summary>
+        public string PostBase64ImgOut(Base64ImgModel model)
+        {
+            try
+            {
+                string[] ExtStrArray = model.FILE_EXTENSION.Split('/');
+                byte[] imageArray = File.ReadAllBytes(model.FILE_PATH + "." + ExtStrArray[1]);
+                return Convert.ToBase64String(imageArray);
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("圖片輸出失敗，原因：" + ex.Message);
+                throw new Exception("圖片輸出失敗，原因：" + ex.Message);
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #endregion

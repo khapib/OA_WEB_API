@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -793,6 +794,43 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
+    #region - base64圖片 -
+
+    /// <summary>
+    /// base64圖片上傳設定
+    /// </summary>
+    public class Base64ImgSingletoSingleModel
+    {
+        /// <summary>暫存名稱_[調整圖片大小]</summary>
+        public string IMG_NAME { get; set; }
+
+        /// <summary>base64圖片碼</summary>
+        public string PHOTO { get; set; }
+
+        /// <summary>輸出名稱</summary>
+        public string PRO_IMG_NAME { get; set; }
+
+        /// <summary>檔案路徑</summary>
+        public string FILE_PATH { get; set; }
+
+        /// <summary>圖片設定值(大小)_[調整圖片大小]</summary>
+        public int? IMG_SIZE { get; set; }
+    }
+
+    /// <summary>
+    /// base64圖片輸出設定
+    /// </summary>
+    public class Base64ImgModel
+    {
+        /// <summary>路徑</summary>
+        public string FILE_PATH { get; set; }
+
+        /// <summary>附件副檔名</summary>
+        public string FILE_EXTENSION { get; set; }
+    }
+
+    #endregion
+
     #region - 擴充方法 -
 
     #region - (擴充方法)_角色列表 -
@@ -875,6 +913,25 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>最終關卡編號</summary>
         public string END_PROCESS_ID { get; set; }
+    }
+
+    #endregion
+
+    #region - (擴充方法)_確認檔案複製路徑 -
+
+    /// <summary>
+    /// (擴充方法)_確認檔案複製路徑
+    /// </summary>
+    public class UploadFilePathModel
+    {
+        /// <summary>位置</summary>
+        public string LOCATION { get; set; }
+
+        /// <summary>路徑</summary>
+        public string PATH { get; set; }
+
+        /// <summary>表單代號</summary>
+        public string IDENTIFY { get; set; }
     }
 
     #endregion

@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
-using OA_WEB_API.Models.ERP;
+using OA_WEB_API.Models;
 
 namespace OA_WEB_API.Repository.ERP
 {
@@ -21,7 +21,7 @@ namespace OA_WEB_API.Repository.ERP
         /// <summary>
         /// 提供外部系統(員工結構)(查詢)
         /// </summary>
-        public IList<GTVStaffModel> PostGTVStaffSingle()
+        public IList<UsersStructure> PostGTVStaffSingle()
         {
             #region - 查詢 -
 
@@ -69,7 +69,7 @@ namespace OA_WEB_API.Repository.ERP
             strSQL += "INNER JOIN [NUP].[dbo].[FSe7en_Org_MemberStruct] AS S on (S.[AccountID]=M.[USER_ID] AND S.[DeptID]=M.[DEPT_ID]) AND (M.[COMPANY_ID]<>'GPI' AND M.[TITLE_ID]<>'AD') AND S.[IsMainJob]=1 ";
             strSQL += "ORDER BY M.[SEQ_ID],[SORT_ORDER] ASC ";
 
-            var gTVStaffModel = dbFun.DoQuery(strSQL, parameterA).ToList<GTVStaffModel>();
+            var gTVStaffModel = dbFun.DoQuery(strSQL, parameterA).ToList<UsersStructure>();
 
             #endregion
 

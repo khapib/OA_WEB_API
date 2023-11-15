@@ -6998,7 +6998,7 @@
             <summary>圖片識別：行照/身分證</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitImagesConfig.PHOTO">
-            <summary>base64圖片</summary>
+            <summary>base64圖片碼</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitImagesConfig.FILE_RENAME">
             <summary>附件編碼名稱</summary>
@@ -8385,7 +8385,7 @@
             <summary>暫存名稱_[調整圖片大小]</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.Base64ImgSingletoSingleModel.PHOTO">
-            <summary>base64圖片</summary>
+            <summary>base64圖片碼</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.Base64ImgSingletoSingleModel.PRO_IMG_NAME">
             <summary>輸出名稱</summary>

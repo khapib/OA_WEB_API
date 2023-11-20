@@ -22,6 +22,7 @@ using OA_WEB_API.Repository.ERP;
 using Dapper;
 using Microsoft.Ajax.Utilities;
 using Docker.DotNet.Models;
+using OA_WEB_API.Repository.OA;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -2053,6 +2054,8 @@ namespace OA_WEB_API.Repository.BPMPro
             return vResult;
         }
 
+        #endregion
+
         /// <summary>
         /// base64圖片輸出設定
         /// </summary>
@@ -2071,7 +2074,121 @@ namespace OA_WEB_API.Repository.BPMPro
             }
         }
 
+        /// <summary>
+        /// 整理圖片檔案及子表單資料
+        /// </summary>
+        public bool PostOrganizeImg(OrganizeImgModel model)
+        {
+            bool vResult = false;
+
+            try
+            {
+                var parameter = new List<SqlParameter>()
+                {
+                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID }
+                };
+
+                strSQL = "";
+                strSQL += "SELECT ";
+                strSQL += "     [FileRename], ";
+                strSQL += "     [FileExtension] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + model.IDENTIFY + "_" + model.EXT + "] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+                var dtImg = dbFun.DoQuery(strSQL, parameter);
+                if (dtImg.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtImg.Rows)
+                    {
+                        string[] ExtStrArray = dr["FileExtension"].ToString().Split('/');
+                        File.Delete(model.FILE_PATH + dr["FileRename"].ToString() + "." + ExtStrArray[1]);
+                    }
+
+                    strSQL = "";
+                    strSQL += "DELETE ";
+                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + model.IDENTIFY + "_D] ";
+                    strSQL += "WHERE 1=1 ";
+                    strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                    dbFun.DoTran(strSQL, parameter);
+
+                    vResult = true;
+                }
+                else vResult = true;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("圖片刪除失敗，原因：" + ex.Message);
+                throw new Exception("圖片刪除失敗，原因：" + ex.Message);
+            }
+            return vResult;
+        }
+
         #endregion
+
+        #region - 檔案、資料整理 -
+
+        /// <summary>
+        /// 檔案、資料整理
+        /// </summary>        
+        public bool PostInformationOrganize(OrganizeImgModel model)
+        {
+            bool vResult = false;
+            try
+            {
+                #region - 確認檔案路徑 -
+
+                var uploadFilePathModel = new UploadFilePathModel()
+                {
+                    LOCATION = GlobalParameters.sqlConnBPMProDevHo,
+                    PATH = model.FILE_PATH,
+                    IDENTIFY = model.IDENTIFY
+                };
+
+                var ImgPath = CommonRepository.PostUploadFilePath(uploadFilePathModel);
+
+                #endregion
+
+                strSQL = "";
+                strSQL += "SELECT ";
+                strSQL += "     [RequisitionID] AS [REQUISITION_ID] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + model.IDENTIFY + "_" + model.EXT + "] ";
+                strSQL += "GROUP BY [RequisitionID] ";
+                strSQL += "EXCEPT ";
+                strSQL += "SELECT ";
+                strSQL += "     [RequisitionID] AS [REQUISITION_ID] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + model.IDENTIFY + "_M] ";
+                strSQL += "GROUP BY [RequisitionID] ";
+                var dtExcept = dbFun.DoQuery(strSQL);
+                if (dtExcept.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtExcept.Rows)
+                    {
+                        #region 整理檔案及資料
+
+                        model = new OrganizeImgModel()
+                        {
+                            EXT = model.EXT,
+                            FILE_PATH = ImgPath,
+                            IDENTIFY = model.IDENTIFY,
+                            REQUISITION_ID = dr["REQUISITION_ID"].ToString()
+                        };
+
+                        vResult = PostOrganizeImg(model);
+
+                        #endregion
+                    }
+                }
+                else vResult = true;
+
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("檔案、資料調整失敗，原因：" + ex.Message);
+                throw new Exception("檔案、資料調整失敗，原因：" + ex.Message);
+            }
+            return vResult;
+        }
 
         #endregion
 

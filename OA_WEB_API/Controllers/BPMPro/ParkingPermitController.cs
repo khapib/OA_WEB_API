@@ -57,6 +57,16 @@ namespace OA_WEB_API.Controllers.BPMPro
             return parkingPermitRepository.PutParkingPermitSingle(model);
         }
 
+        /// <summary>
+        /// 停車證申請單(檔案、資料調整)
+        /// </summary>
+        [Route("GetParkingPermitOrganize")]
+        [HttpGet]
+        public bool GetParkingPermitOrganize()
+        {
+            return parkingPermitRepository.GetParkingPermitOrganize();
+        }
+
         #endregion
     }
 }

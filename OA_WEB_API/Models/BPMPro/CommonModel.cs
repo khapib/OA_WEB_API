@@ -831,6 +831,25 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
+    /// <summary>
+    /// 整理檔案及資料
+    /// </summary>
+    public class OrganizeImgModel
+    {
+        /// <summary>表單資料表子名稱</summary>
+        public string EXT { get; set; }
+
+        /// <summary>表單代號</summary>
+        public string IDENTIFY { get; set; }
+
+        /// <summary>系統編號</summary>
+        public string REQUISITION_ID { get; set; }
+
+        /// <summary>檔案路徑</summary>
+        public string FILE_PATH { get; set; }
+    }
+
+
     #region - 擴充方法 -
 
     #region - (擴充方法)_角色列表 -

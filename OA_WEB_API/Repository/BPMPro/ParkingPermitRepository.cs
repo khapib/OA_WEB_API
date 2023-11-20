@@ -366,15 +366,22 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region - 主旨 -
 
-                if (String.IsNullOrEmpty(model.PARKING_PERMIT_TITLE.OFFICE_NAME) || String.IsNullOrWhiteSpace(model.PARKING_PERMIT_TITLE.OFFICE_NAME)) ConcatenationDept = userStructure.DEPT_NAME + "_" + userStructure.GROUP_NAME;
-                else if (String.IsNullOrEmpty(model.PARKING_PERMIT_TITLE.GROUP_NAME) || String.IsNullOrWhiteSpace(model.PARKING_PERMIT_TITLE.GROUP_NAME)) ConcatenationDept = userStructure.DEPT_NAME + "_" + userStructure.OFFICE_NAME;
-                else ConcatenationDept = userStructure.DEPT_NAME + "_" + userStructure.OFFICE_NAME + "-" + userStructure.GROUP_NAME;
+                FM7Subject = model.PARKING_PERMIT_TITLE.FM7_SUBJECT;
 
-                if ((String.IsNullOrEmpty(model.PARKING_PERMIT_TITLE.APPLICATION_CATEGORY) || String.IsNullOrWhiteSpace(model.PARKING_PERMIT_TITLE.APPLICATION_CATEGORY)) && (String.IsNullOrEmpty(model.PARKING_PERMIT_CONFIG.VEHICLE_CATEGORY) || String.IsNullOrWhiteSpace(model.PARKING_PERMIT_CONFIG.VEHICLE_CATEGORY)))
+                if (FM7Subject == null)
                 {
-                    FM7Subject = "(汽車/機車)申請，車牌號碼：_____；" + ConcatenationDept + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
+                    if (String.IsNullOrEmpty(model.PARKING_PERMIT_TITLE.OFFICE_NAME) || String.IsNullOrWhiteSpace(model.PARKING_PERMIT_TITLE.OFFICE_NAME)) ConcatenationDept = userStructure.DEPT_NAME + "_" + userStructure.GROUP_NAME;
+                    else if (String.IsNullOrEmpty(model.PARKING_PERMIT_TITLE.GROUP_NAME) || String.IsNullOrWhiteSpace(model.PARKING_PERMIT_TITLE.GROUP_NAME)) ConcatenationDept = userStructure.DEPT_NAME + "_" + userStructure.OFFICE_NAME;
+                    else ConcatenationDept = userStructure.DEPT_NAME + "_" + userStructure.OFFICE_NAME + "-" + userStructure.GROUP_NAME;
+
+                    if ((String.IsNullOrEmpty(model.PARKING_PERMIT_TITLE.APPLICATION_CATEGORY) || String.IsNullOrWhiteSpace(model.PARKING_PERMIT_TITLE.APPLICATION_CATEGORY)) && (String.IsNullOrEmpty(model.PARKING_PERMIT_CONFIG.VEHICLE_CATEGORY) || String.IsNullOrWhiteSpace(model.PARKING_PERMIT_CONFIG.VEHICLE_CATEGORY)))
+                    {
+                        FM7Subject = "(汽車/機車)申請，車牌號碼：_____；" + ConcatenationDept + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
+                    }
+                    else FM7Subject = ApplicationCategoryTW + VehicleCategoryTW + ChangeCategoryTW + "申請，車牌號碼：" + model.PARKING_PERMIT_CONFIG.LICENSE_PLATE_NUMBER + "；" + ConcatenationDept + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
                 }
-                else FM7Subject = ApplicationCategoryTW + VehicleCategoryTW + ChangeCategoryTW + "申請，車牌號碼：" + model.PARKING_PERMIT_CONFIG.LICENSE_PLATE_NUMBER + "；" + ConcatenationDept + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
+
+
 
                 #endregion
 
@@ -645,7 +652,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 FormHeader header = new FormHeader();
                 header.REQUISITION_ID = strREQ;
                 header.ITEM_NAME = "Subject";
-                header.ITEM_VALUE = model.PARKING_PERMIT_TITLE.FM7_SUBJECT;
+                header.ITEM_VALUE = FM7Subject;
 
                 formRepository.PutFormHeader(header);
 

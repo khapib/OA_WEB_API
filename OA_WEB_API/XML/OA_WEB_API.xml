@@ -1069,6 +1069,11 @@
             停車證申請單(新增/修改/草稿)
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.ParkingPermitController.GetParkingPermitOrganize">
+            <summary>
+            停車證申請單(檔案、資料調整)
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.PersonnelSupplementController">
             <summary>
             會簽管理系統 - 人員增補單
@@ -8407,6 +8412,23 @@
         <member name="P:OA_WEB_API.Models.BPMPro.Base64ImgModel.FILE_EXTENSION">
             <summary>附件副檔名</summary>
         </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.OrganizeImgModel">
+            <summary>
+            整理檔案及資料
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.OrganizeImgModel.EXT">
+            <summary>表單資料表子名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.OrganizeImgModel.IDENTIFY">
+            <summary>表單代號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.OrganizeImgModel.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.OrganizeImgModel.FILE_PATH">
+            <summary>檔案路徑</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.RolesModel">
             <summary>
             (擴充方法)_角色列表
@@ -11226,6 +11248,11 @@
             停車證申請單(新增/修改/草稿)
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.ParkingPermitRepository.GetParkingPermitOrganize">
+            <summary>
+            停車證申請單(檔案、資料整理)
+            </summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.ParkingPermitRepository.strSQL">
             <summary>
             T-SQL
@@ -11626,6 +11653,16 @@
             <summary>
             base64圖片輸出設定
             </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostOrganizeImg(OA_WEB_API.Models.BPMPro.OrganizeImgModel)">
+            <summary>
+            整理圖片檔案及子表單資料
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostInformationOrganize(OA_WEB_API.Models.BPMPro.OrganizeImgModel)">
+            <summary>
+            檔案、資料整理
+            </summary>        
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.CommonRepository.strSQL">
             <summary>

@@ -12,6 +12,8 @@ using Newtonsoft.Json.Linq;
 using System.Drawing;
 using Microsoft.Ajax.Utilities;
 using OA_WEB_API.Repository.OA;
+using System.Reflection;
+using System.Web.Http.Results;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -137,7 +139,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "ORDER BY [AutoCounter] ";
 
             var parkingPermitImgsConfig = dbFun.DoQuery(strSQL, parameter).ToList<ParkingPermitImagesConfig>();
-            
+
             #region - 確認檔案複製路徑 -
 
             var uploadFilePathModel = new UploadFilePathModel()
@@ -150,7 +152,7 @@ namespace OA_WEB_API.Repository.BPMPro
             var ImgPath = CommonRepository.PostUploadFilePath(uploadFilePathModel);
 
             #endregion
-            
+
             parkingPermitImgsConfig.ForEach(IMG =>
             {
                 var base64ImgModel = new Base64ImgModel()
@@ -166,9 +168,9 @@ namespace OA_WEB_API.Repository.BPMPro
             var parkingPermitViewModel = new ParkingPermitViewModel()
             {
                 APPLICANT_INFO = applicantInfo,
-                PARKING_PERMIT_TITLE=parkingPermitTitle,
-                PARKING_PERMIT_CONFIG=parkingPermitConfig,
-                PARKING_PERMIT_IMGS_CONFIG=parkingPermitImgsConfig
+                PARKING_PERMIT_TITLE = parkingPermitTitle,
+                PARKING_PERMIT_CONFIG = parkingPermitConfig,
+                PARKING_PERMIT_IMGS_CONFIG = parkingPermitImgsConfig
             };
 
             #region - 確認表單 -
@@ -251,19 +253,19 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     parkingPermitViewModel.PARKING_PERMIT_TITLE.FM7_SUBJECT = null;
                     parkingPermitViewModel.PARKING_PERMIT_TITLE.ROC_YEAR = null;
-                    parkingPermitViewModel.PARKING_PERMIT_TITLE.APPLICATION_CATEGORY=null;
-                    parkingPermitViewModel.PARKING_PERMIT_TITLE.GROUP_NAME= null;
-                    parkingPermitViewModel.PARKING_PERMIT_TITLE.GUEST_MOBILE= null;
+                    parkingPermitViewModel.PARKING_PERMIT_TITLE.APPLICATION_CATEGORY = null;
+                    parkingPermitViewModel.PARKING_PERMIT_TITLE.GROUP_NAME = null;
+                    parkingPermitViewModel.PARKING_PERMIT_TITLE.GUEST_MOBILE = null;
 
                     #endregion
 
                     #region - 停車證申請單 表單內容 調整 -
 
-                    parkingPermitViewModel.PARKING_PERMIT_CONFIG.VEHICLE_CATEGORY=null;
+                    parkingPermitViewModel.PARKING_PERMIT_CONFIG.VEHICLE_CATEGORY = null;
                     parkingPermitViewModel.PARKING_PERMIT_CONFIG.LICENSE_PLATE_NUMBER = null;
                     parkingPermitViewModel.PARKING_PERMIT_CONFIG.IS_CHANGE = false;
-                    parkingPermitViewModel.PARKING_PERMIT_CONFIG.CHANGE_LICENSE_PLATE_NUMBER= null;
-                    parkingPermitViewModel.PARKING_PERMIT_CONFIG.CAR_OWNER_RELATIONSHIP= null;
+                    parkingPermitViewModel.PARKING_PERMIT_CONFIG.CHANGE_LICENSE_PLATE_NUMBER = null;
+                    parkingPermitViewModel.PARKING_PERMIT_CONFIG.CAR_OWNER_RELATIONSHIP = null;
 
                     #endregion
 
@@ -369,7 +371,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 else if (String.IsNullOrEmpty(model.PARKING_PERMIT_TITLE.GROUP_NAME) || String.IsNullOrWhiteSpace(model.PARKING_PERMIT_TITLE.GROUP_NAME)) ConcatenationDept = model.PARKING_PERMIT_TITLE.DEPT_NAME + "_" + model.PARKING_PERMIT_TITLE.OFFICE_NAME;
                 else ConcatenationDept = model.PARKING_PERMIT_TITLE.DEPT_NAME + "_" + model.PARKING_PERMIT_TITLE.OFFICE_NAME + "-" + model.PARKING_PERMIT_TITLE.GROUP_NAME;
 
-                if((String.IsNullOrEmpty(model.PARKING_PERMIT_TITLE.APPLICATION_CATEGORY) || String.IsNullOrWhiteSpace(model.PARKING_PERMIT_TITLE.APPLICATION_CATEGORY)) && (String.IsNullOrEmpty(model.PARKING_PERMIT_CONFIG.VEHICLE_CATEGORY) || String.IsNullOrWhiteSpace(model.PARKING_PERMIT_CONFIG.VEHICLE_CATEGORY)))
+                if ((String.IsNullOrEmpty(model.PARKING_PERMIT_TITLE.APPLICATION_CATEGORY) || String.IsNullOrWhiteSpace(model.PARKING_PERMIT_TITLE.APPLICATION_CATEGORY)) && (String.IsNullOrEmpty(model.PARKING_PERMIT_CONFIG.VEHICLE_CATEGORY) || String.IsNullOrWhiteSpace(model.PARKING_PERMIT_CONFIG.VEHICLE_CATEGORY)))
                 {
                     FM7Subject = "(汽車/機車)申請，車牌號碼：_____；" + ConcatenationDept + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
                 }
@@ -389,7 +391,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         LOCATION = GlobalParameters.sqlConnBPMProDev,
                         PATH = Path,
-                        IDENTIFY=IDENTIFY
+                        IDENTIFY = IDENTIFY
                     };
 
                     var ImgPath = CommonRepository.PostUploadFilePath(uploadFilePathModel);
@@ -415,25 +417,18 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     #region 先刪除舊檔案及資料
 
-                    strSQL = "";
-                    strSQL += "SELECT ";
-                    strSQL += "     [FileRename], ";
-                    strSQL += "     [FileExtension] ";
-                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_D] ";
-                    strSQL += "WHERE 1=1 ";
-                    strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
-                    var dtImg = dbFun.DoQuery(strSQL, parameterImages);
-
-                    if (dtImg.Rows.Count > 0)
+                    var organizeImgModel = new OrganizeImgModel()
                     {
-                        foreach (DataRow dr in dtImg.Rows)
-                        {
-                            string[] ExtStrArray = dr["FileExtension"].ToString().Split('/');
-                            File.Delete(ImgPath + dr["FileRename"].ToString() + "." + ExtStrArray[1]);
-                        }
+                        EXT = "D",
+                        FILE_PATH = ImgPath,
+                        IDENTIFY = IDENTIFY,
+                        REQUISITION_ID = strREQ
+                    };
 
-                        #endregion
+                    #endregion
 
+                    if (commonRepository.PostOrganizeImg(organizeImgModel))
+                    {
                         model.PARKING_PERMIT_IMGS_CONFIG.ToList().ForEach(IMG =>
                         {
                             #region - 子表宣告 -
@@ -486,12 +481,13 @@ namespace OA_WEB_API.Repository.BPMPro
                             #endregion
                         });
                     }
+                }
 
-                    #endregion
+                #endregion
 
-                    #region - 停車證申請單 表頭資訊：ParkingPermit_M -
+                #region - 停車證申請單 表頭資訊：ParkingPermit_M -
 
-                    var parameterTitle = new List<SqlParameter>()
+                var parameterTitle = new List<SqlParameter>()
                 {
                     //表單資訊
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  strREQ},
@@ -527,96 +523,96 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 };
 
-                    #region - 正常起單後 申請時間(APPLICANT_DATETIME) 不可覆蓋 -
+                #region - 正常起單後 申請時間(APPLICANT_DATETIME) 不可覆蓋 -
 
-                    if (model.APPLICANT_INFO.DRAFT_FLAG == 0)
+                if (model.APPLICANT_INFO.DRAFT_FLAG == 0)
+                {
+                    var formData = new FormData()
                     {
-                        var formData = new FormData()
-                        {
-                            REQUISITION_ID = strREQ
-                        };
+                        REQUISITION_ID = strREQ
+                    };
 
-                        if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
-                        {
-                            parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
-                            IsADD = true;
-                        }
+                    if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
+                    {
+                        parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+                        IsADD = true;
                     }
-                    else parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+                }
+                else parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
 
-                    #endregion
+                #endregion
+
+                strSQL = "";
+                strSQL += "SELECT ";
+                strSQL += "      [RequisitionID] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+                var dtA = dbFun.DoQuery(strSQL, parameterTitle);
+
+                if (dtA.Rows.Count > 0)
+                {
+                    #region - 修改 -
 
                     strSQL = "";
-                    strSQL += "SELECT ";
-                    strSQL += "      [RequisitionID] ";
-                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                    strSQL += "SET [DiagramID] =@DIAGRAM_ID, ";
+                    strSQL += "     [ApplicantDept]=@APPLICANT_DEPT, ";
+                    strSQL += "     [ApplicantDeptName]=@APPLICANT_DEPT_NAME, ";
+                    strSQL += "     [ApplicantID]=@APPLICANT_ID, ";
+                    strSQL += "     [ApplicantName]=@APPLICANT_NAME, ";
+                    strSQL += "     [ApplicantPhone]=@APPLICANT_PHONE, ";
+
+                    if (IsADD) strSQL += "     [ApplicantDateTime]=@APPLICANT_DATETIME, ";
+
+                    strSQL += "     [FillerID]=@FILLER_ID, ";
+                    strSQL += "     [FillerName]=@FILLER_NAME, ";
+                    strSQL += "     [Priority]=@PRIORITY, ";
+                    strSQL += "     [DraftFlag]=@DRAFT_FLAG, ";
+                    strSQL += "     [FlowActivated]=@FLOW_ACTIVATED, ";
+                    strSQL += "     [FM7Subject]=@FM7_SUBJECT, ";
+                    strSQL += "     [Mobile]=@MOBILE, ";
+                    strSQL += "     [CompanyName]=@COMPANY_NAME, ";
+                    strSQL += "     [DeptID]=@DEPT_ID, ";
+                    strSQL += "     [OfficeID]=@OFFICE_ID, ";
+                    strSQL += "     [GroupID]=@GROUP_ID, ";
+                    strSQL += "     [DeptName]=@DEPT_NAME, ";
+                    strSQL += "     [OfficeName]=@OFFICE_NAME, ";
+                    strSQL += "     [GroupName]=@GROUP_NAME, ";
+                    strSQL += "     [RocYear]=@ROC_YEAR, ";
+                    strSQL += "     [ApplicationCategory]=@APPLICATION_CATEGORY, ";
+                    strSQL += "     [GuestName]=@GUEST_NAME, ";
+                    strSQL += "     [GuestCompanyName]=@GUEST_COMPANY_NAME, ";
+                    strSQL += "     [GuestDeptName]=@GUEST_DEPT_NAME, ";
+                    strSQL += "     [GuestMobile]=@GUEST_MOBILE ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-                    var dtA = dbFun.DoQuery(strSQL, parameterTitle);
-
-                    if (dtA.Rows.Count > 0)
-                    {
-                        #region - 修改 -
-
-                        strSQL = "";
-                        strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
-                        strSQL += "SET [DiagramID] =@DIAGRAM_ID, ";
-                        strSQL += "     [ApplicantDept]=@APPLICANT_DEPT, ";
-                        strSQL += "     [ApplicantDeptName]=@APPLICANT_DEPT_NAME, ";
-                        strSQL += "     [ApplicantID]=@APPLICANT_ID, ";
-                        strSQL += "     [ApplicantName]=@APPLICANT_NAME, ";
-                        strSQL += "     [ApplicantPhone]=@APPLICANT_PHONE, ";
-
-                        if (IsADD) strSQL += "     [ApplicantDateTime]=@APPLICANT_DATETIME, ";
-
-                        strSQL += "     [FillerID]=@FILLER_ID, ";
-                        strSQL += "     [FillerName]=@FILLER_NAME, ";
-                        strSQL += "     [Priority]=@PRIORITY, ";
-                        strSQL += "     [DraftFlag]=@DRAFT_FLAG, ";
-                        strSQL += "     [FlowActivated]=@FLOW_ACTIVATED, ";
-                        strSQL += "     [FM7Subject]=@FM7_SUBJECT, ";
-                        strSQL += "     [Mobile]=@MOBILE, ";
-                        strSQL += "     [CompanyName]=@COMPANY_NAME, ";
-                        strSQL += "     [DeptID]=@DEPT_ID, ";
-                        strSQL += "     [OfficeID]=@OFFICE_ID, ";
-                        strSQL += "     [GroupID]=@GROUP_ID, ";
-                        strSQL += "     [DeptName]=@DEPT_NAME, ";
-                        strSQL += "     [OfficeName]=@OFFICE_NAME, ";
-                        strSQL += "     [GroupName]=@GROUP_NAME, ";
-                        strSQL += "     [RocYear]=@ROC_YEAR, ";
-                        strSQL += "     [ApplicationCategory]=@APPLICATION_CATEGORY, ";
-                        strSQL += "     [GuestName]=@GUEST_NAME, ";
-                        strSQL += "     [GuestCompanyName]=@GUEST_COMPANY_NAME, ";
-                        strSQL += "     [GuestDeptName]=@GUEST_DEPT_NAME, ";
-                        strSQL += "     [GuestMobile]=@GUEST_MOBILE ";
-                        strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-
-                        dbFun.DoTran(strSQL, parameterTitle);
-
-                        #endregion
-                    }
-                    else
-                    {
-                        #region - 新增 -
-
-                        strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FM7Subject],[Mobile],[CompanyName],[DeptID],[OfficeID],[GroupID],[DeptName],[OfficeName],[GroupName],[RocYear],[ApplicationCategory],[GuestName],[GuestCompanyName],[GuestDeptName],[GuestMobile]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FM7_SUBJECT,@MOBILE,@COMPANY_NAME,@DEPT_ID,@OFFICE_ID,@GROUP_ID,@DEPT_NAME,@OFFICE_NAME,@GROUP_NAME,@ROC_YEAR,@APPLICATION_CATEGORY,@GUEST_NAME,@GUEST_COMPANY_NAME,@GUEST_DEPT_NAME,@GUEST_MOBILE) ";
-
-                        dbFun.DoTran(strSQL, parameterTitle);
-
-                        #endregion
-                    }
+                    dbFun.DoTran(strSQL, parameterTitle);
 
                     #endregion
+                }
+                else
+                {
+                    #region - 新增 -
 
-                    #region - 停車證申請單 表單內容：ParkingPermit_M -
+                    strSQL = "";
+                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FM7Subject],[Mobile],[CompanyName],[DeptID],[OfficeID],[GroupID],[DeptName],[OfficeName],[GroupName],[RocYear],[ApplicationCategory],[GuestName],[GuestCompanyName],[GuestDeptName],[GuestMobile]) ";
+                    strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FM7_SUBJECT,@MOBILE,@COMPANY_NAME,@DEPT_ID,@OFFICE_ID,@GROUP_ID,@DEPT_NAME,@OFFICE_NAME,@GROUP_NAME,@ROC_YEAR,@APPLICATION_CATEGORY,@GUEST_NAME,@GUEST_COMPANY_NAME,@GUEST_DEPT_NAME,@GUEST_MOBILE) ";
 
-                    if (model.PARKING_PERMIT_CONFIG != null)
-                    {
-                        strJson = jsonFunction.ObjectToJSON(model.PARKING_PERMIT_CONFIG);
+                    dbFun.DoTran(strSQL, parameterTitle);
 
-                        var parameterInfo = new List<SqlParameter>()
+                    #endregion
+                }
+
+                #endregion
+
+                #region - 停車證申請單 表單內容：ParkingPermit_M -
+
+                if (model.PARKING_PERMIT_CONFIG != null)
+                {
+                    strJson = jsonFunction.ObjectToJSON(model.PARKING_PERMIT_CONFIG);
+
+                    var parameterInfo = new List<SqlParameter>()
                     {
                         //停車證申請單 表單內容
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
@@ -627,89 +623,114 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@CAR_OWNER_RELATIONSHIP", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value }
                     };
 
-                        //寫入：停車證申請單 表單內容parameter                    
-                        GlobalParameters.Infoparameter(strJson, parameterInfo);
+                    //寫入：停車證申請單 表單內容parameter                    
+                    GlobalParameters.Infoparameter(strJson, parameterInfo);
 
-                        strSQL = "";
-                        strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
-                        strSQL += "SET [VehicleCategory]=@VEHICLE_CATEGORY, ";
-                        strSQL += "     [LicensePlateNumber]=@LICENSE_PLATE_NUMBER, ";
-                        strSQL += "     [IsChange]=@IS_CHANGE, ";
-                        strSQL += "     [ChangeLicensePlateNumber]=@CHANGE_LICENSE_PLATE_NUMBER, ";
-                        strSQL += "     [CarOwnerRelationship]=@CAR_OWNER_RELATIONSHIP ";
-                        strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+                    strSQL = "";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                    strSQL += "SET [VehicleCategory]=@VEHICLE_CATEGORY, ";
+                    strSQL += "     [LicensePlateNumber]=@LICENSE_PLATE_NUMBER, ";
+                    strSQL += "     [IsChange]=UPPER(@IS_CHANGE), ";
+                    strSQL += "     [ChangeLicensePlateNumber]=@CHANGE_LICENSE_PLATE_NUMBER, ";
+                    strSQL += "     [CarOwnerRelationship]=@CAR_OWNER_RELATIONSHIP ";
+                    strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-                        dbFun.DoTran(strSQL, parameterInfo);
+                    dbFun.DoTran(strSQL, parameterInfo);
 
-                    }
-
-                    #endregion
-
-                    #region - 表單主旨：FormHeader -
-
-                    FormHeader header = new FormHeader();
-                    header.REQUISITION_ID = strREQ;
-                    header.ITEM_NAME = "Subject";
-                    header.ITEM_VALUE = FM7Subject;
-
-                    formRepository.PutFormHeader(header);
-
-                    #endregion
-
-                    #region - 儲存草稿：FormDraftList -
-
-                    if (model.APPLICANT_INFO.DRAFT_FLAG.Equals(1))
-                    {
-                        FormDraftList draftList = new FormDraftList();
-                        draftList.REQUISITION_ID = strREQ;
-                        draftList.IDENTIFY = IDENTIFY;
-                        draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
-
-                        formRepository.PutFormDraftList(draftList, true);
-                    }
-
-                    #endregion
-
-                    #region - 送出表單：FormAutoStart -
-
-                    if (model.APPLICANT_INFO.DRAFT_FLAG.Equals(0))
-                    {
-                        #region 送出表單前，先刪除草稿清單
-
-                        FormDraftList draftList = new FormDraftList();
-                        draftList.REQUISITION_ID = strREQ;
-                        draftList.IDENTIFY = IDENTIFY;
-                        draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
-
-                        formRepository.PutFormDraftList(draftList, false);
-
-                        #endregion
-
-                        FormAutoStart autoStart = new FormAutoStart();
-                        autoStart.REQUISITION_ID = strREQ;
-                        autoStart.DIAGRAM_ID = model.APPLICANT_INFO.DIAGRAM_ID;
-                        autoStart.APPLICANT_ID = model.APPLICANT_INFO.APPLICANT_ID;
-                        autoStart.APPLICANT_DEPT = model.APPLICANT_INFO.APPLICANT_DEPT;
-
-                        formRepository.PutFormAutoStart(autoStart);
-                    }
-
-                    #endregion
-
-                    #region - 表單機能啟用：BPMFormFunction -
-
-                    var BPM_FormFunction = new BPMFormFunction()
-                    {
-                        REQUISITION_ID = strREQ,
-                        IDENTIFY = IDENTIFY,
-                        DRAFT_FLAG = 0
-                    };
-                    commonRepository.PostBPMFormFunction(BPM_FormFunction);
-
-                    #endregion
-
-                    vResult = true;
                 }
+
+                #endregion
+
+                #region - 表單主旨：FormHeader -
+
+                FormHeader header = new FormHeader();
+                header.REQUISITION_ID = strREQ;
+                header.ITEM_NAME = "Subject";
+                header.ITEM_VALUE = FM7Subject;
+
+                formRepository.PutFormHeader(header);
+
+                #endregion
+
+                #region - 儲存草稿：FormDraftList -
+
+                if (model.APPLICANT_INFO.DRAFT_FLAG.Equals(1))
+                {
+                    FormDraftList draftList = new FormDraftList();
+                    draftList.REQUISITION_ID = strREQ;
+                    draftList.IDENTIFY = IDENTIFY;
+                    draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
+
+                    formRepository.PutFormDraftList(draftList, true);
+                }
+
+                #endregion
+
+                #region - 送出表單：FormAutoStart -
+
+                if (model.APPLICANT_INFO.DRAFT_FLAG.Equals(0))
+                {
+                    #region 送出表單前，先刪除草稿清單
+
+                    FormDraftList draftList = new FormDraftList();
+                    draftList.REQUISITION_ID = strREQ;
+                    draftList.IDENTIFY = IDENTIFY;
+                    draftList.FILLER_ID = model.APPLICANT_INFO.APPLICANT_ID;
+
+                    formRepository.PutFormDraftList(draftList, false);
+
+                    #endregion
+
+                    FormAutoStart autoStart = new FormAutoStart();
+                    autoStart.REQUISITION_ID = strREQ;
+                    autoStart.DIAGRAM_ID = model.APPLICANT_INFO.DIAGRAM_ID;
+                    autoStart.APPLICANT_ID = model.APPLICANT_INFO.APPLICANT_ID;
+                    autoStart.APPLICANT_DEPT = model.APPLICANT_INFO.APPLICANT_DEPT;
+
+                    formRepository.PutFormAutoStart(autoStart);
+                }
+
+                #endregion
+
+                #region - 表單機能啟用：BPMFormFunction -
+
+                var BPM_FormFunction = new BPMFormFunction()
+                {
+                    REQUISITION_ID = strREQ,
+                    IDENTIFY = IDENTIFY,
+                    DRAFT_FLAG = 0
+                };
+                commonRepository.PostBPMFormFunction(BPM_FormFunction);
+
+                #endregion
+
+                vResult = true;
+            }
+            catch (Exception ex)
+            {
+                vResult = false;
+                CommLib.Logger.Error("停車證申請單(新增/修改/草稿)失敗，原因：" + ex.Message);
+            }
+
+            return vResult;
+        }
+
+        /// <summary>
+        /// 停車證申請單(檔案、資料整理)
+        /// </summary>
+        public bool GetParkingPermitOrganize()
+        {
+            bool vResult = false;
+            try
+            {
+                var organizeImgModel = new OrganizeImgModel()
+                {
+                    EXT = "D",
+                    FILE_PATH = Path,
+                    IDENTIFY = IDENTIFY,
+                };
+
+                vResult = commonRepository.PostInformationOrganize(organizeImgModel);
             }
             catch (Exception ex)
             {

@@ -645,7 +645,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 FormHeader header = new FormHeader();
                 header.REQUISITION_ID = strREQ;
                 header.ITEM_NAME = "Subject";
-                header.ITEM_VALUE = FM7Subject;
+                header.ITEM_VALUE = model.PARKING_PERMIT_TITLE.FM7_SUBJECT;
 
                 formRepository.PutFormHeader(header);
 

@@ -361,15 +361,14 @@ namespace OA_WEB_API.Repository.BPMPro
                 model.PARKING_PERMIT_TITLE.DEPT_NAME = userStructure.DEPT_NAME;
                 model.PARKING_PERMIT_TITLE.OFFICE_NAME = userStructure.OFFICE_NAME;
                 model.PARKING_PERMIT_TITLE.GROUP_NAME = userStructure.GROUP_NAME;
-                model.PARKING_PERMIT_TITLE.MOBILE = userStructure.MOBILE;
 
                 #endregion
 
                 #region - 主旨 -
 
-                if (String.IsNullOrEmpty(model.PARKING_PERMIT_TITLE.OFFICE_NAME) || String.IsNullOrWhiteSpace(model.PARKING_PERMIT_TITLE.OFFICE_NAME)) ConcatenationDept = model.PARKING_PERMIT_TITLE.DEPT_NAME + "_" + model.PARKING_PERMIT_TITLE.GROUP_NAME;
-                else if (String.IsNullOrEmpty(model.PARKING_PERMIT_TITLE.GROUP_NAME) || String.IsNullOrWhiteSpace(model.PARKING_PERMIT_TITLE.GROUP_NAME)) ConcatenationDept = model.PARKING_PERMIT_TITLE.DEPT_NAME + "_" + model.PARKING_PERMIT_TITLE.OFFICE_NAME;
-                else ConcatenationDept = model.PARKING_PERMIT_TITLE.DEPT_NAME + "_" + model.PARKING_PERMIT_TITLE.OFFICE_NAME + "-" + model.PARKING_PERMIT_TITLE.GROUP_NAME;
+                if (String.IsNullOrEmpty(model.PARKING_PERMIT_TITLE.OFFICE_NAME) || String.IsNullOrWhiteSpace(model.PARKING_PERMIT_TITLE.OFFICE_NAME)) ConcatenationDept = userStructure.DEPT_NAME + "_" + userStructure.GROUP_NAME;
+                else if (String.IsNullOrEmpty(model.PARKING_PERMIT_TITLE.GROUP_NAME) || String.IsNullOrWhiteSpace(model.PARKING_PERMIT_TITLE.GROUP_NAME)) ConcatenationDept = userStructure.DEPT_NAME + "_" + userStructure.OFFICE_NAME;
+                else ConcatenationDept = userStructure.DEPT_NAME + "_" + userStructure.OFFICE_NAME + "-" + userStructure.GROUP_NAME;
 
                 if ((String.IsNullOrEmpty(model.PARKING_PERMIT_TITLE.APPLICATION_CATEGORY) || String.IsNullOrWhiteSpace(model.PARKING_PERMIT_TITLE.APPLICATION_CATEGORY)) && (String.IsNullOrEmpty(model.PARKING_PERMIT_CONFIG.VEHICLE_CATEGORY) || String.IsNullOrWhiteSpace(model.PARKING_PERMIT_CONFIG.VEHICLE_CATEGORY)))
                 {

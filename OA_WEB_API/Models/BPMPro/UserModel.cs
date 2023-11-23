@@ -146,6 +146,9 @@ namespace OA_WEB_API.Models
         /// <summary>在職狀態(1：在職、2：離職)</summary>
         public Byte JOB_STATUS { get; set; }
 
+        /// <summary>是否為正職部門</summary>
+        public int IS_MAIN_JOB { get; set; }
+
         /// <summary>職稱權重</summary>
         public int JOB_GRADE { get; set; }
 

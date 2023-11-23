@@ -68,11 +68,20 @@ namespace OA_WEB_API.Models
     /// </summary>
     public class UserInfo
     {
-        /// <summary>使用者資料</summary>
-        public IList<UserModel> USER_MODEL { get; set; }
+        /// <summary>使用者資料訊息</summary>
+        public IList<UserInfoModel> USER_MODEL { get; set; }
 
         /// <summary>使用者角色</summary>
         public IList<string> USER_ROLE { get; set; }
+    }
+
+    /// <summary>
+    /// 使用者資料訊息
+    /// </summary>
+    public class UserInfoModel: UserModel
+    {
+        /// <summary>是否為正職部門</summary>
+        public int IS_MAIN_JOB { get; set; }
     }
 
     /// <summary>
@@ -145,9 +154,6 @@ namespace OA_WEB_API.Models
 
         /// <summary>在職狀態(1：在職、2：離職)</summary>
         public Byte JOB_STATUS { get; set; }
-
-        /// <summary>是否為正職部門</summary>
-        public int IS_MAIN_JOB { get; set; }
 
         /// <summary>職稱權重</summary>
         public int JOB_GRADE { get; set; }

@@ -80,7 +80,7 @@ namespace OA_WEB_API.Repository
             strSQL += "WHERE [USER_ID]=@USER_ID ";
             strSQL += "ORDER BY [COMPANY_ID],[SORT_ORDER],[JOB_GRADE] DESC";
 
-            var userModel = dbFun.DoQuery(strSQL, parameter).ToList<UserModel>();
+            var userModel = dbFun.DoQuery(strSQL, parameter).ToList<UserInfoModel>();
 
             #region - 確認BPM_Flow7AdminTool 人員組織是否存在 -
 

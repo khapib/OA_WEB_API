@@ -9392,6 +9392,9 @@
         <member name="P:OA_WEB_API.Models.UserInfo.USER_ROLE">
             <summary>使用者角色</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.UserInfoModel.IS_MAIN_JOB">
+            <summary>是否為正職部門</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.UserModel">
             <summary>
             使用者資料
@@ -9456,9 +9459,6 @@
         </member>
         <member name="P:OA_WEB_API.Models.UserModel.JOB_STATUS">
             <summary>在職狀態(1：在職、2：離職)</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.UserModel.IS_MAIN_JOB">
-            <summary>是否為正職部門</summary>
         </member>
         <member name="P:OA_WEB_API.Models.UserModel.JOB_GRADE">
             <summary>職稱權重</summary>

@@ -245,6 +245,7 @@ namespace OA_WEB_API.Repository
             strSQL += "     M.[MOBILE], ";
             strSQL += "     M.[JOB_GRADE], ";
             strSQL += "     M.[JOB_STATUS], ";
+            strSQL += "     S.[IsMainJob] AS [IS_MAIN_JOB], ";
             strSQL += "     M.[USER_TITLE],";
             strSQL += "     M.[USER_FLOW], ";
             strSQL += "     M.[USER_FLOW_LEVEL], ";

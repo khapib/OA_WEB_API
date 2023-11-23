@@ -249,6 +249,9 @@ namespace OA_WEB_API.Models
         /// <summary>工作狀態</summary>
         public int JOB_STATUS { get; set; }
 
+        /// <summary>是否為正職部門</summary>
+        public int IS_MAIN_JOB { get; set; }
+
         /// <summary>使用者標題</summary>
         public string USER_TITLE { get; set; }
 

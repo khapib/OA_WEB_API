@@ -9477,6 +9477,12 @@
         <member name="P:OA_WEB_API.Models.UsersStructure.SEQ_ID">
             <summary>序列</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.ORG_DEPT_ID">
+            <summary>組織部門編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.ORG_DEPT_NAME">
+            <summary>組織部門名稱</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.UsersStructure.COMPANY_ID">
             <summary>公司編號</summary>
         </member>
@@ -9551,6 +9557,9 @@
         </member>
         <member name="P:OA_WEB_API.Models.UsersStructure.JOB_STATUS">
             <summary>工作狀態</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.UsersStructure.IS_MAIN_JOB">
+            <summary>是否為正職部門</summary>
         </member>
         <member name="P:OA_WEB_API.Models.UsersStructure.USER_TITLE">
             <summary>使用者標題</summary>

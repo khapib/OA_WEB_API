@@ -9457,6 +9457,9 @@
         <member name="P:OA_WEB_API.Models.UserModel.JOB_STATUS">
             <summary>在職狀態(1：在職、2：離職)</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.UserModel.IS_MAIN_JOB">
+            <summary>是否為正職部門</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.UserModel.JOB_GRADE">
             <summary>職稱權重</summary>
         </member>
@@ -9476,12 +9479,6 @@
         </member>
         <member name="P:OA_WEB_API.Models.UsersStructure.SEQ_ID">
             <summary>序列</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.UsersStructure.ORG_DEPT_ID">
-            <summary>組織部門編號</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.UsersStructure.ORG_DEPT_NAME">
-            <summary>組織部門名稱</summary>
         </member>
         <member name="P:OA_WEB_API.Models.UsersStructure.COMPANY_ID">
             <summary>公司編號</summary>
@@ -11846,6 +11843,11 @@
         <member name="M:OA_WEB_API.Repository.UserRepository.IsVerifyUser(OA_WEB_API.Models.LogonModel)">
             <summary>
             驗證使用者是否有效
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.UserRepository.Sysusers">
+            <summary>
+            BPM_Flow7AdminTool 人員組織
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.UserRepository.strSQL">

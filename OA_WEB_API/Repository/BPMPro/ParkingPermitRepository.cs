@@ -354,7 +354,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region  - 申請人部門資訊 -
 
-                var userStructure = userRepository.GetUsersStructure().Where(U => U.COMPANY_ID == CompanyID && U.USER_ID == model.APPLICANT_INFO.APPLICANT_ID).Select(U => U).FirstOrDefault();
+                var userStructure = userRepository.GetUsersStructure().Where(U => U.COMPANY_ID == CompanyID && U.USER_ID == model.APPLICANT_INFO.APPLICANT_ID && U.IS_MAIN_JOB==1).Select(U => U).FirstOrDefault();
                 model.PARKING_PERMIT_TITLE.DEPT_ID = userStructure.DEPT_ID;
                 model.PARKING_PERMIT_TITLE.OFFICE_ID = userStructure.OFFICE_ID;
                 model.PARKING_PERMIT_TITLE.GROUP_ID = userStructure.GROUP_ID;

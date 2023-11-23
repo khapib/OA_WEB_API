@@ -378,7 +378,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         FM7Subject = "(汽車/機車)申請，車牌號碼：_____；" + ConcatenationDept + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
                     }
-                    else FM7Subject = ApplicationCategoryTW + VehicleCategoryTW + ChangeCategoryTW + "申請，車牌號碼：" + model.PARKING_PERMIT_CONFIG.LICENSE_PLATE_NUMBER + "；" + ConcatenationDept + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
+                    else FM7Subject = ApplicationCategoryTW + VehicleCategoryTW + ChangeCategoryTW + "申請，車牌號碼：" + model.PARKING_PERMIT_CONFIG.LICENSE_PLATE_NUMBER.ToUpper() + "；" + ConcatenationDept + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
                 }
 
 
@@ -635,7 +635,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL = "";
                     strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
                     strSQL += "SET [VehicleCategory]=@VEHICLE_CATEGORY, ";
-                    strSQL += "     [LicensePlateNumber]=@LICENSE_PLATE_NUMBER, ";
+                    strSQL += "     [LicensePlateNumber]=UPPER(@LICENSE_PLATE_NUMBER), ";
                     strSQL += "     [IsChange]=UPPER(@IS_CHANGE), ";
                     strSQL += "     [ChangeLicensePlateNumber]=@CHANGE_LICENSE_PLATE_NUMBER, ";
                     strSQL += "     [CarOwnerRelationship]=@CAR_OWNER_RELATIONSHIP ";

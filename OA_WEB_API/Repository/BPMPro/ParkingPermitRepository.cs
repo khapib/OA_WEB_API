@@ -24,7 +24,7 @@ namespace OA_WEB_API.Repository.BPMPro
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProTest);
 
         #region Repository
 
@@ -144,7 +144,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             var uploadFilePathModel = new UploadFilePathModel()
             {
-                LOCATION = GlobalParameters.sqlConnBPMProDev,
+                LOCATION = GlobalParameters.sqlConnBPMProTest,
                 PATH = Path,
                 IDENTIFY = IDENTIFY
             };
@@ -395,7 +395,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     var uploadFilePathModel = new UploadFilePathModel()
                     {
-                        LOCATION = GlobalParameters.sqlConnBPMProDev,
+                        LOCATION = GlobalParameters.sqlConnBPMProTest,
                         PATH = Path,
                         IDENTIFY = IDENTIFY
                     };

@@ -2140,7 +2140,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 var uploadFilePathModel = new UploadFilePathModel()
                 {
-                    LOCATION = GlobalParameters.sqlConnBPMProDev,
+                    LOCATION = GlobalParameters.sqlConnBPMProTest,
                     PATH = model.FILE_PATH,
                     IDENTIFY = model.IDENTIFY
                 };

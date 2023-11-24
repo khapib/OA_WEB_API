@@ -49,17 +49,47 @@ namespace OA_WEB_API.Repository
             };
 
             strSQL = "";
-            strSQL += "SELECT [COMPANY_ID],[PARENT_DEPT_ID],[DEPT_ID],[GRADE_ID],[TITLE_ID],[PARENT_DEPT_NAME],[DEPT_NAME],[GRADE_NAME],[TITLE_NAME],[GRADE_NUM],[SORT_ORDER],[MANAGER_DEPT_ID],[MANAGER_ID],[MANAGER_NAME],[USER_ID],[USER_NAME],[IS_MANAGER],[EMAIL],[MOBILE],[JOB_GRADE],[JOB_STATUS],[USER_TITLE],[USER_FLOW],[DEPT_FLOW] ";
-            strSQL += "FROM [NUP].[dbo].[GTV_Org_Relation_Member] ";
+            strSQL += "SELECT ";
+            strSQL += "     M.[COMPANY_ID], ";
+            strSQL += "     M.[PARENT_DEPT_ID], ";
+            strSQL += "     M.[DEPT_ID], ";
+            strSQL += "     M.[GRADE_ID], ";
+            strSQL += "     M.[TITLE_ID], ";
+            strSQL += "     M.[PARENT_DEPT_NAME], ";
+            strSQL += "     M.[DEPT_NAME], ";
+            strSQL += "     M.[GRADE_NAME], ";
+            strSQL += "     M.[TITLE_NAME], ";
+            strSQL += "     M.[GRADE_NUM], ";
+            strSQL += "     M.[SORT_ORDER], ";
+            strSQL += "     M.[MANAGER_DEPT_ID], ";
+            strSQL += "     M.[MANAGER_ID], ";
+            strSQL += "     M.[MANAGER_NAME], ";
+            strSQL += "     M.[USER_ID], ";
+            strSQL += "     M.[USER_NAME], ";
+            strSQL += "     M.[IS_MANAGER], ";
+            strSQL += "     M.[EMAIL], ";
+            strSQL += "     M.[MOBILE], ";
+            strSQL += "     M.[JOB_GRADE], ";
+            strSQL += "     M.[JOB_STATUS], ";
+            strSQL += "     S.[IsMainJob] AS [IS_MAIN_JOB], ";
+            strSQL += "     M.[USER_TITLE], ";
+            strSQL += "     M.[USER_FLOW], ";
+            strSQL += "     M.[DEPT_FLOW] ";
+            strSQL += "FROM [NUP].[dbo].[GTV_Org_Relation_Member] AS M ";
+            strSQL += "INNER JOIN [NUP].[dbo].[FSe7en_Org_MemberStruct] AS S ON (S.[AccountID]=M.[USER_ID] AND S.[DeptID]=M.[DEPT_ID]) ";
             strSQL += "WHERE [USER_ID]=@USER_ID ";
-            strSQL += "ORDER BY [COMPANY_ID],[SORT_ORDER],[JOB_GRADE] DESC ";
+            strSQL += "ORDER BY [COMPANY_ID],[SORT_ORDER],[JOB_GRADE] DESC";
 
-            var userModel = dbFun.DoQuery(strSQL, parameter).ToList<UserModel>();
+            var userModel = dbFun.DoQuery(strSQL, parameter).ToList<UserInfoModel>();
+
+            #region - 確認BPM_Flow7AdminTool 人員組織是否存在 -
 
             userModel.ForEach(U =>
             {
                 if (Sysusers().Any(SU => SU.USER_ID.Contains(U.USER_ID))) U.JOB_STATUS = 0;
             });
+
+            #endregion
 
             #region - 角色 -
 
@@ -209,6 +239,63 @@ namespace OA_WEB_API.Repository
         }
 
         /// <summary>
+        /// 使用者員工結構資料(檢視)
+        /// </summary>
+        public IList<UsersStructure> GetUsersStructure()
+        {
+            #region - 查詢 -
+
+            var parameterA = new List<SqlParameter>();
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     M.[SEQ_ID], ";
+            strSQL += "     REPLACE(M.[COMPANY_ID],'RootCompany','GTV') AS [COMPANY_ID], ";
+            strSQL += "     M.[PARENT_DEPT_ID], ";
+            strSQL += "     D.[DeptID] AS [DEPT_ID], ";
+            strSQL += "     D.[OfficeID] AS [OFFICE_ID], ";
+            strSQL += "     D.[GroupID] AS [GROUP_ID], ";
+            strSQL += "     M.[GRADE_ID], ";
+            strSQL += "     M.[TITLE_ID], ";
+            strSQL += "     M.[PARENT_DEPT_NAME],";
+            strSQL += "     D.[DeptName] AS [DEPT_NAME], ";
+            strSQL += "     D.[OfficeName] AS [OFFICE_NAME], ";
+            strSQL += "     D.[GroupName] AS [GROUP_NAME], ";
+            strSQL += "     M.[GRADE_NAME], ";
+            strSQL += "     M.[TITLE_NAME], ";
+            strSQL += "     M.[GRADE_NUM], ";
+            strSQL += "     M.[SORT_ORDER], ";
+            strSQL += "     M.[MANAGER_DEPT_ID], ";
+            strSQL += "     M.[MANAGER_ID], ";
+            strSQL += "     M.[MANAGER_NAME], ";
+            strSQL += "     M.[USER_ID], ";
+            strSQL += "     M.[USER_NAME], ";
+            strSQL += "     M.[IS_MANAGER], ";
+            strSQL += "     M.[EMAIL],";
+            strSQL += "     M.[MOBILE], ";
+            strSQL += "     M.[JOB_GRADE], ";
+            strSQL += "     M.[JOB_STATUS], ";
+            strSQL += "     S.[IsMainJob] AS [IS_MAIN_JOB], ";
+            strSQL += "     M.[USER_TITLE],";
+            strSQL += "     M.[USER_FLOW], ";
+            strSQL += "     M.[USER_FLOW_LEVEL], ";
+            strSQL += "     M.[DEPT_FLOW], ";
+            strSQL += "     M.[DEPT_FLOW_LEVEL], ";
+            strSQL += "     M.[CREATE_DATE], ";
+            strSQL += "     M.[MODIFY_DATE] ";
+            strSQL += "FROM [NUP].[dbo].[GTV_Org_Relation_Member] AS M ";
+            strSQL += "INNER JOIN [NUP].[dbo].[GTV_Org_DeptStruct] AS D ON M.[DEPT_ID]=D.[TheEndDeptID] ";
+            strSQL += "INNER JOIN [NUP].[dbo].[FSe7en_Org_MemberStruct] AS S ON (S.[AccountID]=M.[USER_ID] AND S.[DeptID]=M.[DEPT_ID]) AND M.[TITLE_ID]<>'AD' ";
+            strSQL += "ORDER BY M.[SEQ_ID],[SORT_ORDER] ASC ";
+
+            var usersStructure = dbFun.DoQuery(strSQL, parameterA).ToList<UsersStructure>();
+
+            return usersStructure;
+
+            #endregion
+        }
+
+        /// <summary>
         /// 驗證使用者是否有效
         /// </summary>
         public bool IsVerifyUser(LogonModel model)
@@ -250,7 +337,9 @@ namespace OA_WEB_API.Repository
             return vResult;
         }
 
-
+        /// <summary>
+        /// BPM_Flow7AdminTool 人員組織
+        /// </summary>
         public IList<UserModel> Sysusers()
         {
             strSQL = "";
@@ -276,6 +365,7 @@ namespace OA_WEB_API.Repository
             strSQL += "     null AS [MOBILE], ";
             strSQL += "     null AS [JOB_GRADE], ";
             strSQL += "     null AS [JOB_STATUS], ";
+            strSQL += "     null AS [IS_MAIN_JOB], ";
             strSQL += "     null AS [USER_TITLE], ";
             strSQL += "     null AS [USER_FLOW], ";
             strSQL += "     null AS [DEPT_FLOW] ";

@@ -299,6 +299,19 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>所屬專案起案年度</summary>
         public string PROJECT_USE_YEAR { get; set; }
+
+        /// <summary>全部權利</summary>
+        public string AUTH_ALL { get; set; }
+
+        /// <summary>總授權設定</summary>
+        public string FREQUENCY_SETTING { get; set; }
+
+        /// <summary>總授權方式類型</summary>
+        public string FREQUENCY_TYPE_TOTAL { get; set; }
+
+        /// <summary>總授權播放次數</summary>
+        public int PLAY_FREQUENCY_TOTAL { get; set; }
+
     }
 
     /// <summary>

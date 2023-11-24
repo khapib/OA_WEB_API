@@ -9,6 +9,7 @@ using System.Web.Http;
 
 using OA_WEB_API.Models;
 using OA_WEB_API.Repository;
+using OA_WEB_API.Repository.ERP;
 
 namespace OA_WEB_API.Controllers
 {
@@ -58,6 +59,16 @@ namespace OA_WEB_API.Controllers
             var token = HttpContext.Current.Request.Headers["Authoriaztion"].ToString();
 
             return (tokenManager.IsAuthenticated(token)) ? userRepository.PostUsers(query) : null;
+        }
+
+        /// <summary>
+        /// 使用者員工結構資料(檢視)
+        /// </summary>    
+        [Route("GetUsersStructure")]
+        [HttpGet]
+        public IList<UsersStructure> GetUsersStructure()
+        {
+            return userRepository.GetUsersStructure();
         }
     }
 }

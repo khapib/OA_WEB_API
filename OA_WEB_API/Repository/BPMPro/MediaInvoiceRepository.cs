@@ -213,7 +213,11 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     ACPT.[StartEpisode] AS [START_EPISODE], ";
             strSQL += "     ACPT.[EndEpisode] AS [END_EPISODE], ";
             strSQL += "     ACPT.[ACPT_Episode] AS [ACPT_EPISODE], ";
-            strSQL += "     ACPT.[OrderEpisode] AS [ORDER_EPISODE] ";
+            strSQL += "     ACPT.[OrderEpisode] AS [ORDER_EPISODE], ";
+            strSQL += "     DTL.[AUTH_All], ";
+            strSQL += "     DTL.[FrequencySetting] AS [FREQUENCY_SETTING], ";
+            strSQL += "     DTL.[FrequencyTypeTotal] AS [FREQUENCY_TYPE_TOTAL], ";
+            strSQL += "     DTL.[PlayFrequencyTotal] AS [PLAY_FREQUENCY_TOTAL] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_MediaOrder_ACPT] AS ACPT ";
             strSQL += "	    INNER JOIN [BPMPro].[dbo].[FM7T_MediaOrder_DTL] AS DTL ON ACPT.[RequisitionID]=DTL.[RequisitionID] AND ACPT.[SupProdANo]=DTL.[SupProdANo] AND ACPT.[OrderRowNo]=DTL.[OrderRowNo] ";
             strSQL += "WHERE 1=1 ";

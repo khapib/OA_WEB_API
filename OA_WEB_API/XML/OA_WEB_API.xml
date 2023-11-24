@@ -9387,10 +9387,15 @@
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.UserInfo.USER_MODEL">
-            <summary>使用者資料</summary>
+            <summary>使用者資料訊息</summary>
         </member>
         <member name="P:OA_WEB_API.Models.UserInfo.USER_ROLE">
             <summary>使用者角色</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.UserInfoModel">
+            <summary>
+            使用者資料訊息
+            </summary>
         </member>
         <member name="P:OA_WEB_API.Models.UserInfoModel.IS_MAIN_JOB">
             <summary>是否為正職部門</summary>

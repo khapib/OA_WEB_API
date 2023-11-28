@@ -80,7 +80,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [EquipmentUse] AS [EQUIPMENT_USE], ";
             strSQL += "     [MicCount] AS [MIC_COUNT], ";
             strSQL += "     [Light] AS [LIGHT], ";
-            strSQL += "     [IsLiveStreamEquipment] AS [IS_LIVE_STREAM_EQUIPMENT], ";
+            strSQL += "     CAST([IsLiveStreamEquipment] as bit) AS [IS_LIVE_STREAM_EQUIPMENT], ";
             strSQL += "     [Note] AS [NOTE], ";
             strSQL += "     [ApplicationContent] AS [APPLICATION_CONTENT] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
@@ -405,7 +405,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [EquipmentUse]=@EQUIPMENT_USE, ";
                     strSQL += "     [MicCount]=@MIC_COUNT, ";
                     strSQL += "     [Light]=@LIGHT, ";
-                    strSQL += "     [IsLiveStreamEquipment]=@IS_LIVE_STREAM_EQUIPMENT, ";
+                    strSQL += "     [IsLiveStreamEquipment]=UPPER(@IS_LIVE_STREAM_EQUIPMENT), ";
                     strSQL += "     [Note]=@NOTE, ";
                     strSQL += "     [ApplicationContent]=@APPLICATION_CONTENT ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";

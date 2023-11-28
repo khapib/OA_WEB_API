@@ -71,7 +71,7 @@ namespace OA_WEB_API.Models.BPMPro
         public int MIC_COUNT { get; set; }
 
         /// <summary>
-        /// Light：使用投影幕/網美拍照區
+        /// Light：直播座位區/使用投影幕/網美拍照區
         /// </summary>
         public string LIGHT { get; set; }
 

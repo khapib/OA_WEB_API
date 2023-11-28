@@ -519,6 +519,21 @@
             預支費用申請單(新增/修改/草稿)
             </summary>
         </member>
+        <member name="T:OA_WEB_API.Controllers.BPMPro.AStudioLiveStreamUseController">
+            <summary>
+            會簽管理系統 - A攝影棚直播使用申請單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.AStudioLiveStreamUseController.PostAStudioLiveStreamUseSingle(OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseQueryModel)">
+            <summary>
+            A攝影棚直播使用申請單(查詢)
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.AStudioLiveStreamUseController.PutAStudioLiveStreamUseSingle(OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseViewModel)">
+            <summary>
+            A攝影棚直播使用申請單(新增/修改/草稿)
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.EvaluateContentController">
             <summary>
             會簽管理系統 - 內容評估表
@@ -2330,6 +2345,82 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseConfig.FINANC_AUDIT_NAME_2">
             <summary>財務覆核人員姓名</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseQueryModel">
+            <summary>
+            A攝影棚直播使用申請單(查詢條件)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseQueryModel.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseViewModel">
+            <summary>
+            A攝影棚直播使用申請單
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseViewModel.APPLICANT_INFO">
+            <summary>申請人資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseViewModel.A_STUDIO_LIVE_STREAM_USE_TITLE">
+            <summary>A攝影棚直播使用申請單 表頭資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseViewModel.A_STUDIO_LIVE_STREAM_USE_CONFIG">
+            <summary>A攝影棚直播使用申請單 表單內容 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseViewModel.A_STUDIO_LIVE_STREAM_USE_APPROVERS_CONFIG">
+            <summary>A攝影棚直播使用申請單 會簽簽核人員 設定</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseTitle">
+            <summary>
+            A攝影棚直播使用申請單 表頭資訊
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseConfig">
+            <summary>
+            A攝影棚直播使用申請單 表單內容 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseConfig.DESCRIPTION">
+            <summary>直播內容</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseConfig.LIVE_STREAM_DATE">
+            <summary>直播日期</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseConfig.START_TIME">
+            <summary>預計活動開始時間</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseConfig.END_TIME">
+            <summary>預計活動結束時間</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseConfig.EQUIPMENT_USE">
+            <summary>
+            使用器材：單機/雙機/三機
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseConfig.MIC_COUNT">
+            <summary>
+            麥克風數量(使用器材勾選就會必填)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseConfig.LIGHT">
+            <summary>
+            Light：使用投影幕/網美拍照區
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseConfig.IS_LIVE_STREAM_EQUIPMENT">
+            <summary>是否要直播機</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseConfig.NOTE">
+            <summary>特殊需求</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseConfig.APPLICATION_CONTENT">
+            <summary>美術組應用內容</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseApproversConfig">
+            <summary>
+            A攝影棚直播使用申請單 會簽簽核人員 設定
+            </summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContentQueryModel">
             <summary>
@@ -9755,6 +9846,51 @@
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.AdvanceExpenseRepository.strREQ">
+            <summary>
+            系統編號
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Repository.BPMPro.AStudioLiveStreamUseRepository">
+            <summary>
+            會簽管理系統 - A攝影棚直播使用申請單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.AStudioLiveStreamUseRepository.PostAStudioLiveStreamUseSingle(OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseQueryModel)">
+            <summary>
+            A攝影棚直播使用申請單(查詢)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.AStudioLiveStreamUseRepository.PutAStudioLiveStreamUseSingle(OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseViewModel)">
+            <summary>
+            A攝影棚直播使用申請單(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.AStudioLiveStreamUseRepository.strSQL">
+            <summary>
+            T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.AStudioLiveStreamUseRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.AStudioLiveStreamUseRepository.IDENTIFY">
+            <summary>
+            表單代號
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.AStudioLiveStreamUseRepository.FM7Subject">
+            <summary>
+            表單主旨
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.AStudioLiveStreamUseRepository.strJson">
+            <summary>
+            Json字串
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.AStudioLiveStreamUseRepository.strREQ">
             <summary>
             系統編號
             </summary>

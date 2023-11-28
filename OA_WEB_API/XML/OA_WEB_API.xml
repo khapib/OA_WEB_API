@@ -2405,7 +2405,7 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseConfig.LIGHT">
             <summary>
-            Light：使用投影幕/網美拍照區
+            Light：直播座位區/使用投影幕/網美拍照區
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseConfig.IS_LIVE_STREAM_EQUIPMENT">

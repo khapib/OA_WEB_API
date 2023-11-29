@@ -391,7 +391,10 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@APPLICATION_CONTENT", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                     };
 
-                    //寫入：A攝影棚直播使用申請單 表單內容parameter                        
+                    //寫入：A攝影棚直播使用申請單 表單內容parameter
+
+                    if (model.A_STUDIO_LIVE_STREAM_USE_CONFIG.IS_LIVE_STREAM_EQUIPMENT == null) model.A_STUDIO_LIVE_STREAM_USE_CONFIG.IS_LIVE_STREAM_EQUIPMENT = false;
+
                     strJson = jsonFunction.ObjectToJSON(model.A_STUDIO_LIVE_STREAM_USE_CONFIG);
                     GlobalParameters.Infoparameter(strJson, parameterInfo);
 

@@ -105,7 +105,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// </summary>
         public Nullable<Boolean> IS_CHANGE { get; set; }
 
-        /// <summary>異動的車牌</summary>
+        /// <summary>異動的車牌號碼</summary>
         public string CHANGE_LICENSE_PLATE_NUMBER { get; set; }
 
         /// <summary>車主關係</summary>

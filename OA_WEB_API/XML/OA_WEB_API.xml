@@ -7067,7 +7067,7 @@
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitConfig.CHANGE_LICENSE_PLATE_NUMBER">
-            <summary>異動的車牌</summary>
+            <summary>異動的車牌號碼</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ParkingPermitConfig.CAR_OWNER_RELATIONSHIP">
             <summary>車主關係</summary>

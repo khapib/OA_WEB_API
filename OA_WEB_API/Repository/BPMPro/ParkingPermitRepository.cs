@@ -14,6 +14,7 @@ using Microsoft.Ajax.Utilities;
 using OA_WEB_API.Repository.OA;
 using System.Reflection;
 using System.Web.Http.Results;
+using Microsoft.VisualBasic;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -304,6 +305,40 @@ namespace OA_WEB_API.Repository.BPMPro
             bool vResult = false;
             try
             {
+                #region 表單防呆
+
+                if (model.APPLICANT_INFO.DRAFT_FLAG == 0)
+                {
+                    if (!String.IsNullOrEmpty(model.PARKING_PERMIT_CONFIG.LICENSE_PLATE_NUMBER) || !String.IsNullOrWhiteSpace(model.PARKING_PERMIT_CONFIG.LICENSE_PLATE_NUMBER))
+                    {
+                        model.PARKING_PERMIT_CONFIG.LICENSE_PLATE_NUMBER = Strings.StrConv(model.PARKING_PERMIT_CONFIG.LICENSE_PLATE_NUMBER, VbStrConv.Narrow, 0);
+
+                        if (!model.PARKING_PERMIT_CONFIG.LICENSE_PLATE_NUMBER.Contains("-"))
+                        {
+                            CommLib.Logger.Error("停車證申請單(新增/修改/草稿)失敗，原因：車牌號碼 輸入格式不正確。");
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        CommLib.Logger.Error("停車證申請單(新增/修改/草稿)失敗，原因：車牌號碼 輸入格式不正確。");
+                            return false;
+                    }
+
+                    if (!String.IsNullOrEmpty(model.PARKING_PERMIT_CONFIG.CHANGE_LICENSE_PLATE_NUMBER) || !String.IsNullOrWhiteSpace(model.PARKING_PERMIT_CONFIG.CHANGE_LICENSE_PLATE_NUMBER))
+                    {
+                        model.PARKING_PERMIT_CONFIG.CHANGE_LICENSE_PLATE_NUMBER = Strings.StrConv(model.PARKING_PERMIT_CONFIG.CHANGE_LICENSE_PLATE_NUMBER, VbStrConv.Narrow, 0);
+
+                        if (!model.PARKING_PERMIT_CONFIG.CHANGE_LICENSE_PLATE_NUMBER.Contains("-"))
+                        {
+                            CommLib.Logger.Error("停車證申請單(新增/修改/草稿)失敗，原因：異動的車牌號碼 輸入格式不正確。");
+                            return false;
+                        }
+                    }
+                }
+
+                #endregion
+
                 #region - 宣告 -
 
                 var ApplicationCategoryTW = String.Empty;

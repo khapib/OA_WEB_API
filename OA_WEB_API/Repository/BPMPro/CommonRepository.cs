@@ -995,6 +995,7 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 case "GPI_Countersign": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<GPI_CountersignApproversConfig>();
                 case "OfficialStamp": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<OfficialStampApproversConfig>();
+                case "AStudioLiveStreamUse": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<AStudioLiveStreamUseApproversConfig>();
                 default: return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<ApproversConfig>();
             }
         }

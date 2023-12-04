@@ -240,20 +240,6 @@ namespace OA_WEB_API.Repository.BPMPro
             bool vResult = false;
             try
             {
-
-                #region - 表單防呆 -
-
-                if (model.APPLICANT_INFO.DRAFT_FLAG == 0)
-                {
-                    if (DateTime.Parse(model.A_STUDIO_LIVE_STREAM_USE_CONFIG.LIVE_STREAM_DATE) < DateTime.Parse(DateTime.Now.AddDays(14).ToShortDateString()))
-                    {
-                        CommLib.Logger.Error("A攝影棚直播使用申請單(新增/修改/草稿)失敗，原因：直播日期不符合申請於兩周後。");
-                        return false;
-                    }
-                }
-
-                #endregion                              
-
                 #region - 宣告 -
 
                 var LiveStreamActivityDateTime = String.Empty;
@@ -329,8 +315,20 @@ namespace OA_WEB_API.Repository.BPMPro
                     if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
                     {
                         parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+                        model.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Parse(DateTime.Parse(parameterTitle.Where(P => P.ParameterName == "@APPLICANT_DATETIME").FirstOrDefault().Value.ToString()).ToShortDateString());
+
+                        #region - 表單防呆 -
+
+                        if (DateTime.Parse(model.A_STUDIO_LIVE_STREAM_USE_CONFIG.LIVE_STREAM_DATE) < model.APPLICANT_INFO.APPLICANT_DATETIME)
+                        {
+                            CommLib.Logger.Error("A攝影棚直播使用申請單(新增/修改/草稿)失敗，原因：直播日期異常申請。");
+                            return false;
+                        }
+
+                        #endregion
+
                         IsADD = true;
-                    }
+                    }                    
                 }
                 else parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
 

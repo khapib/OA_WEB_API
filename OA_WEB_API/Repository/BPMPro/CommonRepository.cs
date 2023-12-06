@@ -436,6 +436,38 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
+        #region - 會簽常用名單 -
+
+        /// <summary>
+        /// 會簽常用名單
+        /// </summary>
+        public IList<UserModel> PostCommonApprovers(BPMFormFunction query)
+        {
+            try
+            {
+                var rolesUserModel = new List<UserModel>();
+
+                GetRoles().Where(R => R.JOB_STATUS == 1 && R.ROLE_ID.Contains(query.IDENTIFY.ToUpper())).ForEach(R =>
+                {
+                    var logonModel = new LogonModel()
+                    {
+                        USER_ID = R.USER_ID
+                    };
+
+                    rolesUserModel.AddRange(userRepository.PostUserSingle(logonModel).USER_MODEL);
+                });
+
+                return rolesUserModel;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("會辦常用名單顯示失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
         #region - ERP附件 -
 
         /// <summary>
@@ -1772,7 +1804,15 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "SELECT ";
                 strSQL += "     S.[RoleID] AS [ROLE_ID], ";
                 strSQL += "     I.[DisplayName] AS [ROLE_NAME], ";
-                strSQL += "     S.[AtomID] AS [USER_ID] ";
+                strSQL += "     S.[AtomID] AS [USER_ID], ";
+                strSQL += "     CASE (SELECT COUNT(*) FROM [NUP].[dbo].[GTV_Org_Relation_Member] WHERE [USER_ID]=S.[AtomID]) ";
+                strSQL += "         WHEN 0 THEN null ";
+                strSQL += "         ELSE CASE(SELECT COUNT(*) FROM [NUP].[dbo].[FSe7en_Org_MemberInfo] WHERE [AccountID]=S.[AtomID] AND [Terminated] = 1) ";
+                strSQL += "             WHEN 0 THEN 1 ";
+                strSQL += "             ELSE null ";
+                strSQL += "         END ";
+                strSQL += "     END ";
+                strSQL += "     AS [JOB_STATUS] ";
                 strSQL += "FROM [BPMPro].[dbo].[FSe7en_Org_RoleStruct] AS S ";
                 strSQL += "INNER JOIN [BPMPro].[dbo].[FSe7en_Org_RoleInfo] AS I on S.RoleID=I.RoleID ";
                 var RolesData = commonRepository.dbFun.DoQuery(strSQL).ToList<RolesModel>();

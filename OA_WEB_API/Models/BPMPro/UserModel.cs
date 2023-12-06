@@ -256,7 +256,7 @@ namespace OA_WEB_API.Models
         public int JOB_GRADE { get; set; }
 
         /// <summary>工作狀態</summary>
-        public int JOB_STATUS { get; set; }
+        public Byte JOB_STATUS { get; set; }
 
         /// <summary>是否為正職部門</summary>
         public int IS_MAIN_JOB { get; set; }

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using System.Web.ModelBinding;
+using OA_WEB_API.Models;
 using OA_WEB_API.Models.BPMPro;
 using OA_WEB_API.Repository.BPMPro;
 
@@ -120,6 +121,20 @@ namespace OA_WEB_API.Controllers
         public IList<ApproveFormsConfig> PostApproveForms([FromBody] ApproveFormQuery query)
         {
             return commonRepository.PostApproveForms(query);
+        }
+
+        #endregion
+
+        #region - 會簽常用名單 -
+
+        /// <summary>
+        /// 會簽常用名單
+        /// </summary>        
+        [Route("api/PostCommonApprovers")]
+        [HttpPost]
+        public IList<UserModel> PostCommonApprovers([FromBody] BPMFormFunction query)
+        {
+            return commonRepository.PostCommonApprovers(query);
         }
 
         #endregion

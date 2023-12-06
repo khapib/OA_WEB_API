@@ -867,6 +867,9 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>員工編號</summary>
         public string USER_ID { get; set; }
+
+        /// <summary>在職狀態(1：在職、2：離職)</summary>
+        public int JOB_STATUS { get; set; }
     }
 
     #endregion

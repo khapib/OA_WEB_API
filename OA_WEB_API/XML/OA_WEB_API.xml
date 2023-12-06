@@ -1279,6 +1279,11 @@
             審核單列表
             </summary>        
         </member>
+        <member name="M:OA_WEB_API.Controllers.CommonController.PostCommonApprovers(OA_WEB_API.Models.BPMPro.BPMFormFunction)">
+            <summary>
+            會簽常用名單
+            </summary>        
+        </member>
         <member name="M:OA_WEB_API.Controllers.CommonController.PostAttachment(OA_WEB_API.Models.BPMPro.FormQueryModel)">
             <summary>
             附件上傳(查詢)
@@ -8534,6 +8539,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.RolesModel.USER_ID">
             <summary>員工編號</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.RolesModel.JOB_STATUS">
+            <summary>在職狀態(1：在職、2：離職)</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.FSe7enSysRequisitionField">
             <summary>
             (擴充方法)_BPM系統申請單總表
@@ -11665,6 +11673,11 @@
             審核單列表
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostCommonApprovers(OA_WEB_API.Models.BPMPro.BPMFormFunction)">
+            <summary>
+            會簽常用名單
+            </summary>
+        </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostAttachment(OA_WEB_API.Models.BPMPro.FormQueryModel)">
             <summary>
             ERP附件(查詢)
@@ -11984,11 +11997,6 @@
         <member name="M:OA_WEB_API.Repository.UserRepository.IsVerifyUser(OA_WEB_API.Models.LogonModel)">
             <summary>
             驗證使用者是否有效
-            </summary>
-        </member>
-        <member name="M:OA_WEB_API.Repository.UserRepository.Sysusers">
-            <summary>
-            BPM_Flow7AdminTool 人員組織
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.UserRepository.strSQL">

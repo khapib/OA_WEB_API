@@ -70,7 +70,11 @@ namespace OA_WEB_API.Repository
             strSQL += "     M.[EMAIL], ";
             strSQL += "     M.[MOBILE], ";
             strSQL += "     M.[JOB_GRADE], ";
-            strSQL += "     M.[JOB_STATUS], ";
+            strSQL += "     CASE (SELECT COUNT(*) FROM [NUP].[dbo].[FSe7en_Org_MemberInfo] WHERE [AccountID]=M.[USER_ID] AND [Terminated] = 1) ";
+            strSQL += "         WHEN 0 THEN  M.[JOB_STATUS] ";
+            strSQL += "         ELSE null ";
+            strSQL += "     END ";
+            strSQL += "     AS [JOB_STATUS], ";
             strSQL += "     S.[IsMainJob] AS [IS_MAIN_JOB], ";
             strSQL += "     M.[USER_TITLE], ";
             strSQL += "     M.[USER_FLOW], ";
@@ -80,16 +84,7 @@ namespace OA_WEB_API.Repository
             strSQL += "WHERE [USER_ID]=@USER_ID ";
             strSQL += "ORDER BY [COMPANY_ID],[SORT_ORDER],[JOB_GRADE] DESC";
 
-            var userModel = dbFun.DoQuery(strSQL, parameter).ToList<UserInfoModel>();
-
-            #region - 確認BPM_Flow7AdminTool 人員組織是否存在 -
-
-            userModel.ForEach(U =>
-            {
-                if (Sysusers().Any(SU => SU.USER_ID.Contains(U.USER_ID))) U.JOB_STATUS = 0;
-            });
-
-            #endregion
+            var userModel = dbFun.DoQuery(strSQL, parameter).ToList<UserInfoModel>();                        
 
             #region - 角色 -
 
@@ -114,7 +109,35 @@ namespace OA_WEB_API.Repository
             var parameter = new List<SqlParameter>();
 
             strSQL = "";
-            strSQL += "SELECT [COMPANY_ID],[PARENT_DEPT_ID],[DEPT_ID],[GRADE_ID],[TITLE_ID],[PARENT_DEPT_NAME],[DEPT_NAME],[GRADE_NAME],[TITLE_NAME],[GRADE_NUM],[SORT_ORDER],[MANAGER_DEPT_ID],[MANAGER_ID],[MANAGER_NAME],[USER_ID],[USER_NAME],[IS_MANAGER],[EMAIL],[MOBILE],[JOB_GRADE],[JOB_STATUS],[USER_TITLE],[USER_FLOW],[DEPT_FLOW] ";
+            strSQL += "SELECT ";
+            strSQL += "     [COMPANY_ID], ";
+            strSQL += "     [PARENT_DEPT_ID], ";
+            strSQL += "     [DEPT_ID], ";
+            strSQL += "     [GRADE_ID], ";
+            strSQL += "     [TITLE_ID], ";
+            strSQL += "     [PARENT_DEPT_NAME], ";
+            strSQL += "     [DEPT_NAME], ";
+            strSQL += "     [GRADE_NAME], ";
+            strSQL += "     [TITLE_NAME], ";
+            strSQL += "     [GRADE_NUM], ";
+            strSQL += "     [SORT_ORDER], ";
+            strSQL += "     [MANAGER_DEPT_ID], ";
+            strSQL += "     [MANAGER_ID], ";
+            strSQL += "     [MANAGER_NAME], ";
+            strSQL += "     [USER_ID], ";
+            strSQL += "     [USER_NAME], ";
+            strSQL += "     [IS_MANAGER], ";
+            strSQL += "     [EMAIL], ";
+            strSQL += "     [MOBILE], ";
+            strSQL += "     [JOB_GRADE], ";
+            strSQL += "     CASE (SELECT COUNT(*) FROM [NUP].[dbo].[FSe7en_Org_MemberInfo] WHERE [AccountID]=[USER_ID] AND [Terminated] = 1) ";
+            strSQL += "         WHEN 0 THEN [JOB_STATUS] ";
+            strSQL += "         ELSE null ";
+            strSQL += "     END ";
+            strSQL += "     AS [JOB_STATUS], ";
+            strSQL += "     [USER_TITLE], ";
+            strSQL += "     [USER_FLOW], ";
+            strSQL += "     [DEPT_FLOW] ";
             strSQL += "FROM [NUP].[dbo].[GTV_Org_Relation_Member] ";
             strSQL += "WHERE 1=1 ";
 
@@ -219,21 +242,7 @@ namespace OA_WEB_API.Repository
 
             strSQL += "ORDER BY [COMPANY_ID],[SORT_ORDER],[JOB_GRADE] DESC ";
 
-            var usersModel = dbFun.DoQuery(strSQL, parameter).ToList<UserModel>();
-
-            #region - 人員在職確認 -
-
-            //以系統[NUP].[dbo].[FSe7en_Org_MemberInfo]與[NUP].[dbo].[GTV_Org_Relation_Member]確認，
-            //如果[NUP].[dbo].[GTV_Org_Relation_Member]有資料[NUP].[dbo].[FSe7en_Org_MemberInfo]沒有及
-            //[NUP].[dbo].[FSe7en_Org_MemberInfo].[Terminated]狀態=1
-            //則JOB_STATUS就會改為0(離職)
-
-            usersModel.ForEach(U =>
-            {
-                if (Sysusers().Any(SU => SU.USER_ID.Contains(U.USER_ID))) U.JOB_STATUS = 0;
-            });
-
-            #endregion
+            var usersModel = dbFun.DoQuery(strSQL, parameter).ToList<UserModel>();                        
 
             return usersModel;
         }
@@ -274,7 +283,11 @@ namespace OA_WEB_API.Repository
             strSQL += "     M.[EMAIL],";
             strSQL += "     M.[MOBILE], ";
             strSQL += "     M.[JOB_GRADE], ";
-            strSQL += "     M.[JOB_STATUS], ";
+            strSQL += "     CASE (SELECT COUNT(*) FROM [NUP].[dbo].[FSe7en_Org_MemberInfo] WHERE [AccountID]=M.[USER_ID] AND [Terminated] = 1) ";
+            strSQL += "         WHEN 0 THEN M.[JOB_STATUS] ";
+            strSQL += "         ELSE null ";
+            strSQL += "     END ";
+            strSQL += "     AS [JOB_STATUS], ";
             strSQL += "     S.[IsMainJob] AS [IS_MAIN_JOB], ";
             strSQL += "     M.[USER_TITLE],";
             strSQL += "     M.[USER_FLOW], ";
@@ -335,43 +348,6 @@ namespace OA_WEB_API.Repository
             }
 
             return vResult;
-        }
-
-        /// <summary>
-        /// BPM_Flow7AdminTool 人員組織
-        /// </summary>
-        public IList<UserModel> Sysusers()
-        {
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     null AS [COMPANY_ID], ";
-            strSQL += "     null AS [PARENT_DEPT_ID], ";
-            strSQL += "     null AS [DEPT_ID], ";
-            strSQL += "     null AS [GRADE_ID], ";
-            strSQL += "     null AS [TITLE_ID], ";
-            strSQL += "     null AS [PARENT_DEPT_NAME], ";
-            strSQL += "     null AS [DEPT_NAME], ";
-            strSQL += "     null AS [GRADE_NAME], ";
-            strSQL += "     null AS [TITLE_NAME], ";
-            strSQL += "     null AS [GRADE_NUM], ";
-            strSQL += "     null AS [SORT_ORDER], ";
-            strSQL += "     null AS [MANAGER_DEPT_ID], ";
-            strSQL += "     null AS [MANAGER_ID], ";
-            strSQL += "     null AS [MANAGER_NAME], ";
-            strSQL += "     [AccountID] AS [USER_ID], ";
-            strSQL += "     null AS [USER_NAME], ";
-            strSQL += "     null AS [IS_MANAGER], ";
-            strSQL += "     null AS [EMAIL], ";
-            strSQL += "     null AS [MOBILE], ";
-            strSQL += "     null AS [JOB_GRADE], ";
-            strSQL += "     null AS [JOB_STATUS], ";
-            strSQL += "     null AS [IS_MAIN_JOB], ";
-            strSQL += "     null AS [USER_TITLE], ";
-            strSQL += "     null AS [USER_FLOW], ";
-            strSQL += "     null AS [DEPT_FLOW] ";
-            strSQL += "FROM [NUP].[dbo].[FSe7en_Org_MemberInfo] ";
-            strSQL += "WHERE [Terminated] = 1";
-            return dbFun.DoQuery(strSQL).ToList<UserModel>();
         }
 
         #endregion

@@ -447,7 +447,7 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 var rolesUserModel = new List<UserModel>();
 
-                GetRoles().Where(R => R.JOB_STATUS == 1 && R.ROLE_ID.Contains(query.IDENTIFY.ToUpper())).ForEach(R =>
+                GetRoles().Where(R => R.JOB_STATUS == 1 && R.ROLE_ID=="GTV_"+ query.IDENTIFY.ToUpper() + "_COMMON_APPROVER" ).ForEach(R =>
                 {
                     var logonModel = new LogonModel()
                     {

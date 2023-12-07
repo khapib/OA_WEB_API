@@ -328,7 +328,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         #endregion
 
                         IsADD = true;
-                    }                    
+                    }
                 }
                 else parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
 
@@ -406,7 +406,8 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     //寫入：A攝影棚直播使用申請單 表單內容parameter
 
-                    if (model.A_STUDIO_LIVE_STREAM_USE_CONFIG.IS_LIVE_STREAM_EQUIPMENT == null) model.A_STUDIO_LIVE_STREAM_USE_CONFIG.IS_LIVE_STREAM_EQUIPMENT =    true;
+                    if (String.IsNullOrEmpty(model.A_STUDIO_LIVE_STREAM_USE_CONFIG.LIGHT) || String.IsNullOrWhiteSpace(model.A_STUDIO_LIVE_STREAM_USE_CONFIG.LIGHT)) model.A_STUDIO_LIVE_STREAM_USE_CONFIG.LIGHT = "A";
+                    if (model.A_STUDIO_LIVE_STREAM_USE_CONFIG.IS_LIVE_STREAM_EQUIPMENT == null) model.A_STUDIO_LIVE_STREAM_USE_CONFIG.IS_LIVE_STREAM_EQUIPMENT = true;
 
                     strJson = jsonFunction.ObjectToJSON(model.A_STUDIO_LIVE_STREAM_USE_CONFIG);
                     GlobalParameters.Infoparameter(strJson, parameterInfo);

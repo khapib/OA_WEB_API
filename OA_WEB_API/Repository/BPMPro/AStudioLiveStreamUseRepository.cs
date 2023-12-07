@@ -405,8 +405,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     };
 
                     //寫入：A攝影棚直播使用申請單 表單內容parameter
-
-                    if (String.IsNullOrEmpty(model.A_STUDIO_LIVE_STREAM_USE_CONFIG.LIGHT) || String.IsNullOrWhiteSpace(model.A_STUDIO_LIVE_STREAM_USE_CONFIG.LIGHT)) model.A_STUDIO_LIVE_STREAM_USE_CONFIG.LIGHT = "A";
+                                        
                     if (model.A_STUDIO_LIVE_STREAM_USE_CONFIG.IS_LIVE_STREAM_EQUIPMENT == null) model.A_STUDIO_LIVE_STREAM_USE_CONFIG.IS_LIVE_STREAM_EQUIPMENT = true;
 
                     strJson = jsonFunction.ObjectToJSON(model.A_STUDIO_LIVE_STREAM_USE_CONFIG);

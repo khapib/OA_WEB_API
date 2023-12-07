@@ -526,7 +526,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "                 SELECT ";
                 strSQL += "                     [TITLE_NAME] ";
                 strSQL += "                 FROM [NUP].[dbo].[GTV_Org_Relation_Member] ";
-                strSQL += "                 WHERE  [USER_ID]=S.[ApproverID] AND [COMPANY_ID]=@COMPANY_ID ";
+                strSQL += "                 WHERE [USER_ID]=S.[ApproverID] AND [DEPT_ID]=S.[ApproverDept] AND [COMPANY_ID]=@COMPANY_ID ";
                 strSQL += "                 GROUP BY [TITLE_NAME] ";
                 strSQL += "         )AS [TITLE_NAME], ";
                 strSQL += "         S.[ApproverID] AS [APPROVER_ID], ";

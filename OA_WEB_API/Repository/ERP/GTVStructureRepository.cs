@@ -4,7 +4,8 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
-using OA_WEB_API.Models.ERP;
+using OA_WEB_API.Models;
+using OA_WEB_API.Repository.BPMPro;
 
 namespace OA_WEB_API.Repository.ERP
 {
@@ -14,6 +15,12 @@ namespace OA_WEB_API.Repository.ERP
 
         dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMPro);
 
+        #region Repository
+
+        UserRepository userRepository = new UserRepository();
+
+        #endregion
+
         #endregion
 
         #region  - 方法 -
@@ -21,50 +28,24 @@ namespace OA_WEB_API.Repository.ERP
         /// <summary>
         /// 提供外部系統(員工結構)(查詢)
         /// </summary>
-        public IList<GTVStaffModel> PostGTVStaffSingle()
+        public IList<UsersStructure> PostGTVStaffSingle()
         {
             #region - 查詢 -
 
+            #region - 員工結構資料 -
+
+            var usersStructure = userRepository.GetUsersStructure();
+
+            #endregion
+
             #region  - GTV人員資料表 -
-
-            var parameterA = new List<SqlParameter>();
-
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     M.[SEQ_ID], ";
-            strSQL += "     REPLACE(M.[COMPANY_ID],'RootCompany','GTV') AS [COMPANY_ID], ";
-            strSQL += "     M.[PARENT_DEPT_ID], ";
-            strSQL += "     M.[DEPT_ID], ";
-            strSQL += "     M.[GRADE_ID], ";
-            strSQL += "     M.[TITLE_ID], ";
-            strSQL += "     M.[PARENT_DEPT_NAME],";
-            strSQL += "     M.[DEPT_NAME], ";
-            strSQL += "     M.[GRADE_NAME], ";
-            strSQL += "     M.[TITLE_NAME], ";
-            strSQL += "     M.[GRADE_NUM], ";
-            strSQL += "     M.[SORT_ORDER], ";
-            strSQL += "     M.[MANAGER_DEPT_ID], ";
-            strSQL += "     M.[MANAGER_ID], ";
-            strSQL += "     M.[MANAGER_NAME], ";
-            strSQL += "     M.[USER_ID], ";
-            strSQL += "     M.[USER_NAME], ";
-            strSQL += "     M.[IS_MANAGER], ";
-            strSQL += "     M.[EMAIL],";
-            strSQL += "     M.[MOBILE], ";
-            strSQL += "     M.[JOB_GRADE], ";
-            strSQL += "     M.[JOB_STATUS], ";
-            strSQL += "     M.[USER_TITLE],";
-            strSQL += "     REPLACE(M.[USER_FLOW],'>','-') AS [USER_FLOW], ";
-            strSQL += "     M.[USER_FLOW_LEVEL], ";
-            strSQL += "     REPLACE(REPLACE(M.[DEPT_FLOW],'>','-'),'八大電視 - ','') AS [DEPT_FLOW], ";
-            strSQL += "     M.[DEPT_FLOW_LEVEL], ";
-            strSQL += "     M.[CREATE_DATE], ";
-            strSQL += "     M.[MODIFY_DATE] ";            
-            strSQL += "from [NUP].[dbo].[GTV_Org_Relation_Member] AS M ";
-            strSQL += "INNER JOIN [NUP].[dbo].[FSe7en_Org_MemberStruct] AS S on (S.[AccountID]=M.[USER_ID] AND S.[DeptID]=M.[DEPT_ID]) and (M.[COMPANY_ID]<>'GPI' AND M.[TITLE_ID]<>'AD') and S.[IsMainJob]=1 ";
-            strSQL += "ORDER BY M.[SEQ_ID],[SORT_ORDER] ASC ";
-
-            var gTVStaffModel = dbFun.DoQuery(strSQL, parameterA).ToList<GTVStaffModel>();
+            //篩選掉四方四隅及只顯示非兼職的正職部門給ERP
+            var gTVStaffModel = usersStructure.Where(S => S.COMPANY_ID != "GPI" && S.IS_MAIN_JOB == 1).Select(S => S).ToList();
+            gTVStaffModel.ForEach(S =>
+            {
+                if (!String.IsNullOrEmpty(S.USER_FLOW) || !String.IsNullOrWhiteSpace(S.USER_FLOW)) S.USER_FLOW = S.USER_FLOW.Replace(">", "-");
+                if (!String.IsNullOrEmpty(S.DEPT_FLOW) || !String.IsNullOrWhiteSpace(S.DEPT_FLOW)) S.DEPT_FLOW = (S.DEPT_FLOW.Replace("八大電視 - ", "")).Replace(">", "-");
+            });
 
             #endregion
 

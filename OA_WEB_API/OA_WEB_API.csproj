@@ -64,6 +64,7 @@
       <HintPath>..\packages\log4net.2.0.12\lib\net45\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -186,6 +187,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BPMPro\ActiveController.cs" />
     <Compile Include="Controllers\BPMPro\AdvanceExpenseController.cs" />
+    <Compile Include="Controllers\BPMPro\AStudioLiveStreamUseController.cs" />
     <Compile Include="Controllers\BPMPro\EvaluateContentController.cs" />
     <Compile Include="Controllers\BPMPro\EvaluateContentReplenishController.cs" />
     <Compile Include="Controllers\BPMPro\EvaluateDemandController.cs" />
@@ -210,6 +212,7 @@
     <Compile Include="Controllers\BPMPro\NotifyController.cs" />
     <Compile Include="Controllers\BPMPro\CommonController.cs" />
     <Compile Include="Controllers\BPMPro\OfficialStampController.cs" />
+    <Compile Include="Controllers\BPMPro\ParkingPermitController.cs" />
     <Compile Include="Controllers\BPMPro\PersonnelSupplementController.cs" />
     <Compile Include="Controllers\BPMPro\ProjectReviewController.cs" />
     <Compile Include="Controllers\BPMPro\ResignUnpaidLeaveAgendaController.cs" />
@@ -246,6 +249,7 @@
     </Compile>
     <Compile Include="Models\BPMPro\ActiveModel.cs" />
     <Compile Include="Models\BPMPro\AdvanceExpenseModel.cs" />
+    <Compile Include="Models\BPMPro\AStudioLiveStreamUseModel.cs" />
     <Compile Include="Models\BPMPro\EvaluateContentModel.cs" />
     <Compile Include="Models\BPMPro\EvaluateContentReplenishModel.cs" />
     <Compile Include="Models\BPMPro\EvaluateDemandModel.cs" />
@@ -270,6 +274,7 @@
     <Compile Include="Models\BPMPro\MediaWarehouseNotAiredCopyModel.cs" />
     <Compile Include="Models\BPMPro\NotifyModel.cs" />
     <Compile Include="Models\BPMPro\OfficialStampModel.cs" />
+    <Compile Include="Models\BPMPro\ParkingPermitModel.cs" />
     <Compile Include="Models\BPMPro\PersonnelSupplementModel.cs" />
     <Compile Include="Models\BPMPro\ProjectReviewModel.cs" />
     <Compile Include="Models\BPMPro\ResignUnpaidLeaveAgendaModel.cs" />
@@ -288,6 +293,7 @@
     <Compile Include="Models\BPMPro\UserModel.cs" />
     <Compile Include="Repository\BPMPro\ActiveRepository.cs" />
     <Compile Include="Repository\BPMPro\AdvanceExpenseRepository.cs" />
+    <Compile Include="Repository\BPMPro\AStudioLiveStreamUseRepository.cs" />
     <Compile Include="Repository\BPMPro\EvaluateContentReplenishRepository.cs" />
     <Compile Include="Repository\BPMPro\EvaluateContentRepository.cs" />
     <Compile Include="Repository\BPMPro\EvaluateDemandRepository.cs" />
@@ -312,6 +318,7 @@
     <Compile Include="Repository\BPMPro\MediaWarehouseNotAiredCopyRepository.cs" />
     <Compile Include="Repository\BPMPro\NotifyRepository.cs" />
     <Compile Include="Repository\BPMPro\OfficialStampRepository.cs" />
+    <Compile Include="Repository\BPMPro\ParkingPermitRepository.cs" />
     <Compile Include="Repository\BPMPro\PersonnelSupplementRepository.cs" />
     <Compile Include="Repository\BPMPro\ProjectReviewRepository.cs" />
     <Compile Include="Repository\BPMPro\ResignUnpaidLeaveAgendaRepository.cs" />

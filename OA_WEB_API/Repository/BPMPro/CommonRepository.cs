@@ -12,6 +12,8 @@ using System.Web;
 using System.Reflection;
 using System.Web.Http.Results;
 using System.Runtime.InteropServices;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 using OA_WEB_API.Models;
 using OA_WEB_API.Models.BPMPro;
@@ -20,6 +22,7 @@ using OA_WEB_API.Repository.ERP;
 using Dapper;
 using Microsoft.Ajax.Utilities;
 using Docker.DotNet.Models;
+using OA_WEB_API.Repository.OA;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -43,7 +46,7 @@ namespace OA_WEB_API.Repository.BPMPro
         FormRepository formRepository = new FormRepository();
         UserRepository userRepository = new UserRepository();
         NotifyRepository notifyRepository = new NotifyRepository();
-        StepFlowRepository stepFlowRepository = new StepFlowRepository();        
+        StepFlowRepository stepFlowRepository = new StepFlowRepository();
 
         #endregion
 
@@ -126,7 +129,7 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 if (!String.IsNullOrEmpty(query.FORM_NO) || !String.IsNullOrWhiteSpace(query.FORM_NO))
                 {
-                    var formDistinguish = FormDistinguish(query.IDENTIFY);
+                    var formDistinguish = PostFormDistinguish(query.IDENTIFY);
 
                     var parameter = new List<SqlParameter>()
                     {
@@ -433,6 +436,38 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
+        #region - 會簽常用名單 -
+
+        /// <summary>
+        /// 會簽常用名單
+        /// </summary>
+        public IList<UserModel> PostCommonApprovers(BPMFormFunction query)
+        {
+            try
+            {
+                var rolesUserModel = new List<UserModel>();
+
+                GetRoles().Where(R => R.JOB_STATUS == 1 && R.ROLE_ID=="GTV_"+ query.IDENTIFY.ToUpper() + "_COMMON_APPROVER" ).ForEach(R =>
+                {
+                    var logonModel = new LogonModel()
+                    {
+                        USER_ID = R.USER_ID
+                    };
+
+                    rolesUserModel.AddRange(userRepository.PostUserSingle(logonModel).USER_MODEL);
+                });
+
+                return rolesUserModel;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("會辦常用名單顯示失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
         #region - ERP附件 -
 
         /// <summary>
@@ -685,7 +720,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 associatedFormConfigList.ForEach(ConfigList =>
                 {
                     ConfigList.IDENTIFY = query.IDENTIFY;
-                    ConfigList.FORM_NAME = FormDistinguish(query.IDENTIFY).FORM_NAME;
+                    ConfigList.FORM_NAME = PostFormDistinguish(query.IDENTIFY).FORM_NAME;
                     formQueryModel.REQUISITION_ID = ConfigList.ASSOCIATED_REQUISITION_ID;
                     var formData = formRepository.PostFormData(formQueryModel);
                     ConfigList.APPLICANT_DATE_TIME = DateTime.Parse(ConfigList.APPLICANT_DATE_TIME).ToString("yyyy/MM/dd HH:mm:ss");
@@ -740,7 +775,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 var associatedForm = dbFun.DoQuery(strSQL, parameter).ToList<AssociatedFormConfig>();
                 foreach (var Form in associatedForm)
                 {
-                    Form.FORM_NAME = FormDistinguish(Form.IDENTIFY).FORM_NAME;
+                    Form.FORM_NAME = PostFormDistinguish(Form.IDENTIFY).FORM_NAME;
                 }
                 return associatedForm;
             }
@@ -992,6 +1027,7 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 case "GPI_Countersign": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<GPI_CountersignApproversConfig>();
                 case "OfficialStamp": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<OfficialStampApproversConfig>();
+                case "AStudioLiveStreamUse": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<AStudioLiveStreamUseApproversConfig>();
                 default: return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<ApproversConfig>();
             }
         }
@@ -1768,7 +1804,15 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "SELECT ";
                 strSQL += "     S.[RoleID] AS [ROLE_ID], ";
                 strSQL += "     I.[DisplayName] AS [ROLE_NAME], ";
-                strSQL += "     S.[AtomID] AS [USER_ID] ";
+                strSQL += "     S.[AtomID] AS [USER_ID], ";
+                strSQL += "     CASE (SELECT COUNT(*) FROM [NUP].[dbo].[GTV_Org_Relation_Member] WHERE [USER_ID]=S.[AtomID]) ";
+                strSQL += "         WHEN 0 THEN null ";
+                strSQL += "         ELSE CASE(SELECT COUNT(*) FROM [NUP].[dbo].[FSe7en_Org_MemberInfo] WHERE [AccountID]=S.[AtomID] AND [Terminated] = 1) ";
+                strSQL += "             WHEN 0 THEN 1 ";
+                strSQL += "             ELSE null ";
+                strSQL += "         END ";
+                strSQL += "     END ";
+                strSQL += "     AS [JOB_STATUS] ";
                 strSQL += "FROM [BPMPro].[dbo].[FSe7en_Org_RoleStruct] AS S ";
                 strSQL += "INNER JOIN [BPMPro].[dbo].[FSe7en_Org_RoleInfo] AS I on S.RoleID=I.RoleID ";
                 var RolesData = commonRepository.dbFun.DoQuery(strSQL).ToList<RolesModel>();
@@ -1886,7 +1930,7 @@ namespace OA_WEB_API.Repository.BPMPro
         /// <summary>
         /// (擴充方法)_共同表單區分
         /// </summary>
-        public static FormDistinguishResponse FormDistinguish(string IDENTIFY)
+        public static FormDistinguishResponse PostFormDistinguish(string IDENTIFY)
         {
             //擴充方法使用dbFunction需要參考物件
             CommonRepository commonRepository = new CommonRepository();
@@ -1910,7 +1954,283 @@ namespace OA_WEB_API.Repository.BPMPro
         }
 
         #endregion
-        
+
+        #region - (擴充方法)_確認檔案複製路徑 -
+
+        /// <summary>
+        /// (擴充方法)_確認檔案複製路徑
+        /// </summary>
+        public static string PostUploadFilePath(UploadFilePathModel model)
+        {
+            var ProjectField = String.Empty;
+
+            try
+            {
+                switch (model.LOCATION)
+                {
+                    case "BPMProDev":
+                        ProjectField = "OA_WEB_API_DEV";
+                        break;
+                    case "BPMProTest":
+                        ProjectField = "OA_WEB_API_TEST";
+                        break;
+                    case "BPMPro":
+                        ProjectField = "OA_WEB_API";
+                        break;
+                    default:
+                        ProjectField = "OA_WEB_API_DEV_HO";
+                        break;
+                }
+
+                model.PATH = model.PATH + ProjectField + "\\Attach\\" + model.IDENTIFY + "\\";
+
+                if (!Directory.Exists(model.PATH))
+                {
+                    //確認是否有資料夾沒有的話就自動新增
+                    //新增資料夾
+                    Directory.CreateDirectory(model.PATH);
+                }
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("位置錯誤，原因：" + ex.Message);
+                throw new Exception("位置錯誤，原因：" + ex.Message);
+            }
+
+            return model.PATH;
+        }
+
+        #endregion
+
+        #endregion
+
+        #region - base64圖片上傳 -
+
+        #region - 單筆上傳 >>> 單筆輸出 -
+
+        /// <summary>
+        /// base64圖片上傳
+        /// </summary>
+        public bool PostBase64ImgSingletoSingle(Base64ImgSingletoSingleModel model)
+        {
+            bool vResult = false;
+
+            try
+            {
+                string imgPath = null;
+                if (model.IMG_SIZE != null) imgPath = Path.Combine(model.FILE_PATH, model.IMG_NAME);
+                else imgPath = Path.Combine(model.FILE_PATH, model.PRO_IMG_NAME);
+                byte[] imageBytes = Convert.FromBase64String(model.PHOTO);
+                File.WriteAllBytes(imgPath, imageBytes);
+
+                #region - 調整圖片大小 -
+
+                //調整大小
+                //if (model.IMG_SIZE != null)
+                //{
+                //    Image image = Image.FromFile(model.FILE_PATH + model.IMG_NAME);
+                //    //取得影像的格式
+                //    ImageFormat thisFormat = image.RawFormat;
+
+                //    int fixWidth = 0;
+                //    int fixHeight = 0;
+                //    if (image.Width > image.Height)
+                //    {
+                //        if (image.Width < model.IMG_SIZE && image.Height < model.IMG_SIZE)
+                //        {
+                //            //圖片沒有超過設定值，不執行縮圖
+                //            fixHeight = int.Parse(model.IMG_SIZE.ToString());
+                //            fixWidth = int.Parse(model.IMG_SIZE.ToString());
+
+                //        }
+                //        else
+                //        {
+                //            //設定修改後的圖寬
+                //            fixWidth = int.Parse(model.IMG_SIZE.ToString());
+                //            //設定修改後的圖高
+                //            fixHeight = Convert.ToInt32((Convert.ToDouble(fixWidth) / Convert.ToDouble(image.Width)) * Convert.ToDouble(image.Height));
+                //        }
+                //    }
+                //    else
+                //    {
+                //        if (image.Width < int.Parse(model.IMG_SIZE.ToString()) && image.Height < int.Parse(model.IMG_SIZE.ToString()))
+                //        {
+                //            //圖片沒有超過設定值，不執行縮圖
+                //            fixHeight = int.Parse(model.IMG_SIZE.ToString());
+                //            fixWidth = int.Parse(model.IMG_SIZE.ToString());
+                //        }
+                //        else
+                //        {
+                //            //設定修改後的圖高
+                //            fixHeight = int.Parse(model.IMG_SIZE.ToString());
+                //            //設定修改後的圖寬
+                //            fixWidth = Convert.ToInt32((Convert.ToDouble(fixHeight) / Convert.ToDouble(image.Height)) * Convert.ToDouble(image.Width));
+                //        }
+                //    }
+
+                //    //輸出一個新圖(就是修改過的圖)
+                //    Bitmap imageOutput = new Bitmap(image, fixWidth, fixHeight);
+                //    //將修改過的圖存於設定的位子
+                //    imageOutput.Save(string.Concat(model.FILE_PATH + model.PRO_IMG_NAME), thisFormat);
+                //    //docfiles.Add(filePath + Nfile);
+                //    //釋放記憶體
+                //    imageOutput.Dispose();
+                //    //釋放掉圖檔 
+                //    image.Dispose();
+
+                //    ///刪除原始檔案
+                //    File.Delete(model.FILE_PATH + model.IMG_NAME);
+                //}
+
+                #endregion
+
+                vResult = true;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("圖片上傳失敗，原因：" + ex.Message);
+                throw new Exception("圖片上傳失敗，原因：" + ex.Message);
+            }
+
+            return vResult;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// base64圖片輸出設定
+        /// </summary>
+        public string PostBase64ImgOut(Base64ImgModel model)
+        {
+            try
+            {
+                string[] ExtStrArray = model.FILE_EXTENSION.Split('/');
+                byte[] imageArray = File.ReadAllBytes(model.FILE_PATH + "." + ExtStrArray[1]);
+                return Convert.ToBase64String(imageArray);
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("圖片輸出失敗，原因：" + ex.Message);
+                throw new Exception("圖片輸出失敗，原因：" + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 整理圖片檔案及子表單資料
+        /// </summary>
+        public bool PostOrganizeImg(OrganizeImgModel model)
+        {
+            bool vResult = false;
+
+            try
+            {
+                var parameter = new List<SqlParameter>()
+                {
+                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID }
+                };
+
+                strSQL = "";
+                strSQL += "SELECT ";
+                strSQL += "     [FileRename], ";
+                strSQL += "     [FileExtension] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + model.IDENTIFY + "_" + model.EXT + "] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+                var dtImg = dbFun.DoQuery(strSQL, parameter);
+                if (dtImg.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtImg.Rows)
+                    {
+                        string[] ExtStrArray = dr["FileExtension"].ToString().Split('/');
+                        File.Delete(model.FILE_PATH + dr["FileRename"].ToString() + "." + ExtStrArray[1]);
+                    }
+
+                    strSQL = "";
+                    strSQL += "DELETE ";
+                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + model.IDENTIFY + "_D] ";
+                    strSQL += "WHERE 1=1 ";
+                    strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                    dbFun.DoTran(strSQL, parameter);
+
+                    vResult = true;
+                }
+                else vResult = true;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("圖片刪除失敗，原因：" + ex.Message);
+                throw new Exception("圖片刪除失敗，原因：" + ex.Message);
+            }
+            return vResult;
+        }
+
+        #endregion
+
+        #region - 檔案、資料整理 -
+
+        /// <summary>
+        /// 檔案、資料整理
+        /// </summary>        
+        public bool PostInformationOrganize(OrganizeImgModel model)
+        {
+            bool vResult = false;
+            try
+            {
+                #region - 確認檔案路徑 -
+
+                var uploadFilePathModel = new UploadFilePathModel()
+                {
+                    LOCATION = GlobalParameters.sqlConnBPMProTest,
+                    PATH = model.FILE_PATH,
+                    IDENTIFY = model.IDENTIFY
+                };
+
+                var ImgPath = CommonRepository.PostUploadFilePath(uploadFilePathModel);
+
+                #endregion
+
+                strSQL = "";
+                strSQL += "SELECT ";
+                strSQL += "     [RequisitionID] AS [REQUISITION_ID] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + model.IDENTIFY + "_" + model.EXT + "] ";
+                strSQL += "GROUP BY [RequisitionID] ";
+                strSQL += "EXCEPT ";
+                strSQL += "SELECT ";
+                strSQL += "     [RequisitionID] AS [REQUISITION_ID] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + model.IDENTIFY + "_M] ";
+                strSQL += "GROUP BY [RequisitionID] ";
+                var dtExcept = dbFun.DoQuery(strSQL);
+                if (dtExcept.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtExcept.Rows)
+                    {
+                        #region 整理檔案及資料
+
+                        model = new OrganizeImgModel()
+                        {
+                            EXT = model.EXT,
+                            FILE_PATH = ImgPath,
+                            IDENTIFY = model.IDENTIFY,
+                            REQUISITION_ID = dr["REQUISITION_ID"].ToString()
+                        };
+
+                        vResult = PostOrganizeImg(model);
+
+                        #endregion
+                    }
+                }
+                else vResult = true;
+
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("檔案、資料調整失敗，原因：" + ex.Message);
+                throw new Exception("檔案、資料調整失敗，原因：" + ex.Message);
+            }
+            return vResult;
+        }
+
         #endregion
 
         #endregion

@@ -1,24 +1,23 @@
-﻿using System;
-using System.Collections;
+﻿using Microsoft.Ajax.Utilities;
+using OA_WEB_API.Models.BPMPro;
+using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
+using System.Data;
 using System.Linq;
 using System.Web;
-
 using OA_WEB_API.Models;
-using OA_WEB_API.Models.BPMPro;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
     /// <summary>
-    /// 會簽管理系統 - 四方四隅_會簽單
+    /// 會簽管理系統 - A攝影棚直播使用申請單
     /// </summary>
-    public class GPI_CountersignRepository
+    public class AStudioLiveStreamUseRepository
     {
         #region - 宣告 -
 
-        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMPro);
+        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProTest);
 
         #region Repository
 
@@ -35,9 +34,9 @@ namespace OA_WEB_API.Repository.BPMPro
         #region - 方法 -
 
         /// <summary>
-        /// 四方四隅_會簽單(查詢)
+        /// A攝影棚直播使用申請單(查詢)
         /// </summary>
-        public GPI_CountersignViewModel PostGPI_CountersignSingle(GPI_CountersignQueryModel query)
+        public AStudioLiveStreamUseViewModel PostAStudioLiveStreamUseSingle(AStudioLiveStreamUseQueryModel query)
         {
             var parameter = new List<SqlParameter>()
             {
@@ -57,69 +56,64 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 四方四隅_會簽單 表頭資訊 -
+            #region - A攝影棚直播使用申請單 表頭資訊 -
 
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
-            strSQL += "     [BPMFormNo] AS [BPM_FORM_NO], ";
-            strSQL += "     [LevelType] AS [LEVEL_TYPE] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_Countersign_M] ";
+            strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-            var GPI_countersignTitle = dbFun.DoQuery(strSQL, parameter).ToList<GPI_CountersignTitle>().FirstOrDefault();
+            var aStudioLiveStreamUseTitle = dbFun.DoQuery(strSQL, parameter).ToList<AStudioLiveStreamUseTitle>().FirstOrDefault();
 
             #endregion
 
-            #region - 四方四隅_會簽單 表單內容 -
+            #region - A攝影棚直播使用申請單 表單內容 -
 
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [Description] AS [DESCRIPTION], ";
+            strSQL += "     [LiveStreamDate] AS [LIVE_STREAM_DATE], ";
+            strSQL += "     [StartTime] AS [START_TIME], ";
+            strSQL += "     [EndTime] AS [END_TIME], ";
+            strSQL += "     [EquipmentUse] AS [EQUIPMENT_USE], ";
+            strSQL += "     [MicCount] AS [MIC_COUNT], ";
+            strSQL += "     [Light] AS [LIGHT], ";
+            strSQL += "     CAST([IsLiveStreamEquipment] as bit) AS [IS_LIVE_STREAM_EQUIPMENT], ";
             strSQL += "     [Note] AS [NOTE], ";
-            strSQL += "     [IsVicePresident] AS [IS_VICE_PRESIDENT] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_Countersign_M] ";
+            strSQL += "     [ApplicationContent] AS [APPLICATION_CONTENT] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
-            var GPI_countersignConfig = dbFun.DoQuery(strSQL, parameter).ToList<GPI_CountersignConfig>().FirstOrDefault();
+            var aStudioLiveStreamUseConfig = dbFun.DoQuery(strSQL, parameter).ToList<AStudioLiveStreamUseConfig>().FirstOrDefault();
 
             #endregion
 
-            #region - 四方四隅_會簽單 會簽簽核人員 -
+            #region - A攝影棚直播使用申請單 會簽簽核人員 -
 
-            var CommonApprovers = new BPMCommonModel<GPI_CountersignApproversConfig>()
+            var CommonApprovers = new BPMCommonModel<AStudioLiveStreamUseApproversConfig>()
             {
                 EXT = "D",
                 IDENTIFY = IDENTIFY,
                 PARAMETER = parameter
             };
             strJson = jsonFunction.ObjectToJSON(commonRepository.PostApproverFunction(CommonApprovers));
-            var GPI_countersignApproversConfig = jsonFunction.JsonToObject<List<GPI_CountersignApproversConfig>>(strJson);
+            var aStudioLiveStreamUseApproversConfig = jsonFunction.JsonToObject<List<AStudioLiveStreamUseApproversConfig>>(strJson);
 
             #endregion
 
-            #region - 四方四隅_會簽單 表單關聯 -
-
-            var formQueryModel = new FormQueryModel()
-            {
-                REQUISITION_ID = query.REQUISITION_ID
-            };
-            var associatedForm = commonRepository.PostAssociatedForm(formQueryModel);
-
-            #endregion
-
-            var GPI_countersignViewModel = new GPI_CountersignViewModel()
+            var aStudioLiveStreamUseViewModel = new AStudioLiveStreamUseViewModel()
             {
                 APPLICANT_INFO = applicantInfo,
-                GPI_COUNTERSIGN_TITLE = GPI_countersignTitle,
-                GPI_COUNTERSIGN_CONFIG = GPI_countersignConfig,
-                GPI_COUNTERSIGN_APPROVERS_CONFIG = GPI_countersignApproversConfig,
-                ASSOCIATED_FORM_CONFIG = associatedForm
-            };            
+                A_STUDIO_LIVE_STREAM_USE_TITLE = aStudioLiveStreamUseTitle,
+                A_STUDIO_LIVE_STREAM_USE_CONFIG = aStudioLiveStreamUseConfig,
+                A_STUDIO_LIVE_STREAM_USE_APPROVERS_CONFIG = aStudioLiveStreamUseApproversConfig,
+            };
 
             #region - 確認表單 -
 
-            if (GPI_countersignViewModel.APPLICANT_INFO.DRAFT_FLAG == 0)
+            if (aStudioLiveStreamUseViewModel.APPLICANT_INFO.DRAFT_FLAG == 0)
             {
                 var formData = new FormData()
                 {
@@ -128,8 +122,8 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
                 {
-                    GPI_countersignViewModel = new GPI_CountersignViewModel();
-                    CommLib.Logger.Error("四方四隅_會簽單(查詢)失敗，原因：系統無正常起單。");
+                    aStudioLiveStreamUseViewModel = new AStudioLiveStreamUseViewModel();
+                    CommLib.Logger.Error("A攝影棚直播使用申請單(查詢)失敗，原因：系統無正常起單。");
                 }
                 else
                 {
@@ -142,7 +136,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     };
                     notifyRepository.ByInsertBPMFormNo(formQuery);
 
-                    if (String.IsNullOrEmpty(GPI_countersignViewModel.GPI_COUNTERSIGN_TITLE.BPM_FORM_NO) || String.IsNullOrWhiteSpace(GPI_countersignViewModel.GPI_COUNTERSIGN_TITLE.BPM_FORM_NO))
+                    if (String.IsNullOrEmpty(aStudioLiveStreamUseViewModel.A_STUDIO_LIVE_STREAM_USE_TITLE.BPM_FORM_NO) || String.IsNullOrWhiteSpace(aStudioLiveStreamUseViewModel.A_STUDIO_LIVE_STREAM_USE_TITLE.BPM_FORM_NO))
                     {
                         strSQL = "";
                         strSQL += "SELECT ";
@@ -150,7 +144,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
                         strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
                         var dtBpmFormNo = dbFun.DoQuery(strSQL, parameter);
-                        if (dtBpmFormNo.Rows.Count > 0) GPI_countersignViewModel.GPI_COUNTERSIGN_TITLE.BPM_FORM_NO = dtBpmFormNo.Rows[0][0].ToString();
+                        if (dtBpmFormNo.Rows.Count > 0) aStudioLiveStreamUseViewModel.A_STUDIO_LIVE_STREAM_USE_TITLE.BPM_FORM_NO = dtBpmFormNo.Rows[0][0].ToString();
                     }
 
                     #endregion
@@ -159,88 +153,96 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            return GPI_countersignViewModel;
+            return aStudioLiveStreamUseViewModel;
         }
 
         #region - 依此單內容重送 -
 
         /// <summary>
-        /// 四方四隅_會簽單(依此單內容重送)(僅外部起單使用)
+        /// A攝影棚直播使用申請單(依此單內容重送)(僅外部起單使用)
         /// </summary>        
-        public bool PutGPI_CountersignRefill(GPI_CountersignQueryModel query)
-        {
-            bool vResult = false;
+        //public bool PutAStudioLiveStreamUseRefill(AStudioLiveStreamUseQueryModel query)
+        //{
+        //    bool vResult = false;
 
-            try
-            {
-                if (!String.IsNullOrEmpty(query.REQUISITION_ID) || !String.IsNullOrWhiteSpace(query.REQUISITION_ID))
-                {
-                    #region - 宣告 -
+        //    try
+        //    {
+        //        if (!String.IsNullOrEmpty(query.REQUISITION_ID) || !String.IsNullOrWhiteSpace(query.REQUISITION_ID))
+        //        {
+        //            #region - 宣告 -
 
-                    var original = PostGPI_CountersignSingle(query);
-                    strJson = jsonFunction.ObjectToJSON(original);
+        //            var original = PostAStudioLiveStreamUseSingle(query);
+        //            strJson = jsonFunction.ObjectToJSON(original);
 
-                    var GPI_countersignViewModel = new GPI_CountersignViewModel();
+        //            var aStudioLiveStreamUseViewModel = new AStudioLiveStreamUseViewModel();
 
-                    var requisitionID = Guid.NewGuid().ToString();
+        //            var requisitionID = Guid.NewGuid().ToString();
 
-                    #endregion
+        //            #endregion
 
-                    #region - 重送內容 -
+        //            #region - 重送內容 -
 
-                    GPI_countersignViewModel = jsonFunction.JsonToObject<GPI_CountersignViewModel>(strJson);
+        //            aStudioLiveStreamUseViewModel = jsonFunction.JsonToObject<AStudioLiveStreamUseViewModel>(strJson);
 
-                    #region - 申請人資訊 調整 -
+        //            #region - 申請人資訊 調整 -
 
-                    GPI_countersignViewModel.APPLICANT_INFO.REQUISITION_ID = requisitionID;
-                    GPI_countersignViewModel.APPLICANT_INFO.DRAFT_FLAG = 1;
-                    GPI_countersignViewModel.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Now;
+        //            aStudioLiveStreamUseViewModel.APPLICANT_INFO.REQUISITION_ID = requisitionID;
+        //            aStudioLiveStreamUseViewModel.APPLICANT_INFO.DRAFT_FLAG = 1;
+        //            aStudioLiveStreamUseViewModel.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Now;
 
-                    #endregion
+        //            #endregion
 
-                    #region - 四方四隅_會簽單 表頭資訊 調整 -
+        //            #region - A攝影棚直播使用申請單 表頭資訊 調整 -
 
-                    GPI_countersignViewModel.GPI_COUNTERSIGN_TITLE.FM7_SUBJECT = "(依此單內容重上)" + GPI_countersignViewModel.GPI_COUNTERSIGN_TITLE.FM7_SUBJECT;
+        //            aStudioLiveStreamUseViewModel.A_STUDIO_LIVE_STREAM_USE_TITLE = null;
 
-                    #endregion
+        //            #endregion
 
-                    #region - 四方四隅_會簽單 會簽簽核人員 清除 -
+        //            #region - A攝影棚直播使用申請單 表頭內容 調整 -
 
-                    GPI_countersignViewModel.GPI_COUNTERSIGN_APPROVERS_CONFIG = null;
+        //            aStudioLiveStreamUseViewModel.A_STUDIO_LIVE_STREAM_USE_CONFIG = null;
 
-                    #endregion
+        //            #endregion
 
-                    #endregion
+        //            #region - 四方四隅_會簽單 會簽簽核人員 清除 -
 
-                    #region - 送出 執行(新增/修改/草稿) -
+        //            aStudioLiveStreamUseViewModel.A_STUDIO_LIVE_STREAM_USE_APPROVERS_CONFIG = null;
 
-                    PutGPI_CountersignSingle(GPI_countersignViewModel);
+        //            #endregion
 
-                    #endregion
-                }
+        //            #endregion
 
-                vResult = true;
-            }
-            catch (Exception ex)
-            {
-                vResult = false;
-                CommLib.Logger.Error("四方四隅_會簽單(依此單內容重送)失敗，原因：" + ex.Message);
-            }
+        //            #region - 送出 執行(新增/修改/草稿) -
 
-            return vResult;
-        }
+        //            PutAStudioLiveStreamUseSingle(aStudioLiveStreamUseViewModel);
+
+        //            #endregion
+        //        }
+
+        //        vResult = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        vResult = false;
+        //        CommLib.Logger.Error("四方四隅_會簽單(依此單內容重送)失敗，原因：" + ex.Message);
+        //    }
+
+        //    return vResult;
+        //}
 
         #endregion
 
         /// <summary>
-        /// 四方四隅_會簽單(新增/修改/草稿)
+        /// A攝影棚直播使用申請單(新增/修改/草稿)
         /// </summary>
-        public bool PutGPI_CountersignSingle(GPI_CountersignViewModel model)
+        public bool PutAStudioLiveStreamUseSingle(AStudioLiveStreamUseViewModel model)
         {
             bool vResult = false;
             try
             {
                 #region - 宣告 -
+
+                var LiveStreamActivityDateTime = String.Empty;
 
                 #region - 系統編號 -
 
@@ -252,39 +254,40 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                //表單重要性
-                var PRIORITY = model.APPLICANT_INFO.PRIORITY;
-
-                switch (model.GPI_COUNTERSIGN_TITLE.LEVEL_TYPE)
-                {
-                    case "特急件":
-                        PRIORITY = 3;
-                        break;
-                    case "急件":
-                        PRIORITY = 2;
-                        break;
-                    default:
-                        //普通件
-                        PRIORITY = 1;
-                        break;
-                }
-
                 #region - 主旨 -
 
-                FM7Subject = model.GPI_COUNTERSIGN_TITLE.FM7_SUBJECT;
+                FM7Subject = model.A_STUDIO_LIVE_STREAM_USE_TITLE.FM7_SUBJECT;
+
+                if (String.IsNullOrEmpty(model.A_STUDIO_LIVE_STREAM_USE_TITLE.FM7_SUBJECT) || String.IsNullOrWhiteSpace(model.A_STUDIO_LIVE_STREAM_USE_TITLE.FM7_SUBJECT))
+                {
+                    if (model.APPLICANT_INFO.DRAFT_FLAG == 1)
+                    {
+                        if ((String.IsNullOrEmpty(model.A_STUDIO_LIVE_STREAM_USE_CONFIG.LIVE_STREAM_DATE) || String.IsNullOrWhiteSpace(model.A_STUDIO_LIVE_STREAM_USE_CONFIG.LIVE_STREAM_DATE)) && (String.IsNullOrEmpty(model.A_STUDIO_LIVE_STREAM_USE_CONFIG.START_TIME) || String.IsNullOrWhiteSpace(model.A_STUDIO_LIVE_STREAM_USE_CONFIG.START_TIME)))
+                            LiveStreamActivityDateTime = "_____";
+                        else if (String.IsNullOrEmpty(model.A_STUDIO_LIVE_STREAM_USE_CONFIG.LIVE_STREAM_DATE) || String.IsNullOrWhiteSpace(model.A_STUDIO_LIVE_STREAM_USE_CONFIG.LIVE_STREAM_DATE))
+                            LiveStreamActivityDateTime = "___ " + model.A_STUDIO_LIVE_STREAM_USE_CONFIG.START_TIME;
+                        else if (String.IsNullOrEmpty(model.A_STUDIO_LIVE_STREAM_USE_CONFIG.START_TIME) || String.IsNullOrWhiteSpace(model.A_STUDIO_LIVE_STREAM_USE_CONFIG.START_TIME))
+                            LiveStreamActivityDateTime = model.A_STUDIO_LIVE_STREAM_USE_CONFIG.LIVE_STREAM_DATE + " ___";
+                        else LiveStreamActivityDateTime = model.A_STUDIO_LIVE_STREAM_USE_CONFIG.LIVE_STREAM_DATE + " " + model.A_STUDIO_LIVE_STREAM_USE_CONFIG.START_TIME;
+
+                    }
+                    else LiveStreamActivityDateTime = model.A_STUDIO_LIVE_STREAM_USE_CONFIG.LIVE_STREAM_DATE + " " + model.A_STUDIO_LIVE_STREAM_USE_CONFIG.START_TIME;
+
+                    FM7Subject = "A攝影棚" + LiveStreamActivityDateTime + "直播使用；" + model.APPLICANT_INFO.APPLICANT_DEPT_NAME + "_" + model.APPLICANT_INFO.APPLICANT_NAME;
+                }
 
                 #endregion
 
                 #endregion
 
-                #region - 四方四隅_會簽單 表頭資訊：GPI_Countersign_M -
+                #region - A攝影棚直播使用申請單 表頭資訊：AStudioLiveStreamUse_M -
 
                 var parameterTitle = new List<SqlParameter>()
                 {
                     //表單資訊
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value =  strREQ},
                     new SqlParameter("@DIAGRAM_ID", SqlDbType.NVarChar) { Size = 50, Value = model.APPLICANT_INFO.DIAGRAM_ID },
-                    new SqlParameter("@PRIORITY", SqlDbType.Int) { Value =  PRIORITY},
+                    new SqlParameter("@PRIORITY", SqlDbType.Int) { Value =  model.APPLICANT_INFO.PRIORITY},
                     new SqlParameter("@DRAFT_FLAG", SqlDbType.Int) { Value =  model.APPLICANT_INFO.DRAFT_FLAG},
                     new SqlParameter("@FLOW_ACTIVATED", SqlDbType.Int) { Value =  model.APPLICANT_INFO.FLOW_ACTIVATED},
                     //(申請人/起案人)資訊
@@ -298,7 +301,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
                     //四方四隅_會簽單 表頭
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
-                    new SqlParameter("@LEVEL_TYPE", SqlDbType.NVarChar) { Size = 10, Value = (object)model.GPI_COUNTERSIGN_TITLE.LEVEL_TYPE ?? DBNull.Value },
                 };
 
                 #region - 正常起單後 申請時間(APPLICANT_DATETIME) 不可覆蓋 -
@@ -313,6 +315,18 @@ namespace OA_WEB_API.Repository.BPMPro
                     if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
                     {
                         parameterTitle.Add(new SqlParameter("@APPLICANT_DATETIME", SqlDbType.DateTime) { Value = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")) });
+                        model.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Parse(DateTime.Parse(parameterTitle.Where(P => P.ParameterName == "@APPLICANT_DATETIME").FirstOrDefault().Value.ToString()).ToShortDateString());
+
+                        #region - 表單防呆 -
+
+                        if (DateTime.Parse(model.A_STUDIO_LIVE_STREAM_USE_CONFIG.LIVE_STREAM_DATE) < model.APPLICANT_INFO.APPLICANT_DATETIME)
+                        {
+                            CommLib.Logger.Error("A攝影棚直播使用申請單(新增/修改/草稿)失敗，原因：直播日期異常申請。");
+                            return false;
+                        }
+
+                        #endregion
+
                         IsADD = true;
                     }
                 }
@@ -323,7 +337,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL = "";
                 strSQL += "SELECT ";
                 strSQL += "      [RequisitionID] ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_GPI_Countersign_M] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
                 strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                 var dtA = dbFun.DoQuery(strSQL, parameterTitle);
@@ -333,7 +347,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region - 修改 -
 
                     strSQL = "";
-                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_GPI_Countersign_M] ";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
                     strSQL += "SET [DiagramID] =@DIAGRAM_ID, ";
                     strSQL += "     [ApplicantDept]=@APPLICANT_DEPT, ";
                     strSQL += "     [ApplicantDeptName]=@APPLICANT_DEPT_NAME, ";
@@ -348,8 +362,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [Priority]=@PRIORITY, ";
                     strSQL += "     [DraftFlag]=@DRAFT_FLAG, ";
                     strSQL += "     [FlowActivated]=@FLOW_ACTIVATED, ";
-                    strSQL += "     [FM7Subject]=@FM7_SUBJECT, ";
-                    strSQL += "     [LevelType]=@LEVEL_TYPE ";
+                    strSQL += "     [FM7Subject]=@FM7_SUBJECT ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                     dbFun.DoTran(strSQL, parameterTitle);
@@ -361,8 +374,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region - 新增 -
 
                     strSQL = "";
-                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GPI_Countersign_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FM7Subject],[LevelType]) ";
-                    strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FM7_SUBJECT,@LEVEL_TYPE) ";
+                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FM7Subject]) ";
+                    strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FM7_SUBJECT) ";
 
                     dbFun.DoTran(strSQL, parameterTitle);
 
@@ -371,28 +384,45 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 四方四隅_會簽單 表單內容：GPI_Countersign_M -
+                #region - A攝影棚直播使用申請單 表單內容：AStudioLiveStreamUse_M -
 
-                if (model.GPI_COUNTERSIGN_CONFIG != null)
+                if (model.A_STUDIO_LIVE_STREAM_USE_CONFIG != null)
                 {
                     var parameterInfo = new List<SqlParameter>()
                     {
-                        //四方四隅_會簽單 表單內容
+                        //A攝影棚直播使用申請單 表單內容
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
-                        new SqlParameter("@DESCRIPTION", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@IS_VICE_PRESIDENT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value }
+                        new SqlParameter("@DESCRIPTION", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@LIVE_STREAM_DATE", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@START_TIME", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@END_TIME", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@EQUIPMENT_USE", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@MIC_COUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@LIGHT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@IS_LIVE_STREAM_EQUIPMENT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@APPLICATION_CONTENT", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                     };
 
-                    //寫入：四方四隅_會簽單 表單內容parameter                        
-                    strJson = jsonFunction.ObjectToJSON(model.GPI_COUNTERSIGN_CONFIG);
+                    //寫入：A攝影棚直播使用申請單 表單內容parameter
+                                        
+                    if (model.A_STUDIO_LIVE_STREAM_USE_CONFIG.IS_LIVE_STREAM_EQUIPMENT == null) model.A_STUDIO_LIVE_STREAM_USE_CONFIG.IS_LIVE_STREAM_EQUIPMENT = true;
+
+                    strJson = jsonFunction.ObjectToJSON(model.A_STUDIO_LIVE_STREAM_USE_CONFIG);
                     GlobalParameters.Infoparameter(strJson, parameterInfo);
 
                     strSQL = "";
-                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_GPI_Countersign_M] ";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
                     strSQL += "SET [Description]=@DESCRIPTION, ";
+                    strSQL += "     [LiveStreamDate]=@LIVE_STREAM_DATE, ";
+                    strSQL += "     [StartTime]=@START_TIME, ";
+                    strSQL += "     [EndTime]=@END_TIME, ";
+                    strSQL += "     [EquipmentUse]=@EQUIPMENT_USE, ";
+                    strSQL += "     [MicCount]=@MIC_COUNT, ";
+                    strSQL += "     [Light]=@LIGHT, ";
+                    strSQL += "     [IsLiveStreamEquipment]=UPPER(@IS_LIVE_STREAM_EQUIPMENT), ";
                     strSQL += "     [Note]=@NOTE, ";
-                    strSQL += "     [IsVicePresident]=@IS_VICE_PRESIDENT ";
+                    strSQL += "     [ApplicationContent]=@APPLICATION_CONTENT ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                     dbFun.DoTran(strSQL, parameterInfo);
@@ -401,11 +431,11 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 四方四隅_會簽單 會簽簽核人員：GPI_Countersign_D -
+                #region - A攝影棚直播使用申請單 會簽簽核人員：AStudioLiveStreamUse_D -
 
                 var parameterApprovers = new List<SqlParameter>()
                 {
-                    //四方四隅_會簽單 會簽簽核人員
+                    //A攝影棚直播使用申請單 會簽簽核人員
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                     new SqlParameter("@APPROVER_COMPANY_ID", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@APPROVER_DEPT_MAIN_ID", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -414,16 +444,16 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@APPROVER_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value }
                 };
 
-                if (model.GPI_COUNTERSIGN_APPROVERS_CONFIG != null && model.GPI_COUNTERSIGN_APPROVERS_CONFIG.Count > 0)
+                if (model.A_STUDIO_LIVE_STREAM_USE_APPROVERS_CONFIG != null && model.A_STUDIO_LIVE_STREAM_USE_APPROVERS_CONFIG.Count > 0)
                 {
-                    model.GPI_COUNTERSIGN_APPROVERS_CONFIG.ForEach(A =>
+                    model.A_STUDIO_LIVE_STREAM_USE_APPROVERS_CONFIG.ForEach(A =>
                     {
                         var logonModel = new LogonModel()
                         {
                             USER_ID = A.APPROVER_ID
                         };
                         var userModel = userRepository.PostUserSingle(logonModel).USER_MODEL;
-                                                
+
                         if (userModel != null && userModel.Count > 0 && userModel.Any(U => U.JOB_STATUS != 0))
                         {
                             var userInfoMainDeptModel = new UserInfoMainDeptModel()
@@ -433,30 +463,18 @@ namespace OA_WEB_API.Repository.BPMPro
                                 COMPANY_ID = userModel.Where(U => U.DEPT_ID == A.APPROVER_DEPT_ID).Select(U => U.COMPANY_ID).FirstOrDefault(),
                             };
                             A.APPROVER_DEPT_MAIN_ID = sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel).MAIN_DEPT.DEPT_ID;
-                        }                        
+                        }
                     });
 
-                    var CommonApprovers = new BPMCommonModel<GPI_CountersignApproversConfig>()
+                    var CommonApprovers = new BPMCommonModel<AStudioLiveStreamUseApproversConfig>()
                     {
                         EXT = "D",
                         IDENTIFY = IDENTIFY,
                         PARAMETER = parameterApprovers,
-                        MODEL = model.GPI_COUNTERSIGN_APPROVERS_CONFIG
+                        MODEL = model.A_STUDIO_LIVE_STREAM_USE_APPROVERS_CONFIG
                     };
                     commonRepository.PutApproverFunction(CommonApprovers);
                 }
-
-                #endregion
-
-                #region - 四方四隅_會簽單 表單關聯：AssociatedForm -
-
-                var associatedFormModel = new AssociatedFormModel()
-                {
-                    REQUISITION_ID = strREQ,
-                    ASSOCIATED_FORM_CONFIG = model.ASSOCIATED_FORM_CONFIG
-                };
-
-                commonRepository.PutAssociatedForm(associatedFormModel);
 
                 #endregion
 
@@ -524,11 +542,12 @@ namespace OA_WEB_API.Repository.BPMPro
                 #endregion
 
                 vResult = true;
+
             }
             catch (Exception ex)
             {
                 vResult = false;
-                CommLib.Logger.Error("四方四隅_會簽單(新增/修改/草稿)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("A攝影棚直播使用申請單(新增/修改/草稿)失敗，原因：" + ex.Message);
             }
 
             return vResult;
@@ -551,7 +570,7 @@ namespace OA_WEB_API.Repository.BPMPro
         /// <summary>
         /// 表單代號
         /// </summary>
-        private string IDENTIFY = "GPI_Countersign";
+        private string IDENTIFY = "AStudioLiveStreamUse";
 
         /// <summary>
         /// 表單主旨

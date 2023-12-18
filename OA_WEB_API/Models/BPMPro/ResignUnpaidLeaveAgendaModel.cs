@@ -5,12 +5,12 @@ using System.Linq;
 using System.Web;
 
 /// <summary>
-/// 會簽管理系統 - 離職、留職停薪_手續表
+/// 會簽管理系統 - 員工離職/留職停薪手續表
 /// </summary>
 namespace OA_WEB_API.Models.BPMPro
 {
     /// <summary>
-    /// 離職、留職停薪_手續表(查詢條件)
+    /// 員工離職/留職停薪手續表(查詢條件)
     /// </summary>
     public class ResignUnpaidLeaveAgendaQueryModel
     {
@@ -26,18 +26,18 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>申請人資訊</summary>
         public ApplicantInfo APPLICANT_INFO { get; set; }
 
-        /// <summary>離職、留職停薪_手續表 表頭資訊</summary>
+        /// <summary>員工離職/留職停薪手續表 表頭資訊</summary>
         public ResignUnpaidLeaveAgendaTitle RESIGN_UNPAID_LEAVE_AGENDA_TITLE { get; set; }
 
-        /// <summary>離職、留職停薪_手續表 表單內容 設定</summary>
+        /// <summary>員工離職/留職停薪手續表 表單內容 設定</summary>
         public ResignUnpaidLeaveAgendaConfig RESIGN_UNPAID_LEAVE_AGENDA_CONFIG { get; set; }
 
-        /// <summary>離職、留職停薪_手續表 事務清單 設定</summary>
+        /// <summary>員工離職/留職停薪手續表 事務清單 設定</summary>
         public IList<ResignUnpaidLeaveAgendaAffairsConfig> RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG { get; set; }
     }
 
     /// <summary>
-    /// 離職、留職停薪_手續表 表頭資訊
+    /// 員工離職/留職停薪手續表 表頭資訊
     /// </summary>
     public class ResignUnpaidLeaveAgendaTitle : HeaderTitle
     {
@@ -45,7 +45,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 離職、留職停薪_手續表 表單內容 設定
+    /// 員工離職/留職停薪手續表 表單內容 設定
     /// </summary>
     public class ResignUnpaidLeaveAgendaConfig
     {
@@ -84,7 +84,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 離職、留職停薪_手續表 事務清單 設定
+    /// 員工離職/留職停薪手續表 事務清單 設定
     /// </summary>
     public class ResignUnpaidLeaveAgendaAffairsConfig
     {
@@ -118,7 +118,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 離職、留職停薪_手續表 事項交接 設定
+    /// 員工離職/留職停薪手續表 事項交接 設定
     /// </summary>
     public class ResignUnpaidLeaveAgendHandoverSingle: ResignUnpaidLeaveAgendaAffairsConfig
     {
@@ -146,7 +146,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 離職、留職停薪_手續表 建立新的事務清單
+    /// 員工離職/留職停薪手續表 建立新的事務清單
     /// </summary>
     public class NewAffairsConfig
     {

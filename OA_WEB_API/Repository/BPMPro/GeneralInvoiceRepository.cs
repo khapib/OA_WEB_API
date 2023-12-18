@@ -406,7 +406,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@FLOW_NAME", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_INVOICE_TITLE.FLOW_NAME ?? DBNull.Value },
                     new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_INVOICE_TITLE.FORM_NO ?? DBNull.Value },
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
-                    new SqlParameter("@IsCFO", SqlDbType.NVarChar) { Size = 200, Value = (object)model.GENERAL_INVOICE_TITLE.IS_CFO ?? DBNull.Value },
+                    new SqlParameter("@IS_CFO", SqlDbType.NVarChar) { Size = 200, Value = (object)model.GENERAL_INVOICE_TITLE.IS_CFO ?? DBNull.Value },
                 };
 
                 #region - 正常起單後 申請時間(APPLICANT_DATETIME) 不可覆蓋 -

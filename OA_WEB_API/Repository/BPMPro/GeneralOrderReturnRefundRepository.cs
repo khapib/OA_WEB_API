@@ -69,7 +69,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [FlowName] AS [FLOW_NAME], ";
             strSQL += "     [FormNo] AS [FORM_NO], ";
             strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
-            strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
+            strSQL += "     [BPMFormNo] AS [BPM_FORM_NO], ";
+            strSQL += "     [IsCFO] AS [IS_CFO] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralOrderReturnRefund_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 

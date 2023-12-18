@@ -13,7 +13,7 @@ using Microsoft.Ajax.Utilities;
 namespace OA_WEB_API.Repository.BPMPro
 {
     /// <summary>
-    /// 會簽管理系統 - 離職、留職停薪_手續表
+    /// 會簽管理系統 - 員工離職/留職停薪手續表
     /// </summary>
     public class ResignUnpaidLeaveAgendaRepository
     {
@@ -36,7 +36,7 @@ namespace OA_WEB_API.Repository.BPMPro
         #region - 方法 -
 
         /// <summary>
-        /// 離職、留職停薪_手續表(查詢)
+        /// 員工離職/留職停薪手續表(查詢)
         /// </summary>
         public ResignUnpaidLeaveAgendaViewModel PostResignUnpaidLeaveAgendaSingle(ResignUnpaidLeaveAgendaQueryModel query)
         {
@@ -60,7 +60,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 離職、留職停薪_手續表 表頭資訊 -
+            #region - 員工離職/留職停薪手續表 表頭資訊 -
 
             strSQL = "";
             strSQL += "SELECT ";
@@ -73,7 +73,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 離職、留職停薪_手續表 表單內容 -
+            #region - 員工離職/留職停薪手續表 表單內容 -
 
             strSQL = "";
             strSQL += "SELECT ";
@@ -95,7 +95,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 離職、留職停薪_手續表 事務清單 -
+            #region - 員工離職/留職停薪手續表 事務清單 -
 
             strSQL = "";
             strSQL += "SELECT ";
@@ -163,7 +163,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
                 {
                     resignUnpaidLeaveAgendaViewModel = new ResignUnpaidLeaveAgendaViewModel();
-                    CommLib.Logger.Error("離職、留職停薪_手續表(查詢)失敗，原因：系統無正常起單。");
+                    CommLib.Logger.Error("員工離職/留職停薪手續表(查詢)失敗，原因：系統無正常起單。");
                 }
                 else
                 {
@@ -211,7 +211,7 @@ namespace OA_WEB_API.Repository.BPMPro
         }
 
         /// <summary>
-        /// 離職、留職停薪_手續表(新增/修改/草稿)
+        /// 員工離職/留職停薪手續表(新增/修改/草稿)
         /// </summary>
         public bool PutResignUnpaidLeaveAgendaSingle(ResignUnpaidLeaveAgendaViewModel model)
         {
@@ -253,7 +253,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 離職、留職停薪_手續表 表頭資訊：ResignUnpaidLeaveAgenda_M -
+                #region - 員工離職/留職停薪手續表 表頭資訊：ResignUnpaidLeaveAgenda_M -
 
                 #region - 代填單:儲存草稿 -
 
@@ -289,7 +289,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     //(填單人/代填單人)資訊
                     new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_ID },
                     new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
-                    //離職、留職停薪_手續表 表頭
+                    //員工離職/留職停薪手續表 表頭
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
                 };
 
@@ -362,13 +362,13 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 離職、留職停薪_手續表 表單內容：ResignUnpaidLeaveAgenda_M -
+                #region - 員工離職/留職停薪手續表 表單內容：ResignUnpaidLeaveAgenda_M -
 
                 if (model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG != null)
                 {
                     var parameterInfo = new List<SqlParameter>()
                         {
-                            //離職、留職停薪_手續表 表單內容
+                            //員工離職/留職停薪手續表 表單內容
                             new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                             new SqlParameter("@FORM_ACTION", SqlDbType.NVarChar) { Size = 25, Value = (object)DBNull.Value ?? DBNull.Value },
                             new SqlParameter("@RESIGN_DATE", SqlDbType.DateTime) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -389,7 +389,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         if (String.IsNullOrEmpty(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.HANDOVER_SUPERVISOR_ID) || String.IsNullOrWhiteSpace(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.HANDOVER_SUPERVISOR_ID))
                         {
-                            CommLib.Logger.Error("離職、留職停薪_流程表(新增/修改/草稿)失敗，原因：交接人主管不能是 空 的");
+                            CommLib.Logger.Error("員工離職/留職停薪手續表(新增/修改/草稿)失敗，原因：交接人主管不能是 空 的");
                             return false;
                         }
                     }
@@ -402,7 +402,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG.HANDOVER_SUPERVISOR_NAME = userRepository.PostUserSingle(logonModel).USER_MODEL.Select(U => U.USER_NAME).FirstOrDefault();
                     }
 
-                    //寫入：離職、留職停薪_流程表 表單內容parameter                        
+                    //寫入：員工離職/留職停薪手續表 表單內容parameter                        
                     strJson = jsonFunction.ObjectToJSON(model.RESIGN_UNPAID_LEAVE_AGENDA_CONFIG);
                     GlobalParameters.Infoparameter(strJson, parameterInfo);
 
@@ -427,12 +427,12 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 離職、留職停薪_手續表 事務清單：ResignUnpaidLeaveAgenda_D -                              
+                #region - 員工離職/留職停薪手續表 事務清單：ResignUnpaidLeaveAgenda_D -                              
 
                 //IS_CONSUMMATION初始值都會是False
                 var parameterAffairs = new List<SqlParameter>()
                 {
-                    //離職、留職停薪_手續表 事務清單
+                    //員工離職/留職停薪手續表 事務清單
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                     new SqlParameter("@ITEM_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -452,7 +452,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     if (model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG.Any(AFF => AFF.ITEM_ID.Contains("A") && AFF.CONTACTER_ID == model.APPLICANT_INFO.APPLICANT_ID))
                     {
-                        CommLib.Logger.Error("離職、留職停薪_流程表(新增/修改/草稿)失敗，原因：所屬部門交接人不能是申請人。");
+                        CommLib.Logger.Error("員工離職/留職停薪手續表(新增/修改/草稿)失敗，原因：所屬部門交接人不能是申請人。");
                         return false;
                     }
                     else if (model.RESIGN_UNPAID_LEAVE_AGENDA_AFFS_CONFIG.Where(AFF => !String.IsNullOrEmpty(AFF.CONTACTER_ID) || !String.IsNullOrWhiteSpace(AFF.CONTACTER_ID)).Count() > 0)
@@ -478,7 +478,7 @@ namespace OA_WEB_API.Repository.BPMPro
                                 item.CONTACTER_NAME = userRepository.PostUserSingle(logonModel).USER_MODEL.Select(U => U.USER_NAME).FirstOrDefault();
                                 item.IS_CONSUMMATION = false;
 
-                                //寫入：離職、留職停薪_手續表 事務清單parameter
+                                //寫入：員工離職/留職停薪手續表 事務清單parameter
                                 strJson = jsonFunction.ObjectToJSON(item);
                                 GlobalParameters.Infoparameter(strJson, parameterAffairs);
 
@@ -586,14 +586,14 @@ namespace OA_WEB_API.Repository.BPMPro
             catch (Exception ex)
             {
                 vResult = false;
-                CommLib.Logger.Error("離職、留職停薪_流程表(新增/修改/草稿)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("員工離職/留職停薪手續表(新增/修改/草稿)失敗，原因：" + ex.Message);
             }
 
             return vResult;
         }
 
         /// <summary>
-        /// 離職、留職停薪_手續表(事項交接)
+        /// 員工離職/留職停薪手續表(事項交接)
         /// </summary>
         public bool PutResignUnpaidLeaveAgendHandoverSingle(ResignUnpaidLeaveAgendHandoverSingle model)
         {
@@ -608,24 +608,24 @@ namespace OA_WEB_API.Repository.BPMPro
                 //if (Boolean.Parse(model.IS_CONSUMMATION.ToString()))
                 //{
                 var parameter = new List<SqlParameter>()
-                    {
-                        //離職、留職停薪_手續表 事項交接
-                        new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },
-                        new SqlParameter("@ITEM_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)model.ITEM_ID ?? DBNull.Value },
-                        new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@IS_CONSUMMATION", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@DESCRIPTION", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@CONTACTER_DEPT_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@CONTACTER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@CONTACTER_NAME", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@SIGN_DATE", SqlDbType.DateTime) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@C01B_DATE", SqlDbType.DateTime) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@C01C_STR_DATE_TIME", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@C01F_STR_DATE_TIME", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@C01H_STR_DATE_TIME", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@C02_OTHERS", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@C03_OTHERS", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                    };
+                {
+                    //員工離職/留職停薪手續表 事項交接
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },
+                    new SqlParameter("@ITEM_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)model.ITEM_ID ?? DBNull.Value },
+                    new SqlParameter("@ITEM_NAME", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@IS_CONSUMMATION", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DESCRIPTION", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@CONTACTER_DEPT_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@CONTACTER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@CONTACTER_NAME", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@SIGN_DATE", SqlDbType.DateTime) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@C01B_DATE", SqlDbType.DateTime) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@C01C_STR_DATE_TIME", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@C01F_STR_DATE_TIME", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@C01H_STR_DATE_TIME", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@C02_OTHERS", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@C03_OTHERS", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                };
 
                 strSQL = "";
                 strSQL += "SELECT ";
@@ -700,7 +700,7 @@ namespace OA_WEB_API.Repository.BPMPro
                             }
                         }
 
-                        //寫入：離職、留職停薪_流程表 事項交接parameter                        
+                        //寫入：員工離職/留職停薪手續表 事項交接parameter                        
                         strJson = jsonFunction.ObjectToJSON(model);
                         GlobalParameters.Infoparameter(strJson, parameter);
 
@@ -757,7 +757,7 @@ namespace OA_WEB_API.Repository.BPMPro
             }
             catch (Exception ex)
             {
-                CommLib.Logger.Error("離職、留職停薪_手續表(事項交接)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("員工離職/留職停薪手續表(事項交接)失敗，原因：" + ex.Message);
                 throw;
             }
         }
@@ -795,7 +795,7 @@ namespace OA_WEB_API.Repository.BPMPro
             }
             catch (Exception ex)
             {
-                CommLib.Logger.Error("離職、留職停薪_流程表(建立新的事務清單)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("員工離職/留職停薪手續表(建立新的事務清單)失敗，原因：" + ex.Message);
                 throw;
             }
         }

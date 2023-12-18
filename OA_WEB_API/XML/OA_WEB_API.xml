@@ -3715,6 +3715,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderReturnRefundTitle.FLOW_NAME">
             <summary>ERP 工作流程標題名稱</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.GeneralOrderReturnRefundTitle.IS_CFO">
+            <summary>是否經由財務協理簽核</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GeneralOrderReturnRefundConfig">
             <summary>
             行政採購退貨折讓單 表單內容 設定

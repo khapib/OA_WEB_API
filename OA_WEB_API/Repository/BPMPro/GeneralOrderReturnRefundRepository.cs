@@ -344,8 +344,18 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
+                #region - 預設設定 -
+
+                #region - 是否經由財務協理簽核 -
+
+                if (String.IsNullOrEmpty(model.GENERAL_ORDER_RETURN_REFUND_TITLE.IS_CFO) || String.IsNullOrWhiteSpace(model.GENERAL_ORDER_RETURN_REFUND_TITLE.IS_CFO)) model.GENERAL_ORDER_RETURN_REFUND_TITLE.IS_CFO = "false";
+
                 #endregion
 
+                #endregion
+
+                #endregion
+                                
                 #region - 行政採購退貨折讓單 表頭資訊：GeneralOrderReturnRefund_M -
 
                 var parameterTitle = new List<SqlParameter>()
@@ -369,6 +379,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@FLOW_NAME", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_ORDER_RETURN_REFUND_TITLE.FLOW_NAME ?? DBNull.Value },
                     new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_ORDER_RETURN_REFUND_TITLE.FORM_NO ?? DBNull.Value },
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
+                    new SqlParameter("@IS_CFO", SqlDbType.NVarChar) { Size = 200, Value = (object)model.GENERAL_ORDER_RETURN_REFUND_TITLE.IS_CFO ?? DBNull.Value },
                 };
 
                 #region - 正常起單後 申請時間(APPLICANT_DATETIME) 不可覆蓋 -
@@ -420,7 +431,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [FlowActivated]=@FLOW_ACTIVATED, ";
                     strSQL += "     [FlowName]=@FLOW_NAME, ";
                     strSQL += "     [FormNo]=@FORM_NO, ";
-                    strSQL += "     [FM7Subject]=@FM7_SUBJECT ";
+                    strSQL += "     [FM7Subject]=@FM7_SUBJECT, ";
+                    strSQL += "     [IsCFO]=@IS_CFO ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                     dbFun.DoTran(strSQL, parameterTitle);
@@ -432,8 +444,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region - 新增 -
 
                     strSQL = "";
-                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralOrderReturnRefund_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FlowName],[FormNo],[FM7Subject]) ";
-                    strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FLOW_NAME,@FORM_NO,@FM7_SUBJECT) ";
+                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralOrderReturnRefund_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FlowName],[FormNo],[FM7Subject],[IsCFO]) ";
+                    strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FLOW_NAME,@FORM_NO,@FM7_SUBJECT,@IS_CFO) ";
 
                     dbFun.DoTran(strSQL, parameterTitle);
 

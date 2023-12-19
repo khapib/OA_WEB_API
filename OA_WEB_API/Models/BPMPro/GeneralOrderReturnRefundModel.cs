@@ -56,6 +56,10 @@ namespace OA_WEB_API.Models.BPMPro
     {
         /// <summary>ERP 工作流程標題名稱</summary>
         public string FLOW_NAME { get; set; }
+
+        /// <summary>是否經由財務協理簽核</summary>
+        public string IS_CFO { get; set; }
+
     }
 
     /// <summary>

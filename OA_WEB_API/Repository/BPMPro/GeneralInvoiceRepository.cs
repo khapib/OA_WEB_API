@@ -10,6 +10,7 @@ using OA_WEB_API.Models.BPMPro;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using System.Collections;
+using System.Reflection;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -244,6 +245,16 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
+            #region - 是否經由財務協理簽核 -
+
+            if (String.IsNullOrEmpty(generalInvoiceTitle.IS_CFO) || String.IsNullOrWhiteSpace(generalInvoiceTitle.IS_CFO))
+            {
+                if (generalInvoicePaymentsConfig.Select(P => P.GROSS_CONV).Sum() >= 10000) generalInvoiceTitle.IS_CFO = "true";
+                else generalInvoiceTitle.IS_CFO = "false";
+            }
+
+            #endregion
+
             var generalInvoiceViewModel = new GeneralInvoiceViewModel()
             {
                 APPLICANT_INFO = applicantInfo,
@@ -371,17 +382,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     model.GENERAL_INVOICE_CONFIG.REIMBURSEMENT = "false";
                     //支付方式 
                     model.GENERAL_INVOICE_CONFIG.PAY_METHOD = "SUP_A/C";
-                }
-
-                #region - 是否經由財務協理簽核 -
-
-                if (String.IsNullOrEmpty(model.GENERAL_INVOICE_TITLE.IS_CFO) || String.IsNullOrWhiteSpace(model.GENERAL_INVOICE_TITLE.IS_CFO))
-                {
-                    if (model.GENERAL_INVOICE_CONFIG.INV_AMOUNT_TOTAL_TWD >= 10000) model.GENERAL_INVOICE_TITLE.IS_CFO = "true";
-                    else model.GENERAL_INVOICE_TITLE.IS_CFO = "false";
-                }
-
-                #endregion
+                }                
 
                 #endregion
 

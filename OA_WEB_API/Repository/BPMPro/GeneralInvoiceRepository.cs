@@ -10,6 +10,7 @@ using OA_WEB_API.Models.BPMPro;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using System.Collections;
+using System.Reflection;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -71,7 +72,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [FlowName] AS [FLOW_NAME], ";
             strSQL += "     [FormNo] AS [FORM_NO], ";
             strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
-            strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
+            strSQL += "     [BPMFormNo] AS [BPM_FORM_NO], ";
+            strSQL += "     [IsCFO] AS [IS_CFO] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_GeneralInvoice_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
@@ -243,6 +245,16 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
+            #region - 是否經由財務協理簽核 -
+
+            if (String.IsNullOrEmpty(generalInvoiceTitle.IS_CFO) || String.IsNullOrWhiteSpace(generalInvoiceTitle.IS_CFO))
+            {
+                if (generalInvoicePaymentsConfig.Select(P => P.GROSS_CONV).Sum() >= 10000) generalInvoiceTitle.IS_CFO = "true";
+                else generalInvoiceTitle.IS_CFO = "false";
+            }
+
+            #endregion
+
             var generalInvoiceViewModel = new GeneralInvoiceViewModel()
             {
                 APPLICANT_INFO = applicantInfo,
@@ -254,7 +266,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 GENERAL_INVOICE_INVS_CONFIG = generalInvoiceInvoicsConfig,
                 GENERAL_INVOICE_INV_DTLS_CONFIG = generalInvoiceInvoiceDetailsConfig,
                 ASSOCIATED_FORM_CONFIG = associatedForm
-            };            
+            };
 
             #region - 確認表單 -
 
@@ -370,7 +382,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     model.GENERAL_INVOICE_CONFIG.REIMBURSEMENT = "false";
                     //支付方式 
                     model.GENERAL_INVOICE_CONFIG.PAY_METHOD = "SUP_A/C";
-                }
+                }                
 
                 #endregion
 
@@ -399,6 +411,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@FLOW_NAME", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_INVOICE_TITLE.FLOW_NAME ?? DBNull.Value },
                     new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.GENERAL_INVOICE_TITLE.FORM_NO ?? DBNull.Value },
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
+                    new SqlParameter("@IS_CFO", SqlDbType.NVarChar) { Size = 200, Value = (object)model.GENERAL_INVOICE_TITLE.IS_CFO ?? DBNull.Value },
                 };
 
                 #region - 正常起單後 申請時間(APPLICANT_DATETIME) 不可覆蓋 -
@@ -450,7 +463,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [FlowActivated]=@FLOW_ACTIVATED, ";
                     strSQL += "     [FlowName]=@FLOW_NAME, ";
                     strSQL += "     [FormNo]=@FORM_NO, ";
-                    strSQL += "     [FM7Subject]=@FM7_SUBJECT ";
+                    strSQL += "     [FM7Subject]=@FM7_SUBJECT, ";
+                    strSQL += "     [IsCFO]=@IS_CFO ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                     dbFun.DoTran(strSQL, parameterTitle);
@@ -462,8 +476,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region - 新增 -
 
                     strSQL = "";
-                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralInvoice_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FlowName],[FormNo],[FM7Subject]) ";
-                    strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FLOW_NAME,@FORM_NO,@FM7_SUBJECT) ";
+                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_GeneralInvoice_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FlowName],[FormNo],[FM7Subject],[IsCFO]) ";
+                    strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FLOW_NAME,@FORM_NO,@FM7_SUBJECT,@IS_CFO) ";
 
                     dbFun.DoTran(strSQL, parameterTitle);
 
@@ -735,7 +749,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     var CommonINV_DTL = new BPMCommonModel<GeneralInvoiceInvoiceDetailsConfig>()
                     {
-                        EXT="INV_DTL",
+                        EXT = "INV_DTL",
                         IDENTIFY = IDENTIFY,
                         PARAMETER = parameterInvoiceDetails,
                         MODEL = model.GENERAL_INVOICE_INV_DTLS_CONFIG

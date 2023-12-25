@@ -8,6 +8,7 @@ using System.Web;
 using OA_WEB_API.Models.BPMPro;
 using OA_WEB_API.Models;
 using System.Collections;
+using System.Drawing;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -80,6 +81,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [BraidNum] AS [BRAID_NUM], ";
             strSQL += "     [NowNum] AS [NOW_NUM], ";
             strSQL += "     [DemandNum] AS [DEMAND_NUM], ";
+            strSQL += "     [ResignNum] AS [RESIGN_NUM], ";
             strSQL += "     CAST([IsPartTime] as bit) AS [IS_PART_TIME], ";
             strSQL += "     [SalaryMin] AS [SALARY_MIN], ";
             strSQL += "     [SalaryMax] AS [SALARY_MAX], ";
@@ -91,7 +93,6 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [JobSkill] AS [JOB_SKILL], ";
             strSQL += "     [ApprovalNo] AS [APPROVAL_NO], ";
             strSQL += "     [ImplementDate] AS [IMPLEMENT_DATE], ";
-            strSQL += "     [Personnel] AS [PERSONNEL], ";
             strSQL += "     [CloseDate] AS [CLOSE_DATE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
@@ -100,11 +101,28 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
+            #region - 人員增補單 增補明細 -
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
+            strSQL += "     [Name] AS [NAME], ";
+            strSQL += "     [Date] AS [DATE], ";
+            strSQL += "     [Flag] AS [FLAG] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_PersonnelSupplement_D] ";
+            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+            strSQL += "ORDER BY [AutoCounter] ";
+
+            var personnelSupplementDetailsConfig = dbFun.DoQuery(strSQL, parameter).ToList<PersonnelSupplementDetailsConfig>();
+
+            #endregion
+
             var personnelSupplementViewModel = new PersonnelSupplementViewModel()
             {
                 APPLICANT_INFO = applicantInfo,
                 PERSONNEL_SUPPLEMENT_TITLE = personnelSupplementTitle,
                 PERSONNEL_SUPPLEMENT_CONFIG = personnelSupplementConfig,
+                PERSONNEL_SUPPLEMENT_DTLS_CONFIG=personnelSupplementDetailsConfig,
             };
 
             #region - 確認表單 -
@@ -185,13 +203,19 @@ namespace OA_WEB_API.Repository.BPMPro
                     personnelSupplementViewModel.APPLICANT_INFO.APPLICANT_DATETIME = DateTime.Now;
 
                     #endregion
-                    
-                    #region - 人員增補單 表單內容 調整 -
 
+                    #region - 人員增補單 表單內容 調整 -
+                                        
+                    personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG.RESIGN_NUM = 0;
                     personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG.APPROVAL_NO = null;
-                    personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG.PERSONNEL = null;
                     personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG.IMPLEMENT_DATE = null;
                     personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG.CLOSE_DATE = null;
+
+                    #endregion
+
+                    #region - 人員增補單 增補明細 清空 -
+
+                    personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_DTLS_CONFIG = null;
 
                     #endregion
 
@@ -355,10 +379,11 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                         new SqlParameter("@OCCUPATION", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REASON", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@REASON_NOTE", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@REASON_NOTE", SqlDbType.NVarChar) { Size = 255, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@BRAID_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@NOW_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DEMAND_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@RESIGN_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@IS_PART_TIME", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@SALARY_MIN", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@SALARY_MAX", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -370,7 +395,6 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@JOB_SKILL", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@APPROVAL_NO", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@IMPLEMENT_DATE", SqlDbType.DateTime) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PERSONNEL", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@CLOSE_DATE", SqlDbType.DateTime) { Value = (object)DBNull.Value ?? DBNull.Value },
                     };
 
@@ -384,7 +408,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
                     {
                         model.PERSONNEL_SUPPLEMENT_CONFIG.APPROVAL_NO = null;
-                        model.PERSONNEL_SUPPLEMENT_CONFIG.PERSONNEL = null;
                         model.PERSONNEL_SUPPLEMENT_CONFIG.IMPLEMENT_DATE = null;
                         model.PERSONNEL_SUPPLEMENT_CONFIG.CLOSE_DATE = null;
                     }
@@ -403,6 +426,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [BraidNum]=@BRAID_NUM, ";
                     strSQL += "     [NowNum]=@NOW_NUM, ";
                     strSQL += "     [DemandNum]=@DEMAND_NUM, ";
+                    strSQL += "     [ResignNum]=@RESIGN_NUM, ";
                     strSQL += "     [IsPartTime]=@IS_PART_TIME, ";
                     strSQL += "     [SalaryMin]=@SALARY_MIN, ";
                     strSQL += "     [SalaryMax]=@SALARY_MAX, ";
@@ -414,12 +438,59 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [JobSkill]=@JOB_SKILL, ";
                     strSQL += "     [ApprovalNo]=@APPROVAL_NO, ";
                     strSQL += "     [ImplementDate]=@IMPLEMENT_DATE, ";
-                    strSQL += "     [Personnel]=@PERSONNEL, ";
                     strSQL += "     [CloseDate]=@CLOSE_DATE ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                     dbFun.DoTran(strSQL, parameterInfo);
 
+                }
+
+                #endregion
+
+                #region - 人員增補單 增補明細：PersonnelSupplement_D -
+
+                var parameterDetails = new List<SqlParameter>()
+                {
+                    //人員增補單 增補明細
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                    new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@DATE", SqlDbType.DateTime) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@FLAG", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                };
+
+                #region 先刪除舊資料
+
+                strSQL = "";
+                strSQL += "DELETE ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_PersonnelSupplement_D] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoTran(strSQL, parameterDetails);
+
+                #endregion
+
+                if (model.PERSONNEL_SUPPLEMENT_DTLS_CONFIG != null && model.PERSONNEL_SUPPLEMENT_DTLS_CONFIG.Count > 0)
+                {
+                    #region 再新增資料
+
+                    foreach (var item in model.PERSONNEL_SUPPLEMENT_DTLS_CONFIG)
+                    {
+                        if (!String.IsNullOrEmpty(item.NAME) || !String.IsNullOrWhiteSpace(item.NAME))
+                        {
+                            //寫入：人員增補單 增補明細parameter
+                            strJson = jsonFunction.ObjectToJSON(item);
+                            GlobalParameters.Infoparameter(strJson, parameterDetails);
+
+                            strSQL = "";
+                            strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_PersonnelSupplement_D]([RequisitionID],[Name],[Date],[Flag]) ";
+                            strSQL += "VALUES(@REQUISITION_ID,@NAME,@DATE,@FLAG) ";
+
+                            dbFun.DoTran(strSQL, parameterDetails);
+                        }
+                    }
+
+                    #endregion
                 }
 
                 #endregion

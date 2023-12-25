@@ -81,6 +81,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [BraidNum] AS [BRAID_NUM], ";
             strSQL += "     [NowNum] AS [NOW_NUM], ";
             strSQL += "     [DemandNum] AS [DEMAND_NUM], ";
+            strSQL += "     [ResignNum] AS [RESIGN_NUM], ";
             strSQL += "     CAST([IsPartTime] as bit) AS [IS_PART_TIME], ";
             strSQL += "     [SalaryMin] AS [SALARY_MIN], ";
             strSQL += "     [SalaryMax] AS [SALARY_MAX], ";
@@ -204,8 +205,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     #endregion
 
                     #region - 人員增補單 表單內容 調整 -
-
-                    personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG.REASON_NOTE = null;
+                                        
+                    personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG.RESIGN_NUM = 0;
                     personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG.APPROVAL_NO = null;
                     personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG.IMPLEMENT_DATE = null;
                     personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG.CLOSE_DATE = null;
@@ -382,6 +383,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@BRAID_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@NOW_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DEMAND_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@RESIGN_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@IS_PART_TIME", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@SALARY_MIN", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@SALARY_MAX", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -424,6 +426,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [BraidNum]=@BRAID_NUM, ";
                     strSQL += "     [NowNum]=@NOW_NUM, ";
                     strSQL += "     [DemandNum]=@DEMAND_NUM, ";
+                    strSQL += "     [ResignNum]=@RESIGN_NUM, ";
                     strSQL += "     [IsPartTime]=@IS_PART_TIME, ";
                     strSQL += "     [SalaryMin]=@SALARY_MIN, ";
                     strSQL += "     [SalaryMax]=@SALARY_MAX, ";

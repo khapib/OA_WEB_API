@@ -30,6 +30,9 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>人員增補單 表單內容 設定</summary>
         public PersonnelSupplementConfig PERSONNEL_SUPPLEMENT_CONFIG { get; set; }
+
+        /// <summary>人員增補單 增補明細 設定</summary>
+        public IList<PersonnelSupplementDetailsConfig> PERSONNEL_SUPPLEMENT_DTLS_CONFIG { get; set; }
     }
 
     /// <summary>
@@ -62,6 +65,9 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>需求人數</summary>
         public int DEMAND_NUM { get; set; }
+
+        /// <summary>離職人數</summary>
+        public int RESIGN_NUM { get; set; }
 
         /// <summary>是否為工讀生</summary>
         public Nullable<Boolean> IS_PART_TIME { get; set; }
@@ -96,10 +102,22 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>執行日期</summary>
         public Nullable<DateTime> IMPLEMENT_DATE { get; set; }
 
-        /// <summary>增補人員</summary>
-        public string PERSONNEL { get; set; }
-
         /// <summary>關閉日期</summary>
         public Nullable<DateTime> CLOSE_DATE { get; set; }
+    }
+
+    /// <summary>
+    /// 人員增補單 增補明細 設定
+    /// </summary>
+    public class PersonnelSupplementDetailsConfig
+    {
+        /// <summary>姓名</summary>
+        public string NAME { get; set; }
+
+        /// <summary>日期</summary>
+        public Nullable<DateTime> DATE { get; set; }
+
+        /// <summary>離職/增補 註記</summary>
+        public string FLAG { get; set; }
     }
 }

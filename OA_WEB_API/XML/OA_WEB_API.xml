@@ -7152,6 +7152,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG">
             <summary>人員增補單 表單內容 設定</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementViewModel.PERSONNEL_SUPPLEMENT_DTLS_CONFIG">
+            <summary>人員增補單 增補明細 設定</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.PersonnelSupplementTitle">
             <summary>
             人員增補單 表頭資訊
@@ -7179,6 +7182,9 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.DEMAND_NUM">
             <summary>需求人數</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.RESIGN_NUM">
+            <summary>離職人數</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.IS_PART_TIME">
             <summary>是否為工讀生</summary>
@@ -7213,11 +7219,22 @@
         <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.IMPLEMENT_DATE">
             <summary>執行日期</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.PERSONNEL">
-            <summary>增補人員</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.CLOSE_DATE">
             <summary>關閉日期</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.PersonnelSupplementDetailsConfig">
+            <summary>
+            人員增補單 增補明細 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementDetailsConfig.NAME">
+            <summary>姓名</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementDetailsConfig.DATE">
+            <summary>日期</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementDetailsConfig.FLAG">
+            <summary>離職/增補 註記</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ProjectReviewQueryModel">
             <summary>

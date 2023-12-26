@@ -66,9 +66,6 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>需求人數</summary>
         public int DEMAND_NUM { get; set; }
 
-        /// <summary>離職人數</summary>
-        public int RESIGN_NUM { get; set; }
-
         /// <summary>是否為工讀生</summary>
         public Nullable<Boolean> IS_PART_TIME { get; set; }
 
@@ -116,8 +113,5 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>日期</summary>
         public Nullable<DateTime> DATE { get; set; }
-
-        /// <summary>離職/增補 註記</summary>
-        public string FLAG { get; set; }
     }
 }

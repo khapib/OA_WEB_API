@@ -7183,9 +7183,6 @@
         <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.DEMAND_NUM">
             <summary>需求人數</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.RESIGN_NUM">
-            <summary>離職人數</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementConfig.IS_PART_TIME">
             <summary>是否為工讀生</summary>
         </member>
@@ -7232,9 +7229,6 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementDetailsConfig.DATE">
             <summary>日期</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.PersonnelSupplementDetailsConfig.FLAG">
-            <summary>離職/增補 註記</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ProjectReviewQueryModel">
             <summary>

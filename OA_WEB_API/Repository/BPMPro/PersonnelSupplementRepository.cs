@@ -81,7 +81,6 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [BraidNum] AS [BRAID_NUM], ";
             strSQL += "     [NowNum] AS [NOW_NUM], ";
             strSQL += "     [DemandNum] AS [DEMAND_NUM], ";
-            strSQL += "     [ResignNum] AS [RESIGN_NUM], ";
             strSQL += "     CAST([IsPartTime] as bit) AS [IS_PART_TIME], ";
             strSQL += "     [SalaryMin] AS [SALARY_MIN], ";
             strSQL += "     [SalaryMax] AS [SALARY_MAX], ";
@@ -107,8 +106,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "SELECT ";
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
             strSQL += "     [Name] AS [NAME], ";
-            strSQL += "     [Date] AS [DATE], ";
-            strSQL += "     [Flag] AS [FLAG] ";
+            strSQL += "     [Date] AS [DATE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_PersonnelSupplement_D] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
@@ -122,7 +120,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 APPLICANT_INFO = applicantInfo,
                 PERSONNEL_SUPPLEMENT_TITLE = personnelSupplementTitle,
                 PERSONNEL_SUPPLEMENT_CONFIG = personnelSupplementConfig,
-                PERSONNEL_SUPPLEMENT_DTLS_CONFIG=personnelSupplementDetailsConfig,
+                PERSONNEL_SUPPLEMENT_DTLS_CONFIG = personnelSupplementDetailsConfig,
             };
 
             #region - 確認表單 -
@@ -205,8 +203,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     #endregion
 
                     #region - 人員增補單 表單內容 調整 -
-                                        
-                    personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG.RESIGN_NUM = 0;
+
                     personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG.APPROVAL_NO = null;
                     personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG.IMPLEMENT_DATE = null;
                     personnelSupplementViewModel.PERSONNEL_SUPPLEMENT_CONFIG.CLOSE_DATE = null;
@@ -383,7 +380,6 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@BRAID_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@NOW_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@DEMAND_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@RESIGN_NUM", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@IS_PART_TIME", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@SALARY_MIN", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@SALARY_MAX", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -426,7 +422,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [BraidNum]=@BRAID_NUM, ";
                     strSQL += "     [NowNum]=@NOW_NUM, ";
                     strSQL += "     [DemandNum]=@DEMAND_NUM, ";
-                    strSQL += "     [ResignNum]=@RESIGN_NUM, ";
                     strSQL += "     [IsPartTime]=@IS_PART_TIME, ";
                     strSQL += "     [SalaryMin]=@SALARY_MIN, ";
                     strSQL += "     [SalaryMax]=@SALARY_MAX, ";
@@ -455,7 +450,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                     new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@DATE", SqlDbType.DateTime) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@FLAG", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -483,8 +477,8 @@ namespace OA_WEB_API.Repository.BPMPro
                             GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                             strSQL = "";
-                            strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_PersonnelSupplement_D]([RequisitionID],[Name],[Date],[Flag]) ";
-                            strSQL += "VALUES(@REQUISITION_ID,@NAME,@DATE,@FLAG) ";
+                            strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_PersonnelSupplement_D]([RequisitionID],[Name],[Date]) ";
+                            strSQL += "VALUES(@REQUISITION_ID,@NAME,@DATE) ";
 
                             dbFun.DoTran(strSQL, parameterDetails);
                         }

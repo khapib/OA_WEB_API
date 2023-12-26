@@ -1398,6 +1398,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         INV.GROSS_TWD = 0;
                         INV.AMOUNT = 0;
                         INV.AMOUNT_TWD = 0;
+                        INV.NOTE = null;
                     });
 
                     #endregion
@@ -2702,6 +2703,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         INV.GROSS_TWD = 0;
                         INV.AMOUNT = 0;
                         INV.AMOUNT_TWD = 0;
+                        INV.NOTE = null;
                     });
 
                     #endregion

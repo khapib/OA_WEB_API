@@ -1314,6 +1314,11 @@
             關聯表單(知會)
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Controllers.CommonController.PostIsAnyUpload(OA_WEB_API.Models.BPMPro.BPMFormFunction)">
+            <summary>
+            確認是否有上傳檔案
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Controllers.TestController">
             <summary>
             會簽管理系統 - 測試申請單
@@ -11729,6 +11734,11 @@
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostBPMFormFunction(OA_WEB_API.Models.BPMPro.BPMFormFunction)">
             <summary>
             BPM表單機能
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostIsAnyUpload(OA_WEB_API.Models.BPMPro.BPMFormFunction)">
+            <summary>
+            確認是否有上傳檔案
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostApplicantInfoFunction``1(OA_WEB_API.Models.BPMPro.BPMCommonModel{``0})">

@@ -207,6 +207,20 @@ namespace OA_WEB_API.Controllers
 
         #endregion
 
+        #region  - BPM表單機能 -
+
+        /// <summary>
+        /// 確認是否有上傳檔案
+        /// </summary>
+        [Route("api/PostIsAnyUpload")]
+        [HttpPost]
+        public bool PostIsAnyUpload([FromBody] BPMFormFunction query)
+        {
+            return commonRepository.PostIsAnyUpload(query);
+        }
+
+        #endregion
+
         #region - 測試用Controller -
 
         #region - BPM表單機能 -

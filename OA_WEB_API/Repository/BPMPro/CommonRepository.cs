@@ -921,7 +921,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = model.REQUISITION_ID },
                     new SqlParameter("@DRAFT_FLAG", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                 };
-                //寫入：版權採購交片單 表單內容parameter                        
+                //寫入：parameter                        
                 strJson = jsonFunction.ObjectToJSON(model);
                 GlobalParameters.Infoparameter(strJson, parameter);
 
@@ -954,6 +954,43 @@ namespace OA_WEB_API.Repository.BPMPro
             catch (Exception ex)
             {
                 CommLib.Logger.Error("【表單機能】啟用失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 確認是否有上傳檔案
+        /// </summary>
+        public bool PostIsAnyUpload(BPMFormFunction query)
+        {
+            bool vResult = false;
+            try
+            {
+                var parameter = new List<SqlParameter>()
+                {
+                    //BPM表單機能
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID },
+                };
+                //寫入：parameter                        
+                strJson = jsonFunction.ObjectToJSON(query);
+                GlobalParameters.Infoparameter(strJson, parameter);
+
+                strSQL = "";
+                strSQL += "SELECT ";
+                strSQL += "      [RequisitionID] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + query.IDENTIFY + "_F] ";
+                strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+
+                var dtA = dbFun.DoQuery(strSQL, parameter);
+
+                if (dtA.Rows.Count > 0) vResult = true;
+                else vResult = false;
+
+                return vResult;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("【確認是否有上傳檔案】確認失敗，原因：" + ex.Message);
                 throw;
             }
         }

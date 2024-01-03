@@ -2886,6 +2886,9 @@
             費用申請單 表單內容 設定
             </summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.IS_CFO">
+            <summary>是否過財務協理</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.REIMB_STAFF_DEPT_ID">
             <summary>代墊員工部門編號</summary>
         </member>
@@ -2912,9 +2915,6 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.NOTE">
             <summary>備註</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.IS_VICE_PRESIDENT">
-            <summary>是否過副總</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.FINANC_AUDIT_ID_1">
             <summary>財務審核人員編號</summary>
@@ -2962,9 +2962,6 @@
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.CURRENCY">
             <summary>幣別</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.ACCT_CATEGORY">
-            <summary>會計類別</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.PROJECT_FORM_NO">
             <summary>所屬專案 ERP 單號</summary>
         </member>
@@ -2976,6 +2973,9 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.PROJECT_USE_YEAR">
             <summary>所屬專案年分</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.NOTE">
+            <summary>備註</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseInvoiceDetailsConfig">
             <summary>

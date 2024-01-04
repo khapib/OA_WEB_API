@@ -75,6 +75,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [IsCFO] AS [IS_CFO], ";
+            strSQL += "     [IsVicePresident] AS [IS_VICE_PRESIDENT], ";
             strSQL += "     [REIMB_StaffDeptID] AS [REIMB_STAFF_DEPT_ID], ";
             strSQL += "     [REIMB_StaffDeptName] AS [REIMB_STAFF_DEPT_NAME], ";
             strSQL += "     [REIMB_StaffID] AS [REIMB_STAFF_ID], ";
@@ -405,6 +406,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         //費用申請單 表單內容
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                         new SqlParameter("@IS_CFO", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@IS_VICE_PRESIDENT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REIMB_STAFF_DEPT_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REIMB_STAFF_DEPT_NAME", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REIMB_STAFF_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -429,6 +431,12 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@AMOUNT_CONV_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     };
 
+                    if(String.IsNullOrEmpty(model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT) || String.IsNullOrWhiteSpace(model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT))
+                    {
+                        if(model.EXPENSES_REIMBURSE_CONFIG.AMOUNT_CONV_TOTAL>=30000) model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT=true.ToString();
+                        else model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT=false.ToString();
+                    }
+
                     //寫入：費用申請單 表單內容parameter                        
                     strJson = jsonFunction.ObjectToJSON(model.EXPENSES_REIMBURSE_CONFIG);
                     GlobalParameters.Infoparameter(strJson, parameterInfo);
@@ -436,6 +444,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL = "";
                     strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
                     strSQL += "SET [IsCFO]=@IS_CFO, ";
+                    strSQL += "     [IsVicePresident]=@IS_VICE_PRESIDENT, ";
                     strSQL += "     [REIMB_StaffDeptID]=@REIMB_STAFF_DEPT_ID, ";
                     strSQL += "     [REIMB_StaffDeptName]=@REIMB_STAFF_DEPT_NAME, ";
                     strSQL += "     [REIMB_StaffID]=@REIMB_STAFF_ID, ";

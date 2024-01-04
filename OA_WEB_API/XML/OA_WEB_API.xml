@@ -2889,6 +2889,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.IS_CFO">
             <summary>是否過財務協理</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.IS_VICE_PRESIDENT">
+            <summary>是否過副總</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.REIMB_STAFF_DEPT_ID">
             <summary>代墊員工部門編號</summary>
         </member>

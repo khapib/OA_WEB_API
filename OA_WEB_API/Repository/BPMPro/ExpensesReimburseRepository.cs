@@ -433,8 +433,8 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     if(String.IsNullOrEmpty(model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT) || String.IsNullOrWhiteSpace(model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT))
                     {
-                        if(model.EXPENSES_REIMBURSE_CONFIG.AMOUNT_CONV_TOTAL>=30000) model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT=true.ToString();
-                        else model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT=false.ToString();
+                        if(model.EXPENSES_REIMBURSE_CONFIG.AMOUNT_CONV_TOTAL>=30000) model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT=true.ToString().ToLower();
+                        else model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT=false.ToString().ToLower();
                     }
 
                     //寫入：費用申請單 表單內容parameter                        

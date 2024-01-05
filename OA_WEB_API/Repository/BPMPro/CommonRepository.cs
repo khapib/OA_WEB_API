@@ -1159,11 +1159,12 @@ namespace OA_WEB_API.Repository.BPMPro
                     strField_V += "[ExchangeRate] AS [EXCH_RATE], ";
                     strField_V += "[Amount_CONV] AS [AMOUNT_CONV], ";
                     strField_V += "[Currency] AS [CURRENCY], ";
-                    strField_V += "[ACCT_Category] AS [ACCT_CATEGORY], ";
+                    //strField_V += "[ACCT_Category] AS [ACCT_CATEGORY], ";
                     strField_V += "[ProjectFormNo] AS [PROJECT_FORM_NO], ";
                     strField_V += "[ProjectName] AS [PROJECT_NAME], ";
                     strField_V += "[ProjectNickname] AS [PROJECT_NICKNAME], ";
                     strField_V += "[ProjectUseYear] AS [PROJECT_USE_YEAR], ";
+                    strField_V += "[Note] AS [NOTE], ";
                     break;
                 default:
                     strField_V = "[RowNo] AS [ROW_NO], ";

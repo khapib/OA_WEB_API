@@ -71,7 +71,12 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>期望交付日期</summary>
         public Nullable<DateTime> EXPECTED_DATE { get; set; }
 
-        /// <summary>處理人員</summary>
+        /// <summary>
+        /// 處理人員：
+        /// G021.訊號作業組、
+        /// G023.資料片庫組、
+        /// G022.剪輯組
+        /// </summary>
         public string CONTACT_PERSON { get; set; }
 
         #region 拷貝類型

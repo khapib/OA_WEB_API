@@ -56,6 +56,12 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class ExpensesReimburseConfig : DOM_TWD_Bank
     {
+        /// <summary>是否過財務協理</summary>
+        public string IS_CFO { get; set; }
+
+        /// <summary>是否過副總</summary>
+        public string IS_VICE_PRESIDENT { get; set; }
+
         /// <summary>代墊員工部門編號</summary>
         public string REIMB_STAFF_DEPT_ID { get; set; }
 
@@ -81,10 +87,7 @@ namespace OA_WEB_API.Models.BPMPro
         public string REASON { get; set; }
 
         /// <summary>備註</summary>
-        public string NOTE { get; set; }
-
-        /// <summary>是否過副總</summary>
-        public string IS_VICE_PRESIDENT { get; set; }
+        public string NOTE { get; set; }      
 
         /// <summary>財務審核人員編號</summary>
         public string FINANC_AUDIT_ID_1 { get; set; }
@@ -133,8 +136,8 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>幣別</summary>
         public string CURRENCY { get; set; }
 
-        /// <summary>會計類別</summary>
-        public string ACCT_CATEGORY { get; set; }
+        ///// <summary>會計類別</summary>
+        //public string ACCT_CATEGORY { get; set; }
 
         /// <summary>所屬專案 ERP 單號</summary>
         public string PROJECT_FORM_NO { get; set; }
@@ -147,6 +150,9 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>所屬專案年分</summary>
         public string PROJECT_USE_YEAR { get; set; }
+
+        /// <summary>備註</summary>
+        public string NOTE { get; set; }
     }
 
     /// <summary>

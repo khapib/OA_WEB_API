@@ -162,6 +162,9 @@ namespace OA_WEB_API.Repository.OA
                         case "G023":
                             ContactPerson = "GTV_MEDIA_WAREHOUSE_COPY_MEDIA_WAREHOUSE";
                             break;
+                        case "G022":
+                            ContactPerson = "GTV_MEDIA_WAREHOUSE_COPY_MEDIA_WAREHOUSE";
+                            break;
                         default:
                             break;
                     }

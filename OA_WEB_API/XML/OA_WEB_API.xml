@@ -6567,7 +6567,12 @@
             <summary>期望交付日期</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.CONTACT_PERSON">
-            <summary>處理人員</summary>
+            <summary>
+            處理人員：
+            G021.訊號作業組、
+            G023.資料片庫組、
+            G022.剪輯組
+            </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaWarehouseCopyConfig.APPLY_TYPE">
             <summary>用途說明</summary>

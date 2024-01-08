@@ -118,19 +118,6 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 費用申請單 憑證細項 -
-
-            var CommonINV_DTL = new BPMCommonModel<InvoiceDetailConfig>()
-            {
-                EXT = "INV_DTL",
-                IDENTIFY = IDENTIFY,
-                PARAMETER = parameter
-            };
-            strJson = jsonFunction.ObjectToJSON(commonRepository.PostInvoiceDetailFunction(CommonINV_DTL));
-            var expensesReimburseInvoiceDetailsConfig = jsonFunction.JsonToObject<List<ExpensesReimburseInvoiceDetailsConfig>>(strJson);
-
-            #endregion
-
             #region - 費用申請單 使用預算 -
 
             var CommonBUDG = new BPMCommonModel<ExpensesReimburseBudgetsConfig>()
@@ -160,7 +147,6 @@ namespace OA_WEB_API.Repository.BPMPro
                 EXPENSES_REIMBURSE_TITLE = expensesReimburseTitle,
                 EXPENSES_REIMBURSE_CONFIG = expensesReimburseConfig,
                 EXPENSES_REIMBURSE_DTLS_CONFIG = expensesReimburseDetailsConfig,
-                EXPENSES_REIMBURSE_INV_DTLS_CONFIG = expensesReimburseInvoiceDetailsConfig,
                 EXPENSES_REIMBURSE_BUDGS_CONFIG = expensesReimburseBudgetsConfig,
                 ASSOCIATED_FORM_CONFIG = associatedForm
             };
@@ -546,36 +532,6 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     });
-                }
-
-                #endregion
-
-                #region - 費用申請單 費用憑證細項: ExpensesReimburse_INV_DTL -
-
-                var parameterInvoiceDetails = new List<SqlParameter>()
-                {
-                    //費用申請單 憑證細項
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
-                    new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5 , Value = (object)DBNull.Value ?? DBNull.Value },
-                };
-
-                if (model.EXPENSES_REIMBURSE_INV_DTLS_CONFIG != null && model.EXPENSES_REIMBURSE_INV_DTLS_CONFIG.Count > 0)
-                {
-                    var CommonINV_DTL = new BPMCommonModel<ExpensesReimburseInvoiceDetailsConfig>()
-                    {
-                        EXT = "INV_DTL",
-                        IDENTIFY = IDENTIFY,
-                        PARAMETER = parameterInvoiceDetails,
-                        MODEL = model.EXPENSES_REIMBURSE_INV_DTLS_CONFIG
-                    };
-                    commonRepository.PutInvoiceDetailFunction(CommonINV_DTL);
-
                 }
 
                 #endregion

@@ -79,25 +79,32 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [REIMB_StaffDeptID] AS [REIMB_STAFF_DEPT_ID], ";
             strSQL += "     [REIMB_StaffDeptName] AS [REIMB_STAFF_DEPT_NAME], ";
             strSQL += "     [REIMB_StaffID] AS [REIMB_STAFF_ID], ";
-            strSQL += "     [REIMB_StaffName] AS [REIMB_STAFF_NAME], ";
-            strSQL += "     [PayMethod] AS [PAY_METHOD], ";
-            strSQL += "     [TX_Category] AS [TX_CATEGORY], ";
-            strSQL += "     [BFCY_AccountNo] AS [BFCY_ACCOUNT_NO], ";
-            strSQL += "     [BFCY_AccountName] AS [BFCY_ACCOUNT_NAME], ";
-            strSQL += "     [BFCY_BankNo] AS [BFCY_BANK_NO], ";
-            strSQL += "     [BFCY_BankName] AS [BFCY_BANK_NAME], ";
-            strSQL += "     [BFCY_BankCountryAndCity] AS [BFCY_BANK_COUNTRY_AND_CITY], ";
-            strSQL += "     [CurrencyName] AS [CURRENCY_NAME], ";
-            strSQL += "     [BFCY_Name] AS [BFCY_NAME], ";
-            strSQL += "     [BFCY_TEL] AS [BFCY_TEL], ";
-            strSQL += "     [BFCY_Email] AS [BFCY_EMAIL], ";
+            strSQL += "     [REIMB_StaffName] AS [REIMB_STAFF_NAME], ";            
             strSQL += "     [Reason] AS [REASON], ";
             strSQL += "     [Note] AS [NOTE], ";
             strSQL += "     [FinancAuditID_1] AS [FINANC_AUDIT_ID_1], ";
             strSQL += "     [FinancAuditName_1] AS [FINANC_AUDIT_NAME_1], ";
             strSQL += "     [FinancAuditID_2] AS [FINANC_AUDIT_ID_2], ";
             strSQL += "     [FinancAuditName_2] AS [FINANC_AUDIT_NAME_2], ";
-            strSQL += "     [Amount_CONV_Total] AS [AMOUNT_CONV_TOTAL] ";
+            strSQL += "     [Amount_CONV_Total] AS [AMOUNT_CONV_TOTAL], ";
+            strSQL += "     [PayMethod] AS [PAY_METHOD], ";
+            strSQL += "     [AccountCategory] AS [ACCOUNT_CATEGORY], ";
+            strSQL += "     [PaymentObject] AS [PAYMENT_OBJECT], ";
+            strSQL += "     [TX_Category] AS [TX_CATEGORY], ";
+            strSQL += "     [BFCY_AccountNo] AS [BFCY_ACCOUNT_NO], ";
+            strSQL += "     [BFCY_AccountName] AS [BFCY_ACCOUNT_NAME], ";
+            strSQL += "     [BFCY_BankNo] AS [BFCY_BANK_NO], ";
+            strSQL += "     [BFCY_BankName] AS [BFCY_BANK_NAME], ";
+            strSQL += "     [BFCY_BanKBranchNo] AS [BFCY_BANK_BRANCH_NO], ";
+            strSQL += "     [BFCY_BanKBranchName] AS [BFCY_BANK_BRANCH_NAME], ";
+            strSQL += "     [BFCY_BankSWIFT] AS [BFCY_BANK_SWIFT], ";
+            strSQL += "     [BFCY_BankAddress] AS [BFCY_BANK_ADDRESS], ";
+            strSQL += "     [BFCY_BankCountryAndCity] AS [BFCY_BANK_COUNTRY_AND_CITY], ";
+            strSQL += "     [BFCY_BankIBAN] AS [BFCY_BANK_IBAN], ";
+            strSQL += "     [CurrencyName] AS [CURRENCY_NAME], ";
+            strSQL += "     [BFCY_Name] AS [BFCY_NAME], ";
+            strSQL += "     [BFCY_TEL] AS [BFCY_TEL], ";
+            strSQL += "     [BFCY_Email] AS [BFCY_EMAIL] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
@@ -396,18 +403,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@REIMB_STAFF_DEPT_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REIMB_STAFF_DEPT_NAME", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REIMB_STAFF_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@REIMB_STAFF_NAME", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PAY_METHOD", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@TX_CATEGORY", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@BFCY_ACCOUNT_NO", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@BFCY_ACCOUNT_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@BFCY_BANK_NO", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@BFCY_BANK_NAME", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@BFCY_BANK_COUNTRY_AND_CITY", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@CURRENCY_NAME", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@BFCY_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@BFCY_TEL", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@BFCY_EMAIL", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@REIMB_STAFF_NAME", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },                        
                         new SqlParameter("@REASON", SqlDbType.NVarChar) { Size = 4000 , Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@FINANC_AUDIT_ID_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -415,6 +411,24 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@FINANC_AUDIT_ID_2", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@FINANC_AUDIT_NAME_2", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@AMOUNT_CONV_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PAY_METHOD", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@ACCOUNT_CATEGORY", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PAYMENT_OBJECT", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@TX_CATEGORY", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_ACCOUNT_NO", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_ACCOUNT_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_BANK_NO", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_BANK_NAME", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_BANK_BRANCH_NO", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_BANK_BRANCH_NAME", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_BANK_SWIFT", SqlDbType.NVarChar) { Size = 300, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_BANK_ADDRESS", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_BANK_COUNTRY_AND_CITY", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_BANK_IBAN", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@CURRENCY_NAME", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_TEL", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_EMAIL", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     };
 
                     if(String.IsNullOrEmpty(model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT) || String.IsNullOrWhiteSpace(model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT))
@@ -434,25 +448,32 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [REIMB_StaffDeptID]=@REIMB_STAFF_DEPT_ID, ";
                     strSQL += "     [REIMB_StaffDeptName]=@REIMB_STAFF_DEPT_NAME, ";
                     strSQL += "     [REIMB_StaffID]=@REIMB_STAFF_ID, ";
-                    strSQL += "     [REIMB_StaffName]=@REIMB_STAFF_NAME, ";
-                    strSQL += "     [PayMethod]=@PAY_METHOD, ";
-                    strSQL += "     [TX_Category]=@TX_CATEGORY, ";
-                    strSQL += "     [BFCY_AccountNo]=@BFCY_ACCOUNT_NO, ";
-                    strSQL += "     [BFCY_AccountName]=@BFCY_ACCOUNT_NAME, ";
-                    strSQL += "     [BFCY_BankNo]=@BFCY_BANK_NO, ";
-                    strSQL += "     [BFCY_BankName]=@BFCY_BANK_NAME, ";
-                    strSQL += "     [BFCY_BankCountryAndCity]=@BFCY_BANK_COUNTRY_AND_CITY, ";
-                    strSQL += "     [CurrencyName]=@CURRENCY_NAME, ";
-                    strSQL += "     [BFCY_Name]=@BFCY_NAME, ";
-                    strSQL += "     [BFCY_TEL]=@BFCY_TEL, ";
-                    strSQL += "     [BFCY_Email]=@BFCY_EMAIL, ";
+                    strSQL += "     [REIMB_StaffName]=@REIMB_STAFF_NAME, ";                    
                     strSQL += "     [Reason]=@REASON, ";
                     strSQL += "     [Note]=@NOTE, ";
                     strSQL += "     [FinancAuditID_1]=@FINANC_AUDIT_ID_1, ";
                     strSQL += "     [FinancAuditName_1]=@FINANC_AUDIT_NAME_1, ";
                     strSQL += "     [FinancAuditID_2]=@FINANC_AUDIT_ID_2, ";
                     strSQL += "     [FinancAuditName_2]=@FINANC_AUDIT_NAME_2, ";
-                    strSQL += "     [Amount_CONV_Total]=@AMOUNT_CONV_TOTAL ";
+                    strSQL += "     [Amount_CONV_Total]=@AMOUNT_CONV_TOTAL, ";
+                    strSQL += "     [PayMethod]=@PAY_METHOD, ";
+                    strSQL += "     [AccountCategory]=@ACCOUNT_CATEGORY,";
+                    strSQL += "     [PaymentObject]=@PAYMENT_OBJECT,";                    
+                    strSQL += "     [TX_Category]=@TX_CATEGORY, ";
+                    strSQL += "     [BFCY_AccountNo]=@BFCY_ACCOUNT_NO, ";
+                    strSQL += "     [BFCY_AccountName]=@BFCY_ACCOUNT_NAME, ";
+                    strSQL += "     [BFCY_BankNo]=@BFCY_BANK_NO, ";
+                    strSQL += "     [BFCY_BankName]=@BFCY_BANK_NAME, ";
+                    strSQL += "     [BFCY_BanKBranchNo]=@BFCY_BANK_BRANCH_NO, ";
+                    strSQL += "     [BFCY_BanKBranchName]=@BFCY_BANK_BRANCH_NAME, ";
+                    strSQL += "     [BFCY_BankSWIFT]=@BFCY_BANK_SWIFT, ";
+                    strSQL += "     [BFCY_BankAddress]=@BFCY_BANK_ADDRESS, ";
+                    strSQL += "     [BFCY_BankCountryAndCity]=@BFCY_BANK_COUNTRY_AND_CITY, ";
+                    strSQL += "     [BFCY_BankIBAN]=@BFCY_BANK_IBAN, ";
+                    strSQL += "     [CurrencyName]=@CURRENCY_NAME, ";
+                    strSQL += "     [BFCY_Name]=@BFCY_NAME, ";
+                    strSQL += "     [BFCY_TEL]=@BFCY_TEL, ";
+                    strSQL += "     [BFCY_Email]=@BFCY_EMAIL ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                     dbFun.DoTran(strSQL, parameterInfo);

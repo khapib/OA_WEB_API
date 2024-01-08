@@ -2901,15 +2901,6 @@
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.REIMB_STAFF_NAME">
             <summary>代墊員工姓名</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.PAY_METHOD">
-            <summary>
-            支付方式：
-            CS.現金
-            PT_AC.薪轉帳戶
-            OR.其他
-            DT.(國內)_台幣其他帳戶(需自行負擔手續費)
-            </summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.REASON">
             <summary>申請源由</summary>
         </member>
@@ -2930,6 +2921,21 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.AMOUNT_CONV_TOTAL">
             <summary>憑證金額_換算台幣 合計</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.PAY_METHOD">
+            <summary>
+            支付方式：
+            CS.現金
+            PT_AC.薪轉帳戶
+            OR.其他
+            DT.(國內)_台幣其他帳戶(需自行負擔手續費)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.ACCOUNT_CATEGORY">
+            <summary>帳戶類別</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.PAYMENT_OBJECT">
+            <summary>支付對象</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig">
             <summary>

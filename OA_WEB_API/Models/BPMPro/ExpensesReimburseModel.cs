@@ -51,7 +51,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 費用申請單 表單內容 設定
     /// </summary>
-    public class ExpensesReimburseConfig : DOM_TWD_Bank
+    public class ExpensesReimburseConfig : COMM_Bank
     {
         /// <summary>是否過財務協理</summary>
         public string IS_CFO { get; set; }
@@ -70,15 +70,6 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>代墊員工姓名</summary>
         public string REIMB_STAFF_NAME { get; set; }
-
-        /// <summary>
-        /// 支付方式：
-        /// CS.現金
-        /// PT_AC.薪轉帳戶
-        /// OR.其他
-        /// DT.(國內)_台幣其他帳戶(需自行負擔手續費)
-        /// </summary>
-        public string PAY_METHOD { get; set; }
 
         /// <summary>申請源由</summary>
         public string REASON { get; set; }
@@ -100,6 +91,21 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>憑證金額_換算台幣 合計</summary>
         public int AMOUNT_CONV_TOTAL { get; set; }
+
+        /// <summary>
+        /// 支付方式：
+        /// CS.現金
+        /// PT_AC.薪轉帳戶
+        /// OR.其他
+        /// DT.其他帳戶(需自行負擔手續費)
+        /// </summary>
+        public string PAY_METHOD { get; set; }
+
+        /// <summary>帳戶類別</summary>
+        public string ACCOUNT_CATEGORY { get; set; }
+
+        /// <summary>支付對象</summary>
+        public string PAYMENT_OBJECT { get; set; }
     }
 
     /// <summary>

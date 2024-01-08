@@ -2864,9 +2864,6 @@
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_DTLS_CONFIG">
             <summary>費用申請單 費用明細 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_INV_DTLS_CONFIG">
-            <summary>費用申請單 憑證細項 設定</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_BUDGS_CONFIG">
             <summary>費用申請單 使用預算 設定</summary>
         </member>
@@ -2979,11 +2976,6 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.NOTE">
             <summary>備註</summary>
-        </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseInvoiceDetailsConfig">
-            <summary>
-            費用申請單 憑證細項 設定
-            </summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig">
             <summary>

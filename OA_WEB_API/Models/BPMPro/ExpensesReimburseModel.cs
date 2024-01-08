@@ -31,9 +31,6 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>費用申請單 費用明細 設定</summary>
         public List<ExpensesReimburseDetailsConfig> EXPENSES_REIMBURSE_DTLS_CONFIG { get; set; }
 
-        /// <summary>費用申請單 憑證細項 設定</summary>
-        public List<ExpensesReimburseInvoiceDetailsConfig> EXPENSES_REIMBURSE_INV_DTLS_CONFIG { get; set; }
-
         /// <summary>費用申請單 使用預算 設定</summary>
         public List<ExpensesReimburseBudgetsConfig> EXPENSES_REIMBURSE_BUDGS_CONFIG { get; set; }
 
@@ -153,14 +150,6 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>備註</summary>
         public string NOTE { get; set; }
-    }
-
-    /// <summary>
-    /// 費用申請單 憑證細項 設定
-    /// </summary>
-    public class ExpensesReimburseInvoiceDetailsConfig: InvoiceDetailConfig
-    {
-
     }
 
     /// <summary>

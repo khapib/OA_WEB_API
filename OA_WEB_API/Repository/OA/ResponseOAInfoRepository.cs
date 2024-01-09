@@ -163,7 +163,7 @@ namespace OA_WEB_API.Repository.OA
                             ContactPerson = "GTV_MEDIA_WAREHOUSE_COPY_MEDIA_WAREHOUSE";
                             break;
                         case "G022":
-                            ContactPerson = "GTV_MEDIA_WAREHOUSE_COPY_MEDIA_WAREHOUSE";
+                            ContactPerson = "GTV_MEDIA_WAREHOUSE_COPY_TRIM";
                             break;
                         default:
                             break;

@@ -63,7 +63,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [FormNo] AS [FORM_NO], ";
             strSQL += "     [FM7Subject] AS [FM7_SUBJECT], ";
             strSQL += "     [BPMFormNo] AS [BPM_FORM_NO] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_ExpensesReimburse_M] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
             var expensesReimburseTitle = dbFun.DoQuery(strSQL, parameter).ToList<ExpensesReimburseTitle>().FirstOrDefault();
@@ -74,30 +74,38 @@ namespace OA_WEB_API.Repository.BPMPro
 
             strSQL = "";
             strSQL += "SELECT ";
+            strSQL += "     [IsCFO] AS [IS_CFO], ";
+            strSQL += "     [IsVicePresident] AS [IS_VICE_PRESIDENT], ";
             strSQL += "     [REIMB_StaffDeptID] AS [REIMB_STAFF_DEPT_ID], ";
             strSQL += "     [REIMB_StaffDeptName] AS [REIMB_STAFF_DEPT_NAME], ";
             strSQL += "     [REIMB_StaffID] AS [REIMB_STAFF_ID], ";
-            strSQL += "     [REIMB_StaffName] AS [REIMB_STAFF_NAME], ";
+            strSQL += "     [REIMB_StaffName] AS [REIMB_STAFF_NAME], ";            
+            strSQL += "     [Reason] AS [REASON], ";
+            strSQL += "     [Note] AS [NOTE], ";
+            strSQL += "     [FinancAuditID_1] AS [FINANC_AUDIT_ID_1], ";
+            strSQL += "     [FinancAuditName_1] AS [FINANC_AUDIT_NAME_1], ";
+            strSQL += "     [FinancAuditID_2] AS [FINANC_AUDIT_ID_2], ";
+            strSQL += "     [FinancAuditName_2] AS [FINANC_AUDIT_NAME_2], ";
+            strSQL += "     [Amount_CONV_Total] AS [AMOUNT_CONV_TOTAL], ";
             strSQL += "     [PayMethod] AS [PAY_METHOD], ";
+            strSQL += "     [AccountCategory] AS [ACCOUNT_CATEGORY], ";
+            strSQL += "     [PaymentObject] AS [PAYMENT_OBJECT], ";
             strSQL += "     [TX_Category] AS [TX_CATEGORY], ";
             strSQL += "     [BFCY_AccountNo] AS [BFCY_ACCOUNT_NO], ";
             strSQL += "     [BFCY_AccountName] AS [BFCY_ACCOUNT_NAME], ";
             strSQL += "     [BFCY_BankNo] AS [BFCY_BANK_NO], ";
             strSQL += "     [BFCY_BankName] AS [BFCY_BANK_NAME], ";
+            strSQL += "     [BFCY_BanKBranchNo] AS [BFCY_BANK_BRANCH_NO], ";
+            strSQL += "     [BFCY_BanKBranchName] AS [BFCY_BANK_BRANCH_NAME], ";
+            strSQL += "     [BFCY_BankSWIFT] AS [BFCY_BANK_SWIFT], ";
+            strSQL += "     [BFCY_BankAddress] AS [BFCY_BANK_ADDRESS], ";
             strSQL += "     [BFCY_BankCountryAndCity] AS [BFCY_BANK_COUNTRY_AND_CITY], ";
+            strSQL += "     [BFCY_BankIBAN] AS [BFCY_BANK_IBAN], ";
             strSQL += "     [CurrencyName] AS [CURRENCY_NAME], ";
             strSQL += "     [BFCY_Name] AS [BFCY_NAME], ";
             strSQL += "     [BFCY_TEL] AS [BFCY_TEL], ";
-            strSQL += "     [BFCY_Email] AS [BFCY_EMAIL], ";
-            strSQL += "     [Reason] AS [REASON], ";
-            strSQL += "     [Note] AS [NOTE], ";
-            strSQL += "     [IsVicePresident] AS [IS_VICE_PRESIDENT], ";
-            strSQL += "     [FinancAuditID_1] AS [FINANC_AUDIT_ID_1], ";
-            strSQL += "     [FinancAuditName_1] AS [FINANC_AUDIT_NAME_1], ";
-            strSQL += "     [FinancAuditID_2] AS [FINANC_AUDIT_ID_2], ";
-            strSQL += "     [FinancAuditName_2] AS [FINANC_AUDIT_NAME_2], ";
-            strSQL += "     [Amount_CONV_Total] AS [AMOUNT_CONV_TOTAL] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_ExpensesReimburse_M] ";
+            strSQL += "     [BFCY_Email] AS [BFCY_EMAIL] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
             var expensesReimburseConfig = dbFun.DoQuery(strSQL, parameter).ToList<ExpensesReimburseConfig>().FirstOrDefault();
@@ -114,19 +122,6 @@ namespace OA_WEB_API.Repository.BPMPro
             };
             strJson = jsonFunction.ObjectToJSON(commonRepository.PostInvoiceFunction(CommonDTL));
             var expensesReimburseDetailsConfig = jsonFunction.JsonToObject<List<ExpensesReimburseDetailsConfig>>(strJson);
-
-            #endregion
-
-            #region - 費用申請單 憑證細項 -
-
-            var CommonINV_DTL = new BPMCommonModel<InvoiceDetailConfig>()
-            {
-                EXT = "INV_DTL",
-                IDENTIFY = IDENTIFY,
-                PARAMETER = parameter
-            };
-            strJson = jsonFunction.ObjectToJSON(commonRepository.PostInvoiceDetailFunction(CommonINV_DTL));
-            var expensesReimburseInvoiceDetailsConfig = jsonFunction.JsonToObject<List<ExpensesReimburseInvoiceDetailsConfig>>(strJson);
 
             #endregion
 
@@ -159,11 +154,10 @@ namespace OA_WEB_API.Repository.BPMPro
                 EXPENSES_REIMBURSE_TITLE = expensesReimburseTitle,
                 EXPENSES_REIMBURSE_CONFIG = expensesReimburseConfig,
                 EXPENSES_REIMBURSE_DTLS_CONFIG = expensesReimburseDetailsConfig,
-                EXPENSES_REIMBURSE_INV_DTLS_CONFIG = expensesReimburseInvoiceDetailsConfig,
                 EXPENSES_REIMBURSE_BUDGS_CONFIG = expensesReimburseBudgetsConfig,
                 ASSOCIATED_FORM_CONFIG = associatedForm
             };
-            
+
             #region - 確認表單 -
 
             if (expensesReimburseViewModel.APPLICANT_INFO.DRAFT_FLAG == 0)
@@ -347,7 +341,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL = "";
                 strSQL += "SELECT ";
                 strSQL += "      [RequisitionID] ";
-                strSQL += "FROM [BPMPro].[dbo].[FM7T_ExpensesReimburse_M] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
                 strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                 var dtA = dbFun.DoQuery(strSQL, parameterTitle);
@@ -357,7 +351,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region - 修改 -
 
                     strSQL = "";
-                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_ExpensesReimburse_M] ";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
                     strSQL += "SET [DiagramID] =@DIAGRAM_ID, ";
                     strSQL += "     [ApplicantDept]=@APPLICANT_DEPT, ";
                     strSQL += "     [ApplicantDeptName]=@APPLICANT_DEPT_NAME, ";
@@ -386,7 +380,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region - 新增 -
 
                     strSQL = "";
-                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_ExpensesReimburse_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FlowName],[FormNo],[FM7Subject]) ";
+                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[ApplicantPhone],[ApplicantDateTime],[FillerID],[FillerName],[Priority],[DraftFlag],[FlowActivated],[FlowName],[FormNo],[FM7Subject]) ";
                     strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@FILLER_ID,@FILLER_NAME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FLOW_NAME,@FORM_NO,@FM7_SUBJECT) ";
 
                     dbFun.DoTran(strSQL, parameterTitle);
@@ -404,60 +398,82 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         //費用申請單 表單內容
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                        new SqlParameter("@IS_CFO", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@IS_VICE_PRESIDENT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REIMB_STAFF_DEPT_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REIMB_STAFF_DEPT_NAME", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REIMB_STAFF_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@REIMB_STAFF_NAME", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PAY_METHOD", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@TX_CATEGORY", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@BFCY_ACCOUNT_NO", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@BFCY_ACCOUNT_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@BFCY_BANK_NO", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@BFCY_BANK_NAME", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@BFCY_BANK_COUNTRY_AND_CITY", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@CURRENCY_NAME", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@BFCY_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@BFCY_TEL", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@BFCY_EMAIL", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@REIMB_STAFF_NAME", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },                        
                         new SqlParameter("@REASON", SqlDbType.NVarChar) { Size = 4000 , Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@IS_VICE_PRESIDENT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@FINANC_AUDIT_ID_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@FINANC_AUDIT_NAME_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@FINANC_AUDIT_ID_2", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@FINANC_AUDIT_NAME_2", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@AMOUNT_CONV_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PAY_METHOD", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@ACCOUNT_CATEGORY", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PAYMENT_OBJECT", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@TX_CATEGORY", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_ACCOUNT_NO", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_ACCOUNT_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_BANK_NO", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_BANK_NAME", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_BANK_BRANCH_NO", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_BANK_BRANCH_NAME", SqlDbType.NVarChar) { Size = 200, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_BANK_SWIFT", SqlDbType.NVarChar) { Size = 300, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_BANK_ADDRESS", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_BANK_COUNTRY_AND_CITY", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_BANK_IBAN", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@CURRENCY_NAME", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_NAME", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_TEL", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@BFCY_EMAIL", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     };
+
+                    if(String.IsNullOrEmpty(model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT) || String.IsNullOrWhiteSpace(model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT))
+                    {
+                        if(model.EXPENSES_REIMBURSE_CONFIG.AMOUNT_CONV_TOTAL>=30000) model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT=true.ToString().ToLower();
+                        else model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT=false.ToString().ToLower();
+                    }
 
                     //寫入：費用申請單 表單內容parameter                        
                     strJson = jsonFunction.ObjectToJSON(model.EXPENSES_REIMBURSE_CONFIG);
                     GlobalParameters.Infoparameter(strJson, parameterInfo);
 
                     strSQL = "";
-                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_ExpensesReimburse_M] ";
-                    strSQL += "SET [REIMB_StaffDeptID]=@REIMB_STAFF_DEPT_ID, ";
+                    strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
+                    strSQL += "SET [IsCFO]=@IS_CFO, ";
+                    strSQL += "     [IsVicePresident]=@IS_VICE_PRESIDENT, ";
+                    strSQL += "     [REIMB_StaffDeptID]=@REIMB_STAFF_DEPT_ID, ";
                     strSQL += "     [REIMB_StaffDeptName]=@REIMB_STAFF_DEPT_NAME, ";
                     strSQL += "     [REIMB_StaffID]=@REIMB_STAFF_ID, ";
-                    strSQL += "     [REIMB_StaffName]=@REIMB_STAFF_NAME, ";
+                    strSQL += "     [REIMB_StaffName]=@REIMB_STAFF_NAME, ";                    
+                    strSQL += "     [Reason]=@REASON, ";
+                    strSQL += "     [Note]=@NOTE, ";
+                    strSQL += "     [FinancAuditID_1]=@FINANC_AUDIT_ID_1, ";
+                    strSQL += "     [FinancAuditName_1]=@FINANC_AUDIT_NAME_1, ";
+                    strSQL += "     [FinancAuditID_2]=@FINANC_AUDIT_ID_2, ";
+                    strSQL += "     [FinancAuditName_2]=@FINANC_AUDIT_NAME_2, ";
+                    strSQL += "     [Amount_CONV_Total]=@AMOUNT_CONV_TOTAL, ";
                     strSQL += "     [PayMethod]=@PAY_METHOD, ";
+                    strSQL += "     [AccountCategory]=@ACCOUNT_CATEGORY,";
+                    strSQL += "     [PaymentObject]=@PAYMENT_OBJECT,";                    
                     strSQL += "     [TX_Category]=@TX_CATEGORY, ";
                     strSQL += "     [BFCY_AccountNo]=@BFCY_ACCOUNT_NO, ";
                     strSQL += "     [BFCY_AccountName]=@BFCY_ACCOUNT_NAME, ";
                     strSQL += "     [BFCY_BankNo]=@BFCY_BANK_NO, ";
                     strSQL += "     [BFCY_BankName]=@BFCY_BANK_NAME, ";
+                    strSQL += "     [BFCY_BanKBranchNo]=@BFCY_BANK_BRANCH_NO, ";
+                    strSQL += "     [BFCY_BanKBranchName]=@BFCY_BANK_BRANCH_NAME, ";
+                    strSQL += "     [BFCY_BankSWIFT]=@BFCY_BANK_SWIFT, ";
+                    strSQL += "     [BFCY_BankAddress]=@BFCY_BANK_ADDRESS, ";
                     strSQL += "     [BFCY_BankCountryAndCity]=@BFCY_BANK_COUNTRY_AND_CITY, ";
+                    strSQL += "     [BFCY_BankIBAN]=@BFCY_BANK_IBAN, ";
                     strSQL += "     [CurrencyName]=@CURRENCY_NAME, ";
                     strSQL += "     [BFCY_Name]=@BFCY_NAME, ";
                     strSQL += "     [BFCY_TEL]=@BFCY_TEL, ";
-                    strSQL += "     [BFCY_Email]=@BFCY_EMAIL, ";
-                    strSQL += "     [Reason]=@REASON, ";
-                    strSQL += "     [Note]=@NOTE, ";
-                    strSQL += "     [IsVicePresident]=@IS_VICE_PRESIDENT, ";
-                    strSQL += "     [FinancAuditID_1]=@FINANC_AUDIT_ID_1, ";
-                    strSQL += "     [FinancAuditName_1]=@FINANC_AUDIT_NAME_1, ";
-                    strSQL += "     [FinancAuditID_2]=@FINANC_AUDIT_ID_2, ";
-                    strSQL += "     [FinancAuditName_2]=@FINANC_AUDIT_NAME_2, ";
-                    strSQL += "     [Amount_CONV_Total]=@AMOUNT_CONV_TOTAL ";
+                    strSQL += "     [BFCY_Email]=@BFCY_EMAIL ";
                     strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
 
                     dbFun.DoTran(strSQL, parameterInfo);
@@ -479,7 +495,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@EXCH_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AMOUNT_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@CURRENCY", SqlDbType.NVarChar) { Size = 10 , Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@ACCT_CATEGORY", SqlDbType.NVarChar) { Size = 10 , Value = (object)DBNull.Value ?? DBNull.Value },
+                    //new SqlParameter("@ACCT_CATEGORY", SqlDbType.NVarChar) { Size = 10 , Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PROJECT_FORM_NO", SqlDbType.NVarChar) { Size = 20 , Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PROJECT_NAME", SqlDbType.NVarChar) { Size = 500 , Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PROJECT_NICKNAME", SqlDbType.NVarChar) { Size = 4000 , Value = (object)DBNull.Value ?? DBNull.Value },
@@ -496,6 +512,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@GROSS_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NOTE", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
 
                 };
 
@@ -517,54 +534,25 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "UPDATE [BPMPro].[dbo].[FM7T_ExpensesReimburse_DTL] ";
+                        strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_DTL] ";
                         strSQL += "SET [Name] =@NAME, ";
                         strSQL += "     [Type]=@TYPE, ";
                         strSQL += "     [InvoiceType]=@INV_TYPE, ";
                         strSQL += "     [ExchangeRate]=@EXCH_RATE, ";
                         strSQL += "     [Amount_CONV]=@AMOUNT_CONV, ";
                         strSQL += "     [Currency]=@CURRENCY, ";
-                        strSQL += "     [ACCT_Category]=@ACCT_CATEGORY, ";
+                        //strSQL += "     [ACCT_Category]=@ACCT_CATEGORY, ";
                         strSQL += "     [ProjectFormNo]=@PROJECT_FORM_NO, ";
                         strSQL += "     [ProjectName]=@PROJECT_NAME, ";
                         strSQL += "     [ProjectNickname]=@PROJECT_NICKNAME, ";
-                        strSQL += "     [ProjectUseYear]=@PROJECT_USE_YEAR ";
+                        strSQL += "     [ProjectUseYear]=@PROJECT_USE_YEAR, ";
+                        strSQL += "     [Note]=@NOTE ";
                         strSQL += "WHERE 1=1 ";
                         strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
                         strSQL += "         AND [RowNo]=@ROW_NO ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     });
-                }
-
-                #endregion
-
-                #region - 費用申請單 費用憑證細項: ExpensesReimburse_INV_DTL -
-
-                var parameterInvoiceDetails = new List<SqlParameter>()
-                {
-                    //費用申請單 憑證細項
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
-                    new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 50 , Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@QUANTITY", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AMOUNT_TWD", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@IS_EXCL", SqlDbType.NVarChar) { Size = 5 , Value = (object)DBNull.Value ?? DBNull.Value },
-                };
-
-                if (model.EXPENSES_REIMBURSE_INV_DTLS_CONFIG != null && model.EXPENSES_REIMBURSE_INV_DTLS_CONFIG.Count > 0)
-                {
-                    var CommonINV_DTL = new BPMCommonModel<ExpensesReimburseInvoiceDetailsConfig>()
-                    {
-                        EXT = "INV_DTL",
-                        IDENTIFY = IDENTIFY,
-                        PARAMETER = parameterInvoiceDetails,
-                        MODEL = model.EXPENSES_REIMBURSE_INV_DTLS_CONFIG
-                    };
-                    commonRepository.PutInvoiceDetailFunction(CommonINV_DTL);
-
                 }
 
                 #endregion

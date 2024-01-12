@@ -504,6 +504,21 @@
             (測試)表單(結束)執行
             </summary>
         </member>
+        <member name="T:OA_WEB_API.Controllers.BPMPro.AdvanceExpenseController">
+            <summary>
+            會簽管理系統 - 預支費用申請單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.AdvanceExpenseController.PostAdvanceExpenseSingle(OA_WEB_API.Models.BPMPro.AdvanceExpenseQueryModel)">
+            <summary>
+            預支費用申請單(查詢)
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.AdvanceExpenseController.PutAdvanceExpenseSingle(OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel)">
+            <summary>
+            預支費用申請單(新增/修改/草稿)
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.AStudioLiveStreamUseController">
             <summary>
             會簽管理系統 - A攝影棚直播使用申請單
@@ -2270,7 +2285,7 @@
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel.ADVANCE_EXPENSE_CONFIG">
             <summary>預支費用申請單 表單內容 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel.ADVANCE_EXPENSE_DETAILS_CONFIG">
+        <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel.ADVANCE_EXPENSE_DTLS_CONFIG">
             <summary>預支費用申請單 預知明細 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel.ASSOCIATED_FORM_CONFIG">
@@ -2330,7 +2345,7 @@
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.ADVANCE_AMOUNT">
             <summary>預支金額</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.Amount_CONV">
+        <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.AMOUNT_CONV">
             <summary>換算台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.ADVANCE_DATE">
@@ -9847,6 +9862,51 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.FlowRepository.strSQL">
             <summary>
             T-SQL
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Repository.BPMPro.AdvanceExpenseRepository">
+            <summary>
+            會簽管理系統 - 預支費用申請單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.AdvanceExpenseRepository.PostAdvanceExpenseSingle(OA_WEB_API.Models.BPMPro.AdvanceExpenseQueryModel)">
+            <summary>
+            預支費用申請單(查詢)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.AdvanceExpenseRepository.PutAdvanceExpenseSingle(OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel)">
+            <summary>
+            預支費用申請單(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.AdvanceExpenseRepository.strSQL">
+            <summary>
+            T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.AdvanceExpenseRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.AdvanceExpenseRepository.IDENTIFY">
+            <summary>
+            表單代號
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.AdvanceExpenseRepository.FM7Subject">
+            <summary>
+            表單主旨
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.AdvanceExpenseRepository.strJson">
+            <summary>
+            Json字串
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.AdvanceExpenseRepository.strREQ">
+            <summary>
+            系統編號
             </summary>
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.AStudioLiveStreamUseRepository">

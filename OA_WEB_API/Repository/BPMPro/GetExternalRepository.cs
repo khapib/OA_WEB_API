@@ -611,7 +611,7 @@ namespace OA_WEB_API.Repository.BPMPro
             }
             catch (Exception ex)
             {
-                CommLib.Logger.Error("版權採購申請單(外部起單)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("費用申請單(外部起單)失敗，原因：" + ex.Message);
                 throw;
             }
         }

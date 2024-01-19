@@ -31,7 +31,7 @@ namespace OA_WEB_API.Models.BPMPro
         public AdvanceExpenseConfig ADVANCE_EXPENSE_CONFIG { get; set; }
 
         /// <summary>預支費用申請單 預知明細 設定</summary>
-        public AdvanceExpenseDetailsConfig ADVANCE_EXPENSE_DETAILS_CONFIG { get; set; }
+        public IList<AdvanceExpenseDetailsConfig> ADVANCE_EXPENSE_DTLS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
@@ -80,7 +80,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 預支費用申請單 預知明細 設定
     /// </summary>
-    public class AdvanceExpenseDetailsConfig : COMM_Bank
+    public class AdvanceExpenseDetailsConfig : DOM_TWD_Bank
     {
         /// <summary>行數編號</summary>
         public int ROW_NO { get; set; }
@@ -89,13 +89,13 @@ namespace OA_WEB_API.Models.BPMPro
         public string ADVANCE_CURRENCY_NAME { get; set; }
 
         /// <summary>匯率</summary>
-        public float EXCHANGE_RATE { get; set; }
+        public double EXCHANGE_RATE { get; set; }
 
         /// <summary>預支金額</summary>
-        public float ADVANCE_AMOUNT { get; set; }
+        public double ADVANCE_AMOUNT { get; set; }
 
         /// <summary>換算台幣</summary>
-        public int Amount_CONV { get; set; }
+        public int AMOUNT_CONV { get; set; }
 
         /// <summary>預支日期</summary>
         public DateTime ADVANCE_DATE { get; set; }

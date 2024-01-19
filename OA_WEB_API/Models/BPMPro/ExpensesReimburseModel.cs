@@ -34,6 +34,18 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>費用申請單 使用預算 設定</summary>
         public List<ExpensesReimburseBudgetsConfig> EXPENSES_REIMBURSE_BUDGS_CONFIG { get; set; }
 
+        /// <summary>費用申請單 小計 設定</summary>
+        public List<ExpensesReimburseSumsConfig> EXPENSES_REIMBURSE_SUMS_CONFIG { get; set; }
+
+        /// <summary>費用申請單 已預支 設定</summary>
+        public List<ExpensesReimburseAdvancesConfig> EXPENSES_REIMBURSE_ADVS_CONFIG { get; set; }
+
+        /// <summary>費用申請單 應退 設定</summary>
+        public List<ExpensesReimburseRefundablesConfig> EXPENSES_REIMBURSE_ARS_CONFIG { get; set; }
+
+        /// <summary>費用申請單 應付 設定</summary>
+        public List<ExpensesReimbursePayablesConfig> EXPENSES_REIMBURSE_APS_CONFIG { get; set; }
+
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
 
@@ -75,7 +87,7 @@ namespace OA_WEB_API.Models.BPMPro
         public string REASON { get; set; }
 
         /// <summary>備註</summary>
-        public string NOTE { get; set; }      
+        public string NOTE { get; set; }
 
         /// <summary>財務審核人員編號</summary>
         public string FINANC_AUDIT_ID_1 { get; set; }
@@ -111,7 +123,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 費用申請單 費用明細 設定
     /// </summary>
-    public class ExpensesReimburseDetailsConfig: InvoiceConfig
+    public class ExpensesReimburseDetailsConfig : InvoiceConfig
     {
         /// <summary>行數編號</summary>
         public int ROW_NO { get; set; }
@@ -161,10 +173,53 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 費用申請單 使用預算 設定
     /// </summary>
-    public class ExpensesReimburseBudgetsConfig: BudgetConfig
+    public class ExpensesReimburseBudgetsConfig : BudgetConfig
     {
         /// <summary>行數編號</summary>
         public int ROW_NO { get; set; }
     }
 
+    /// <summary>
+    /// 費用申請單 M表 後半部 設定
+    /// </summary>
+    public class ExpensesReimburseLatterHalfConfig
+    {
+        /// <summary>幣別</summary>
+        public string CURRENCY { get; set; }
+
+        /// <summary>金額</summary>
+        public double AMOUNT { get; set; }
+    }
+
+    /// <summary>
+    /// 費用申請單 小計 設定
+    /// </summary>
+    public class ExpensesReimburseSumsConfig : ExpensesReimburseLatterHalfConfig
+    {
+
+    }
+
+    /// <summary>
+    /// 費用申請單 已預支 設定
+    /// </summary>
+    public class ExpensesReimburseAdvancesConfig : ExpensesReimburseLatterHalfConfig
+    {
+
+    }
+
+    /// <summary>
+    /// 費用申請單 應退 設定
+    /// </summary>
+    public class ExpensesReimburseRefundablesConfig : ExpensesReimburseLatterHalfConfig
+    {
+
+    }
+
+    /// <summary>
+    /// 費用申請單 應付 設定
+    /// </summary>
+    public class ExpensesReimbursePayablesConfig : ExpensesReimburseLatterHalfConfig
+    {
+
+    }
 }

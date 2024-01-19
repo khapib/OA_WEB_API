@@ -268,7 +268,7 @@ namespace OA_WEB_API.Models.ERP
     /// <summary>
     /// 內容評估表 表頭資訊
     /// </summary>
-    public class EvaluateContentInfoTitle: EvaluateContentTitle
+    public class EvaluateContentInfoTitle : EvaluateContentTitle
     {
         /// <summary>最終建議</summary>
         public string FINAL_ADVISE { get; set; }

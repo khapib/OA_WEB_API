@@ -60,7 +60,7 @@ namespace OA_WEB_API.Controllers.ERP
         {
             HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
             HttpRequestBase request = context.Request;
-
+        
             var query = new RequestQueryModel()
             {
                 REQUISITION_ID = request["RequisitionID"],

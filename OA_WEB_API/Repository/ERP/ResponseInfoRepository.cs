@@ -255,7 +255,6 @@ namespace OA_WEB_API.Repository.ERP
             }
         }
 
-
         #endregion
 
         #region - 行政採購類_回傳ERP資訊 -

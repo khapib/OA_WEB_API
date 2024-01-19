@@ -264,7 +264,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
                     new SqlParameter("@COMPENDIUM", SqlDbType.NVarChar) { Size = 4000, Value = (object)model.EVALUATE_DEMAND_CONFIG.COMPENDIUM ?? DBNull.Value },
                     new SqlParameter("@CONTACT_PERSON", SqlDbType.NVarChar) { Size = 10, Value = (object)model.EVALUATE_DEMAND_CONFIG.CONTACT_PERSON ?? DBNull.Value },
-                    new SqlParameter("@IS_JUMP", SqlDbType.NVarChar) { Size = 5, Value = (object)model.EVALUATE_DEMAND_CONFIG.CONTACT_PERSON ?? DBNull.Value },
+                    new SqlParameter("@IS_JUMP", SqlDbType.NVarChar) { Size = 5, Value = (object)model.EVALUATE_DEMAND_CONFIG.IS_JUMP.ToString() ?? DBNull.Value },
                     new SqlParameter("@EVALUATE", SqlDbType.NVarChar) { Size = 4000, Value = (object)model.EVALUATE_DEMAND_CONFIG.EVALUATE ?? DBNull.Value },
                     new SqlParameter("@SCHEME", SqlDbType.NVarChar) { Size = 25, Value = (object)model.EVALUATE_DEMAND_CONFIG.SCHEME ?? DBNull.Value },
                     new SqlParameter("@PROCESS_RESULT", SqlDbType.NVarChar) { Size = 4000, Value = (object)model.EVALUATE_DEMAND_CONFIG.PROCESS_RESULT ?? DBNull.Value },

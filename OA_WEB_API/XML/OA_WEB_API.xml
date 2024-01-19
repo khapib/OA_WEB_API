@@ -2850,6 +2850,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.EvaluateDemandConfig.CONTACT_PERSON">
             <summary>窗口</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EvaluateDemandConfig.IS_JUMP">
+            <summary>是否跳關</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.EvaluateDemandConfig.EVALUATE">
             <summary>評估</summary>
         </member>
@@ -2889,6 +2892,18 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_BUDGS_CONFIG">
             <summary>費用申請單 使用預算 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_SUMS_CONFIG">
+            <summary>費用申請單 小計 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_ADVS_CONFIG">
+            <summary>費用申請單 已預支 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_ARS_CONFIG">
+            <summary>費用申請單 應退 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_APS_CONFIG">
+            <summary>費用申請單 應付 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.ASSOCIATED_FORM_CONFIG">
             <summary>表單關聯</summary>
@@ -3013,6 +3028,37 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.ROW_NO">
             <summary>行數編號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseLatterHalfConfig">
+            <summary>
+            費用申請單 M表 後半部 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseLatterHalfConfig.CURRENCY">
+            <summary>幣別</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseLatterHalfConfig.AMOUNT">
+            <summary>金額</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseSumsConfig">
+            <summary>
+            費用申請單 小計 設定
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseAdvancesConfig">
+            <summary>
+            費用申請單 已預支 設定
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseRefundablesConfig">
+            <summary>
+            費用申請單 應退 設定
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimbursePayablesConfig">
+            <summary>
+            費用申請單 應付 設定
+            </summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GeneralAcceptanceQueryModel">
             <summary>

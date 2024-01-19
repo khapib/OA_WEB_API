@@ -42,7 +42,7 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                  new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID }
             };
-            
+
             #region - 申請人資訊 -
 
             var CommonApplicantInfo = new BPMCommonModel<ApplicantInfo>()
@@ -64,6 +64,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [BPMFormNo] AS [BPM_FORM_NO], ";
             strSQL += "     [Compendium] AS [COMPENDIUM], ";
             strSQL += "     [ContactPerson] AS [CONTACT_PERSON], ";
+            strSQL += "     CAST([IsJump] as bit) AS [IS_JUMP], ";
             strSQL += "     [Evaluate] AS [EVALUATE], ";
             strSQL += "     [Scheme] AS [SCHEME], ";
             strSQL += "     [ProcessResult] AS [PROCESS_RESULT], ";
@@ -93,7 +94,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 EVALUATE_DEMAND_CONFIG = evaluateDemandConfig,
                 ASSOCIATED_FORM_CONFIG = associatedForm
             };
-            
+
             #region - 確認表單 -
 
             if (evaluateDemand.APPLICANT_INFO.DRAFT_FLAG == 0)
@@ -131,7 +132,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     }
 
                     #endregion
-                }                                
+                }
             }
 
             #endregion
@@ -232,6 +233,14 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
+                #region - 跳關預設值 -
+
+                if (model.EVALUATE_DEMAND_CONFIG.IS_JUMP == null) model.EVALUATE_DEMAND_CONFIG.IS_JUMP = false;
+                //如果是選工程部則不會有跳關選項。
+                if (model.EVALUATE_DEMAND_CONFIG.CONTACT_PERSON == "D06") model.EVALUATE_DEMAND_CONFIG.IS_JUMP = false;
+
+                #endregion
+
                 #endregion
 
                 #region - 需求評估主表：EvaluateDemand_M -
@@ -255,6 +264,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
                     new SqlParameter("@COMPENDIUM", SqlDbType.NVarChar) { Size = 4000, Value = (object)model.EVALUATE_DEMAND_CONFIG.COMPENDIUM ?? DBNull.Value },
                     new SqlParameter("@CONTACT_PERSON", SqlDbType.NVarChar) { Size = 10, Value = (object)model.EVALUATE_DEMAND_CONFIG.CONTACT_PERSON ?? DBNull.Value },
+                    new SqlParameter("@IS_JUMP", SqlDbType.NVarChar) { Size = 5, Value = (object)model.EVALUATE_DEMAND_CONFIG.CONTACT_PERSON ?? DBNull.Value },
                     new SqlParameter("@EVALUATE", SqlDbType.NVarChar) { Size = 4000, Value = (object)model.EVALUATE_DEMAND_CONFIG.EVALUATE ?? DBNull.Value },
                     new SqlParameter("@SCHEME", SqlDbType.NVarChar) { Size = 25, Value = (object)model.EVALUATE_DEMAND_CONFIG.SCHEME ?? DBNull.Value },
                     new SqlParameter("@PROCESS_RESULT", SqlDbType.NVarChar) { Size = 4000, Value = (object)model.EVALUATE_DEMAND_CONFIG.PROCESS_RESULT ?? DBNull.Value },
@@ -310,6 +320,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [FM7Subject]=@FM7_SUBJECT,";
                     strSQL += "     [Compendium]=@COMPENDIUM, ";
                     strSQL += "     [ContactPerson]=@CONTACT_PERSON, ";
+                    strSQL += "     [IsJump]=@IS_JUMP,";
                     strSQL += "     [Evaluate]=@EVALUATE, ";
                     strSQL += "     [Scheme]=@SCHEME, ";
                     strSQL += "     [ProcessResult]=@PROCESS_RESULT, ";
@@ -325,8 +336,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region 新增
 
                     strSQL = "";
-                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_EvaluateDemand_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[FillerID],[FillerName],[ApplicantPhone],[ApplicantDateTime],[Priority],[DraftFlag],[FlowActivated],[FM7Subject],[Compendium],[ContactPerson],[Evaluate],[Scheme],[ProcessResult],[ApproveLoop]) ";
-                    strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@FILLER_ID,@FILLER_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FM7_SUBJECT,@COMPENDIUM,@CONTACT_PERSON,NULL,NULL,NULL,1) ";
+                    strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_EvaluateDemand_M]([RequisitionID],[DiagramID],[ApplicantDept],[ApplicantDeptName],[ApplicantID],[ApplicantName],[FillerID],[FillerName],[ApplicantPhone],[ApplicantDateTime],[Priority],[DraftFlag],[FlowActivated],[FM7Subject],[Compendium],[ContactPerson],[IsJump],[Evaluate],[Scheme],[ProcessResult],[ApproveLoop]) ";
+                    strSQL += "VALUES(@REQUISITION_ID,@DIAGRAM_ID,@APPLICANT_DEPT,@APPLICANT_DEPT_NAME,@APPLICANT_ID,@APPLICANT_NAME,@FILLER_ID,@FILLER_NAME,@APPLICANT_PHONE,@APPLICANT_DATETIME,@PRIORITY,@DRAFT_FLAG,@FLOW_ACTIVATED,@FM7_SUBJECT,@COMPENDIUM,@CONTACT_PERSON,@IS_JUMP,NULL,NULL,NULL,1) ";
 
                     dbFun.DoTran(strSQL, parameterA);
 

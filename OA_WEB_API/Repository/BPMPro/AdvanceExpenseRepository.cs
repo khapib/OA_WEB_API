@@ -136,6 +136,19 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
+            #region - 預支費用申請單 小計 -
+
+            var CommonSUM = new BPMCommonModel<AdvanceExpenseSumsConfig>()
+            {
+                EXT = "SUM",
+                IDENTIFY = IDENTIFY,
+                PARAMETER = parameter
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostExpensesReimburseProcessLatterHalfFunction(CommonSUM));
+            var advanceExpenseSumsConfig = jsonFunction.JsonToObject<List<AdvanceExpenseSumsConfig>>(strJson);
+
+            #endregion
+
             #region - 預支費用申請單 表單關聯 -
 
             var formQueryModel = new FormQueryModel()
@@ -152,6 +165,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 ADVANCE_EXPENSE_TITLE = advanceExpenseTitle,
                 ADVANCE_EXPENSE_CONFIG = advanceExpenseConfig,
                 ADVANCE_EXPENSE_DTLS_CONFIG = advanceExpenseDetailsConfig,
+                ADVANCE_EXPENSE_SUMS_CONFIG=advanceExpenseSumsConfig,
                 ASSOCIATED_FORM_CONFIG = associatedForm
             };
 
@@ -496,6 +510,28 @@ namespace OA_WEB_API.Repository.BPMPro
                     }
 
                     #endregion
+                }
+
+                #endregion
+
+                var parameterLatterHalf = new List<SqlParameter>()
+                {
+                    //預支費用申請單 小計
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                };
+
+                #region - 預支費用申請單 小計：AdvanceExpense_SUM -
+
+                if (model.ADVANCE_EXPENSE_SUMS_CONFIG != null && model.ADVANCE_EXPENSE_SUMS_CONFIG.Count > 0)
+                {
+                    var CommonSUM = new BPMCommonModel<AdvanceExpenseSumsConfig>()
+                    {
+                        EXT = "SUM",
+                        IDENTIFY = IDENTIFY,
+                        PARAMETER = parameterLatterHalf,
+                        MODEL = model.ADVANCE_EXPENSE_SUMS_CONFIG
+                    };
+                    vResult = commonRepository.PutExpensesReimburseProcessLatterHalfFunction(CommonSUM);
                 }
 
                 #endregion

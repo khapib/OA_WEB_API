@@ -2288,6 +2288,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel.ADVANCE_EXPENSE_DTLS_CONFIG">
             <summary>預支費用申請單 預知明細 設定</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel.ADVANCE_EXPENSE_SUMS_CONFIG">
+            <summary>預支費用申請單 小計 設定</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel.ASSOCIATED_FORM_CONFIG">
             <summary>表單關聯</summary>
         </member>
@@ -2378,6 +2381,11 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.PAYMENT_OBJECT">
             <summary>支付對象</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.AdvanceExpenseSumsConfig">
+            <summary>
+            預支費用申請單 小計 設定
+            </summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseQueryModel">
             <summary>

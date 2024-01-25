@@ -1828,7 +1828,7 @@ namespace OA_WEB_API.Repository.BPMPro
         /// <summary>
         /// 費用流程主表_後半部(查詢)
         /// </summary>
-        public List<T> PostExpensesReimburseProcessLatterHalfFunction<T>(BPMCommonModel<T> Common)
+        public IList<ExpensesReimburseProcessLatterHalfConfig> PostExpensesReimburseProcessLatterHalfFunction<T>(BPMCommonModel<T> Common)
         {            
             try
             {
@@ -1847,7 +1847,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
                 strSQL += "ORDER BY [AutoCounter] ";
 
-                return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<ExpensesReimburseProcessLatterHalfConfig>();
+                return dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<ExpensesReimburseProcessLatterHalfConfig>();
             }
             catch (Exception ex)
             {
@@ -1898,6 +1898,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         strSQL = "";
                         strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "]([RequisitionID],[Currency],[Amount]) ";
                         strSQL += "VALUES(@REQUISITION_ID,@CURRENCY,@AMOUNT) ";
+
+                        dbFun.DoTran(strSQL, Common.PARAMETER);
 
                         Common.PARAMETER.Remove(Common.PARAMETER.Where(SP => SP.ParameterName.Contains("@CURRENCY")).FirstOrDefault());
                         Common.PARAMETER.Remove(Common.PARAMETER.Where(SP => SP.ParameterName.Contains("@AMOUNT")).FirstOrDefault());

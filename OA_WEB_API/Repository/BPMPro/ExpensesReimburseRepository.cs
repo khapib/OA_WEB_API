@@ -79,7 +79,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [REIMB_StaffDeptID] AS [REIMB_STAFF_DEPT_ID], ";
             strSQL += "     [REIMB_StaffDeptName] AS [REIMB_STAFF_DEPT_NAME], ";
             strSQL += "     [REIMB_StaffID] AS [REIMB_STAFF_ID], ";
-            strSQL += "     [REIMB_StaffName] AS [REIMB_STAFF_NAME], ";            
+            strSQL += "     [REIMB_StaffName] AS [REIMB_STAFF_NAME], ";
             strSQL += "     [Reason] AS [REASON], ";
             strSQL += "     [Note] AS [NOTE], ";
             strSQL += "     [FinancAuditID_1] AS [FINANC_AUDIT_ID_1], ";
@@ -138,6 +138,66 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
+            #region - 費用申請單 小計 -
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
+            strSQL += "     [Currency] AS [CURRENCY], ";
+            strSQL += "     [Amount] AS [AMOUNT] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_SUM] ";
+            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+            strSQL += "ORDER BY [AutoCounter] ";
+
+            var expensesReimburseSumsConfig = dbFun.DoQuery(strSQL, parameter).ToList<ExpensesReimburseSumsConfig>().ToList();
+
+            #endregion
+
+            #region - 費用申請單 已預支 -
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
+            strSQL += "     [Currency] AS [CURRENCY], ";
+            strSQL += "     [Amount] AS [AMOUNT] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_ADV] ";
+            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+            strSQL += "ORDER BY [AutoCounter] ";
+
+            var expensesReimburseAdvancesConfig = dbFun.DoQuery(strSQL, parameter).ToList<ExpensesReimburseAdvancesConfig>().ToList();
+
+            #endregion
+
+            #region - 費用申請單 應退(退還財務) -
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
+            strSQL += "     [Currency] AS [CURRENCY], ";
+            strSQL += "     [Amount] AS [AMOUNT] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_FA] ";
+            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+            strSQL += "ORDER BY [AutoCounter] ";
+
+            var expensesReimburseFinancAmountsConfig = dbFun.DoQuery(strSQL, parameter).ToList<ExpensesReimburseFinancAmountsConfig>().ToList();
+
+            #endregion
+
+            #region - 費用申請單 應付(付給使用者) -
+
+            strSQL = "";
+            strSQL += "SELECT ";
+            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
+            strSQL += "     [Currency] AS [CURRENCY], ";
+            strSQL += "     [Amount] AS [AMOUNT] ";
+            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_UA] ";
+            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+            strSQL += "ORDER BY [AutoCounter] ";
+
+            var expensesReimburseUserAmountsConfig = dbFun.DoQuery(strSQL, parameter).ToList<ExpensesReimburseUserAmountsConfig>().ToList();
+
+            #endregion
+
             #region - 費用申請單 表單關聯 -
 
             var formQueryModel = new FormQueryModel()
@@ -155,6 +215,10 @@ namespace OA_WEB_API.Repository.BPMPro
                 EXPENSES_REIMBURSE_CONFIG = expensesReimburseConfig,
                 EXPENSES_REIMBURSE_DTLS_CONFIG = expensesReimburseDetailsConfig,
                 EXPENSES_REIMBURSE_BUDGS_CONFIG = expensesReimburseBudgetsConfig,
+                EXPENSES_REIMBURSE_SUMS_CONFIG = expensesReimburseSumsConfig,
+                EXPENSES_REIMBURSE_ADVS_CONFIG= expensesReimburseAdvancesConfig,
+                EXPENSES_REIMBURSE_FAS_CONFIG= expensesReimburseFinancAmountsConfig,
+                EXPENSES_REIMBURSE_UAS_CONFIG= expensesReimburseUserAmountsConfig,
                 ASSOCIATED_FORM_CONFIG = associatedForm
             };
 
@@ -403,7 +467,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@REIMB_STAFF_DEPT_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REIMB_STAFF_DEPT_NAME", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REIMB_STAFF_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@REIMB_STAFF_NAME", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },                        
+                        new SqlParameter("@REIMB_STAFF_NAME", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REASON", SqlDbType.NVarChar) { Size = 4000 , Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@FINANC_AUDIT_ID_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -431,10 +495,10 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@BFCY_EMAIL", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     };
 
-                    if(String.IsNullOrEmpty(model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT) || String.IsNullOrWhiteSpace(model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT))
+                    if (String.IsNullOrEmpty(model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT) || String.IsNullOrWhiteSpace(model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT))
                     {
-                        if(model.EXPENSES_REIMBURSE_CONFIG.AMOUNT_CONV_TOTAL>=30000) model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT=true.ToString().ToLower();
-                        else model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT=false.ToString().ToLower();
+                        if (model.EXPENSES_REIMBURSE_CONFIG.AMOUNT_CONV_TOTAL >= 30000) model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT = true.ToString().ToLower();
+                        else model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT = false.ToString().ToLower();
                     }
 
                     //寫入：費用申請單 表單內容parameter                        
@@ -448,7 +512,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [REIMB_StaffDeptID]=@REIMB_STAFF_DEPT_ID, ";
                     strSQL += "     [REIMB_StaffDeptName]=@REIMB_STAFF_DEPT_NAME, ";
                     strSQL += "     [REIMB_StaffID]=@REIMB_STAFF_ID, ";
-                    strSQL += "     [REIMB_StaffName]=@REIMB_STAFF_NAME, ";                    
+                    strSQL += "     [REIMB_StaffName]=@REIMB_STAFF_NAME, ";
                     strSQL += "     [Reason]=@REASON, ";
                     strSQL += "     [Note]=@NOTE, ";
                     strSQL += "     [FinancAuditID_1]=@FINANC_AUDIT_ID_1, ";
@@ -458,7 +522,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [Amount_CONV_Total]=@AMOUNT_CONV_TOTAL, ";
                     strSQL += "     [PayMethod]=@PAY_METHOD, ";
                     strSQL += "     [AccountCategory]=@ACCOUNT_CATEGORY,";
-                    strSQL += "     [PaymentObject]=@PAYMENT_OBJECT,";                    
+                    strSQL += "     [PaymentObject]=@PAYMENT_OBJECT,";
                     strSQL += "     [TX_Category]=@TX_CATEGORY, ";
                     strSQL += "     [BFCY_AccountNo]=@BFCY_ACCOUNT_NO, ";
                     strSQL += "     [BFCY_AccountName]=@BFCY_ACCOUNT_NAME, ";
@@ -587,6 +651,167 @@ namespace OA_WEB_API.Repository.BPMPro
                 }
 
                 #endregion
+
+                var parameterLatterHalf = new List<SqlParameter>()
+                {
+                    //費用申請單 小計、已預支、應退、應付
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                };
+
+                #region - 費用申請單 小計：ExpensesReimburse_SUM -
+
+                if (model.EXPENSES_REIMBURSE_SUMS_CONFIG != null && model.EXPENSES_REIMBURSE_SUMS_CONFIG.Count > 0)
+                {
+                    #region 先刪除舊資料
+
+                    strSQL = "";
+                    strSQL += "DELETE ";
+                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_SUM] ";
+                    strSQL += "WHERE 1=1 ";
+                    strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                    dbFun.DoTran(strSQL, parameterLatterHalf);
+
+                    #endregion
+
+                    model.EXPENSES_REIMBURSE_SUMS_CONFIG.ForEach(SUM =>
+                    {
+                        parameterLatterHalf.Add(new SqlParameter("@CURRENCY", SqlDbType.VarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value });
+                        parameterLatterHalf.Add(new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value });
+
+                        //寫入：費用申請單 小計parameter
+                        strJson = jsonFunction.ObjectToJSON(SUM);
+                        GlobalParameters.Infoparameter(strJson, parameterLatterHalf);
+
+                        strSQL = "";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_SUM]([RequisitionID],[Currency],[Amount]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@CURRENCY,@AMOUNT) ";
+
+                        dbFun.DoTran(strSQL, parameterLatterHalf);
+
+                        parameterLatterHalf.Remove(parameterLatterHalf.Where(SP => SP.ParameterName.Contains("@CURRENCY")).FirstOrDefault());
+                        parameterLatterHalf.Remove(parameterLatterHalf.Where(SP => SP.ParameterName.Contains("@AMOUNT")).FirstOrDefault());
+                    });
+                }
+
+                #endregion
+
+                #region - 費用申請單 已預支：ExpensesReimburse_ADV -
+
+                if (model.EXPENSES_REIMBURSE_ADVS_CONFIG != null && model.EXPENSES_REIMBURSE_ADVS_CONFIG.Count > 0)
+                {
+                    #region 先刪除舊資料
+
+                    strSQL = "";
+                    strSQL += "DELETE ";
+                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_ADV] ";
+                    strSQL += "WHERE 1=1 ";
+                    strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                    dbFun.DoTran(strSQL, parameterLatterHalf);
+
+                    #endregion
+
+                    model.EXPENSES_REIMBURSE_ADVS_CONFIG.ForEach(ADV =>
+                    {
+                        parameterLatterHalf.Add(new SqlParameter("@CURRENCY", SqlDbType.VarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value });
+                        parameterLatterHalf.Add(new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value });
+
+                        //寫入：費用申請單 已預支parameter
+                        strJson = jsonFunction.ObjectToJSON(ADV);
+                        GlobalParameters.Infoparameter(strJson, parameterLatterHalf);
+
+                        strSQL = "";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_ADV]([RequisitionID],[Currency],[Amount]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@CURRENCY,@AMOUNT) ";
+
+                        dbFun.DoTran(strSQL, parameterLatterHalf);
+
+                        parameterLatterHalf.Remove(parameterLatterHalf.Where(SP => SP.ParameterName.Contains("@CURRENCY")).FirstOrDefault());
+                        parameterLatterHalf.Remove(parameterLatterHalf.Where(SP => SP.ParameterName.Contains("@AMOUNT")).FirstOrDefault());
+                    });
+                }
+
+                #endregion
+
+                #region - 費用申請單 應退(退還財務)：ExpensesReimburse_FA -
+
+                if (model.EXPENSES_REIMBURSE_FAS_CONFIG != null && model.EXPENSES_REIMBURSE_FAS_CONFIG.Count > 0)
+                {
+                    #region 先刪除舊資料
+
+                    strSQL = "";
+                    strSQL += "DELETE ";
+                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_FA] ";
+                    strSQL += "WHERE 1=1 ";
+                    strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                    dbFun.DoTran(strSQL, parameterLatterHalf);
+
+                    #endregion
+
+                    model.EXPENSES_REIMBURSE_FAS_CONFIG.ForEach(AR =>
+                    {
+                        parameterLatterHalf.Add(new SqlParameter("@CURRENCY", SqlDbType.VarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value });
+                        parameterLatterHalf.Add(new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value });
+
+                        //寫入：費用申請單 應退parameter
+                        strJson = jsonFunction.ObjectToJSON(AR);
+                        GlobalParameters.Infoparameter(strJson, parameterLatterHalf);
+
+                        strSQL = "";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_FA]([RequisitionID],[Currency],[Amount]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@CURRENCY,@AMOUNT) ";
+
+                        dbFun.DoTran(strSQL, parameterLatterHalf);
+
+                        parameterLatterHalf.Remove(parameterLatterHalf.Where(SP => SP.ParameterName.Contains("@CURRENCY")).FirstOrDefault());
+                        parameterLatterHalf.Remove(parameterLatterHalf.Where(SP => SP.ParameterName.Contains("@AMOUNT")).FirstOrDefault());
+                    });
+                }
+
+                #endregion
+
+                #region - 費用申請單 應付(付給使用者)：ExpensesReimburse_UA -
+
+                if (model.EXPENSES_REIMBURSE_UAS_CONFIG != null && model.EXPENSES_REIMBURSE_UAS_CONFIG.Count > 0)
+                {
+                    #region 先刪除舊資料
+
+                    strSQL = "";
+                    strSQL += "DELETE ";
+                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_UA] ";
+                    strSQL += "WHERE 1=1 ";
+                    strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                    dbFun.DoTran(strSQL, parameterLatterHalf);
+
+                    #endregion
+
+                    model.EXPENSES_REIMBURSE_UAS_CONFIG.ForEach(UA =>
+                    {
+                        parameterLatterHalf.Add(new SqlParameter("@CURRENCY", SqlDbType.VarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value });
+                        parameterLatterHalf.Add(new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value });
+
+                        //寫入：費用申請單 應退parameter
+                        strJson = jsonFunction.ObjectToJSON(UA);
+                        GlobalParameters.Infoparameter(strJson, parameterLatterHalf);
+
+                        strSQL = "";
+                        strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_UA] ";
+                        strSQL += "SET [Currency] =@CURRENCY, ";
+                        strSQL += "     [Amount]=@AMOUNT ";
+                        strSQL += "WHERE 1=1 ";
+                        strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+
+                        dbFun.DoTran(strSQL, parameterLatterHalf);
+
+                        parameterLatterHalf.Remove(parameterLatterHalf.Where(SP => SP.ParameterName.Contains("@CURRENCY")).FirstOrDefault());
+                        parameterLatterHalf.Remove(parameterLatterHalf.Where(SP => SP.ParameterName.Contains("@AMOUNT")).FirstOrDefault());
+                    });
+                }
+
+                #endregion                
 
                 #region - 費用申請單 表單關聯：AssociatedForm -
 

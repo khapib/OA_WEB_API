@@ -278,6 +278,7 @@
     <Compile Include="Models\BPMPro\PersonnelSupplementModel.cs" />
     <Compile Include="Models\BPMPro\ProjectReviewModel.cs" />
     <Compile Include="Models\BPMPro\ResignUnpaidLeaveAgendaModel.cs" />
+    <Compile Include="Models\BPMPro\StaffTravellingExpensesModel.cs" />
     <Compile Include="Models\BPMPro\SupplierReviewModel.cs" />
     <Compile Include="Models\BPMPro\TestModel.cs" />
     <Compile Include="Models\BPMPro\CommonModel.cs" />
@@ -322,6 +323,7 @@
     <Compile Include="Repository\BPMPro\PersonnelSupplementRepository.cs" />
     <Compile Include="Repository\BPMPro\ProjectReviewRepository.cs" />
     <Compile Include="Repository\BPMPro\ResignUnpaidLeaveAgendaRepository.cs" />
+    <Compile Include="Repository\BPMPro\StaffTravellingExpensesRepository.cs" />
     <Compile Include="Repository\BPMPro\SupplierReviewRepository.cs" />
     <Compile Include="Repository\BPMPro\UserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

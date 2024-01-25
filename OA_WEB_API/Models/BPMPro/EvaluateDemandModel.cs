@@ -41,6 +41,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>窗口</summary>
         public string CONTACT_PERSON { get; set; }
 
+        /// <summary>是否跳關</summary>
+        public Nullable<Boolean> IS_JUMP { get; set; }
+
         /// <summary>評估</summary>
         public string EVALUATE { get; set; }
 

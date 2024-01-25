@@ -244,7 +244,9 @@ namespace OA_WEB_API.Models.BPMPro
         public string NOTE { get; set; }
     }
 
-
+    /// <summary>
+    /// 行政採購申請 憑證細項 設定
+    /// </summary>
     public class GeneralInvoiceInvoiceDetailsConfig : InvoiceDetailConfig
     {
         /// <summary>期別</summary>

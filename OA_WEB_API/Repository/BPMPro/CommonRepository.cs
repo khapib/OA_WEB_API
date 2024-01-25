@@ -1573,6 +1573,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         strField_V = "@PERIOD, ";
                         break;
                     case "ExpensesReimburse":
+                    case "StaffTravellingExpenses":
                         strField_F = "[RowNo], ";
                         strField_V = "@ROW_NO, ";
                         break;
@@ -1819,6 +1820,102 @@ namespace OA_WEB_API.Repository.BPMPro
         }
 
         #endregion
+
+        #endregion
+
+        #region - 費用流程 -
+
+        /// <summary>
+        /// 費用流程主表_後半部(查詢)
+        /// </summary>
+        public List<T> PostExpensesReimburseProcessLatterHalfFunction<T>(BPMCommonModel<T> Common)
+        {            
+            try
+            {
+                #region - 宣告 -
+
+                strTable = Common.IDENTIFY + "_" + Common.EXT;
+
+                #endregion
+
+                strSQL = "";
+                strSQL += "SELECT ";
+                strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
+                strSQL += "     [Currency] AS [CURRENCY], ";
+                strSQL += "     [Amount] AS [AMOUNT] ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + strTable + "] ";
+                strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
+                strSQL += "ORDER BY [AutoCounter] ";
+
+                return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<ExpensesReimburseProcessLatterHalfConfig>();
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("【費用流程主表_後半】執行失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 費用流程主表_後半部(新增/修改/草稿)
+        /// </summary>
+        public bool PutExpensesReimburseProcessLatterHalfFunction<T>(BPMCommonModel<T> Common)
+        {
+            bool vResult = false;
+            try
+            {
+                #region - 宣告 -
+
+                strTable = Common.IDENTIFY + "_" + Common.EXT;
+
+                #endregion
+
+                #region 先刪除舊資料
+
+                strSQL = "";
+                strSQL += "DELETE ";
+                strSQL += "FROM [BPMPro].[dbo].[FM7T_" + strTable + "] ";
+                strSQL += "WHERE 1=1 ";
+                strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
+
+                dbFun.DoTran(strSQL, Common.PARAMETER);
+
+                #endregion
+
+                if (Common.MODEL != null && Common.MODEL.Count > 0)
+                {
+                    #region 再新增資料
+
+                    foreach (var item in Common.MODEL)
+                    {
+                        Common.PARAMETER.Add(new SqlParameter("@CURRENCY", SqlDbType.VarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value });
+                        Common.PARAMETER.Add(new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value });
+
+                        //寫入：parameter
+                        strJson = jsonFunction.ObjectToJSON(item);
+                        GlobalParameters.Infoparameter(strJson, Common.PARAMETER);
+
+                        strSQL = "";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "]([RequisitionID],[Currency],[Amount]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@CURRENCY,@AMOUNT) ";
+
+                        Common.PARAMETER.Remove(Common.PARAMETER.Where(SP => SP.ParameterName.Contains("@CURRENCY")).FirstOrDefault());
+                        Common.PARAMETER.Remove(Common.PARAMETER.Where(SP => SP.ParameterName.Contains("@AMOUNT")).FirstOrDefault());
+                    }
+
+                    #endregion
+                }
+
+                vResult = true;                
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("【費用流程主表_後半】執行失敗，原因：" + ex.Message);
+                throw;
+            }
+
+            return vResult;
+        }
 
         #endregion
 

@@ -16,7 +16,7 @@
 //    {
 //        #region - 宣告 -
 
-//        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProDev);
+//        dbFunction dbFun = new dbFunction(GlobalParameters.sqlConnBPMProTest);
 
 //        #region Repository
 

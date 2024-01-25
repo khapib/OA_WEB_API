@@ -500,6 +500,22 @@ namespace OA_WEB_API.Models.BPMPro
         public List<T> MODEL { get; set; }
     }
 
+    #region - 費用流程 -
+
+    /// <summary>
+    /// 費用流程_主表_後半部 設定
+    /// </summary>
+    public class ExpensesReimburseProcessLatterHalfConfig
+    {
+        /// <summary>幣別</summary>
+        public string CURRENCY { get; set; }
+
+        /// <summary>金額</summary>
+        public double AMOUNT { get; set; }
+    }
+
+    #endregion
+
     #region - 會簽簽核人員 -
 
     /// <summary>

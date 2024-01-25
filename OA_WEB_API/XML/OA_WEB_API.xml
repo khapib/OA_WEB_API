@@ -2899,11 +2899,11 @@
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_ADVS_CONFIG">
             <summary>費用申請單 已預支 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_ARS_CONFIG">
-            <summary>費用申請單 應退 設定</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_FAS_CONFIG">
+            <summary>費用申請單 應退(退還財務) 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_APS_CONFIG">
-            <summary>費用申請單 應付 設定</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_UAS_CONFIG">
+            <summary>費用申請單 應付(付給使用者) 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.ASSOCIATED_FORM_CONFIG">
             <summary>表單關聯</summary>
@@ -3029,17 +3029,6 @@
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseBudgetsConfig.ROW_NO">
             <summary>行數編號</summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseLatterHalfConfig">
-            <summary>
-            費用申請單 M表 後半部 設定
-            </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseLatterHalfConfig.CURRENCY">
-            <summary>幣別</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseLatterHalfConfig.AMOUNT">
-            <summary>金額</summary>
-        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseSumsConfig">
             <summary>
             費用申請單 小計 設定
@@ -3050,14 +3039,14 @@
             費用申請單 已預支 設定
             </summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseRefundablesConfig">
+        <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseFinancAmountsConfig">
             <summary>
-            費用申請單 應退 設定
+            費用申請單 應退(退還財務) 設定
             </summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimbursePayablesConfig">
+        <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseUserAmountsConfig">
             <summary>
-            費用申請單 應付 設定
+            費用申請單 應付(付給使用者) 設定
             </summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GeneralAcceptanceQueryModel">
@@ -3421,6 +3410,11 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceInvoicesConfig.NOTE">
             <summary>備註</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.GeneralInvoiceInvoiceDetailsConfig">
+            <summary>
+            行政採購申請 憑證細項 設定
+            </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.GeneralInvoiceInvoiceDetailsConfig.PERIOD">
             <summary>期別</summary>
@@ -7516,6 +7510,205 @@
         <member name="P:OA_WEB_API.Models.BPMPro.NewAffairsConfig.PARAMETER">
             <summary>SqlParameter</summary>
         </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesQueryModel">
+            <summary>
+            差旅費用報支單(查詢條件)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesQueryModel.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel">
+            <summary>
+            差旅費用報支單
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.APPLICANT_INFO">
+            <summary>申請人資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.STAFF_TRAVELLING_EXPENSES_TITLE">
+            <summary>差旅費用報支單 表頭資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.STAFF_TRAVELLING_EXPENSES_CONFIG">
+            <summary>差旅費用報支單 表單內容 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.STAFF_TRAVELLING_EXPENSES_DTLS_CONFIG">
+            <summary>差旅費用報支單 差旅明細 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.STAFF_TRAVELLING_EXPENSES_INV_DTLS_CONFIG">
+            <summary>差旅費用報支單 憑證明細 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.STAFF_TRAVELLING_EXPENSE_BUDGS_CONFIG">
+            <summary>差旅費用報支單 使用預算 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.STAFF_TRAVELLING_EXPENSES_SUMS_CONFIG">
+            <summary>差旅費用報支單 小計 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.STAFF_TRAVELLING_EXPENSES_ADVS_CONFIG">
+            <summary>差旅費用報支單 已預支 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.STAFF_TRAVELLING_EXPENSES_FAS_CONFIG">
+            <summary>差旅費用報支單 應退(退還財務) 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.STAFF_TRAVELLING_EXPENSES_UAS_CONFIG">
+            <summary>差旅費用報支單 應付(付給使用者) 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.ASSOCIATED_FORM_CONFIG">
+            <summary>表單關聯</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesTitle">
+            <summary>
+            差旅費用報支單 表頭資訊
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesTitle.FLOW_NAME">
+            <summary>ERP 工作流程標題名稱</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesConfig">
+            <summary>
+            差旅費用報支單 表單內容 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesConfig.IS_CFO">
+            <summary>是否過協理</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesConfig.TRAVELLING_STAFFS">
+            <summary>出差人員</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesConfig.REASON">
+            <summary>申請源由</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesConfig.NOTE">
+            <summary>備註</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesConfig.REFUND_MODE">
+            <summary>退款方式</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesConfig.AMOUNT_CONV_TOTAL">
+            <summary>換算台幣 合計</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesConfig.FINANC_AUDIT_ID_1">
+            <summary>財務審核人員編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesConfig.FINANC_AUDIT_NAME_1">
+            <summary>財務審核人員姓名</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesConfig.FINANC_AUDIT_ID_2">
+            <summary>財務覆核人員編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesConfig.FINANC_AUDIT_NAME_2">
+            <summary>財務覆核人員姓名</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig">
+            <summary>
+            差旅費用報支單 差旅明細 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.ROW_NO">
+            <summary>行數編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.TRAVELLING_DATE">
+            <summary>行程日期</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.PLACE">
+            <summary>起訖地點</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.PAYER">
+            <summary>付款人</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.PROJECT_FORM_NO">
+            <summary>所屬專案 ERP 單號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.PROJECT_NAME">
+            <summary>所屬專案名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.PROJECT_NICKNAME">
+            <summary>所屬專案描述</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.PROJECT_USE_YEAR">
+            <summary>所屬專案年分</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.NOTE">
+            <summary>備註</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.INV_ROW_NO">
+            <summary>憑證行數編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.INV_TYPE">
+            <summary>憑證類型</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.NUM">
+            <summary>憑證號碼</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.DATE">
+            <summary>憑證日期</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.AMOUNT">
+            <summary>項目金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.AMOUNT_CONV">
+            <summary>換算台幣</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.CURRENCY">
+            <summary>幣別</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.EXCH_RATE">
+            <summary>匯率</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.INV_NOTE">
+            <summary>憑證附件</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesInvoiceDetailsConfig">
+            <summary>
+            差旅費用報支單 憑證細項 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesInvoiceDetailsConfig.ROW_NO">
+            <summary>行數編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesInvoiceDetailsConfig.INV_ROW_NO">
+            <summary>憑證行數編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesInvoiceDetailsConfig.NUM">
+            <summary>憑證號碼</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesInvoiceDetailsConfig.NAME">
+            <summary>名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesInvoiceDetailsConfig.AMOUNT">
+            <summary>金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesInvoiceDetailsConfig.AMOUNT_TWD">
+            <summary>金額_台幣</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesBudgetsConfig">
+            <summary>
+            差旅費用報支單 使用預算 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesBudgetsConfig.ROW_NO">
+            <summary>行數編號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesSumsConfig">
+            <summary>
+            差旅費用報支單 小計 設定
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesAdvancesConfig">
+            <summary>
+            差旅費用報支單 已預支 設定
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesFinancAmountsConfig">
+            <summary>
+            差旅費用報支單 應退(退還財務) 設定
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesUserAmountsConfig">
+            <summary>
+            差旅費用報支單 應付(付給使用者) 設定
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.SupplierReviewQueryModel">
             <summary>
             合作夥伴審核單(查詢條件)
@@ -8327,6 +8520,17 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.MODEL">
             <summary>Models</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseProcessLatterHalfConfig">
+            <summary>
+            費用流程_主表_後半部 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseProcessLatterHalfConfig.CURRENCY">
+            <summary>幣別</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseProcessLatterHalfConfig.AMOUNT">
+            <summary>金額</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ApproversConfig">
             <summary>
@@ -11879,6 +12083,16 @@
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PutMediaCommodityFunction``1(OA_WEB_API.Models.BPMPro.BPMCommonModel{``0})">
             <summary>
             (已退貨/退貨)版權商品_共用模組(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostExpensesReimburseProcessLatterHalfFunction``1(OA_WEB_API.Models.BPMPro.BPMCommonModel{``0})">
+            <summary>
+            費用流程主表_後半部(查詢)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PutExpensesReimburseProcessLatterHalfFunction``1(OA_WEB_API.Models.BPMPro.BPMCommonModel{``0})">
+            <summary>
+            費用流程主表_後半部(新增/修改/草稿)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.GetRoles">

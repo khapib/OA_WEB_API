@@ -744,6 +744,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AVAILABLE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@USE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 if (model.GENERAL_ORDER_BUDGETS_CONFIG != null && model.GENERAL_ORDER_BUDGETS_CONFIG.Count > 0)

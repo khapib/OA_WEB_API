@@ -1144,6 +1144,21 @@
             員工離職/留職停薪手續表(事項交接)
             </summary>
         </member>
+        <member name="T:OA_WEB_API.Controllers.BPMPro.StaffTravellingExpensesController">
+            <summary>
+            會簽管理系統 - 差旅費用報支單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.StaffTravellingExpensesController.PostStaffTravellingExpensesSingle(OA_WEB_API.Models.BPMPro.StaffTravellingExpensesQueryModel)">
+            <summary>
+            差旅費用報支單(查詢)
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.StaffTravellingExpensesController.PutStaffTravellingExpensesSingle(OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel)">
+            <summary>
+            差旅費用報支單(新增/修改/草稿)
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.SupplierReviewController">
             <summary>
             會簽管理系統 - 合作夥伴審核單
@@ -2288,6 +2303,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel.ADVANCE_EXPENSE_DTLS_CONFIG">
             <summary>預支費用申請單 預知明細 設定</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel.ADVANCE_EXPENSE_SUMS_CONFIG">
+            <summary>預支費用申請單 小計 設定</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel.ASSOCIATED_FORM_CONFIG">
             <summary>表單關聯</summary>
         </member>
@@ -2378,6 +2396,11 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.PAYMENT_OBJECT">
             <summary>支付對象</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.AdvanceExpenseSumsConfig">
+            <summary>
+            預支費用申請單 小計 設定
+            </summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseQueryModel">
             <summary>
@@ -6518,27 +6541,6 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.PERIOD">
             <summary>期別</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.BUDG_FORM_NO">
-            <summary>預算 ERP唯一碼</summary>        
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.BUDG_CREATE_YEAR">
-            <summary>預算編列年度</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.BUDG_NAME">
-            <summary>預算名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.OWNER_DEPT">
-            <summary>所屬部門</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.BUDG_TOTAL">
-            <summary>預算總額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.BUDG_AVAILABLE_BUDGET_AMOUNT">
-            <summary>可用預算金額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.BUDG_USE_BUDGET_AMOUNT">
-            <summary>使用預算金額</summary>
-        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaSaleDeliverysConfig">
             <summary>
             版權銷售申請單 交付項目 設定
@@ -8654,7 +8656,7 @@
             <summary>憑證金額</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.InvoiceConfig.AMOUNT_TWD">
-            <summary>憑證金額</summary>
+            <summary>憑證金額_台幣</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.InvoiceDetailConfig">
             <summary>
@@ -8777,6 +8779,9 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.BudgetConfig.USE_BUDGET_AMOUNT">
             <summary>使用預算金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.BudgetConfig.FILLER_ID">
+            <summary>選取人員工編號</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.Base64ImgSingletoSingleModel">
             <summary>
@@ -11897,6 +11902,51 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.ResignUnpaidLeaveAgendaRepository.ItemNameDic">
             <summary>
             承辦事項
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Repository.BPMPro.StaffTravellingExpensesRepository">
+            <summary>
+            會簽管理系統 - 差旅費用報支單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.StaffTravellingExpensesRepository.PostStaffTravellingExpensesSingle(OA_WEB_API.Models.BPMPro.StaffTravellingExpensesQueryModel)">
+            <summary>
+            差旅費用報支單(查詢)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.StaffTravellingExpensesRepository.PutStaffTravellingExpensesSingle(OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel)">
+            <summary>
+            差旅費用報支單(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.StaffTravellingExpensesRepository.strSQL">
+            <summary>
+            T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.StaffTravellingExpensesRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.StaffTravellingExpensesRepository.IDENTIFY">
+            <summary>
+            表單代號
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.StaffTravellingExpensesRepository.FM7Subject">
+            <summary>
+            表單主旨
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.StaffTravellingExpensesRepository.strJson">
+            <summary>
+            Json字串
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.StaffTravellingExpensesRepository.strREQ">
+            <summary>
+            系統編號
             </summary>
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.SupplierReviewRepository">

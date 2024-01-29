@@ -33,6 +33,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>預支費用申請單 預知明細 設定</summary>
         public IList<AdvanceExpenseDetailsConfig> ADVANCE_EXPENSE_DTLS_CONFIG { get; set; }
 
+        /// <summary>預支費用申請單 小計 設定</summary>
+        public List<AdvanceExpenseSumsConfig> ADVANCE_EXPENSE_SUMS_CONFIG { get; set; }
+
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
 
@@ -127,5 +130,13 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>支付對象</summary>
         public string PAYMENT_OBJECT { get; set; }
+    }
+
+    /// <summary>
+    /// 預支費用申請單 小計 設定
+    /// </summary>
+    public class AdvanceExpenseSumsConfig : ExpensesReimburseProcessLatterHalfConfig
+    {
+
     }
 }

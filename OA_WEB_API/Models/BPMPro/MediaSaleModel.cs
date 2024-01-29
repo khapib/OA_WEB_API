@@ -48,7 +48,7 @@ namespace OA_WEB_API.Models.BPMPro
         public IList<MediaSaleCollectionsConfig> MEDIA_SALE_COLLS_CONFIG { get; set; }
 
         /// <summary>版權銷售申請單 使用預算 設定</summary>
-        public IList<MediaSaleBudgetsConfig> MEDIA_SALE_BUDGS_CONFIG { get; set; }
+        public List<MediaSaleBudgetsConfig> MEDIA_SALE_BUDGS_CONFIG { get; set; }
 
         /// <summary>版權銷售申請單 交付項目 設定</summary>
         public IList<MediaSaleDeliverysConfig> MEDIA_SALE_DELYS_CONFIG { get; set; }
@@ -446,31 +446,10 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 版權銷售申請單 使用預算 設定
     /// </summary>
-    public class MediaSaleBudgetsConfig
+    public class MediaSaleBudgetsConfig : BudgetConfig
     {
         /// <summary>期別</summary>
         public int PERIOD { get; set; }
-
-        /// <summary>預算 ERP唯一碼</summary>        
-        public string BUDG_FORM_NO { get; set; }
-
-        /// <summary>預算編列年度</summary>
-        public string BUDG_CREATE_YEAR { get; set; }
-
-        /// <summary>預算名稱</summary>
-        public string BUDG_NAME { get; set; }
-
-        /// <summary>所屬部門</summary>
-        public string OWNER_DEPT { get; set; }
-
-        /// <summary>預算總額</summary>
-        public int BUDG_TOTAL { get; set; }
-
-        /// <summary>可用預算金額</summary>
-        public int BUDG_AVAILABLE_BUDGET_AMOUNT { get; set; }
-
-        /// <summary>使用預算金額</summary>
-        public int BUDG_USE_BUDGET_AMOUNT { get; set; }
     }
 
     /// <summary>

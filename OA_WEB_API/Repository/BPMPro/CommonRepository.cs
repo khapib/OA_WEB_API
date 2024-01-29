@@ -1512,12 +1512,14 @@ namespace OA_WEB_API.Repository.BPMPro
                 //case "GeneralOrderReturnRefund":
                 //由GeneralOrder(查詢)後LINQ篩選PERIOD。
                 case "MediaOrder":
-                    //case "MediaInvoice": 
-                    //case "MediaOrderReturnRefund":
-                    //由MediaOrder(查詢)後LINQ篩選PERIOD。
+                //case "MediaInvoice": 
+                //case "MediaOrderReturnRefund":
+                //由MediaOrder(查詢)後LINQ篩選PERIOD。
+                case "MediaSale":
                     strField_V = "[Period] AS [PERIOD], ";
                     break;
                 case "ExpensesReimburse":
+                case "StaffTravellingExpenses":
                     strField_V = "[RowNo] AS[ROW_NO], ";
                     break;
                 default:
@@ -1538,7 +1540,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [OwnerDept] AS [OWNER_DEPT], ";
             strSQL += "     [Total] AS [TOTAL], ";
             strSQL += "     [AvailableBudgetAmount] AS [AVAILABLE_BUDGET_AMOUNT], ";
-            strSQL += "     [UseBudgetAmount] AS [USE_BUDGET_AMOUNT] ";
+            strSQL += "     [UseBudgetAmount] AS [USE_BUDGET_AMOUNT], ";
+            strSQL += "     [FillerID] AS [FILLER_ID] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_" + strTable + "] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
@@ -1548,6 +1551,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 case "GeneralOrder": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<GeneralOrderBudgetsConfig>();
                 case "MediaOrder": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<MediaOrderBudgetsConfig>();
                 case "ExpensesReimburse": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<ExpensesReimburseBudgetsConfig>();
+                case "StaffTravellingExpenses": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<StaffTravellingExpensesBudgetsConfig>();
                 default: return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<BudgetConfig>();
             }
 
@@ -1569,6 +1573,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     case "GeneralOrder":
                     case "MediaOrder":
+                    case "MediaSale":
                         strField_F = "[Period], ";
                         strField_V = "@PERIOD, ";
                         break;
@@ -1617,8 +1622,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, Common.PARAMETER);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "]([RequisitionID]," + strField_F + "[FormNo],[CreateYear],[Name],[OwnerDept],[Total],[AvailableBudgetAmount],[UseBudgetAmount]) ";
-                        strSQL += "VALUES(@REQUISITION_ID," + strField_V + "@FORM_NO,@CREATE_YEAR,@NAME,@OWNER_DEPT,@TOTAL,@AVAILABLE_BUDGET_AMOUNT,@USE_BUDGET_AMOUNT) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "]([RequisitionID]," + strField_F + "[FormNo],[CreateYear],[Name],[OwnerDept],[Total],[AvailableBudgetAmount],[UseBudgetAmount],[FillerID]) ";
+                        strSQL += "VALUES(@REQUISITION_ID," + strField_V + "@FORM_NO,@CREATE_YEAR,@NAME,@OWNER_DEPT,@TOTAL,@AVAILABLE_BUDGET_AMOUNT,@USE_BUDGET_AMOUNT,@FILLER_ID) ";
 
                         dbFun.DoTran(strSQL, Common.PARAMETER);
 
@@ -1828,7 +1833,7 @@ namespace OA_WEB_API.Repository.BPMPro
         /// <summary>
         /// 費用流程主表_後半部(查詢)
         /// </summary>
-        public List<T> PostExpensesReimburseProcessLatterHalfFunction<T>(BPMCommonModel<T> Common)
+        public IList<ExpensesReimburseProcessLatterHalfConfig> PostExpensesReimburseProcessLatterHalfFunction<T>(BPMCommonModel<T> Common)
         {            
             try
             {
@@ -1847,7 +1852,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
                 strSQL += "ORDER BY [AutoCounter] ";
 
-                return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<ExpensesReimburseProcessLatterHalfConfig>();
+                return dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<ExpensesReimburseProcessLatterHalfConfig>();
             }
             catch (Exception ex)
             {
@@ -1898,6 +1903,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         strSQL = "";
                         strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "]([RequisitionID],[Currency],[Amount]) ";
                         strSQL += "VALUES(@REQUISITION_ID,@CURRENCY,@AMOUNT) ";
+
+                        dbFun.DoTran(strSQL, Common.PARAMETER);
 
                         Common.PARAMETER.Remove(Common.PARAMETER.Where(SP => SP.ParameterName.Contains("@CURRENCY")).FirstOrDefault());
                         Common.PARAMETER.Remove(Common.PARAMETER.Where(SP => SP.ParameterName.Contains("@AMOUNT")).FirstOrDefault());

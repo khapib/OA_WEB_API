@@ -140,61 +140,53 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #region - 費用申請單 小計 -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [Currency] AS [CURRENCY], ";
-            strSQL += "     [Amount] AS [AMOUNT] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_SUM] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "ORDER BY [AutoCounter] ";
-
-            var expensesReimburseSumsConfig = dbFun.DoQuery(strSQL, parameter).ToList<ExpensesReimburseSumsConfig>().ToList();
+            var CommonSUM = new BPMCommonModel<ExpensesReimburseSumsConfig>()
+            {
+                EXT = "SUM",
+                IDENTIFY = IDENTIFY,
+                PARAMETER = parameter
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostExpensesReimburseProcessLatterHalfFunction(CommonSUM));
+            var expensesReimburseSumsConfig = jsonFunction.JsonToObject<List<ExpensesReimburseSumsConfig>>(strJson);
 
             #endregion
 
             #region - 費用申請單 已預支 -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [Currency] AS [CURRENCY], ";
-            strSQL += "     [Amount] AS [AMOUNT] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_ADV] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "ORDER BY [AutoCounter] ";
-
-            var expensesReimburseAdvancesConfig = dbFun.DoQuery(strSQL, parameter).ToList<ExpensesReimburseAdvancesConfig>().ToList();
+            var CommonADV = new BPMCommonModel<ExpensesReimburseAdvancesConfig>()
+            {
+                EXT = "ADV",
+                IDENTIFY = IDENTIFY,
+                PARAMETER = parameter
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostExpensesReimburseProcessLatterHalfFunction(CommonADV));
+            var expensesReimburseAdvancesConfig = jsonFunction.JsonToObject<List<ExpensesReimburseAdvancesConfig>>(strJson);
 
             #endregion
 
             #region - 費用申請單 應退(退還財務) -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [Currency] AS [CURRENCY], ";
-            strSQL += "     [Amount] AS [AMOUNT] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_FA] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "ORDER BY [AutoCounter] ";
-
-            var expensesReimburseFinancAmountsConfig = dbFun.DoQuery(strSQL, parameter).ToList<ExpensesReimburseFinancAmountsConfig>().ToList();
+            var CommonFA = new BPMCommonModel<ExpensesReimburseFinancAmountsConfig>()
+            {
+                EXT = "FA",
+                IDENTIFY = IDENTIFY,
+                PARAMETER = parameter
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostExpensesReimburseProcessLatterHalfFunction(CommonFA));
+            var expensesReimburseFinancAmountsConfig = jsonFunction.JsonToObject<List<ExpensesReimburseFinancAmountsConfig>>(strJson);
 
             #endregion
 
             #region - 費用申請單 應付(付給使用者) -
 
-            strSQL = "";
-            strSQL += "SELECT ";
-            strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
-            strSQL += "     [Currency] AS [CURRENCY], ";
-            strSQL += "     [Amount] AS [AMOUNT] ";
-            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_UA] ";
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "ORDER BY [AutoCounter] ";
-
-            var expensesReimburseUserAmountsConfig = dbFun.DoQuery(strSQL, parameter).ToList<ExpensesReimburseUserAmountsConfig>().ToList();
+            var CommonUA = new BPMCommonModel<ExpensesReimburseUserAmountsConfig>()
+            {
+                EXT = "UA",
+                IDENTIFY = IDENTIFY,
+                PARAMETER = parameter
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostExpensesReimburseProcessLatterHalfFunction(CommonUA));
+            var expensesReimburseUserAmountsConfig = jsonFunction.JsonToObject<List<ExpensesReimburseUserAmountsConfig>>(strJson);
 
             #endregion
 
@@ -636,6 +628,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AVAILABLE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@USE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 if (model.EXPENSES_REIMBURSE_BUDGS_CONFIG != null && model.EXPENSES_REIMBURSE_BUDGS_CONFIG.Count > 0)
@@ -662,36 +655,14 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (model.EXPENSES_REIMBURSE_SUMS_CONFIG != null && model.EXPENSES_REIMBURSE_SUMS_CONFIG.Count > 0)
                 {
-                    #region 先刪除舊資料
-
-                    strSQL = "";
-                    strSQL += "DELETE ";
-                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_SUM] ";
-                    strSQL += "WHERE 1=1 ";
-                    strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
-
-                    dbFun.DoTran(strSQL, parameterLatterHalf);
-
-                    #endregion
-
-                    model.EXPENSES_REIMBURSE_SUMS_CONFIG.ForEach(SUM =>
+                    var CommonSUM = new BPMCommonModel<ExpensesReimburseSumsConfig>()
                     {
-                        parameterLatterHalf.Add(new SqlParameter("@CURRENCY", SqlDbType.VarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value });
-                        parameterLatterHalf.Add(new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value });
-
-                        //寫入：費用申請單 小計parameter
-                        strJson = jsonFunction.ObjectToJSON(SUM);
-                        GlobalParameters.Infoparameter(strJson, parameterLatterHalf);
-
-                        strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_SUM]([RequisitionID],[Currency],[Amount]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@CURRENCY,@AMOUNT) ";
-
-                        dbFun.DoTran(strSQL, parameterLatterHalf);
-
-                        parameterLatterHalf.Remove(parameterLatterHalf.Where(SP => SP.ParameterName.Contains("@CURRENCY")).FirstOrDefault());
-                        parameterLatterHalf.Remove(parameterLatterHalf.Where(SP => SP.ParameterName.Contains("@AMOUNT")).FirstOrDefault());
-                    });
+                        EXT = "SUM",
+                        IDENTIFY = IDENTIFY,
+                        PARAMETER = parameterLatterHalf,
+                        MODEL = model.EXPENSES_REIMBURSE_SUMS_CONFIG
+                    };
+                    vResult = commonRepository.PutExpensesReimburseProcessLatterHalfFunction(CommonSUM);
                 }
 
                 #endregion
@@ -700,36 +671,14 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (model.EXPENSES_REIMBURSE_ADVS_CONFIG != null && model.EXPENSES_REIMBURSE_ADVS_CONFIG.Count > 0)
                 {
-                    #region 先刪除舊資料
-
-                    strSQL = "";
-                    strSQL += "DELETE ";
-                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_ADV] ";
-                    strSQL += "WHERE 1=1 ";
-                    strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
-
-                    dbFun.DoTran(strSQL, parameterLatterHalf);
-
-                    #endregion
-
-                    model.EXPENSES_REIMBURSE_ADVS_CONFIG.ForEach(ADV =>
+                    var CommonADV = new BPMCommonModel<ExpensesReimburseAdvancesConfig>()
                     {
-                        parameterLatterHalf.Add(new SqlParameter("@CURRENCY", SqlDbType.VarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value });
-                        parameterLatterHalf.Add(new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value });
-
-                        //寫入：費用申請單 已預支parameter
-                        strJson = jsonFunction.ObjectToJSON(ADV);
-                        GlobalParameters.Infoparameter(strJson, parameterLatterHalf);
-
-                        strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_ADV]([RequisitionID],[Currency],[Amount]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@CURRENCY,@AMOUNT) ";
-
-                        dbFun.DoTran(strSQL, parameterLatterHalf);
-
-                        parameterLatterHalf.Remove(parameterLatterHalf.Where(SP => SP.ParameterName.Contains("@CURRENCY")).FirstOrDefault());
-                        parameterLatterHalf.Remove(parameterLatterHalf.Where(SP => SP.ParameterName.Contains("@AMOUNT")).FirstOrDefault());
-                    });
+                        EXT = "ADV",
+                        IDENTIFY = IDENTIFY,
+                        PARAMETER = parameterLatterHalf,
+                        MODEL = model.EXPENSES_REIMBURSE_ADVS_CONFIG
+                    };
+                    if (vResult) vResult = commonRepository.PutExpensesReimburseProcessLatterHalfFunction(CommonADV);
                 }
 
                 #endregion
@@ -738,36 +687,14 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (model.EXPENSES_REIMBURSE_FAS_CONFIG != null && model.EXPENSES_REIMBURSE_FAS_CONFIG.Count > 0)
                 {
-                    #region 先刪除舊資料
-
-                    strSQL = "";
-                    strSQL += "DELETE ";
-                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_FA] ";
-                    strSQL += "WHERE 1=1 ";
-                    strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
-
-                    dbFun.DoTran(strSQL, parameterLatterHalf);
-
-                    #endregion
-
-                    model.EXPENSES_REIMBURSE_FAS_CONFIG.ForEach(AR =>
+                    var CommonFA = new BPMCommonModel<ExpensesReimburseFinancAmountsConfig>()
                     {
-                        parameterLatterHalf.Add(new SqlParameter("@CURRENCY", SqlDbType.VarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value });
-                        parameterLatterHalf.Add(new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value });
-
-                        //寫入：費用申請單 應退parameter
-                        strJson = jsonFunction.ObjectToJSON(AR);
-                        GlobalParameters.Infoparameter(strJson, parameterLatterHalf);
-
-                        strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_FA]([RequisitionID],[Currency],[Amount]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@CURRENCY,@AMOUNT) ";
-
-                        dbFun.DoTran(strSQL, parameterLatterHalf);
-
-                        parameterLatterHalf.Remove(parameterLatterHalf.Where(SP => SP.ParameterName.Contains("@CURRENCY")).FirstOrDefault());
-                        parameterLatterHalf.Remove(parameterLatterHalf.Where(SP => SP.ParameterName.Contains("@AMOUNT")).FirstOrDefault());
-                    });
+                        EXT = "FA",
+                        IDENTIFY = IDENTIFY,
+                        PARAMETER = parameterLatterHalf,
+                        MODEL = model.EXPENSES_REIMBURSE_FAS_CONFIG
+                    };
+                    if (vResult) vResult = commonRepository.PutExpensesReimburseProcessLatterHalfFunction(CommonFA);
                 }
 
                 #endregion
@@ -776,39 +703,14 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 if (model.EXPENSES_REIMBURSE_UAS_CONFIG != null && model.EXPENSES_REIMBURSE_UAS_CONFIG.Count > 0)
                 {
-                    #region 先刪除舊資料
-
-                    strSQL = "";
-                    strSQL += "DELETE ";
-                    strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_UA] ";
-                    strSQL += "WHERE 1=1 ";
-                    strSQL += "          AND [RequisitionID]=@REQUISITION_ID ";
-
-                    dbFun.DoTran(strSQL, parameterLatterHalf);
-
-                    #endregion
-
-                    model.EXPENSES_REIMBURSE_UAS_CONFIG.ForEach(UA =>
+                    var CommonUA = new BPMCommonModel<ExpensesReimburseUserAmountsConfig>()
                     {
-                        parameterLatterHalf.Add(new SqlParameter("@CURRENCY", SqlDbType.VarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value });
-                        parameterLatterHalf.Add(new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value });
-
-                        //寫入：費用申請單 應退parameter
-                        strJson = jsonFunction.ObjectToJSON(UA);
-                        GlobalParameters.Infoparameter(strJson, parameterLatterHalf);
-
-                        strSQL = "";
-                        strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_UA] ";
-                        strSQL += "SET [Currency] =@CURRENCY, ";
-                        strSQL += "     [Amount]=@AMOUNT ";
-                        strSQL += "WHERE 1=1 ";
-                        strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
-
-                        dbFun.DoTran(strSQL, parameterLatterHalf);
-
-                        parameterLatterHalf.Remove(parameterLatterHalf.Where(SP => SP.ParameterName.Contains("@CURRENCY")).FirstOrDefault());
-                        parameterLatterHalf.Remove(parameterLatterHalf.Where(SP => SP.ParameterName.Contains("@AMOUNT")).FirstOrDefault());
-                    });
+                        EXT = "UA",
+                        IDENTIFY = IDENTIFY,
+                        PARAMETER = parameterLatterHalf,
+                        MODEL = model.EXPENSES_REIMBURSE_UAS_CONFIG
+                    };
+                    if (vResult) vResult = commonRepository.PutExpensesReimburseProcessLatterHalfFunction(CommonUA);
                 }
 
                 #endregion                

@@ -216,6 +216,7 @@
     <Compile Include="Controllers\BPMPro\PersonnelSupplementController.cs" />
     <Compile Include="Controllers\BPMPro\ProjectReviewController.cs" />
     <Compile Include="Controllers\BPMPro\ResignUnpaidLeaveAgendaController.cs" />
+    <Compile Include="Controllers\BPMPro\StaffTravellingExpensesController.cs" />
     <Compile Include="Controllers\BPMPro\SupplierReviewController.cs" />
     <Compile Include="Controllers\BPMPro\TestController.cs" />
     <Compile Include="Controllers\BPMPro\RollCardController.cs" />

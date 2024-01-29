@@ -654,7 +654,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>憑證金額</summary>
         public double AMOUNT { get; set; }
 
-        /// <summary>憑證金額</summary>
+        /// <summary>憑證金額_台幣</summary>
         public int AMOUNT_TWD { get; set; }
     }
 
@@ -804,6 +804,9 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>使用預算金額</summary>
         public int USE_BUDGET_AMOUNT { get; set; }
+
+        /// <summary>選取人員工編號</summary>
+        public string FILLER_ID { get; set; }
     }
 
     #endregion

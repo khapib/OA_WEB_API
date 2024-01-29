@@ -1512,9 +1512,10 @@ namespace OA_WEB_API.Repository.BPMPro
                 //case "GeneralOrderReturnRefund":
                 //由GeneralOrder(查詢)後LINQ篩選PERIOD。
                 case "MediaOrder":
-                    //case "MediaInvoice": 
-                    //case "MediaOrderReturnRefund":
-                    //由MediaOrder(查詢)後LINQ篩選PERIOD。
+                //case "MediaInvoice": 
+                //case "MediaOrderReturnRefund":
+                //由MediaOrder(查詢)後LINQ篩選PERIOD。
+                case "MediaSale":
                     strField_V = "[Period] AS [PERIOD], ";
                     break;
                 case "ExpensesReimburse":
@@ -1572,6 +1573,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     case "GeneralOrder":
                     case "MediaOrder":
+                    case "MediaSale":
                         strField_F = "[Period], ";
                         strField_V = "@PERIOD, ";
                         break;

@@ -6541,27 +6541,6 @@
         <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.PERIOD">
             <summary>期別</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.BUDG_FORM_NO">
-            <summary>預算 ERP唯一碼</summary>        
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.BUDG_CREATE_YEAR">
-            <summary>預算編列年度</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.BUDG_NAME">
-            <summary>預算名稱</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.OWNER_DEPT">
-            <summary>所屬部門</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.BUDG_TOTAL">
-            <summary>預算總額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.BUDG_AVAILABLE_BUDGET_AMOUNT">
-            <summary>可用預算金額</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.MediaSaleBudgetsConfig.BUDG_USE_BUDGET_AMOUNT">
-            <summary>使用預算金額</summary>
-        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaSaleDeliverysConfig">
             <summary>
             版權銷售申請單 交付項目 設定

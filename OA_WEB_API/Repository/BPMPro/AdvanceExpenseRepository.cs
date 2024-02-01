@@ -109,7 +109,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
             strSQL += "     [RowNo] AS [ROW_NO], ";
             strSQL += "     [AdvanceCurrencyName] AS [ADVANCE_CURRENCY_NAME], ";
-            strSQL += "     [ExchangeRate] AS [EXCHANGE_RATE], ";
+            strSQL += "     [ExchangeRate] AS [EXCH_RATE], ";
             strSQL += "     [AdvanceAmount] AS [ADVANCE_AMOUNT], ";
             strSQL += "     [Amount_CONV] AS [AMOUNT_CONV], ";
             strSQL += "     [AdvanceDate] AS [ADVANCE_DATE], ";
@@ -144,7 +144,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 IDENTIFY = IDENTIFY,
                 PARAMETER = parameter
             };
-            strJson = jsonFunction.ObjectToJSON(commonRepository.PostExpensesReimburseProcessLatterHalfFunction(CommonSUM));
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostFinanceFieldFunction(CommonSUM));
             var advanceExpenseSumsConfig = jsonFunction.JsonToObject<List<AdvanceExpenseSumsConfig>>(strJson);
 
             #endregion
@@ -459,7 +459,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                     new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ADVANCE_CURRENCY_NAME", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@EXCHANGE_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@EXCH_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ADVANCE_AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AMOUNT_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ADVANCE_DATE", SqlDbType.DateTime) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -504,7 +504,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         strSQL = "";
                         strSQL += "INSERT INTO [BPMPro].[dbo].FM7T_" + IDENTIFY + "_DTL([RowNo],[RequisitionID],[AdvanceCurrencyName],[ExchangeRate],[AdvanceAmount],[Amount_CONV],[AdvanceDate],[RepaymentDate],[RepaymentType],[Note],[PayMethod],[AccountCategory],[PaymentObject],[TX_Category],[BFCY_AccountNo],[BFCY_AccountName],[BFCY_BankNo],[BFCY_BankName],[CurrencyName],[BFCY_Name],[BFCY_TEL],[BFCY_Email]) ";
-                        strSQL += "VALUES(@ROW_NO,@REQUISITION_ID,@ADVANCE_CURRENCY_NAME,@EXCHANGE_RATE,@ADVANCE_AMOUNT,@AMOUNT_CONV,@ADVANCE_DATE,@REPAYMENT_DATE,@REPAYMENT_TYPE,@NOTE,@PAY_METHOD,@ACCOUNT_CATEGORY,@PAYMENT_OBJECT,@TX_CATEGORY,@BFCY_ACCOUNT_NO,@BFCY_ACCOUNT_NAME,@BFCY_BANK_NO,@BFCY_BANK_NAME,@CURRENCY_NAME,@BFCY_NAME,@BFCY_TEL,@BFCY_EMAIL)";
+                        strSQL += "VALUES(@ROW_NO,@REQUISITION_ID,@ADVANCE_CURRENCY_NAME,@EXCH_RATE,@ADVANCE_AMOUNT,@AMOUNT_CONV,@ADVANCE_DATE,@REPAYMENT_DATE,@REPAYMENT_TYPE,@NOTE,@PAY_METHOD,@ACCOUNT_CATEGORY,@PAYMENT_OBJECT,@TX_CATEGORY,@BFCY_ACCOUNT_NO,@BFCY_ACCOUNT_NAME,@BFCY_BANK_NO,@BFCY_BANK_NAME,@CURRENCY_NAME,@BFCY_NAME,@BFCY_TEL,@BFCY_EMAIL)";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     }
@@ -518,6 +518,8 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     //預支費用申請單 小計
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                    new SqlParameter("@CURRENCY", SqlDbType.VarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value }
                 };
 
                 #region - 預支費用申請單 小計：AdvanceExpense_SUM -
@@ -531,7 +533,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         PARAMETER = parameterLatterHalf,
                         MODEL = model.ADVANCE_EXPENSE_SUMS_CONFIG
                     };
-                    vResult = commonRepository.PutExpensesReimburseProcessLatterHalfFunction(CommonSUM);
+                    vResult = commonRepository.PutFinanceFieldFunction(CommonSUM);
                 }
 
                 #endregion

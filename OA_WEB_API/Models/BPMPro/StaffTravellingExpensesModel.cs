@@ -79,7 +79,13 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>備註</summary>
         public string NOTE { get; set; }
 
-        /// <summary>退款方式</summary>
+        /// <summary>
+        /// 退款方式：
+        /// CS.現金
+        /// PT_AC.薪轉帳戶
+        /// OR.其他[X]
+        /// DT.其他帳戶(需自行負擔手續費)[?]
+        /// </summary>
         public string REFUND_MODE { get; set; }
 
         /// <summary>換算台幣 合計</summary>
@@ -107,7 +113,7 @@ namespace OA_WEB_API.Models.BPMPro
         public int ROW_NO { get; set; }
 
         /// <summary>行程日期</summary>
-        public string TRAVELLING_DATE { get; set; }
+        public Nullable<DateTime> TRAVELLING_DATE { get; set; }
 
         /// <summary>起訖地點</summary>
         public string PLACE { get; set; }
@@ -133,7 +139,12 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>憑證行數編號</summary>
         public int INV_ROW_NO { get; set; }
 
-        /// <summary>憑證類型</summary>
+        /// <summary>
+        /// 憑證類型：
+        /// INV_TW.統一發票、
+        /// INV_F. Invoice、
+        /// RECPT.收據
+        /// </summary>
         public string INV_TYPE { get; set; }
 
         /// <summary>憑證號碼</summary>
@@ -172,14 +183,20 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>憑證號碼</summary>
         public string NUM { get; set; }
 
-        /// <summary>名稱</summary>
-        public string NAME { get; set; }
+        /// <summary>項目類型</summary>
+        public string TYPE { get; set; }
+
+        /// <summary>項目類型名稱</summary>
+        public string TYPE_NAME { get; set; }
+
+        /// <summary>幣別</summary>
+        public string CURRENCY { get; set; }
 
         /// <summary>金額</summary>
         public double AMOUNT { get; set; }
 
-        /// <summary>金額_台幣</summary>
-        public int AMOUNT_TWD { get; set; }
+        /// <summary>備註</summary>
+        public string NOTE { get; set; }
 
     }
 
@@ -195,7 +212,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 差旅費用報支單 小計 設定
     /// </summary>
-    public class StaffTravellingExpensesSumsConfig : ExpensesReimburseProcessLatterHalfConfig
+    public class StaffTravellingExpensesSumsConfig : FinanceFieldConfig
     {
 
     }
@@ -203,7 +220,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 差旅費用報支單 已預支 設定
     /// </summary>
-    public class StaffTravellingExpensesAdvancesConfig : ExpensesReimburseProcessLatterHalfConfig
+    public class StaffTravellingExpensesAdvancesConfig : FinanceFieldExchangeRateConfig
     {
 
     }
@@ -211,7 +228,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 差旅費用報支單 應退(退還財務) 設定
     /// </summary>
-    public class StaffTravellingExpensesFinancAmountsConfig : ExpensesReimburseProcessLatterHalfConfig
+    public class StaffTravellingExpensesFinancAmountsConfig : FinanceFieldExchangeRateConfig
     {
 
     }
@@ -219,7 +236,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 差旅費用報支單 應付(付給使用者) 設定
     /// </summary>
-    public class StaffTravellingExpensesUserAmountsConfig : ExpensesReimburseProcessLatterHalfConfig
+    public class StaffTravellingExpensesUserAmountsConfig : FinanceFieldExchangeRateConfig
     {
 
     }

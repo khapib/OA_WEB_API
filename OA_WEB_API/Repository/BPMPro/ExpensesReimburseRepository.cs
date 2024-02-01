@@ -146,7 +146,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 IDENTIFY = IDENTIFY,
                 PARAMETER = parameter
             };
-            strJson = jsonFunction.ObjectToJSON(commonRepository.PostExpensesReimburseProcessLatterHalfFunction(CommonSUM));
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostFinanceFieldFunction(CommonSUM));
             var expensesReimburseSumsConfig = jsonFunction.JsonToObject<List<ExpensesReimburseSumsConfig>>(strJson);
 
             #endregion
@@ -159,7 +159,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 IDENTIFY = IDENTIFY,
                 PARAMETER = parameter
             };
-            strJson = jsonFunction.ObjectToJSON(commonRepository.PostExpensesReimburseProcessLatterHalfFunction(CommonADV));
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostFinanceFieldFunction(CommonADV));
             var expensesReimburseAdvancesConfig = jsonFunction.JsonToObject<List<ExpensesReimburseAdvancesConfig>>(strJson);
 
             #endregion
@@ -172,7 +172,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 IDENTIFY = IDENTIFY,
                 PARAMETER = parameter
             };
-            strJson = jsonFunction.ObjectToJSON(commonRepository.PostExpensesReimburseProcessLatterHalfFunction(CommonFA));
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostFinanceFieldFunction(CommonFA));
             var expensesReimburseFinancAmountsConfig = jsonFunction.JsonToObject<List<ExpensesReimburseFinancAmountsConfig>>(strJson);
 
             #endregion
@@ -185,7 +185,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 IDENTIFY = IDENTIFY,
                 PARAMETER = parameter
             };
-            strJson = jsonFunction.ObjectToJSON(commonRepository.PostExpensesReimburseProcessLatterHalfFunction(CommonUA));
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostFinanceFieldFunction(CommonUA));
             var expensesReimburseUserAmountsConfig = jsonFunction.JsonToObject<List<ExpensesReimburseUserAmountsConfig>>(strJson);
 
             #endregion
@@ -647,8 +647,10 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 var parameterLatterHalf = new List<SqlParameter>()
                 {
-                    //費用申請單 小計、已預支、應退、應付
+                    //費用申請 小計、已預支、應退、應付
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                    new SqlParameter("@CURRENCY", SqlDbType.VarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value }
                 };
 
                 #region - 費用申請單 小計：ExpensesReimburse_SUM -
@@ -662,10 +664,12 @@ namespace OA_WEB_API.Repository.BPMPro
                         PARAMETER = parameterLatterHalf,
                         MODEL = model.EXPENSES_REIMBURSE_SUMS_CONFIG
                     };
-                    vResult = commonRepository.PutExpensesReimburseProcessLatterHalfFunction(CommonSUM);
+                    vResult = commonRepository.PutFinanceFieldFunction(CommonSUM);
                 }
 
                 #endregion
+
+                parameterLatterHalf.Add(new SqlParameter("@EXCH_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value });
 
                 #region - 費用申請單 已預支：ExpensesReimburse_ADV -
 
@@ -678,7 +682,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         PARAMETER = parameterLatterHalf,
                         MODEL = model.EXPENSES_REIMBURSE_ADVS_CONFIG
                     };
-                    if (vResult) vResult = commonRepository.PutExpensesReimburseProcessLatterHalfFunction(CommonADV);
+                    if (vResult) vResult = commonRepository.PutFinanceFieldFunction(CommonADV);
                 }
 
                 #endregion
@@ -694,7 +698,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         PARAMETER = parameterLatterHalf,
                         MODEL = model.EXPENSES_REIMBURSE_FAS_CONFIG
                     };
-                    if (vResult) vResult = commonRepository.PutExpensesReimburseProcessLatterHalfFunction(CommonFA);
+                    if (vResult) vResult = commonRepository.PutFinanceFieldFunction(CommonFA);
                 }
 
                 #endregion
@@ -710,7 +714,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         PARAMETER = parameterLatterHalf,
                         MODEL = model.EXPENSES_REIMBURSE_UAS_CONFIG
                     };
-                    if (vResult) vResult = commonRepository.PutExpensesReimburseProcessLatterHalfFunction(CommonUA);
+                    if (vResult) vResult = commonRepository.PutFinanceFieldFunction(CommonUA);
                 }
 
                 #endregion                

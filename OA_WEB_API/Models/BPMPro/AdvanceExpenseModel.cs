@@ -92,7 +92,7 @@ namespace OA_WEB_API.Models.BPMPro
         public string ADVANCE_CURRENCY_NAME { get; set; }
 
         /// <summary>匯率</summary>
-        public double EXCHANGE_RATE { get; set; }
+        public double EXCH_RATE { get; set; }
 
         /// <summary>預支金額</summary>
         public double ADVANCE_AMOUNT { get; set; }
@@ -120,7 +120,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// 支付方式：
         /// CS.現金
         /// PT_AC.薪轉帳戶
-        /// OR.其他
+        /// OR.其他[X]
         /// DT.其他帳戶(需自行負擔手續費)
         /// </summary>
         public string PAY_METHOD { get; set; }
@@ -135,7 +135,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 預支費用申請單 小計 設定
     /// </summary>
-    public class AdvanceExpenseSumsConfig : ExpensesReimburseProcessLatterHalfConfig
+    public class AdvanceExpenseSumsConfig : FinanceFieldConfig
     {
 
     }

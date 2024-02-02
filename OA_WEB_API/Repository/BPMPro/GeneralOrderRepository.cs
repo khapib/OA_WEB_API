@@ -648,12 +648,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         strJson = jsonFunction.ObjectToJSON(item);
 
-                        #region - 確認小數點後第二位 -
-
-                        GlobalParameters.IsDouble(strJson);
-
-                        #endregion
-
                         //寫入：行政採購申請 採購明細parameter
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
@@ -707,12 +701,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     foreach (var item in model.GENERAL_ORDER_PAYMENTS_CONFIG)
                     {
                         strJson = jsonFunction.ObjectToJSON(item);
-
-                        #region - 確認小數點後第二位 -
-
-                        GlobalParameters.IsDouble(strJson);
-
-                        #endregion
 
                         //寫入：行政採購申請 付款辦法parameter
 

@@ -217,11 +217,6 @@
             寫入parameter值
             </summary>
         </member>
-        <member name="M:GlobalParameters.IsDouble(System.String)">
-            <summary>
-            確認小數點後第二位
-            </summary>
-        </member>
         <member name="M:GlobalParameters.JsonChangeValue(System.String,System.String,System.String)">
             <summary>
             替換Json值

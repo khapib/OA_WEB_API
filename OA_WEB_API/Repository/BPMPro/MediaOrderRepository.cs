@@ -760,12 +760,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         strJson = jsonFunction.ObjectToJSON(item);
 
-                        #region - 確認小數點後第二位 -
-
-                        GlobalParameters.IsDouble(strJson);
-
-                        #endregion
-
                         //寫入：版權採購申請單 採購明細parameter
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
@@ -879,12 +873,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         strJson = jsonFunction.ObjectToJSON(item);
 
-                        #region - 確認小數點後第二位 -
-
-                        GlobalParameters.IsDouble(strJson);
-
-                        #endregion
-
                         //寫入：版權採購申請單 授權權利parameter
                         GlobalParameters.Infoparameter(strJson, parameterExtras);
 
@@ -940,12 +928,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     foreach (var item in model.MEDIA_ORDER_PYMTS_CONFIG)
                     {
                         strJson = jsonFunction.ObjectToJSON(item);
-
-                        #region - 確認小數點後第二位 -
-
-                        GlobalParameters.IsDouble(strJson);
-
-                        #endregion
 
                         //寫入：版權採購申請單 付款辦法parameter
 

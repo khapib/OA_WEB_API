@@ -475,24 +475,6 @@ public class GlobalParameters
     }
 
     /// <summary>
-    /// 確認小數點後第二位
-    /// </summary>
-    public static string IsDouble(string strJson)
-    {
-        var jss = new JavaScriptSerializer();
-        var dictionary = jss.Deserialize<Dictionary<string, string>>(strJson);        
-        foreach (var item in dictionary)
-        {
-            if (item.Value.IsFloat())
-            {
-                strJson=JsonChangeValue(strJson, item.Key, item.Value);
-            }
-        }
-
-        return strJson;
-    }
-
-    /// <summary>
     /// 替換Json值
     /// </summary>
     public static string JsonChangeValue(string strJson, string strKey, string strVal)

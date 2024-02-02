@@ -1266,12 +1266,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         strJson = jsonFunction.ObjectToJSON(item);
 
-                        #region - 確認小數點後第二位 -
-
-                        GlobalParameters.IsDouble(strJson);
-
-                        #endregion
-
                         //寫入：版權採購請款 憑證明細parameter
                         strJson = jsonFunction.ObjectToJSON(item);
                         GlobalParameters.Infoparameter(strJson, Common.PARAMETER);
@@ -1432,12 +1426,6 @@ namespace OA_WEB_API.Repository.BPMPro
                         }
 
                         strJson = jsonFunction.ObjectToJSON(item);
-
-                        #region - 確認小數點後第二位 -
-
-                        GlobalParameters.IsDouble(strJson);
-
-                        #endregion
 
                         //寫入：憑證細項parameter
                         strJson = jsonFunction.ObjectToJSON(item);
@@ -1610,12 +1598,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     foreach (var item in Common.MODEL)
                     {
                         strJson = jsonFunction.ObjectToJSON(item);
-
-                        #region - 確認小數點後第二位 -
-
-                        GlobalParameters.IsDouble(strJson);
-
-                        #endregion
 
                         //寫入：預算parameter
                         strJson = jsonFunction.ObjectToJSON(item);

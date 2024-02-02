@@ -140,7 +140,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>總稅額/總預估保留稅額(採購明細)</summary>
         public double DTL_TAX_TOTAL { get; set; }
 
-        /// <summary>總稅額/總預估保留稅額_台幣(採購明細)</summary>
+        /// <summary>總稅額_台幣/總預估保留稅額_台幣(採購明細)</summary>
         public int DTL_TAX_TOTAL_TWD { get; set; }
 
         /// <summary>合計含稅總額(採購明細)/GROSS總額(採購明細)</summary>
@@ -173,7 +173,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>額外項目總稅額/總預估保留稅額(額外項目)</summary>
         public double EX_TAX_TOTAL { get; set; }
 
-        /// <summary>額外項目總稅額/總預估保留稅額_台幣(額外項目)</summary>
+        /// <summary>額外項目總稅額_台幣/總預估保留稅額_台幣(額外項目)</summary>
         public int EX_TAX_TOTAL_TWD { get; set; }
 
         /// <summary>不可異動標住(付款辦法)</summary>
@@ -227,7 +227,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>稅額/預估保留稅額</summary>
         public double TAX { get; set; }
 
-        /// <summary>稅額/預估保留稅額_台幣</summary>
+        /// <summary>稅額_台幣/預估保留稅額_台幣</summary>
         public int TAX_TWD { get; set; }
 
         /// <summary>含稅單價/GROSS單價</summary>
@@ -345,7 +345,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>稅額/預估保留稅額</summary>
         public double TAX { get; set; }
 
-        /// <summary>稅額/預估保留稅額_台幣</summary>
+        /// <summary>稅額_台幣/預估保留稅額_台幣</summary>
         public int TAX_TWD { get; set; }
 
         /// <summary>期別</summary>
@@ -354,7 +354,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>所屬專案 ERP 單號</summary>
         public string PROJECT_FORM_NO { get; set; }
 
-        /// <summary>所屬專案名稱 </summary>
+        /// <summary>所屬專案名稱</summary>
         public string PROJECT_NAME { get; set; }
 
         /// <summary>所屬專案描述</summary>

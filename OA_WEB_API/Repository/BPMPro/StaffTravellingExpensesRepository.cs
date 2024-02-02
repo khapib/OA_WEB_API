@@ -129,9 +129,11 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [RowNo] AS [ROW_NO], ";
             strSQL += "     [InvoiceRowNo] AS [INV_ROW_NO], ";
             strSQL += "     [Num] AS [NUM], ";
-            strSQL += "     [Name] AS [NAME], ";
+            strSQL += "     [Type] AS [TYPE], ";
+            strSQL += "     [TypeName] AS [TYPE_NAME], ";
+            strSQL += "     [Currency] AS [CURRENCY], ";
             strSQL += "     [Amount] AS [AMOUNT], ";
-            strSQL += "     [Amount_TWD] AS [AMOUNT_TWD] ";
+            strSQL += "     [Note] AS [NOTE] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_INV_DTL] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
@@ -161,7 +163,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 IDENTIFY = IDENTIFY,
                 PARAMETER = parameter
             };
-            strJson = jsonFunction.ObjectToJSON(commonRepository.PostExpensesReimburseProcessLatterHalfFunction(CommonSUM));
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostFinanceFieldFunction(CommonSUM));
             var staffTravellingExpensesSumsConfig = jsonFunction.JsonToObject<List<StaffTravellingExpensesSumsConfig>>(strJson);
 
             #endregion
@@ -174,7 +176,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 IDENTIFY = IDENTIFY,
                 PARAMETER = parameter
             };
-            strJson = jsonFunction.ObjectToJSON(commonRepository.PostExpensesReimburseProcessLatterHalfFunction(CommonADV));
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostFinanceFieldFunction(CommonADV));
             var staffTravellingExpensesAdvancesConfig = jsonFunction.JsonToObject<List<StaffTravellingExpensesAdvancesConfig>>(strJson);
 
             #endregion
@@ -187,7 +189,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 IDENTIFY = IDENTIFY,
                 PARAMETER = parameter
             };
-            strJson = jsonFunction.ObjectToJSON(commonRepository.PostExpensesReimburseProcessLatterHalfFunction(CommonFA));
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostFinanceFieldFunction(CommonFA));
             var staffTravellingExpensesFinancAmountsConfig = jsonFunction.JsonToObject<List<StaffTravellingExpensesFinancAmountsConfig>>(strJson);
 
             #endregion
@@ -200,12 +202,12 @@ namespace OA_WEB_API.Repository.BPMPro
                 IDENTIFY = IDENTIFY,
                 PARAMETER = parameter
             };
-            strJson = jsonFunction.ObjectToJSON(commonRepository.PostExpensesReimburseProcessLatterHalfFunction(CommonUA));
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostFinanceFieldFunction(CommonUA));
             var staffTravellingExpensesUserAmountsConfig = jsonFunction.JsonToObject<List<StaffTravellingExpensesUserAmountsConfig>>(strJson);
 
             #endregion
 
-            #region - 費用申請單 表單關聯 -
+            #region - 差旅費用報支單 表單關聯 -
 
             var formQueryModel = new FormQueryModel()
             {
@@ -575,8 +577,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].FM7T_" + IDENTIFY + "_DTL]([RequisitionID],[RowNo],[TravellingDate],[Place],[Payer],[ProjectFormNo],[ProjectName],[ProjectNickname],[ProjectUseYear],[Note],[InvoiceRowNo],[InvoiceType],[Num],[Date],[Amount],[Amount_CONV],[Currency],[ExchangeRate],[InvoiceNote]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@ROW_NO,@TRAVELLING_DATE,@PLACE,@PAYER,@PROJECT_FORM_NO,@PROJECT_NAME,@PROJECT_NICKNAME,@PROJECT_NICKNAME,@PROJECT_USE_YEAR,@NOTE,@INV_ROW_NO,@INV_TYPE,@NUM,@DATE,@AMOUNT,@CURRENCY,@EXCH_RATE,@INV_NOTE)";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_DTL]([RequisitionID],[RowNo],[TravellingDate],[Place],[Payer],[ProjectFormNo],[ProjectName],[ProjectNickname],[ProjectUseYear],[Note],[InvoiceRowNo],[InvoiceType],[Num],[Date],[Amount],[Amount_CONV],[Currency],[ExchangeRate],[InvoiceNote]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@ROW_NO,@TRAVELLING_DATE,@PLACE,@PAYER,@PROJECT_FORM_NO,@PROJECT_NAME,@PROJECT_NICKNAME,@PROJECT_USE_YEAR,@NOTE,@INV_ROW_NO,@INV_TYPE,@NUM,@DATE,@AMOUNT,@AMOUNT_CONV,@CURRENCY,@EXCH_RATE,@INV_NOTE)";
 
                         dbFun.DoTran(strSQL, parameterDetails);
                     });
@@ -595,9 +597,11 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@NAME", SqlDbType.Date) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TYPE", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TYPE_NAME", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@CURRENCY", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AMOUNT_CONV", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value }
+                    new SqlParameter("@NOTE", SqlDbType.Float) { Size = 255, Value = (object)DBNull.Value ?? DBNull.Value }
                 };
 
                 #region 先刪除舊資料
@@ -623,8 +627,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterInvoiceDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].FM7T_" + IDENTIFY + "_INV_DTL]([RequisitionID],[RowNo],[InvoiceRowNo],[Num],[Name],[Amount],[Amount_TWD]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@ROW_NO,@INV_ROW_NO,@NUM,@NAME,@AMOUNT,@AMOUNT_TWD)";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_INV_DTL]([RequisitionID],[RowNo],[InvoiceRowNo],[Num],[Type],[TypeName],[Currency],[Amount],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@ROW_NO,@INV_ROW_NO,@NUM,@TYPE,@TYPE_NAME,@CURRENCY,@AMOUNT,@NOTE)";
 
                         dbFun.DoTran(strSQL, parameterInvoiceDetails);
                     });
@@ -668,8 +672,10 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 var parameterLatterHalf = new List<SqlParameter>()
                 {
-                    //費用申請單 小計、已預支、應退、應付
+                    //費用申請 小計、已預支、應退、應付
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                    new SqlParameter("@CURRENCY", SqlDbType.VarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value }
                 };
 
                 #region - 差旅費用報支單 小計：StaffTravellingExpenses_SUM -
@@ -683,10 +689,12 @@ namespace OA_WEB_API.Repository.BPMPro
                         PARAMETER = parameterLatterHalf,
                         MODEL = model.STAFF_TRAVELLING_EXPENSES_SUMS_CONFIG
                     };
-                    vResult = commonRepository.PutExpensesReimburseProcessLatterHalfFunction(CommonSUM);
+                    vResult = commonRepository.PutFinanceFieldFunction(CommonSUM);
                 }
 
                 #endregion
+
+                parameterLatterHalf.Add(new SqlParameter("@EXCH_RATE", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value });
 
                 #region - 差旅費用報支單 已預支：StaffTravellingExpenses_ADV -
 
@@ -699,7 +707,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         PARAMETER = parameterLatterHalf,
                         MODEL = model.STAFF_TRAVELLING_EXPENSES_ADVS_CONFIG
                     };
-                    if (vResult) vResult = commonRepository.PutExpensesReimburseProcessLatterHalfFunction(CommonSUM);
+                    if (vResult) vResult = commonRepository.PutFinanceFieldFunction(CommonSUM);
                 }
 
                 #endregion
@@ -715,7 +723,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         PARAMETER = parameterLatterHalf,
                         MODEL = model.STAFF_TRAVELLING_EXPENSES_FAS_CONFIG
                     };
-                    if (vResult) vResult = commonRepository.PutExpensesReimburseProcessLatterHalfFunction(CommonSUM);
+                    if (vResult) vResult = commonRepository.PutFinanceFieldFunction(CommonSUM);
                 }
 
                 #endregion
@@ -731,7 +739,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         PARAMETER = parameterLatterHalf,
                         MODEL = model.STAFF_TRAVELLING_EXPENSES_UAS_CONFIG
                     };
-                    if (vResult) vResult = commonRepository.PutExpensesReimburseProcessLatterHalfFunction(CommonSUM);
+                    if (vResult) vResult = commonRepository.PutFinanceFieldFunction(CommonSUM);
                 }
 
                 #endregion                

@@ -127,7 +127,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// FF.國外電匯、
         /// DD.票匯、
         /// CS.現金、
-        /// OR.其他
+        /// OR.其他[X]
         /// </summary>
         public string TX_CATEGORY { get; set; }
 

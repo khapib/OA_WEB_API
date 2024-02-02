@@ -30,7 +30,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 版權採購異動申請 表頭資訊
+    /// 版權採購異動申請單 表頭資訊
     /// </summary>
     public class MediaOrderChangeTitle : ImplementHeader
     {

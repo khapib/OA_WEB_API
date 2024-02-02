@@ -503,15 +503,24 @@ namespace OA_WEB_API.Models.BPMPro
     #region - 費用流程 -
 
     /// <summary>
-    /// 費用流程_主表_後半部 設定
+    /// 財務類表單相關欄位 設定
     /// </summary>
-    public class ExpensesReimburseProcessLatterHalfConfig
+    public class FinanceFieldConfig
     {
         /// <summary>幣別</summary>
         public string CURRENCY { get; set; }
 
         /// <summary>金額</summary>
-        public double AMOUNT { get; set; }
+        public double AMOUNT { get; set; }        
+    }
+
+    /// <summary>
+    /// 財務類表單相關欄位_含匯率 設定
+    /// </summary>
+    public class FinanceFieldExchangeRateConfig : FinanceFieldConfig
+    {
+        /// <summary>匯率</summary>
+        public double EXCH_RATE { get; set; }
     }
 
     #endregion
@@ -579,8 +588,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// DF.國內電匯(外幣)、
         /// FF.國外電匯、
         /// DD.票匯、
-        /// CS.現金、
-        /// OR.其他
+        /// CS.現金
         /// </summary>
         public string TX_CATEGORY { get; set; }
 

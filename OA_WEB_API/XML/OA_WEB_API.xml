@@ -217,11 +217,6 @@
             寫入parameter值
             </summary>
         </member>
-        <member name="M:GlobalParameters.IsDouble(System.String)">
-            <summary>
-            確認小數點後第二位
-            </summary>
-        </member>
         <member name="M:GlobalParameters.JsonChangeValue(System.String,System.String,System.String)">
             <summary>
             替換Json值
@@ -1087,6 +1082,21 @@
         <member name="M:OA_WEB_API.Controllers.BPMPro.ParkingPermitController.GetParkingPermitOrganize">
             <summary>
             停車證申請單(檔案、資料調整)
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Controllers.BPMPro.PaymentOrderController">
+            <summary>
+            會簽管理系統 - 繳款單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.PaymentOrderController.PostPaymentOrderSingle(OA_WEB_API.Models.BPMPro.PaymentOrderQueryModel)">
+            <summary>
+            繳款單(查詢)
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.PaymentOrderController.PutPaymentOrderSingle(OA_WEB_API.Models.BPMPro.PaymentOrderViewModel)">
+            <summary>
+            繳款單(新增/修改/草稿)
             </summary>
         </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.PersonnelSupplementController">
@@ -2357,7 +2367,7 @@
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.ADVANCE_CURRENCY_NAME">
             <summary>預知幣別</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.EXCHANGE_RATE">
+        <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.EXCH_RATE">
             <summary>匯率</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.ADVANCE_AMOUNT">
@@ -2387,12 +2397,20 @@
             支付方式：
             CS.現金
             PT_AC.薪轉帳戶
-            OR.其他
+            OR.其他[X]
             DT.其他帳戶(需自行負擔手續費)
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.ACCOUNT_CATEGORY">
-            <summary>帳戶類別</summary>
+            <summary>
+            帳戶類別：
+            A.廠商
+            B.個人
+            PayMethod：
+            CS.(現金)、
+            PT_AC.(薪轉帳戶)
+            帳戶類別 固定都會是B。
+            </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.PAYMENT_OBJECT">
             <summary>支付對象</summary>
@@ -2988,12 +3006,20 @@
             支付方式：
             CS.現金
             PT_AC.薪轉帳戶
-            OR.其他
+            OR.其他[X]
             DT.其他帳戶(需自行負擔手續費)
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.ACCOUNT_CATEGORY">
-            <summary>帳戶類別</summary>
+            <summary>
+            帳戶類別：
+            A.廠商
+            B.個人
+            PayMethod：
+            CS.(現金)、
+            PT_AC.(薪轉帳戶)
+            帳戶類別 固定都會是B。
+            </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.PAYMENT_OBJECT">
             <summary>支付對象</summary>
@@ -4964,19 +4990,19 @@
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceConfig.MEDIA_ORDER_REQUISITION_ID">
-            <summary>行政採購 系統編號</summary>
+            <summary>版權採購 系統編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceConfig.MEDIA_ORDER_SUBJECT">
-            <summary>行政採購 主旨</summary>
+            <summary>版權採購 主旨</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceConfig.MEDIA_ORDER_BPM_FORM_NO">
-            <summary>行政採購 BPM 表單單號</summary>
+            <summary>版權採購 BPM 表單單號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceConfig.MEDIA_ORDER_ERP_FORM_NO">
-            <summary>行政採購 ERP 表單唯一碼</summary>
+            <summary>版權採購 ERP 表單唯一碼</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceConfig.MEDIA_ORDER_PATH">
-            <summary>行政採購 路徑</summary>
+            <summary>版權採購 路徑</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaAcceptanceConfig.PERIOD">
             <summary>期別</summary>
@@ -5248,7 +5274,7 @@
             <summary>總稅額/總預估保留稅額(採購明細)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.DTL_TAX_TOTAL_TWD">
-            <summary>總稅額/總預估保留稅額_台幣(採購明細)</summary>
+            <summary>總稅額_台幣/總預估保留稅額_台幣(採購明細)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.DTL_GROSS_TOTAL">
             <summary>合計含稅總額(採購明細)/GROSS總額(採購明細)</summary>
@@ -5296,7 +5322,7 @@
             <summary>憑證明細 總稅額/總預估保留稅額(憑證明細)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.INV_TAX_TOTAL_TWD">
-            <summary>憑證明細 總稅額/總預估保留稅額_台幣(憑證明細)</summary>
+            <summary>憑證明細 總稅額_台幣/總預估保留稅額_台幣(憑證明細)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceConfig.ACTUAL_PAY_AMOUNT">
             <summary>實際支付金額</summary>
@@ -5334,7 +5360,7 @@
             <summary>稅額/總預估保留稅額</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.TAX_TWD">
-            <summary>稅額/總預估保留稅額_台幣</summary>
+            <summary>稅額_台幣/總預估保留稅額_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaInvoiceAcceptancesConfig.GROSS">
             <summary>含稅單價/GROSS單價</summary>
@@ -5459,7 +5485,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.MediaOrderChangeTitle">
             <summary>
-            版權採購異動申請 表頭資訊
+            版權採購異動申請單 表頭資訊
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderChangeTitle.PYMT_LOCK_PERIOD">
@@ -5624,7 +5650,7 @@
             <summary>總稅額/總預估保留稅額(採購明細)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.DTL_TAX_TOTAL_TWD">
-            <summary>總稅額/總預估保留稅額_台幣(採購明細)</summary>
+            <summary>總稅額_台幣/總預估保留稅額_台幣(採購明細)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.DTL_GROSS_TOTAL">
             <summary>合計含稅總額(採購明細)/GROSS總額(採購明細)</summary>
@@ -5657,7 +5683,7 @@
             <summary>額外項目總稅額/總預估保留稅額(額外項目)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.EX_TAX_TOTAL_TWD">
-            <summary>額外項目總稅額/總預估保留稅額_台幣(額外項目)</summary>
+            <summary>額外項目總稅額_台幣/總預估保留稅額_台幣(額外項目)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderConfig.PYMT_LOCK_PERIOD">
             <summary>不可異動標住(付款辦法)</summary>
@@ -5710,7 +5736,7 @@
             <summary>稅額/預估保留稅額</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.TAX_TWD">
-            <summary>稅額/預估保留稅額_台幣</summary>
+            <summary>稅額_台幣/預估保留稅額_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderDetailsConfig.GROSS">
             <summary>含稅單價/GROSS單價</summary>
@@ -5825,7 +5851,7 @@
             <summary>稅額/預估保留稅額</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderExtrasConfig.TAX_TWD">
-            <summary>稅額/預估保留稅額_台幣</summary>
+            <summary>稅額_台幣/預估保留稅額_台幣</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderExtrasConfig.PERIOD">
             <summary>期別</summary>
@@ -5834,7 +5860,7 @@
             <summary>所屬專案 ERP 單號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderExtrasConfig.PROJECT_NAME">
-            <summary>所屬專案名稱 </summary>
+            <summary>所屬專案名稱</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.MediaOrderExtrasConfig.PROJECT_NICKNAME">
             <summary>所屬專案描述</summary>
@@ -7206,6 +7232,92 @@
             正式：0；草稿：1
             </summary>
         </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.PaymentOrderQueryModel">
+            <summary>
+            繳款單(查詢條件)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderQueryModel.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.PaymentOrderViewModel">
+            <summary>
+            繳款單
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderViewModel.APPLICANT_INFO">
+            <summary>申請人資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderViewModel.PAYMENT_ORDER_TITLE">
+            <summary>繳款單 表頭資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderViewModel.PAYMENT_ORDER_CONFIG">
+            <summary>繳款單 表單內容 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderViewModel.ASSOCIATED_FORM_CONFIG">
+            <summary>表單關聯</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.PaymentOrderTitle">
+            <summary>
+            繳款單 表頭資訊
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderTitle.FLOW_NAME">
+            <summary>ERP 工作流程標題名稱</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.PaymentOrderConfig">
+            <summary>
+            繳款單 表單內容 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.IS_CFO">
+            <summary>是否過財務協理</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.AMOUNT">
+            <summary>金額</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.CURRENCY">
+            <summary>幣別</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.NOTE">
+            <summary>備註</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.FINANC_AUDIT_ID_1">
+            <summary>財務審核人員編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.FINANC_AUDIT_NAME_1">
+            <summary>財務審核人員姓名</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.FINANC_AUDIT_ID_2">
+            <summary>財務覆核人員編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.FINANC_AUDIT_NAME_2">
+            <summary>財務覆核人員姓名</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.PAY_METHOD">
+            <summary>
+            支付方式：
+            CS.現金
+            PT_AC.薪轉帳戶
+            OR.其他[X]
+            DT.其他帳戶(需自行負擔手續費)
+            DD.支票
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.ACCOUNT_CATEGORY">
+            <summary>
+            帳戶類別：
+            A.廠商
+            B.個人
+            PayMethod：
+            CS.(現金)、
+            PT_AC.(薪轉帳戶)
+            帳戶類別 固定都會是B。
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.PAYMENT_OBJECT">
+            <summary>支付對象</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.PersonnelSupplementQueryModel">
             <summary>
             人員增補單(查詢條件)
@@ -7584,7 +7696,13 @@
             <summary>備註</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesConfig.REFUND_MODE">
-            <summary>退款方式</summary>
+            <summary>
+            退款方式：
+            CS.現金
+            PT_AC.薪轉帳戶
+            OR.其他[X]
+            DT.其他帳戶(需自行負擔手續費)[?]
+            </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesConfig.AMOUNT_CONV_TOTAL">
             <summary>換算台幣 合計</summary>
@@ -7637,7 +7755,12 @@
             <summary>憑證行數編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.INV_TYPE">
-            <summary>憑證類型</summary>
+            <summary>
+            憑證類型：
+            INV_TW.統一發票、
+            INV_F. Invoice、
+            RECPT.收據
+            </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.NUM">
             <summary>憑證號碼</summary>
@@ -7674,14 +7797,17 @@
         <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesInvoiceDetailsConfig.NUM">
             <summary>憑證號碼</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesInvoiceDetailsConfig.NAME">
-            <summary>名稱</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesInvoiceDetailsConfig.TYPE">
+            <summary>項目類型</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesInvoiceDetailsConfig.CURRENCY">
+            <summary>幣別</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesInvoiceDetailsConfig.AMOUNT">
             <summary>金額</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesInvoiceDetailsConfig.AMOUNT_TWD">
-            <summary>金額_台幣</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesInvoiceDetailsConfig.NOTE">
+            <summary>備註</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesBudgetsConfig">
             <summary>
@@ -7829,7 +7955,7 @@
             FF.國外電匯、
             DD.票匯、
             CS.現金、
-            OR.其他
+            OR.其他[X]
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.SupplierReviewRemitConfig.BFCY_AC_NO">
@@ -8523,16 +8649,24 @@
         <member name="P:OA_WEB_API.Models.BPMPro.BPMCommonModel`1.MODEL">
             <summary>Models</summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseProcessLatterHalfConfig">
+        <member name="T:OA_WEB_API.Models.BPMPro.FinanceFieldConfig">
             <summary>
-            費用流程_主表_後半部 設定
+            財務類表單相關欄位 設定
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseProcessLatterHalfConfig.CURRENCY">
+        <member name="P:OA_WEB_API.Models.BPMPro.FinanceFieldConfig.CURRENCY">
             <summary>幣別</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseProcessLatterHalfConfig.AMOUNT">
+        <member name="P:OA_WEB_API.Models.BPMPro.FinanceFieldConfig.AMOUNT">
             <summary>金額</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.FinanceFieldExchangeRateConfig">
+            <summary>
+            財務類表單相關欄位_含匯率 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.FinanceFieldExchangeRateConfig.EXCH_RATE">
+            <summary>匯率</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ApproversConfig">
             <summary>
@@ -8589,8 +8723,7 @@
             DF.國內電匯(外幣)、
             FF.國外電匯、
             DD.票匯、
-            CS.現金、
-            OR.其他
+            CS.現金
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.DOM_TWD_Bank.BFCY_ACCOUNT_NO">
@@ -11749,6 +11882,51 @@
             檔案路徑
             </summary>
         </member>
+        <member name="T:OA_WEB_API.Repository.BPMPro.PaymentOrderRepository">
+            <summary>
+            會簽管理系統 - 繳款單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.PaymentOrderRepository.PostPaymentOrderSingle(OA_WEB_API.Models.BPMPro.PaymentOrderQueryModel)">
+            <summary>
+            繳款單(查詢)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.PaymentOrderRepository.PutPaymentOrderSingle(OA_WEB_API.Models.BPMPro.PaymentOrderViewModel)">
+            <summary>
+            繳款單(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.PaymentOrderRepository.strSQL">
+            <summary>
+            T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.PaymentOrderRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.PaymentOrderRepository.IDENTIFY">
+            <summary>
+            表單代號
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.PaymentOrderRepository.FM7Subject">
+            <summary>
+            表單主旨
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.PaymentOrderRepository.strJson">
+            <summary>
+            Json字串
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.PaymentOrderRepository.strREQ">
+            <summary>
+            系統編號
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.PersonnelSupplementRepository">
             <summary>
             會簽管理系統 - 人員增補單
@@ -12135,14 +12313,14 @@
             (已退貨/退貨)版權商品_共用模組(新增/修改/草稿)
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostExpensesReimburseProcessLatterHalfFunction``1(OA_WEB_API.Models.BPMPro.BPMCommonModel{``0})">
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PostFinanceFieldFunction``1(OA_WEB_API.Models.BPMPro.BPMCommonModel{``0})">
             <summary>
-            費用流程主表_後半部(查詢)
+            財務類表單相關欄位(查詢)
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PutExpensesReimburseProcessLatterHalfFunction``1(OA_WEB_API.Models.BPMPro.BPMCommonModel{``0})">
+        <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.PutFinanceFieldFunction``1(OA_WEB_API.Models.BPMPro.BPMCommonModel{``0})">
             <summary>
-            費用流程主表_後半部(新增/修改/草稿)
+            財務類表單相關欄位(新增/修改/草稿)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.CommonRepository.GetRoles">

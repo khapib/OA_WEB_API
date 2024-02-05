@@ -605,12 +605,6 @@ namespace OA_WEB_API.Repository.BPMPro
                 {
                     strJson = jsonFunction.ObjectToJSON(model.MEDIA_SALE_CONFIG);
 
-                    #region - 確認小數點後第二位 -
-
-                    GlobalParameters.IsDouble(strJson);
-
-                    #endregion
-
                     var parameterInfo = new List<SqlParameter>()
                     {
                         //版權銷售申請單 表單內容
@@ -742,12 +736,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         strJson = jsonFunction.ObjectToJSON(item);
 
-                        #region - 確認小數點後第二位 -
-
-                        GlobalParameters.IsDouble(strJson);
-
-                        #endregion
-
                         //寫入：版權銷售申請單 稅率結構parameter
                         GlobalParameters.Infoparameter(strJson, parameterTaxRateStructures);
 
@@ -815,12 +803,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     foreach (var item in model.MEDIA_SALE_DTLS_CONFIG)
                     {
                         strJson = jsonFunction.ObjectToJSON(item);
-
-                        #region - 確認小數點後第二位 -
-
-                        GlobalParameters.IsDouble(strJson);
-
-                        #endregion
 
                         //寫入：版權銷售申請單 銷售明細parameter
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
@@ -934,12 +916,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         strJson = jsonFunction.ObjectToJSON(item);
 
-                        #region - 確認小數點後第二位 -
-
-                        GlobalParameters.IsDouble(strJson);
-
-                        #endregion
-
                         //寫入：版權銷售申請單 授權權利parameter                        
                         GlobalParameters.Infoparameter(strJson, parameterExtras);
 
@@ -993,12 +969,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     foreach (var item in model.MEDIA_SALE_COLLS_CONFIG)
                     {
                         strJson = jsonFunction.ObjectToJSON(item);
-
-                        #region - 確認小數點後第二位 -
-
-                        GlobalParameters.IsDouble(strJson);
-
-                        #endregion
 
                         //寫入：版權銷售申請單 收款辦法parameter                                               
                         GlobalParameters.Infoparameter(strJson, parameterCollections);

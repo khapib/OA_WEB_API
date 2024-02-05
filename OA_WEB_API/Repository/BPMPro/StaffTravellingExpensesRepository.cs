@@ -130,7 +130,6 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [InvoiceRowNo] AS [INV_ROW_NO], ";
             strSQL += "     [Num] AS [NUM], ";
             strSQL += "     [Type] AS [TYPE], ";
-            strSQL += "     [TypeName] AS [TYPE_NAME], ";
             strSQL += "     [Currency] AS [CURRENCY], ";
             strSQL += "     [Amount] AS [AMOUNT], ";
             strSQL += "     [Note] AS [NOTE] ";
@@ -244,7 +243,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
                 {
                     staffTravellingExpensesViewModel = new StaffTravellingExpensesViewModel();
-                    CommLib.Logger.Error("費用申請單(查詢)失敗，原因：系統無正常起單。");
+                    CommLib.Logger.Error("差旅費用報支單(查詢)失敗，原因：系統無正常起單。");
                 }
                 else
                 {
@@ -324,7 +323,7 @@ namespace OA_WEB_API.Repository.BPMPro
         //    catch (Exception ex)
         //    {
         //        vResult = false;
-        //        CommLib.Logger.Error("預支費用申請單(依此單內容重送)失敗，原因：" + ex.Message);
+        //        CommLib.Logger.Error("差旅費用報支單(依此單內容重送)失敗，原因：" + ex.Message);
         //    }
 
         //    return vResult;
@@ -598,7 +597,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@INV_ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@NUM", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@TYPE", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@TYPE_NAME", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@CURRENCY", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@NOTE", SqlDbType.Float) { Size = 255, Value = (object)DBNull.Value ?? DBNull.Value }
@@ -627,8 +625,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, parameterInvoiceDetails);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_INV_DTL]([RequisitionID],[RowNo],[InvoiceRowNo],[Num],[Type],[TypeName],[Currency],[Amount],[Note]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@ROW_NO,@INV_ROW_NO,@NUM,@TYPE,@TYPE_NAME,@CURRENCY,@AMOUNT,@NOTE)";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_INV_DTL]([RequisitionID],[RowNo],[InvoiceRowNo],[Num],[Type],[Currency],[Amount],[Note]) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@ROW_NO,@INV_ROW_NO,@NUM,@TYPE,@CURRENCY,@AMOUNT,@NOTE)";
 
                         dbFun.DoTran(strSQL, parameterInvoiceDetails);
                     });

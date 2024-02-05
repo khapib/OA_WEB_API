@@ -1266,12 +1266,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         strJson = jsonFunction.ObjectToJSON(item);
 
-                        #region - 確認小數點後第二位 -
-
-                        GlobalParameters.IsDouble(strJson);
-
-                        #endregion
-
                         //寫入：版權採購請款 憑證明細parameter
                         strJson = jsonFunction.ObjectToJSON(item);
                         GlobalParameters.Infoparameter(strJson, Common.PARAMETER);
@@ -1432,12 +1426,6 @@ namespace OA_WEB_API.Repository.BPMPro
                         }
 
                         strJson = jsonFunction.ObjectToJSON(item);
-
-                        #region - 確認小數點後第二位 -
-
-                        GlobalParameters.IsDouble(strJson);
-
-                        #endregion
 
                         //寫入：憑證細項parameter
                         strJson = jsonFunction.ObjectToJSON(item);
@@ -1610,12 +1598,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     foreach (var item in Common.MODEL)
                     {
                         strJson = jsonFunction.ObjectToJSON(item);
-
-                        #region - 確認小數點後第二位 -
-
-                        GlobalParameters.IsDouble(strJson);
-
-                        #endregion
 
                         //寫入：預算parameter
                         strJson = jsonFunction.ObjectToJSON(item);
@@ -1831,9 +1813,9 @@ namespace OA_WEB_API.Repository.BPMPro
         #region - 費用流程 -
 
         /// <summary>
-        /// 費用流程主表_後半部(查詢)
+        /// 財務類表單相關欄位(查詢)
         /// </summary>
-        public IList<ExpensesReimburseProcessLatterHalfConfig> PostExpensesReimburseProcessLatterHalfFunction<T>(BPMCommonModel<T> Common)
+        public IList<FinanceFieldExchangeRateConfig> PostFinanceFieldFunction<T>(BPMCommonModel<T> Common)
         {            
             try
             {
@@ -1841,18 +1823,31 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 strTable = Common.IDENTIFY + "_" + Common.EXT;
 
+                switch (Common.EXT)
+                {
+                    case "ADV":
+                    case "FA":
+                    case "UA":
+                        strField_V = "[ExchangeRate] AS [EXCH_RATE], ";
+                        break;
+                    default:
+                        strField_V = "null AS [EXCH_RATE], ";
+                        break;
+                }
+
                 #endregion
 
                 strSQL = "";
                 strSQL += "SELECT ";
                 strSQL += "     [RequisitionID] AS [REQUISITION_ID], ";
+                strSQL += strField_V;
                 strSQL += "     [Currency] AS [CURRENCY], ";
                 strSQL += "     [Amount] AS [AMOUNT] ";
                 strSQL += "FROM [BPMPro].[dbo].[FM7T_" + strTable + "] ";
                 strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
                 strSQL += "ORDER BY [AutoCounter] ";
 
-                return dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<ExpensesReimburseProcessLatterHalfConfig>();
+                return dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<FinanceFieldExchangeRateConfig>();
             }
             catch (Exception ex)
             {
@@ -1862,9 +1857,9 @@ namespace OA_WEB_API.Repository.BPMPro
         }
 
         /// <summary>
-        /// 費用流程主表_後半部(新增/修改/草稿)
+        /// 財務類表單相關欄位(新增/修改/草稿)
         /// </summary>
-        public bool PutExpensesReimburseProcessLatterHalfFunction<T>(BPMCommonModel<T> Common)
+        public bool PutFinanceFieldFunction<T>(BPMCommonModel<T> Common)
         {
             bool vResult = false;
             try
@@ -1872,6 +1867,20 @@ namespace OA_WEB_API.Repository.BPMPro
                 #region - 宣告 -
 
                 strTable = Common.IDENTIFY + "_" + Common.EXT;
+
+                switch (Common.EXT)
+                {
+                    case "ADV":
+                    case "FA":
+                    case "UA":
+                        strField_F = "[ExchangeRate], ";
+                        strField_V = "@EXCH_RATE, ";
+                        break;
+                    default:
+                        strField_F = null;
+                        strField_V = null;
+                        break;
+                }
 
                 #endregion
 
@@ -1893,21 +1902,16 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     foreach (var item in Common.MODEL)
                     {
-                        Common.PARAMETER.Add(new SqlParameter("@CURRENCY", SqlDbType.VarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value });
-                        Common.PARAMETER.Add(new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value });
-
                         //寫入：parameter
                         strJson = jsonFunction.ObjectToJSON(item);
                         GlobalParameters.Infoparameter(strJson, Common.PARAMETER);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "]([RequisitionID],[Currency],[Amount]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@CURRENCY,@AMOUNT) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "]([RequisitionID]," + strField_F + "[Currency],[Amount]) ";
+                        strSQL += "VALUES(@REQUISITION_ID," + strField_V + "@CURRENCY,@AMOUNT) ";
 
                         dbFun.DoTran(strSQL, Common.PARAMETER);
 
-                        Common.PARAMETER.Remove(Common.PARAMETER.Where(SP => SP.ParameterName.Contains("@CURRENCY")).FirstOrDefault());
-                        Common.PARAMETER.Remove(Common.PARAMETER.Where(SP => SP.ParameterName.Contains("@AMOUNT")).FirstOrDefault());
                     }
 
                     #endregion

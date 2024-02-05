@@ -58,19 +58,19 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class MediaAcceptanceConfig
     {
-        /// <summary>行政採購 系統編號</summary>
+        /// <summary>版權採購 系統編號</summary>
         public string MEDIA_ORDER_REQUISITION_ID { get; set; }
 
-        /// <summary>行政採購 主旨</summary>
+        /// <summary>版權採購 主旨</summary>
         public string MEDIA_ORDER_SUBJECT { get; set; }
 
-        /// <summary>行政採購 BPM 表單單號</summary>
+        /// <summary>版權採購 BPM 表單單號</summary>
         public string MEDIA_ORDER_BPM_FORM_NO { get; set; }
 
-        /// <summary>行政採購 ERP 表單唯一碼</summary>
+        /// <summary>版權採購 ERP 表單唯一碼</summary>
         public string MEDIA_ORDER_ERP_FORM_NO { get; set; }
 
-        /// <summary>行政採購 路徑</summary>
+        /// <summary>版權採購 路徑</summary>
         public string MEDIA_ORDER_PATH { get; set; }
 
         /// <summary>期別</summary>

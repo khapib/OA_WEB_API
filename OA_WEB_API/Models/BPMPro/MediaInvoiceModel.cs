@@ -171,7 +171,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>總稅額/總預估保留稅額(採購明細)</summary>
         public double DTL_TAX_TOTAL { get; set; }
 
-        /// <summary>總稅額/總預估保留稅額_台幣(採購明細)</summary>
+        /// <summary>總稅額_台幣/總預估保留稅額_台幣(採購明細)</summary>
         public int DTL_TAX_TOTAL_TWD { get; set; }
 
         /// <summary>合計含稅總額(採購明細)/GROSS總額(採購明細)</summary>
@@ -219,7 +219,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>憑證明細 總稅額/總預估保留稅額(憑證明細)</summary>
         public double INV_TAX_TOTAL { get; set; }
 
-        /// <summary>憑證明細 總稅額/總預估保留稅額_台幣(憑證明細)</summary>
+        /// <summary>憑證明細 總稅額_台幣/總預估保留稅額_台幣(憑證明細)</summary>
         public int INV_TAX_TOTAL_TWD { get; set; }
 
         /// <summary>實際支付金額</summary>
@@ -258,7 +258,7 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>稅額/總預估保留稅額</summary>
         public double TAX { get; set; }
 
-        /// <summary>稅額/總預估保留稅額_台幣</summary>
+        /// <summary>稅額_台幣/總預估保留稅額_台幣</summary>
         public int TAX_TWD { get; set; }
 
         /// <summary>含稅單價/GROSS單價</summary>

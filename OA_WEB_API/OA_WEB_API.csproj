@@ -213,6 +213,7 @@
     <Compile Include="Controllers\BPMPro\CommonController.cs" />
     <Compile Include="Controllers\BPMPro\OfficialStampController.cs" />
     <Compile Include="Controllers\BPMPro\ParkingPermitController.cs" />
+    <Compile Include="Controllers\BPMPro\PaymentOrderController.cs" />
     <Compile Include="Controllers\BPMPro\PersonnelSupplementController.cs" />
     <Compile Include="Controllers\BPMPro\ProjectReviewController.cs" />
     <Compile Include="Controllers\BPMPro\ResignUnpaidLeaveAgendaController.cs" />
@@ -276,6 +277,7 @@
     <Compile Include="Models\BPMPro\NotifyModel.cs" />
     <Compile Include="Models\BPMPro\OfficialStampModel.cs" />
     <Compile Include="Models\BPMPro\ParkingPermitModel.cs" />
+    <Compile Include="Models\BPMPro\PaymentOrderModel.cs" />
     <Compile Include="Models\BPMPro\PersonnelSupplementModel.cs" />
     <Compile Include="Models\BPMPro\ProjectReviewModel.cs" />
     <Compile Include="Models\BPMPro\ResignUnpaidLeaveAgendaModel.cs" />
@@ -321,6 +323,7 @@
     <Compile Include="Repository\BPMPro\NotifyRepository.cs" />
     <Compile Include="Repository\BPMPro\OfficialStampRepository.cs" />
     <Compile Include="Repository\BPMPro\ParkingPermitRepository.cs" />
+    <Compile Include="Repository\BPMPro\PaymentOrderRepository.cs" />
     <Compile Include="Repository\BPMPro\PersonnelSupplementRepository.cs" />
     <Compile Include="Repository\BPMPro\ProjectReviewRepository.cs" />
     <Compile Include="Repository\BPMPro\ResignUnpaidLeaveAgendaRepository.cs" />

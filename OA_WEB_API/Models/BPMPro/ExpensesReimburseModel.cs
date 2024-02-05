@@ -108,12 +108,20 @@ namespace OA_WEB_API.Models.BPMPro
         /// 支付方式：
         /// CS.現金
         /// PT_AC.薪轉帳戶
-        /// OR.其他
+        /// OR.其他[X]
         /// DT.其他帳戶(需自行負擔手續費)
         /// </summary>
         public string PAY_METHOD { get; set; }
 
-        /// <summary>帳戶類別</summary>
+        /// <summary>
+        /// 帳戶類別：
+        /// A.廠商
+        /// B.個人
+        /// PayMethod：
+        /// CS.(現金)、
+        /// PT_AC.(薪轉帳戶)
+        /// 帳戶類別 固定都會是B。
+        /// </summary>
         public string ACCOUNT_CATEGORY { get; set; }
 
         /// <summary>支付對象</summary>
@@ -182,7 +190,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 費用申請單 小計 設定
     /// </summary>
-    public class ExpensesReimburseSumsConfig : ExpensesReimburseProcessLatterHalfConfig
+    public class ExpensesReimburseSumsConfig : FinanceFieldConfig
     {
 
     }
@@ -190,7 +198,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 費用申請單 已預支 設定
     /// </summary>
-    public class ExpensesReimburseAdvancesConfig : ExpensesReimburseProcessLatterHalfConfig
+    public class ExpensesReimburseAdvancesConfig : FinanceFieldExchangeRateConfig
     {
 
     }
@@ -198,7 +206,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 費用申請單 應退(退還財務) 設定
     /// </summary>
-    public class ExpensesReimburseFinancAmountsConfig : ExpensesReimburseProcessLatterHalfConfig
+    public class ExpensesReimburseFinancAmountsConfig : FinanceFieldExchangeRateConfig
     {
 
     }
@@ -206,7 +214,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 費用申請單 應付(付給使用者) 設定
     /// </summary>
-    public class ExpensesReimburseUserAmountsConfig : ExpensesReimburseProcessLatterHalfConfig
+    public class ExpensesReimburseUserAmountsConfig : FinanceFieldExchangeRateConfig
     {
 
     }

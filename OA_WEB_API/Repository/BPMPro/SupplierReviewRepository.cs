@@ -272,7 +272,7 @@ namespace OA_WEB_API.Repository.BPMPro
         //    catch (Exception ex)
         //    {
         //        vResult = false;
-        //        CommLib.Logger.Error("跑馬申請單(依此單內容重送)失敗，原因：" + ex.Message);
+        //        CommLib.Logger.Error("合作夥伴審核單(依此單內容重送)失敗，原因：" + ex.Message);
         //    }
 
         //    return vResult;

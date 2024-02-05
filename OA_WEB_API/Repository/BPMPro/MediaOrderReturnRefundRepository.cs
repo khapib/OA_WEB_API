@@ -545,12 +545,6 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     strJson = jsonFunction.ObjectToJSON(model.MEDIA_ORDER_RETURN_REFUND_CONFIG);
 
-                    #region - 確認小數點後第二位 -
-
-                    GlobalParameters.IsDouble(strJson);
-
-                    #endregion
-
                     GlobalParameters.Infoparameter(strJson, parameterInfo);
 
                     strSQL = "";

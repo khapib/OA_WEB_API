@@ -113,7 +113,15 @@ namespace OA_WEB_API.Models.BPMPro
         /// </summary>
         public string PAY_METHOD { get; set; }
 
-        /// <summary>帳戶類別</summary>
+        /// <summary>
+        /// 帳戶類別：
+        /// A.廠商
+        /// B.個人
+        /// PayMethod：
+        /// CS.(現金)、
+        /// PT_AC.(薪轉帳戶)
+        /// 帳戶類別 固定都會是B。
+        /// </summary>
         public string ACCOUNT_CATEGORY { get; set; }
 
         /// <summary>支付對象</summary>

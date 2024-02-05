@@ -186,9 +186,6 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>項目類型</summary>
         public string TYPE { get; set; }
 
-        /// <summary>項目類型名稱</summary>
-        public string TYPE_NAME { get; set; }
-
         /// <summary>幣別</summary>
         public string CURRENCY { get; set; }
 

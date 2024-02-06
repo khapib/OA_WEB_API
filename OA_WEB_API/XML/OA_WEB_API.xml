@@ -7652,7 +7652,7 @@
         <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.STAFF_TRAVELLING_EXPENSES_INV_DTLS_CONFIG">
             <summary>差旅費用報支單 憑證明細 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.STAFF_TRAVELLING_EXPENSE_BUDGS_CONFIG">
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.STAFF_TRAVELLING_EXPENSES_BUDGS_CONFIG">
             <summary>差旅費用報支單 使用預算 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.STAFF_TRAVELLING_EXPENSES_SUMS_CONFIG">

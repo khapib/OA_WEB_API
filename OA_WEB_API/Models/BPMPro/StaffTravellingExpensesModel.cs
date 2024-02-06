@@ -35,7 +35,7 @@ namespace OA_WEB_API.Models.BPMPro
         public List<StaffTravellingExpensesInvoiceDetailsConfig> STAFF_TRAVELLING_EXPENSES_INV_DTLS_CONFIG { get; set; }
 
         /// <summary>差旅費用報支單 使用預算 設定</summary>
-        public List<StaffTravellingExpensesBudgetsConfig> STAFF_TRAVELLING_EXPENSE_BUDGS_CONFIG { get; set; }
+        public List<StaffTravellingExpensesBudgetsConfig> STAFF_TRAVELLING_EXPENSES_BUDGS_CONFIG { get; set; }
 
         /// <summary>差旅費用報支單 小計 設定</summary>
         public List<StaffTravellingExpensesSumsConfig> STAFF_TRAVELLING_EXPENSES_SUMS_CONFIG { get; set; }

@@ -223,7 +223,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 STAFF_TRAVELLING_EXPENSES_CONFIG = staffTravellingExpensesConfig,
                 STAFF_TRAVELLING_EXPENSES_DTLS_CONFIG = staffTravellingExpensesDetailsConfig,
                 STAFF_TRAVELLING_EXPENSES_INV_DTLS_CONFIG = staffTravellingExpensesInvoiceDetailsConfig,
-                STAFF_TRAVELLING_EXPENSE_BUDGS_CONFIG = staffTravellingExpensesBudgetsConfig,
+                STAFF_TRAVELLING_EXPENSES_BUDGS_CONFIG = staffTravellingExpensesBudgetsConfig,
                 STAFF_TRAVELLING_EXPENSES_SUMS_CONFIG = staffTravellingExpensesSumsConfig,
                 STAFF_TRAVELLING_EXPENSES_ADVS_CONFIG = staffTravellingExpensesAdvancesConfig,
                 STAFF_TRAVELLING_EXPENSES_FAS_CONFIG = staffTravellingExpensesFinancAmountsConfig,
@@ -654,14 +654,14 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
-                if (model.STAFF_TRAVELLING_EXPENSE_BUDGS_CONFIG != null && model.STAFF_TRAVELLING_EXPENSE_BUDGS_CONFIG.Count > 0)
+                if (model.STAFF_TRAVELLING_EXPENSES_BUDGS_CONFIG != null && model.STAFF_TRAVELLING_EXPENSES_BUDGS_CONFIG.Count > 0)
                 {
                     var CommonBUDG = new BPMCommonModel<StaffTravellingExpensesBudgetsConfig>()
                     {
                         EXT = "BUDG",
                         IDENTIFY = IDENTIFY,
                         PARAMETER = parameterBudgets,
-                        MODEL = model.STAFF_TRAVELLING_EXPENSE_BUDGS_CONFIG
+                        MODEL = model.STAFF_TRAVELLING_EXPENSES_BUDGS_CONFIG
                     };
                     commonRepository.PutBudgetFunction(CommonBUDG);
                 }

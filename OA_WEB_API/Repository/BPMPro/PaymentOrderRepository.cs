@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using OA_WEB_API.Models;
+using System.Reflection;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -156,6 +157,16 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     #endregion
                 }
+            }
+
+            #endregion
+
+            #region - 是否經由財務協理簽核 -
+
+            if (String.IsNullOrEmpty(paymentOrderConfig.IS_CFO) || String.IsNullOrWhiteSpace(paymentOrderConfig.IS_CFO))
+            {
+                if (paymentOrderConfig.AMOUNT >= 10000) paymentOrderConfig.IS_CFO = true.ToString().ToLower();
+                else paymentOrderConfig.IS_CFO = false.ToString().ToLower();
             }
 
             #endregion
@@ -393,12 +404,15 @@ namespace OA_WEB_API.Repository.BPMPro
                     if (!String.IsNullOrEmpty(model.PAYMENT_ORDER_CONFIG.FINANC_AUDIT_ID_2) || !String.IsNullOrWhiteSpace(model.PAYMENT_ORDER_CONFIG.FINANC_AUDIT_ID_2))
                         model.PAYMENT_ORDER_CONFIG.FINANC_AUDIT_NAME_2 = FinancUser.Where(U => U.USER_ID == model.PAYMENT_ORDER_CONFIG.FINANC_AUDIT_ID_2).Select(U => U.USER_NAME).FirstOrDefault();
 
+                    #region - 是否經由財務協理簽核 -
 
                     if (String.IsNullOrEmpty(model.PAYMENT_ORDER_CONFIG.IS_CFO) || String.IsNullOrWhiteSpace(model.PAYMENT_ORDER_CONFIG.IS_CFO))
                     {
                         if (model.PAYMENT_ORDER_CONFIG.AMOUNT >= 10000) model.PAYMENT_ORDER_CONFIG.IS_CFO = true.ToString().ToLower();
                         else model.PAYMENT_ORDER_CONFIG.IS_CFO = false.ToString().ToLower();
                     }
+
+                    #endregion
 
                     //寫入：繳款單 表單內容parameter                        
                     strJson = jsonFunction.ObjectToJSON(model.PAYMENT_ORDER_CONFIG);

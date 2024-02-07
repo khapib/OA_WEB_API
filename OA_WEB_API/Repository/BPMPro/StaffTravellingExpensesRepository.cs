@@ -216,6 +216,16 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
+            #region - 是否經由財務協理簽核 -
+
+            if (String.IsNullOrEmpty(staffTravellingExpensesConfig.IS_CFO) || String.IsNullOrWhiteSpace(staffTravellingExpensesConfig.IS_CFO))
+            {
+                if (staffTravellingExpensesConfig.AMOUNT_CONV_TOTAL >= 10000) staffTravellingExpensesConfig.IS_CFO = true.ToString().ToLower();
+                else staffTravellingExpensesConfig.IS_CFO = false.ToString().ToLower();
+            }
+
+            #endregion
+
             var staffTravellingExpensesViewModel = new StaffTravellingExpensesViewModel()
             {
                 APPLICANT_INFO = applicantInfo,
@@ -496,12 +506,15 @@ namespace OA_WEB_API.Repository.BPMPro
                     if (!String.IsNullOrEmpty(model.STAFF_TRAVELLING_EXPENSES_CONFIG.FINANC_AUDIT_ID_2) || !String.IsNullOrWhiteSpace(model.STAFF_TRAVELLING_EXPENSES_CONFIG.FINANC_AUDIT_ID_2))
                         model.STAFF_TRAVELLING_EXPENSES_CONFIG.FINANC_AUDIT_NAME_2 = FinancUser.Where(U => U.USER_ID == model.STAFF_TRAVELLING_EXPENSES_CONFIG.FINANC_AUDIT_ID_2).Select(U => U.USER_NAME).FirstOrDefault();
 
+                    #region - 是否經由財務協理簽核 -
 
                     if (String.IsNullOrEmpty(model.STAFF_TRAVELLING_EXPENSES_CONFIG.IS_CFO) || String.IsNullOrWhiteSpace(model.STAFF_TRAVELLING_EXPENSES_CONFIG.IS_CFO))
                     {
                         if (model.STAFF_TRAVELLING_EXPENSES_CONFIG.AMOUNT_CONV_TOTAL >= 10000) model.STAFF_TRAVELLING_EXPENSES_CONFIG.IS_CFO = true.ToString().ToLower();
                         else model.STAFF_TRAVELLING_EXPENSES_CONFIG.IS_CFO = false.ToString().ToLower();
                     }
+
+                    #endregion
 
                     //寫入：費用申請單 表單內容parameter                        
                     strJson = jsonFunction.ObjectToJSON(model.STAFF_TRAVELLING_EXPENSES_CONFIG);

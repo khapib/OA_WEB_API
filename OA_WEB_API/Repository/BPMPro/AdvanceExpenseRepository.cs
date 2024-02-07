@@ -159,6 +159,16 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
+            #region - 是否經由財務協理簽核 -
+
+            if (String.IsNullOrEmpty(advanceExpenseConfig.IS_CFO) || String.IsNullOrWhiteSpace(advanceExpenseConfig.IS_CFO))
+            {
+                if (advanceExpenseConfig.AMOUNT_CONV_TOTAL >= 10000) advanceExpenseConfig.IS_CFO = true.ToString().ToLower();
+                else advanceExpenseConfig.IS_CFO = false.ToString().ToLower();
+            }
+
+            #endregion
+
             var advanceExpenseViewModel = new AdvanceExpenseViewModel()
             {
                 APPLICANT_INFO = applicantInfo,
@@ -428,6 +438,15 @@ namespace OA_WEB_API.Repository.BPMPro
                     if (!String.IsNullOrEmpty(model.ADVANCE_EXPENSE_CONFIG.FINANC_AUDIT_ID_2) || !String.IsNullOrWhiteSpace(model.ADVANCE_EXPENSE_CONFIG.FINANC_AUDIT_ID_2))
                         model.ADVANCE_EXPENSE_CONFIG.FINANC_AUDIT_NAME_2 = FinancUser.Where(U => U.USER_ID == model.ADVANCE_EXPENSE_CONFIG.FINANC_AUDIT_ID_2).Select(U => U.USER_NAME).FirstOrDefault();
 
+                    #region - 是否經由財務協理簽核 -
+
+                    if (String.IsNullOrEmpty(model.ADVANCE_EXPENSE_CONFIG.IS_CFO) || String.IsNullOrWhiteSpace(model.ADVANCE_EXPENSE_CONFIG.IS_CFO))
+                    {
+                        if (model.ADVANCE_EXPENSE_CONFIG.AMOUNT_CONV_TOTAL >= 10000) model.ADVANCE_EXPENSE_CONFIG.IS_CFO = true.ToString().ToLower();
+                        else model.ADVANCE_EXPENSE_CONFIG.IS_CFO = false.ToString().ToLower();
+                    }
+
+                    #endregion
 
                     //寫入：預支費用申請單 表單內容parameter                        
                     strJson = jsonFunction.ObjectToJSON(model.ADVANCE_EXPENSE_CONFIG);

@@ -200,6 +200,16 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
+            #region - 是否經由財務協理簽核 -
+
+            if (String.IsNullOrEmpty(expensesReimburseConfig.IS_CFO) || String.IsNullOrWhiteSpace(expensesReimburseConfig.IS_CFO))
+            {
+                if (expensesReimburseConfig.AMOUNT_CONV_TOTAL >= 10000) expensesReimburseConfig.IS_CFO = true.ToString().ToLower();
+                else expensesReimburseConfig.IS_CFO = false.ToString().ToLower(); ;
+            }
+
+            #endregion
+
             var expensesReimburseViewModel = new ExpensesReimburseViewModel()
             {
                 APPLICANT_INFO = applicantInfo,
@@ -487,11 +497,15 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@BFCY_EMAIL", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     };
 
+                    #region - 是否經由財務協理簽核 -
+
                     if (String.IsNullOrEmpty(model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT) || String.IsNullOrWhiteSpace(model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT))
                     {
                         if (model.EXPENSES_REIMBURSE_CONFIG.AMOUNT_CONV_TOTAL >= 30000) model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT = true.ToString().ToLower();
                         else model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT = false.ToString().ToLower();
                     }
+
+                    #endregion                                      
 
                     //寫入：費用申請單 表單內容parameter                        
                     strJson = jsonFunction.ObjectToJSON(model.EXPENSES_REIMBURSE_CONFIG);

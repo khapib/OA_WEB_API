@@ -2412,8 +2412,19 @@
             帳戶類別 固定都會是B。
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.PAYMENT_OBJECT">
-            <summary>支付對象</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.PAYMENT_OBJECT_NO">
+            <summary>
+            支付對象：
+            員工編號、
+            合作夥伴的統編
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.PAYMENT_OBJECT_NAME">
+            <summary>
+            支付對象：
+            員工姓名、
+            合作夥伴的名稱
+            </summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.AdvanceExpenseSumsConfig">
             <summary>
@@ -2495,6 +2506,189 @@
             <summary>
             A攝影棚直播使用申請單 會簽簽核人員 設定
             </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewQueryModel">
+            <summary>
+            企業乘車審核單(查詢條件)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewQueryModel.REQUISITION_ID">
+            <summary>系統編號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewViewModel">
+            <summary>
+            企業乘車審核單
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewViewModel.APPLICANT_INFO">
+            <summary>申請人資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_TITLE">
+            <summary>企業乘車審核單 表頭資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG">
+            <summary>企業乘車審核單 表單內容 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG">
+            <summary>企業乘車審核單 乘車明細 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG">
+            <summary>企業乘車審核單 使用預算 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewViewModel.ASSOCIATED_FORM_CONFIG">
+            <summary>表單關聯</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewTitle">
+            <summary>
+            企業乘車審核單 表頭資訊
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewTitle.FLOW_NAME">
+            <summary>ERP 工作流程標題名稱</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewConfig">
+            <summary>
+            企業乘車審核單 表單內容 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewConfig.ACCOUNTING_DATE_START">
+            <summary>列帳期間起</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewConfig.ACCOUNTING_DATE_END">
+            <summary>列帳期間迄</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewConfig.BILL_PLAN">
+            <summary>結款方案</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewConfig.PAY_OFF_PERIOD">
+            <summary>還款期間</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewConfig.ADD_EXPENSE">
+            <summary>新增費用</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewConfig.ACCOUNTS_PAYABLE">
+            <summary>應繳帳款</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewConfig.NOTE">
+            <summary>備註</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewConfig.TOTAL">
+            <summary>合計</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig">
+            <summary>
+            企業乘車審核單 乘車明細 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.ROW_NO">
+            <summary>行數編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.TICKET">
+            <summary>乘車券</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.GET_ON_DATE">
+            <summary>上車日期</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.GET_OFF_DATE">
+            <summary>下車日期</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.GET_ON_TIME">
+            <summary>上車時間</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.GET_OFF_TIME">
+            <summary>下車時間</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.GET_ON_PLACE">
+            <summary>上車地點</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.GET_OFF_PLACE">
+            <summary>下車地點</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.COMPLEMENT_GET_ON_PLACE">
+            <summary>補充上車地點</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.COMPLEMENT_GET_OFF_PLACE">
+            <summary>補充下車地點</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.TRAVEL_BY_PURPOSE">
+            <summary>乘車目的</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.TAXI_EXPENSES">
+            <summary>車資</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.NAME">
+            <summary>員工姓名</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.ACCOUNT_ID">
+            <summary>員工編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.DEPT_ID">
+            <summary>部門編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.DEPT_NAME">
+            <summary>部門名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.OFFICE_ID">
+            <summary>局處中心編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.OFFICE_NAME">
+            <summary>局處中心名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.GROUP_ID">
+            <summary>組別編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.GROUP_NAME">
+            <summary>組別名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.PROJECT_FORM_NO">
+            <summary>所屬專案 ERP 單號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.PROJECT_NAME">
+            <summary>所屬專案名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.PROJECT_NICKNAME">
+            <summary>所屬專案描述</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.PROJECT_USE_YEAR">
+            <summary>所屬專案年分</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsConfig.FLAG">
+            <summary>標記[空值標記：1]</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewApproversConfig">
+            <summary>
+            企業乘車審核單 會簽乘車人員 設定
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewBudgetsConfig">
+            <summary>
+            企業乘車審核單 使用預算 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewBudgetsConfig.ROW_NO">
+            <summary>行數編號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsQueryModel">
+            <summary>
+            企業乘車審核單(明細)(查詢條件)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsQueryModel.USER_ID">
+            <summary>員工編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsQueryModel.IS_ALL">
+            <summary>是否全部檢視</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsViewModel">
+            <summary>
+            企業乘車審核單(審核/明細) 設定
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsViewModel.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG">
+            <summary>企業乘車審核單 乘車明細 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsViewModel.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG">
+            <summary>企業乘車審核單 使用預算 設定</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.EvaluateContentQueryModel">
             <summary>
@@ -3021,8 +3215,19 @@
             帳戶類別 固定都會是B。
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.PAYMENT_OBJECT">
-            <summary>支付對象</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.PAYMENT_OBJECT_NO">
+            <summary>
+            支付對象：
+            員工編號、
+            合作夥伴的統編
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.PAYMENT_OBJECT_NAME">
+            <summary>
+            支付對象：
+            員工姓名、
+            合作夥伴的名稱
+            </summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig">
             <summary>
@@ -7315,8 +7520,19 @@
             帳戶類別 固定都會是B。
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.PAYMENT_OBJECT">
-            <summary>支付對象</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.PAYMENT_OBJECT_NO">
+            <summary>
+            支付對象：
+            員工編號、
+            合作夥伴的統編
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.PAYMENT_OBJECT_NAME">
+            <summary>
+            支付對象：
+            員工姓名、
+            合作夥伴的名稱
+            </summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.PersonnelSupplementQueryModel">
             <summary>

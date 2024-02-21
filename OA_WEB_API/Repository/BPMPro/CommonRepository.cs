@@ -1508,6 +1508,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     break;
                 case "ExpensesReimburse":
                 case "StaffTravellingExpenses":
+                case "EnterpriseTaxiReview":
                     strField_V = "[RowNo] AS[ROW_NO], ";
                     break;
                 default:
@@ -1567,6 +1568,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         break;
                     case "ExpensesReimburse":
                     case "StaffTravellingExpenses":
+                    case "EnterpriseTaxiReview":
                         strField_F = "[RowNo], ";
                         strField_V = "@ROW_NO, ";
                         break;

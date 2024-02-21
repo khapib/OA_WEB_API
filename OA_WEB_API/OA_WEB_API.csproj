@@ -252,6 +252,7 @@
     <Compile Include="Models\BPMPro\ActiveModel.cs" />
     <Compile Include="Models\BPMPro\AdvanceExpenseModel.cs" />
     <Compile Include="Models\BPMPro\AStudioLiveStreamUseModel.cs" />
+    <Compile Include="Models\BPMPro\EnterpriseTaxiReviewModel.cs" />
     <Compile Include="Models\BPMPro\EvaluateContentModel.cs" />
     <Compile Include="Models\BPMPro\EvaluateContentReplenishModel.cs" />
     <Compile Include="Models\BPMPro\EvaluateDemandModel.cs" />
@@ -298,6 +299,7 @@
     <Compile Include="Repository\BPMPro\ActiveRepository.cs" />
     <Compile Include="Repository\BPMPro\AdvanceExpenseRepository.cs" />
     <Compile Include="Repository\BPMPro\AStudioLiveStreamUseRepository.cs" />
+    <Compile Include="Repository\BPMPro\EnterpriseTaxiReviewRepository.cs" />
     <Compile Include="Repository\BPMPro\EvaluateContentReplenishRepository.cs" />
     <Compile Include="Repository\BPMPro\EvaluateContentRepository.cs" />
     <Compile Include="Repository\BPMPro\EvaluateDemandRepository.cs" />

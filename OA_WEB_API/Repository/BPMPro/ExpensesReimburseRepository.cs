@@ -89,7 +89,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [Amount_CONV_Total] AS [AMOUNT_CONV_TOTAL], ";
             strSQL += "     [PayMethod] AS [PAY_METHOD], ";
             strSQL += "     [AccountCategory] AS [ACCOUNT_CATEGORY], ";
-            strSQL += "     [PaymentObject] AS [PAYMENT_OBJECT], ";
+            strSQL += "     [PaymentObjectNo] AS [PAYMENT_OBJECT_NO], ";
+            strSQL += "     [PaymentObjectName] AS [PAYMENT_OBJECT_NAME], ";
             strSQL += "     [TX_Category] AS [TX_CATEGORY], ";
             strSQL += "     [BFCY_AccountNo] AS [BFCY_ACCOUNT_NO], ";
             strSQL += "     [BFCY_AccountName] AS [BFCY_ACCOUNT_NAME], ";
@@ -479,7 +480,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@AMOUNT_CONV_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PAY_METHOD", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@ACCOUNT_CATEGORY", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PAYMENT_OBJECT", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PAYMENT_OBJECT_NO", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PAYMENT_OBJECT_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@TX_CATEGORY", SqlDbType.NVarChar) { Size = 64, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@BFCY_ACCOUNT_NO", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@BFCY_ACCOUNT_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -528,7 +530,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [Amount_CONV_Total]=@AMOUNT_CONV_TOTAL, ";
                     strSQL += "     [PayMethod]=@PAY_METHOD, ";
                     strSQL += "     [AccountCategory]=@ACCOUNT_CATEGORY,";
-                    strSQL += "     [PaymentObject]=@PAYMENT_OBJECT,";
+                    strSQL += "     [PaymentObjectNo]=@PAYMENT_OBJECT_NO,";
+                    strSQL += "     [PaymentObjectName]=@PAYMENT_OBJECT_NAME,";
                     strSQL += "     [TX_Category]=@TX_CATEGORY, ";
                     strSQL += "     [BFCY_AccountNo]=@BFCY_ACCOUNT_NO, ";
                     strSQL += "     [BFCY_AccountName]=@BFCY_ACCOUNT_NAME, ";

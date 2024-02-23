@@ -40,7 +40,7 @@ namespace OA_WEB_API.Repository.ERP
 
             #region  - GTV人員資料表 -
             //篩選掉四方四隅及只顯示非兼職的正職部門給ERP
-            var gTVStaffModel = usersStructure.Where(S => S.COMPANY_ID != "GPI" && S.IS_MAIN_JOB == 1).Select(S => S).ToList();
+            var gTVStaffModel = usersStructure.Where(S => S.COMPANY_ID != "GPI").Select(S => S).ToList();
             gTVStaffModel.ForEach(S =>
             {
                 if (!String.IsNullOrEmpty(S.USER_FLOW) || !String.IsNullOrWhiteSpace(S.USER_FLOW)) S.USER_FLOW = S.USER_FLOW.Replace(">", "-");

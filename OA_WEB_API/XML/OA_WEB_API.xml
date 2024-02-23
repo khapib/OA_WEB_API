@@ -10558,6 +10558,61 @@
             系統編號
             </summary>
         </member>
+        <member name="T:OA_WEB_API.Repository.BPMPro.EnterpriseTaxiReviewRepository">
+            <summary>
+            會簽管理系統 - 企業乘車審核單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.EnterpriseTaxiReviewRepository.PostEnterpriseTaxiReviewSingle(OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewQueryModel)">
+            <summary>
+            企業乘車審核單(查詢)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.EnterpriseTaxiReviewRepository.PostEnterpriseTaxiReviewDetailsSingle(OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsQueryModel)">
+            <summary>
+            企業乘車審核單(明細)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.EnterpriseTaxiReviewRepository.PutEnterpriseTaxiReviewSingle(OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewViewModel)">
+            <summary>
+            企業乘車審核單(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.EnterpriseTaxiReviewRepository.PutEnterpriseTaxiReviewApproveSingle(OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsViewModel)">
+            <summary>
+            企業乘車審核單(審核)
+            </summary>        
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EnterpriseTaxiReviewRepository.strSQL">
+            <summary>
+            T-SQL
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EnterpriseTaxiReviewRepository.IsADD">
+            <summary>
+            確認是否為新建的表單
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EnterpriseTaxiReviewRepository.IDENTIFY">
+            <summary>
+            表單代號
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EnterpriseTaxiReviewRepository.FM7Subject">
+            <summary>
+            表單主旨
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EnterpriseTaxiReviewRepository.strJson">
+            <summary>
+            Json字串
+            </summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.EnterpriseTaxiReviewRepository.strREQ">
+            <summary>
+            系統編號
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.EvaluateContentReplenishRepository">
             <summary>
             會簽管理系統 - 內容評估表_補充意見

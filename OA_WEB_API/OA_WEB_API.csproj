@@ -188,6 +188,7 @@
     <Compile Include="Controllers\BPMPro\ActiveController.cs" />
     <Compile Include="Controllers\BPMPro\AdvanceExpenseController.cs" />
     <Compile Include="Controllers\BPMPro\AStudioLiveStreamUseController.cs" />
+    <Compile Include="Controllers\BPMPro\EnterpriseTaxiReviewController.cs" />
     <Compile Include="Controllers\BPMPro\EvaluateContentController.cs" />
     <Compile Include="Controllers\BPMPro\EvaluateContentReplenishController.cs" />
     <Compile Include="Controllers\BPMPro\EvaluateDemandController.cs" />

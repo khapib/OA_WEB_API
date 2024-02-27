@@ -45,7 +45,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 繳款單 表單內容 設定
     /// </summary>
-    public class PaymentOrderConfig : DOM_TWD_Bank
+    public class PaymentOrderConfig : COMM_Bank
     {
         /// <summary>是否過財務協理</summary>
         public string IS_CFO { get; set; }
@@ -105,6 +105,15 @@ namespace OA_WEB_API.Models.BPMPro
         /// 合作夥伴的名稱
         /// </summary>
         public string PAYMENT_OBJECT_NAME { get; set; }
+
+        /// <summary>收款帳戶</summary>
+        public string RECV_ACCOUNT_NO { get; set; }
+
+        /// <summary>收款帳戶名稱</summary>
+        public string RECV_ACCOUNT_NAME { get; set; }
+
+        /// <summary>票據到期日</summary>
+        public Nullable<DateTime> BILL_MATURITY_DATE { get; set; }
     }
 
 }

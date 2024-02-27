@@ -529,6 +529,31 @@
             A攝影棚直播使用申請單(新增/修改/草稿)
             </summary>
         </member>
+        <member name="T:OA_WEB_API.Controllers.BPMPro.EnterpriseTaxiReviewController">
+            <summary>
+            會簽管理系統 - 企業乘車審核單
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.EnterpriseTaxiReviewController.PostEnterpriseTaxiReviewSingle(OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewQueryModel)">
+            <summary>
+            企業乘車審核單(查詢)
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.EnterpriseTaxiReviewController.PostEnterpriseTaxiReviewDetailsSingle(OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsQueryModel)">
+            <summary>
+            企業乘車審核單(明細)
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.EnterpriseTaxiReviewController.PutEnterpriseTaxiReviewSingle(OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewViewModel)">
+            <summary>
+            企業乘車審核單(新增/修改/草稿)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.EnterpriseTaxiReviewController.PutEnterpriseTaxiReviewApproveSingle(OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsViewModel)">
+            <summary>
+            企業乘車審核單(審核)
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.EvaluateContentController">
             <summary>
             會簽管理系統 - 內容評估表
@@ -7533,6 +7558,15 @@
             員工姓名、
             合作夥伴的名稱
             </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.RECV_ACCOUNT_NO">
+            <summary>收款帳戶</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.RECV_ACCOUNT_NAME">
+            <summary>收款帳戶名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.BILL_MATURITY_DATE">
+            <summary>票據到期日</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.PersonnelSupplementQueryModel">
             <summary>

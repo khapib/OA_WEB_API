@@ -2383,7 +2383,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig">
             <summary>
-            預支費用申請單 預知明細 設定
+            預支費用申請單 預支明細 設定
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.ROW_NO">
@@ -2450,6 +2450,12 @@
             員工姓名、
             合作夥伴的名稱
             </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.REG_KIND">
+            <summary>登記證號類別</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.REG_NO">
+            <summary>登記證號/統編</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.AdvanceExpenseSumsConfig">
             <summary>
@@ -2559,9 +2565,6 @@
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG">
             <summary>企業乘車審核單 使用預算 設定</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewViewModel.ASSOCIATED_FORM_CONFIG">
-            <summary>表單關聯</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewTitle">
             <summary>
@@ -7544,6 +7547,12 @@
             PT_AC.(薪轉帳戶)
             帳戶類別 固定都會是B。
             </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.REG_KIND">
+            <summary>登記證號類別</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.REG_NO">
+            <summary>登記證號/統編</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.PAYMENT_OBJECT_NO">
             <summary>

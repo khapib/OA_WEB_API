@@ -94,17 +94,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             //企業乘車審核單 乘車明細、使用預算 檢視，由另一隻API篩選設定後View。
 
-            #endregion
-
-            #region - 企業乘車審核單 表單關聯 -
-
-            var formQueryModel = new FormQueryModel()
-            {
-                REQUISITION_ID = query.REQUISITION_ID
-            };
-            var associatedForm = commonRepository.PostAssociatedForm(formQueryModel);
-
-            #endregion
+            #endregion            
 
             var enterpriseTaxiReviewViewModel = new EnterpriseTaxiReviewViewModel()
             {
@@ -113,7 +103,6 @@ namespace OA_WEB_API.Repository.BPMPro
                 ENTERPRISE_TAXI_REVIEW_CONFIG = enterpriseTaxiReviewConfig,
                 ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG = null,
                 ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG = null,
-                ASSOCIATED_FORM_CONFIG = associatedForm
             };
 
             #region - 確認表單 -
@@ -349,6 +338,8 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 #region - 宣告 -
 
+                var TaxiExpensesSum = 0;
+
                 #region - 系統編號 -
 
                 strREQ = model.APPLICANT_INFO.REQUISITION_ID;
@@ -475,7 +466,15 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     };
 
-                    if (model.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL == 0) model.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.Sum(DTL => DTL.TAXI_EXPENSES);
+                    
+                    if (model.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG != null && model.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.Count > 0) TaxiExpensesSum = model.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.Sum(DTL => DTL.TAXI_EXPENSES);
+
+                    if (TaxiExpensesSum > 0)
+                    {
+                        if (model.ENTERPRISE_TAXI_REVIEW_CONFIG.ADD_EXPENSE == 0) model.ENTERPRISE_TAXI_REVIEW_CONFIG.ADD_EXPENSE = TaxiExpensesSum;
+                        if (model.ENTERPRISE_TAXI_REVIEW_CONFIG.ACCOUNTS_PAYABLE == 0) model.ENTERPRISE_TAXI_REVIEW_CONFIG.ACCOUNTS_PAYABLE = TaxiExpensesSum;
+                        if (model.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL == 0) model.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL = TaxiExpensesSum;
+                    }                    
 
                     //寫入：企業乘車審核單 表單內容parameter                        
                     strJson = jsonFunction.ObjectToJSON(model.ENTERPRISE_TAXI_REVIEW_CONFIG);
@@ -571,6 +570,9 @@ namespace OA_WEB_API.Repository.BPMPro
                         #region - 部門彙整 -
                         var UserInfo = userRepository.GetUsersStructure().Where(U => U.COMPANY_ID == "RootCompany" && U.IS_MAIN_JOB == 1 && U.USER_ID == DTL.ACCOUNT_ID).Select(U => U).FirstOrDefault();
 
+                        if (UserInfo != null) DTL.NAME = UserInfo.USER_NAME;
+                        else DTL.NAME = null;
+
                         DTL.DEPT_ID = UserInfo.DEPT_ID;
                         DTL.DEPT_NAME = UserInfo.DEPT_NAME;
                         DTL.OFFICE_ID = UserInfo.OFFICE_ID;
@@ -649,18 +651,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     #endregion
 
                 }
-
-                #endregion
-
-                #region - 企業乘車審核單 表單關聯：AssociatedForm -
-
-                var associatedFormModel = new AssociatedFormModel()
-                {
-                    REQUISITION_ID = strREQ,
-                    ASSOCIATED_FORM_CONFIG = model.ASSOCIATED_FORM_CONFIG
-                };
-
-                commonRepository.PutAssociatedForm(associatedFormModel);
 
                 #endregion
 

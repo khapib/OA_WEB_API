@@ -84,6 +84,8 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [FinancAuditName_2] AS [FINANC_AUDIT_NAME_2], ";
             strSQL += "     [PayMethod] AS [PAY_METHOD], ";
             strSQL += "     [AccountCategory] AS [ACCOUNT_CATEGORY], ";
+            strSQL += "     [RegisterKind] AS [REG_KIND], ";
+            strSQL += "     [RegisterNo] AS [REG_NO], ";
             strSQL += "     [PaymentObjectNo] AS [PAYMENT_OBJECT_NO], ";
             strSQL += "     [PaymentObjectName] AS [PAYMENT_OBJECT_NAME], ";
             strSQL += "     [RECV_AccountNo] AS [RECV_ACCOUNT_NO], ";
@@ -389,6 +391,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@FINANC_AUDIT_NAME_2", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PAY_METHOD", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@ACCOUNT_CATEGORY", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@REG_KIND", SqlDbType.NVarChar) { Size = 15, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@REG_NO", SqlDbType.NVarChar) { Size = 15, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PAYMENT_OBJECT_NO", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PAYMENT_OBJECT_NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@RECV_ACCOUNT_NO", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -450,6 +454,8 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "     [FinancAuditName_2]=@FINANC_AUDIT_NAME_2, ";
                     strSQL += "     [PayMethod]=@PAY_METHOD, ";
                     strSQL += "     [AccountCategory]=@ACCOUNT_CATEGORY, ";
+                    strSQL += "     [RegisterKind]=@REG_KIND, ";
+                    strSQL += "     [RegisterNo]=@REG_NO, ";
                     strSQL += "     [PaymentObjectNo]=@PAYMENT_OBJECT_NO, ";
                     strSQL += "     [PaymentObjectName]=@PAYMENT_OBJECT_NAME, ";
                     strSQL += "     [RECV_AccountNo]=@RECV_ACCOUNT_NO, ";

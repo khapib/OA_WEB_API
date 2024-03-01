@@ -81,7 +81,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 預支費用申請單 預知明細 設定
+    /// 預支費用申請單 預支明細 設定
     /// </summary>
     public class AdvanceExpenseDetailsConfig : DOM_TWD_Bank
     {
@@ -149,6 +149,12 @@ namespace OA_WEB_API.Models.BPMPro
         /// 合作夥伴的名稱
         /// </summary>
         public string PAYMENT_OBJECT_NAME { get; set; }
+
+        /// <summary>登記證號類別</summary>
+        public string REG_KIND { get; set; }
+
+        /// <summary>登記證號/統編</summary>
+        public string REG_NO { get; set; }
     }
 
     /// <summary>

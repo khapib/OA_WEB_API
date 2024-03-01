@@ -35,8 +35,6 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>企業乘車審核單 使用預算 設定</summary>
         public List<EnterpriseTaxiReviewBudgetsConfig> ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG { get; set; }
 
-        /// <summary>表單關聯</summary>
-        public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
     }
 
     /// <summary>

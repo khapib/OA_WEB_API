@@ -124,6 +124,12 @@ namespace OA_WEB_API.Models.BPMPro
         /// </summary>
         public string ACCOUNT_CATEGORY { get; set; }
 
+        /// <summary>登記證號類別</summary>
+        public string REG_KIND { get; set; }
+
+        /// <summary>登記證號/統編</summary>
+        public string REG_NO { get; set; }
+
         /// <summary>
         /// 支付對象：
         /// 員工編號、

@@ -2437,6 +2437,12 @@
             帳戶類別 固定都會是B。
             </summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.REG_KIND">
+            <summary>登記證號類別</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.REG_NO">
+            <summary>登記證號/統編</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.PAYMENT_OBJECT_NO">
             <summary>
             支付對象：
@@ -2450,12 +2456,6 @@
             員工姓名、
             合作夥伴的名稱
             </summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.REG_KIND">
-            <summary>登記證號類別</summary>
-        </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.REG_NO">
-            <summary>登記證號/統編</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.AdvanceExpenseSumsConfig">
             <summary>
@@ -3242,6 +3242,12 @@
             PT_AC.(薪轉帳戶)
             帳戶類別 固定都會是B。
             </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.REG_KIND">
+            <summary>登記證號類別</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.REG_NO">
+            <summary>登記證號/統編</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseConfig.PAYMENT_OBJECT_NO">
             <summary>

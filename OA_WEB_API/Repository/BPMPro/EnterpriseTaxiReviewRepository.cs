@@ -570,15 +570,27 @@ namespace OA_WEB_API.Repository.BPMPro
                         #region - 部門彙整 -
                         var UserInfo = userRepository.GetUsersStructure().Where(U => U.COMPANY_ID == "RootCompany" && U.IS_MAIN_JOB == 1 && U.USER_ID == DTL.ACCOUNT_ID).Select(U => U).FirstOrDefault();
 
-                        if (UserInfo != null) DTL.NAME = UserInfo.USER_NAME;
-                        else DTL.NAME = null;
-
-                        DTL.DEPT_ID = UserInfo.DEPT_ID;
-                        DTL.DEPT_NAME = UserInfo.DEPT_NAME;
-                        DTL.OFFICE_ID = UserInfo.OFFICE_ID;
-                        DTL.OFFICE_NAME = UserInfo.OFFICE_NAME;
-                        DTL.GROUP_ID = UserInfo.GROUP_ID;
-                        DTL.GROUP_NAME = UserInfo.GROUP_NAME;
+                        if (UserInfo != null)
+                        {
+                            DTL.NAME = UserInfo.USER_NAME;
+                            DTL.DEPT_ID = UserInfo.DEPT_ID;
+                            DTL.DEPT_NAME = UserInfo.DEPT_NAME;
+                            DTL.OFFICE_ID = UserInfo.OFFICE_ID;
+                            DTL.OFFICE_NAME = UserInfo.OFFICE_NAME;
+                            DTL.GROUP_ID = UserInfo.GROUP_ID;
+                            DTL.GROUP_NAME = UserInfo.GROUP_NAME;
+                        }
+                        else
+                        {
+                            DTL.NAME = null;
+                            DTL.DEPT_ID = null;
+                            DTL.DEPT_NAME = null;
+                            DTL.OFFICE_ID = null;
+                            DTL.OFFICE_NAME = null;
+                            DTL.GROUP_ID = null;
+                            DTL.GROUP_NAME = null;
+                        }
+                        
 
                         #endregion
 

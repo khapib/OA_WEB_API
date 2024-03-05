@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OA_WEB_API.Models.BPMPro;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -282,4 +283,62 @@ namespace OA_WEB_API.Models
         /// <summary>修改日期</summary>
         public DateTime MODIFY_DATE { get; set; }
     }
+
+    #region - 特殊簽核路徑 -
+
+    /// <summary>
+    /// 使用者特殊簽核路徑(查詢條件)
+    /// </summary>
+    public class SetUserApproverQueryModel
+    {
+        /// <summary>員工編號</summary>
+        public string USER_ID { get; set; }
+
+        /// <summary>表單代號</summary>
+        public string IDENTIFY { get; set; }
+    }
+
+    /// <summary>
+    /// 使用者特殊簽核路徑
+    /// </summary>
+    public class SetUserApproverModel
+    {
+        /// <summary>員工編號</summary>
+        public string USER_ID { get; set; }
+
+        /// <summary>員工姓名</summary>
+        public string USER_NAME { get; set; }
+
+        /// <summary>部門編號</summary>
+        public string DEPT_ID { get; set; }
+
+        /// <summary>部門名稱</summary>
+        public string DEPT_NAME { get; set; }
+
+        /// <summary>是否為管理者</summary>
+        public bool? IS_MANAGER { get; set; }
+
+        /// <summary>職稱權重</summary>
+        public int? JOB_GRADE { get; set; }
+
+        /// <summary>簽核人姓名</summary>
+        public string APPROVER_NAME { get; set; }
+
+        /// <summary>簽核人員工編號</summary>
+        public string APPROVER_ID { get; set; }
+
+        /// <summary>簽核人部門編號</summary>
+        public string APPROVER_DEPT_ID { get; set; }
+
+        /// <summary>
+        /// 是否為特殊設定：
+        /// 0.沒有
+        /// 1.有
+        /// </summary>
+        public bool? IS_SET_FLAG { get; set; }
+    }
+
+    #endregion
+
+
 }

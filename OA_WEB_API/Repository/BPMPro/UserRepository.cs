@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using Microsoft.Ajax.Utilities;
 using OA_WEB_API.Models;
+using OA_WEB_API.Models.BPMPro;
 
 namespace OA_WEB_API.Repository
 {
@@ -84,11 +86,11 @@ namespace OA_WEB_API.Repository
             strSQL += "WHERE [USER_ID]=@USER_ID ";
             strSQL += "ORDER BY [COMPANY_ID],[SORT_ORDER],[JOB_GRADE] DESC";
 
-            var userModel = dbFun.DoQuery(strSQL, parameter).ToList<UserInfoModel>();                        
+            var userModel = dbFun.DoQuery(strSQL, parameter).ToList<UserInfoModel>();
 
             #region - 角色 -
 
-            var userRole = BPMPro.CommonRepository.GetRoles().Where(R=>R.USER_ID== model.USER_ID).Select(R=>R.ROLE_ID).ToList();
+            var userRole = BPMPro.CommonRepository.GetRoles().Where(R => R.USER_ID == model.USER_ID).Select(R => R.ROLE_ID).ToList();
 
             #endregion
 
@@ -242,10 +244,76 @@ namespace OA_WEB_API.Repository
 
             strSQL += "ORDER BY [COMPANY_ID],[SORT_ORDER],[JOB_GRADE] DESC ";
 
-            var usersModel = dbFun.DoQuery(strSQL, parameter).ToList<UserModel>();                        
+            var usersModel = dbFun.DoQuery(strSQL, parameter).ToList<UserModel>();
 
             return usersModel;
         }
+
+        #region - 特殊簽核路徑 -
+
+        /// <summary>
+        /// 使用者特殊簽核路徑
+        /// </summary>
+        public IList<SetUserApproverModel> PostSetUserApproverSingle(SetUserApproverQueryModel query)
+        {
+            try
+            {
+                var parameter = new List<SqlParameter>();
+
+                #region - 宣告 -
+
+                var strWhereSQL = String.Empty;
+                var strIdentifySQL = String.Empty;
+                strIdentifySQL = "";
+
+                switch (query.IDENTIFY)
+                {
+                    case "EnterpriseTaxiReview":
+                        strIdentifySQL += "S.[EnterpriseTaxiApproverName] AS [APPROVER_NAME], ";
+                        strIdentifySQL += "S.[EnterpriseTaxiApproverID] AS [APPROVER_ID], ";
+                        strIdentifySQL += "S.[EnterpriseTaxiApproverDeptID] AS [APPROVER_DEPT_ID], ";
+                         strIdentifySQL += "CAST(S.[EnterpriseTaxiSetFlag] as bit) AS [IS_SET_FLAG] ";                        
+                        break;
+                    default:
+                        strIdentifySQL += "null AS [APPROVER_NAME], ";
+                        strIdentifySQL += "null AS [APPROVER_ID], ";
+                        strIdentifySQL += "null AS [APPROVER_DEPT_ID], ";
+                        strIdentifySQL += "null AS [IS_SET_FLAG] ";
+                        break;
+                }
+
+                #endregion
+
+                if (!String.IsNullOrEmpty(query.USER_ID) || !String.IsNullOrWhiteSpace(query.USER_ID))
+                {
+                    parameter.Add(new SqlParameter("@USER_ID", SqlDbType.NVarChar) { Size = 40, Value = query.USER_ID });
+                    strWhereSQL = "WHERE [AccountID]=@USER_ID ";
+                }
+
+                strSQL = "";
+                strSQL += "SELECT ";
+                strSQL += "S.[AccountID] AS [USER_ID], ";
+                strSQL += "S.[Name] AS [USER_NAME], ";
+                strSQL += "S.[DeptID] AS [DEPT_ID], ";
+                strSQL += "D.[DisplayName] AS [DEPT_NAME], ";
+                strSQL += "CAST(S.[ApproveRight] as bit) AS [IS_MANAGER], ";
+                strSQL += "S.[JobGrade] AS [JOB_GRADE], ";
+                strSQL += strIdentifySQL;
+                strSQL += "FROM [NUP].[dbo].[GTV_Org_SetMemberStruct] AS S ";
+                strSQL += "INNER JOIN [NUP].[dbo].[FSe7en_Org_DeptInfo] AS D ON D.[DeptID]=S.[DeptID] ";
+                if (!String.IsNullOrEmpty(query.USER_ID) || !String.IsNullOrWhiteSpace(query.USER_ID)) strSQL += strWhereSQL;
+                strSQL += "ORDER BY [AutoCounter] ASC";
+
+                return dbFun.DoQuery(strSQL, parameter).ToList<SetUserApproverModel>().ToList();
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("使用者特殊簽核路徑輸出失敗，原因：" + ex.Message);
+                throw new Exception("使用者特殊簽核路徑輸出失敗，原因：" + ex.Message);
+            }
+        }
+
+        #endregion
 
         /// <summary>
         /// 使用者員工結構資料(檢視)

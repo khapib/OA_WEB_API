@@ -76,6 +76,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "SELECT ";
             strSQL += "     [IsCFO] AS [IS_CFO], ";
             strSQL += "     [Amount] AS [AMOUNT], ";
+            strSQL += "     [Amount_CONV_Total] AS [AMOUNT_CONV_TOTAL], ";
             strSQL += "     [Currency] AS [CURRENCY], ";
             strSQL += "     [Note] AS [NOTE], ";
             strSQL += "     [FinancAuditID_1] AS [FINANC_AUDIT_ID_1], ";
@@ -383,6 +384,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                         new SqlParameter("@IS_CFO", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@AMOUNT_CONV_TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@CURRENCY", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },                        
                         new SqlParameter("@FINANC_AUDIT_ID_1", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -446,6 +448,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
                     strSQL += "SET [IsCFO]=@IS_CFO, ";
                     strSQL += "     [Amount]=@AMOUNT, ";
+                    strSQL += "     [Amount_CONV_Total]=@AMOUNT_CONV_TOTAL, ";
                     strSQL += "     [Currency]=@CURRENCY, ";
                     strSQL += "     [Note]=@NOTE, ";
                     strSQL += "     [FinancAuditID_1]=@FINANC_AUDIT_ID_1, ";

@@ -1494,6 +1494,11 @@
             使用者資料列表(查詢)
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Controllers.UserController.PostSetMemberStructSingle(OA_WEB_API.Models.SetUserApproverQueryModel)">
+            <summary>
+            使用者特殊簽核路徑
+            </summary>
+        </member>
         <member name="M:OA_WEB_API.Controllers.UserController.GetUsersStructure">
             <summary>
             使用者員工結構資料(檢視)
@@ -7515,6 +7520,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.AMOUNT">
             <summary>金額</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.AMOUNT_CONV_TOTAL">
+            <summary>換算台幣 合計</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderConfig.CURRENCY">
             <summary>幣別</summary>
         </member>
@@ -10387,6 +10395,56 @@
         <member name="P:OA_WEB_API.Models.UsersStructure.MODIFY_DATE">
             <summary>修改日期</summary>
         </member>
+        <member name="T:OA_WEB_API.Models.SetUserApproverQueryModel">
+            <summary>
+            使用者特殊簽核路徑(查詢條件)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.SetUserApproverQueryModel.USER_ID">
+            <summary>員工編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.SetUserApproverQueryModel.IDENTIFY">
+            <summary>表單代號</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.SetUserApproverModel">
+            <summary>
+            使用者特殊簽核路徑
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.SetUserApproverModel.USER_ID">
+            <summary>員工編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.SetUserApproverModel.USER_NAME">
+            <summary>員工姓名</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.SetUserApproverModel.DEPT_ID">
+            <summary>部門編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.SetUserApproverModel.DEPT_NAME">
+            <summary>部門名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.SetUserApproverModel.IS_MANAGER">
+            <summary>是否為管理者</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.SetUserApproverModel.JOB_GRADE">
+            <summary>職稱權重</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.SetUserApproverModel.APPROVER_NAME">
+            <summary>簽核人姓名</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.SetUserApproverModel.APPROVER_ID">
+            <summary>簽核人員工編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.SetUserApproverModel.APPROVER_DEPT_ID">
+            <summary>簽核人部門編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.SetUserApproverModel.IS_SET_FLAG">
+            <summary>
+            是否為特殊設定：
+            0.沒有
+            1.有
+            </summary>
+        </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.FormRepository">
             <summary>
             表單共用
@@ -12851,6 +12909,11 @@
         <member name="M:OA_WEB_API.Repository.UserRepository.PostUsers(OA_WEB_API.Models.UserQueryModel)">
             <summary>
             使用者資料列表(查詢)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.UserRepository.PostSetUserApproverSingle(OA_WEB_API.Models.SetUserApproverQueryModel)">
+            <summary>
+            使用者特殊簽核路徑
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.UserRepository.GetUsersStructure">

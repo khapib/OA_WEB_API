@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
@@ -59,6 +60,16 @@ namespace OA_WEB_API.Controllers
             var token = HttpContext.Current.Request.Headers["Authoriaztion"].ToString();
 
             return (tokenManager.IsAuthenticated(token)) ? userRepository.PostUsers(query) : null;
+        }
+
+        /// <summary>
+        /// 使用者特殊簽核路徑
+        /// </summary>
+        [HttpPost]
+        [Route("PostSetMemberStructSingle")]
+        public IList<SetUserApproverModel> PostSetMemberStructSingle([FromBody] SetUserApproverQueryModel query)
+        {
+            return userRepository.PostSetUserApproverSingle(query);
         }
 
         /// <summary>

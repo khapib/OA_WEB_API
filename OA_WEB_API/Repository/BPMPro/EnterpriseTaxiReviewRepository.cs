@@ -466,7 +466,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     };
 
-                    
+
                     if (model.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG != null && model.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.Count > 0) TaxiExpensesSum = model.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.Sum(DTL => DTL.TAXI_EXPENSES);
 
                     if (TaxiExpensesSum > 0)
@@ -474,7 +474,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         if (model.ENTERPRISE_TAXI_REVIEW_CONFIG.ADD_EXPENSE == 0) model.ENTERPRISE_TAXI_REVIEW_CONFIG.ADD_EXPENSE = TaxiExpensesSum;
                         if (model.ENTERPRISE_TAXI_REVIEW_CONFIG.ACCOUNTS_PAYABLE == 0) model.ENTERPRISE_TAXI_REVIEW_CONFIG.ACCOUNTS_PAYABLE = TaxiExpensesSum;
                         if (model.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL == 0) model.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL = TaxiExpensesSum;
-                    }                    
+                    }
 
                     //寫入：企業乘車審核單 表單內容parameter                        
                     strJson = jsonFunction.ObjectToJSON(model.ENTERPRISE_TAXI_REVIEW_CONFIG);
@@ -568,7 +568,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         #endregion
 
                         #region - 部門彙整 -
-                        var UserInfo = userRepository.GetUsersStructure().Where(U => U.COMPANY_ID == "RootCompany" && U.IS_MAIN_JOB == 1 && U.USER_ID == DTL.ACCOUNT_ID).Select(U => U).FirstOrDefault();
+                        var UserInfo = userRepository.GetUsersStructure().Where(U => U.COMPANY_ID == "GTV" && U.IS_MAIN_JOB == 1 && U.USER_ID == DTL.ACCOUNT_ID).Select(U => U).FirstOrDefault();
 
                         if (UserInfo != null)
                         {
@@ -580,17 +580,6 @@ namespace OA_WEB_API.Repository.BPMPro
                             DTL.GROUP_ID = UserInfo.GROUP_ID;
                             DTL.GROUP_NAME = UserInfo.GROUP_NAME;
                         }
-                        else
-                        {
-                            DTL.NAME = null;
-                            DTL.DEPT_ID = null;
-                            DTL.DEPT_NAME = null;
-                            DTL.OFFICE_ID = null;
-                            DTL.OFFICE_NAME = null;
-                            DTL.GROUP_ID = null;
-                            DTL.GROUP_NAME = null;
-                        }
-                        
 
                         #endregion
 
@@ -604,31 +593,56 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         dbFun.DoTran(strSQL, parameterDetails);
 
-                        #region - 乘車人員 彙整 -
+                        #region - 乘車會簽 彙整 -
 
-                        var ApproversConfig = new EnterpriseTaxiReviewApproversConfig();
+                        var approversConfig = new EnterpriseTaxiReviewApproversConfig();
 
-                        var logonModel = new LogonModel()
+                        approversConfig.APPROVER_DEPT_ID = DTL.DEPT_ID;
+                        if (!String.IsNullOrEmpty(DTL.OFFICE_ID) || !String.IsNullOrWhiteSpace(DTL.OFFICE_ID)) approversConfig.APPROVER_DEPT_ID = DTL.OFFICE_ID;
+                        if (!String.IsNullOrEmpty(DTL.GROUP_ID) || !String.IsNullOrWhiteSpace(DTL.GROUP_ID)) approversConfig.APPROVER_DEPT_ID = DTL.GROUP_ID;
+
+                        if (UserInfo != null || UserInfo.JOB_STATUS == 1)
                         {
-                            USER_ID = DTL.ACCOUNT_ID
-                        };
-                        var UserModel = userRepository.PostUserSingle(logonModel).USER_MODEL;
-                        ApproversConfig.APPROVER_DEPT_ID = DTL.DEPT_ID;
-                        if (!String.IsNullOrEmpty(DTL.OFFICE_ID) || !String.IsNullOrWhiteSpace(DTL.OFFICE_ID)) ApproversConfig.APPROVER_DEPT_ID = DTL.OFFICE_ID;
-                        if (!String.IsNullOrEmpty(DTL.GROUP_ID) || !String.IsNullOrWhiteSpace(DTL.GROUP_ID)) ApproversConfig.APPROVER_DEPT_ID = DTL.GROUP_ID;
-
-                        ApproversConfig.APPROVER_COMPANY_ID = UserModel.Where(U => U.DEPT_ID == ApproversConfig.APPROVER_DEPT_ID).Select(U => U.COMPANY_ID).FirstOrDefault();
-                        ApproversConfig.APPROVER_NAME = UserModel.Where(U => U.USER_ID == ApproversConfig.APPROVER_ID).Select(U => U.USER_NAME).FirstOrDefault();
+                            var query = new LogonModel()
+                            {
+                                USER_ID = DTL.ACCOUNT_ID
+                            };
+                            var UserModel = userRepository.PostUserSingle(query).USER_MODEL;
+                            approversConfig.APPROVER_ID = DTL.ACCOUNT_ID;
+                            approversConfig.APPROVER_COMPANY_ID = UserModel.Where(U => U.DEPT_ID == approversConfig.APPROVER_DEPT_ID).Select(U => U.COMPANY_ID).FirstOrDefault();
+                            approversConfig.APPROVER_NAME = UserModel.Where(U => U.USER_ID == approversConfig.APPROVER_ID).Select(U => U.USER_NAME).FirstOrDefault();
+                        }
+                        else
+                        {
+                            var query = new SetUserApproverQueryModel()
+                            {
+                                USER_ID = DTL.ACCOUNT_ID,
+                                IDENTIFY = IDENTIFY
+                            };
+                            var SetUserApproverInfo = userRepository.PostSetUserApproverSingle(query).Select(U => U).FirstOrDefault();
+                            if (SetUserApproverInfo != null)
+                            {
+                                var userQuery = new LogonModel()
+                                {
+                                    USER_ID = DTL.ACCOUNT_ID
+                                };
+                                var UserModel = userRepository.PostUserSingle(userQuery).USER_MODEL;
+                                approversConfig.APPROVER_ID = DTL.ACCOUNT_ID;
+                                if (sysCommonRepository.GetGPIDeptTree().Where(T => T.DEPT_ID == approversConfig.APPROVER_COMPANY_ID).Count() > 0) approversConfig.APPROVER_COMPANY_ID = "GPI";
+                                else approversConfig.APPROVER_COMPANY_ID = "RootCompany";
+                                approversConfig.APPROVER_NAME = SetUserApproverInfo.USER_NAME;
+                            }
+                        }
 
                         var userInfoMainDeptModel = new UserInfoMainDeptModel()
                         {
-                            USER_ID = ApproversConfig.APPROVER_ID,
-                            DEPT_ID = ApproversConfig.APPROVER_DEPT_ID,
-                            COMPANY_ID = UserInfo.COMPANY_ID,
+                            USER_ID = approversConfig.APPROVER_ID,
+                            DEPT_ID = approversConfig.APPROVER_DEPT_ID,
+                            COMPANY_ID = approversConfig.APPROVER_COMPANY_ID,
                         };
-                        ApproversConfig.APPROVER_DEPT_MAIN_ID = sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel).MAIN_DEPT.DEPT_ID;
+                        approversConfig.APPROVER_DEPT_MAIN_ID = sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel).MAIN_DEPT.DEPT_ID;
 
-                        enterpriseTaxiReviewApproversConfigs.Add(ApproversConfig);
+                        enterpriseTaxiReviewApproversConfigs.Add(approversConfig);
 
 
                         #endregion

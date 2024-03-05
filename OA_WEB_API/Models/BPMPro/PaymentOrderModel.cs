@@ -53,6 +53,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>金額</summary>
         public double AMOUNT { get; set; }
 
+        /// <summary>換算台幣 合計</summary>
+        public int AMOUNT_CONV_TOTAL { get; set; }
+
         /// <summary>幣別</summary>
         public string CURRENCY { get; set; }
 

@@ -4,7 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
-
+using Microsoft.Ajax.Utilities;
 using OA_WEB_API.Models;
 using OA_WEB_API.Models.BPMPro;
 using OA_WEB_API.Models.ERP;
@@ -219,66 +219,104 @@ namespace OA_WEB_API.Repository
 
                 var userInfoMainDeptViewModel = new UserInfoMainDeptViewModel();
 
-                var logonModel = new LogonModel()
+                if(!String.IsNullOrEmpty(model.USER_ID) || !String.IsNullOrWhiteSpace(model.USER_ID))
                 {
-                    USER_ID = model.USER_ID
-                };
-
-                userInfoMainDeptViewModel.USER_MODEL = jsonFunction.JsonToObject<UserInfoConfig>(jsonFunction.ObjectToJSON(userRepository.PostUserSingle(logonModel).USER_MODEL
-                                                                                                                            .Where(U => U.DEPT_ID == model.DEPT_ID)
-                                                                                                                            .Select(U => U)
-                                                                                                                            .FirstOrDefault()));
-                if(userInfoMainDeptViewModel.USER_MODEL!=null && userInfoMainDeptViewModel.USER_MODEL.JOB_STATUS != 0)
-                {
-                    var parameter = new List<SqlParameter>()
+                    var logonModel = new LogonModel()
                     {
-                        new SqlParameter("@ACCOUNT_ID", SqlDbType.NVarChar) { Size = 10, Value = userInfoMainDeptViewModel.USER_MODEL.USER_ID },
-                        new SqlParameter("@DEPT_ID", SqlDbType.NVarChar) { Size = 40, Value = userInfoMainDeptViewModel.USER_MODEL.DEPT_ID },
+                        USER_ID = model.USER_ID
                     };
 
-                    strSQL = "";
-                    strSQL += "Select ";
-                    strSQL += "      [IsMainJob] ";
-                    strSQL += "FROM [NUP].[dbo].[FSe7en_Org_MemberStruct] ";
-                    strSQL += "WHERE 1=1 ";
-                    strSQL += "         AND [AccountID]=@ACCOUNT_ID ";
-                    strSQL += "         AND [DeptID]=@DEPT_ID ";
-                    var dt = dbFun.DoQuery(strSQL, parameter);
-
-                    if (dt.Rows.Count > 0)
+                    userInfoMainDeptViewModel.USER_MODEL = jsonFunction.JsonToObject<UserInfoConfig>(jsonFunction.ObjectToJSON(userRepository.PostUserSingle(logonModel).USER_MODEL
+                                                                                                                                .Where(U => U.DEPT_ID == model.DEPT_ID)
+                                                                                                                                .Select(U => U)
+                                                                                                                                .FirstOrDefault()));
+                    if (userInfoMainDeptViewModel.USER_MODEL != null && userInfoMainDeptViewModel.USER_MODEL.JOB_STATUS != 0)
                     {
-                        switch (dt.Rows[0][0].ToString())
+                        var parameter = new List<SqlParameter>()
                         {
-                            case "0":
-                                userInfoMainDeptViewModel.USER_MODEL.IS_MAIN_JOB = false;
-                                break;
-                            case "1":
-                                userInfoMainDeptViewModel.USER_MODEL.IS_MAIN_JOB = true;
-                                break;
-                            default:
-                                userInfoMainDeptViewModel.USER_MODEL.IS_MAIN_JOB = null;
-                                break;
-                        }
+                            new SqlParameter("@ACCOUNT_ID", SqlDbType.NVarChar) { Size = 10, Value = userInfoMainDeptViewModel.USER_MODEL.USER_ID },
+                            new SqlParameter("@DEPT_ID", SqlDbType.NVarChar) { Size = 40, Value = userInfoMainDeptViewModel.USER_MODEL.DEPT_ID },
+                        };
 
-                        if (userInfoMainDeptViewModel.USER_MODEL.DEPT_FLOW == null)
+                        strSQL = "";
+                        strSQL += "Select ";
+                        strSQL += "      [IsMainJob] ";
+                        strSQL += "FROM [NUP].[dbo].[FSe7en_Org_MemberStruct] ";
+                        strSQL += "WHERE 1=1 ";
+                        strSQL += "         AND [AccountID]=@ACCOUNT_ID ";
+                        strSQL += "         AND [DeptID]=@DEPT_ID ";
+                        var dt = dbFun.DoQuery(strSQL, parameter);
+
+                        if (dt.Rows.Count > 0)
                         {
-                            switch (model.COMPANY_ID)
+                            switch (dt.Rows[0][0].ToString())
                             {
-                                case "RootCompany":
-                                    userInfoMainDeptViewModel.MAIN_DEPT = MainDept.Where(D => D.DEPT_ID == "D01").Select(D => D).FirstOrDefault();
+                                case "0":
+                                    userInfoMainDeptViewModel.USER_MODEL.IS_MAIN_JOB = false;
                                     break;
-                                case "GPI":
-                                    userInfoMainDeptViewModel.MAIN_DEPT = MainDept.Where(D => D.DEPT_ID == "H02").Select(D => D).FirstOrDefault();
+                                case "1":
+                                    userInfoMainDeptViewModel.USER_MODEL.IS_MAIN_JOB = true;
                                     break;
-                                default: break;
+                                default:
+                                    userInfoMainDeptViewModel.USER_MODEL.IS_MAIN_JOB = null;
+                                    break;
                             }
-                        }
-                        else
-                        {
-                            userInfoMainDeptViewModel.MAIN_DEPT = MainDept.Where(D => userInfoMainDeptViewModel.USER_MODEL.DEPT_FLOW.Contains(D.DEPT_NAME)).Select(D => D).FirstOrDefault();
-                        }
 
+                            if (userInfoMainDeptViewModel.USER_MODEL.DEPT_FLOW == null)
+                            {
+                                switch (model.COMPANY_ID)
+                                {
+                                    case "RootCompany":
+                                        userInfoMainDeptViewModel.MAIN_DEPT = MainDept.Where(D => D.DEPT_ID == "D01").Select(D => D).FirstOrDefault();
+                                        break;
+                                    case "GPI":
+                                        userInfoMainDeptViewModel.MAIN_DEPT = MainDept.Where(D => D.DEPT_ID == "H02").Select(D => D).FirstOrDefault();
+                                        break;
+                                    default: break;
+                                }
+                            }
+                            else
+                            {
+                                //
+                            }
+
+                        }
                     }
+                }
+                else
+                {
+                    userInfoMainDeptViewModel.USER_MODEL = null;
+
+                    if(String.IsNullOrEmpty(model.DEPT_ID) || String.IsNullOrWhiteSpace(model.DEPT_ID))
+                    {
+                        switch (model.COMPANY_ID)
+                        {
+                            case "RootCompany":
+                                userInfoMainDeptViewModel.MAIN_DEPT = MainDept.Where(D => D.DEPT_ID == "D01").Select(D => D).FirstOrDefault();
+                                break;
+                            case "GPI":
+                                userInfoMainDeptViewModel.MAIN_DEPT = MainDept.Where(D => D.DEPT_ID == "H02").Select(D => D).FirstOrDefault();
+                                break;
+                            default: break;
+                        }
+                    }
+                    else
+                    {
+                        // userInfoMainDeptViewModel.MAIN_DEPT = MainDept.Where(D => userInfoMainDeptViewModel.USER_MODEL.DEPT_FLOW.Contains(D.DEPT_NAME)).Select(D => D).FirstOrDefault();
+
+                        switch (model.COMPANY_ID)
+                        {
+                            case "RootCompany":
+                                ParentDeptID = "H01";
+                                
+                                break;
+                            case "GPI":
+                                ParentDeptID = "H02";
+                                
+                                break;
+                            default: break;
+                        }
+                    }  
                 }
 
                 return userInfoMainDeptViewModel;

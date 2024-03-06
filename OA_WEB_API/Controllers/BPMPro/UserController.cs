@@ -66,8 +66,8 @@ namespace OA_WEB_API.Controllers
         /// 使用者特殊簽核路徑
         /// </summary>
         [HttpPost]
-        [Route("PostSetMemberStructSingle")]
-        public IList<SetUserApproverModel> PostSetMemberStructSingle([FromBody] SetUserApproverQueryModel query)
+        [Route("PostSetUserApproverSingle")]
+        public IList<SetUserApproverModel> PostSetUserApproverSingle([FromBody] SetUserApproverQueryModel query)
         {
             return userRepository.PostSetUserApproverSingle(query);
         }

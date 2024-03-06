@@ -294,6 +294,9 @@ namespace OA_WEB_API.Models
         /// <summary>員工編號</summary>
         public string USER_ID { get; set; }
 
+        /// <summary>審核人</summary>
+        public string APPROVER_ID { get; set; }
+
         /// <summary>表單代號</summary>
         public string IDENTIFY { get; set; }
     }

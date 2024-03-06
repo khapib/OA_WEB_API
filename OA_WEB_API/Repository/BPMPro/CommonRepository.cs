@@ -1541,6 +1541,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 case "MediaOrder": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<MediaOrderBudgetsConfig>();
                 case "ExpensesReimburse": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<ExpensesReimburseBudgetsConfig>();
                 case "StaffTravellingExpenses": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<StaffTravellingExpensesBudgetsConfig>();
+                case "EnterpriseTaxiReview": return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<EnterpriseTaxiReviewBudgetsConfig>();
                 default: return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<BudgetConfig>();
             }
 

@@ -24,7 +24,7 @@ namespace OA_WEB_API.Controllers.BPMPro
         #region  - 方法 - 
 
         /// <summary>
-        /// 企業乘車審核單(查詢)
+        /// 企業乘車審核單(主單查詢)
         /// </summary>    
         [Route("PostEnterpriseTaxiReviewSingle")]
         [HttpPost]
@@ -34,7 +34,7 @@ namespace OA_WEB_API.Controllers.BPMPro
         }
 
         /// <summary>
-        /// 企業乘車審核單(明細)
+        /// 企業乘車審核單(明細查詢)
         /// </summary>    
         [Route("PostEnterpriseTaxiReviewDetailsSingle")]
         [HttpPost]

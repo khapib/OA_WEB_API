@@ -536,12 +536,12 @@
         </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.EnterpriseTaxiReviewController.PostEnterpriseTaxiReviewSingle(OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewQueryModel)">
             <summary>
-            企業乘車審核單(查詢)
+            企業乘車審核單(主單查詢)
             </summary>    
         </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.EnterpriseTaxiReviewController.PostEnterpriseTaxiReviewDetailsSingle(OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsQueryModel)">
             <summary>
-            企業乘車審核單(明細)
+            企業乘車審核單(明細查詢)
             </summary>    
         </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.EnterpriseTaxiReviewController.PutEnterpriseTaxiReviewSingle(OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewViewModel)">
@@ -1494,7 +1494,7 @@
             使用者資料列表(查詢)
             </summary>
         </member>
-        <member name="M:OA_WEB_API.Controllers.UserController.PostSetMemberStructSingle(OA_WEB_API.Models.SetUserApproverQueryModel)">
+        <member name="M:OA_WEB_API.Controllers.UserController.PostSetUserApproverSingle(OA_WEB_API.Models.SetUserApproverQueryModel)">
             <summary>
             使用者特殊簽核路徑
             </summary>
@@ -10403,6 +10403,9 @@
         <member name="P:OA_WEB_API.Models.SetUserApproverQueryModel.USER_ID">
             <summary>員工編號</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.SetUserApproverQueryModel.APPROVER_ID">
+            <summary>審核人</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.SetUserApproverQueryModel.IDENTIFY">
             <summary>表單代號</summary>
         </member>
@@ -10667,27 +10670,27 @@
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.EnterpriseTaxiReviewRepository">
             <summary>
-            會簽管理系統 - 企業乘車審核單
+            會簽管理系統 - 企業乘車對帳單
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.EnterpriseTaxiReviewRepository.PostEnterpriseTaxiReviewSingle(OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewQueryModel)">
             <summary>
-            企業乘車審核單(查詢)
+            企業乘車對帳單(主單查詢)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.EnterpriseTaxiReviewRepository.PostEnterpriseTaxiReviewDetailsSingle(OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsQueryModel)">
             <summary>
-            企業乘車審核單(明細)
+            企業乘車對帳單(明細查詢)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.EnterpriseTaxiReviewRepository.PutEnterpriseTaxiReviewSingle(OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewViewModel)">
             <summary>
-            企業乘車審核單(新增/修改/草稿)
+            企業乘車對帳單(新增/修改/草稿)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.EnterpriseTaxiReviewRepository.PutEnterpriseTaxiReviewApproveSingle(OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewDetailsViewModel)">
             <summary>
-            企業乘車審核單(審核)
+            企業乘車對帳單(審核)
             </summary>        
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.EnterpriseTaxiReviewRepository.strSQL">

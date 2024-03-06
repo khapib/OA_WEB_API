@@ -191,7 +191,7 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 企業乘車審核單(審核/明細) 設定
     /// </summary>
-    public class EnterpriseTaxiReviewDetailsViewModel
+    public class EnterpriseTaxiReviewDetailsViewModel: EnterpriseTaxiReviewQueryModel
     {
         /// <summary>企業乘車審核單 乘車明細 設定</summary>
         public List<EnterpriseTaxiReviewDetailsConfig> ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG { get; set; }

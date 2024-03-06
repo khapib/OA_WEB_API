@@ -262,9 +262,16 @@ namespace OA_WEB_API.Repository
 
                 #region - 宣告 -
 
+                var setApprovers = new List<SetUserApproverModel>();
                 var strWhereSQL = String.Empty;
                 var strIdentifySQL = String.Empty;
                 strIdentifySQL = "";
+
+                if (!String.IsNullOrEmpty(query.USER_ID) || !String.IsNullOrWhiteSpace(query.USER_ID))
+                {
+                    parameter.Add(new SqlParameter("@USER_ID", SqlDbType.NVarChar) { Size = 40, Value = query.USER_ID });
+                    strWhereSQL = "WHERE [AccountID]=@USER_ID ";
+                }
 
                 switch (query.IDENTIFY)
                 {
@@ -272,7 +279,7 @@ namespace OA_WEB_API.Repository
                         strIdentifySQL += "S.[EnterpriseTaxiApproverName] AS [APPROVER_NAME], ";
                         strIdentifySQL += "S.[EnterpriseTaxiApproverID] AS [APPROVER_ID], ";
                         strIdentifySQL += "S.[EnterpriseTaxiApproverDeptID] AS [APPROVER_DEPT_ID], ";
-                         strIdentifySQL += "CAST(S.[EnterpriseTaxiSetFlag] as bit) AS [IS_SET_FLAG] ";                        
+                        strIdentifySQL += "CAST(S.[EnterpriseTaxiSetFlag] as bit) AS [IS_SET_FLAG] ";
                         break;
                     default:
                         strIdentifySQL += "null AS [APPROVER_NAME], ";
@@ -282,13 +289,7 @@ namespace OA_WEB_API.Repository
                         break;
                 }
 
-                #endregion
-
-                if (!String.IsNullOrEmpty(query.USER_ID) || !String.IsNullOrWhiteSpace(query.USER_ID))
-                {
-                    parameter.Add(new SqlParameter("@USER_ID", SqlDbType.NVarChar) { Size = 40, Value = query.USER_ID });
-                    strWhereSQL = "WHERE [AccountID]=@USER_ID ";
-                }
+                #endregion                
 
                 strSQL = "";
                 strSQL += "SELECT ";
@@ -302,9 +303,41 @@ namespace OA_WEB_API.Repository
                 strSQL += "FROM [NUP].[dbo].[GTV_Org_SetMemberStruct] AS S ";
                 strSQL += "INNER JOIN [NUP].[dbo].[FSe7en_Org_DeptInfo] AS D ON D.[DeptID]=S.[DeptID] ";
                 if (!String.IsNullOrEmpty(query.USER_ID) || !String.IsNullOrWhiteSpace(query.USER_ID)) strSQL += strWhereSQL;
+                if (!String.IsNullOrEmpty(query.APPROVER_ID) || !String.IsNullOrWhiteSpace(query.APPROVER_ID)) strSQL += strWhereSQL;
                 strSQL += "ORDER BY [AutoCounter] ASC";
 
-                return dbFun.DoQuery(strSQL, parameter).ToList<SetUserApproverModel>().ToList();
+                var setUserApproverModel = dbFun.DoQuery(strSQL, parameter).ToList<SetUserApproverModel>().ToList();
+
+                if (!String.IsNullOrEmpty(query.APPROVER_ID) || !String.IsNullOrWhiteSpace(query.APPROVER_ID))
+                {
+                    
+                    setApprovers = setApprovers.Concat(setUserApproverModel.Where(A => A.APPROVER_ID == query.APPROVER_ID).Select(A => A).ToList()).ToList();
+
+                    int i = 1;
+                    while (i<= int.Parse(GetUsersStructure().Max(U => U.USER_FLOW_LEVEL).ToString()))
+                    {
+                        setApprovers.ForEach(S =>
+                        {
+                            if (setUserApproverModel.Any(A => A.APPROVER_ID == S.USER_ID)) setApprovers = setApprovers.Concat(setUserApproverModel.Where(A => A.APPROVER_ID == S.USER_ID).Select(A => A).ToList()).ToList();                            
+                        });
+                        i++;
+                    }
+                }
+                else setApprovers = setApprovers.Concat(setUserApproverModel).ToList();
+
+                return setApprovers.GroupBy(S => 
+                new { 
+                    S.USER_ID,
+                    S.USER_NAME,
+                    S.DEPT_ID,
+                    S.DEPT_NAME,
+                    S.IS_MANAGER,
+                    S.JOB_GRADE,
+                    S.APPROVER_NAME,
+                    S.APPROVER_ID,
+                    S.APPROVER_DEPT_ID,
+                    S.IS_SET_FLAG
+                }).Select(g => g.First()).ToList();
             }
             catch (Exception ex)
             {

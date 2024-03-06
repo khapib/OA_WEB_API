@@ -277,7 +277,7 @@ namespace OA_WEB_API.Repository
                             }
                             else
                             {
-                                //
+                                userInfoMainDeptViewModel.MAIN_DEPT = MainDept.Where(D => userInfoMainDeptViewModel.USER_MODEL.DEPT_FLOW.Contains(D.DEPT_NAME)).Select(D => D).FirstOrDefault();
                             }
 
                         }
@@ -301,21 +301,28 @@ namespace OA_WEB_API.Repository
                         }
                     }
                     else
-                    {
-                        // userInfoMainDeptViewModel.MAIN_DEPT = MainDept.Where(D => userInfoMainDeptViewModel.USER_MODEL.DEPT_FLOW.Contains(D.DEPT_NAME)).Select(D => D).FirstOrDefault();
-
+                    {    
                         switch (model.COMPANY_ID)
                         {
                             case "RootCompany":
                                 ParentDeptID = "H01";
-                                
+                                MainDept = GetGTVDeptTree().Where(D => D.DEPT_ID == model.DEPT_ID).Select(D => D).ToList();
+                                while(MainDept.Select(D=>D.PARENT_DEPT_ID).FirstOrDefault()!= ParentDeptID)
+                                {
+                                    MainDept= GetGTVDeptTree().Where(D=>D.DEPT_ID== MainDept.Select(P => P.PARENT_DEPT_ID).FirstOrDefault()).ToList();
+                                }
                                 break;
                             case "GPI":
                                 ParentDeptID = "H02";
-                                
+                                MainDept = GetGPIDeptTree().Where(D => D.DEPT_ID == model.DEPT_ID).Select(D => D).ToList();
+                                while (MainDept.Select(D => D.PARENT_DEPT_ID).FirstOrDefault() != ParentDeptID)
+                                {
+                                    MainDept = GetGPIDeptTree().Where(D => D.DEPT_ID == MainDept.Select(P => P.PARENT_DEPT_ID).FirstOrDefault()).ToList();
+                                }
                                 break;
                             default: break;
                         }
+                        userInfoMainDeptViewModel.MAIN_DEPT = MainDept.FirstOrDefault();
                     }  
                 }
 

@@ -7,11 +7,12 @@ using System.Linq;
 using System.Web;
 using OA_WEB_API.Models;
 using System.Runtime.InteropServices;
+using OA_WEB_API.Models.ERP;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
     /// <summary>
-    /// 會簽管理系統 - 企業乘車審核單
+    /// 會簽管理系統 - 企業乘車對帳單
     /// </summary>
     public class EnterpriseTaxiReviewRepository
     {
@@ -34,7 +35,7 @@ namespace OA_WEB_API.Repository.BPMPro
         #region - 方法 -
 
         /// <summary>
-        /// 企業乘車審核單(查詢)
+        /// 企業乘車對帳單(主單查詢)
         /// </summary>
         public EnterpriseTaxiReviewViewModel PostEnterpriseTaxiReviewSingle(EnterpriseTaxiReviewQueryModel query)
         {
@@ -56,7 +57,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 企業乘車審核單 表頭資訊 -
+            #region - 企業乘車對帳單 表頭資訊 -
 
             strSQL = "";
             strSQL += "SELECT ";
@@ -71,7 +72,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 企業乘車審核單 表單內容 -
+            #region - 企業乘車對帳單 表單內容 -
 
             strSQL = "";
             strSQL += "SELECT ";
@@ -90,9 +91,9 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 企業乘車審核單 乘車明細、使用預算 -
+            #region - 企業乘車對帳單 乘車明細、使用預算 -
 
-            //企業乘車審核單 乘車明細、使用預算 檢視，由另一隻API篩選設定後View。
+            //企業乘車對帳單 乘車明細、使用預算 檢視，由另一隻API篩選設定後View。
 
             #endregion            
 
@@ -117,7 +118,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
                 {
                     enterpriseTaxiReviewViewModel = new EnterpriseTaxiReviewViewModel();
-                    CommLib.Logger.Error("企業乘車審核單(查詢)失敗，原因：系統無正常起單。");
+                    CommLib.Logger.Error("企業乘車對帳單(查詢)失敗，原因：系統無正常起單。");
                 }
                 else
                 {
@@ -151,7 +152,7 @@ namespace OA_WEB_API.Repository.BPMPro
         }
 
         /// <summary>
-        /// 企業乘車審核單(明細)
+        /// 企業乘車對帳單(明細查詢)
         /// </summary>
         public EnterpriseTaxiReviewDetailsViewModel PostEnterpriseTaxiReviewDetailsSingle(EnterpriseTaxiReviewDetailsQueryModel query)
         {
@@ -164,21 +165,19 @@ namespace OA_WEB_API.Repository.BPMPro
                  new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID }
             };
 
-            if (query.IS_ALL)
+            if (!String.IsNullOrEmpty(query.USER_ID) || !String.IsNullOrWhiteSpace(query.USER_ID))
             {
-                if (CommonRepository.GetRoles().Any(R => R.ROLE_ID == "GV_ENTERPRISE_TAXI_REVIEW_VIEW_ALL" && R.USER_ID == query.USER_ID)) query.IS_ALL = true;
-                else query.IS_ALL = false;
+                if (query.IS_ALL)
+                {
+                    if (CommonRepository.GetRoles().Any(R => R.ROLE_ID == "GV_ENTERPRISE_TAXI_REVIEW_VIEW_ALL" && R.USER_ID == query.USER_ID)) query.IS_ALL = true;
+                    else query.IS_ALL = false;
+                }
             }
+            else query.IS_ALL = true;
 
             #endregion
 
-            #region - 企業乘車審核單 乘車明細 -
-
-            if (!query.IS_ALL)
-            {
-                parameter.Add(new SqlParameter("@USER_ID", SqlDbType.NVarChar) { Size = 40, Value = query.USER_ID });
-                strSetSQL = "INNER JOIN [NUP].[dbo].[GTV_Org_SetMemberStruct] AS S ON D.[AccountID]=S.[AccountID] AND D.[DeptID]=S.[DeptID] AND S.EnterpriseTaxiApproverID=@USER_ID ";
-            }
+            #region - 企業乘車對帳單 乘車明細 -
 
             strSQL = "";
             strSQL += "SELECT ";
@@ -209,7 +208,6 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [ProjectUseYear] AS [PROJECT_USE_YEAR], ";
             strSQL += "     [Flag] AS [FLAG] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_DTL] ";
-            strSQL += strSetSQL;
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
             strSQL += "ORDER BY [AutoCounter] ";
 
@@ -217,21 +215,23 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 明細顯示的行數 -
+            if (!query.IS_ALL)
+            {
+                var setUserApproverQuery = new SetUserApproverQueryModel()
+                {
+                    APPROVER_ID = query.USER_ID,
+                    IDENTIFY = IDENTIFY
+                };
 
-            strSQL = "";
-            strSQL += "SELECT STUFF( ";
-            strSQL += "(SELECT DISTINCT ',' + '' + CAST([RowNo] as nvarchar) +'' ";
-            strSQL += "FROM  [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_DTL] AS D ";
-            strSQL += strSetSQL;
-            strSQL += "WHERE [RequisitionID]=@REQUISITION_ID FOR XML PATH('')), ";
-            strSQL += "1, 1, '') ";
+                var SetMember = userRepository.PostSetUserApproverSingle(setUserApproverQuery);
 
-            var ArrayRowNo = dbFun.DoQuery(strSQL, parameter).Rows[0][0].ToString().Split(',');
+                enterpriseTaxiReviewDetailsConfig = enterpriseTaxiReviewDetailsConfig.Where(DTL => SetMember.Select(S => S.USER_ID).Contains(DTL.ACCOUNT_ID) || DTL.ACCOUNT_ID == query.USER_ID).ToList();
 
-            #endregion
+            }
 
-            #region - 企業乘車審核單 使用預算 -
+            var ArrayRowNo = enterpriseTaxiReviewDetailsConfig.Select(DTL => DTL.ROW_NO).ToArray();
+
+            #region - 企業乘車對帳單 使用預算 -
 
             var CommonBUDG = new BPMCommonModel<EnterpriseTaxiReviewBudgetsConfig>()
             {
@@ -244,7 +244,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             if (!query.IS_ALL)
             {
-                enterpriseTaxiReviewBudgetsConfig = enterpriseTaxiReviewBudgetsConfig.Where(BUDG => ArrayRowNo.Any(R => int.Parse(R) == BUDG.ROW_NO)).ToList();
+                enterpriseTaxiReviewBudgetsConfig = enterpriseTaxiReviewBudgetsConfig.Where(BUDG => ArrayRowNo.Any(R => R == BUDG.ROW_NO)).ToList();
             }
 
             #endregion
@@ -253,6 +253,7 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG = enterpriseTaxiReviewDetailsConfig,
                 ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG = enterpriseTaxiReviewBudgetsConfig,
+                REQUISITION_ID=strREQ
             };
 
             return enterpriseTaxiReviewDetailsViewModel;
@@ -261,7 +262,7 @@ namespace OA_WEB_API.Repository.BPMPro
         #region - 依此單內容重送 -
 
         ///// <summary>
-        ///// 企業乘車審核單(依此單內容重送)(僅外部起單使用)
+        ///// 企業乘車對帳單(依此單內容重送)(僅外部起單使用)
         ///// </summary>
         //public bool PutEnterpriseTaxiReviewRefill(EnterpriseTaxiReviewQueryModel query)
         //{
@@ -329,7 +330,7 @@ namespace OA_WEB_API.Repository.BPMPro
         #endregion
 
         /// <summary>
-        /// 企業乘車審核單(新增/修改/草稿)
+        /// 企業乘車對帳單(新增/修改/草稿)
         /// </summary>
         public bool PutEnterpriseTaxiReviewSingle(EnterpriseTaxiReviewViewModel model)
         {
@@ -350,9 +351,23 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
+                #region - 主旨 -
+
+                if (String.IsNullOrEmpty(model.ENTERPRISE_TAXI_REVIEW_TITLE.FM7_SUBJECT) || String.IsNullOrWhiteSpace(model.ENTERPRISE_TAXI_REVIEW_TITLE.FM7_SUBJECT))
+                {
+                    // 單號由流程事件做寫入
+                    FM7Subject = DateTime.Parse(model.ENTERPRISE_TAXI_REVIEW_CONFIG.ACCOUNTING_DATE_END.ToString()).Year + "年度" + DateTime.Parse(model.ENTERPRISE_TAXI_REVIEW_CONFIG.ACCOUNTING_DATE_END.ToString()).Month + "月企業乘車審核單";
+                }
+                else
+                {
+                    FM7Subject = model.ENTERPRISE_TAXI_REVIEW_TITLE.FM7_SUBJECT;
+                }
+
                 #endregion
 
-                #region - 企業乘車審核單 表頭資訊：EnterpriseTaxiReview_M -
+                #endregion
+
+                #region - 企業乘車對帳單 表頭資訊：EnterpriseTaxiReview_M -
 
                 var parameterTitle = new List<SqlParameter>()
                 {
@@ -371,7 +386,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     //(填單人/代填單人)資訊
                     new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_ID },
                     new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
-                    //企業乘車審核單 表頭
+                    //企業乘車對帳單 表頭
                     new SqlParameter("@FLOW_NAME", SqlDbType.NVarChar) { Size = 20, Value = (object)model.ENTERPRISE_TAXI_REVIEW_TITLE.FLOW_NAME ?? DBNull.Value },
                     new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.ENTERPRISE_TAXI_REVIEW_TITLE.FORM_NO ?? DBNull.Value },
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
@@ -448,13 +463,13 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 企業乘車審核單 表單內容：EnterpriseTaxiReview_M -
+                #region - 企業乘車對帳單 表單內容：EnterpriseTaxiReview_M -
 
                 if (model.ENTERPRISE_TAXI_REVIEW_CONFIG != null)
                 {
                     var parameterInfo = new List<SqlParameter>()
                     {
-                        //企業乘車審核單 表單內容
+                        //企業乘車對帳單 表單內容
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                         new SqlParameter("@ACCOUNTING_DATE_START", SqlDbType.DateTime) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@ACCOUNTING_DATE_END", SqlDbType.DateTime) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -476,7 +491,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         if (model.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL == 0) model.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL = TaxiExpensesSum;
                     }
 
-                    //寫入：企業乘車審核單 表單內容parameter                        
+                    //寫入：企業乘車對帳單 表單內容parameter                        
                     strJson = jsonFunction.ObjectToJSON(model.ENTERPRISE_TAXI_REVIEW_CONFIG);
                     GlobalParameters.Infoparameter(strJson, parameterInfo);
 
@@ -498,11 +513,11 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 企業乘車審核單 乘車明細: EnterpriseTaxiReview_DTL -
+                #region - 企業乘車對帳單 乘車明細: EnterpriseTaxiReview_DTL -
 
                 var parameterDetails = new List<SqlParameter>()
                 {
-                    //企業乘車審核單 乘車明細
+                    //企業乘車對帳單 乘車明細
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                     new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@TICKET", SqlDbType.NVarChar) { Size = 15, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -533,7 +548,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #region 先刪除舊資料
 
-                //企業乘車審核單 乘車明細
+                //企業乘車對帳單 乘車明細
                 strSQL = "";
                 strSQL += "DELETE ";
                 strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_DTL] ";
@@ -583,7 +598,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         #endregion
 
-                        //寫入：企業乘車審核單 乘車明細parameter
+                        //寫入：企業乘車對帳單 乘車明細parameter
                         strJson = jsonFunction.ObjectToJSON(DTL);
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
@@ -596,6 +611,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         #region - 乘車會簽 彙整 -
 
                         var approversConfig = new EnterpriseTaxiReviewApproversConfig();
+                        var userInfoMainDeptModel = new UserInfoMainDeptModel();
 
                         approversConfig.APPROVER_DEPT_ID = DTL.DEPT_ID;
                         if (!String.IsNullOrEmpty(DTL.OFFICE_ID) || !String.IsNullOrWhiteSpace(DTL.OFFICE_ID)) approversConfig.APPROVER_DEPT_ID = DTL.OFFICE_ID;
@@ -611,6 +627,11 @@ namespace OA_WEB_API.Repository.BPMPro
                             approversConfig.APPROVER_ID = DTL.ACCOUNT_ID;
                             approversConfig.APPROVER_COMPANY_ID = UserModel.Where(U => U.DEPT_ID == approversConfig.APPROVER_DEPT_ID).Select(U => U.COMPANY_ID).FirstOrDefault();
                             approversConfig.APPROVER_NAME = UserModel.Where(U => U.USER_ID == approversConfig.APPROVER_ID).Select(U => U.USER_NAME).FirstOrDefault();
+                            strJson = jsonFunction.ObjectToJSON(approversConfig);
+                            strJson = strJson.Replace("APPROVER_ID", "USER_ID");
+                            strJson = strJson.Replace("APPROVER_DEPT_ID", "DEPT_ID");
+                            strJson = strJson.Replace("APPROVER_COMPANY_ID", "COMPANY_ID");
+                            userInfoMainDeptModel = jsonFunction.JsonToObject<UserInfoMainDeptModel>(strJson);
                         }
                         else
                         {
@@ -622,28 +643,22 @@ namespace OA_WEB_API.Repository.BPMPro
                             var SetUserApproverInfo = userRepository.PostSetUserApproverSingle(query).Select(U => U).FirstOrDefault();
                             if (SetUserApproverInfo != null)
                             {
-                                var userQuery = new LogonModel()
-                                {
-                                    USER_ID = DTL.ACCOUNT_ID
-                                };
-                                var UserModel = userRepository.PostUserSingle(userQuery).USER_MODEL;
-                                approversConfig.APPROVER_ID = DTL.ACCOUNT_ID;
+                                approversConfig.APPROVER_ID = null;
                                 if (sysCommonRepository.GetGPIDeptTree().Where(T => T.DEPT_ID == approversConfig.APPROVER_COMPANY_ID).Count() > 0) approversConfig.APPROVER_COMPANY_ID = "GPI";
                                 else approversConfig.APPROVER_COMPANY_ID = "RootCompany";
                                 approversConfig.APPROVER_NAME = SetUserApproverInfo.USER_NAME;
+                                strJson = jsonFunction.ObjectToJSON(approversConfig);
+                                strJson = strJson.Replace("APPROVER_ID", "USER_ID");
+                                strJson = strJson.Replace("APPROVER_DEPT_ID", "DEPT_ID");
+                                strJson = strJson.Replace("APPROVER_COMPANY_ID", "COMPANY_ID");
+                                userInfoMainDeptModel = jsonFunction.JsonToObject<UserInfoMainDeptModel>(strJson);
+                                approversConfig.APPROVER_ID = DTL.ACCOUNT_ID;
                             }
                         }
 
-                        var userInfoMainDeptModel = new UserInfoMainDeptModel()
-                        {
-                            USER_ID = approversConfig.APPROVER_ID,
-                            DEPT_ID = approversConfig.APPROVER_DEPT_ID,
-                            COMPANY_ID = approversConfig.APPROVER_COMPANY_ID,
-                        };
                         approversConfig.APPROVER_DEPT_MAIN_ID = sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel).MAIN_DEPT.DEPT_ID;
 
                         enterpriseTaxiReviewApproversConfigs.Add(approversConfig);
-
 
                         #endregion
 
@@ -652,11 +667,11 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     #endregion
 
-                    #region - 企業乘車審核單 乘車人員: EnterpriseTaxiReview_D 執行 -
+                    #region - 企業乘車對帳單 乘車人員: EnterpriseTaxiReview_D 執行 -
 
                     var parameterApprovers = new List<SqlParameter>()
                     {
-                        //企業乘車審核單 乘車人員
+                        //企業乘車對帳單 乘車人員
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                         new SqlParameter("@APPROVER_COMPANY_ID", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@APPROVER_DEPT_MAIN_ID", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
@@ -676,6 +691,38 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     #endregion
 
+                }
+
+                #endregion
+
+                #region - 企業乘車對帳單 使用預算：EnterpriseTaxiReview_BUDG -
+
+                var parameterBudgets = new List<SqlParameter>()
+                {
+                    //企業乘車對帳單 使用預算
+                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                    new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@PERIOD", SqlDbType.Int) { Size = 2, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@CREATE_YEAR", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@OWNER_DEPT", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@AVAILABLE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@USE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                };
+
+                if (model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG != null && model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG.Count > 0)
+                {
+                    var CommonBUDG = new BPMCommonModel<EnterpriseTaxiReviewBudgetsConfig>()
+                    {
+                        EXT = "BUDG",
+                        IDENTIFY = IDENTIFY,
+                        PARAMETER = parameterBudgets,
+                        MODEL = model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG
+                    };
+                    commonRepository.PutBudgetFunction(CommonBUDG);
                 }
 
                 #endregion
@@ -748,107 +795,121 @@ namespace OA_WEB_API.Repository.BPMPro
             catch (Exception ex)
             {
                 vResult = false;
-                CommLib.Logger.Error("企業乘車審核單(新增/修改/草稿)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("企業乘車對帳單(新增/修改/草稿)失敗，原因：" + ex.Message);
             }
 
             return vResult;
         }
 
         /// <summary>
-        /// 企業乘車審核單(審核)
+        /// 企業乘車對帳單(審核)
         /// </summary>        
         public bool PutEnterpriseTaxiReviewApproveSingle(EnterpriseTaxiReviewDetailsViewModel model)
         {
             bool vResult = false;
             try
             {
-                #region - 企業乘車審核單 乘車明細: EnterpriseTaxiReview_DTL -
+                strREQ = model.REQUISITION_ID;
 
-                var parameterDetails = new List<SqlParameter>()
+                if (!String.IsNullOrEmpty(strREQ) || !String.IsNullOrWhiteSpace(strREQ))
                 {
-                    //企業乘車審核單 乘車明細
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
-                    new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@GET_ON_DATE", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@GET_OFF_DATE", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@GET_ON_TIME", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@GET_OFF_TIME", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@GET_ON_PLACE", SqlDbType.NVarChar) { Size = 255, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@GET_OFF_PLACE", SqlDbType.NVarChar) { Size = 255, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@COMPLEMENT_GET_ON_PLACE", SqlDbType.NVarChar) { Size = 255, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@COMPLEMENT_GET_OFF_PLACE", SqlDbType.NVarChar) { Size = 255, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@TRAVEL_BY_PURPOSE", SqlDbType.NVarChar) { Size = 255, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PROJECT_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PROJECT_NAME", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PROJECT_NICKNAME", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PROJECT_USE_YEAR", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-                };
+                    #region - 企業乘車對帳單 乘車明細: EnterpriseTaxiReview_DTL -
 
-                if (model.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG != null && model.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.Count > 0)
-                {
-                    model.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.ForEach(DTL =>
+                    var parameterDetails = new List<SqlParameter>()
                     {
-                        strSQL = "";
-                        strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_DTL] ";
-                        strSQL += "SET [GetOnDate]=@GET_ON_DATE, ";
-                        strSQL += "     [GetOffDate]=@GET_OFF_DATE, ";
-                        strSQL += "     [GetOnTime]=@GET_ON_TIME, ";
-                        strSQL += "     [GetOffTime]=@GET_OFF_TIME, ";
-                        strSQL += "     [GetOnPlace]=@GET_ON_PLACE, ";
-                        strSQL += "     [GetOffPlace]=@GET_OFF_PLACE, ";
-                        strSQL += "     [ComplementGetOnPlace]=@COMPLEMENT_GET_ON_PLACE, ";
-                        strSQL += "     [ComplementGetOffPlace]=@COMPLEMENT_GET_OFF_PLACE, ";
-                        strSQL += "     [TravelByPurpose]=@TRAVEL_BY_PURPOSE, ";
-                        strSQL += "     [ProjectFormNo]=@PROJECT_FORM_NO, ";
-                        strSQL += "     [ProjectName]=@PROJECT_NAME, ";
-                        strSQL += "     [ProjectNickname]=@PROJECT_NICKNAME, ";
-                        strSQL += "     [ProjectUseYear]=@PROJECT_USE_YEAR ";
-                        strSQL += "WHERE 1=1 ";
-                        strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
-                        strSQL += "         AND [RowNo]=@ROW_NO ";
-
-                    });
-                }
-                #endregion
-
-                #region - 企業乘車審核單 使用預算：EnterpriseTaxiReview_BUDG -
-
-                var parameterBudgets = new List<SqlParameter>()
-                {
-                    //企業乘車審核單 使用預算
-                    new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
-                    new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@PERIOD", SqlDbType.Int) { Size = 2, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@CREATE_YEAR", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@OWNER_DEPT", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@AVAILABLE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@USE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                };
-
-                if (model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG != null && model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG.Count > 0)
-                {
-                    var CommonBUDG = new BPMCommonModel<EnterpriseTaxiReviewBudgetsConfig>()
-                    {
-                        EXT = "BUDG",
-                        IDENTIFY = IDENTIFY,
-                        PARAMETER = parameterBudgets,
-                        MODEL = model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG
+                        //企業乘車對帳單 乘車明細
+                        new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                        new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@GET_ON_DATE", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@GET_OFF_DATE", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@GET_ON_TIME", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@GET_OFF_TIME", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@GET_ON_PLACE", SqlDbType.NVarChar) { Size = 255, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@GET_OFF_PLACE", SqlDbType.NVarChar) { Size = 255, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@COMPLEMENT_GET_ON_PLACE", SqlDbType.NVarChar) { Size = 255, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@COMPLEMENT_GET_OFF_PLACE", SqlDbType.NVarChar) { Size = 255, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@TRAVEL_BY_PURPOSE", SqlDbType.NVarChar) { Size = 255, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PROJECT_FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PROJECT_NAME", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PROJECT_NICKNAME", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PROJECT_USE_YEAR", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
                     };
-                    commonRepository.PutBudgetFunction(CommonBUDG);
+
+                    if (model.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG != null && model.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.Count > 0)
+                    {
+                        model.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.ForEach(DTL =>
+                        {
+                            strJson = jsonFunction.ObjectToJSON(DTL);
+                            GlobalParameters.Infoparameter(strJson, parameterDetails);
+
+                            strSQL = "";
+                            strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_DTL] ";
+                            strSQL += "SET [GetOnDate]=@GET_ON_DATE, ";
+                            strSQL += "     [GetOffDate]=@GET_OFF_DATE, ";
+                            strSQL += "     [GetOnTime]=@GET_ON_TIME, ";
+                            strSQL += "     [GetOffTime]=@GET_OFF_TIME, ";
+                            strSQL += "     [GetOnPlace]=@GET_ON_PLACE, ";
+                            strSQL += "     [GetOffPlace]=@GET_OFF_PLACE, ";
+                            strSQL += "     [ComplementGetOnPlace]=@COMPLEMENT_GET_ON_PLACE, ";
+                            strSQL += "     [ComplementGetOffPlace]=@COMPLEMENT_GET_OFF_PLACE, ";
+                            strSQL += "     [TravelByPurpose]=@TRAVEL_BY_PURPOSE, ";
+                            strSQL += "     [ProjectFormNo]=@PROJECT_FORM_NO, ";
+                            strSQL += "     [ProjectName]=@PROJECT_NAME, ";
+                            strSQL += "     [ProjectNickname]=@PROJECT_NICKNAME, ";
+                            strSQL += "     [ProjectUseYear]=@PROJECT_USE_YEAR ";
+                            strSQL += "WHERE 1=1 ";
+                            strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+                            strSQL += "         AND [RowNo]=@ROW_NO ";
+                            dbFun.DoTran(strSQL, parameterDetails);
+                        });
+                    }
+                    #endregion
+
+                    #region - 企業乘車對帳單 使用預算：EnterpriseTaxiReview_BUDG -
+
+                    var parameterBudgets = new List<SqlParameter>()
+                    {
+                        //企業乘車對帳單 使用預算
+                        new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                        new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@PERIOD", SqlDbType.Int) { Size = 2, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@CREATE_YEAR", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@OWNER_DEPT", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@AVAILABLE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@USE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                    };
+
+                    if (model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG != null && model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG.Count > 0)
+                    {
+                        var CommonBUDG = new BPMCommonModel<EnterpriseTaxiReviewBudgetsConfig>()
+                        {
+                            EXT = "BUDG",
+                            IDENTIFY = IDENTIFY,
+                            PARAMETER = parameterBudgets,
+                            MODEL = model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG
+                        };
+                        commonRepository.PutBudgetFunction(CommonBUDG);
+                    }
+
+                    #endregion
+
+                    vResult = true;
+
                 }
-
-                #endregion
-
-                vResult = true;
+                else
+                {
+                    vResult = false;
+                    CommLib.Logger.Error("企業乘車對帳單(審核)失敗，原因：未帶入【系統編號】");
+                }
             }
             catch (Exception ex)
             {
                 vResult = false;
-                CommLib.Logger.Error("企業乘車審核單(審核)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("企業乘車對帳單(審核)失敗，原因：" + ex.Message);
             }
             return vResult;
         }

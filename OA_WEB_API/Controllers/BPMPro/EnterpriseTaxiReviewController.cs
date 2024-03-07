@@ -10,7 +10,7 @@ using System.Web.Http;
 namespace OA_WEB_API.Controllers.BPMPro
 {
     /// <summary>
-    /// 會簽管理系統 - 企業乘車審核單
+    /// 會簽管理系統 - 企業乘車對帳單
     /// </summary>
     [RoutePrefix("api/BPMPro/EnterpriseTaxiReview")]
     public class EnterpriseTaxiReviewController : ApiController
@@ -24,7 +24,7 @@ namespace OA_WEB_API.Controllers.BPMPro
         #region  - 方法 - 
 
         /// <summary>
-        /// 企業乘車審核單(主單查詢)
+        /// 企業乘車對帳單(主單查詢)
         /// </summary>    
         [Route("PostEnterpriseTaxiReviewSingle")]
         [HttpPost]
@@ -34,7 +34,7 @@ namespace OA_WEB_API.Controllers.BPMPro
         }
 
         /// <summary>
-        /// 企業乘車審核單(明細查詢)
+        /// 企業乘車對帳單(明細查詢)
         /// </summary>    
         [Route("PostEnterpriseTaxiReviewDetailsSingle")]
         [HttpPost]
@@ -46,7 +46,7 @@ namespace OA_WEB_API.Controllers.BPMPro
         #region - 依此單內容重送 -
 
         ///// <summary>
-        ///// 企業乘車審核單(依此單內容重送)
+        ///// 企業乘車對帳單(依此單內容重送)
         ///// </summary>
         //[Route("PutEnterpriseTaxiReviewRefill")]
         //[HttpPost]
@@ -58,7 +58,7 @@ namespace OA_WEB_API.Controllers.BPMPro
         #endregion
 
         /// <summary>
-        /// 企業乘車審核單(新增/修改/草稿)
+        /// 企業乘車對帳單(新增/修改/草稿)
         /// </summary>
         [Route("PutEnterpriseTaxiReviewSingle")]
         [HttpPost]
@@ -68,7 +68,7 @@ namespace OA_WEB_API.Controllers.BPMPro
         }
 
         /// <summary>
-        /// 企業乘車審核單(審核)
+        /// 企業乘車對帳單(審核)
         /// </summary>
         [Route("PutEnterpriseTaxiReviewApproveSingle")]
         [HttpPost]

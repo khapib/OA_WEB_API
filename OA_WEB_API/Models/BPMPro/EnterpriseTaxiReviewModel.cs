@@ -7,7 +7,7 @@ using System.Web.Configuration;
 namespace OA_WEB_API.Models.BPMPro
 {
     /// <summary>
-    /// 企業乘車審核單(查詢條件)
+    /// 企業乘車對帳單(查詢條件)
     /// </summary>
     public class EnterpriseTaxiReviewQueryModel
     {
@@ -16,29 +16,29 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 企業乘車審核單
+    /// 企業乘車對帳單
     /// </summary>
     public class EnterpriseTaxiReviewViewModel
     {
         /// <summary>申請人資訊</summary>
         public ApplicantInfo APPLICANT_INFO { get; set; }
 
-        /// <summary>企業乘車審核單 表頭資訊</summary>
+        /// <summary>企業乘車對帳單 表頭資訊</summary>
         public EnterpriseTaxiReviewTitle ENTERPRISE_TAXI_REVIEW_TITLE { get; set; }
 
-        /// <summary>企業乘車審核單 表單內容 設定</summary>
+        /// <summary>企業乘車對帳單 表單內容 設定</summary>
         public EnterpriseTaxiReviewConfig ENTERPRISE_TAXI_REVIEW_CONFIG { get; set; }
 
-        /// <summary>企業乘車審核單 乘車明細 設定</summary>
+        /// <summary>企業乘車對帳單 乘車明細 設定</summary>
         public List<EnterpriseTaxiReviewDetailsConfig> ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG { get; set; }
 
-        /// <summary>企業乘車審核單 使用預算 設定</summary>
+        /// <summary>企業乘車對帳單 使用預算 設定</summary>
         public List<EnterpriseTaxiReviewBudgetsConfig> ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG { get; set; }
 
     }
 
     /// <summary>
-    /// 企業乘車審核單 表頭資訊
+    /// 企業乘車對帳單 表頭資訊
     /// </summary>
     public class EnterpriseTaxiReviewTitle : ImplementHeader
     {
@@ -47,7 +47,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 企業乘車審核單 表單內容 設定
+    /// 企業乘車對帳單 表單內容 設定
     /// </summary>
     public class EnterpriseTaxiReviewConfig
     {
@@ -77,7 +77,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 企業乘車審核單 乘車明細 設定
+    /// 企業乘車對帳單 乘車明細 設定
     /// </summary>
     public class EnterpriseTaxiReviewDetailsConfig
     {
@@ -153,12 +153,12 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>所屬專案年分</summary>
         public string PROJECT_USE_YEAR { get; set; }
 
-        /// <summary>標記[空值標記：1]</summary>
-        public int FLAG { get; set; }
+        /// <summary>標記[可調整標記："true"]</summary>
+        public string FLAG { get; set; }
     }
 
     /// <summary>
-    /// 企業乘車審核單 會簽乘車人員 設定
+    /// 企業乘車對帳單 會簽乘車人員 設定
     /// </summary>
     public class EnterpriseTaxiReviewApproversConfig : ApproversConfig
     {
@@ -166,7 +166,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 企業乘車審核單 使用預算 設定
+    /// 企業乘車對帳單 使用預算 設定
     /// </summary>
     public class EnterpriseTaxiReviewBudgetsConfig : BudgetConfig
     {
@@ -174,10 +174,10 @@ namespace OA_WEB_API.Models.BPMPro
         public int ROW_NO { get; set; }
     }
 
-    #region - 企業乘車審核單(審核/明細) -
+    #region - 企業乘車對帳單(審核/明細) -
 
     /// <summary>
-    /// 企業乘車審核單(明細)(查詢條件)
+    /// 企業乘車對帳單(明細)(查詢條件)
     /// </summary>
     public class EnterpriseTaxiReviewDetailsQueryModel : EnterpriseTaxiReviewQueryModel
     {
@@ -189,14 +189,14 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 企業乘車審核單(審核/明細) 設定
+    /// 企業乘車對帳單(審核/明細) 設定
     /// </summary>
     public class EnterpriseTaxiReviewDetailsViewModel: EnterpriseTaxiReviewQueryModel
     {
-        /// <summary>企業乘車審核單 乘車明細 設定</summary>
+        /// <summary>企業乘車對帳單 乘車明細 設定</summary>
         public List<EnterpriseTaxiReviewDetailsConfig> ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG { get; set; }
 
-        /// <summary>企業乘車審核單 使用預算 設定</summary>
+        /// <summary>企業乘車對帳單 使用預算 設定</summary>
         public List<EnterpriseTaxiReviewBudgetsConfig> ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG { get; set; }
     }
 

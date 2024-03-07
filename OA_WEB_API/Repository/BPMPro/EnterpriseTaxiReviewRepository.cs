@@ -543,7 +543,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     new SqlParameter("@PROJECT_NAME", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PROJECT_NICKNAME", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@PROJECT_USE_YEAR", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
-                    new SqlParameter("@Flag", SqlDbType.TinyInt) { Value = (object)DBNull.Value ?? DBNull.Value },
+                    new SqlParameter("@FLAG", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                 };
 
                 #region 先刪除舊資料
@@ -572,13 +572,16 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         #region - 標註是否可以調整 -
 
-                        DTL.FLAG = 0;
-                        if (String.IsNullOrEmpty(DTL.GET_ON_DATE) || String.IsNullOrWhiteSpace(DTL.GET_ON_DATE)) DTL.FLAG = 1;
-                        else if (String.IsNullOrEmpty(DTL.GET_OFF_DATE) || String.IsNullOrWhiteSpace(DTL.GET_OFF_DATE)) DTL.FLAG = 1;
-                        else if (String.IsNullOrEmpty(DTL.GET_ON_TIME) || String.IsNullOrWhiteSpace(DTL.GET_ON_TIME)) DTL.FLAG = 1;
-                        else if (String.IsNullOrEmpty(DTL.GET_OFF_TIME) || String.IsNullOrWhiteSpace(DTL.GET_OFF_TIME)) DTL.FLAG = 1;
-                        else if (String.IsNullOrEmpty(DTL.GET_ON_PLACE) || String.IsNullOrWhiteSpace(DTL.GET_ON_PLACE)) DTL.FLAG = 1;
-                        else if (String.IsNullOrEmpty(DTL.GET_OFF_PLACE) || String.IsNullOrWhiteSpace(DTL.GET_OFF_PLACE)) DTL.FLAG = 1;
+                        if(String.IsNullOrEmpty(DTL.FLAG) || String.IsNullOrWhiteSpace(DTL.FLAG))
+                        {
+                            if (String.IsNullOrEmpty(DTL.GET_ON_DATE) || String.IsNullOrWhiteSpace(DTL.GET_ON_DATE)) DTL.FLAG = true.ToString();
+                            else if (String.IsNullOrEmpty(DTL.GET_OFF_DATE) || String.IsNullOrWhiteSpace(DTL.GET_OFF_DATE)) DTL.FLAG = true.ToString();
+                            else if (String.IsNullOrEmpty(DTL.GET_ON_TIME) || String.IsNullOrWhiteSpace(DTL.GET_ON_TIME)) DTL.FLAG = true.ToString();
+                            else if (String.IsNullOrEmpty(DTL.GET_OFF_TIME) || String.IsNullOrWhiteSpace(DTL.GET_OFF_TIME)) DTL.FLAG = true.ToString();
+                            else if (String.IsNullOrEmpty(DTL.GET_ON_PLACE) || String.IsNullOrWhiteSpace(DTL.GET_ON_PLACE)) DTL.FLAG = true.ToString();
+                            else if (String.IsNullOrEmpty(DTL.GET_OFF_PLACE) || String.IsNullOrWhiteSpace(DTL.GET_OFF_PLACE)) DTL.FLAG = true.ToString();
+                            else DTL.FLAG = false.ToString();
+                        }
 
                         #endregion
 
@@ -604,7 +607,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         strSQL = "";
                         strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_DTL]([RequisitionID],[RowNo],[Ticket],[GetOnDate],[GetOffDate],[GetOnTime],[GetOffTime],[GetOnPlace],[GetOffPlace],[ComplementGetOnPlace],[ComplementGetOffPlace],[TravelByPurpose],[TaxiExpenses],[Name],[AccountID],[DeptID],[DeptName],[OfficeID],[OfficeName],[GroupID],[GroupName],[ProjectFormNo],[ProjectName],[ProjectNickname],[ProjectUseYear],[Flag]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@ROW_NO,@TICKET,@GET_ON_DATE,@GET_OFF_DATE,@GET_ON_TIME,@GET_OFF_TIME,@GET_ON_PLACE,@GET_OFF_PLACE,@COMPLEMENT_GET_ON_PLACE,@COMPLEMENT_GET_OFF_PLACE,@TRAVEL_BY_PURPOSE,@TAXI_EXPENSES,@NAME,@ACCOUNT_ID,@DEPT_ID,@DEPT_NAME,@OFFICE_ID,@OFFICE_NAME,@GROUP_ID,@GROUP_NAME,@PROJECT_FORM_NO,@PROJECT_NAME,@PROJECT_NICKNAME,@PROJECT_USE_YEAR,@FLAG) ";
+                        strSQL += "VALUES(@REQUISITION_ID,@ROW_NO,@TICKET,@GET_ON_DATE,@GET_OFF_DATE,@GET_ON_TIME,@GET_OFF_TIME,@GET_ON_PLACE,@GET_OFF_PLACE,@COMPLEMENT_GET_ON_PLACE,@COMPLEMENT_GET_OFF_PLACE,@TRAVEL_BY_PURPOSE,@TAXI_EXPENSES,@NAME,@ACCOUNT_ID,@DEPT_ID,@DEPT_NAME,@OFFICE_ID,@OFFICE_NAME,@GROUP_ID,@GROUP_NAME,@PROJECT_FORM_NO,@PROJECT_NAME,@PROJECT_NICKNAME,@PROJECT_USE_YEAR,UPPER(@FLAG)) ";
 
                         dbFun.DoTran(strSQL, parameterDetails);
 

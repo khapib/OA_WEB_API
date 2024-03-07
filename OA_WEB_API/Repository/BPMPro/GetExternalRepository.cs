@@ -42,8 +42,17 @@ namespace OA_WEB_API.Repository.BPMPro
         ProjectReviewRepository projectReviewRepository = new ProjectReviewRepository();
         /// <summary>合作夥伴審核單</summary>
         SupplierReviewRepository supplierReviewRepository = new SupplierReviewRepository();
-        /// <summary>費用申請單</summary>
-        ExpensesReimburseRepository expensesReimburseRepository = new ExpensesReimburseRepository();
+
+        #region - 財務類 -
+
+        /// <summary>預支費用申請單</summary>
+        AdvanceExpenseRepository advanceExpenseRepository = new AdvanceExpenseRepository();
+        ///// <summary>費用申請單</summary>
+        //ExpensesReimburseRepository expensesReimburseRepository = new ExpensesReimburseRepository();
+        /// <summary>差旅費用報支單</summary>
+        StaffTravellingExpensesRepository staffTravellingExpensesRepository =new StaffTravellingExpensesRepository();
+
+        #endregion
 
         #region 行政採購類
 
@@ -472,6 +481,160 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #endregion
 
+        #region - 企業乘車對帳單(外部起單) -
+
+
+
+        #endregion
+
+        #region - 財務類_(外部起單) -
+
+        #region - 預支費用申請單(外部起單) -
+
+        /// <summary>
+        /// 預支費用申請單(外部起單)
+        /// </summary>
+        public GetExternalData PutAdvanceExpenseGetExternal(AdvanceExpenseERPInfo model)
+        {
+            try
+            {
+                #region - 初始化宣告 -
+
+                //表單ID
+                IDENTIFY = "AdvanceExpense";
+
+                strFormNo = model.ERP_FORM_NO;
+                var request = new GTVInApproveProgress()
+                {
+                    FORM_NO = strFormNo,
+                    IDENTIFY = IDENTIFY
+                };
+
+                //BPM 系統編號
+                if (model.BPM_REQ_ID == null)
+                {
+                    strREQ = Guid.NewGuid().ToString();
+
+                }
+                else
+                {
+                    strREQ = model.BPM_REQ_ID;
+                }
+
+                #endregion
+
+                #region 確認是否已起單且簽核中
+
+                var ApproveProgress = commonRepository.PostGTVInApproveProgress(request);
+
+                //確認是否已起單且簽核中或草稿中
+                if (!ApproveProgress.vResult)
+                {
+                    #region - 起單 -
+
+                    #region - 申請人資訊:ApplicantInfo -
+
+                    //表單資訊
+                    var applicantInfo = new ApplicantInfo()
+                    {
+                        REQUISITION_ID = strREQ,
+                        DIAGRAM_ID = IDENTIFY + "_P1",
+                        PRIORITY = 2,
+                        DRAFT_FLAG = 0,
+                        FLOW_ACTIVATED = 1
+                    };
+
+                    //申請人資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.APPLICANT_DEPT = item.DEPT_ID;
+                        applicantInfo.APPLICANT_DEPT_NAME = item.DEPT_NAME;
+                        applicantInfo.APPLICANT_ID = item.USER_ID;
+                        applicantInfo.APPLICANT_NAME = item.USER_NAME;
+                        applicantInfo.APPLICANT_PHONE = item.MOBILE;
+                    }
+
+                    //(填單人/代填單人)資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.FILLER_ID = item.USER_ID;
+                        applicantInfo.FILLER_NAME = item.USER_NAME;
+                    }
+
+                    #endregion
+
+                    #region - 預支費用申請單 表頭資訊:AdvanceExpenseTitle -
+
+                    strJson = jsonFunction.ObjectToJSON(model);
+                    var advanceExpenseTitle = jsonFunction.JsonToObject<AdvanceExpenseTitle>(strJson);
+                    advanceExpenseTitle.FORM_NO = strFormNo;
+
+                    #endregion
+
+                    #region - 送單 -
+
+                    //送單
+                    var advanceExpenseViewModel = new AdvanceExpenseViewModel()
+                    {
+                        APPLICANT_INFO = applicantInfo,
+                        ADVANCE_EXPENSE_TITLE = advanceExpenseTitle,
+                    };
+
+                    if (advanceExpenseRepository.PutAdvanceExpenseSingle(advanceExpenseViewModel))
+                    {
+                        //起單成功
+                        State = BPMStatusCode.PROGRESS;
+                    }
+                    else
+                    {
+                        //起單失敗
+                        State = BPMStatusCode.FAIL;
+                    }
+
+                    #endregion
+
+                    #endregion
+                }
+                else
+                {
+                    strREQ = ApproveProgress.REQUISITION_ID;
+                    State = ApproveProgress.BPMStatus;
+                }
+
+                #endregion
+
+                #region - 回傳狀態資訊 -
+
+                var getExternalData = new GetExternalData()
+                {
+                    BPM_REQ_ID = strREQ,
+                    ERP_FORM_NO = strFormNo,
+                    STATE = State
+                };
+
+                return getExternalData;
+
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("預支費用申請單(外部起單)失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
         #region - 費用申請單_(外部起單) -
 
         /// <summary>
@@ -567,13 +730,159 @@ namespace OA_WEB_API.Repository.BPMPro
                     #region - 送單 -
 
                     //送單
-                    var expensesReimburseViewModel = new ExpensesReimburseViewModel()
+                    //var expensesReimburseViewModel = new ExpensesReimburseViewModel()
+                    //{
+                    //    APPLICANT_INFO = applicantInfo,
+                    //    EXPENSES_REIMBURSE_TITLE = expensesReimburseTitle,
+                    //};
+
+                    //if (expensesReimburseRepository.PutExpensesReimburseSingle(expensesReimburseViewModel))
+                    //{
+                    //    //起單成功
+                    //    State = BPMStatusCode.PROGRESS;
+                    //}
+                    //else
+                    //{
+                    //    //起單失敗
+                    //    State = BPMStatusCode.FAIL;
+                    //}
+
+                    #endregion
+
+                    #endregion
+                }
+                else
+                {
+                    strREQ = ApproveProgress.REQUISITION_ID;
+                    State = ApproveProgress.BPMStatus;
+                }
+
+                #endregion
+
+                #region - 回傳狀態資訊 -
+
+                var getExternalData = new GetExternalData()
+                {
+                    BPM_REQ_ID = strREQ,
+                    ERP_FORM_NO = strFormNo,
+                    STATE = State
+                };
+
+                return getExternalData;
+
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("費用申請單(外部起單)失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region - 差旅費用報支單(外部起單) -
+
+        /// <summary>
+        /// 差旅費用報支單(外部起單)
+        /// </summary>
+        public GetExternalData PutStaffTravellingExpensesGetExternal(StaffTravellingExpensesERPInfo model)
+        {
+            try
+            {
+                #region - 初始化宣告 -
+
+                //表單ID
+                IDENTIFY = "StaffTravellingExpenses";
+
+                strFormNo = model.ERP_FORM_NO;
+                var request = new GTVInApproveProgress()
+                {
+                    FORM_NO = strFormNo,
+                    IDENTIFY = IDENTIFY
+                };
+
+                //BPM 系統編號
+                if (model.BPM_REQ_ID == null)
+                {
+                    strREQ = Guid.NewGuid().ToString();
+
+                }
+                else
+                {
+                    strREQ = model.BPM_REQ_ID;
+                }
+
+                #endregion
+
+                #region 確認是否已起單且簽核中
+
+                var ApproveProgress = commonRepository.PostGTVInApproveProgress(request);
+
+                //確認是否已起單且簽核中或草稿中
+                if (!ApproveProgress.vResult)
+                {
+                    #region - 起單 -
+
+                    #region - 申請人資訊:ApplicantInfo -
+
+                    //表單資訊
+                    var applicantInfo = new ApplicantInfo()
                     {
-                        APPLICANT_INFO = applicantInfo,
-                        EXPENSES_REIMBURSE_TITLE = expensesReimburseTitle,
+                        REQUISITION_ID = strREQ,
+                        DIAGRAM_ID = IDENTIFY + "_P1",
+                        PRIORITY = 2,
+                        DRAFT_FLAG = 0,
+                        FLOW_ACTIVATED = 1
                     };
 
-                    if (expensesReimburseRepository.PutExpensesReimburseSingle(expensesReimburseViewModel))
+                    //申請人資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.APPLICANT_DEPT = item.DEPT_ID;
+                        applicantInfo.APPLICANT_DEPT_NAME = item.DEPT_NAME;
+                        applicantInfo.APPLICANT_ID = item.USER_ID;
+                        applicantInfo.APPLICANT_NAME = item.USER_NAME;
+                        applicantInfo.APPLICANT_PHONE = item.MOBILE;
+                    }
+
+                    //(填單人/代填單人)資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.FILLER_ID = item.USER_ID;
+                        applicantInfo.FILLER_NAME = item.USER_NAME;
+                    }
+
+                    #endregion
+
+                    #region - 差旅費用報支單 表頭資訊:StaffTravellingExpensesTitle -
+
+                    strJson = jsonFunction.ObjectToJSON(model);
+                    var staffTravellingExpensesTitle = jsonFunction.JsonToObject<StaffTravellingExpensesTitle>(strJson);
+                    staffTravellingExpensesTitle.FORM_NO = strFormNo;
+
+                    #endregion
+
+                    #region - 送單 -
+
+                    //送單
+                    var staffTravellingExpensesViewModel = new StaffTravellingExpensesViewModel()
+                    {
+                        APPLICANT_INFO = applicantInfo,
+                        STAFF_TRAVELLING_EXPENSES_TITLE= staffTravellingExpensesTitle,
+                    };
+
+                    if (staffTravellingExpensesRepository.PutStaffTravellingExpensesSingle(staffTravellingExpensesViewModel))
                     {
                         //起單成功
                         State = BPMStatusCode.PROGRESS;
@@ -611,12 +920,18 @@ namespace OA_WEB_API.Repository.BPMPro
             }
             catch (Exception ex)
             {
-                CommLib.Logger.Error("費用申請單(外部起單)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("預支費用申請單(外部起單)失敗，原因：" + ex.Message);
                 throw;
             }
         }
 
+        #endregion
 
+        #region - 繳款單(外部起單) -
+
+
+
+        #endregion
 
         #endregion
 

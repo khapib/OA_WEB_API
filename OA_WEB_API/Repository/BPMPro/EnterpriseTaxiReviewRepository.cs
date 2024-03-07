@@ -572,13 +572,15 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         #region - 標註是否可以調整 -
 
-                        DTL.FLAG = 0;
-                        if (String.IsNullOrEmpty(DTL.GET_ON_DATE) || String.IsNullOrWhiteSpace(DTL.GET_ON_DATE)) DTL.FLAG = 1;
-                        else if (String.IsNullOrEmpty(DTL.GET_OFF_DATE) || String.IsNullOrWhiteSpace(DTL.GET_OFF_DATE)) DTL.FLAG = 1;
-                        else if (String.IsNullOrEmpty(DTL.GET_ON_TIME) || String.IsNullOrWhiteSpace(DTL.GET_ON_TIME)) DTL.FLAG = 1;
-                        else if (String.IsNullOrEmpty(DTL.GET_OFF_TIME) || String.IsNullOrWhiteSpace(DTL.GET_OFF_TIME)) DTL.FLAG = 1;
-                        else if (String.IsNullOrEmpty(DTL.GET_ON_PLACE) || String.IsNullOrWhiteSpace(DTL.GET_ON_PLACE)) DTL.FLAG = 1;
-                        else if (String.IsNullOrEmpty(DTL.GET_OFF_PLACE) || String.IsNullOrWhiteSpace(DTL.GET_OFF_PLACE)) DTL.FLAG = 1;
+                        if(String.IsNullOrEmpty(DTL.FLAG) || String.IsNullOrWhiteSpace(DTL.FLAG))
+                        {
+                            if (String.IsNullOrEmpty(DTL.GET_ON_DATE) || String.IsNullOrWhiteSpace(DTL.GET_ON_DATE)) DTL.FLAG = true.ToString();
+                            else if (String.IsNullOrEmpty(DTL.GET_OFF_DATE) || String.IsNullOrWhiteSpace(DTL.GET_OFF_DATE)) DTL.FLAG = true.ToString();
+                            else if (String.IsNullOrEmpty(DTL.GET_ON_TIME) || String.IsNullOrWhiteSpace(DTL.GET_ON_TIME)) DTL.FLAG = true.ToString();
+                            else if (String.IsNullOrEmpty(DTL.GET_OFF_TIME) || String.IsNullOrWhiteSpace(DTL.GET_OFF_TIME)) DTL.FLAG = true.ToString();
+                            else if (String.IsNullOrEmpty(DTL.GET_ON_PLACE) || String.IsNullOrWhiteSpace(DTL.GET_ON_PLACE)) DTL.FLAG = true.ToString();
+                            else if (String.IsNullOrEmpty(DTL.GET_OFF_PLACE) || String.IsNullOrWhiteSpace(DTL.GET_OFF_PLACE)) DTL.FLAG = true.ToString();
+                        }                        
 
                         #endregion
 

@@ -836,6 +836,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@PROJECT_NAME", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PROJECT_NICKNAME", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@PROJECT_USE_YEAR", SqlDbType.NVarChar) { Size = 50, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@FLAG", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                     };
 
                     if (model.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG != null && model.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.Count > 0)
@@ -859,7 +860,8 @@ namespace OA_WEB_API.Repository.BPMPro
                             strSQL += "     [ProjectFormNo]=@PROJECT_FORM_NO, ";
                             strSQL += "     [ProjectName]=@PROJECT_NAME, ";
                             strSQL += "     [ProjectNickname]=@PROJECT_NICKNAME, ";
-                            strSQL += "     [ProjectUseYear]=@PROJECT_USE_YEAR ";
+                            strSQL += "     [ProjectUseYear]=@PROJECT_USE_YEAR, ";
+                            strSQL += "     [Flag]=UPPER(@FLAG) ";
                             strSQL += "WHERE 1=1 ";
                             strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
                             strSQL += "         AND [RowNo]=@ROW_NO ";

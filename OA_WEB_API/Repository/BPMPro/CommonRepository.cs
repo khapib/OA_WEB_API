@@ -1068,8 +1068,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 default: return (List<T>)dbFun.DoQuery(strSQL, Common.PARAMETER).ToList<ApproversConfig>();
             }
         }
-
-
+         
         /// <summary>
         /// 會簽簽核人員_共用模組(新增/修改/草稿)
         /// </summary>
@@ -1081,6 +1080,18 @@ namespace OA_WEB_API.Repository.BPMPro
                 #region - 宣告 -
 
                 strTable = Common.IDENTIFY + "_" + Common.EXT;
+
+                switch (Common.IDENTIFY)
+                {
+                    case "EnterpriseTaxiReview":
+                        strField_F = "[RowNo],";
+                        strField_V = "@ROW_NO,";
+                        break;
+                    default:
+                        strField_F = null;
+                        strField_V = null;
+                        break;
+                }
 
                 #endregion
 
@@ -1107,8 +1118,8 @@ namespace OA_WEB_API.Repository.BPMPro
                         GlobalParameters.Infoparameter(strJson, Common.PARAMETER);
 
                         strSQL = "";
-                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "]([RequisitionID],[ApproverCompanyID],[ApproverDeptMainID],[ApproverDeptID],[ApproverID],[ApproverName]) ";
-                        strSQL += "VALUES(@REQUISITION_ID,@APPROVER_COMPANY_ID,@APPROVER_DEPT_MAIN_ID,@APPROVER_DEPT_ID,@APPROVER_ID,@APPROVER_NAME) ";
+                        strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + strTable + "]([RequisitionID]," + strField_F + "[ApproverCompanyID],[ApproverDeptMainID],[ApproverDeptID],[ApproverID],[ApproverName]) ";
+                        strSQL += "VALUES(@REQUISITION_ID," + strField_V + "@APPROVER_COMPANY_ID,@APPROVER_DEPT_MAIN_ID,@APPROVER_DEPT_ID,@APPROVER_ID,@APPROVER_NAME) ";
 
                         dbFun.DoTran(strSQL, Common.PARAMETER);
 

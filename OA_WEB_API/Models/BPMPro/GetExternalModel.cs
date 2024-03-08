@@ -117,6 +117,34 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
+    #region - 企業乘車對帳單(外部起單) -
+
+    /// <summary>
+    /// 企業乘車對帳單(外部起單)ERP資料
+    /// </summary>
+    public class EnterpriseTaxiReviewERPInfo
+    {
+        /// <summary>合作夥伴審核單(表頭內容)</summary>
+        public EnterpriseTaxiReviewInfoTitle TITLE { get; set; }
+
+        /// <summary>合作夥伴審核單(基本資料)</summary>
+        public EnterpriseTaxiReviewConfig INFO { get; set; }
+
+        /// <summary>企業乘車對帳單(乘車明細)</summary>
+        public List<EnterpriseTaxiReviewDetailsConfig> DTLS { get; set; }
+    }
+
+    /// <summary>
+    /// 企業乘車對帳單(表頭內容)
+    /// </summary>
+    public class EnterpriseTaxiReviewInfoTitle : InfoTitle
+    {
+        /// <summary>ERP 工作流程名稱</summary>
+        public string FLOW_NAME { get; set; }
+    }
+
+    #endregion
+
     #region - 財務類_(外部起單) -
 
     #region - 預支費用申請單(外部起單) -
@@ -151,6 +179,19 @@ namespace OA_WEB_API.Models.BPMPro
     /// 差旅費用報支單(外部起單)ERP資料
     /// </summary>
     public class StaffTravellingExpensesERPInfo : InfoTitle
+    {
+        /// <summary>ERP 工作流程名稱</summary>
+        public string FLOW_NAME { get; set; }
+    }
+
+    #endregion
+
+    #region - 繳款單(外部起單) -
+
+    /// <summary>
+    /// 繳款單(外部起單)ERP資料
+    /// </summary>
+    public class PaymentOrderERPInfo : InfoTitle
     {
         /// <summary>ERP 工作流程名稱</summary>
         public string FLOW_NAME { get; set; }

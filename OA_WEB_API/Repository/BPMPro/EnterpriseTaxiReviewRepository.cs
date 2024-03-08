@@ -659,6 +659,7 @@ namespace OA_WEB_API.Repository.BPMPro
                             }
                         }
 
+                        approversConfig.ROW_NO = i;
                         approversConfig.APPROVER_DEPT_MAIN_ID = sysCommonRepository.PostUserInfoMainDept(userInfoMainDeptModel).MAIN_DEPT.DEPT_ID;
 
                         enterpriseTaxiReviewApproversConfigs.Add(approversConfig);
@@ -676,6 +677,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     {
                         //企業乘車對帳單 乘車人員
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                        new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@APPROVER_COMPANY_ID", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@APPROVER_DEPT_MAIN_ID", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@APPROVER_DEPT_ID", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -871,39 +873,80 @@ namespace OA_WEB_API.Repository.BPMPro
                     #endregion
 
                     #region - 企業乘車對帳單 使用預算：EnterpriseTaxiReview_BUDG -
-
-                    var parameterBudgets = new List<SqlParameter>()
-                    {
-                        //企業乘車對帳單 使用預算
-                        new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
-                        new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@PERIOD", SqlDbType.Int) { Size = 2, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@CREATE_YEAR", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@OWNER_DEPT", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@AVAILABLE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@USE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
-                        new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
-                    };
-
+                    
                     if (model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG != null && model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG.Count > 0)
                     {
-                        var CommonBUDG = new BPMCommonModel<EnterpriseTaxiReviewBudgetsConfig>()
+                        model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG.ForEach(BUDG =>
                         {
-                            EXT = "BUDG",
-                            IDENTIFY = IDENTIFY,
-                            PARAMETER = parameterBudgets,
-                            MODEL = model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG
-                        };
-                        commonRepository.PutBudgetFunction(CommonBUDG);
+                            var parameterBudgets = new List<SqlParameter>()
+                            {
+	                            //企業乘車對帳單 使用預算
+	                            new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                                new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@PERIOD", SqlDbType.Int) { Size = 2, Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@CREATE_YEAR", SqlDbType.NVarChar) { Size = 20, Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@NAME", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@OWNER_DEPT", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@TOTAL", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@AVAILABLE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@USE_BUDGET_AMOUNT", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                            };
+
+                            strJson = jsonFunction.ObjectToJSON(BUDG);
+                            GlobalParameters.Infoparameter(strJson, parameterBudgets);
+
+                            strSQL = "";
+                            strSQL += "SELECT ";
+                            strSQL += "      [RequisitionID] ";
+                            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_BUDG] ";
+                            strSQL += "WHERE 1=1 ";
+                            strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+                            strSQL += "         AND [RowNo]=@ROW_NO ";
+
+                            var dtA = dbFun.DoQuery(strSQL, parameterBudgets);
+                            if (dtA.Rows.Count > 0)
+                            {
+                                #region - 修改 -
+
+                                strSQL = "";
+                                strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_BUDG] ";
+                                strSQL += "SET [FormNo] =@FORM_NO, ";
+                                strSQL += "     [CreateYear]=@CREATE_YEAR, ";
+                                strSQL += "     [Name]=@NAME, ";
+                                strSQL += "     [OwnerDept]=@OWNER_DEPT, ";
+                                strSQL += "     [Total]=@TOTAL, ";
+                                strSQL += "     [AvailableBudgetAmount]=@AVAILABLE_BUDGET_AMOUNT, ";
+                                strSQL += "     [UseBudgetAmount]=@USE_BUDGET_AMOUNT, ";
+                                strSQL += "     [FillerID]=@FILLER_ID ";
+                                strSQL += "WHERE 1=1 ";
+                                strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+                                strSQL += "         AND [RowNo]=@ROW_NO ";
+
+                                dbFun.DoTran(strSQL, parameterBudgets);
+
+                                #endregion
+
+                            }
+                            else
+                            {
+                                #region - 新增 -
+
+                                strSQL = "";
+                                strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_BUDG]([RequisitionID],[RowNo],[FormNo],[CreateYear],[Name],[OwnerDept],[Total],[AvailableBudgetAmount],[UseBudgetAmount],[FillerID]) ";
+                                strSQL += "VALUES(@REQUISITION_ID,@ROW_NO,@FORM_NO,@CREATE_YEAR,@NAME,@OWNER_DEPT,@TOTAL,@AVAILABLE_BUDGET_AMOUNT,@USEBUDGET_AMOUNT,@FILLER_ID) ";
+
+                                dbFun.DoTran(strSQL, parameterBudgets);
+
+                                #endregion
+                            }
+                        });
                     }
 
                     #endregion
 
                     vResult = true;
-
                 }
                 else
                 {

@@ -43,11 +43,11 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>差旅費用報支單 已預支 設定</summary>
         public List<StaffTravellingExpensesAdvancesConfig> STAFF_TRAVELLING_EXPENSES_ADVS_CONFIG { get; set; }
 
-        /// <summary>差旅費用報支單 應退(退還財務) 設定</summary>
-        public List<StaffTravellingExpensesFinancAmountsConfig> STAFF_TRAVELLING_EXPENSES_FAS_CONFIG { get; set; }
-
-        /// <summary>差旅費用報支單 應付(付給使用者) 設定</summary>
+        /// <summary>差旅費用報支單 申請人應繳 設定</summary>
         public List<StaffTravellingExpensesUserAmountsConfig> STAFF_TRAVELLING_EXPENSES_UAS_CONFIG { get; set; }
+
+        /// <summary>差旅費用報支單 財務應退(合作夥伴廠商/合作夥伴個人/員工) 設定</summary>
+        public List<StaffTravellingExpensesFinancAmountsConfig> STAFF_TRAVELLING_EXPENSES_FAS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
@@ -223,17 +223,17 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 差旅費用報支單 應退(退還財務) 設定
+    /// 差旅費用報支單 申請人應繳 設定
     /// </summary>
-    public class StaffTravellingExpensesFinancAmountsConfig : FinanceFieldExchangeRateConfig
+    public class StaffTravellingExpensesUserAmountsConfig : FinanceFieldExchangeRateConfig
     {
 
     }
 
     /// <summary>
-    /// 差旅費用報支單 應付(付給使用者) 設定
+    /// 差旅費用報支單 財務應退(合作夥伴廠商/合作夥伴個人/員工) 設定
     /// </summary>
-    public class StaffTravellingExpensesUserAmountsConfig : FinanceFieldExchangeRateConfig
+    public class StaffTravellingExpensesFinancAmountsConfig : FinanceFieldExchangeRateConfig
     {
 
     }

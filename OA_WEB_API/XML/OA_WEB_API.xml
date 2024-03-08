@@ -2693,6 +2693,9 @@
             企業乘車對帳單 會簽乘車人員 設定
             </summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewApproversConfig.ROW_NO">
+            <summary>行數編號</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewBudgetsConfig">
             <summary>
             企業乘車對帳單 使用預算 設定
@@ -3167,11 +3170,11 @@
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_ADVS_CONFIG">
             <summary>費用申請單 已預支 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_FAS_CONFIG">
-            <summary>費用申請單 應退(退還財務) 設定</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_UAS_CONFIG">
-            <summary>費用申請單 應付(付給使用者) 設定</summary>
+            <summary>費用申請單 申請人應繳 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.EXPENSES_REIMBURSE_FAS_CONFIG">
+            <summary>費用申請單 財務應退(合作夥伴廠商/合作夥伴個人/員工) 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseViewModel.ASSOCIATED_FORM_CONFIG">
             <summary>表單關聯</summary>
@@ -3332,14 +3335,14 @@
             費用申請單 已預支 設定
             </summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseFinancAmountsConfig">
-            <summary>
-            費用申請單 應退(退還財務) 設定
-            </summary>
-        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseUserAmountsConfig">
             <summary>
-            費用申請單 應付(付給使用者) 設定
+            費用申請單 申請人應繳 設定
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseFinancAmountsConfig">
+            <summary>
+            費用申請單 財務應退(合作夥伴廠商/合作夥伴個人/員工) 設定
             </summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GeneralAcceptanceQueryModel">
@@ -4288,6 +4291,28 @@
         <member name="P:OA_WEB_API.Models.BPMPro.SupplierReviewInfoTitle.SUP_NO">
             <summary>廠商編號</summary>
         </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewERPInfo">
+            <summary>
+            企業乘車對帳單(外部起單)ERP資料
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewERPInfo.TITLE">
+            <summary>合作夥伴審核單(表頭內容)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewERPInfo.INFO">
+            <summary>合作夥伴審核單(基本資料)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewERPInfo.DTLS">
+            <summary>企業乘車對帳單(乘車明細)</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoTitle">
+            <summary>
+            企業乘車對帳單(表頭內容)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoTitle.FLOW_NAME">
+            <summary>ERP 工作流程名稱</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.AdvanceExpenseERPInfo">
             <summary>
             預支費用申請單(外部起單)ERP資料
@@ -4310,6 +4335,14 @@
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesERPInfo.FLOW_NAME">
+            <summary>ERP 工作流程名稱</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.PaymentOrderERPInfo">
+            <summary>
+            繳款單(外部起單)ERP資料
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.PaymentOrderERPInfo.FLOW_NAME">
             <summary>ERP 工作流程名稱</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.GeneralOrderERPInfo">
@@ -7950,11 +7983,11 @@
         <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.STAFF_TRAVELLING_EXPENSES_ADVS_CONFIG">
             <summary>差旅費用報支單 已預支 設定</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.STAFF_TRAVELLING_EXPENSES_FAS_CONFIG">
-            <summary>差旅費用報支單 應退(退還財務) 設定</summary>
-        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.STAFF_TRAVELLING_EXPENSES_UAS_CONFIG">
-            <summary>差旅費用報支單 應付(付給使用者) 設定</summary>
+            <summary>差旅費用報支單 申請人應繳 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.STAFF_TRAVELLING_EXPENSES_FAS_CONFIG">
+            <summary>差旅費用報支單 財務應退(合作夥伴廠商/合作夥伴個人/員工) 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesViewModel.ASSOCIATED_FORM_CONFIG">
             <summary>表單關聯</summary>
@@ -8116,14 +8149,14 @@
             差旅費用報支單 已預支 設定
             </summary>
         </member>
-        <member name="T:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesFinancAmountsConfig">
-            <summary>
-            差旅費用報支單 應退(退還財務) 設定
-            </summary>
-        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesUserAmountsConfig">
             <summary>
-            差旅費用報支單 應付(付給使用者) 設定
+            差旅費用報支單 申請人應繳 設定
+            </summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesFinancAmountsConfig">
+            <summary>
+            差旅費用報支單 財務應退(合作夥伴廠商/合作夥伴個人/員工) 設定
             </summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.SupplierReviewQueryModel">
@@ -11201,11 +11234,17 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.supplierReviewRepository">
             <summary>合作夥伴審核單</summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.enterpriseTaxiReviewRepository">
+            <summary>企業乘車對帳單</summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.advanceExpenseRepository">
             <summary>預支費用申請單</summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.staffTravellingExpensesRepository">
             <summary>差旅費用報支單</summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.paymentOrderRepository">
+            <summary>繳款單</summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.generalOrderRepository">
             <summary>行政採購申請單</summary>
@@ -11272,6 +11311,11 @@
         <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutStaffTravellingExpensesGetExternal(OA_WEB_API.Models.BPMPro.StaffTravellingExpensesERPInfo)">
             <summary>
             差旅費用報支單(外部起單)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutPaymentOrderGetExternal(OA_WEB_API.Models.BPMPro.PaymentOrderERPInfo)">
+            <summary>
+            繳款單(外部起單)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutGeneralOrderGetExternal(OA_WEB_API.Models.BPMPro.GeneralOrderERPInfo)">

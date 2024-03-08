@@ -166,21 +166,8 @@ namespace OA_WEB_API.Repository.BPMPro
             var expensesReimburseAdvancesConfig = jsonFunction.JsonToObject<List<ExpensesReimburseAdvancesConfig>>(strJson);
 
             #endregion
-
-            #region - 費用申請單 應退(退還財務) -
-
-            var CommonFA = new BPMCommonModel<ExpensesReimburseFinancAmountsConfig>()
-            {
-                EXT = "FA",
-                IDENTIFY = IDENTIFY,
-                PARAMETER = parameter
-            };
-            strJson = jsonFunction.ObjectToJSON(commonRepository.PostFinanceFieldFunction(CommonFA));
-            var expensesReimburseFinancAmountsConfig = jsonFunction.JsonToObject<List<ExpensesReimburseFinancAmountsConfig>>(strJson);
-
-            #endregion
-
-            #region - 費用申請單 應付(付給使用者) -
+                        
+            #region - 費用申請單 申請人應繳 -
 
             var CommonUA = new BPMCommonModel<ExpensesReimburseUserAmountsConfig>()
             {
@@ -190,6 +177,19 @@ namespace OA_WEB_API.Repository.BPMPro
             };
             strJson = jsonFunction.ObjectToJSON(commonRepository.PostFinanceFieldFunction(CommonUA));
             var expensesReimburseUserAmountsConfig = jsonFunction.JsonToObject<List<ExpensesReimburseUserAmountsConfig>>(strJson);
+
+            #endregion
+
+            #region - 費用申請單 財務應退(合作夥伴廠商/合作夥伴個人/員工) -
+
+            var CommonFA = new BPMCommonModel<ExpensesReimburseFinancAmountsConfig>()
+            {
+                EXT = "FA",
+                IDENTIFY = IDENTIFY,
+                PARAMETER = parameter
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostFinanceFieldFunction(CommonFA));
+            var expensesReimburseFinancAmountsConfig = jsonFunction.JsonToObject<List<ExpensesReimburseFinancAmountsConfig>>(strJson);
 
             #endregion
 
@@ -709,24 +709,8 @@ namespace OA_WEB_API.Repository.BPMPro
                 }
 
                 #endregion
-
-                #region - 費用申請單 應退(退還財務)：ExpensesReimburse_FA -
-
-                if (model.EXPENSES_REIMBURSE_FAS_CONFIG != null && model.EXPENSES_REIMBURSE_FAS_CONFIG.Count > 0)
-                {
-                    var CommonFA = new BPMCommonModel<ExpensesReimburseFinancAmountsConfig>()
-                    {
-                        EXT = "FA",
-                        IDENTIFY = IDENTIFY,
-                        PARAMETER = parameterLatterHalf,
-                        MODEL = model.EXPENSES_REIMBURSE_FAS_CONFIG
-                    };
-                    if (vResult) vResult = commonRepository.PutFinanceFieldFunction(CommonFA);
-                }
-
-                #endregion
-
-                #region - 費用申請單 應付(付給使用者)：ExpensesReimburse_UA -
+                
+                #region - 費用申請單 申請人應繳：ExpensesReimburse_UA -
 
                 if (model.EXPENSES_REIMBURSE_UAS_CONFIG != null && model.EXPENSES_REIMBURSE_UAS_CONFIG.Count > 0)
                 {
@@ -741,6 +725,22 @@ namespace OA_WEB_API.Repository.BPMPro
                 }
 
                 #endregion                
+
+                #region - 費用申請單 財務應退(合作夥伴廠商/合作夥伴個人/員工)：ExpensesReimburse_FA -
+
+                if (model.EXPENSES_REIMBURSE_FAS_CONFIG != null && model.EXPENSES_REIMBURSE_FAS_CONFIG.Count > 0)
+                {
+                    var CommonFA = new BPMCommonModel<ExpensesReimburseFinancAmountsConfig>()
+                    {
+                        EXT = "FA",
+                        IDENTIFY = IDENTIFY,
+                        PARAMETER = parameterLatterHalf,
+                        MODEL = model.EXPENSES_REIMBURSE_FAS_CONFIG
+                    };
+                    if (vResult) vResult = commonRepository.PutFinanceFieldFunction(CommonFA);
+                }
+
+                #endregion
 
                 #region - 費用申請單 表單關聯：AssociatedForm -
 

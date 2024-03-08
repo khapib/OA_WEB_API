@@ -179,21 +179,8 @@ namespace OA_WEB_API.Repository.BPMPro
             var staffTravellingExpensesAdvancesConfig = jsonFunction.JsonToObject<List<StaffTravellingExpensesAdvancesConfig>>(strJson);
 
             #endregion
-
-            #region - 差旅費用報支單 應退(退還財務) -
-
-            var CommonFA = new BPMCommonModel<StaffTravellingExpensesFinancAmountsConfig>()
-            {
-                EXT = "FA",
-                IDENTIFY = IDENTIFY,
-                PARAMETER = parameter
-            };
-            strJson = jsonFunction.ObjectToJSON(commonRepository.PostFinanceFieldFunction(CommonFA));
-            var staffTravellingExpensesFinancAmountsConfig = jsonFunction.JsonToObject<List<StaffTravellingExpensesFinancAmountsConfig>>(strJson);
-
-            #endregion
-
-            #region - 差旅費用報支單 應付(付給使用者) -
+            
+            #region - 差旅費用報支單 申請人應繳 -
 
             var CommonUA = new BPMCommonModel<StaffTravellingExpensesUserAmountsConfig>()
             {
@@ -203,6 +190,19 @@ namespace OA_WEB_API.Repository.BPMPro
             };
             strJson = jsonFunction.ObjectToJSON(commonRepository.PostFinanceFieldFunction(CommonUA));
             var staffTravellingExpensesUserAmountsConfig = jsonFunction.JsonToObject<List<StaffTravellingExpensesUserAmountsConfig>>(strJson);
+
+            #endregion
+
+            #region - 差旅費用報支單 財務應退(合作夥伴廠商/合作夥伴個人/員工) -
+
+            var CommonFA = new BPMCommonModel<StaffTravellingExpensesFinancAmountsConfig>()
+            {
+                EXT = "FA",
+                IDENTIFY = IDENTIFY,
+                PARAMETER = parameter
+            };
+            strJson = jsonFunction.ObjectToJSON(commonRepository.PostFinanceFieldFunction(CommonFA));
+            var staffTravellingExpensesFinancAmountsConfig = jsonFunction.JsonToObject<List<StaffTravellingExpensesFinancAmountsConfig>>(strJson);
 
             #endregion
 
@@ -723,23 +723,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 差旅費用報支單 應退(退還財務)：StaffTravellingExpenses_FA -
-
-                if (model.STAFF_TRAVELLING_EXPENSES_FAS_CONFIG != null && model.STAFF_TRAVELLING_EXPENSES_FAS_CONFIG.Count > 0)
-                {
-                    var CommonSUM = new BPMCommonModel<StaffTravellingExpensesFinancAmountsConfig>()
-                    {
-                        EXT = "FA",
-                        IDENTIFY = IDENTIFY,
-                        PARAMETER = parameterLatterHalf,
-                        MODEL = model.STAFF_TRAVELLING_EXPENSES_FAS_CONFIG
-                    };
-                    if (vResult) vResult = commonRepository.PutFinanceFieldFunction(CommonSUM);
-                }
-
-                #endregion
-
-                #region - 差旅費用報支單 應付(付給使用者)：StaffTravellingExpenses_UA -
+                #region - 差旅費用報支單 申請人應繳：StaffTravellingExpenses_UA -
 
                 if (model.STAFF_TRAVELLING_EXPENSES_UAS_CONFIG != null && model.STAFF_TRAVELLING_EXPENSES_UAS_CONFIG.Count > 0)
                 {
@@ -754,6 +738,22 @@ namespace OA_WEB_API.Repository.BPMPro
                 }
 
                 #endregion                
+
+                #region - 差旅費用報支單 財務應退(合作夥伴廠商/合作夥伴個人/員工)：StaffTravellingExpenses_FA -
+
+                if (model.STAFF_TRAVELLING_EXPENSES_FAS_CONFIG != null && model.STAFF_TRAVELLING_EXPENSES_FAS_CONFIG.Count > 0)
+                {
+                    var CommonSUM = new BPMCommonModel<StaffTravellingExpensesFinancAmountsConfig>()
+                    {
+                        EXT = "FA",
+                        IDENTIFY = IDENTIFY,
+                        PARAMETER = parameterLatterHalf,
+                        MODEL = model.STAFF_TRAVELLING_EXPENSES_FAS_CONFIG
+                    };
+                    if (vResult) vResult = commonRepository.PutFinanceFieldFunction(CommonSUM);
+                }
+
+                #endregion
 
                 #region - 差旅費用報支單 表單關聯：AssociatedForm -
 

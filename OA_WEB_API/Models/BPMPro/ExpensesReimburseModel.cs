@@ -40,11 +40,11 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>費用申請單 已預支 設定</summary>
         public List<ExpensesReimburseAdvancesConfig> EXPENSES_REIMBURSE_ADVS_CONFIG { get; set; }
 
-        /// <summary>費用申請單 應退(退還財務) 設定</summary>
-        public List<ExpensesReimburseFinancAmountsConfig> EXPENSES_REIMBURSE_FAS_CONFIG { get; set; }
-
-        /// <summary>費用申請單 應付(付給使用者) 設定</summary>
+        /// <summary>費用申請單 申請人應繳 設定</summary>
         public List<ExpensesReimburseUserAmountsConfig> EXPENSES_REIMBURSE_UAS_CONFIG { get; set; }
+
+        /// <summary>費用申請單 財務應退(合作夥伴廠商/合作夥伴個人/員工) 設定</summary>
+        public List<ExpensesReimburseFinancAmountsConfig> EXPENSES_REIMBURSE_FAS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
@@ -221,17 +221,17 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 費用申請單 應退(退還財務) 設定
+    /// 費用申請單 申請人應繳 設定
     /// </summary>
-    public class ExpensesReimburseFinancAmountsConfig : FinanceFieldExchangeRateConfig
+    public class ExpensesReimburseUserAmountsConfig : FinanceFieldExchangeRateConfig
     {
 
     }
 
     /// <summary>
-    /// 費用申請單 應付(付給使用者) 設定
+    /// 費用申請單 財務應退(合作夥伴廠商/合作夥伴個人/員工) 設定
     /// </summary>
-    public class ExpensesReimburseUserAmountsConfig : FinanceFieldExchangeRateConfig
+    public class ExpensesReimburseFinancAmountsConfig : FinanceFieldExchangeRateConfig
     {
 
     }

@@ -162,7 +162,8 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class EnterpriseTaxiReviewApproversConfig : ApproversConfig
     {
-
+        /// <summary>行數編號</summary>
+        public int ROW_NO { get; set; }
     }
 
     /// <summary>

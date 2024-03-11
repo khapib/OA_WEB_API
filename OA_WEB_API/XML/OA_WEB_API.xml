@@ -8008,6 +8008,9 @@
         <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesConfig.IS_CFO">
             <summary>是否過協理</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesConfig.IS_VICE_PRESIDENT">
+            <summary>是否過副總</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesConfig.TRAVELLING_STAFFS">
             <summary>出差人員</summary>
         </member>

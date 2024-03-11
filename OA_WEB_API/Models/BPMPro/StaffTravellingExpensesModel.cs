@@ -70,6 +70,9 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>是否過協理</summary>
         public string IS_CFO { get; set; }
 
+        /// <summary>是否過副總</summary>
+        public string IS_VICE_PRESIDENT { get; set; }
+
         /// <summary>出差人員</summary>
         public string TRAVELLING_STAFFS { get; set; }
 

@@ -518,6 +518,16 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     #endregion
 
+                    #region - 是否經由副總簽核 -
+
+                    if (String.IsNullOrEmpty(model.STAFF_TRAVELLING_EXPENSES_CONFIG.IS_VICE_PRESIDENT) || String.IsNullOrWhiteSpace(model.STAFF_TRAVELLING_EXPENSES_CONFIG.IS_VICE_PRESIDENT))
+                    {
+                        if (model.STAFF_TRAVELLING_EXPENSES_CONFIG.AMOUNT_CONV_TOTAL >= 30000) model.STAFF_TRAVELLING_EXPENSES_CONFIG.IS_VICE_PRESIDENT = true.ToString().ToLower();
+                        else model.STAFF_TRAVELLING_EXPENSES_CONFIG.IS_VICE_PRESIDENT = false.ToString().ToLower();
+                    }
+
+                    #endregion
+
                     //寫入：費用申請單 表單內容parameter                        
                     strJson = jsonFunction.ObjectToJSON(model.STAFF_TRAVELLING_EXPENSES_CONFIG);
                     GlobalParameters.Infoparameter(strJson, parameterInfo);

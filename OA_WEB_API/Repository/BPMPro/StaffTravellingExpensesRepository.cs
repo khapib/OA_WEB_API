@@ -74,6 +74,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL = "";
             strSQL += "SELECT ";
             strSQL += "     [IsCFO] AS [IS_CFO], ";
+            strSQL += "     [IsVicePresident] AS [IS_VICE_PRESIDENT], ";
             strSQL += "     [TravellingStaffs] AS [TRAVELLING_STAFFS], ";
             strSQL += "     [Reason] AS [REASON], ";
             strSQL += "     [Note] AS [NOTE], ";
@@ -482,6 +483,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         //差旅費用報支單 表單內容
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                         new SqlParameter("@IS_CFO", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
+                        new SqlParameter("@IS_VICE_PRESIDENT", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@TRAVELLING_STAFFS", SqlDbType.NVarChar) { Size = 500, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REASON", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@NOTE", SqlDbType.NVarChar) { Size = 4000, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -523,6 +525,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     strSQL = "";
                     strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_M] ";
                     strSQL += "SET [IsCFO]=@IS_CFO, ";
+                    strSQL += "     [IsVicePresident]=@IS_VICE_PRESIDENT, ";
                     strSQL += "     [TravellingStaffs]=@TRAVELLING_STAFFS, ";
                     strSQL += "     [Reason]=@REASON, ";
                     strSQL += "     [Note]=@NOTE, ";

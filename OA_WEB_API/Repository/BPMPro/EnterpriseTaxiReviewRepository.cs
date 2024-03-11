@@ -935,7 +935,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                                 strSQL = "";
                                 strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_BUDG]([RequisitionID],[RowNo],[FormNo],[CreateYear],[Name],[OwnerDept],[Total],[AvailableBudgetAmount],[UseBudgetAmount],[FillerID]) ";
-                                strSQL += "VALUES(@REQUISITION_ID,@ROW_NO,@FORM_NO,@CREATE_YEAR,@NAME,@OWNER_DEPT,@TOTAL,@AVAILABLE_BUDGET_AMOUNT,@USEB_UDGET_AMOUNT,@FILLER_ID) ";
+                                strSQL += "VALUES(@REQUISITION_ID,@ROW_NO,@FORM_NO,@CREATE_YEAR,@NAME,@OWNER_DEPT,@TOTAL,@AVAILABLE_BUDGET_AMOUNT,@USE_BUDGET_AMOUNT,@FILLER_ID) ";
 
                                 dbFun.DoTran(strSQL, parameterBudgets);
 

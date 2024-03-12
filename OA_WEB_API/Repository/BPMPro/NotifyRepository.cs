@@ -10,6 +10,8 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Web;
+using System.Web.Http.Results;
+using System.Web.Security;
 using Dapper;
 using Microsoft.Ajax.Utilities;
 using OA_WEB_API.Models;
@@ -975,6 +977,128 @@ namespace OA_WEB_API.Repository.BPMPro
         }
 
         #endregion
+
+        #region - 2024/03/12 Leon: 接收流程引擎(授權檢視表單)通知觸發事件 -
+
+        /// <summary>
+        /// (授權檢視表單)事件
+        /// </summary>
+        public void ByAuthView(InformNotifyModel inform)
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(inform.REQUISITION_ID) || !String.IsNullOrWhiteSpace(inform.REQUISITION_ID))
+                {
+                    var formQueryModel = new FormQueryModel()
+                    {
+                        REQUISITION_ID = inform.REQUISITION_ID
+                    };
+                    if (CommonRepository.PostDataHaveForm(formQueryModel))
+                    {
+                        //表單資訊
+                        var formData = formRepository.PostFormData(formQueryModel);
+
+                        var groupInformNotifyModel = new GroupInformNotifyModel
+                        {
+                            NOTIFY_BY = new List<string>()
+                        };                        
+
+                        #region - 被授權角色 -
+
+                        if (!String.IsNullOrEmpty(inform.ROLE_ID) || !String.IsNullOrWhiteSpace(inform.ROLE_ID))
+                        {
+                            var RolesUserID = CommonRepository.GetRoles().Where(R => R.ROLE_ID == inform.ROLE_ID).Select(R => R).ToList();
+
+                            if(RolesUserID != null && RolesUserID.Count > 0)
+                            {
+                                RolesUserID.ForEach(R =>
+                                {
+                                    groupInformNotifyModel.NOTIFY_BY.Add(R.USER_ID);
+                                });
+                            }
+                            else
+                            {
+                                CommLib.Logger.Error("(授權檢視表單)通知觸發事件 執行失敗，原因：" + inform.ROLE_ID + "系統查無此角色。");
+                                throw new Exception("(授權檢視表單)通知觸發事件 執行失敗，原因：" + inform.ROLE_ID + "系統查無此角色。");
+                            }
+                        }
+
+                        #endregion
+
+                        #region - 新增被授權人 -
+
+                        if (!String.IsNullOrEmpty(inform.NOTIFY_BY) || !String.IsNullOrWhiteSpace(inform.NOTIFY_BY))
+                        {
+                            groupInformNotifyModel.NOTIFY_BY.Add(inform.NOTIFY_BY);
+                        }
+
+                        #endregion
+
+                        #region - 排除重複人員 -
+
+                        groupInformNotifyModel.NOTIFY_BY = groupInformNotifyModel.NOTIFY_BY.GroupBy(N => N).Select(g => g.First()).ToList();
+
+                        #endregion
+
+                        #region - 排除 NOTIFY_BY List Value 是 null -
+
+                        groupInformNotifyModel.NOTIFY_BY = groupInformNotifyModel.NOTIFY_BY.Where(N => N != null).Select(R => R).ToList();
+
+                        #endregion
+
+                        #region - 執行賦予可檢視表單 -
+
+                        if (groupInformNotifyModel.NOTIFY_BY != null && groupInformNotifyModel.NOTIFY_BY.Count > 0)
+                        {
+                            var parameter = new List<SqlParameter>
+                            {
+                                new SqlParameter("@UNIQUE_ID", SqlDbType.Int) { Value = 0 },
+                                new SqlParameter("@IDENTIFY", SqlDbType.NVarChar) { Size = 50, Value = formData.IDENTIFY },
+                                new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = inform.REQUISITION_ID },
+                                new SqlParameter("@ACCOUNT_ID", SqlDbType.NVarChar) { Size = 40, Value = (object)DBNull.Value ?? DBNull.Value },
+                                new SqlParameter("@WHO_CHANGED", SqlDbType.NVarChar) { Size = 40, Value = (object)"BPMSysteam" ?? DBNull.Value },
+                            };
+
+                            groupInformNotifyModel.NOTIFY_BY.ForEach(N =>
+                            {
+                                strSQL = "";
+                                strSQL += "SELECT ISNULL(MAX([UniqueID]), 0) +1 AS [UniqueMaxID] ";
+                                strSQL += "FROM [BPMPro].[dbo].[FSe7en_Tep_OthersSearchAuth] ";
+
+                                parameter.Where(P => P.ParameterName == "@UNIQUE_ID").FirstOrDefault().Value = int.Parse(dbFun.DoQuery(strSQL).Rows[0]["UniqueMaxID"].ToString());
+                                parameter.Where(P => P.ParameterName == "@ACCOUNT_ID").FirstOrDefault().Value = N;
+
+                                strSQL = "";
+                                strSQL += "INSERT INTO [BPMPro].[dbo].[FSe7en_Tep_OthersSearchAuth]([UniqueID],[Identify],[RequisitionID],[AccountID],[WhoChanged],[WhenChanged]) ";
+                                strSQL += "VALUES (@UNIQUE_ID,@IDENTIFY,@REQUISITION_ID,@ACCOUNT_ID,@WHO_CHANGED,GETDATE()) ";
+
+                                dbFun.DoTran(strSQL, parameter);
+                            });
+                        }
+
+                        #endregion
+                    }
+                    else
+                    {
+                        CommLib.Logger.Error("(授權檢視表單)通知觸發事件 執行失敗，原因："+ inform.REQUISITION_ID + "未起單，系統查無此表單。");
+                        throw new Exception("(授權檢視表單)通知觸發事件 執行失敗，原因："+ inform.REQUISITION_ID + "未起單，系統查無此表單。");
+                    }
+                }
+                else
+                {
+                    CommLib.Logger.Error("(授權檢視表單)通知觸發事件 執行失敗，原因：請輸入表單系統編號。");
+                    throw new Exception("(授權檢視表單)通知觸發事件 執行失敗，原因：請輸入表單系統編號。");
+                }
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("(授權檢視表單)通知觸發事件 執行失敗，原因：" + ex.Message);
+                throw;                
+            }
+        }
+
+        #endregion
+
 
         /// <summary>
         /// (結案打包)事件，包含 簽呈、會簽單、四方四隅簽呈

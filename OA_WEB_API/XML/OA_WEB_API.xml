@@ -1279,6 +1279,11 @@
             (欄位確認後知會通知)通知觸發事件
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Controllers.NotifyController.ByAuthView">
+            <summary>
+            (授權檢視表單)事件
+            </summary>
+        </member>
         <member name="M:OA_WEB_API.Controllers.NotifyController.ByArchive">
             <summary>
             接收流程引擎(結案打包)通知，包含 簽呈、會簽單、四方四隅簽呈
@@ -12136,6 +12141,11 @@
             <param name="Identify">識別編號(運用在M表)</param>
             <param name="IsImplement">要確認的欄位名稱</param>
             <returns></returns>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.NotifyRepository.ByAuthView(OA_WEB_API.Models.BPMPro.InformNotifyModel)">
+            <summary>
+            (授權檢視表單)事件
+            </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.NotifyRepository.ByArchive(OA_WEB_API.Models.BPMPro.FormQueryModel)">
             <summary>

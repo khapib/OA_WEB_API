@@ -291,6 +291,30 @@ namespace OA_WEB_API.Controllers
 
         #endregion
 
+        #region - 2024/03/12 Leon: 接收流程引擎(授權檢視表單)通知觸發事件 -
+
+        /// <summary>
+        /// (授權檢視表單)事件
+        /// </summary>
+        [Route("ByAuthView")]
+        [HttpPost]
+        public void ByAuthView()
+        {
+            HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
+            HttpRequestBase request = context.Request;
+
+            var inform = new InformNotifyModel()
+            {
+                REQUISITION_ID = request["RequisitionID"],
+                NOTIFY_BY = request["NotifyBy"],
+                ROLE_ID = request["RoleID"]
+            };
+
+            notifyRepository.ByAuthView(inform);
+        }
+
+        #endregion
+
 
         /// <summary>
         /// 接收流程引擎(結案打包)通知，包含 簽呈、會簽單、四方四隅簽呈

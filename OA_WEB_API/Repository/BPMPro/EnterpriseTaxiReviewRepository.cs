@@ -169,7 +169,7 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 if (query.IS_ALL)
                 {
-                    if (CommonRepository.GetRoles().Any(R => R.ROLE_ID == "GV_ENTERPRISE_TAXI_REVIEW_VIEW_ALL" && R.USER_ID == query.USER_ID)) query.IS_ALL = true;
+                    if (CommonRepository.GetRoles().Any(R => R.ROLE_ID == "GTV_ENTERPRISE_TAXI_REVIEW_VIEW_ALL" && R.USER_ID == query.USER_ID)) query.IS_ALL = true;
                     else query.IS_ALL = false;
                 }
             }

@@ -8,6 +8,7 @@ using System.Web;
 using OA_WEB_API.Models;
 using System.Runtime.InteropServices;
 using OA_WEB_API.Models.ERP;
+using System.Reflection;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -158,11 +159,12 @@ namespace OA_WEB_API.Repository.BPMPro
         {
             #region - 宣告 -
 
+            strREQ = query.REQUISITION_ID;
             var strSetSQL = String.Empty;
 
             var parameter = new List<SqlParameter>()
             {
-                 new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID }
+                 new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ }
             };
 
             if (!String.IsNullOrEmpty(query.USER_ID) || !String.IsNullOrWhiteSpace(query.USER_ID))

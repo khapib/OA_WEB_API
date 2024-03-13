@@ -724,9 +724,24 @@
             合作夥伴審核單(外部起單)
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutAdvanceExpenseGetExternal(OA_WEB_API.Models.BPMPro.AdvanceExpenseERPInfo)">
+            <summary>
+            預支費用申請單(外部起單)
+            </summary>
+        </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutExpensesReimburseGetExternal(OA_WEB_API.Models.BPMPro.ExpensesReimburseERPInfo)">
             <summary>
             費用申請單(外部起單)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutStaffTravellingExpensesGetExternal(OA_WEB_API.Models.BPMPro.StaffTravellingExpensesERPInfo)">
+            <summary>
+            差旅費用報支單(外部起單)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutPaymentOrderGetExternal(OA_WEB_API.Models.BPMPro.PaymentOrderERPInfo)">
+            <summary>
+            繳款單(外部起單)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutGeneralOrderGetExternal(OA_WEB_API.Models.BPMPro.GeneralOrderERPInfo)">

@@ -53,6 +53,22 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #endregion
 
+        #region - 財務類_(外部起單) -
+
+        #region - 預支費用申請單(外部起單) -
+
+        /// <summary>
+        /// 預支費用申請單(外部起單)
+        /// </summary>
+        [Route("api/PutAdvanceExpenseGetExternal")]
+        [HttpPost]
+        public GetExternalData PutAdvanceExpenseGetExternal(AdvanceExpenseERPInfo model)
+        {
+            return getExternalRepository.PutAdvanceExpenseGetExternal(model);
+        }
+
+        #endregion
+
         #region - 費用申請單(外部起單) -
 
         /// <summary>
@@ -64,7 +80,37 @@ namespace OA_WEB_API.Controllers.BPMPro
         {
             return getExternalRepository.PutExpensesReimburseGetExternal(model);
         }
-        
+
+        #endregion
+
+        #region - 差旅費用報支單(外部起單) -
+
+        /// <summary>
+        /// 差旅費用報支單(外部起單)
+        /// </summary>
+        [Route("api/PutStaffTravellingExpensesGetExternal")]
+        [HttpPost]
+        public GetExternalData PutStaffTravellingExpensesGetExternal(StaffTravellingExpensesERPInfo model)
+        {
+            return getExternalRepository.PutStaffTravellingExpensesGetExternal(model);
+        }
+
+        #endregion
+
+        #region - 繳款單(外部起單) -
+
+        /// <summary>
+        /// 繳款單(外部起單)
+        /// </summary>
+        [Route("api/PutPaymentOrderGetExternal")]
+        [HttpPost]
+        public GetExternalData PutPaymentOrderGetExternal(PaymentOrderERPInfo model)
+        {
+            return getExternalRepository.PutPaymentOrderGetExternal(model);
+        }
+
+        #endregion
+
         #endregion
 
         #region - 行政採購類_(外部起單) -

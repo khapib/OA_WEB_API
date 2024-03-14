@@ -54,6 +54,22 @@ namespace OA_WEB_API.Models.BPMPro
 
     #endregion
 
+    #region - 關聯表單(外部起單) -
+
+    /// <summary>
+    /// 外部起單 關聯表單
+    /// </summary>
+    public class AssociatedFormERPInfo
+    {
+        /// <summary>關聯表單:系統編號</summary>
+        public string ASSOC_REQ_ID { get; set; }
+
+        /// <summary>BPM 表單編號</summary>
+        public string BPM_FORM_NO { get; set; }
+    }
+
+    #endregion
+
     #region - 專案建立審核單(外部起單) -
 
     /// <summary>
@@ -124,14 +140,14 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class EnterpriseTaxiReviewERPInfo
     {
-        /// <summary>合作夥伴審核單(表頭內容)</summary>
+        /// <summary>企業乘車對帳單(表頭內容)</summary>
         public EnterpriseTaxiReviewInfoTitle TITLE { get; set; }
 
-        /// <summary>合作夥伴審核單(基本資料)</summary>
+        /// <summary>企業乘車對帳單(基本資料)</summary>
         public EnterpriseTaxiReviewConfig INFO { get; set; }
 
         /// <summary>企業乘車對帳單(乘車明細)</summary>
-        public List<EnterpriseTaxiReviewDetailsConfig> DTLS { get; set; }
+        public List<EnterpriseTaxiReviewInfoDetailsConfig> DTLS { get; set; }
     }
 
     /// <summary>
@@ -139,8 +155,59 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class EnterpriseTaxiReviewInfoTitle : InfoTitle
     {
+        /// <summary>主旨</summary>
+        public string SUBJECT { get; set; }
+
         /// <summary>ERP 工作流程名稱</summary>
         public string FLOW_NAME { get; set; }
+    }
+
+    /// <summary>
+    /// 企業乘車對帳單(乘車明細)
+    /// </summary>
+    public class EnterpriseTaxiReviewInfoDetailsConfig
+    {
+        /// <summary>乘車券</summary>
+        public string TICKET { get; set; }
+
+        /// <summary>上車日期時間</summary>
+        public string GET_ON_DATE_TIME { get; set; }
+
+        /// <summary>下車日期時間</summary>
+        public string GET_OFF_DATE_TIME { get; set; }
+
+        /// <summary>上車地點</summary>
+        public string GET_ON_PLACE { get; set; }
+
+        /// <summary>下車地點</summary>
+        public string GET_OFF_PLACE { get; set; }
+
+        /// <summary>補充上車地點</summary>
+        public string COMPLEMENT_GET_ON_PLACE { get; set; }
+
+        /// <summary>補充下車地點</summary>
+        public string COMPLEMENT_GET_OFF_PLACE { get; set; }
+
+        /// <summary>乘車目的</summary>
+        public string TRAVEL_BY_PURPOSE { get; set; }
+
+        /// <summary>車資</summary>
+        public int TAXI_EXPENSES { get; set; }
+
+        /// <summary>員工姓名</summary>
+        public string NAME { get; set; }
+
+        /// <summary>員工編號</summary>
+        public string ACCOUNT_ID { get; set; }
+
+        /// <summary>部門編號</summary>
+        public string DEPT_ID { get; set; }
+
+        /// <summary>局處中心編號</summary>
+        public string OFFICE_ID { get; set; }
+
+        /// <summary>組別編號</summary>
+        public string GROUP_ID { get; set; }
     }
 
     #endregion
@@ -165,7 +232,19 @@ namespace OA_WEB_API.Models.BPMPro
     /// <summary>
     /// 費用申請單(外部起單)ERP資料
     /// </summary>
-    public class ExpensesReimburseERPInfo : InfoTitle
+    public class ExpensesReimburseERPInfo
+    {
+        /// <summary>費用申請單(表頭內容)</summary>
+        public ExpensesReimburseInfoTitle TITLE { get; set; }
+
+        /// <summary>費用申請單(關聯表單)</summary>
+        public IList<AssociatedFormERPInfo> ASSOC_FORM { get; set; }
+    }
+
+    /// <summary>
+    /// 費用申請單(表頭內容)
+    /// </summary>
+    public class ExpensesReimburseInfoTitle : InfoTitle
     {
         /// <summary>ERP 工作流程名稱</summary>
         public string FLOW_NAME { get; set; }

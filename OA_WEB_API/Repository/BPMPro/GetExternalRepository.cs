@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Web;
-
+using System.Xml.Linq;
+using Microsoft.Ajax.Utilities;
 using OA_WEB_API.Models;
 using OA_WEB_API.Models.BPMPro;
 using OA_WEB_API.Repository.ERP;
+using WebGrease.Css.Extensions;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -49,10 +53,10 @@ namespace OA_WEB_API.Repository.BPMPro
 
         /// <summary>預支費用申請單</summary>
         AdvanceExpenseRepository advanceExpenseRepository = new AdvanceExpenseRepository();
-        ///// <summary>費用申請單</summary>
-        //ExpensesReimburseRepository expensesReimburseRepository = new ExpensesReimburseRepository();
+        /// <summary>費用申請單</summary>
+        ExpensesReimburseRepository expensesReimburseRepository = new ExpensesReimburseRepository();
         /// <summary>差旅費用報支單</summary>
-        StaffTravellingExpensesRepository staffTravellingExpensesRepository =new StaffTravellingExpensesRepository();
+        StaffTravellingExpensesRepository staffTravellingExpensesRepository = new StaffTravellingExpensesRepository();
         /// <summary>繳款單</summary>
         PaymentOrderRepository paymentOrderRepository = new PaymentOrderRepository();
 
@@ -487,21 +491,175 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #region - 企業乘車對帳單(外部起單) -
 
-        ///// <summary>
-        ///// 企業乘車對帳單(外部起單)
-        ///// </summary>
-        //public GetExternalData PutEnterpriseTaxiReviewGetExternal(EnterpriseTaxiReviewERPInfo model)
-        //{
-        //    try
-        //    {
+        /// <summary>
+        /// 企業乘車對帳單(外部起單)
+        /// </summary>
+        public GetExternalData PutEnterpriseTaxiReviewGetExternal(EnterpriseTaxiReviewERPInfo model)
+        {
+            try
+            {
+                #region - 初始化宣告 -
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        CommLib.Logger.Error("預支費用申請單(外部起單)失敗，原因：" + ex.Message);
-        //        throw;
-        //    }
-        //}
+                //表單ID
+                IDENTIFY = "EnterpriseTaxiReview";
+
+                strFormNo = model.TITLE.ERP_FORM_NO;
+                var request = new GTVInApproveProgress()
+                {
+                    FORM_NO = strFormNo,
+                    IDENTIFY = IDENTIFY
+                };
+
+                //BPM 系統編號
+                if (model.TITLE.BPM_REQ_ID == null)
+                {
+                    strREQ = Guid.NewGuid().ToString();
+
+                }
+                else
+                {
+                    strREQ = model.TITLE.BPM_REQ_ID;
+                }
+
+                #endregion
+
+                #region 確認是否已起單且簽核中
+
+                var ApproveProgress = commonRepository.PostGTVInApproveProgress(request);
+
+                //確認是否已起單且簽核中或草稿中
+                if (!ApproveProgress.vResult)
+                {
+                    #region - 起單 -
+
+                    #region - 申請人資訊:ApplicantInfo -
+
+                    //表單資訊
+                    var applicantInfo = new ApplicantInfo()
+                    {
+                        REQUISITION_ID = strREQ,
+                        DIAGRAM_ID = IDENTIFY + "_P1",
+                        PRIORITY = 2,
+                        DRAFT_FLAG = 0,
+                        FLOW_ACTIVATED = 1
+                    };
+
+                    //申請人資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.TITLE.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.APPLICANT_DEPT = item.DEPT_ID;
+                        applicantInfo.APPLICANT_DEPT_NAME = item.DEPT_NAME;
+                        applicantInfo.APPLICANT_ID = item.USER_ID;
+                        applicantInfo.APPLICANT_NAME = item.USER_NAME;
+                        applicantInfo.APPLICANT_PHONE = item.MOBILE;
+                    }
+
+                    //(填單人/代填單人)資訊
+                    UserIDmodel = new LogonModel()
+                    {
+                        USER_ID = model.TITLE.CREATE_BY
+                    };
+
+                    foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
+                    {
+                        applicantInfo.FILLER_ID = item.USER_ID;
+                        applicantInfo.FILLER_NAME = item.USER_NAME;
+                    }
+
+                    #endregion
+
+                    #region - 企業乘車對帳單 表頭資訊:EnterpriseTaxiReview -
+
+                    strJson = jsonFunction.ObjectToJSON(model.TITLE);
+                    strJson = strJson.Replace("SUBJECT", "FM7_SUBJECT");
+                    var enterpriseTaxiReviewTitle = jsonFunction.JsonToObject<EnterpriseTaxiReviewTitle>(strJson);
+                    enterpriseTaxiReviewTitle.FORM_NO = strFormNo;
+
+                    #endregion
+
+                    #region - 企業乘車對帳單 基本資料:EnterpriseTaxiReview -
+
+                    strJson = jsonFunction.ObjectToJSON(model.INFO);
+                    var enterpriseTaxiReviewConfig = jsonFunction.JsonToObject<EnterpriseTaxiReviewConfig>(strJson);
+                    enterpriseTaxiReviewConfig.TOTAL = enterpriseTaxiReviewConfig.ACCOUNTS_PAYABLE;
+
+                    #endregion
+
+                    #region - 企業乘車對帳單 乘車明細:EnterpriseTaxiReview -
+
+                    strJson = jsonFunction.ObjectToJSON(model.DTLS);
+                    strJson = strJson.Replace("GET_ON_DATE_TIME", "GET_ON_DATE");
+                    strJson = strJson.Replace("GET_OFF_DATE_TIME", "GET_OFF_DATE");
+                    var enterpriseTaxiReviewDetailsConfig = jsonFunction.JsonToObject<List<EnterpriseTaxiReviewDetailsConfig>>(strJson);
+                    enterpriseTaxiReviewDetailsConfig.ForEach(DTL =>
+                    {
+                        DTL.GET_ON_TIME = DateTime.Parse(DTL.GET_ON_DATE).ToString("HH:mm");
+                        DTL.GET_ON_DATE = DateTime.Parse(DTL.GET_ON_DATE).ToString("yyyy-MM-dd");
+                        DTL.GET_OFF_TIME = DateTime.Parse(DTL.GET_OFF_DATE).ToString("HH:mm");
+                        DTL.GET_OFF_DATE = DateTime.Parse(DTL.GET_OFF_DATE).ToString("yyyy-MM-dd");
+                    });
+
+                    #endregion
+
+                    #region - 送單 -
+
+                    //送單
+                    var enterpriseTaxiReviewViewModel = new EnterpriseTaxiReviewViewModel()
+                    {
+                        APPLICANT_INFO = applicantInfo,
+                        ENTERPRISE_TAXI_REVIEW_TITLE = enterpriseTaxiReviewTitle,
+                        ENTERPRISE_TAXI_REVIEW_CONFIG = enterpriseTaxiReviewConfig,
+                        ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG = enterpriseTaxiReviewDetailsConfig,
+                        ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG = null
+                    };
+
+                    if (enterpriseTaxiReviewRepository.PutEnterpriseTaxiReviewSingle(enterpriseTaxiReviewViewModel))
+                    {
+                        //起單成功
+                        State = BPMStatusCode.PROGRESS;
+                    }
+                    else
+                    {
+                        //起單失敗
+                        State = BPMStatusCode.FAIL;
+                    }
+
+                    #endregion
+
+                    #endregion
+                }
+                else
+                {
+                    strREQ = ApproveProgress.REQUISITION_ID;
+                    State = ApproveProgress.BPMStatus;
+                }
+
+                #endregion
+
+                #region - 回傳狀態資訊 -
+
+                var getExternalData = new GetExternalData()
+                {
+                    BPM_REQ_ID = strREQ,
+                    ERP_FORM_NO = strFormNo,
+                    STATE = State
+                };
+
+                return getExternalData;
+
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("企業乘車對帳單(外部起單)失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
 
         #endregion
 
@@ -664,10 +822,16 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 #region - 初始化宣告 -
 
+                var expensesReimburseConfig = new ExpensesReimburseConfig();
+                var expensesReimburseDetailsConfig = new List<ExpensesReimburseDetailsConfig>();
+                var expensesReimburseBudgetsConfig = new List<ExpensesReimburseBudgetsConfig>();
+                var expensesReimburseSumsConfig = new List<ExpensesReimburseSumsConfig>();
+                var expensesReimburseFinancAmountsConfig = new List<ExpensesReimburseFinancAmountsConfig>();
+
                 //表單ID
                 IDENTIFY = "ExpensesReimburse";
 
-                strFormNo = model.ERP_FORM_NO;
+                strFormNo = model.TITLE.ERP_FORM_NO;
                 var request = new GTVInApproveProgress()
                 {
                     FORM_NO = strFormNo,
@@ -675,14 +839,14 @@ namespace OA_WEB_API.Repository.BPMPro
                 };
 
                 //BPM 系統編號
-                if (model.BPM_REQ_ID == null)
+                if (model.TITLE.BPM_REQ_ID == null)
                 {
                     strREQ = Guid.NewGuid().ToString();
 
                 }
                 else
                 {
-                    strREQ = model.BPM_REQ_ID;
+                    strREQ = model.TITLE.BPM_REQ_ID;
                 }
 
                 #endregion
@@ -711,7 +875,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     //申請人資訊
                     UserIDmodel = new LogonModel()
                     {
-                        USER_ID = model.CREATE_BY
+                        USER_ID = model.TITLE.CREATE_BY
                     };
 
                     foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
@@ -726,7 +890,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     //(填單人/代填單人)資訊
                     UserIDmodel = new LogonModel()
                     {
-                        USER_ID = model.CREATE_BY
+                        USER_ID = model.TITLE.CREATE_BY
                     };
 
                     foreach (UserModel item in userRepository.PostUserSingle(UserIDmodel).USER_MODEL)
@@ -737,33 +901,193 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     #endregion
 
-                    #region - 費用申請單 表頭資訊:MediaOrderTitle -
+                    #region - 費用申請單 表頭資訊:ExpensesReimburseTitle -
 
-                    strJson = jsonFunction.ObjectToJSON(model);
+                    strJson = jsonFunction.ObjectToJSON(model.TITLE);
                     var expensesReimburseTitle = jsonFunction.JsonToObject<ExpensesReimburseTitle>(strJson);
                     expensesReimburseTitle.FORM_NO = strFormNo;
+
+                    #endregion
+
+                    #region - 費用申請單 關聯表單:ExpensesReimburseAssociatedForm -
+
+                    var associatedFormConfigs = new List<AssociatedFormConfig>();
+
+                    model.ASSOC_FORM.ToList().ForEach(ASSOC =>
+                    {
+                        var formQuery = new FormQueryModel()
+                        {
+                            REQUISITION_ID = ASSOC.ASSOC_REQ_ID
+                        };
+                        var formData = formRepository.PostFormData(formQuery);
+
+                        var formFilter = new FormFilter()
+                        {
+                            IDENTIFY = new List<string>()
+                            {
+                                formData.IDENTIFY
+                            }
+                        };
+
+                        var associatedForm = new AssociatedFormConfig()
+                        {
+                            IDENTIFY = formData.IDENTIFY,
+                            FORM_NAME = commonRepository.PostGTVBPMFormTree(formFilter).Select(F => F.FORM_TREE.FirstOrDefault().FORM_NAME).FirstOrDefault(),
+                            ASSOCIATED_REQUISITION_ID = ASSOC.ASSOC_REQ_ID,
+                            FM7_SUBJECT= formData.FORM_SUBJECT,
+                            BPM_FORM_NO = ASSOC.BPM_FORM_NO,
+                            APPLICANT_DEPT_NAME = formData.APPLICANT_DEPT_NAME,
+                            APPLICANT_NAME = formData.APPLICANT_NAME,
+                            APPLICANT_DATE_TIME = formData.APPLICANT_DATETIME.ToString(),
+                            FORM_PATH = GlobalParameters.FormContentPath(formData.REQUISITION_ID, formData.IDENTIFY, formData.DIAGRAM_NAME),
+                            STATE = BPMStatusCode.CLOSE
+                        };
+
+                        associatedFormConfigs.Add(associatedForm);
+                    });
+
+                    var associatedFormModel = new AssociatedFormModel()
+                    {
+                        REQUISITION_ID = strREQ,
+                        ASSOCIATED_FORM_CONFIG = associatedFormConfigs
+                    };
+
+                    commonRepository.PutAssociatedForm(associatedFormModel);
+
+                    #endregion
+
+                    #region - 關聯【企業乘車對帳單】-帶入預設內容 -
+
+                    if (associatedFormConfigs.Any(ASSOC => ASSOC.IDENTIFY == "EnterpriseTaxiReview"))
+                    {
+                        var strAssocReq = associatedFormConfigs.Where(ASSOC => ASSOC.IDENTIFY == "EnterpriseTaxiReview").Select(ASSOC => ASSOC.ASSOCIATED_REQUISITION_ID).FirstOrDefault();
+                        var query = new EnterpriseTaxiReviewQueryModel()
+                        {
+                            REQUISITION_ID = strAssocReq
+                        };
+                        strJson = jsonFunction.ObjectToJSON(enterpriseTaxiReviewRepository.PostEnterpriseTaxiReviewSingle(query));
+                        var enterpriseTaxiReviewViewModel = jsonFunction.JsonToObject<EnterpriseTaxiReviewViewModel>(strJson);
+
+                        #region - 【企業乘車對帳單】費用申請單 表頭資訊:ExpensesReimburseTitle -
+
+                        expensesReimburseTitle.FM7_SUBJECT = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_TITLE.FM7_SUBJECT.Replace("對帳單", null) + "_費用申請。";
+
+                        #endregion
+
+                        #region - 【企業乘車對帳單】費用申請單 表單內容:ExpensesReimburseConfig -
+
+                        expensesReimburseConfig = new ExpensesReimburseConfig()
+                        {
+                            REASON = "繳交" + enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_TITLE.FM7_SUBJECT.Replace("對帳單", "費用"),
+                            AMOUNT_CONV_TOTAL = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL
+                        };
+
+                        #region - 是否經由財務協理簽核 -
+
+                        if (enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL >= 10000) expensesReimburseConfig.IS_CFO = true.ToString().ToLower();
+                        else expensesReimburseConfig.IS_CFO = false.ToString().ToLower();
+
+                        #endregion
+
+                        #region - 是否經由副總簽核 -
+
+                        if (enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL >= 30000) expensesReimburseConfig.IS_VICE_PRESIDENT = true.ToString().ToLower();
+                        else expensesReimburseConfig.IS_VICE_PRESIDENT = false.ToString().ToLower();
+
+                        #endregion
+
+                        #endregion
+
+                        #region - 【企業乘車對帳單】費用申請單 費用明細:ExpensesReimburseDetails -
+
+                        expensesReimburseDetailsConfig = new List<ExpensesReimburseDetailsConfig>()
+                        {
+                            new ExpensesReimburseDetailsConfig()
+                            {
+                                ROW_NO = 1,
+                                NAME = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_TITLE.FM7_SUBJECT.Replace("年度", "/").Replace("對帳單", "費用"),
+                                TYPE = "交通費",
+                                INV_TYPE = "RECPT",
+                                EXCH_RATE = 1,
+                                AMOUNT_CONV = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL,
+                                CURRENCY = "TWD",
+                                EXCL = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL,
+                                EXCL_TWD = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL,
+                                AMOUNT = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL,
+                                AMOUNT_TWD = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL,
+                            }
+                        };
+
+                        #endregion
+
+                        #region - 【企業乘車對帳單】費用申請單 使用預算:ExpensesReimburseBudgets -
+
+                        var detailsQueryModel = new EnterpriseTaxiReviewDetailsQueryModel()
+                        {
+                            REQUISITION_ID = strAssocReq,
+                            USER_ID = "Administrator",
+                            IS_ALL = true
+                        };
+                        strJson = jsonFunction.ObjectToJSON(enterpriseTaxiReviewRepository.PostEnterpriseTaxiReviewDetailsSingle(detailsQueryModel).ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG);
+                        expensesReimburseBudgetsConfig = jsonFunction.JsonToObject<List<ExpensesReimburseBudgetsConfig>>(strJson);
+                        expensesReimburseBudgetsConfig.Where(BUDG => BUDG.ROW_NO != 1).Select(BUDG => { BUDG.ROW_NO = 1; return BUDG; }).ToList();
+
+                        #endregion
+
+                        #region - 【企業乘車對帳單】費用申請單 小計:ExpensesReimburseSums -
+
+                        expensesReimburseSumsConfig = new List<ExpensesReimburseSumsConfig>()
+                        {
+                            new ExpensesReimburseSumsConfig()
+                            {
+                                AMOUNT = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL,
+                                CURRENCY = "TWD"
+                            }
+                        };
+
+                        #endregion
+
+                        #region - 【企業乘車對帳單】費用申請單 財務應退(合作夥伴廠商/合作夥伴個人/員工):ExpensesReimburseSums -
+
+                        expensesReimburseFinancAmountsConfig = new List<ExpensesReimburseFinancAmountsConfig>()
+                        {
+                            new ExpensesReimburseFinancAmountsConfig()
+                            {
+                                AMOUNT = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL,
+                                CURRENCY = "TWD"
+                            }
+                        };
+
+                        #endregion
+                    }
 
                     #endregion
 
                     #region - 送單 -
 
                     //送單
-                    //var expensesReimburseViewModel = new ExpensesReimburseViewModel()
-                    //{
-                    //    APPLICANT_INFO = applicantInfo,
-                    //    EXPENSES_REIMBURSE_TITLE = expensesReimburseTitle,
-                    //};
+                    var expensesReimburseViewModel = new ExpensesReimburseViewModel()
+                    {
+                        APPLICANT_INFO = applicantInfo,
+                        EXPENSES_REIMBURSE_TITLE = expensesReimburseTitle,
+                        EXPENSES_REIMBURSE_CONFIG=expensesReimburseConfig,
+                        EXPENSES_REIMBURSE_DTLS_CONFIG=expensesReimburseDetailsConfig,
+                        EXPENSES_REIMBURSE_BUDGS_CONFIG= expensesReimburseBudgetsConfig,
+                        EXPENSES_REIMBURSE_SUMS_CONFIG=expensesReimburseSumsConfig,
+                        EXPENSES_REIMBURSE_FAS_CONFIG= expensesReimburseFinancAmountsConfig,
+                        ASSOCIATED_FORM_CONFIG = associatedFormConfigs
+                    };
 
-                    //if (expensesReimburseRepository.PutExpensesReimburseSingle(expensesReimburseViewModel))
-                    //{
-                    //    //起單成功
-                    //    State = BPMStatusCode.PROGRESS;
-                    //}
-                    //else
-                    //{
-                    //    //起單失敗
-                    //    State = BPMStatusCode.FAIL;
-                    //}
+                    if (expensesReimburseRepository.PutExpensesReimburseSingle(expensesReimburseViewModel))
+                    {
+                        //起單成功
+                        State = BPMStatusCode.PROGRESS;
+                    }
+                    else
+                    {
+                        //起單失敗
+                        State = BPMStatusCode.FAIL;
+                    }
 
                     #endregion
 
@@ -897,7 +1221,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     var staffTravellingExpensesViewModel = new StaffTravellingExpensesViewModel()
                     {
                         APPLICANT_INFO = applicantInfo,
-                        STAFF_TRAVELLING_EXPENSES_TITLE= staffTravellingExpensesTitle,
+                        STAFF_TRAVELLING_EXPENSES_TITLE = staffTravellingExpensesTitle,
                     };
 
                     if (staffTravellingExpensesRepository.PutStaffTravellingExpensesSingle(staffTravellingExpensesViewModel))
@@ -1043,7 +1367,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     var paymentOrderViewModel = new PaymentOrderViewModel()
                     {
                         APPLICANT_INFO = applicantInfo,
-                        PAYMENT_ORDER_TITLE= paymentOrderTitle,
+                        PAYMENT_ORDER_TITLE = paymentOrderTitle,
                     };
 
                     if (paymentOrderRepository.PutPaymentOrderSingle(paymentOrderViewModel))

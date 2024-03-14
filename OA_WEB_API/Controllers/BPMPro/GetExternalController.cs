@@ -53,6 +53,20 @@ namespace OA_WEB_API.Controllers.BPMPro
 
         #endregion
 
+        #region - 企業乘車對帳單(外部起單) -
+
+        /// <summary>
+        /// 企業乘車對帳單(外部起單)
+        /// </summary>
+        [Route("api/PutEnterpriseTaxiReviewGetExternal")]
+        [HttpPost]
+        public GetExternalData PutEnterpriseTaxiReviewGetExternal(EnterpriseTaxiReviewERPInfo model)
+        {
+            return getExternalRepository.PutEnterpriseTaxiReviewGetExternal(model);
+        }
+
+        #endregion
+
         #region - 財務類_(外部起單) -
 
         #region - 預支費用申請單(外部起單) -

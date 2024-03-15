@@ -724,6 +724,11 @@
             合作夥伴審核單(外部起單)
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutEnterpriseTaxiReviewGetExternal(OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewERPInfo)">
+            <summary>
+            企業乘車對帳單(外部起單)
+            </summary>
+        </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.GetExternalController.PutAdvanceExpenseGetExternal(OA_WEB_API.Models.BPMPro.AdvanceExpenseERPInfo)">
             <summary>
             預支費用申請單(外部起單)
@@ -4260,6 +4265,17 @@
         <member name="P:OA_WEB_API.Models.BPMPro.COMM_FormInfoTitle.START_ID">
             <summary>ERP起案人</summary>
         </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.AssociatedFormERPInfo">
+            <summary>
+            外部起單 關聯表單
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AssociatedFormERPInfo.ASSOC_REQ_ID">
+            <summary>關聯表單:系統編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.AssociatedFormERPInfo.BPM_FORM_NO">
+            <summary>BPM 表單編號</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.BPMPro.ProjectReviewERPInfo">
             <summary>
             專案建立審核單(外部起單)ERP資料
@@ -4317,10 +4333,10 @@
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewERPInfo.TITLE">
-            <summary>合作夥伴審核單(表頭內容)</summary>
+            <summary>企業乘車對帳單(表頭內容)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewERPInfo.INFO">
-            <summary>合作夥伴審核單(基本資料)</summary>
+            <summary>企業乘車對帳單(基本資料)</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewERPInfo.DTLS">
             <summary>企業乘車對帳單(乘車明細)</summary>
@@ -4330,8 +4346,58 @@
             企業乘車對帳單(表頭內容)
             </summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoTitle.SUBJECT">
+            <summary>主旨</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoTitle.FLOW_NAME">
             <summary>ERP 工作流程名稱</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig">
+            <summary>
+            企業乘車對帳單(乘車明細)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.TICKET">
+            <summary>乘車券</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.GET_ON_DATE_TIME">
+            <summary>上車日期時間</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.GET_OFF_DATE_TIME">
+            <summary>下車日期時間</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.GET_ON_PLACE">
+            <summary>上車地點</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.GET_OFF_PLACE">
+            <summary>下車地點</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.COMPLEMENT_GET_ON_PLACE">
+            <summary>補充上車地點</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.COMPLEMENT_GET_OFF_PLACE">
+            <summary>補充下車地點</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.TRAVEL_BY_PURPOSE">
+            <summary>乘車目的</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.TAXI_EXPENSES">
+            <summary>車資</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.NAME">
+            <summary>員工姓名</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.ACCOUNT_ID">
+            <summary>員工編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.DEPT_ID">
+            <summary>部門編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.OFFICE_ID">
+            <summary>局處中心編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.GROUP_ID">
+            <summary>組別編號</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.AdvanceExpenseERPInfo">
             <summary>
@@ -4346,7 +4412,18 @@
             費用申請單(外部起單)ERP資料
             </summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseERPInfo.FLOW_NAME">
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseERPInfo.TITLE">
+            <summary>費用申請單(表頭內容)</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseERPInfo.ASSOC_FORM">
+            <summary>費用申請單(關聯表單)</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.BPMPro.ExpensesReimburseInfoTitle">
+            <summary>
+            費用申請單(表頭內容)
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseInfoTitle.FLOW_NAME">
             <summary>ERP 工作流程名稱</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesERPInfo">
@@ -11263,6 +11340,9 @@
         <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.advanceExpenseRepository">
             <summary>預支費用申請單</summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.expensesReimburseRepository">
+            <summary>費用申請單</summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.staffTravellingExpensesRepository">
             <summary>差旅費用報支單</summary>
         </member>
@@ -11319,6 +11399,11 @@
         <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutSupplierReviewGetExternal(OA_WEB_API.Models.BPMPro.SupplierReviewERPInfo)">
             <summary>
             合作夥伴審核單(外部起單)
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutEnterpriseTaxiReviewGetExternal(OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewERPInfo)">
+            <summary>
+            企業乘車對帳單(外部起單)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutAdvanceExpenseGetExternal(OA_WEB_API.Models.BPMPro.AdvanceExpenseERPInfo)">

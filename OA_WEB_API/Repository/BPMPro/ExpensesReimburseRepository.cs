@@ -503,7 +503,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         new SqlParameter("@BFCY_EMAIL", SqlDbType.NVarChar) { Size = 100, Value = (object)DBNull.Value ?? DBNull.Value },
                     };
 
-                    #region - 是否經由財務協理簽核 -
+                    #region - 是否經由副總簽核 -
 
                     if (String.IsNullOrEmpty(model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT) || String.IsNullOrWhiteSpace(model.EXPENSES_REIMBURSE_CONFIG.IS_VICE_PRESIDENT))
                     {

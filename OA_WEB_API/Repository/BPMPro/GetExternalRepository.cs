@@ -586,7 +586,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     strJson = jsonFunction.ObjectToJSON(model.INFO);
                     var enterpriseTaxiReviewConfig = jsonFunction.JsonToObject<EnterpriseTaxiReviewConfig>(strJson);
-                    enterpriseTaxiReviewConfig.TOTAL = enterpriseTaxiReviewConfig.ACCOUNTS_PAYABLE;
+                    enterpriseTaxiReviewConfig.TOTAL = 0;
 
                     #endregion
 

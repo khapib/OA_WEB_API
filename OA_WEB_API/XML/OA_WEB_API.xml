@@ -1544,9 +1544,29 @@
             專案建立審核單 財務審核資訊_回傳ERP
             </summary>    
         </member>
+        <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostEnterpriseTaxiReviewInfoSingle">
+            <summary>
+            企業乘車對帳單 對帳資訊_回傳ERP
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostAdvanceExpenseInfoSingle">
+            <summary>
+            預支費用申請單 審核資訊_回傳ERP
+            </summary>    
+        </member>
         <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostExpensesReimburseInfoSingle">
             <summary>
             費用申請單 審核資訊_回傳ERP
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostStaffTravellingExpensesInfoSingle">
+            <summary>
+            差旅費用報支單 審核資訊_回傳ERP
+            </summary>    
+        </member>
+        <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostPaymentOrderInfoSingle">
+            <summary>
+            繳款單 審核資訊_回傳ERP
             </summary>    
         </member>
         <member name="M:OA_WEB_API.Controllers.ERP.ResponseInfoController.PostGeneralOrderInfoSingle">
@@ -9635,6 +9655,61 @@
         <member name="P:OA_WEB_API.Models.ERP.ProjectReviewFinanceRequest.LoginName">
             <summary>最後簽核人姓名</summary>
         </member>
+        <member name="T:OA_WEB_API.Models.ERP.EnterpriseTaxiReviewInfoRequest">
+            <summary>
+            企業乘車對帳單 對帳資訊_回傳ERP 
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.EnterpriseTaxiReviewInfoRequest.ERP_RESPONSE_STATE">
+            <summary>接收ERP回傳狀態</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.EnterpriseTaxiReviewInfoRequest.ENTERPRISE_TAXI_REVIEW_TITLE">
+            <summary>企業乘車對帳單 表頭資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.EnterpriseTaxiReviewInfoRequest.ENTERPRISE_TAXI_REVIEW_CONFIG">
+            <summary>企業乘車對帳單 表單內容 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.EnterpriseTaxiReviewInfoRequest.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG">
+            <summary>企業乘車對帳單 乘車明細 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.EnterpriseTaxiReviewInfoRequest.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG">
+            <summary>企業乘車對帳單 使用預算 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.EnterpriseTaxiReviewInfoRequest.LoginId">
+            <summary>最後簽核人員工編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.EnterpriseTaxiReviewInfoRequest.LoginName">
+            <summary>最後簽核人姓名</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.ERP.AdvanceExpenseInfoRequest">
+            <summary>
+            預支費用申請單_回傳ERP 
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.AdvanceExpenseInfoRequest.ERP_RESPONSE_STATE">
+            <summary>接收ERP回傳狀態</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.AdvanceExpenseInfoRequest.ADVANCE_EXPENSE_TITLE">
+            <summary>預支費用申請單 表頭資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.AdvanceExpenseInfoRequest.ADVANCE_EXPENSE_CONFIG">
+            <summary>預支費用申請單 表單內容 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.AdvanceExpenseInfoRequest.ADVANCE_EXPENSE_DTLS_CONFIG">
+            <summary>預支費用申請單 預知明細 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.AdvanceExpenseInfoRequest.ADVANCE_EXPENSE_SUMS_CONFIG">
+            <summary>預支費用申請單 小計 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.AdvanceExpenseInfoRequest.ASSOCIATED_FORM_CONFIG">
+            <summary>表單關聯</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.AdvanceExpenseInfoRequest.LoginId">
+            <summary>最後簽核人員工編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.AdvanceExpenseInfoRequest.LoginName">
+            <summary>最後簽核人姓名</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.ERP.ExpensesReimburseInfoRequest">
             <summary>
             費用申請單 審核資訊_回傳ERP 
@@ -9652,6 +9727,21 @@
         <member name="P:OA_WEB_API.Models.ERP.ExpensesReimburseInfoRequest.EXPENSES_REIMBURSE_DTLS_CONFIG">
             <summary>費用申請單 費用明細 設定</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.ERP.ExpensesReimburseInfoRequest.EXPENSES_REIMBURSE_BUDGS_CONFIG">
+            <summary>費用申請單 使用預算 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.ExpensesReimburseInfoRequest.EXPENSES_REIMBURSE_SUMS_CONFIG">
+            <summary>費用申請單 小計 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.ExpensesReimburseInfoRequest.EXPENSES_REIMBURSE_ADVS_CONFIG">
+            <summary>費用申請單 已預支 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.ExpensesReimburseInfoRequest.EXPENSES_REIMBURSE_UAS_CONFIG">
+            <summary>費用申請單 申請人應繳 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.ExpensesReimburseInfoRequest.EXPENSES_REIMBURSE_FAS_CONFIG">
+            <summary>費用申請單 財務應退(合作夥伴廠商/合作夥伴個人/員工) 設定</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.ERP.ExpensesReimburseInfoRequest.ASSOCIATED_FORM_CONFIG">
             <summary>表單關聯</summary>
         </member>
@@ -9659,6 +9749,73 @@
             <summary>最後簽核人員工編號</summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.ExpensesReimburseInfoRequest.LoginName">
+            <summary>最後簽核人姓名</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.ERP.StaffTravellingExpensesInfoRequest">
+            <summary>
+            預支費用申請單_回傳ERP 
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.StaffTravellingExpensesInfoRequest.ERP_RESPONSE_STATE">
+            <summary>接收ERP回傳狀態</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.StaffTravellingExpensesInfoRequest.STAFF_TRAVELLING_EXPENSES_TITLE">
+            <summary>差旅費用報支單 表頭資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.StaffTravellingExpensesInfoRequest.STAFF_TRAVELLING_EXPENSES_CONFIG">
+            <summary>差旅費用報支單 表單內容 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.StaffTravellingExpensesInfoRequest.STAFF_TRAVELLING_EXPENSES_DTLS_CONFIG">
+            <summary>差旅費用報支單 差旅明細 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.StaffTravellingExpensesInfoRequest.STAFF_TRAVELLING_EXPENSES_INV_DTLS_CONFIG">
+            <summary>差旅費用報支單 憑證明細 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.StaffTravellingExpensesInfoRequest.STAFF_TRAVELLING_EXPENSES_BUDGS_CONFIG">
+            <summary>差旅費用報支單 使用預算 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.StaffTravellingExpensesInfoRequest.STAFF_TRAVELLING_EXPENSES_SUMS_CONFIG">
+            <summary>差旅費用報支單 小計 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.StaffTravellingExpensesInfoRequest.STAFF_TRAVELLING_EXPENSES_ADVS_CONFIG">
+            <summary>差旅費用報支單 已預支 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.StaffTravellingExpensesInfoRequest.STAFF_TRAVELLING_EXPENSES_UAS_CONFIG">
+            <summary>差旅費用報支單 申請人應繳 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.StaffTravellingExpensesInfoRequest.STAFF_TRAVELLING_EXPENSES_FAS_CONFIG">
+            <summary>差旅費用報支單 財務應退(合作夥伴廠商/合作夥伴個人/員工) 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.StaffTravellingExpensesInfoRequest.ASSOCIATED_FORM_CONFIG">
+            <summary>表單關聯</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.StaffTravellingExpensesInfoRequest.LoginId">
+            <summary>最後簽核人員工編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.StaffTravellingExpensesInfoRequest.LoginName">
+            <summary>最後簽核人姓名</summary>
+        </member>
+        <member name="T:OA_WEB_API.Models.ERP.PaymentOrderInfoRequest">
+            <summary>
+            繳款單_回傳ERP 
+            </summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.PaymentOrderInfoRequest.ERP_RESPONSE_STATE">
+            <summary>接收ERP回傳狀態</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.PaymentOrderInfoRequest.PAYMENT_ORDER_TITLE">
+            <summary>繳款單 表頭資訊</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.PaymentOrderInfoRequest.PAYMENT_ORDER_CONFIG">
+            <summary>繳款單 表單內容 設定</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.PaymentOrderInfoRequest.ASSOCIATED_FORM_CONFIG">
+            <summary>表單關聯</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.PaymentOrderInfoRequest.LoginId">
+            <summary>最後簽核人員工編號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.PaymentOrderInfoRequest.LoginName">
             <summary>最後簽核人姓名</summary>
         </member>
         <member name="T:OA_WEB_API.Models.ERP.GeneralOrderInfoRequest">
@@ -13135,8 +13292,20 @@
             回傳ERP資訊
             </summary>
         </member>
+        <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.enterpriseTaxiReviewRepository">
+            <summary>企業乘車對帳單</summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.advanceExpenseRepository">
+            <summary>預支費用申請單</summary>
+        </member>
         <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.expensesReimburseRepository">
             <summary>費用申請單</summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.staffTravellingExpensesRepository">
+            <summary>差旅費用報支單</summary>
+        </member>
+        <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.paymentOrderRepository">
+            <summary>繳款單</summary>
         </member>
         <member name="F:OA_WEB_API.Repository.ERP.ResponseInfoRepository.generalOrderRepository">
             <summary>行政採購申請單</summary>
@@ -13179,9 +13348,29 @@
             專案建立審核單 財務審核資訊_回傳ERP
             </summary>
         </member>
+        <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostEnterpriseTaxiReviewInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
+            <summary>
+            企業乘車對帳單 對帳資訊_回傳ERP
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostAdvanceExpenseInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
+            <summary>
+            預支費用申請單 審核資訊_回傳ERP
+            </summary>
+        </member>
         <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostExpensesReimburseInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
             <summary>
             費用申請單 審核資訊_回傳ERP
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostStaffTravellingExpensesInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
+            <summary>
+            差旅費用報支單 審核資訊_回傳ERP
+            </summary>
+        </member>
+        <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostPaymentOrderInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">
+            <summary>
+            繳款單 審核資訊_回傳ERP
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.ERP.ResponseInfoRepository.PostGeneralOrderInfoSingle(OA_WEB_API.Models.ERP.RequestQueryModel)">

@@ -49,6 +49,54 @@ namespace OA_WEB_API.Controllers.ERP
 
         #endregion
 
+        #region - 企業乘車對帳單 對帳資訊_回傳ERP -
+
+        /// <summary>
+        /// 企業乘車對帳單 對帳資訊_回傳ERP
+        /// </summary>    
+        [Route("api/PostEnterpriseTaxiReviewInfoSingle")]
+        [HttpPost]
+        public EnterpriseTaxiReviewInfoRequest PostEnterpriseTaxiReviewInfoSingle()
+        {
+            HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
+            HttpRequestBase request = context.Request;
+
+            var query = new RequestQueryModel()
+            {
+                REQUISITION_ID = request["RequisitionID"],
+                REQUEST_FLG = bool.Parse(request["RequestFlg"])
+            };
+
+            return responseInfoRepository.PostEnterpriseTaxiReviewInfoSingle(query);
+        }
+
+        #endregion
+
+        #region - 財務類_回傳ERP資訊 -
+
+        #region - 預支費用申請單 審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 預支費用申請單 審核資訊_回傳ERP
+        /// </summary>    
+        [Route("api/PostAdvanceExpenseInfoSingle")]
+        [HttpPost]
+        public AdvanceExpenseInfoRequest PostAdvanceExpenseInfoSingle()
+        {
+            HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
+            HttpRequestBase request = context.Request;
+
+            var query = new RequestQueryModel()
+            {
+                REQUISITION_ID = request["RequisitionID"],
+                REQUEST_FLG = bool.Parse(request["RequestFlg"])
+            };
+
+            return responseInfoRepository.PostAdvanceExpenseInfoSingle(query);
+        }
+
+        #endregion
+
         #region - 費用申請單 審核資訊_回傳ERP -
 
         /// <summary>
@@ -60,7 +108,7 @@ namespace OA_WEB_API.Controllers.ERP
         {
             HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
             HttpRequestBase request = context.Request;
-        
+
             var query = new RequestQueryModel()
             {
                 REQUISITION_ID = request["RequisitionID"],
@@ -71,6 +119,54 @@ namespace OA_WEB_API.Controllers.ERP
         }
 
         #endregion
+
+        #region - 差旅費用報支單 審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 差旅費用報支單 審核資訊_回傳ERP
+        /// </summary>    
+        [Route("api/PostStaffTravellingExpensesInfoSingle")]
+        [HttpPost]
+        public StaffTravellingExpensesInfoRequest PostStaffTravellingExpensesInfoSingle()
+        {
+            HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
+            HttpRequestBase request = context.Request;
+
+            var query = new RequestQueryModel()
+            {
+                REQUISITION_ID = request["RequisitionID"],
+                REQUEST_FLG = bool.Parse(request["RequestFlg"])
+            };
+
+            return responseInfoRepository.PostStaffTravellingExpensesInfoSingle(query);
+        }
+
+        #endregion
+
+        #region - 繳款單 審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 繳款單 審核資訊_回傳ERP
+        /// </summary>    
+        [Route("api/PostPaymentOrderInfoSingle")]
+        [HttpPost]
+        public PaymentOrderInfoRequest PostPaymentOrderInfoSingle()
+        {
+            HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];
+            HttpRequestBase request = context.Request;
+
+            var query = new RequestQueryModel()
+            {
+                REQUISITION_ID = request["RequisitionID"],
+                REQUEST_FLG = bool.Parse(request["RequestFlg"])
+            };
+
+            return responseInfoRepository.PostPaymentOrderInfoSingle(query);
+        }
+
+        #endregion
+
+        #endregion      
 
         #region - 行政採購類_回傳ERP資訊 -
 

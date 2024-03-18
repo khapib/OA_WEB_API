@@ -40,8 +40,21 @@ namespace OA_WEB_API.Repository.ERP
 
         #region FormRepository
 
+        /// <summary>企業乘車對帳單</summary>
+        EnterpriseTaxiReviewRepository enterpriseTaxiReviewRepository = new EnterpriseTaxiReviewRepository();
+
+        #region - 財務類 -
+
+        /// <summary>預支費用申請單</summary>
+        AdvanceExpenseRepository advanceExpenseRepository = new AdvanceExpenseRepository();
         /// <summary>費用申請單</summary>
         ExpensesReimburseRepository expensesReimburseRepository = new ExpensesReimburseRepository();
+        /// <summary>差旅費用報支單</summary>
+        StaffTravellingExpensesRepository staffTravellingExpensesRepository = new StaffTravellingExpensesRepository();
+        /// <summary>繳款單</summary>
+        PaymentOrderRepository paymentOrderRepository = new PaymentOrderRepository();
+
+        #endregion
 
         #region 行政採購類
 
@@ -176,6 +189,206 @@ namespace OA_WEB_API.Repository.ERP
 
         #endregion
 
+        #region - 企業乘車對帳單 對帳資訊_回傳ERP -
+
+        /// <summary>
+        /// 企業乘車對帳單 對帳資訊_回傳ERP
+        /// </summary>
+        public EnterpriseTaxiReviewInfoRequest PostEnterpriseTaxiReviewInfoSingle(RequestQueryModel query)
+        {
+            try
+            {
+                #region - 查詢及執行 -
+
+                #region - 企業乘車對帳單 申請審核資訊 -
+
+                #region 回傳表單內容
+
+                var enterpriseTaxiReviewQueryModel = new EnterpriseTaxiReviewQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID,
+                };
+
+                var enterpriseTaxiReviewInfoRequest = new EnterpriseTaxiReviewInfoRequest();
+                var enterpriseTaxiReviewContent = enterpriseTaxiReviewRepository.PostEnterpriseTaxiReviewSingle(enterpriseTaxiReviewQueryModel);
+
+                #region - 企業乘車對帳單 主表單資訊 -
+
+                //Join 企業乘車對帳單(主表單查詢)Function
+                strJson = jsonFunction.ObjectToJSON(enterpriseTaxiReviewContent);
+                //給予需要回傳ERP的資訊
+                enterpriseTaxiReviewInfoRequest = jsonFunction.JsonToObject<EnterpriseTaxiReviewInfoRequest>(strJson);
+                enterpriseTaxiReviewInfoRequest.REQUISITION_ID = enterpriseTaxiReviewContent.APPLICANT_INFO.REQUISITION_ID;
+
+                #endregion
+
+                var detailsQueryModel = new EnterpriseTaxiReviewDetailsQueryModel()
+                {
+                    REQUISITION_ID = enterpriseTaxiReviewInfoRequest.REQUISITION_ID,
+                    USER_ID = "Administrator",
+                    IS_ALL = true
+                };
+                var enterpriseTaxiReviewDetails = enterpriseTaxiReviewRepository.PostEnterpriseTaxiReviewDetailsSingle(detailsQueryModel);
+
+                #region - 企業乘車對帳單 對帳明細 -
+
+                enterpriseTaxiReviewDetails.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.ForEach(DTL =>
+                {
+                    DTL.GET_ON_DATE = DateTime.Parse(DTL.GET_ON_DATE + " " + DTL.GET_ON_TIME).ToString("s(zh-TW)");
+                    DTL.GET_OFF_DATE = DateTime.Parse(DTL.GET_OFF_DATE + " " + DTL.GET_OFF_TIME).ToString("s(zh-TW)");
+                });
+                //Join 企業乘車對帳單(對帳明細)Function
+                strJson = jsonFunction.ObjectToJSON(enterpriseTaxiReviewDetails.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG);
+                strJson = strJson.Replace("GET_ON_DATE", "GET_ON_DATE_TIME");
+                strJson = strJson.Replace("GET_OFF_DATE", "GET_OFF_DATE_TIME");
+                enterpriseTaxiReviewInfoRequest.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG = jsonFunction.JsonToObject<List<EnterpriseTaxiReviewInfoDetailsConfig>>(strJson);
+
+                #endregion
+
+                #region - 企業乘車對帳單 預算 -
+
+                //Join 企業乘車對帳單(對帳明細)Function
+                strJson = jsonFunction.ObjectToJSON(enterpriseTaxiReviewDetails.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG);
+                enterpriseTaxiReviewInfoRequest.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG = jsonFunction.JsonToObject<List<EnterpriseTaxiReviewBudgetsConfig>>(strJson);
+
+                #endregion
+
+                #endregion
+
+                #region 表單簽核狀態
+
+                var parameter = new List<SqlParameter>()
+                {
+                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID },
+                };
+                //表單資料
+                var formQueryModel = new FormQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+                var formData = formRepository.PostFormData(formQueryModel);
+                var stepFlowConfig = stepFlowRepository.StepFlowInfo(formData, parameter);
+
+                #endregion
+
+                #endregion
+
+                #region - 回傳ERP - 
+
+                //enterpriseTaxiReviewInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                //enterpriseTaxiReviewInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+
+                //if (query.REQUEST_FLG)
+                //{
+                //    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
+                //    Method = "POST";
+                //    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, enterpriseTaxiReviewInfoRequest);
+
+                //    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                //    CommLib.Logger.Debug("企業乘車對帳單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                //    enterpriseTaxiReviewInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                //}
+
+                #endregion
+
+                #endregion
+
+                strJson = jsonFunction.ObjectToJSON(enterpriseTaxiReviewInfoRequest);
+                CommLib.Logger.Debug("企業乘車對帳單:" + query.REQUISITION_ID + " BPM回傳內容：" + strJson);
+                return enterpriseTaxiReviewInfoRequest;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("企業乘車對帳單:" + query.REQUISITION_ID + " 對帳資訊回傳ERP 失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region - 財務類_回傳ERP資訊 -
+
+        #region - 預支費用申請單 審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 預支費用申請單 審核資訊_回傳ERP
+        /// </summary>
+        public AdvanceExpenseInfoRequest PostAdvanceExpenseInfoSingle(RequestQueryModel query)
+        {
+            try
+            {
+                #region - 查詢及執行 -
+
+                #region - 預支費用申請單 申請審核資訊 -
+
+                #region 回傳表單內容
+
+                var advanceExpenseQueryModel = new AdvanceExpenseQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID,
+                };
+
+                var advanceExpenseInfoRequest = new AdvanceExpenseInfoRequest();
+                var advanceExpenseContent = advanceExpenseRepository.PostAdvanceExpenseSingle(advanceExpenseQueryModel);
+                //Join 預支費用申請單(查詢)Function
+                strJson = jsonFunction.ObjectToJSON(advanceExpenseContent);
+                //給予需要回傳ERP的資訊
+                advanceExpenseInfoRequest = jsonFunction.JsonToObject<AdvanceExpenseInfoRequest>(strJson);
+                advanceExpenseInfoRequest.REQUISITION_ID = advanceExpenseContent.APPLICANT_INFO.REQUISITION_ID;
+
+                #endregion
+
+                #region 表單簽核狀態
+
+                var parameter = new List<SqlParameter>()
+                {
+                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID },
+                };
+                //表單資料
+                var formQueryModel = new FormQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+                var formData = formRepository.PostFormData(formQueryModel);
+                var stepFlowConfig = stepFlowRepository.StepFlowInfo(formData, parameter);
+
+                #endregion
+
+                #endregion
+
+                #region - 回傳ERP - 
+
+                //advanceExpenseInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                //advanceExpenseInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+
+                //if (query.REQUEST_FLG)
+                //{
+                //    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
+                //    Method = "POST";
+                //    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, advanceExpenseInfoRequest);
+
+                //    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                //    CommLib.Logger.Debug("預支費用申請單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                //    advanceExpenseInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                //}
+
+                #endregion
+
+                #endregion
+
+                strJson = jsonFunction.ObjectToJSON(advanceExpenseInfoRequest);
+                CommLib.Logger.Debug("預支費用申請單:" + query.REQUISITION_ID + " BPM回傳內容：" + strJson);
+                return advanceExpenseInfoRequest;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("預支費用申請單:" + query.REQUISITION_ID + " 申請審核資訊回傳ERP 失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
         #region - 費用申請單 審核資訊_回傳ERP -
 
         /// <summary>
@@ -191,12 +404,12 @@ namespace OA_WEB_API.Repository.ERP
 
                 #region 回傳表單內容
 
-                ExpensesReimburseQueryModel expensesReimburseQueryModel = new ExpensesReimburseQueryModel
+                var expensesReimburseQueryModel = new ExpensesReimburseQueryModel
                 {
                     REQUISITION_ID = query.REQUISITION_ID
                 };
 
-                ExpensesReimburseInfoRequest expensesReimburseInfoRequest = new ExpensesReimburseInfoRequest();
+                var expensesReimburseInfoRequest = new ExpensesReimburseInfoRequest();
                 var expensesReimburseContent = expensesReimburseRepository.PostExpensesReimburseSingle(expensesReimburseQueryModel);
                 //Join 費用申請單(查詢)Function
                 strJson = jsonFunction.ObjectToJSON(expensesReimburseContent);
@@ -226,19 +439,19 @@ namespace OA_WEB_API.Repository.ERP
 
                 #region - 回傳ERP - 
 
-                expensesReimburseInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
-                expensesReimburseInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+                //expensesReimburseInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                //expensesReimburseInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
 
-                if (query.REQUEST_FLG)
-                {
-                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/UpdateER_DetailContent";
-                    Method = "POST";
-                    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, expensesReimburseInfoRequest);
+                //if (query.REQUEST_FLG)
+                //{
+                //    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
+                //    Method = "POST";
+                //    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, expensesReimburseInfoRequest);
 
-                    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
-                    CommLib.Logger.Debug("費用申請單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
-                    expensesReimburseInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
-                }
+                //    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                //    CommLib.Logger.Debug("費用申請單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                //    expensesReimburseInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                //}
 
                 #endregion
 
@@ -254,6 +467,170 @@ namespace OA_WEB_API.Repository.ERP
                 throw;
             }
         }
+
+        #endregion
+
+        #region - 差旅費用報支單 審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 差旅費用報支單 審核資訊_回傳ERP
+        /// </summary>
+        public StaffTravellingExpensesInfoRequest PostStaffTravellingExpensesInfoSingle(RequestQueryModel query)
+        {
+            try
+            {
+                #region - 查詢及執行 -
+
+                #region - 差旅費用報支單 申請審核資訊 -
+
+                #region 回傳表單內容
+
+                var staffTravellingExpensesQueryModel = new StaffTravellingExpensesQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID,
+                };
+
+                var staffTravellingExpensesInfoRequest = new StaffTravellingExpensesInfoRequest();
+                var staffTravellingExpensesContent = staffTravellingExpensesRepository.PostStaffTravellingExpensesSingle(staffTravellingExpensesQueryModel);
+                //Join 差旅費用報支單(查詢)Function
+                strJson = jsonFunction.ObjectToJSON(staffTravellingExpensesContent);
+                //給予需要回傳ERP的資訊
+                staffTravellingExpensesInfoRequest = jsonFunction.JsonToObject<StaffTravellingExpensesInfoRequest>(strJson);
+                staffTravellingExpensesInfoRequest.REQUISITION_ID = staffTravellingExpensesContent.APPLICANT_INFO.REQUISITION_ID;
+
+                #endregion
+
+                #region 表單簽核狀態
+
+                var parameter = new List<SqlParameter>()
+                {
+                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID },
+                };
+                //表單資料
+                var formQueryModel = new FormQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+                var formData = formRepository.PostFormData(formQueryModel);
+                var stepFlowConfig = stepFlowRepository.StepFlowInfo(formData, parameter);
+
+                #endregion
+
+                #endregion
+
+                #region - 回傳ERP - 
+
+                //staffTravellingExpensesInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                //staffTravellingExpensesInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+
+                //if (query.REQUEST_FLG)
+                //{
+                //    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
+                //    Method = "POST";
+                //    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, staffTravellingExpensesInfoRequest);
+
+                //    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                //    CommLib.Logger.Debug("差旅費用報支單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                //    staffTravellingExpensesInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                //}
+
+                #endregion
+
+                #endregion
+
+                strJson = jsonFunction.ObjectToJSON(staffTravellingExpensesInfoRequest);
+                CommLib.Logger.Debug("差旅費用報支單:" + query.REQUISITION_ID + " BPM回傳內容：" + strJson);
+                return staffTravellingExpensesInfoRequest;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("差旅費用報支單:" + query.REQUISITION_ID + " 申請審核資訊回傳ERP 失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region - 繳款單 審核資訊_回傳ERP -
+
+        /// <summary>
+        /// 繳款單 審核資訊_回傳ERP
+        /// </summary>
+        public PaymentOrderInfoRequest PostPaymentOrderInfoSingle(RequestQueryModel query)
+        {
+            try
+            {
+                #region - 查詢及執行 -
+
+                #region - 繳款單 申請審核資訊 -
+
+                #region 回傳表單內容
+
+                var paymentOrderQueryModel = new PaymentOrderQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID,
+                };
+
+                var paymentOrderInfoRequest = new PaymentOrderInfoRequest();
+                var paymentOrderContent = paymentOrderRepository.PostPaymentOrderSingle(paymentOrderQueryModel);
+                //Join 繳款單(查詢)Function
+                strJson = jsonFunction.ObjectToJSON(paymentOrderContent);
+                //給予需要回傳ERP的資訊
+                paymentOrderInfoRequest = jsonFunction.JsonToObject<PaymentOrderInfoRequest>(strJson);
+                paymentOrderInfoRequest.REQUISITION_ID = paymentOrderContent.APPLICANT_INFO.REQUISITION_ID;
+
+                #endregion
+
+                #region 表單簽核狀態
+
+                var parameter = new List<SqlParameter>()
+                {
+                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = query.REQUISITION_ID },
+                };
+                //表單資料
+                var formQueryModel = new FormQueryModel()
+                {
+                    REQUISITION_ID = query.REQUISITION_ID
+                };
+                var formData = formRepository.PostFormData(formQueryModel);
+                var stepFlowConfig = stepFlowRepository.StepFlowInfo(formData, parameter);
+
+                #endregion
+
+                #endregion
+
+                #region - 回傳ERP - 
+
+                //paymentOrderInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                //paymentOrderInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+
+                //if (query.REQUEST_FLG)
+                //{
+                //    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
+                //    Method = "POST";
+                //    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, paymentOrderInfoRequest);
+
+                //    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                //    CommLib.Logger.Debug("繳款單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                //    paymentOrderInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                //}
+
+                #endregion
+
+                #endregion
+
+                strJson = jsonFunction.ObjectToJSON(paymentOrderInfoRequest);
+                CommLib.Logger.Debug("繳款單:" + query.REQUISITION_ID + " BPM回傳內容：" + strJson);
+                return paymentOrderInfoRequest;
+            }
+            catch (Exception ex)
+            {
+                CommLib.Logger.Error("繳款單:" + query.REQUISITION_ID + " 申請審核資訊回傳ERP 失敗，原因：" + ex.Message);
+                throw;
+            }
+        }
+
+        #endregion
 
         #endregion
 
@@ -274,12 +651,12 @@ namespace OA_WEB_API.Repository.ERP
 
                 #region 回傳表單內容
 
-                GeneralOrderQueryModel generalOrderquery = new GeneralOrderQueryModel
+                var generalOrderquery = new GeneralOrderQueryModel
                 {
                     REQUISITION_ID = query.REQUISITION_ID
                 };
 
-                GeneralOrderInfoRequest generalOrderInfoRequest = new GeneralOrderInfoRequest();
+                var generalOrderInfoRequest = new GeneralOrderInfoRequest();
                 var generalOrderContent = generalOrderRepository.PostGeneralOrderSingle(generalOrderquery);
                 //Join 行政採購申請單(查詢)Function
                 strJson = jsonFunction.ObjectToJSON(generalOrderContent);
@@ -355,12 +732,12 @@ namespace OA_WEB_API.Repository.ERP
 
                 #region 回傳表單內容
 
-                GeneralAcceptanceQueryModel generalAcceptanceQueryModel = new GeneralAcceptanceQueryModel
+                var generalAcceptanceQueryModel = new GeneralAcceptanceQueryModel
                 {
                     REQUISITION_ID = query.REQUISITION_ID
                 };
 
-                GeneralAcceptanceInfoRequest generalAcceptanceInfoRequest = new GeneralAcceptanceInfoRequest();
+                var generalAcceptanceInfoRequest = new GeneralAcceptanceInfoRequest();
                 var generalAcceptanceContent = generalAcceptanceRepository.PostGeneralAcceptanceSingle(generalAcceptanceQueryModel);
                 //Join 行政採購點驗收單(查詢)Function
                 strJson = jsonFunction.ObjectToJSON(generalAcceptanceContent);
@@ -436,12 +813,12 @@ namespace OA_WEB_API.Repository.ERP
 
                 #region 回傳表單內容
 
-                GeneralInvoiceQueryModel generalInvoiceQueryModel = new GeneralInvoiceQueryModel
+                var generalInvoiceQueryModel = new GeneralInvoiceQueryModel
                 {
                     REQUISITION_ID = query.REQUISITION_ID
                 };
 
-                GeneralInvoiceInfoRequest generalInvoiceInfoRequest = new GeneralInvoiceInfoRequest();
+                var generalInvoiceInfoRequest = new GeneralInvoiceInfoRequest();
                 var generalInvoiceContent = generalInvoiceRepository.PostGeneralInvoiceSingle(generalInvoiceQueryModel);
                 //Join 行政採購點驗收單(查詢)Function
                 strJson = jsonFunction.ObjectToJSON(generalInvoiceContent);
@@ -517,12 +894,12 @@ namespace OA_WEB_API.Repository.ERP
 
                 #region 回傳表單內容
 
-                GeneralOrderReturnRefundQueryModel generalOrderReturnRefundQueryModel = new GeneralOrderReturnRefundQueryModel
+                var generalOrderReturnRefundQueryModel = new GeneralOrderReturnRefundQueryModel
                 {
                     REQUISITION_ID = query.REQUISITION_ID
                 };
 
-                GeneralOrderReturnRefundInfoRequest generalOrderReturnRefundInfoRequest = new GeneralOrderReturnRefundInfoRequest();
+                var generalOrderReturnRefundInfoRequest = new GeneralOrderReturnRefundInfoRequest();
                 var generalOrderReturnRefundContent = generalOrderReturnRefundRepository.PostGeneralOrderReturnRefundSingle(generalOrderReturnRefundQueryModel);
                 generalOrderReturnRefundInfoRequest.GENERAL_ORDER_RETURN_REFUND_VIEW = generalOrderReturnRefundContent;
 
@@ -693,7 +1070,7 @@ namespace OA_WEB_API.Repository.ERP
                     REQUISITION_ID = query.REQUISITION_ID
                 };
 
-                EvaluateContentInfoRequest evaluateContentReplenishInfoRequest = new EvaluateContentInfoRequest();
+                var evaluateContentReplenishInfoRequest = new EvaluateContentInfoRequest();
                 var evaluateContentReplenishContent = evaluateContentReplenishRepository.PostEvaluateContentReplenishSingle(evaluateContentReplenishQueryModel);
                 //Join 內容評估表_補充意見(查詢)Function
                 strJson = jsonFunction.ObjectToJSON(evaluateContentReplenishContent);
@@ -789,7 +1166,7 @@ namespace OA_WEB_API.Repository.ERP
                     REQUISITION_ID = query.REQUISITION_ID
                 };
 
-                MediaOrderInfoRequest mediaOrderInfoRequest = new MediaOrderInfoRequest();
+                var mediaOrderInfoRequest = new MediaOrderInfoRequest();
                 var mediaOrderContent = mediaOrderRepository.PostMediaOrderSingle(mediaOrderQueryModel);
                 //Join 版權採購申請單(查詢)Function
                 strJson = jsonFunction.ObjectToJSON(mediaOrderContent);
@@ -865,12 +1242,12 @@ namespace OA_WEB_API.Repository.ERP
 
                 #region 回傳表單內容
 
-                MediaAcceptanceQueryModel mediaAcceptanceQueryModel = new MediaAcceptanceQueryModel
+                var mediaAcceptanceQueryModel = new MediaAcceptanceQueryModel
                 {
                     REQUISITION_ID = query.REQUISITION_ID
                 };
 
-                MediaAcceptanceInfoRequest mediaAcceptanceInfoRequest = new MediaAcceptanceInfoRequest();
+                var mediaAcceptanceInfoRequest = new MediaAcceptanceInfoRequest();
                 var mediaAcceptanceContent = mediaAcceptanceRepository.PostMediaAcceptanceSingle(mediaAcceptanceQueryModel);
                 //Join 版權採購交片單(查詢)Function
                 strJson = jsonFunction.ObjectToJSON(mediaAcceptanceContent);
@@ -948,12 +1325,12 @@ namespace OA_WEB_API.Repository.ERP
 
                 #region 回傳表單內容
 
-                MediaInvoiceQueryModel mediaInvoiceQueryModel = new MediaInvoiceQueryModel
+                var mediaInvoiceQueryModel = new MediaInvoiceQueryModel
                 {
                     REQUISITION_ID = query.REQUISITION_ID
                 };
 
-                MediaInvoiceInfoRequest mediaInvoiceInfoRequest = new MediaInvoiceInfoRequest();
+                var mediaInvoiceInfoRequest = new MediaInvoiceInfoRequest();
                 var mediaInvoiceContent = mediaInvoiceRepository.PostMediaInvoiceSingle(mediaInvoiceQueryModel);
                 //Join 版權採購請款單(查詢)Function
                 strJson = jsonFunction.ObjectToJSON(mediaInvoiceContent);
@@ -1029,12 +1406,12 @@ namespace OA_WEB_API.Repository.ERP
 
                 #region 回傳表單內容
 
-                MediaOrderReturnRefundQueryModel mediaOrderReturnRefundQueryModel = new MediaOrderReturnRefundQueryModel
+                var mediaOrderReturnRefundQueryModel = new MediaOrderReturnRefundQueryModel
                 {
                     REQUISITION_ID = query.REQUISITION_ID
                 };
 
-                MediaOrderReturnRefundInfoRequest mediaOrderReturnRefundInfoRequest = new MediaOrderReturnRefundInfoRequest();
+                var mediaOrderReturnRefundInfoRequest = new MediaOrderReturnRefundInfoRequest();
                 var mediaOrderReturnRefundContent = mediaOrderReturnRefundRepository.PostMediaOrderReturnRefundSingle(mediaOrderReturnRefundQueryModel);
                 mediaOrderReturnRefundInfoRequest.MEDIA_ORDER_RETURN_REFUND_VIEW = mediaOrderReturnRefundContent;
 
@@ -1115,7 +1492,7 @@ namespace OA_WEB_API.Repository.ERP
                     REQUISITION_ID = query.REQUISITION_ID
                 };
 
-                EvaluateContentInfoRequest GPI_evaluateContentInfoRequest = new EvaluateContentInfoRequest();
+                var GPI_evaluateContentInfoRequest = new EvaluateContentInfoRequest();
                 var GPI_evaluateContentContent = GPI_evaluateContentRepository.PostGPI_EvaluateContentSingle(GPI_evaluateContentQueryModel);
                 //Join 內容評估表(查詢)Function
                 strJson = jsonFunction.ObjectToJSON(GPI_evaluateContentContent);
@@ -1211,7 +1588,7 @@ namespace OA_WEB_API.Repository.ERP
                     REQUISITION_ID = query.REQUISITION_ID
                 };
 
-                EvaluateContentInfoRequest GPI_evaluateContentReplenishInfoRequest = new EvaluateContentInfoRequest();
+                var GPI_evaluateContentReplenishInfoRequest = new EvaluateContentInfoRequest();
                 var GPI_evaluateContentReplenishContent = GPI_evaluateContentReplenishRepository.PostGPI_EvaluateContentReplenishSingle(GPI_evaluateContentReplenishQueryModel);
                 //Join 四方四隅_內容評估表_補充意見(查詢)Function
                 strJson = jsonFunction.ObjectToJSON(GPI_evaluateContentReplenishContent);

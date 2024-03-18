@@ -64,7 +64,76 @@ namespace OA_WEB_API.Models.ERP
 
     #endregion
 
-    #region - 費用申請單 審核資訊_回傳ERP -
+    #region - 企業乘車對帳單 對帳資訊_回傳ERP -
+
+    /// <summary>
+    /// 企業乘車對帳單 對帳資訊_回傳ERP 
+    /// </summary>
+    public class EnterpriseTaxiReviewInfoRequest : EnterpriseTaxiReviewQueryModel
+    {
+        /// <summary>接收ERP回傳狀態</summary>
+        public ErpResponseState ERP_RESPONSE_STATE { get; set; }
+
+        /// <summary>企業乘車對帳單 表頭資訊</summary>
+        public EnterpriseTaxiReviewTitle ENTERPRISE_TAXI_REVIEW_TITLE { get; set; }
+
+        /// <summary>企業乘車對帳單 表單內容 設定</summary>
+        public EnterpriseTaxiReviewConfig ENTERPRISE_TAXI_REVIEW_CONFIG { get; set; }
+
+        /// <summary>企業乘車對帳單 乘車明細 設定</summary>
+        public List<EnterpriseTaxiReviewInfoDetailsConfig> ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG { get; set; }
+
+        /// <summary>企業乘車對帳單 使用預算 設定</summary>
+        public List<EnterpriseTaxiReviewBudgetsConfig> ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG { get; set; }
+
+        /// <summary>最後簽核人員工編號</summary>
+        public string LoginId { get; set; }
+
+        /// <summary>最後簽核人姓名</summary>
+        public string LoginName { get; set; }
+
+    }
+
+    #endregion
+
+    #region - 財務類_回傳ERP資訊 -
+
+    #region - 預支費用申請單_回傳ERP -
+
+    /// <summary>
+    /// 預支費用申請單_回傳ERP 
+    /// </summary>
+    public class AdvanceExpenseInfoRequest : AdvanceExpenseQueryModel
+    {
+        /// <summary>接收ERP回傳狀態</summary>
+        public ErpResponseState ERP_RESPONSE_STATE { get; set; }
+
+        /// <summary>預支費用申請單 表頭資訊</summary>
+        public AdvanceExpenseTitle ADVANCE_EXPENSE_TITLE { get; set; }
+
+        /// <summary>預支費用申請單 表單內容 設定</summary>
+        public AdvanceExpenseConfig ADVANCE_EXPENSE_CONFIG { get; set; }
+
+        /// <summary>預支費用申請單 預知明細 設定</summary>
+        public IList<AdvanceExpenseDetailsConfig> ADVANCE_EXPENSE_DTLS_CONFIG { get; set; }
+
+        /// <summary>預支費用申請單 小計 設定</summary>
+        public List<AdvanceExpenseSumsConfig> ADVANCE_EXPENSE_SUMS_CONFIG { get; set; }
+
+        /// <summary>表單關聯</summary>
+        public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
+
+        /// <summary>最後簽核人員工編號</summary>
+        public string LoginId { get; set; }
+
+        /// <summary>最後簽核人姓名</summary>
+        public string LoginName { get; set; }
+
+    }
+
+    #endregion
+
+    #region - 費用申請單_回傳ERP -
 
     /// <summary>
     /// 費用申請單 審核資訊_回傳ERP 
@@ -83,6 +152,21 @@ namespace OA_WEB_API.Models.ERP
         /// <summary>費用申請單 費用明細 設定</summary>
         public IList<ExpensesReimburseDetailsConfig> EXPENSES_REIMBURSE_DTLS_CONFIG { get; set; }
 
+        /// <summary>費用申請單 使用預算 設定</summary>
+        public List<ExpensesReimburseBudgetsConfig> EXPENSES_REIMBURSE_BUDGS_CONFIG { get; set; }
+
+        /// <summary>費用申請單 小計 設定</summary>
+        public List<ExpensesReimburseSumsConfig> EXPENSES_REIMBURSE_SUMS_CONFIG { get; set; }
+
+        /// <summary>費用申請單 已預支 設定</summary>
+        public List<ExpensesReimburseAdvancesConfig> EXPENSES_REIMBURSE_ADVS_CONFIG { get; set; }
+
+        /// <summary>費用申請單 申請人應繳 設定</summary>
+        public List<ExpensesReimburseUserAmountsConfig> EXPENSES_REIMBURSE_UAS_CONFIG { get; set; }
+
+        /// <summary>費用申請單 財務應退(合作夥伴廠商/合作夥伴個人/員工) 設定</summary>
+        public List<ExpensesReimburseFinancAmountsConfig> EXPENSES_REIMBURSE_FAS_CONFIG { get; set; }
+
         /// <summary>表單關聯</summary>
         public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
 
@@ -93,6 +177,87 @@ namespace OA_WEB_API.Models.ERP
         public string LoginName { get; set; }
 
     }
+
+    #endregion
+
+    #region - 預支費用申請單_回傳ERP -
+
+    /// <summary>
+    /// 預支費用申請單_回傳ERP 
+    /// </summary>
+    public class StaffTravellingExpensesInfoRequest : StaffTravellingExpensesQueryModel
+    {
+        /// <summary>接收ERP回傳狀態</summary>
+        public ErpResponseState ERP_RESPONSE_STATE { get; set; }
+
+        /// <summary>差旅費用報支單 表頭資訊</summary>
+        public StaffTravellingExpensesTitle STAFF_TRAVELLING_EXPENSES_TITLE { get; set; }
+
+        /// <summary>差旅費用報支單 表單內容 設定</summary>
+        public StaffTravellingExpensesConfig STAFF_TRAVELLING_EXPENSES_CONFIG { get; set; }
+
+        /// <summary>差旅費用報支單 差旅明細 設定</summary>
+        public List<StaffTravellingExpensesDetailsConfig> STAFF_TRAVELLING_EXPENSES_DTLS_CONFIG { get; set; }
+
+        /// <summary>差旅費用報支單 憑證明細 設定</summary>
+        public List<StaffTravellingExpensesInvoiceDetailsConfig> STAFF_TRAVELLING_EXPENSES_INV_DTLS_CONFIG { get; set; }
+
+        /// <summary>差旅費用報支單 使用預算 設定</summary>
+        public List<StaffTravellingExpensesBudgetsConfig> STAFF_TRAVELLING_EXPENSES_BUDGS_CONFIG { get; set; }
+
+        /// <summary>差旅費用報支單 小計 設定</summary>
+        public List<StaffTravellingExpensesSumsConfig> STAFF_TRAVELLING_EXPENSES_SUMS_CONFIG { get; set; }
+
+        /// <summary>差旅費用報支單 已預支 設定</summary>
+        public List<StaffTravellingExpensesAdvancesConfig> STAFF_TRAVELLING_EXPENSES_ADVS_CONFIG { get; set; }
+
+        /// <summary>差旅費用報支單 申請人應繳 設定</summary>
+        public List<StaffTravellingExpensesUserAmountsConfig> STAFF_TRAVELLING_EXPENSES_UAS_CONFIG { get; set; }
+
+        /// <summary>差旅費用報支單 財務應退(合作夥伴廠商/合作夥伴個人/員工) 設定</summary>
+        public List<StaffTravellingExpensesFinancAmountsConfig> STAFF_TRAVELLING_EXPENSES_FAS_CONFIG { get; set; }
+
+        /// <summary>表單關聯</summary>
+        public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
+
+        /// <summary>最後簽核人員工編號</summary>
+        public string LoginId { get; set; }
+
+        /// <summary>最後簽核人姓名</summary>
+        public string LoginName { get; set; }
+
+    }
+
+    #endregion
+
+    #region - 繳款單_回傳ERP -
+
+    /// <summary>
+    /// 繳款單_回傳ERP 
+    /// </summary>
+    public class PaymentOrderInfoRequest : PaymentOrderQueryModel
+    {
+        /// <summary>接收ERP回傳狀態</summary>
+        public ErpResponseState ERP_RESPONSE_STATE { get; set; }
+
+        /// <summary>繳款單 表頭資訊</summary>
+        public PaymentOrderTitle PAYMENT_ORDER_TITLE { get; set; }
+
+        /// <summary>繳款單 表單內容 設定</summary>
+        public PaymentOrderConfig PAYMENT_ORDER_CONFIG { get; set; }
+
+        /// <summary>表單關聯</summary>
+        public IList<AssociatedFormConfig> ASSOCIATED_FORM_CONFIG { get; set; }
+
+        /// <summary>最後簽核人員工編號</summary>
+        public string LoginId { get; set; }
+
+        /// <summary>最後簽核人姓名</summary>
+        public string LoginName { get; set; }
+
+    }
+
+    #endregion
 
     #endregion
 

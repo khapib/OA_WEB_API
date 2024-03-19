@@ -243,10 +243,15 @@ namespace OA_WEB_API.Repository.BPMPro
             };
             strJson = jsonFunction.ObjectToJSON(commonRepository.PostBudgetFunction(CommonBUDG));
             var enterpriseTaxiReviewBudgetsConfig = jsonFunction.JsonToObject<List<EnterpriseTaxiReviewBudgetsConfig>>(strJson);
+            var ViewBudgets = new List<EnterpriseTaxiReviewBudgetsConfig>();
+            enterpriseTaxiReviewDetailsConfig.ForEach(DTL =>
+            {
+                ViewBudgets.Add(enterpriseTaxiReviewBudgetsConfig.Where(BUDG => BUDG.ROW_NO == DTL.ROW_NO).FirstOrDefault());
+            });
 
             if (!query.IS_ALL)
             {
-                enterpriseTaxiReviewBudgetsConfig = enterpriseTaxiReviewBudgetsConfig.Where(BUDG => ArrayRowNo.Any(R => R == BUDG.ROW_NO)).ToList();
+                ViewBudgets = ViewBudgets.Where(BUDG => ArrayRowNo.Any(R => R == BUDG.ROW_NO)).ToList();
             }
 
             #endregion
@@ -254,7 +259,7 @@ namespace OA_WEB_API.Repository.BPMPro
             var enterpriseTaxiReviewDetailsViewModel = new EnterpriseTaxiReviewDetailsViewModel()
             {
                 ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG = enterpriseTaxiReviewDetailsConfig,
-                ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG = enterpriseTaxiReviewBudgetsConfig,
+                ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG = ViewBudgets.Where(BUDG=>BUDG!=null).ToList(),
                 REQUISITION_ID=strREQ
             };
 

@@ -238,7 +238,7 @@ namespace OA_WEB_API.Repository.ERP
                     DTL.GET_OFF_DATE = DateTime.Parse(DTL.GET_OFF_DATE + " " + DTL.GET_OFF_TIME).ToString("s");
                 });
                 //Join 企業乘車對帳單(對帳明細)Function
-                strJson = jsonFunction.ObjectToJSON(enterpriseTaxiReviewDetails.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG);
+                strJson = jsonFunction.ObjectToJSON(enterpriseTaxiReviewDetails.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.Where(DTL => DTL!=null).OrderBy(DTL => DTL.ROW_NO));
                 strJson = strJson.Replace("GET_ON_DATE", "GET_ON_DATE_TIME");
                 strJson = strJson.Replace("GET_OFF_DATE", "GET_OFF_DATE_TIME");
                 enterpriseTaxiReviewInfoRequest.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG = jsonFunction.JsonToObject<List<EnterpriseTaxiReviewInfoDetailsConfig>>(strJson);
@@ -248,7 +248,7 @@ namespace OA_WEB_API.Repository.ERP
                 #region - 企業乘車對帳單 預算 -
 
                 //Join 企業乘車對帳單(對帳明細)Function
-                strJson = jsonFunction.ObjectToJSON(enterpriseTaxiReviewDetails.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG);
+                strJson = jsonFunction.ObjectToJSON(enterpriseTaxiReviewDetails.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG.Where(BUDG => BUDG != null).OrderBy(BUDG=>BUDG.ROW_NO));
                 enterpriseTaxiReviewInfoRequest.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG = jsonFunction.JsonToObject<List<EnterpriseTaxiReviewBudgetsConfig>>(strJson);
 
                 #endregion
@@ -444,7 +444,7 @@ namespace OA_WEB_API.Repository.ERP
 
                 if (query.REQUEST_FLG)
                 {
-                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/UpdateER_DetailContent";
                     Method = "POST";
                     strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, expensesReimburseInfoRequest);
 

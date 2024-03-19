@@ -234,8 +234,8 @@ namespace OA_WEB_API.Repository.ERP
 
                 enterpriseTaxiReviewDetails.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.ForEach(DTL =>
                 {
-                    DTL.GET_ON_DATE = DateTime.Parse(DTL.GET_ON_DATE + " " + DTL.GET_ON_TIME).ToString("s(zh-TW)");
-                    DTL.GET_OFF_DATE = DateTime.Parse(DTL.GET_OFF_DATE + " " + DTL.GET_OFF_TIME).ToString("s(zh-TW)");
+                    DTL.GET_ON_DATE = DateTime.Parse(DTL.GET_ON_DATE + " " + DTL.GET_ON_TIME).ToString("s");
+                    DTL.GET_OFF_DATE = DateTime.Parse(DTL.GET_OFF_DATE + " " + DTL.GET_OFF_TIME).ToString("s");
                 });
                 //Join 企業乘車對帳單(對帳明細)Function
                 strJson = jsonFunction.ObjectToJSON(enterpriseTaxiReviewDetails.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG);
@@ -275,19 +275,19 @@ namespace OA_WEB_API.Repository.ERP
 
                 #region - 回傳ERP - 
 
-                //enterpriseTaxiReviewInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
-                //enterpriseTaxiReviewInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+                enterpriseTaxiReviewInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                enterpriseTaxiReviewInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
 
-                //if (query.REQUEST_FLG)
-                //{
-                //    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
-                //    Method = "POST";
-                //    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, enterpriseTaxiReviewInfoRequest);
+                if (query.REQUEST_FLG)
+                {
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
+                    Method = "POST";
+                    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, enterpriseTaxiReviewInfoRequest);
 
-                //    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
-                //    CommLib.Logger.Debug("企業乘車對帳單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
-                //    enterpriseTaxiReviewInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
-                //}
+                    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                    CommLib.Logger.Debug("企業乘車對帳單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                    enterpriseTaxiReviewInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                }
 
                 #endregion
 

@@ -444,7 +444,7 @@ namespace OA_WEB_API.Repository.ERP
 
                 if (query.REQUEST_FLG)
                 {
-                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/UpdateER_DetailContent";
                     Method = "POST";
                     strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, expensesReimburseInfoRequest);
 

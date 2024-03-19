@@ -211,7 +211,7 @@ namespace OA_WEB_API.Repository.BPMPro
             strSQL += "     [Flag] AS [FLAG] ";
             strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_DTL] ";
             strSQL += "WHERE [RequisitionID]=@REQUISITION_ID ";
-            strSQL += "ORDER BY [AutoCounter] ";
+            strSQL += "ORDER BY [DeptID],[OfficeID],[GroupID],[Name],[GetOnDate],[GetOnTime] ASC ";
 
             var enterpriseTaxiReviewDetailsConfig = dbFun.DoQuery(strSQL, parameter).ToList<EnterpriseTaxiReviewDetailsConfig>().ToList();
 

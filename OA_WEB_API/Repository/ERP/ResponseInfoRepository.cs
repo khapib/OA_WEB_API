@@ -234,8 +234,8 @@ namespace OA_WEB_API.Repository.ERP
 
                 enterpriseTaxiReviewDetails.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.ForEach(DTL =>
                 {
-                    DTL.GET_ON_DATE = DateTime.Parse(DTL.GET_ON_DATE + " " + DTL.GET_ON_TIME).ToString("s(zh-TW)");
-                    DTL.GET_OFF_DATE = DateTime.Parse(DTL.GET_OFF_DATE + " " + DTL.GET_OFF_TIME).ToString("s(zh-TW)");
+                    DTL.GET_ON_DATE = DateTime.Parse(DTL.GET_ON_DATE + " " + DTL.GET_ON_TIME).ToString("s");
+                    DTL.GET_OFF_DATE = DateTime.Parse(DTL.GET_OFF_DATE + " " + DTL.GET_OFF_TIME).ToString("s");
                 });
                 //Join 企業乘車對帳單(對帳明細)Function
                 strJson = jsonFunction.ObjectToJSON(enterpriseTaxiReviewDetails.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG);
@@ -275,19 +275,19 @@ namespace OA_WEB_API.Repository.ERP
 
                 #region - 回傳ERP - 
 
-                //enterpriseTaxiReviewInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
-                //enterpriseTaxiReviewInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+                enterpriseTaxiReviewInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                enterpriseTaxiReviewInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
 
-                //if (query.REQUEST_FLG)
-                //{
-                //    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
-                //    Method = "POST";
-                //    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, enterpriseTaxiReviewInfoRequest);
+                if (query.REQUEST_FLG)
+                {
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
+                    Method = "POST";
+                    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, enterpriseTaxiReviewInfoRequest);
 
-                //    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
-                //    CommLib.Logger.Debug("企業乘車對帳單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
-                //    enterpriseTaxiReviewInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
-                //}
+                    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                    CommLib.Logger.Debug("企業乘車對帳單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                    enterpriseTaxiReviewInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                }
 
                 #endregion
 
@@ -358,19 +358,19 @@ namespace OA_WEB_API.Repository.ERP
 
                 #region - 回傳ERP - 
 
-                //advanceExpenseInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
-                //advanceExpenseInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+                advanceExpenseInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                advanceExpenseInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
 
-                //if (query.REQUEST_FLG)
-                //{
-                //    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
-                //    Method = "POST";
-                //    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, advanceExpenseInfoRequest);
+                if (query.REQUEST_FLG)
+                {
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
+                    Method = "POST";
+                    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, advanceExpenseInfoRequest);
 
-                //    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
-                //    CommLib.Logger.Debug("預支費用申請單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
-                //    advanceExpenseInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
-                //}
+                    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                    CommLib.Logger.Debug("預支費用申請單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                    advanceExpenseInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                }
 
                 #endregion
 
@@ -439,19 +439,19 @@ namespace OA_WEB_API.Repository.ERP
 
                 #region - 回傳ERP - 
 
-                //expensesReimburseInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
-                //expensesReimburseInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+                expensesReimburseInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                expensesReimburseInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
 
-                //if (query.REQUEST_FLG)
-                //{
-                //    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
-                //    Method = "POST";
-                //    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, expensesReimburseInfoRequest);
+                if (query.REQUEST_FLG)
+                {
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
+                    Method = "POST";
+                    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, expensesReimburseInfoRequest);
 
-                //    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
-                //    CommLib.Logger.Debug("費用申請單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
-                //    expensesReimburseInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
-                //}
+                    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                    CommLib.Logger.Debug("費用申請單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                    expensesReimburseInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                }
 
                 #endregion
 
@@ -520,19 +520,19 @@ namespace OA_WEB_API.Repository.ERP
 
                 #region - 回傳ERP - 
 
-                //staffTravellingExpensesInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
-                //staffTravellingExpensesInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+                staffTravellingExpensesInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                staffTravellingExpensesInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
 
-                //if (query.REQUEST_FLG)
-                //{
-                //    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
-                //    Method = "POST";
-                //    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, staffTravellingExpensesInfoRequest);
+                if (query.REQUEST_FLG)
+                {
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
+                    Method = "POST";
+                    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, staffTravellingExpensesInfoRequest);
 
-                //    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
-                //    CommLib.Logger.Debug("差旅費用報支單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
-                //    staffTravellingExpensesInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
-                //}
+                    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                    CommLib.Logger.Debug("差旅費用報支單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                    staffTravellingExpensesInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                }
 
                 #endregion
 
@@ -601,19 +601,19 @@ namespace OA_WEB_API.Repository.ERP
 
                 #region - 回傳ERP - 
 
-                //paymentOrderInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
-                //paymentOrderInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
+                paymentOrderInfoRequest.LoginId = stepFlowConfig.APPROVER_ID;
+                paymentOrderInfoRequest.LoginName = stepFlowConfig.APPROVER_NAME;
 
-                //if (query.REQUEST_FLG)
-                //{
-                //    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
-                //    Method = "POST";
-                //    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, paymentOrderInfoRequest);
+                if (query.REQUEST_FLG)
+                {
+                    ApiUrl = GlobalParameters.ERPSystemAPI(GlobalParameters.sqlConnBPMProDevHo) + "BPM/";
+                    Method = "POST";
+                    strResponseJson = GlobalParameters.RequestInfoWebAPI(ApiUrl, Method, paymentOrderInfoRequest);
 
-                //    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
-                //    CommLib.Logger.Debug("繳款單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
-                //    paymentOrderInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
-                //}
+                    erpResponseState = JsonConvert.DeserializeObject<ErpResponseState>(strResponseJson);
+                    CommLib.Logger.Debug("繳款單:" + query.REQUISITION_ID + " ERP訊息回傳：" + erpResponseState.msg);
+                    paymentOrderInfoRequest.ERP_RESPONSE_STATE = erpResponseState;
+                }
 
                 #endregion
 

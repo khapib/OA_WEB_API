@@ -81,7 +81,7 @@ namespace OA_WEB_API.Models.ERP
         public EnterpriseTaxiReviewConfig ENTERPRISE_TAXI_REVIEW_CONFIG { get; set; }
 
         /// <summary>企業乘車對帳單 乘車明細 設定</summary>
-        public List<EnterpriseTaxiReviewInfoDetailsConfig> ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG { get; set; }
+        public List<EnterpriseTaxiReviewDetailsConfig_RP> ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG { get; set; }
 
         /// <summary>企業乘車對帳單 使用預算 設定</summary>
         public List<EnterpriseTaxiReviewBudgetsConfig> ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG { get; set; }
@@ -92,6 +92,21 @@ namespace OA_WEB_API.Models.ERP
         /// <summary>最後簽核人姓名</summary>
         public string LoginName { get; set; }
 
+    }
+
+    public class EnterpriseTaxiReviewDetailsConfig_RP: EnterpriseTaxiReviewInfoDetailsConfig
+    {
+        /// <summary>所屬專案 ERP 單號</summary>
+        public string PROJECT_FORM_NO { get; set; }
+
+        /// <summary>所屬專案名稱</summary>
+        public string PROJECT_NAME { get; set; }
+
+        /// <summary>所屬專案描述</summary>
+        public string PROJECT_NICKNAME { get; set; }
+
+        /// <summary>所屬專案年分</summary>
+        public string PROJECT_USE_YEAR { get; set; }
     }
 
     #endregion
@@ -180,10 +195,10 @@ namespace OA_WEB_API.Models.ERP
 
     #endregion
 
-    #region - 預支費用申請單_回傳ERP -
+    #region - 差旅費用報支單_回傳ERP -
 
     /// <summary>
-    /// 預支費用申請單_回傳ERP 
+    /// 差旅費用報支單_回傳ERP 
     /// </summary>
     public class StaffTravellingExpensesInfoRequest : StaffTravellingExpensesQueryModel
     {

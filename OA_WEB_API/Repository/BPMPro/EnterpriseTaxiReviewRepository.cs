@@ -9,6 +9,9 @@ using OA_WEB_API.Models;
 using System.Runtime.InteropServices;
 using OA_WEB_API.Models.ERP;
 using System.Reflection;
+using System.Collections;
+using OA_WEB_API.Controllers;
+using Docker.DotNet.Models;
 
 namespace OA_WEB_API.Repository.BPMPro
 {
@@ -575,7 +578,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     var i = 1;
                     model.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.ForEach(DTL =>
                     {
-                        DTL.ROW_NO = i;
+                        if(DTL.ROW_NO<=0) DTL.ROW_NO = i;
 
                         #region - 標註是否可以調整 -
 
@@ -593,17 +596,48 @@ namespace OA_WEB_API.Repository.BPMPro
                         #endregion
 
                         #region - 部門彙整 -
-                        var UserInfo = userRepository.GetUsersStructure().Where(U => U.COMPANY_ID == "GTV" && U.IS_MAIN_JOB == 1 && U.USER_ID == DTL.ACCOUNT_ID).Select(U => U).FirstOrDefault();
 
-                        if (UserInfo != null)
+                        var query = new LogonModel()
                         {
-                            DTL.NAME = UserInfo.USER_NAME;
-                            DTL.DEPT_ID = UserInfo.DEPT_ID;
-                            DTL.DEPT_NAME = UserInfo.DEPT_NAME;
-                            DTL.OFFICE_ID = UserInfo.OFFICE_ID;
-                            DTL.OFFICE_NAME = UserInfo.OFFICE_NAME;
-                            DTL.GROUP_ID = UserInfo.GROUP_ID;
-                            DTL.GROUP_NAME = UserInfo.GROUP_NAME;
+                            USER_ID = DTL.ACCOUNT_ID
+                        };
+                        var UserModel = userRepository.PostUserSingle(query).USER_MODEL;
+                        var deptTree = sysCommonRepository.GetGTVDeptTree();
+                        var ParentDeptName=String.Empty;
+
+                        if (UserModel != null)
+                        {
+                            if (String.IsNullOrEmpty(DTL.NAME) || String.IsNullOrWhiteSpace(DTL.NAME)) DTL.NAME = UserModel.Where(U=>U.IS_MAIN_JOB==1).Select(U=>U.USER_NAME).FirstOrDefault();
+                            if (String.IsNullOrEmpty(DTL.DEPT_NAME) || String.IsNullOrWhiteSpace(DTL.DEPT_NAME))
+                            {
+                                //如果沒有名稱就自行抓取「部門」、「局處中心」、「組別」。
+                                var DeptUsersStructure = userRepository.GetUsersStructure().Where(U => U.IS_MAIN_JOB == 1 && U.USER_ID == DTL.ACCOUNT_ID).ToList();
+                                DTL.DEPT_NAME = DeptUsersStructure.Select(D => D.DEPT_NAME).FirstOrDefault();
+                                DTL.OFFICE_NAME = DeptUsersStructure.Select(D => D.OFFICE_NAME).FirstOrDefault();
+                                DTL.GROUP_NAME = DeptUsersStructure.Select(D => D.GROUP_NAME).FirstOrDefault();
+                            }
+
+                            #region - 抓取部門編號 -
+
+                            DTL.DEPT_ID = deptTree.Where(T => T.DEPT_NAME == DTL.DEPT_NAME).Select(D => D.DEPT_ID).FirstOrDefault();
+
+                            if (!String.IsNullOrEmpty(DTL.OFFICE_NAME) || !String.IsNullOrWhiteSpace(DTL.OFFICE_NAME))
+                            {
+                                DTL.OFFICE_ID = deptTree.Where(T => T.PARENT_DEPT_ID == DTL.DEPT_ID && T.DEPT_NAME == DTL.OFFICE_NAME).Select(D => D.DEPT_ID).FirstOrDefault();
+                            }
+                            if (!String.IsNullOrEmpty(DTL.GROUP_NAME) || !String.IsNullOrWhiteSpace(DTL.GROUP_NAME))
+                            {
+                                if (!String.IsNullOrEmpty(DTL.OFFICE_ID) || !String.IsNullOrWhiteSpace(DTL.OFFICE_ID))
+                                {
+                                    DTL.GROUP_ID = deptTree.Where(T => T.PARENT_DEPT_ID == DTL.OFFICE_ID && T.DEPT_NAME == DTL.GROUP_NAME).Select(D => D.DEPT_ID).FirstOrDefault();
+                                }
+                                else
+                                {
+                                    DTL.GROUP_ID = deptTree.Where(T => T.PARENT_DEPT_ID == DTL.DEPT_ID && T.DEPT_NAME == DTL.GROUP_NAME).Select(D => D.DEPT_ID).FirstOrDefault();
+                                }
+                            }
+
+                            #endregion
                         }
 
                         #endregion
@@ -627,13 +661,12 @@ namespace OA_WEB_API.Repository.BPMPro
                         if (!String.IsNullOrEmpty(DTL.OFFICE_ID) || !String.IsNullOrWhiteSpace(DTL.OFFICE_ID)) approversConfig.APPROVER_DEPT_ID = DTL.OFFICE_ID;
                         if (!String.IsNullOrEmpty(DTL.GROUP_ID) || !String.IsNullOrWhiteSpace(DTL.GROUP_ID)) approversConfig.APPROVER_DEPT_ID = DTL.GROUP_ID;
 
-                        if (UserInfo != null || UserInfo.JOB_STATUS == 1)
+                        if (UserModel != null || UserModel.Where(U => U.IS_MAIN_JOB == 1).Select(U => U.JOB_STATUS).FirstOrDefault() == 1)
                         {
-                            var query = new LogonModel()
-                            {
-                                USER_ID = DTL.ACCOUNT_ID
-                            };
-                            var UserModel = userRepository.PostUserSingle(query).USER_MODEL;
+                            
+                            //企劃組 測試
+                            //if (DTL.ACCOUNT_ID == "01653") DTL.ACCOUNT_ID = DTL.ACCOUNT_ID;
+                            
                             approversConfig.APPROVER_ID = DTL.ACCOUNT_ID;
                             approversConfig.APPROVER_COMPANY_ID = UserModel.Where(U => U.DEPT_ID == approversConfig.APPROVER_DEPT_ID).Select(U => U.COMPANY_ID).FirstOrDefault();
                             approversConfig.APPROVER_NAME = UserModel.Where(U => U.USER_ID == approversConfig.APPROVER_ID).Select(U => U.USER_NAME).FirstOrDefault();
@@ -645,12 +678,12 @@ namespace OA_WEB_API.Repository.BPMPro
                         }
                         else
                         {
-                            var query = new SetUserApproverQueryModel()
+                            var approverquery = new SetUserApproverQueryModel()
                             {
                                 USER_ID = DTL.ACCOUNT_ID,
                                 IDENTIFY = IDENTIFY
                             };
-                            var SetUserApproverInfo = userRepository.PostSetUserApproverSingle(query).Select(U => U).FirstOrDefault();
+                            var SetUserApproverInfo = userRepository.PostSetUserApproverSingle(approverquery).Select(U => U).FirstOrDefault();
                             if (SetUserApproverInfo != null)
                             {
                                 approversConfig.APPROVER_ID = null;
@@ -702,7 +735,6 @@ namespace OA_WEB_API.Repository.BPMPro
                     commonRepository.PutApproverFunction(CommonApprovers);
 
                     #endregion
-
                 }
 
                 #endregion

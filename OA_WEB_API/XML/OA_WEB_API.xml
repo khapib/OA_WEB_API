@@ -4377,6 +4377,9 @@
             企業乘車對帳單(乘車明細)
             </summary>
         </member>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.ROW_NO">
+            <summary>行數編號</summary>
+        </member>
         <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.TICKET">
             <summary>乘車券</summary>
         </member>
@@ -4410,14 +4413,14 @@
         <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.ACCOUNT_ID">
             <summary>員工編號</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.DEPT_ID">
-            <summary>部門編號</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.DEPT_NAME">
+            <summary>部門名稱</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.OFFICE_ID">
-            <summary>局處中心編號</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.OFFICE_NAME">
+            <summary>局處中心名稱</summary>
         </member>
-        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.GROUP_ID">
-            <summary>組別編號</summary>
+        <member name="P:OA_WEB_API.Models.BPMPro.EnterpriseTaxiReviewInfoDetailsConfig.GROUP_NAME">
+            <summary>組別名稱</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.AdvanceExpenseERPInfo">
             <summary>
@@ -9681,6 +9684,18 @@
         <member name="P:OA_WEB_API.Models.ERP.EnterpriseTaxiReviewInfoRequest.LoginName">
             <summary>最後簽核人姓名</summary>
         </member>
+        <member name="P:OA_WEB_API.Models.ERP.EnterpriseTaxiReviewDetailsConfig_RP.PROJECT_FORM_NO">
+            <summary>所屬專案 ERP 單號</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.EnterpriseTaxiReviewDetailsConfig_RP.PROJECT_NAME">
+            <summary>所屬專案名稱</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.EnterpriseTaxiReviewDetailsConfig_RP.PROJECT_NICKNAME">
+            <summary>所屬專案描述</summary>
+        </member>
+        <member name="P:OA_WEB_API.Models.ERP.EnterpriseTaxiReviewDetailsConfig_RP.PROJECT_USE_YEAR">
+            <summary>所屬專案年分</summary>
+        </member>
         <member name="T:OA_WEB_API.Models.ERP.AdvanceExpenseInfoRequest">
             <summary>
             預支費用申請單_回傳ERP 
@@ -9753,7 +9768,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.ERP.StaffTravellingExpensesInfoRequest">
             <summary>
-            預支費用申請單_回傳ERP 
+            差旅費用報支單_回傳ERP 
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.ERP.StaffTravellingExpensesInfoRequest.ERP_RESPONSE_STATE">

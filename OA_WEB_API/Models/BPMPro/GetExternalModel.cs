@@ -167,6 +167,9 @@ namespace OA_WEB_API.Models.BPMPro
     /// </summary>
     public class EnterpriseTaxiReviewInfoDetailsConfig
     {
+        /// <summary>行數編號</summary>
+        public int ROW_NO { get; set; }
+
         /// <summary>乘車券</summary>
         public string TICKET { get; set; }
 
@@ -200,14 +203,14 @@ namespace OA_WEB_API.Models.BPMPro
         /// <summary>員工編號</summary>
         public string ACCOUNT_ID { get; set; }
 
-        /// <summary>部門編號</summary>
-        public string DEPT_ID { get; set; }
+        /// <summary>部門名稱</summary>
+        public string DEPT_NAME { get; set; }
 
-        /// <summary>局處中心編號</summary>
-        public string OFFICE_ID { get; set; }
+        /// <summary>局處中心名稱</summary>
+        public string OFFICE_NAME { get; set; }
 
-        /// <summary>組別編號</summary>
-        public string GROUP_ID { get; set; }
+        /// <summary>組別名稱</summary>
+        public string GROUP_NAME { get; set; }
     }
 
     #endregion

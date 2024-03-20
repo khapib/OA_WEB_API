@@ -234,14 +234,14 @@ namespace OA_WEB_API.Repository.ERP
 
                 enterpriseTaxiReviewDetails.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.ForEach(DTL =>
                 {
-                    DTL.GET_ON_DATE = DateTime.Parse(DTL.GET_ON_DATE + " " + DTL.GET_ON_TIME).ToString("s");
-                    DTL.GET_OFF_DATE = DateTime.Parse(DTL.GET_OFF_DATE + " " + DTL.GET_OFF_TIME).ToString("s");
+                    if (!String.IsNullOrEmpty(DTL.GET_ON_DATE) || !String.IsNullOrWhiteSpace(DTL.GET_ON_DATE)) DTL.GET_ON_DATE = DateTime.Parse(DTL.GET_ON_DATE + " " + DTL.GET_ON_TIME).ToString("s");
+                    if (!String.IsNullOrEmpty(DTL.GET_OFF_DATE) || !String.IsNullOrWhiteSpace(DTL.GET_OFF_DATE)) DTL.GET_OFF_DATE = DateTime.Parse(DTL.GET_OFF_DATE + " " + DTL.GET_OFF_TIME).ToString("s");
                 });
                 //Join 企業乘車對帳單(對帳明細)Function
                 strJson = jsonFunction.ObjectToJSON(enterpriseTaxiReviewDetails.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.Where(DTL => DTL!=null).OrderBy(DTL => DTL.ROW_NO));
                 strJson = strJson.Replace("GET_ON_DATE", "GET_ON_DATE_TIME");
                 strJson = strJson.Replace("GET_OFF_DATE", "GET_OFF_DATE_TIME");
-                enterpriseTaxiReviewInfoRequest.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG = jsonFunction.JsonToObject<List<EnterpriseTaxiReviewInfoDetailsConfig>>(strJson);
+                enterpriseTaxiReviewInfoRequest.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG = jsonFunction.JsonToObject<List<EnterpriseTaxiReviewDetailsConfig_RP>>(strJson);
 
                 #endregion
 

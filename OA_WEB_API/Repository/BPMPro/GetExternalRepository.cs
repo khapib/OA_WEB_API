@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Web;
 using System.Xml.Linq;
 using Microsoft.Ajax.Utilities;
+using OA_WEB_API.Controllers;
 using OA_WEB_API.Models;
 using OA_WEB_API.Models.BPMPro;
 using OA_WEB_API.Repository.ERP;
@@ -598,10 +599,16 @@ namespace OA_WEB_API.Repository.BPMPro
                     var enterpriseTaxiReviewDetailsConfig = jsonFunction.JsonToObject<List<EnterpriseTaxiReviewDetailsConfig>>(strJson);
                     enterpriseTaxiReviewDetailsConfig.ForEach(DTL =>
                     {
-                        DTL.GET_ON_TIME = DateTime.Parse(DTL.GET_ON_DATE).ToString("HH:mm");
-                        DTL.GET_ON_DATE = DateTime.Parse(DTL.GET_ON_DATE).ToString("yyyy-MM-dd");
-                        DTL.GET_OFF_TIME = DateTime.Parse(DTL.GET_OFF_DATE).ToString("HH:mm");
-                        DTL.GET_OFF_DATE = DateTime.Parse(DTL.GET_OFF_DATE).ToString("yyyy-MM-dd");
+                        if(!String.IsNullOrEmpty(DTL.GET_ON_DATE) || !String.IsNullOrWhiteSpace(DTL.GET_ON_DATE))
+                        {
+                            DTL.GET_ON_TIME = DateTime.Parse(DTL.GET_ON_DATE).ToString("HH:mm");
+                            DTL.GET_ON_DATE = DateTime.Parse(DTL.GET_ON_DATE).ToString("yyyy-MM-dd");
+                        }
+                        if (!String.IsNullOrEmpty(DTL.GET_OFF_DATE) || !String.IsNullOrWhiteSpace(DTL.GET_OFF_DATE))
+                        {
+                            DTL.GET_OFF_TIME = DateTime.Parse(DTL.GET_OFF_DATE).ToString("HH:mm");
+                            DTL.GET_OFF_DATE = DateTime.Parse(DTL.GET_OFF_DATE).ToString("yyyy-MM-dd");
+                        }                            
                     });
 
                     #endregion
@@ -979,7 +986,7 @@ namespace OA_WEB_API.Repository.BPMPro
                         expensesReimburseConfig = new ExpensesReimburseConfig()
                         {
                             REASON = "繳交" + enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_TITLE.FM7_SUBJECT.Replace("對帳單", "費用"),
-                            AMOUNT_CONV_TOTAL = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL
+                            AMOUNT_CONV_TOTAL = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.ACCOUNTS_PAYABLE
                         };
 
                         #region - 是否經由財務協理簽核 -
@@ -1009,12 +1016,12 @@ namespace OA_WEB_API.Repository.BPMPro
                                 TYPE = "交通費",
                                 INV_TYPE = "RECPT",
                                 EXCH_RATE = 1,
-                                AMOUNT_CONV = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL,
+                                AMOUNT_CONV = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.ACCOUNTS_PAYABLE,
                                 CURRENCY = "TWD",
-                                EXCL = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL,
-                                EXCL_TWD = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL,
-                                AMOUNT = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL,
-                                AMOUNT_TWD = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.TOTAL,
+                                EXCL = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.ACCOUNTS_PAYABLE,
+                                EXCL_TWD = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.ACCOUNTS_PAYABLE,
+                                AMOUNT = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.ACCOUNTS_PAYABLE,
+                                AMOUNT_TWD = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_CONFIG.ACCOUNTS_PAYABLE,
                             }
                         };
 

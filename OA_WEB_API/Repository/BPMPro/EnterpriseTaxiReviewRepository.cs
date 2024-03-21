@@ -980,6 +980,8 @@ namespace OA_WEB_API.Repository.BPMPro
                                 strSQL += "         AND [RowNo]=@ROW_NO ";
                                 strSQL += "         AND [FormNo] IS NULL ";
 
+                                dbFun.DoTran(strSQL, parameterBudgets);
+
                                 #endregion
 
                             }

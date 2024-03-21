@@ -252,12 +252,12 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 enterpriseTaxiReviewDetailsConfig.ForEach(DTL =>
                 {
-                    ViewBudgets.Add(enterpriseTaxiReviewBudgetsConfig.Where(BUDG => BUDG.ROW_NO == DTL.ROW_NO).FirstOrDefault());
+                    if (enterpriseTaxiReviewBudgetsConfig.Exists(BUDG => BUDG.ROW_NO == DTL.ROW_NO)) ViewBudgets.Add(enterpriseTaxiReviewBudgetsConfig.Where(BUDG => BUDG.ROW_NO == DTL.ROW_NO).FirstOrDefault());
                 });
 
                 if (!query.IS_ALL)
                 {
-                    ViewBudgets = ViewBudgets.Where(BUDG => ArrayRowNo.Any(R => R == BUDG.ROW_NO)).ToList();
+                    if (ViewBudgets != null && ViewBudgets.Count > 0) ViewBudgets = ViewBudgets.Where(BUDG => ArrayRowNo.Any(R => R == BUDG.ROW_NO)).ToList();
                 }
             }
 

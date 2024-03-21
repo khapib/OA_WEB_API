@@ -919,9 +919,32 @@ namespace OA_WEB_API.Repository.BPMPro
                     
                     if (model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG != null && model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG.Count > 0)
                     {
+                        //Array組裝測試
+                        var t = string.Join(",", model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG.Select(BUDG=>BUDG.ROW_NO).Distinct().ToArray());
+
+                        var parameterBudgets = new List<SqlParameter>()
+                        {
+                            //企業乘車對帳單 使用預算
+	                        new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
+                            new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object) string.Join(",", model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG.Select(BUDG=>BUDG.ROW_NO).Distinct().ToArray()) ?? DBNull.Value }
+                        };
+
+                        #region 先刪除舊資料
+
+                        strSQL = "";
+                        strSQL += "DELETE ";
+                        strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_BUDG] ";
+                        strSQL += "WHERE 1=1 ";
+                        strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+                        strSQL += "         AND CAST([RowNo] as varchar) in (@ROW_NO) ";
+
+                        dbFun.DoTran(strSQL, parameterBudgets);
+
+                        #endregion
+
                         model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG.ForEach(BUDG =>
                         {
-                            var parameterBudgets = new List<SqlParameter>()
+                            parameterBudgets = new List<SqlParameter>()
                             {
 	                            //企業乘車對帳單 使用預算
 	                            new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
@@ -940,63 +963,28 @@ namespace OA_WEB_API.Repository.BPMPro
                             strJson = jsonFunction.ObjectToJSON(BUDG);
                             GlobalParameters.Infoparameter(strJson, parameterBudgets);
 
+                            #region - 在新增資料 -
+
                             strSQL = "";
-                            strSQL += "SELECT ";
-                            strSQL += "      [RequisitionID] ";
-                            strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_BUDG] ";
+                            strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_BUDG]([RequisitionID],[RowNo],[FormNo],[CreateYear],[Name],[OwnerDept],[Total],[AvailableBudgetAmount],[UseBudgetAmount],[FillerID]) ";
+                            strSQL += "VALUES(@REQUISITION_ID,@ROW_NO,@FORM_NO,@CREATE_YEAR,@NAME,@OWNER_DEPT,@TOTAL,@AVAILABLE_BUDGET_AMOUNT,@USE_BUDGET_AMOUNT,@FILLER_ID) ";
+
+                            dbFun.DoTran(strSQL, parameterBudgets);
+
+                            #endregion
+
+                            #region - 刪除存空白預算的資料 -
+
+                            strSQL = "";
+                            strSQL += "DELETE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_BUDG] ";
                             strSQL += "WHERE 1=1 ";
                             strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
                             strSQL += "         AND [RowNo]=@ROW_NO ";
+                            strSQL += "         AND [FormNo] IS NULL ";
 
-                            var dtA = dbFun.DoQuery(strSQL, parameterBudgets);
-                            if (dtA.Rows.Count > 0)
-                            {
-                                #region - 修改 -
+                            dbFun.DoTran(strSQL, parameterBudgets);
 
-                                strSQL = "";
-                                strSQL += "UPDATE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_BUDG] ";
-                                strSQL += "SET [FormNo] =@FORM_NO, ";
-                                strSQL += "     [CreateYear]=@CREATE_YEAR, ";
-                                strSQL += "     [Name]=@NAME, ";
-                                strSQL += "     [OwnerDept]=@OWNER_DEPT, ";
-                                strSQL += "     [Total]=@TOTAL, ";
-                                strSQL += "     [AvailableBudgetAmount]=@AVAILABLE_BUDGET_AMOUNT, ";
-                                strSQL += "     [UseBudgetAmount]=@USE_BUDGET_AMOUNT, ";
-                                strSQL += "     [FillerID]=@FILLER_ID ";
-                                strSQL += "WHERE 1=1 ";
-                                strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
-                                strSQL += "         AND [RowNo]=@ROW_NO ";
-
-                                dbFun.DoTran(strSQL, parameterBudgets);
-
-                                #endregion
-
-                                #region - 刪除 -
-
-                                strSQL = "";
-                                strSQL += "DELETE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_BUDG] ";
-                                strSQL += "WHERE 1=1 ";
-                                strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
-                                strSQL += "         AND [RowNo]=@ROW_NO ";
-                                strSQL += "         AND [FormNo] IS NULL ";
-
-                                dbFun.DoTran(strSQL, parameterBudgets);
-
-                                #endregion
-
-                            }
-                            else
-                            {
-                                #region - 新增 -
-
-                                strSQL = "";
-                                strSQL += "INSERT INTO [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_BUDG]([RequisitionID],[RowNo],[FormNo],[CreateYear],[Name],[OwnerDept],[Total],[AvailableBudgetAmount],[UseBudgetAmount],[FillerID]) ";
-                                strSQL += "VALUES(@REQUISITION_ID,@ROW_NO,@FORM_NO,@CREATE_YEAR,@NAME,@OWNER_DEPT,@TOTAL,@AVAILABLE_BUDGET_AMOUNT,@USE_BUDGET_AMOUNT,@FILLER_ID) ";
-
-                                dbFun.DoTran(strSQL, parameterBudgets);
-
-                                #endregion
-                            }
+                            #endregion
                         });
                     }
 

@@ -1035,9 +1035,19 @@ namespace OA_WEB_API.Repository.BPMPro
                             USER_ID = "Administrator",
                             IS_ALL = true
                         };
-                        strJson = jsonFunction.ObjectToJSON(enterpriseTaxiReviewRepository.PostEnterpriseTaxiReviewDetailsSingle(detailsQueryModel).ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG);
+                        var expensesReimburseView = enterpriseTaxiReviewRepository.PostEnterpriseTaxiReviewDetailsSingle(detailsQueryModel);
+                        strJson = jsonFunction.ObjectToJSON(expensesReimburseView.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG);
                         expensesReimburseBudgetsConfig = jsonFunction.JsonToObject<List<ExpensesReimburseBudgetsConfig>>(strJson);
-                        expensesReimburseBudgetsConfig.Where(BUDG => BUDG.ROW_NO != 1).Select(BUDG => { BUDG.ROW_NO = 1; return BUDG; }).ToList();
+                        var ViewBudgets = new List<ExpensesReimburseBudgetsConfig>();
+
+                        if (expensesReimburseBudgetsConfig != null && expensesReimburseBudgetsConfig.Count > 0)
+                        {
+                            expensesReimburseView.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.ForEach(DTL =>
+                            {
+                                ViewBudgets.Add(expensesReimburseBudgetsConfig.Where(BUDG => BUDG.ROW_NO == DTL.ROW_NO).FirstOrDefault());
+                            });
+                            expensesReimburseBudgetsConfig.Where(BUDG => BUDG.ROW_NO != 1).Select(BUDG => { BUDG.ROW_NO = 1; return BUDG; }).ToList();
+                        }                            
 
                         #endregion
 

@@ -247,14 +247,18 @@ namespace OA_WEB_API.Repository.BPMPro
             strJson = jsonFunction.ObjectToJSON(commonRepository.PostBudgetFunction(CommonBUDG));
             var enterpriseTaxiReviewBudgetsConfig = jsonFunction.JsonToObject<List<EnterpriseTaxiReviewBudgetsConfig>>(strJson);
             var ViewBudgets = new List<EnterpriseTaxiReviewBudgetsConfig>();
-            enterpriseTaxiReviewDetailsConfig.ForEach(DTL =>
-            {
-                ViewBudgets.Add(enterpriseTaxiReviewBudgetsConfig.Where(BUDG => BUDG.ROW_NO == DTL.ROW_NO).FirstOrDefault());
-            });
 
-            if (!query.IS_ALL)
+            if (enterpriseTaxiReviewBudgetsConfig != null && enterpriseTaxiReviewBudgetsConfig.Count > 0)
             {
-                ViewBudgets = ViewBudgets.Where(BUDG => ArrayRowNo.Any(R => R == BUDG.ROW_NO)).ToList();
+                enterpriseTaxiReviewDetailsConfig.ForEach(DTL =>
+                {
+                    ViewBudgets.Add(enterpriseTaxiReviewBudgetsConfig.Where(BUDG => BUDG.ROW_NO == DTL.ROW_NO).FirstOrDefault());
+                });
+
+                if (!query.IS_ALL)
+                {
+                    ViewBudgets = ViewBudgets.Where(BUDG => ArrayRowNo.Any(R => R == BUDG.ROW_NO)).ToList();
+                }
             }
 
             #endregion

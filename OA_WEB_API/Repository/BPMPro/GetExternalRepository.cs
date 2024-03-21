@@ -1039,11 +1039,15 @@ namespace OA_WEB_API.Repository.BPMPro
                         strJson = jsonFunction.ObjectToJSON(expensesReimburseView.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG);
                         expensesReimburseBudgetsConfig = jsonFunction.JsonToObject<List<ExpensesReimburseBudgetsConfig>>(strJson);
                         var ViewBudgets = new List<ExpensesReimburseBudgetsConfig>();
-                        expensesReimburseView.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.ForEach(DTL =>
+
+                        if (expensesReimburseBudgetsConfig != null && expensesReimburseBudgetsConfig.Count > 0)
                         {
-                            ViewBudgets.Add(expensesReimburseBudgetsConfig.Where(BUDG => BUDG.ROW_NO == DTL.ROW_NO).FirstOrDefault());
-                        });
-                        expensesReimburseBudgetsConfig.Where(BUDG => BUDG.ROW_NO != 1).Select(BUDG => { BUDG.ROW_NO = 1; return BUDG; }).ToList();
+                            expensesReimburseView.ENTERPRISE_TAXI_REVIEW_DTLS_CONFIG.ForEach(DTL =>
+                            {
+                                ViewBudgets.Add(expensesReimburseBudgetsConfig.Where(BUDG => BUDG.ROW_NO == DTL.ROW_NO).FirstOrDefault());
+                            });
+                            expensesReimburseBudgetsConfig.Where(BUDG => BUDG.ROW_NO != 1).Select(BUDG => { BUDG.ROW_NO = 1; return BUDG; }).ToList();
+                        }                            
 
                         #endregion
 

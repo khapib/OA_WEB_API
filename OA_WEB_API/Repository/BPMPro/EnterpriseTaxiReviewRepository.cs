@@ -971,6 +971,17 @@ namespace OA_WEB_API.Repository.BPMPro
 
                                 #endregion
 
+                                #region - 刪除 -
+
+                                strSQL = "";
+                                strSQL += "DELETE [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_BUDG] ";
+                                strSQL += "WHERE 1=1 ";
+                                strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
+                                strSQL += "         AND [RowNo]=@ROW_NO ";
+                                strSQL += "         AND [FormNo] IS NULL ";
+
+                                #endregion
+
                             }
                             else
                             {

@@ -252,7 +252,7 @@ namespace OA_WEB_API.Repository.BPMPro
             {
                 enterpriseTaxiReviewDetailsConfig.ForEach(DTL =>
                 {
-                    if (enterpriseTaxiReviewBudgetsConfig.Exists(BUDG => BUDG.ROW_NO == DTL.ROW_NO)) ViewBudgets.Add(enterpriseTaxiReviewBudgetsConfig.Where(BUDG => BUDG.ROW_NO == DTL.ROW_NO).FirstOrDefault());
+                    if (enterpriseTaxiReviewBudgetsConfig.Exists(BUDG => BUDG.ROW_NO == DTL.ROW_NO)) ViewBudgets = ViewBudgets.Concat(enterpriseTaxiReviewBudgetsConfig.Where(BUDG => BUDG.ROW_NO == DTL.ROW_NO).ToList()).ToList();
                 });
 
                 if (!query.IS_ALL)

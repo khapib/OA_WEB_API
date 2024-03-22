@@ -919,24 +919,22 @@ namespace OA_WEB_API.Repository.BPMPro
                     
                     if (model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG != null && model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG.Count > 0)
                     {
-                        //Array組裝測試
-                        var t = string.Join(",", model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG.Select(BUDG=>BUDG.ROW_NO).Distinct().ToArray());
+                        #region 先刪除舊資料
 
+                        var ListRowNo = string.Join(",", model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG.Select(BUDG => BUDG.ROW_NO).Distinct().ToList());
                         var parameterBudgets = new List<SqlParameter>()
                         {
                             //企業乘車對帳單 使用預算
 	                        new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
-                            new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object) string.Join(",", model.ENTERPRISE_TAXI_REVIEW_BUDGS_CONFIG.Select(BUDG=>BUDG.ROW_NO).Distinct().ToArray()) ?? DBNull.Value }
                         };
-
-                        #region 先刪除舊資料
+                        string strFilmPurposes = dbFun.SetSqlParameterList(ref parameterBudgets, ListRowNo, "ROW_NO");
 
                         strSQL = "";
                         strSQL += "DELETE ";
                         strSQL += "FROM [BPMPro].[dbo].[FM7T_" + IDENTIFY + "_BUDG] ";
                         strSQL += "WHERE 1=1 ";
                         strSQL += "         AND [RequisitionID]=@REQUISITION_ID ";
-                        strSQL += "         AND CAST([RowNo] as varchar) in (@ROW_NO) ";
+                        strSQL += "         AND [RowNo] in (" + strFilmPurposes + ") ";
 
                         dbFun.DoTran(strSQL, parameterBudgets);
 

@@ -501,17 +501,17 @@
         </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.AdvanceExpenseController">
             <summary>
-            會簽管理系統 - 預支費用申請單
+            會簽管理系統 - 預支單
             </summary>
         </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.AdvanceExpenseController.PostAdvanceExpenseSingle(OA_WEB_API.Models.BPMPro.AdvanceExpenseQueryModel)">
             <summary>
-            預支費用申請單(查詢)
+            預支單(查詢)
             </summary>    
         </member>
         <member name="M:OA_WEB_API.Controllers.BPMPro.AdvanceExpenseController.PutAdvanceExpenseSingle(OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel)">
             <summary>
-            預支費用申請單(新增/修改/草稿)
+            預支單(新增/修改/草稿)
             </summary>
         </member>
         <member name="T:OA_WEB_API.Controllers.BPMPro.AStudioLiveStreamUseController">
@@ -2365,7 +2365,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.AdvanceExpenseQueryModel">
             <summary>
-            預支費用申請單(查詢條件)
+            預支單(查詢條件)
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseQueryModel.REQUISITION_ID">
@@ -2373,30 +2373,30 @@
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel">
             <summary>
-            預支費用申請單
+            預支單
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel.APPLICANT_INFO">
             <summary>申請人資訊</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel.ADVANCE_EXPENSE_TITLE">
-            <summary>預支費用申請單 表頭資訊</summary>
+            <summary>預支單 表頭資訊</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel.ADVANCE_EXPENSE_CONFIG">
-            <summary>預支費用申請單 表單內容 設定</summary>
+            <summary>預支單 表單內容 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel.ADVANCE_EXPENSE_DTLS_CONFIG">
-            <summary>預支費用申請單 預知明細 設定</summary>
+            <summary>預支單 預知明細 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel.ADVANCE_EXPENSE_SUMS_CONFIG">
-            <summary>預支費用申請單 小計 設定</summary>
+            <summary>預支單 小計 設定</summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel.ASSOCIATED_FORM_CONFIG">
             <summary>表單關聯</summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.AdvanceExpenseTitle">
             <summary>
-            預支費用申請單 表頭資訊
+            預支單 表頭資訊
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseTitle.FLOW_NAME">
@@ -2404,7 +2404,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.AdvanceExpenseConfig">
             <summary>
-            預支費用申請單 表單內容 設定
+            預支單 表單內容 設定
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseConfig.IS_CFO">
@@ -2433,7 +2433,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig">
             <summary>
-            預支費用申請單 預支明細 設定
+            預支單 預支明細 設定
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.AdvanceExpenseDetailsConfig.ROW_NO">
@@ -2509,7 +2509,7 @@
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.AdvanceExpenseSumsConfig">
             <summary>
-            預支費用申請單 小計 設定
+            預支單 小計 設定
             </summary>
         </member>
         <member name="T:OA_WEB_API.Models.BPMPro.AStudioLiveStreamUseQueryModel">
@@ -3333,9 +3333,13 @@
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.INV_TYPE">
             <summary>
             憑證類型：
-            INV_TW.統一發票、
+            INV_TW.統一發票(不扣抵)、
+            INV_TW_OT.統一發票、
             INV_F. Invoice、
-            RECPT.收據
+            RECPT.收據(不扣抵)
+            RECPT_OT.收據
+            ROL.勞務報酬單
+            OR.其他
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.ExpensesReimburseDetailsConfig.EXCH_RATE">
@@ -8202,9 +8206,13 @@
         <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.INV_TYPE">
             <summary>
             憑證類型：
-            INV_TW.統一發票、
+            INV_TW.統一發票(不扣抵)、
+            INV_TW_OT.統一發票、
             INV_F. Invoice、
-            RECPT.收據
+            RECPT.收據(不扣抵)
+            RECPT_OT.收據
+            ROL.勞務報酬單
+            OR.其他
             </summary>
         </member>
         <member name="P:OA_WEB_API.Models.BPMPro.StaffTravellingExpensesDetailsConfig.NUM">
@@ -10901,17 +10909,17 @@
         </member>
         <member name="T:OA_WEB_API.Repository.BPMPro.AdvanceExpenseRepository">
             <summary>
-            會簽管理系統 - 預支費用申請單
+            會簽管理系統 - 預支單
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.AdvanceExpenseRepository.PostAdvanceExpenseSingle(OA_WEB_API.Models.BPMPro.AdvanceExpenseQueryModel)">
             <summary>
-            預支費用申請單(查詢)
+            預支單(查詢)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.AdvanceExpenseRepository.PutAdvanceExpenseSingle(OA_WEB_API.Models.BPMPro.AdvanceExpenseViewModel)">
             <summary>
-            預支費用申請單(新增/修改/草稿)
+            預支單(新增/修改/草稿)
             </summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.AdvanceExpenseRepository.strSQL">
@@ -11510,7 +11518,7 @@
             <summary>企業乘車對帳單</summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.advanceExpenseRepository">
-            <summary>預支費用申請單</summary>
+            <summary>預支單</summary>
         </member>
         <member name="F:OA_WEB_API.Repository.BPMPro.GetExternalRepository.expensesReimburseRepository">
             <summary>費用申請單</summary>
@@ -11580,7 +11588,7 @@
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutAdvanceExpenseGetExternal(OA_WEB_API.Models.BPMPro.AdvanceExpenseERPInfo)">
             <summary>
-            預支費用申請單(外部起單)
+            預支單(外部起單)
             </summary>
         </member>
         <member name="M:OA_WEB_API.Repository.BPMPro.GetExternalRepository.PutExpensesReimburseGetExternal(OA_WEB_API.Models.BPMPro.ExpensesReimburseERPInfo)">

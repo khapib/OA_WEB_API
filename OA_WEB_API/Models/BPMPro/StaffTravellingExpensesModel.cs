@@ -144,9 +144,13 @@ namespace OA_WEB_API.Models.BPMPro
 
         /// <summary>
         /// 憑證類型：
-        /// INV_TW.統一發票、
+        /// INV_TW.統一發票(不扣抵)、
+        /// INV_TW_OT.統一發票、
         /// INV_F. Invoice、
-        /// RECPT.收據
+        /// RECPT.收據(不扣抵)
+        /// RECPT_OT.收據
+        /// ROL.勞務報酬單
+        /// OR.其他
         /// </summary>
         public string INV_TYPE { get; set; }
 

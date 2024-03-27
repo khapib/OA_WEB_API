@@ -8,7 +8,7 @@ using System.Web.Profile;
 namespace OA_WEB_API.Models.BPMPro
 {
     /// <summary>
-    /// 預支費用申請單(查詢條件)
+    /// 預支單(查詢條件)
     /// </summary>
     public class AdvanceExpenseQueryModel
     {
@@ -17,23 +17,23 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 預支費用申請單
+    /// 預支單
     /// </summary>
     public class AdvanceExpenseViewModel
     {
         /// <summary>申請人資訊</summary>
         public ApplicantInfo APPLICANT_INFO { get; set; }
 
-        /// <summary>預支費用申請單 表頭資訊</summary>
+        /// <summary>預支單 表頭資訊</summary>
         public AdvanceExpenseTitle ADVANCE_EXPENSE_TITLE { get; set; }
 
-        /// <summary>預支費用申請單 表單內容 設定</summary>
+        /// <summary>預支單 表單內容 設定</summary>
         public AdvanceExpenseConfig ADVANCE_EXPENSE_CONFIG { get; set; }
 
-        /// <summary>預支費用申請單 預知明細 設定</summary>
+        /// <summary>預支單 預知明細 設定</summary>
         public IList<AdvanceExpenseDetailsConfig> ADVANCE_EXPENSE_DTLS_CONFIG { get; set; }
 
-        /// <summary>預支費用申請單 小計 設定</summary>
+        /// <summary>預支單 小計 設定</summary>
         public List<AdvanceExpenseSumsConfig> ADVANCE_EXPENSE_SUMS_CONFIG { get; set; }
 
         /// <summary>表單關聯</summary>
@@ -42,7 +42,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 預支費用申請單 表頭資訊
+    /// 預支單 表頭資訊
     /// </summary>
     public class AdvanceExpenseTitle : ImplementHeader
     {
@@ -51,7 +51,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 預支費用申請單 表單內容 設定
+    /// 預支單 表單內容 設定
     /// </summary>
     public class AdvanceExpenseConfig
     {
@@ -81,7 +81,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 預支費用申請單 預支明細 設定
+    /// 預支單 預支明細 設定
     /// </summary>
     public class AdvanceExpenseDetailsConfig : DOM_TWD_Bank
     {
@@ -158,7 +158,7 @@ namespace OA_WEB_API.Models.BPMPro
     }
 
     /// <summary>
-    /// 預支費用申請單 小計 設定
+    /// 預支單 小計 設定
     /// </summary>
     public class AdvanceExpenseSumsConfig : FinanceFieldConfig
     {

@@ -52,7 +52,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #region - 財務類 -
 
-        /// <summary>預支費用申請單</summary>
+        /// <summary>預支單</summary>
         AdvanceExpenseRepository advanceExpenseRepository = new AdvanceExpenseRepository();
         /// <summary>費用申請單</summary>
         ExpensesReimburseRepository expensesReimburseRepository = new ExpensesReimburseRepository();
@@ -672,10 +672,10 @@ namespace OA_WEB_API.Repository.BPMPro
 
         #region - 財務類_(外部起單) -
 
-        #region - 預支費用申請單(外部起單) -
+        #region - 預支單(外部起單) -
 
         /// <summary>
-        /// 預支費用申請單(外部起單)
+        /// 預支單(外部起單)
         /// </summary>
         public GetExternalData PutAdvanceExpenseGetExternal(AdvanceExpenseERPInfo model)
         {
@@ -756,7 +756,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     #endregion
 
-                    #region - 預支費用申請單 表頭資訊:AdvanceExpenseTitle -
+                    #region - 預支單 表頭資訊:AdvanceExpenseTitle -
 
                     strJson = jsonFunction.ObjectToJSON(model);
                     var advanceExpenseTitle = jsonFunction.JsonToObject<AdvanceExpenseTitle>(strJson);
@@ -811,7 +811,7 @@ namespace OA_WEB_API.Repository.BPMPro
             }
             catch (Exception ex)
             {
-                CommLib.Logger.Error("預支費用申請單(外部起單)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("預支單(外部起單)失敗，原因：" + ex.Message);
                 throw;
             }
         }
@@ -1012,7 +1012,7 @@ namespace OA_WEB_API.Repository.BPMPro
                             new ExpensesReimburseDetailsConfig()
                             {
                                 ROW_NO = 1,
-                                NAME = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_TITLE.FM7_SUBJECT.Replace("年度", "/").Replace("對帳單", "費用"),
+                                NAME = enterpriseTaxiReviewViewModel.ENTERPRISE_TAXI_REVIEW_TITLE.FM7_SUBJECT.Replace("年", "/").Replace("對帳單", "費用"),
                                 TYPE = "交通費",
                                 INV_TYPE = "RECPT",
                                 EXCH_RATE = 1,
@@ -1064,7 +1064,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                         #endregion
 
-                        #region - 【企業乘車對帳單】費用申請單 財務應退(合作夥伴廠商/合作夥伴個人/員工):ExpensesReimburseSums -
+                        #region - 【企業乘車對帳單】費用申請單 財務應退(合作夥伴廠商/合作夥伴個人/員工):ExpensesReimburseFinancAmounts -
 
                         expensesReimburseFinancAmountsConfig = new List<ExpensesReimburseFinancAmountsConfig>()
                         {
@@ -1279,7 +1279,7 @@ namespace OA_WEB_API.Repository.BPMPro
             }
             catch (Exception ex)
             {
-                CommLib.Logger.Error("預支費用申請單(外部起單)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("差旅費用報支單(外部起單)失敗，原因：" + ex.Message);
                 throw;
             }
         }
@@ -1425,7 +1425,7 @@ namespace OA_WEB_API.Repository.BPMPro
             }
             catch (Exception ex)
             {
-                CommLib.Logger.Error("預支費用申請單(外部起單)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("繳款單(外部起單)失敗，原因：" + ex.Message);
                 throw;
             }
         }

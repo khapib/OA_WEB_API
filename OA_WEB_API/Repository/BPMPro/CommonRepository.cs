@@ -364,7 +364,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 搜尋:REQUISITION_ID 系統編號 -
+                #region - 搜尋:BPM_FORM_NO BPM表單單號 -
 
                 if (query.BPM_FORM_NO != null)
                 {

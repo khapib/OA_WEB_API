@@ -12,7 +12,7 @@ using OA_WEB_API.Models;
 namespace OA_WEB_API.Repository.BPMPro
 {
     /// <summary>
-    /// 會簽管理系統 - 預支費用申請單
+    /// 會簽管理系統 - 預支單
     /// </summary>
     public class AdvanceExpenseRepository
     {
@@ -34,7 +34,7 @@ namespace OA_WEB_API.Repository.BPMPro
         #region - 方法 -
 
         /// <summary>
-        /// 預支費用申請單(查詢)
+        /// 預支單(查詢)
         /// </summary>
         public AdvanceExpenseViewModel PostAdvanceExpenseSingle(AdvanceExpenseQueryModel query)
         {
@@ -68,7 +68,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 預支費用申請單 表頭資訊 -
+            #region - 預支單 表頭資訊 -
 
             strSQL = "";
             strSQL += "SELECT ";
@@ -83,7 +83,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 預支費用申請單 表單內容 -
+            #region - 預支單 表單內容 -
 
             strSQL = "";
             strSQL += "SELECT ";
@@ -102,7 +102,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 預支費用申請單 預知明細 -
+            #region - 預支單 預知明細 -
 
             strSQL = "";
             strSQL += "SELECT ";
@@ -139,7 +139,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 預支費用申請單 小計 -
+            #region - 預支單 小計 -
 
             var CommonSUM = new BPMCommonModel<AdvanceExpenseSumsConfig>()
             {
@@ -152,7 +152,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
             #endregion
 
-            #region - 預支費用申請單 表單關聯 -
+            #region - 預支單 表單關聯 -
 
             var formQueryModel = new FormQueryModel()
             {
@@ -194,7 +194,7 @@ namespace OA_WEB_API.Repository.BPMPro
                 if (CommonRepository.PostFSe7enSysRequisition(formData).Count <= 0)
                 {
                     advanceExpenseViewModel = new AdvanceExpenseViewModel();
-                    CommLib.Logger.Error("預支費用申請單(查詢)失敗，原因：系統無正常起單。");
+                    CommLib.Logger.Error("預支單(查詢)失敗，原因：系統無正常起單。");
                 }
                 else
                 {
@@ -226,7 +226,7 @@ namespace OA_WEB_API.Repository.BPMPro
         #region - 依此單內容重送 -
 
         ///// <summary>
-        ///// 預支費用申請單(依此單內容重送)(僅外部起單使用)
+        ///// 預支單(依此單內容重送)(僅外部起單使用)
         ///// </summary>        
         //public bool PutAdvanceExpenseRefill(AdvanceExpenseeQueryModel query)
         //{
@@ -270,7 +270,7 @@ namespace OA_WEB_API.Repository.BPMPro
         //    catch (Exception ex)
         //    {
         //        vResult = false;
-        //        CommLib.Logger.Error("預支費用申請單(依此單內容重送)失敗，原因：" + ex.Message);
+        //        CommLib.Logger.Error("預支單(依此單內容重送)失敗，原因：" + ex.Message);
         //    }
 
         //    return vResult;
@@ -279,7 +279,7 @@ namespace OA_WEB_API.Repository.BPMPro
         #endregion
 
         /// <summary>
-        /// 預支費用申請單(新增/修改/草稿)
+        /// 預支單(新增/修改/草稿)
         /// </summary>
         public bool PutAdvanceExpenseSingle(AdvanceExpenseViewModel model)
         {
@@ -314,7 +314,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 預支費用申請單 表頭資訊：AdvanceExpense_M -
+                #region - 預支單 表頭資訊：AdvanceExpense_M -
 
                 var parameterTitle = new List<SqlParameter>()
                 {
@@ -333,7 +333,7 @@ namespace OA_WEB_API.Repository.BPMPro
                     //(填單人/代填單人)資訊
                     new SqlParameter("@FILLER_ID", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_ID },
                     new SqlParameter("@FILLER_NAME", SqlDbType.NVarChar) { Size = 40, Value = model.APPLICANT_INFO.FILLER_NAME },
-                    //預支費用申請單 表頭
+                    //預支單 表頭
                     new SqlParameter("@FLOW_NAME", SqlDbType.NVarChar) { Size = 20, Value = (object)model.ADVANCE_EXPENSE_TITLE.FLOW_NAME ?? DBNull.Value },
                     new SqlParameter("@FORM_NO", SqlDbType.NVarChar) { Size = 20, Value = (object)model.ADVANCE_EXPENSE_TITLE.FORM_NO ?? DBNull.Value },
                     new SqlParameter("@FM7_SUBJECT", SqlDbType.NVarChar) { Size = 200, Value = FM7Subject ?? String.Empty },
@@ -410,13 +410,13 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 預支費用申請單 表單內容：AdvanceExpense_M -
+                #region - 預支單 表單內容：AdvanceExpense_M -
 
                 if (model.ADVANCE_EXPENSE_CONFIG != null)
                 {
                     var parameterInfo = new List<SqlParameter>()
                     {
-                        //預支費用申請單 表單內容
+                        //預支單 表單內容
                         new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                         new SqlParameter("@IS_CFO", SqlDbType.NVarChar) { Size = 5, Value = (object)DBNull.Value ?? DBNull.Value },
                         new SqlParameter("@REASON", SqlDbType.NVarChar) { Size = 4000 , Value = (object)DBNull.Value ?? DBNull.Value },
@@ -456,7 +456,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     #endregion
 
-                    //寫入：預支費用申請單 表單內容parameter                        
+                    //寫入：預支單 表單內容parameter                        
                     strJson = jsonFunction.ObjectToJSON(model.ADVANCE_EXPENSE_CONFIG);
                     GlobalParameters.Infoparameter(strJson, parameterInfo);
 
@@ -478,11 +478,11 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 預支費用申請單 預知明細: AdvanceExpense_DTL -
+                #region - 預支單 預知明細: AdvanceExpense_DTL -
 
                 var parameterDetails = new List<SqlParameter>()
                 {
-                    //預支費用申請單 預知明細
+                    //預支單 預知明細
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                     new SqlParameter("@ROW_NO", SqlDbType.Int) { Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@ADVANCE_CURRENCY_NAME", SqlDbType.NVarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
@@ -528,7 +528,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                     foreach (var item in model.ADVANCE_EXPENSE_DTLS_CONFIG)
                     {
-                        //寫入：預支費用申請單 預知明細parameter
+                        //寫入：預支單 預知明細parameter
                         strJson = jsonFunction.ObjectToJSON(item);
                         GlobalParameters.Infoparameter(strJson, parameterDetails);
 
@@ -546,13 +546,13 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 var parameterLatterHalf = new List<SqlParameter>()
                 {
-                    //預支費用申請單 小計
+                    //預支單 小計
                     new SqlParameter("@REQUISITION_ID", SqlDbType.NVarChar) { Size = 64, Value = strREQ },
                     new SqlParameter("@CURRENCY", SqlDbType.VarChar) { Size = 10, Value = (object)DBNull.Value ?? DBNull.Value },
                     new SqlParameter("@AMOUNT", SqlDbType.Float) { Value = (object)DBNull.Value ?? DBNull.Value }
                 };
 
-                #region - 預支費用申請單 小計：AdvanceExpense_SUM -
+                #region - 預支單 小計：AdvanceExpense_SUM -
 
                 if (model.ADVANCE_EXPENSE_SUMS_CONFIG != null && model.ADVANCE_EXPENSE_SUMS_CONFIG.Count > 0)
                 {
@@ -568,7 +568,7 @@ namespace OA_WEB_API.Repository.BPMPro
 
                 #endregion
 
-                #region - 預支費用申請單 表單關聯：AssociatedForm -
+                #region - 預支單 表單關聯：AssociatedForm -
 
                 var associatedFormModel = new AssociatedFormModel()
                 {
@@ -648,7 +648,7 @@ namespace OA_WEB_API.Repository.BPMPro
             catch (Exception ex)
             {
                 vResult = false;
-                CommLib.Logger.Error("預支費用申請單(新增/修改/草稿)失敗，原因：" + ex.Message);
+                CommLib.Logger.Error("預支單(新增/修改/草稿)失敗，原因：" + ex.Message);
             }
 
             return vResult;
